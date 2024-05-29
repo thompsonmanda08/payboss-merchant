@@ -9,12 +9,12 @@ import {
   Transition,
   TransitionChild,
 } from '@headlessui/react'
-import clsx from 'clsx'
 
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/NavLink'
+import { cn } from '@/lib/utils'
 
 function MobileNavLink({ href, children }) {
   return (
@@ -35,14 +35,11 @@ function MobileNavIcon({ open }) {
     >
       <path
         d="M0 1H14M0 7H14M0 13H14"
-        className={clsx(
-          'origin-center transition',
-          open && 'scale-90 opacity-0',
-        )}
+        className={cn('origin-center transition', open && 'scale-90 opacity-0')}
       />
       <path
         d="M2 2L12 12M12 2L2 12"
-        className={clsx(
+        className={cn(
           'origin-center transition',
           !open && 'scale-90 opacity-0',
         )}
@@ -55,7 +52,7 @@ function MobileNavigation() {
   return (
     <Popover>
       <PopoverButton
-        className="relative z-10 flex h-8 w-8 items-center justify-center ui-not-focus-visible:outline-none"
+        className="ui-not-focus-visible:outline-none relative z-10 flex h-8 w-8 items-center justify-center"
         aria-label="Toggle Navigation"
       >
         {({ open }) => <MobileNavIcon open={open} />}
