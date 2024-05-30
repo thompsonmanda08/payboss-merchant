@@ -65,7 +65,9 @@ function SideNavBar() {
         <div className="flex h-full w-full flex-col">
           {/* BUTTON CONTAINER */}
           <div>
-            <Logo />
+            <Link href="/" aria-label="Home">
+              <Logo className="h-10 w-auto" />
+            </Link>
           </div>
 
           {/* MENU ITEMS CONTAINER */}
