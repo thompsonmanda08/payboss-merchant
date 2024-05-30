@@ -4,8 +4,10 @@ import React from 'react'
 
 function Home() {
   return (
-    <main className="flex min-h-screen w-full flex-col items-center gap-6 overflow-clip bg-background px-8 pt-28 text-foreground sm:gap-8 md:gap-10 md:px-16 md:pt-32 lg:px-24">
-      <div className="flex w-full flex-col gap-4 md:gap-6 lg:flex-row"></div>
+    <main className="flex min-h-screen w-full flex-col items-center gap-6 overflow-clip bg-background text-foreground ">
+      <div className="flex w-full flex-col gap-4 md:gap-6 lg:flex-row">
+        {/*  */}
+      </div>
       <div className="min-h-2/3 mt-4 flex w-full flex-col">
         <div className="flex w-full items-end justify-between">
           <div className="flex flex-col gap-2">

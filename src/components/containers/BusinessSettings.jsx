@@ -1,33 +1,33 @@
-"use client";
-import useProfileStore from "@/state/profileStore";
-import useSettingsStore from "@/state/settingsStore";
-import { Modal } from "..";
-import { useState } from "react";
+'use client'
+import useProfileStore from '@/state/profileStore'
+import useSettingsStore from '@/state/settingsStore'
+import { Modal } from '..'
+import { useState } from 'react'
 
 export default function BusinessSettings() {
-  const { user } = useProfileStore();
-  const { openEditModal, setOpenEditModal } = useSettingsStore();
-  const [openCreateQRCodeModal, setOpenCreateQRCodeModal] = useState(false);
+  const { user } = useProfileStore()
+  const { openEditModal, setOpenEditModal } = useSettingsStore()
+  const [openCreateQRCodeModal, setOpenCreateQRCodeModal] = useState(false)
 
   function handleToggleModal() {
-    setOpenEditModal(!openEditModal);
+    setOpenEditModal(!openEditModal)
   }
   function handleToggleQRCodeModal() {
-    setOpenCreateQRCodeModal(!openEditModal);
+    setOpenCreateQRCodeModal(!openEditModal)
   }
 
   function handleConfirm() {
-    handleToggleModal();
+    handleToggleModal()
   }
 
   function handleProfileUpdate() {
-    handleToggleModal();
+    handleToggleModal()
   }
   return (
     <>
-      <div className="flex flex-col rounded-md w-full p-5 gap-y-10">
+      <div className="flex w-full flex-col gap-y-10 rounded-md p-5">
         <div>
-          <div className="flex justify-between items-end w-full">
+          <div className="flex w-full items-end justify-between">
             <div>
               <h2 className="text-base font-semibold leading-7 text-gray-900">
                 Business Information
@@ -95,7 +95,7 @@ export default function BusinessSettings() {
                   onClick={handleToggleQRCodeModal}
                   className="font-semibold text-primary hover:text-primary/85"
                 >
-                  Generate QR Code
+                  Update
                 </button>
               </dd>
             </div>
@@ -121,10 +121,10 @@ export default function BusinessSettings() {
           show={openEditModal}
           onClose={handleToggleModal}
           onConfirm={handleConfirm}
-          title={"Update Profile Details"}
-          infoText={"Ensure that your account information is up to date."}
+          title={'Update Profile Details'}
+          infoText={'Ensure that your account information is up to date.'}
         >
-          <div className="flex bg-red-500 w-full h-24"></div>
+          <div className="flex h-24 w-full bg-red-500"></div>
         </Modal>
       )}
       {/********** HANDLE GENERATE QR CODE FOR MERCHANT **********/}
@@ -133,12 +133,12 @@ export default function BusinessSettings() {
           show={openCreateQRCodeModal}
           onClose={handleToggleQRCodeModal}
           onConfirm={handleConfirm}
-          title={"Create QR Code"}
-          infoText={"You will be able to scan this QR code on your phone."}
+          title={'Create QR Code'}
+          infoText={'You will be able to scan this QR code on your phone.'}
         >
-          <div className="flex bg-blue-500 w-full h-24"></div>
+          <div className="flex h-24 w-full bg-blue-500"></div>
         </Modal>
       )}
     </>
-  );
+  )
 }

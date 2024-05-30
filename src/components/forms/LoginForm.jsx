@@ -45,7 +45,11 @@ function LoginForm() {
           </Link>
         </div>
         <div className="">
-          <Button type="button" className={'my-4 mt-6 w-full px-6'}>
+          <Button
+            type="button"
+            href={'/dashboard'}
+            className={'my-4 mt-6 w-full px-6'}
+          >
             Sign in
           </Button>
         </div>

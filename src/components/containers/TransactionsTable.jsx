@@ -1,6 +1,7 @@
 'use client'
 import { formatCurrency } from '@/lib/utils'
 import React, { useState } from 'react'
+import EmptyState from '../EmptyState'
 
 export default function TransactionsTable({
   data,
