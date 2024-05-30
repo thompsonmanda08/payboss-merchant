@@ -97,9 +97,8 @@ function MiniFooter() {
         <div class="-mx-3 flex flex-wrap">
           <div class="flex-0 mx-auto mt-1 w-8/12 max-w-full px-3 text-center">
             <p class="mb-0 text-slate-400">
-              Copyright ©
-              <script>document.write(new Date().getFullYear());</script>
-              Bridging Gap Solutions Zambia.
+              Copyright ©{new Date().getFullYear()} PayBoss. All rights
+              reserved.
             </p>
           </div>
         </div>
