@@ -1,10 +1,10 @@
 'use client'
 import { useState } from 'react';
+import { motion, AnimatePresence } from "framer-motion"
 import Image from 'next/image'
 import { Container } from '@/components/Container'
 import Tab from '@/components/Tab'
 import api from '@/images/avatars/avatar-3.png'
-
 
 
 function QuoteIcon(props) {
@@ -14,6 +14,23 @@ function QuoteIcon(props) {
     </svg>
   )
 }
+
+const containerVariants = {
+  hidden: { opacity: 1 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: -50 },
+  show: { opacity: 1, y: 0 }
+};
+
+
 
 function Collections(){
   const collections = [
@@ -79,49 +96,53 @@ function Collections(){
     ],
   ]
   return(
-    <ul
-    role="list"
-    className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-  >
-    {collections.map((column, columnIndex) => (
-      <li key={columnIndex}>
-        <ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
-          {column.map((testimonial, testimonialIndex) => (
-            <li key={testimonialIndex}>
-              <figure className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
-                <QuoteIcon className="absolute left-6 top-6 fill-slate-100" />
-                <blockquote className="relative">
-                  <p className="text-lg tracking-tight text-slate-900">
-                    {testimonial.content}
-                  </p>
-                </blockquote>
-                <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
-                  <div>
-                    <div className="font-display text-base text-slate-900">
-                      {testimonial.author.name}
+    <motion.ul
+      role="list"
+      className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+    >
+      {collections.map((column, columnIndex) => (
+        <li key={columnIndex}>
+          <motion.ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
+            {column.map((revenue, revenueIndex) => (
+              <motion.li key={revenueIndex} variants={itemVariants}>
+                <figure className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
+                  <QuoteIcon className="absolute left-6 top-6 fill-slate-100" />
+                  <blockquote className="relative">
+                    <p className="text-lg tracking-tight text-slate-900">
+                      {revenue.content}
+                    </p>
+                  </blockquote>
+                  <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
+                    <div>
+                      <div className="font-display text-base text-slate-900">
+                        {revenue.author.name}
+                      </div>
+                      <div className="mt-1 text-sm text-slate-500">
+                        {revenue.author.role}
+                      </div>
                     </div>
-                    <div className="mt-1 text-sm text-slate-500">
-                      {testimonial.author.role}
+                    <div className="overflow-hidden rounded-full bg-slate-50">
+                      <Image
+                        className="h-14 w-14 object-cover"
+                        src={revenue.author.image}
+                        alt=""
+                        width={56}
+                        height={56}
+                      />
                     </div>
-                  </div>
-                  <div className="overflow-hidden rounded-full bg-slate-50">
-                    <Image
-                      className="h-14 w-14 object-cover"
-                      src={testimonial.author.image}
-                      alt=""
-                      width={56}
-                      height={56}
-                    />
-                  </div>
-                </figcaption>
-              </figure>
-            </li>
-          ))}
-        </ul>
-      </li>
-    ))}
-  </ul>
-  )
+                  </figcaption>
+                </figure>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </li>
+      ))}
+    </motion.ul>
+  );
 }
 
 
@@ -189,49 +210,53 @@ function Spending(){
     ],
   ]
   return(
-    <ul
-    role="list"
-    className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-  >
-    {spending.map((column, columnIndex) => (
-      <li key={columnIndex}>
-        <ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
-          {column.map((testimonial, testimonialIndex) => (
-            <li key={testimonialIndex}>
-              <figure className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
-                <QuoteIcon className="absolute left-6 top-6 fill-slate-100" />
-                <blockquote className="relative">
-                  <p className="text-lg tracking-tight text-slate-900">
-                    {testimonial.content}
-                  </p>
-                </blockquote>
-                <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
-                  <div>
-                    <div className="font-display text-base text-slate-900">
-                      {testimonial.author.name}
+    <motion.ul
+      role="list"
+      className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+    >
+      {spending.map((column, columnIndex) => (
+        <li key={columnIndex}>
+          <motion.ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
+            {column.map((expense, expenseIndex) => (
+              <motion.li key={expenseIndex} variants={itemVariants}>
+                <figure className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
+                  <QuoteIcon className="absolute left-6 top-6 fill-slate-100" />
+                  <blockquote className="relative">
+                    <p className="text-lg tracking-tight text-slate-900">
+                      {expense.content}
+                    </p>
+                  </blockquote>
+                  <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
+                    <div>
+                      <div className="font-display text-base text-slate-900">
+                        {expense.author.name}
+                      </div>
+                      <div className="mt-1 text-sm text-slate-500">
+                        {expense.author.role}
+                      </div>
                     </div>
-                    <div className="mt-1 text-sm text-slate-500">
-                      {testimonial.author.role}
+                    <div className="overflow-hidden rounded-full bg-slate-50">
+                      <Image
+                        className="h-14 w-14 object-cover"
+                        src={expense.author.image}
+                        alt=""
+                        width={56}
+                        height={56}
+                      />
                     </div>
-                  </div>
-                  <div className="overflow-hidden rounded-full bg-slate-50">
-                    <Image
-                      className="h-14 w-14 object-cover"
-                      src={testimonial.author.image}
-                      alt=""
-                      width={56}
-                      height={56}
-                    />
-                  </div>
-                </figcaption>
-              </figure>
-            </li>
-          ))}
-        </ul>
-      </li>
-    ))}
-  </ul>
-  )
+                  </figcaption>
+                </figure>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </li>
+      ))}
+    </motion.ul>
+  );
 }
 const tabData = [
   { name: 'FOR COLLECTIONS / REVENUE', current: true },
@@ -239,22 +264,24 @@ const tabData = [
 ];
 
 export function Features() {
+  
   const [currentTab, setCurrentTab] = useState(tabData.find(tab => tab.current).name);
 
   const handleTabChange = (tabName) => {
     setCurrentTab(tabName);
   };
 
+
   return (
     <section
-      id="testimonials"
-      aria-label="What our customers are saying"
+      id="features"
+      aria-label="Features payBoss is offering"
       className="bg-slate-50 py-20 sm:py-32"
     >
       <Container>
       <Tab tabs={tabData} onTabChange={handleTabChange} />
         <div className="mt-10 mx-auto max-w-2xl md:text-center">
-        {currentTab === 'FOR COLLECTIONS / REVENUE' &&  
+       {currentTab === 'FOR COLLECTIONS / REVENUE' &&  
         <h2 className="font-display text-2xl tracking-tight text-slate-900 sm:text-4xl">
            Boost Your Collections
         </h2>}
@@ -262,12 +289,14 @@ export function Features() {
         <h2 className="font-display text-2xl tracking-tight text-slate-900 sm:text-4xl">
            Streamline Your Spending
         </h2>}
-          <p className="mt-4 text-sm tracking-tight text-slate-700">
+       <p className="mt-4 text-sm tracking-tight text-slate-700">
           Streamline your processes, save time, and grow your business with confidence.
           </p>
         </div>
-        {currentTab === 'FOR COLLECTIONS / REVENUE' &&  <Collections/> }
-        {currentTab === 'FOR DISBURSEMENTS / EXPENDITURE' &&  <Spending/> }
+        <AnimatePresence mode='wait'>
+          {currentTab === 'FOR COLLECTIONS / REVENUE' && <Collections key="collections" />}
+          {currentTab === 'FOR DISBURSEMENTS / EXPENDITURE' && <Spending key="spending" />}
+        </AnimatePresence>
       </Container>
     </section>
   )
