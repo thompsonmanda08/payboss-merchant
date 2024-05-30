@@ -21,11 +21,11 @@ export function CallToAction() {
       <Container className="relative">
         <div className="mx-auto max-w-xl text-center">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl">
-          Get Started Today
+            Get Started Today
           </h2>
-          <p className="mt-4 text-lg tracking-tight text-white text-center">
-          Ready to take control of your business finances? Sign up 
-          for PayBoss and experience the future of financial management.
+          <p className="mt-4 text-center text-lg tracking-tight text-white">
+            Ready to take control of your business finances? Sign up for PayBoss
+            and experience the future of financial management.
           </p>
           <Button href="/register" color="white" className="mt-10">
             Book a free demo

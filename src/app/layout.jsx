@@ -1,7 +1,9 @@
 import { Inter, Lexend } from 'next/font/google'
-import clsx from 'clsx'
 
 import '@/styles/tailwind.css'
+import { Toaster } from 'react-hot-toast'
+import { cn } from '@/lib/utils'
+import Providers from './providers'
 
 export const metadata = {
   title: {
@@ -28,13 +30,24 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={clsx(
+      className={cn(
         'h-full scroll-smooth bg-white antialiased',
         inter.variable,
         lexend.variable,
       )}
     >
-      <body className="flex h-full flex-col">{children}</body>
+      <body className="flex h-full flex-col">
+        <Providers>
+          {children}
+          <Toaster
+            toastOptions={{
+              duration: 3000,
+            }}
+            position="top-center"
+            containerClassName="z-[10000000!important]"
+          />
+        </Providers>
+      </body>
     </html>
   )
 }

@@ -1,7 +1,6 @@
-import Link from "next/link";
-import { SIDE_BAR_OPTIONS } from "./SideNavBar";
-import Logo from "./Logo";
-import { CloseIcon, LogOutIcon } from "@/lib/icons";
+import { Cross1Icon, ExitIcon } from '@radix-ui/react-icons'
+import { SIDE_BAR_OPTIONS } from './SideNavBar'
+import Logo from './Logo'
 
 export default function MobileNavBar({
   isMobileMenuOpen,
@@ -13,7 +12,7 @@ export default function MobileNavBar({
   setPage,
 }) {
   function closeMobileMenu() {
-    setIsMobileMenuOpen(false);
+    setIsMobileMenuOpen() // CLOSE
   }
 
   return (
@@ -22,64 +21,64 @@ export default function MobileNavBar({
         <div
           onClick={closeMobileMenu}
           className={`absolute ${
-            isMobileMenuOpen ? "block inset-0" : "hidden left-[-100%]"
-          }  bg-slate-900/80 z-[10]`}
+            isMobileMenuOpen ? 'inset-0 block' : 'left-[-100%] hidden'
+          }  z-[10] bg-slate-900/80`}
         />
       )}
       <nav
         className={`${
-          isMobileMenuOpen ? "flex left-0" : "left-[-100%]"
-        } flex-col w-[70%] max-w-[412px] min-w-[300px] h-full fixed top-0 bg-white transition-all duration-300 ease-in-out z-[999] p-5`}
+          isMobileMenuOpen ? 'left-0 flex' : 'left-[-100%]'
+        } fixed top-0 z-[999] h-full w-[70%] min-w-[300px] max-w-[412px] flex-col bg-white p-5 transition-all duration-300 ease-in-out`}
       >
         <button
-          className="p-2 max-w-fit absolute right-0 mr-2 mt-1"
+          className="absolute right-0 mr-2 mt-1 max-w-fit p-2"
           onClick={closeMobileMenu}
         >
-          <CloseIcon className="w-6 h-6 text-slate-600 hover:text-primary/80 transition-all duration-200 ease-in" />
+          <Cross1Icon className="h-6 w-6 text-slate-600 transition-all duration-200 ease-in hover:text-primary/80" />
         </button>
-        <div className="flex flex-col w-full h-full">
-          <div className="scale-[0.9] -ml-2 md:ml-0">
+        <div className="flex h-full w-full flex-col">
+          <div className="-ml-2 scale-[0.9] md:ml-0">
             <Logo />
           </div>
           {/* MENU ITEMS CONTAINER */}
-          <div className="flex flex-col w-full h-full gap-4 mt-8">
+          <div className="mt-8 flex h-full w-full flex-col gap-4">
             {SIDE_BAR_OPTIONS.map(({ name, href, Icon }, index) => (
               <div
                 key={index}
                 // href={href}
                 // shallow={true}
                 onClick={() => {
-                  setCurrentPage(index);
-                  setPage(href);
-                  closeMobileMenu();
+                  setCurrentPage(index)
+                  setPage(href)
+                  closeMobileMenu()
                 }}
                 className={`group ${
                   // pathname.split("/")[1] == name.toLowerCase() ||
                   // pathname == href
                   currentPage === index
-                    ? "bg-primary/20 text-primary rounded-sm"
-                    : "bg-transparent hover:bg-accent/5 text-slate-800"
+                    ? 'rounded-sm bg-primary/20 text-primary'
+                    : 'bg-transparent text-slate-800 hover:bg-accent/5'
                 } 
-                  flex items-center cursor-pointer p-3 rounded-lg text-sm font-medium max-h-14 flex-grow-0`}
+                  flex max-h-14 flex-grow-0 cursor-pointer items-center rounded-lg p-3 text-sm font-medium`}
               >
-                <Icon className="w-6 h-6" />
+                <Icon className="h-6 w-6" />
                 <span className="ml-3"> {name}</span>
               </div>
             ))}
           </div>
 
           <button
-            className="mt-auto flex gap-3 cursor-pointer mb-4 p-3 rounded-lg items-center text-sm font-medium hover:bg-primary/10 text-slate-600"
+            className="mb-4 mt-auto flex cursor-pointer items-center gap-3 rounded-lg p-3 text-sm font-medium text-slate-600 hover:bg-primary/10"
             onClick={async () => {
-              await handleUserLogOut();
-              closeMobileMenu();
+              await handleUserLogOut()
+              closeMobileMenu()
             }}
           >
-            <LogOutIcon className="w-6 h-6" />
+            <ExitIcon className="h-6 w-6" />
             Log out
           </button>
         </div>
       </nav>
     </>
-  );
+  )
 }
