@@ -1,5 +1,4 @@
 'use client'
-'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -15,9 +14,9 @@ import {
 
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
-import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/NavLink'
 import { cn } from '@/lib/utils'
+import { Logo } from '.'
 
 function MobileNavLink({ href, children }) {
   return (
@@ -111,7 +110,7 @@ export function Header() {
         `rounded-blur fixed left-0 right-0 top-0 z-30 flex   flex-wrap items-center  px-4 py-5 backdrop-blur-2xl backdrop-saturate-200 transition-all lg:flex-nowrap lg:justify-start`,
         {
           'top-4 mx-10 rounded-xl bg-white/80': isFloating,
-          'z-50': pathname === '/' && !isFloating,
+          'z-50 pt-5': pathname === '/' && !isFloating,
         },
       )}
     >
