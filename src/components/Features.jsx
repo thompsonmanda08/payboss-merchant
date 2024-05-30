@@ -1,11 +1,12 @@
 'use client'
-import { useState } from 'react';
-import { motion, AnimatePresence } from "framer-motion"
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { Container } from '@/components/Container'
 import Tab from '@/components/Tab'
-import api from '@/images/avatars/avatar-3.png'
+// import api from '@/images/avatars/avatar-3.png'
 
+import api from '@/images/logos/payboss-icon.svg'
 
 function QuoteIcon(props) {
   return (
@@ -20,24 +21,22 @@ const containerVariants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2
-    }
-  }
-};
+      staggerChildren: 0.2,
+    },
+  },
+}
 
 const itemVariants = {
   hidden: { opacity: 0, y: -50 },
-  show: { opacity: 1, y: 0 }
-};
+  show: { opacity: 1, y: 0 },
+}
 
-
-
-function Collections(){
+function Collections() {
   const collections = [
     [
       {
         content:
-          'Seamlessly connect PayBoss with your existing systems and automate your financial workflows with our robust API integration.',
+          'Seamlessly connect with your existing systems and automate your financial workflows with our robust API.',
         author: {
           name: 'API Integration',
           role: 'Connect Seamlessly',
@@ -46,7 +45,7 @@ function Collections(){
       },
       {
         content:
-          'Create, send, and manage professional invoices with ease. Stay on top of your receivables and ensure timely payments.',
+          'Create, send, and manage professional invoices with ease. Stay on top of your income and ensure timely payments.',
         author: {
           name: 'Invoicing',
           role: 'Effortless Billing',
@@ -57,7 +56,7 @@ function Collections(){
     [
       {
         content:
-          'Customize and deploy payment forms that cater to your business needs. Simplify the payment process for your customers.',
+          'Customize and deploy payment forms that cater to your business needs. Easy payments process for your customers.',
         author: {
           name: 'Payment Forms',
           role: 'Simplify Transactions',
@@ -66,7 +65,7 @@ function Collections(){
       },
       {
         content:
-          'Sell your products and services online or via WhatsApp. Reach more customers and increase your sales with flexible store options.',
+          'Sell your products and services online or via WhatsApp. Increase your sales with flexible store options.',
         author: {
           name: 'Store',
           role: 'Expand Sales Channels',
@@ -77,7 +76,7 @@ function Collections(){
     [
       {
         content:
-          'Manage recurring payments and subscriptions effortlessly. Keep track of your subscribers and their payments in one place.',
+          'Manage recurring payments and subscriptions effortlessly. Keep track of your subscribers and their payments.',
         author: {
           name: 'Subscriptions',
           role: 'Automate Recurring Payments',
@@ -86,7 +85,7 @@ function Collections(){
       },
       {
         content:
-          'Enable quick and secure in-store payments with our USSD feature. Provide your customers with a convenient and cashless payment option.',
+          'Enable quick and secure in-store payments with our USSD feature. A convenient and cashless payment option.',
         author: {
           name: 'USSD',
           role: 'Quick Cashless Payments',
@@ -95,7 +94,7 @@ function Collections(){
       },
     ],
   ]
-  return(
+  return (
     <motion.ul
       role="list"
       className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
@@ -142,11 +141,10 @@ function Collections(){
         </li>
       ))}
     </motion.ul>
-  );
+  )
 }
 
-
-function Spending(){
+function Spending() {
   const spending = [
     [
       {
@@ -180,7 +178,7 @@ function Spending(){
       },
       {
         content:
-          'Make bulk payments to vendors, suppliers, or employees with ease. Enjoy the convenience of managing multiple payments simultaneously.',
+          'Make bulk payments to vendors, suppliers, or employees and enjoy streamlined payments automation.',
         author: {
           name: 'Bulk Direct Payment',
           role: 'Pay Multiple Vendors',
@@ -191,7 +189,7 @@ function Spending(){
     [
       {
         content:
-          'Distribute bulk vouchers to your customers or employees efficiently. Enhance your promotional and reward programs.',
+          'Distribute bulk vouchers to your customers or employees efficiently. Enhanced reward programs.',
         author: {
           name: 'Bulk Vouchers Payment',
           role: 'Distribute Rewards Efficiently',
@@ -209,7 +207,7 @@ function Spending(){
       },
     ],
   ]
-  return(
+  return (
     <motion.ul
       role="list"
       className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
@@ -256,21 +254,21 @@ function Spending(){
         </li>
       ))}
     </motion.ul>
-  );
+  )
 }
 const tabData = [
   { name: 'FOR COLLECTIONS / REVENUE', current: true },
   { name: 'FOR DISBURSEMENTS / EXPENDITURE', current: false },
-];
+]
 
 export function Features() {
-  
-  const [currentTab, setCurrentTab] = useState(tabData.find(tab => tab.current).name);
+  const [currentTab, setCurrentTab] = useState(
+    tabData.find((tab) => tab.current).name,
+  )
 
   const handleTabChange = (tabName) => {
-    setCurrentTab(tabName);
-  };
-
+    setCurrentTab(tabName)
+  }
 
   return (
     <section
@@ -279,23 +277,30 @@ export function Features() {
       className="bg-slate-50 py-20 sm:py-32"
     >
       <Container>
-      <Tab tabs={tabData} onTabChange={handleTabChange} />
-        <div className="mt-10 mx-auto max-w-2xl md:text-center">
-       {currentTab === 'FOR COLLECTIONS / REVENUE' &&  
-        <h2 className="font-display text-2xl tracking-tight text-slate-900 sm:text-4xl">
-           Boost Your Collections
-        </h2>}
-        {currentTab === 'FOR DISBURSEMENTS / EXPENDITURE' &&  
-        <h2 className="font-display text-2xl tracking-tight text-slate-900 sm:text-4xl">
-           Streamline Your Spending
-        </h2>}
-       <p className="mt-4 text-sm tracking-tight text-slate-700">
-          Streamline your processes, save time, and grow your business with confidence.
+        <Tab tabs={tabData} onTabChange={handleTabChange} />
+        <div className="mx-auto mt-10 max-w-2xl md:text-center">
+          {currentTab === 'FOR COLLECTIONS / REVENUE' && (
+            <h2 className="font-display text-2xl tracking-tight text-slate-900 sm:text-4xl">
+              Boost Your Collections
+            </h2>
+          )}
+          {currentTab === 'FOR DISBURSEMENTS / EXPENDITURE' && (
+            <h2 className="font-display text-2xl tracking-tight text-slate-900 sm:text-4xl">
+              Streamline Your Spending
+            </h2>
+          )}
+          <p className="mt-4 text-sm tracking-tight text-slate-700">
+            Streamline your processes, save time, and grow your business with
+            confidence.
           </p>
         </div>
-        <AnimatePresence mode='wait'>
-          {currentTab === 'FOR COLLECTIONS / REVENUE' && <Collections key="collections" />}
-          {currentTab === 'FOR DISBURSEMENTS / EXPENDITURE' && <Spending key="spending" />}
+        <AnimatePresence mode="wait">
+          {currentTab === 'FOR COLLECTIONS / REVENUE' && (
+            <Collections key="collections" />
+          )}
+          {currentTab === 'FOR DISBURSEMENTS / EXPENDITURE' && (
+            <Spending key="spending" />
+          )}
         </AnimatePresence>
       </Container>
     </section>

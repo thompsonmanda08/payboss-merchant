@@ -15,7 +15,7 @@ export function Hero() {
       <div className="pt-8">
         <h1 className="mx-auto max-w-4xl bg-clip-text font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl">
           Simplify{' '}
-          <span className="to-primary-light relative whitespace-nowrap bg-gradient-to-br from-primary bg-clip-text text-primary">
+          <span className="relative whitespace-nowrap bg-gradient-to-br from-primary to-primary-light bg-clip-text text-primary">
             <svg
               aria-hidden="true"
               viewBox="0 0 418 42"
@@ -49,7 +49,7 @@ export function Hero() {
           </Button>
         </div>
       </div>
-      <div className="mt-36 lg:mt-44">
+      {/* <div className="mt-36 lg:mt-44">
         <p className="font-display text-base text-slate-900">
           Trusted by these six companies so far
         </p>
@@ -83,7 +83,7 @@ export function Hero() {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </Container>
   )
 }

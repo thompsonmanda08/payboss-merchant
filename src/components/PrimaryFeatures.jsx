@@ -6,36 +6,37 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
+import { placeHolderImage } from '@/lib/constants'
 import backgroundImage from '@/images/background-features.jpg'
-import screenshotExpenses from '@/images/screenshots/expenses.png'
-import screenshotPayroll from '@/images/screenshots/payroll.png'
-import screenshotReporting from '@/images/screenshots/reporting.png'
-import screenshotVatReturns from '@/images/screenshots/vat-returns.png'
+// import screenshotExpenses from '@/images/screenshots/expenses.png'
+// import screenshotPayroll from '@/images/screenshots/payroll.png'
+// import screenshotReporting from '@/images/screenshots/reporting.png'
+// import screenshotVatReturns from '@/images/screenshots/vat-returns.png'
 
 const features = [
   {
     title: 'Comprehensive Financial Management',
     description:
-      " From invoicing to expense tracking, PayBoss covers all aspects of your financial needs.",
-    image: screenshotPayroll,
+      ' From invoicing to expense tracking, PayBoss covers all aspects of your financial needs.',
+    image: placeHolderImage,
   },
   {
     title: 'User-Friendly Interface',
     description:
-      "Our platform is designed to be intuitive and easy to use, even for those with limited technical expertise.",
-    image: screenshotExpenses,
+      'Our platform is designed to be intuitive and easy to use, even for those with limited technical expertise.',
+    image: placeHolderImage,
   },
   {
     title: 'Secure and Reliable',
     description:
-      "We prioritize the security of your financial data with robust encryption and security protocols.",
-    image: screenshotVatReturns,
+      'We prioritize the security of your financial data with robust encryption and security protocols.',
+    image: placeHolderImage,
   },
   {
     title: 'Customizable Solutions',
     description:
       'Tailor PayBoss features to fit your daily unique business requirements.',
-    image: screenshotReporting,
+    image: placeHolderImage,
   },
 ]
 
@@ -74,7 +75,7 @@ export function PrimaryFeatures() {
       <Container className="relative">
         <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
-          Why Choose PayBoss?
+            Why Choose PayBoss?
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
             Well everything you need if you aren’t that picky about minor
