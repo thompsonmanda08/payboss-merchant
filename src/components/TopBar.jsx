@@ -4,6 +4,7 @@ import Avatar from './Avatar'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import useNavigationStore from '@/state/navigationStore'
 import Logo from './Logo'
+import Link from 'next/link'
 // import { useProfileData } from '@/hooks/useQueryHooks'
 
 export default function TopNavBar({}) {
