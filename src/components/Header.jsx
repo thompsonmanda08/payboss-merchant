@@ -1,6 +1,9 @@
 'use client'
-
+'use client'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+
 import {
   Popover,
   PopoverButton,
@@ -52,7 +55,7 @@ function MobileNavigation() {
   return (
     <Popover>
       <PopoverButton
-        className="ui-not-focus-visible:outline-none relative z-10 flex h-8 w-8 items-center justify-center"
+        className="relative z-10 flex h-8 w-8 items-center justify-center ui-not-focus-visible:outline-none"
         aria-label="Toggle Navigation"
       >
         {({ open }) => <MobileNavIcon open={open} />}
@@ -90,10 +93,30 @@ function MobileNavigation() {
 }
 
 export function Header() {
+  const [isFloating, setIsFloating] = useState(false)
+
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const scrollYPos = window.addEventListener('scroll', () => {
+      window.scrollY > 50 ? setIsFloating(true) : setIsFloating(false)
+    })
+
+    // remove event
+    return () => window.removeEventListener('scroll', scrollYPos)
+  })
   return (
-    <header className="py-10">
-      <Container>
-        <nav className="relative z-50 flex justify-between">
+    <header
+      className={cn(
+        `rounded-blur fixed left-0 right-0 top-0 z-30 flex   flex-wrap items-center  px-4 py-5 backdrop-blur-2xl backdrop-saturate-200 transition-all lg:flex-nowrap lg:justify-start`,
+        {
+          'top-4 mx-10 rounded-xl bg-white/80': isFloating,
+          'z-50': pathname === '/' && !isFloating,
+        },
+      )}
+    >
+      <Container className={'w-full'}>
+        <nav className="relative z-50 flex w-full justify-between">
           <div className="flex items-center md:gap-x-12">
             <Link href="#" aria-label="Home">
               <Logo className="h-10 w-auto" />
@@ -108,9 +131,10 @@ export function Header() {
             <div className="hidden md:block">
               <NavLink href="/login">Sign in</NavLink>
             </div>
-            <Button href="/register" color="blue">
+            <Button href="/register" className={'h-10'}>
               <span>
-                Get started <span className="hidden lg:inline">today</span>
+                Get started
+                {/* <span className="hidden lg:inline">today</span> */}
               </span>
             </Button>
             <div className="-mr-1 md:hidden">

@@ -6,53 +6,53 @@ import backgroundImage from '@/images/background-faqs.jpg'
 const faqs = [
   [
     {
-      question: 'Does TaxPal handle VAT?',
+      question: 'What is PayBoss?',
       answer:
-        'Well no, but if you move your company offshore you can probably ignore it.',
+        'PayBoss is a comprehensive financial management platform offering digital tools to help businesses of all sizes manage their inflows and outflows of funds efficiently.',
     },
     {
-      question: 'Can I pay for my subscription via purchase order?',
-      answer: 'Absolutely, we are happy to take your money in all forms.',
+      question: 'How does API Integration benefit my business?',
+      answer: 'API Integration allows you to seamlessly connect PayBoss with your existing systems, automating financial workflows and reducing manual intervention, thus saving time and minimizing errors.',
     },
     {
-      question: 'How do I apply for a job at TaxPal?',
+      question: 'Can I create and send invoices using PayBoss?',
       answer:
-        'We only hire our customers, so subscribe for a minimum of 6 months and then let’s talk.',
+        'Yes, with Invoicing, you can create, send, and manage professional invoices easily, ensuring you stay on top of your receivables and receive timely payments.',
     },
   ],
   [
     {
-      question: 'What was that testimonial about tax fraud all about?',
+      question: 'How can PayBoss simplify transactions for my customers?',
       answer:
-        'TaxPal is just a software application, ultimately your books are your responsibility.',
+        'Payment Forms on PayBoss can be customized and deployed to cater to your business needs, simplifying the payment process and enhancing the customer experience.',
     },
     {
       question:
-        'TaxPal sounds horrible but why do I still feel compelled to purchase?',
+        'What are the options for selling products with PayBoss?',
       answer:
-        'This is the power of excellent visual design. You just can’t resist it, no matter how poorly it actually functions.',
+        'PayBoss offers a Store feature, allowing you to sell products and services online through a web store or via WhatsApp, expanding your sales channels and reaching more customers.',
     },
     {
       question:
-        'I found other companies called TaxPal, are you sure you can use this name?',
+        'How does PayBoss handle recurring payments?',
       answer:
-        'Honestly not sure at all. We haven’t actually incorporated or anything, we just thought it sounded cool and made this website.',
+        'With the Subscriptions feature, you can manage recurring payments and subscriptions effortlessly, keeping track of subscribers and their payments in one centralized location.',
     },
   ],
   [
     {
-      question: 'How do you generate reports?',
+      question: 'Can PayBoss facilitate in-store payments?',
       answer:
-        'You just tell us what data you need a report for, and we get our kids to create beautiful charts for you using only the finest crayons.',
+        'Yes, the USSD: In-Store Payments feature enables quick and secure in-store payments, providing your customers with a convenient and cashless payment option.',
     },
     {
-      question: 'Can we expect more inventory features?',
-      answer: 'In life it’s really better to never expect anything at all.',
+      question: 'What spending management features does PayBoss offer?',
+      answer: 'PayBoss offers several spending management features, including Bill Payments, Bulk Data, Bulk Airtime, Bulk Direct Payment, Bulk Vouchers Payment, and Expense Cards (Virtual or Physical), allowing you to manage various expenses efficiently.',
     },
     {
-      question: 'I lost my password, how do I get into my account?',
+      question: 'How secure is my financial data with PayBoss?',
       answer:
-        'Send us an email and we will send you a copy of our latest password spreadsheet so you can find your information.',
+        'PayBoss prioritizes the security of your financial data by implementing robust encryption and security protocols, ensuring your data is protected and your transactions are secure.',
     },
   ],
 ]
@@ -78,11 +78,11 @@ export function Faqs() {
             id="faq-title"
             className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl"
           >
-            Frequently asked questions
+          Frequently Asked Questions
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
             If you can’t find what you’re looking for, email our support team
-            and if you’re lucky someone will get back to you.
+            and someone will get back to you soon.
           </p>
         </div>
         <ul
