@@ -247,8 +247,8 @@ export function Features() {
 
   return (
     <section
-      id="testimonials"
-      aria-label="What our customers are saying"
+      id="features"
+      aria-label="Features payBoss is offering"
       className="bg-slate-50 py-20 sm:py-32"
     >
       <Container>
