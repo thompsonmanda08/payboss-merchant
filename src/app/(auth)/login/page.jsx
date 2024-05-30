@@ -2,7 +2,7 @@ import { LoginForm } from '@/components/forms'
 import Link from 'next/link'
 import React from 'react'
 import paymentsImage from '@/images/product/payments.avif'
-import MiniFooter from '@/components/base/MiniFooter'
+import MiniFooter from '@/components/MiniFooter'
 import Image from 'next/image'
 import { Logo } from '@/components/Logo'
 
@@ -22,7 +22,7 @@ function LoginPage() {
                     <div className="mb-4 flex w-full justify-start">
                       <Logo />
                     </div>
-                    <h3 className="to-primary-light relative z-10 bg-gradient-to-tr from-primary via-primary/80 bg-clip-text text-2xl font-bold text-transparent lg:text-4xl">
+                    <h3 className="relative z-10 bg-gradient-to-tr from-primary via-primary/80 to-primary-light bg-clip-text text-2xl font-bold text-transparent lg:text-4xl">
                       Welcome back
                     </h3>
                     <p className="mb-0">

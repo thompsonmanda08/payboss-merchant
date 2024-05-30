@@ -1,7 +1,7 @@
 'use client'
-
+import React, { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import Logo from './Logo'
 
 import {
   ChevronLeftIcon,
@@ -11,10 +11,9 @@ import {
   HomeIcon,
   ReaderIcon,
 } from '@radix-ui/react-icons'
+import MobileNavBar from './MobileNavBar'
 import useAuthStore from '@/state/authStore'
 import useNavigationStore from '@/state/navigationStore'
-import MobileNavBar from './MobileNavBar'
-import Logo from './Logo'
 
 export const SIDE_BAR_OPTIONS = [
   {
@@ -35,22 +34,20 @@ export const SIDE_BAR_OPTIONS = [
   },
 ]
 
-function SideNavBar() {
+function SideNav() {
   const pathname = usePathname()
   const { logUserOut } = useAuthStore()
 
   const [isSideNavCollapsed, setIsSideNavCollapsed] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const {
-    currentPage,
-    setCurrentPage,
-    setPage,
-    openMobileMenu,
-    toggleMobileMenu,
-  } = useNavigationStore()
+  const { currentPage, setCurrentPage, setPage } = useNavigationStore()
 
   function toggleSideNav() {
     setIsSideNavCollapsed(!isSideNavCollapsed)
+  }
+  function toggleMobileMenu() {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
   }
 
   return (
@@ -60,14 +57,28 @@ function SideNavBar() {
           isSideNavCollapsed
             ? 'max-w-[96px] items-center'
             : 'min-w-[220px] max-w-[320px]'
-        } fixed left-0 top-0 z-20 hidden h-screen max-h-screen w-full bg-white px-4 pb-10 pt-5 shadow-md shadow-slate-800/5 transition-all duration-500 ease-in-out lg:block`}
+        } z-20 hidden h-screen max-h-screen w-full bg-white px-4 pb-10 pt-5 shadow-md shadow-slate-800/5 transition-all duration-500 ease-in-out lg:block`}
       >
         <div className="flex h-full w-full flex-col">
-          {/* BUTTON CONTAINER */}
-          <div>
-            <Logo />
-          </div>
+          <div className="group relative flex items-center justify-between ">
+            <Logo isCollapsedNavBar={isSideNavCollapsed} />
 
+            <button onClick={toggleSideNav}>
+              {isSideNavCollapsed ? (
+                <ChevronRightIcon
+                  className={`${
+                    isSideNavCollapsed
+                      ? 'group-hover:delay-400 absolute bottom-0 top-2 rounded-xl text-white opacity-0 group-hover:block group-hover:rounded-lg group-hover:bg-primary group-hover:opacity-100'
+                      : 'hidden'
+                  } aspect-square h-8 w-8 p-1 text-4xl transition-all delay-200 duration-500 ease-in-out`}
+                />
+              ) : (
+                <ChevronLeftIcon
+                  className={`aspect-square h-8 w-8 p-1 text-4xl text-slate-600 opacity-0 transition-all delay-200 duration-500 ease-in-out group-hover:opacity-100`}
+                />
+              )}
+            </button>
+          </div>
           {/* MENU ITEMS CONTAINER */}
           <div className="mt-8 flex h-full w-full flex-col gap-4">
             {SIDE_BAR_OPTIONS.map(({ name, href, Icon }, index) => (
@@ -135,8 +146,8 @@ function SideNavBar() {
 
       {/* MOBILE NAVIGATION */}
       <MobileNavBar
-        isMobileMenuOpen={openMobileMenu}
-        setIsMobileMenuOpen={toggleMobileMenu}
+        isMobileMenuOpen={isMobileMenuOpen}
+        setIsMobileMenuOpen={setIsMobileMenuOpen}
         pathname={pathname}
         currentPage={currentPage}
         setPage={setPage}
@@ -146,4 +157,4 @@ function SideNavBar() {
   )
 }
 
-export default SideNavBar
+export default SideNav

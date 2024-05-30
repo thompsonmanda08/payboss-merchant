@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 312.39 384.71">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-1, .cls-2 {
+        fill-rule: evenodd;
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient-2);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="225.32" y1="42.77" x2="-369.56" y2="511.81" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9dc4ff"/>
+      <stop offset=".09" stop-color="#70a3ee"/>
+      <stop offset=".19" stop-color="#4b87e0"/>
+      <stop offset=".28" stop-color="#3074d6"/>
+      <stop offset=".35" stop-color="#2068d0"/>
+      <stop offset=".41" stop-color="#1b64ce"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-149.73" y1="418.72" x2="328.23" y2="249.18" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff9b57"/>
+      <stop offset=".28" stop-color="#fd9853"/>
+      <stop offset=".52" stop-color="#f88f48"/>
+      <stop offset=".75" stop-color="#ef8136"/>
+      <stop offset=".97" stop-color="#e36c1d"/>
+      <stop offset="1" stop-color="#e26a1a"/>
+    </linearGradient>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <path class="cls-1" d="m83,.95c-8.74,1.08-22.1,5.15-29.99,9.13C27.2,23.09,9.69,45.32,2.25,74.53q-2.25,8.81-2.25,123.81v115l2.64,5.62c3.57,7.62,8.92,13.27,15.7,16.6,4.84,2.38,6.89,2.78,14.16,2.78s9.05-.33,13-2.7c7.31-4.38,10.71-8.77,31.61-40.68,20.84-31.83,28.19-41.02,38.94-48.69,14.35-10.24,29.01-14.77,52.96-16.37,17.08-1.14,29.92-3.99,42.48-9.43,16.74-7.25,34.13-21.13,45.73-36.47,3.18-4.21,6.36-8.26,7.08-9.02,1.87-1.98,6.79-11.98,9.71-19.74,6.67-17.71,8.61-44.14,4.62-62.9-6.52-30.64-24.03-56.32-50.07-73.42-15.22-9.99-32.52-16.1-51.21-18.07-11.31-1.19-84.53-1.11-94.34.1"/>
+      <path class="cls-2" d="m258,182.94c-6.75,9.43-19.15,21.21-29.68,28.22-17.49,11.63-34.83,17.1-59.31,18.74-23.95,1.6-38.61,6.13-52.96,16.37-10.75,7.67-18.1,16.86-38.94,48.69-19.94,30.45-24.74,36.8-29.86,39.49-1.51.79-2.75,1.91-2.75,2.47,0,2.12,8.61,13.6,14.97,19.95,11.52,11.52,26.89,20.37,43.53,25.08,7.66,2.17,9.92,2.28,53.5,2.66,31.34.27,48.45.03,54.99-.79,59.86-7.48,104.19-60.47,100.7-120.38-1.53-26.35-10.6-49.01-27.67-69.1-5.53-6.51-18.91-18.53-20.53-18.43-.55.03-3.25,3.2-6,7.04"/>
+    </g>
+  </g>
+</svg>
