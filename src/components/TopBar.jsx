@@ -23,7 +23,9 @@ export default function TopNavBar({}) {
           <HamburgerMenuIcon className="h-6 w-6 text-slate-700" />
         </div>
         <div className={`${''} z-[0] ml-8 min-w-[180px]`}>
-          <Logo isCollapsedNavBar={false} />
+          <Link href="/" aria-label="Home">
+            <Logo className="h-10 w-auto" />
+          </Link>
         </div>
 
         {/* COMPONENT SWAP */}
