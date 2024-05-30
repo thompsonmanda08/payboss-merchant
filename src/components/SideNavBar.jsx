@@ -15,6 +15,7 @@ import useAuthStore from '@/state/authStore'
 import useNavigationStore from '@/state/navigationStore'
 import MobileNavBar from './MobileNavBar'
 import Logo from './Logo'
+import Link from 'next/link'
 
 export const SIDE_BAR_OPTIONS = [
   {
