@@ -10,6 +10,8 @@ import screenshotContacts from '@/images/screenshots/contacts.png'
 import screenshotInventory from '@/images/screenshots/inventory.png'
 import screenshotProfitLoss from '@/images/screenshots/profit-loss.png'
 
+import bpIcon from '@/images/logos/payboss-icon.svg'
+
 const features = [
   {
     name: 'Reporting',

@@ -1,11 +1,12 @@
 'use client'
-import { useState } from 'react';
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { Container } from '@/components/Container'
 import Tab from '@/components/Tab'
-import api from '@/images/avatars/avatar-3.png'
+// import api from '@/images/avatars/avatar-3.png'
 
-
+import api from '@/images/logos/payboss-icon.svg'
 
 function QuoteIcon(props) {
   return (
@@ -15,12 +16,27 @@ function QuoteIcon(props) {
   )
 }
 
-function Collections(){
+const containerVariants = {
+  hidden: { opacity: 1 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: -50 },
+  show: { opacity: 1, y: 0 },
+}
+
+function Collections() {
   const collections = [
     [
       {
         content:
-          'Seamlessly connect PayBoss with your existing systems and automate your financial workflows with our robust API integration.',
+          'Seamlessly connect with your existing systems and automate your financial workflows with our robust API.',
         author: {
           name: 'API Integration',
           role: 'Connect Seamlessly',
@@ -29,7 +45,7 @@ function Collections(){
       },
       {
         content:
-          'Create, send, and manage professional invoices with ease. Stay on top of your receivables and ensure timely payments.',
+          'Create, send, and manage professional invoices with ease. Stay on top of your income and ensure timely payments.',
         author: {
           name: 'Invoicing',
           role: 'Effortless Billing',
@@ -40,7 +56,7 @@ function Collections(){
     [
       {
         content:
-          'Customize and deploy payment forms that cater to your business needs. Simplify the payment process for your customers.',
+          'Customize and deploy payment forms that cater to your business needs. Easy payments process for your customers.',
         author: {
           name: 'Payment Forms',
           role: 'Simplify Transactions',
@@ -49,7 +65,7 @@ function Collections(){
       },
       {
         content:
-          'Sell your products and services online or via WhatsApp. Reach more customers and increase your sales with flexible store options.',
+          'Sell your products and services online or via WhatsApp. Increase your sales with flexible store options.',
         author: {
           name: 'Store',
           role: 'Expand Sales Channels',
@@ -60,7 +76,7 @@ function Collections(){
     [
       {
         content:
-          'Manage recurring payments and subscriptions effortlessly. Keep track of your subscribers and their payments in one place.',
+          'Manage recurring payments and subscriptions effortlessly. Keep track of your subscribers and their payments.',
         author: {
           name: 'Subscriptions',
           role: 'Automate Recurring Payments',
@@ -69,7 +85,7 @@ function Collections(){
       },
       {
         content:
-          'Enable quick and secure in-store payments with our USSD feature. Provide your customers with a convenient and cashless payment option.',
+          'Enable quick and secure in-store payments with our USSD feature. A convenient and cashless payment option.',
         author: {
           name: 'USSD',
           role: 'Quick Cashless Payments',
@@ -78,54 +94,57 @@ function Collections(){
       },
     ],
   ]
-  return(
-    <ul
-    role="list"
-    className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-  >
-    {collections.map((column, columnIndex) => (
-      <li key={columnIndex}>
-        <ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
-          {column.map((testimonial, testimonialIndex) => (
-            <li key={testimonialIndex}>
-              <figure className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
-                <QuoteIcon className="absolute left-6 top-6 fill-slate-100" />
-                <blockquote className="relative">
-                  <p className="text-lg tracking-tight text-slate-900">
-                    {testimonial.content}
-                  </p>
-                </blockquote>
-                <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
-                  <div>
-                    <div className="font-display text-base text-slate-900">
-                      {testimonial.author.name}
+  return (
+    <motion.ul
+      role="list"
+      className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+    >
+      {collections.map((column, columnIndex) => (
+        <li key={columnIndex}>
+          <motion.ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
+            {column.map((revenue, revenueIndex) => (
+              <motion.li key={revenueIndex} variants={itemVariants}>
+                <figure className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
+                  <QuoteIcon className="absolute left-6 top-6 fill-slate-100" />
+                  <blockquote className="relative">
+                    <p className="text-lg tracking-tight text-slate-900">
+                      {revenue.content}
+                    </p>
+                  </blockquote>
+                  <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
+                    <div>
+                      <div className="font-display text-base text-slate-900">
+                        {revenue.author.name}
+                      </div>
+                      <div className="mt-1 text-sm text-slate-500">
+                        {revenue.author.role}
+                      </div>
                     </div>
-                    <div className="mt-1 text-sm text-slate-500">
-                      {testimonial.author.role}
+                    <div className="overflow-hidden rounded-full bg-slate-50">
+                      <Image
+                        className="h-14 w-14 object-cover"
+                        src={revenue.author.image}
+                        alt=""
+                        width={56}
+                        height={56}
+                      />
                     </div>
-                  </div>
-                  <div className="overflow-hidden rounded-full bg-slate-50">
-                    <Image
-                      className="h-14 w-14 object-cover"
-                      src={testimonial.author.image}
-                      alt=""
-                      width={56}
-                      height={56}
-                    />
-                  </div>
-                </figcaption>
-              </figure>
-            </li>
-          ))}
-        </ul>
-      </li>
-    ))}
-  </ul>
+                  </figcaption>
+                </figure>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </li>
+      ))}
+    </motion.ul>
   )
 }
 
-
-function Spending(){
+function Spending() {
   const spending = [
     [
       {
@@ -159,7 +178,7 @@ function Spending(){
       },
       {
         content:
-          'Make bulk payments to vendors, suppliers, or employees with ease. Enjoy the convenience of managing multiple payments simultaneously.',
+          'Make bulk payments to vendors, suppliers, or employees and enjoy streamlined payments automation.',
         author: {
           name: 'Bulk Direct Payment',
           role: 'Pay Multiple Vendors',
@@ -170,7 +189,7 @@ function Spending(){
     [
       {
         content:
-          'Distribute bulk vouchers to your customers or employees efficiently. Enhance your promotional and reward programs.',
+          'Distribute bulk vouchers to your customers or employees efficiently. Enhanced reward programs.',
         author: {
           name: 'Bulk Vouchers Payment',
           role: 'Distribute Rewards Efficiently',
@@ -188,86 +207,101 @@ function Spending(){
       },
     ],
   ]
-  return(
-    <ul
-    role="list"
-    className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-  >
-    {spending.map((column, columnIndex) => (
-      <li key={columnIndex}>
-        <ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
-          {column.map((testimonial, testimonialIndex) => (
-            <li key={testimonialIndex}>
-              <figure className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
-                <QuoteIcon className="absolute left-6 top-6 fill-slate-100" />
-                <blockquote className="relative">
-                  <p className="text-lg tracking-tight text-slate-900">
-                    {testimonial.content}
-                  </p>
-                </blockquote>
-                <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
-                  <div>
-                    <div className="font-display text-base text-slate-900">
-                      {testimonial.author.name}
+  return (
+    <motion.ul
+      role="list"
+      className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+    >
+      {spending.map((column, columnIndex) => (
+        <li key={columnIndex}>
+          <motion.ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
+            {column.map((expense, expenseIndex) => (
+              <motion.li key={expenseIndex} variants={itemVariants}>
+                <figure className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
+                  <QuoteIcon className="absolute left-6 top-6 fill-slate-100" />
+                  <blockquote className="relative">
+                    <p className="text-lg tracking-tight text-slate-900">
+                      {expense.content}
+                    </p>
+                  </blockquote>
+                  <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
+                    <div>
+                      <div className="font-display text-base text-slate-900">
+                        {expense.author.name}
+                      </div>
+                      <div className="mt-1 text-sm text-slate-500">
+                        {expense.author.role}
+                      </div>
                     </div>
-                    <div className="mt-1 text-sm text-slate-500">
-                      {testimonial.author.role}
+                    <div className="overflow-hidden rounded-full bg-slate-50">
+                      <Image
+                        className="h-14 w-14 object-cover"
+                        src={expense.author.image}
+                        alt=""
+                        width={56}
+                        height={56}
+                      />
                     </div>
-                  </div>
-                  <div className="overflow-hidden rounded-full bg-slate-50">
-                    <Image
-                      className="h-14 w-14 object-cover"
-                      src={testimonial.author.image}
-                      alt=""
-                      width={56}
-                      height={56}
-                    />
-                  </div>
-                </figcaption>
-              </figure>
-            </li>
-          ))}
-        </ul>
-      </li>
-    ))}
-  </ul>
+                  </figcaption>
+                </figure>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </li>
+      ))}
+    </motion.ul>
   )
 }
 const tabData = [
   { name: 'FOR COLLECTIONS / REVENUE', current: true },
   { name: 'FOR DISBURSEMENTS / EXPENDITURE', current: false },
-];
+]
 
 export function Features() {
-  const [currentTab, setCurrentTab] = useState(tabData.find(tab => tab.current).name);
+  const [currentTab, setCurrentTab] = useState(
+    tabData.find((tab) => tab.current).name,
+  )
 
   const handleTabChange = (tabName) => {
-    setCurrentTab(tabName);
-  };
+    setCurrentTab(tabName)
+  }
 
   return (
     <section
-      id="testimonials"
-      aria-label="What our customers are saying"
+      id="features"
+      aria-label="Features payBoss is offering"
       className="bg-slate-50 py-20 sm:py-32"
     >
       <Container>
-      <Tab tabs={tabData} onTabChange={handleTabChange} />
-        <div className="mt-10 mx-auto max-w-2xl md:text-center">
-        {currentTab === 'FOR COLLECTIONS / REVENUE' &&  
-        <h2 className="font-display text-2xl tracking-tight text-slate-900 sm:text-4xl">
-           Boost Your Collections
-        </h2>}
-        {currentTab === 'FOR DISBURSEMENTS / EXPENDITURE' &&  
-        <h2 className="font-display text-2xl tracking-tight text-slate-900 sm:text-4xl">
-           Streamline Your Spending
-        </h2>}
+        <Tab tabs={tabData} onTabChange={handleTabChange} />
+        <div className="mx-auto mt-10 max-w-2xl md:text-center">
+          {currentTab === 'FOR COLLECTIONS / REVENUE' && (
+            <h2 className="font-display text-2xl tracking-tight text-slate-900 sm:text-4xl">
+              Boost Your Collections
+            </h2>
+          )}
+          {currentTab === 'FOR DISBURSEMENTS / EXPENDITURE' && (
+            <h2 className="font-display text-2xl tracking-tight text-slate-900 sm:text-4xl">
+              Streamline Your Spending
+            </h2>
+          )}
           <p className="mt-4 text-sm tracking-tight text-slate-700">
-          Streamline your processes, save time, and grow your business with confidence.
+            Streamline your processes, save time, and grow your business with
+            confidence.
           </p>
         </div>
-        {currentTab === 'FOR COLLECTIONS / REVENUE' &&  <Collections/> }
-        {currentTab === 'FOR DISBURSEMENTS / EXPENDITURE' &&  <Spending/> }
+        <AnimatePresence mode="wait">
+          {currentTab === 'FOR COLLECTIONS / REVENUE' && (
+            <Collections key="collections" />
+          )}
+          {currentTab === 'FOR DISBURSEMENTS / EXPENDITURE' && (
+            <Spending key="spending" />
+          )}
+        </AnimatePresence>
       </Container>
     </section>
   )

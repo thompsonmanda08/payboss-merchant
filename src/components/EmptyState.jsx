@@ -1,6 +1,6 @@
-import Link from "next/link";
-import React from "react";
-import { Button } from "../ui/button";
+import Link from 'next/link'
+import React from 'react'
+import { Button } from './Button'
 
 function EmptyState({
   title,
@@ -11,29 +11,29 @@ function EmptyState({
   children,
 }) {
   return (
-    <div className="w-full flex flex-col text-gray-300 h-full justify-center items-center my-12">
+    <div className="my-12 flex h-full w-full flex-col items-center justify-center text-gray-300">
       <h3
-        className={`${""} text-2xl md:text-[48px] text-center text-primary-800 font-bold leading-8`}
+        className={`${''} text-primary-800 text-center text-2xl font-bold leading-8 md:text-[48px]`}
       >
-        {title || "Whoops-a-daisy!"}
+        {title || 'Whoops-a-daisy!'}
       </h3>
       <p
-        className={`max-w-[380px] md:max-w-[480px] text-sm md:text-base text-center mb-4 my-6 text-gray-400/80 px-5 p-2`}
+        className={`my-6 mb-4 max-w-[380px] p-2 px-5 text-center text-sm text-gray-400/80 md:max-w-[480px] md:text-base`}
       >
-        {message || "There is nothing here yet. Please try again later."}
+        {message || 'There is nothing here yet. Please try again later.'}
       </p>
       {children ||
         (!onButtonClick ? (
-          <Link href={href || "/"}>
-            <Button className={"px-8 h-12"}>{buttonText || "Go Home"}</Button>
+          <Link href={href || '/'}>
+            <Button className={'h-12 px-8'}>{buttonText || 'Go Home'}</Button>
           </Link>
         ) : (
-          <Button className={"px-8 py-3"} onClick={onButtonClick}>
-            {buttonText || "Done"}
+          <Button className={'px-8 py-3'} onClick={onButtonClick}>
+            {buttonText || 'Done'}
           </Button>
         ))}
     </div>
-  );
+  )
 }
 
-export default EmptyState;
+export default EmptyState

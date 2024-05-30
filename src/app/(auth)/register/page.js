@@ -1,9 +1,9 @@
 import Link from 'next/link'
-
 import { Button } from '@/components/Button'
 import { SelectField, TextField } from '@/components/Fields'
-import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
+import { Logo } from '@/components'
+import { Input } from '@/components/ui/input'
 
 export const metadata = {
   title: 'Sign Up',
@@ -34,36 +34,46 @@ export default function Register() {
         action="#"
         className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2"
       >
-        <TextField
+        <Input
           label="First name"
           name="first_name"
           type="text"
           autoComplete="given-name"
           required
         />
-        <TextField
+        <Input
           label="Last name"
           name="last_name"
           type="text"
           autoComplete="family-name"
           required
         />
-        <TextField
-          className="col-span-full"
-          label="Email address"
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-        />
-        <TextField
-          className="col-span-full"
-          label="Password"
-          name="password"
-          type="password"
-          autoComplete="new-password"
-          required
-        />
+        <div className="col-span-full flex w-full flex-col gap-4">
+          <Input
+            className="col-span-full"
+            label="Email address"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+          />
+          <Input
+            className="col-span-full"
+            label="Password"
+            name="password"
+            type="password"
+            autoComplete="new-password"
+            required
+          />
+          <Input
+            className="col-span-full"
+            label="Confirm Password"
+            name="password"
+            type="password"
+            autoComplete="new-password"
+            required
+          />
+        </div>
         <SelectField
           className="col-span-full"
           label="How did you hear about us?"
@@ -77,7 +87,7 @@ export default function Register() {
         <div className="col-span-full">
           <Button type="submit" variant="solid" color="blue" className="w-full">
             <span>
-              Sign up <span aria-hidden="true">&rarr;</span>
+              Sign up <span aria-hidden="true"> &rarr;</span>
             </span>
           </Button>
         </div>

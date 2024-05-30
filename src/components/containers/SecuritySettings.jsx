@@ -1,25 +1,25 @@
 // TODO: THIS COMPONENT WILL BE A REFFERENCE POINT FOR THE SETTINGS PAGE
 
-import { Modal } from "..";
-import useProfileStore from "@/state/profileStore";
-import useSettingsStore from "@/state/settingsStore";
+import { Modal } from '..'
+import useProfileStore from '@/state/profileStore'
+import useSettingsStore from '@/state/settingsStore'
 
 export default function SecuritySettings() {
-  const { user } = useProfileStore();
-  const { openEditModal, setOpenEditModal } = useSettingsStore();
+  const { user } = useProfileStore()
+  const { openEditModal, setOpenEditModal } = useSettingsStore()
 
   function handleToggleModal() {
-    setOpenEditModal(!openEditModal);
+    setOpenEditModal(!openEditModal)
   }
   function handleConfirm() {
-    handleToggleModal();
+    handleToggleModal()
   }
 
   return (
     <>
-      <div className="flex flex-col rounded-md w-full p-5">
+      <div className="flex w-full flex-col rounded-md p-5">
         <div>
-          <div className="flex justify-between items-end w-full">
+          <div className="flex w-full items-end justify-between">
             <div>
               <h2 className="text-base font-semibold leading-7 text-gray-900">
                 Security
@@ -54,12 +54,12 @@ export default function SecuritySettings() {
                 </button>
               </dd>
             </div>
-            <div className="pt-6 sm:flex grayscale opacity-55">
+            <div className="pt-6 opacity-55 grayscale sm:flex">
               <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
                 2F Authentication
               </dt>
               <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                <div className="text-gray-900 font-medium">
+                <div className="font-medium text-gray-900">
                   [disabled] Coming Soon!
                 </div>
                 <button
@@ -75,7 +75,7 @@ export default function SecuritySettings() {
                 Recovery Email
               </dt>
               <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                <div className="text-gray-900">{user.email || "Not Set"}</div>
+                <div className="text-gray-900">{user?.email || 'Not Set'}</div>
                 <button
                   type="button"
                   className="font-semibold text-primary hover:text-primary/80"
@@ -92,12 +92,12 @@ export default function SecuritySettings() {
           show={openEditModal}
           onClose={handleToggleModal}
           onConfirm={handleConfirm}
-          title={"Update Profile Details"}
-          infoText={"Ensure that your account information is up to date."}
+          title={'Update Profile Details'}
+          infoText={'Ensure that your account information is up to date.'}
         >
-          <div className="flex bg-red-500 w-full h-24"></div>
+          <div className="flex h-24 w-full bg-red-500"></div>
         </Modal>
       )}
     </>
-  );
+  )
 }

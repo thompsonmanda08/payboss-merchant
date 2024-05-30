@@ -3,13 +3,13 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 const Input = React.forwardRef(
-  ({ className, type, label, name, ...props }, ref) => {
+  ({ className, type, label, name, containerClasses, ...props }, ref) => {
     return (
-      <>
+      <div className={cn('flex flex-col ', containerClasses)}>
         {label && (
           <label
             htmlFor={name}
-            class="mb-2 ml-1 text-xs font-medium text-slate-700"
+            class="mb-1 ml-1 text-sm font-medium text-slate-700"
           >
             {label}
           </label>
@@ -25,7 +25,7 @@ const Input = React.forwardRef(
           name={name}
           {...props}
         />
-      </>
+      </div>
     )
   },
 )

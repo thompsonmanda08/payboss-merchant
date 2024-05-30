@@ -14,24 +14,23 @@ import {
 import useAuthStore from '@/state/authStore'
 import useNavigationStore from '@/state/navigationStore'
 import MobileNavBar from './MobileNavBar'
-import Logo from './Logo'
 import Link from 'next/link'
 
 export const SIDE_BAR_OPTIONS = [
   {
-    name: 'Home',
-    href: '',
+    name: 'Dashboard',
+    href: '/dashboard',
     Icon: HomeIcon,
   },
   {
-    name: 'Transactions',
-    href: 'transactions',
+    name: 'Disbursements',
+    href: '/dashboard/disbursements',
     Icon: ReaderIcon,
   },
 
   {
-    name: 'Account Settings',
-    href: 'account-settings',
+    name: 'Settings',
+    href: '/dashboard/settings',
     Icon: GearIcon,
   },
 ]
@@ -61,32 +60,25 @@ function SideNavBar() {
           isSideNavCollapsed
             ? 'max-w-[96px] items-center'
             : 'min-w-[220px] max-w-[320px]'
-        } fixed left-0 top-0 z-20 hidden h-screen max-h-screen w-full bg-white px-4 pb-10 pt-5 shadow-md shadow-slate-800/5 transition-all duration-500 ease-in-out lg:block`}
+        } z-20 hidden h-full max-h-screen w-full bg-white px-4 pb-10 shadow-md shadow-slate-800/5 transition-all duration-500 ease-in-out lg:block`}
       >
         <div className="flex h-full w-full flex-col">
-          {/* BUTTON CONTAINER */}
-          <div>
-            <Link href="/" aria-label="Home">
-              <Logo className="h-10 w-auto" />
-            </Link>
-          </div>
-
           {/* MENU ITEMS CONTAINER */}
-          <div className="mt-8 flex h-full w-full flex-col gap-4">
+          <div className="mt-6 flex h-full w-full flex-col gap-4">
             {SIDE_BAR_OPTIONS.map(({ name, href, Icon }, index) => (
-              <div
+              <Link
                 key={index}
-                // href={href}
+                href={href}
                 onClick={() => {
-                  setCurrentPage(index)
-                  setPage(href)
+                  // setCurrentPage(index)
+                  // setPage(href)
                 }}
                 // shallow={true}
                 className={`group ${
-                  // pathname.split("/")[1] == name.toLowerCase() ||
-                  // pathname == href
-                  currentPage === index
-                    ? 'rounded-sm bg-primary/10 font-medium text-primary'
+                  pathname.split('/')[0] == name.toLowerCase() ||
+                  pathname == href
+                    ? // currentPage === index
+                      'rounded-sm bg-primary/10 font-medium text-primary'
                     : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10 '
                 } 
 
@@ -107,7 +99,7 @@ function SideNavBar() {
                 ) : (
                   name
                 )}
-              </div>
+              </Link>
             ))}
           </div>
           <button
