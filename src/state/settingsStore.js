@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 
 const INITIAL_STATE = {
   openEditModal: false,
+  openCreateUserModal: false,
 };
 
 const useSettingsStore = create((set, get) => ({
@@ -10,6 +11,7 @@ const useSettingsStore = create((set, get) => ({
 
   //SETTERS
   setOpenEditModal: (open) => set({ openEditModal: open }),
+  setOpenCreateUserModal: (open) => set({ openCreateUserModal: open }),
 
   // CLear & Reset
   resetSettingsData: () =>

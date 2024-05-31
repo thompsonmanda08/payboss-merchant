@@ -39,7 +39,7 @@ function Avatar({ userData }) {
           <div className="flex min-w-[120px] flex-col items-start">
             <p className="text-sm font-semibold text-slate-700">{`${userData?.firstName || 'PayBoss'} ${userData?.lastName || 'Admin'}`}</p>
             <p className="text-[13px] font-medium text-slate-500">
-              {userData?.email?.split('@')[0] || 'admin@payboss'}
+              {userData?.email || 'admin@payboss'}
             </p>
           </div>
           {/* <ChevronDownIcon

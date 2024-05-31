@@ -7,7 +7,7 @@ export { Footer } from './LandingPage/Footer'
 export { Pricing } from './LandingPage/Pricing'
 export { PrimaryFeatures } from './LandingPage/PrimaryFeatures'
 export { SecondaryFeatures } from './LandingPage/SecondaryFeatures'
-
+export { default as UsersSettings } from './UsersSettings'
 /* *********************** SETTINGS PAGE *************************** */
 export { default as BusinessSettings } from './Settings/BusinessSettings'
 export { default as GeneralSettings } from './Settings/GeneralSettings'
