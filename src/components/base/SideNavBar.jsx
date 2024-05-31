@@ -23,9 +23,37 @@ export const SIDE_BAR_OPTIONS = [
     Icon: HomeIcon,
   },
   {
-    name: 'Payments',
+    name: 'Disbursements',
     href: '/dashboard/payments',
     Icon: QueueListIcon,
+    subMenuItems: [
+      {
+        name: 'Invoices',
+        Icon: QueueListIcon,
+      },
+    ],
+  },
+  {
+    name: 'Collections',
+    href: '/dashboard/collections',
+    Icon: QueueListIcon,
+    subMenuItems: [
+      {
+        name: 'Invoices',
+        Icon: QueueListIcon,
+      },
+    ],
+  },
+  {
+    name: 'Bill Payments',
+    href: '/dashboard/bills',
+    Icon: QueueListIcon,
+    subMenuItems: [
+      {
+        name: 'Invoices',
+        Icon: QueueListIcon,
+      },
+    ],
   },
 
   {

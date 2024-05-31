@@ -1,4 +1,7 @@
 'use client'
+import { FileDropZone } from '@/components/base'
+import { Button } from '@/components/ui/Button'
+import Link from 'next/link'
 import React from 'react'
 
 const UploadCSVFile = ({
@@ -9,15 +12,26 @@ const UploadCSVFile = ({
   return (
     <>
       <div className="flex h-full w-full flex-col justify-between">
-        <div className="flex h-5/6 w-full flex-col items-center justify-center gap-4 text-center">
-          <div
-            className="bg-primary-50/50 hover:bg-primary-50/60 ring-primary-100 flex h-12 w-full shrink-0 cursor-pointer items-center 
-          rounded-md text-sm tracking-tighter ring-offset-1 focus-within:ring-2 lg:text-base"
-          ></div>
-          <div className="max-h-[250px] min-h-[250px] w-full overflow-y-auto">
-            {/*  */}
-            <></>
-          </div>
+        <FileDropZone
+          onChange={(file) => {
+            // console.log('ON CHANGE SHOW FILE NAME:', file.name)
+            updatePaymentFields({ file })
+          }}
+        />
+
+        <p className="mt-2 text-xs font-medium text-gray-500 lg:text-[13px]">
+          Having trouble with the file uploads?
+          <Link
+            href={'#'}
+            download={'#'}
+            className="ml-1 font-bold text-primary"
+          >
+            Download a template here
+          </Link>
+        </p>
+
+        <div className="mt-4 flex h-1/6 w-full items-end justify-end">
+          <Button onClick={() => changeScreen(2)}>Next</Button>
         </div>
       </div>
     </>

@@ -1,6 +1,10 @@
 'use client'
 
-import { CloudArrowUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {
+  CloudArrowUpIcon,
+  DocumentArrowUpIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 import * as React from 'react'
 import { useDropzone } from 'react-dropzone'
 import { twMerge } from 'tailwind-merge'
@@ -138,11 +142,24 @@ const SingleFileDropzone = React.forwardRef(
               src={imageUrl}
               alt={acceptedFiles[0]?.name}
             />
+          ) : acceptedFiles[0] ? (
+            // File Preview
+            <div className="bg-red-60 relative flex flex-col items-center gap-4">
+              <DocumentArrowUpIcon className="absolute -z-0 h-24 w-24  text-gray-200" />
+              <div className="z-10 flex flex-col items-center gap-4">
+                <p className="py-2 font-medium">Your file is ready to upload</p>
+                <span className="test-base font-bold">
+                  {' '}
+                  {acceptedFiles[0]?.name}
+                </span>
+                <Button disabled={disabled}>Change</Button>
+              </div>
+            </div>
           ) : (
             // Upload Icon
             <div className="flex flex-col items-center justify-center text-xs text-gray-400">
-              <CloudArrowUpIcon className="mb-2 h-7 w-7" />
-              <div className="text-gray-400">drag & drop to upload</div>
+              <CloudArrowUpIcon className="mb-2 h-12 w-12" />
+              <div className="text-gray-400">Drag & Drop to Upload</div>
               <div className="mt-3">
                 <Button disabled={disabled}>Upload</Button>
               </div>

@@ -5,7 +5,7 @@ import CreatePayment from './CreatePayment'
 import UploadCSVFile from './UploadCSVFile'
 import BatchPaymentDetails from './BatchDetails'
 
-export const PAYMENT_TYPES = ['BULK PAYMENT', 'SINGLE PAYMENTS']
+export const PAYMENT_TYPES = ['Bulk Payment', 'Single Payment']
 
 export const ALL_STEPS = []
 
@@ -63,7 +63,7 @@ const BatchPayment = ({}) => {
         resetPaymentData()
       }}
     >
-      <div className="flex h-full w-full flex-col items-center justify-between gap-2 py-2">
+      <div className="flex h-full w-full flex-col items-center justify-between gap-2 pt-2">
         {tabs ? (
           activeTab
         ) : (
