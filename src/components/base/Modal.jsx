@@ -82,7 +82,7 @@ function Modal({
                 onClose()
               }}
               className={
-                'h-12 bg-rose-500/10 text-rose-500 hover:bg-rose-500/30'
+                'h-12 bg-rose-500/10 text-rose-400 hover:bg-rose-500/30'
               }
             >
               {cancelText || 'Cancel'}

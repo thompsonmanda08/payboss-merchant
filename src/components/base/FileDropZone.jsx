@@ -59,12 +59,12 @@ const SingleFileDropzone = React.forwardRef(
       isDragReject,
     } = useDropzone({
       accept: {
-        'image/png': [],
-        'application/*': [],
-        'application/vnd.ms-excel': [],
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [],
+        // 'image/png': [],
         'text/csv': [],
         'text/*': [],
+        // 'application/*': [],
+        'application/vnd.ms-excel': [],
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [],
       },
       multiple: false,
       disabled,
