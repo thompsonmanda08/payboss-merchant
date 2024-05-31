@@ -6,6 +6,7 @@ import {
   BusinessSettings,
   GeneralSettings,
   SecuritySettings,
+  UsersSettings,
 } from '@/components/containers'
 
 import useCustomTabsHook from '@/hooks/CustomTabsHook'
@@ -15,6 +16,7 @@ const tabs = [
   { name: 'General', href: '#', current: 0 },
   { name: 'Security', href: '#', current: 1 },
   { name: 'Business', href: '#', current: 2 },
+  { name: 'Users', href: '#', current: 3 },
 ]
 
 function AccountSettings() {
@@ -22,6 +24,7 @@ function AccountSettings() {
     <GeneralSettings key="general" />,
     <SecuritySettings key={'security'} />,
     <BusinessSettings key={'business'} />,
+    <UsersSettings key={'users'} />,
   ])
 
   return (

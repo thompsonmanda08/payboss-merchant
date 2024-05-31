@@ -1,26 +1,60 @@
 'use client'
+import { Switch } from '@headlessui/react';
+import { useState } from 'react';
 
-import * as React from 'react'
-import * as SwitchPrimitives from '@radix-ui/react-switch'
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ');
+}
 
-import { cn } from '@/lib/utils'
-
-const Switch = React.forwardRef(({ className, ...props }, ref) => (
-  <SwitchPrimitives.Root
-    className={cn(
-      'peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
-      className,
-    )}
-    {...props}
-    ref={ref}
-  >
-    <SwitchPrimitives.Thumb
-      className={cn(
-        'pointer-events-none block h-4 w-4 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0',
+const ToggleSwitch = () => {
+  const [enabled, setEnabled] = useState(false);
+  return (
+    <Switch
+      checked={enabled}
+      onChange={setEnabled}
+      className={classNames(
+        'relative inline-flex bg-primary p-1 flex-shrink-0 2xl:h-[28px] 2xl:w-14  xl:w-12 xl:h-[24px] rounded-[4px] border-transparent  cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none ',
       )}
-    />
-  </SwitchPrimitives.Root>
-))
-Switch.displayName = SwitchPrimitives.Root.displayName
-
-export { Switch }
+    >
+      <span className='sr-only'>On</span>
+      <span
+        className={classNames(
+          enabled
+            ? '2xl:translate-x-6 xl:translate-x-5 translate-x-5'
+            : 'translate-x-0',
+          'pointer-events-none relative inline-block h-full w-[50%] rounded-[3px] bg-white transform ring-0 transition ease-in-out duration-200',
+        )}
+      >
+        <span
+          className={classNames(
+            enabled
+              ? 'opacity-0 ease-out duration-100'
+              : 'opacity-100 ease-in duration-200',
+            'absolute inset-0 h-full w-full flex items-center justify-center transition-opacity',
+          )}
+          aria-hidden='true'
+        ></span>
+        <span
+          className={classNames(
+            enabled
+              ? 'opacity-100 ease-in duration-200'
+              : 'opacity-0 ease-out duration-100',
+            'absolute inset-0 h-full w-full flex items-center justify-center transition-opacity',
+          )}
+          aria-hidden='true'
+        ></span>
+      </span>
+      <span
+        className={` font-bold 2xl:text-[13px] xl:text-[10px] text-white absolute left-1`}
+      >
+        On
+      </span>
+      <span
+        className={` font-bold 2xl:text-[13px] xl:text-[10px] text-white mx-1`}
+      >
+        Off
+      </span>
+    </Switch>
+  );
+};
+export default ToggleSwitch;
