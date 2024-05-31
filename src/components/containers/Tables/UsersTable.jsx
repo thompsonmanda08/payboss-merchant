@@ -91,7 +91,10 @@ const users =  people?.filter((user) => {
           </div>
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            {users.length === 0 ? <EmptyState></EmptyState>:  <table className="min-w-full divide-y divide-gray-300 border-t">
+            {users.length === 0 ? 
+            <EmptyState>
+            <span></span>
+            </EmptyState>:  <table className="min-w-full divide-y divide-gray-300 border-t">
                 <thead>
                   <tr className="divide-x divide-gray-200">
                     <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">
