@@ -71,7 +71,7 @@ function Modal({
             className="z-[999] flex w-full flex-col items-center justify-between gap-1 rounded-lg bg-white p-4"
           >
             {/* CLOSE MODAL ICON */}
-            <div className="relative flex w-full items-center justify-between">
+            <div className="relative flex w-full items-center justify-between py-4">
               {title && (
                 <div className="flex flex-col gap-2">
                   <h3 className="text-sm font-semibold tracking-tight text-slate-800 xl:text-base">
