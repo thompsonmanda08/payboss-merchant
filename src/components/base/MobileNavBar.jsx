@@ -1,4 +1,7 @@
-import { Cross1Icon, ExitIcon } from '@radix-ui/react-icons'
+import {
+  XMarkIcon,
+  ArrowLeftStartOnRectangleIcon,
+} from '@heroicons/react/24/outline'
 import { SIDE_BAR_OPTIONS } from './SideNavBar'
 import Logo from './Logo'
 
@@ -34,7 +37,7 @@ export default function MobileNavBar({
           className="absolute right-0 mr-2 mt-1 max-w-fit p-2"
           onClick={closeMobileMenu}
         >
-          <Cross1Icon className="h-6 w-6 text-slate-600 transition-all duration-200 ease-in hover:text-primary/80" />
+          <XMarkIcon className="h-5 w-5 text-slate-600 transition-all duration-200 ease-in hover:text-primary/80" />
         </button>
         <div className="flex h-full w-full flex-col">
           <div className="-ml-2 scale-[0.9] md:ml-0">
@@ -74,7 +77,7 @@ export default function MobileNavBar({
               closeMobileMenu()
             }}
           >
-            <ExitIcon className="h-6 w-6" />
+            <ArrowLeftStartOnRectangleIcon className="h-6 w-6" />
             Log out
           </button>
         </div>

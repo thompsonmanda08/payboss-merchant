@@ -2,9 +2,11 @@ import { LoginForm } from '@/components/forms'
 import Link from 'next/link'
 import React from 'react'
 import paymentsImage from '@/images/product/payments.avif'
-import MiniFooter from '@/components/MiniFooter'
+import MiniFooter from '@/components/base/MiniFooter'
 import Image from 'next/image'
-import { Logo } from '@/components'
+import { Logo } from '@/components/base'
+import { Footer } from '@/components/containers'
+import { DotsVerticalIcon } from '@radix-ui/react-icons'
 
 function LoginPage() {
   return (
@@ -61,7 +63,7 @@ function LoginPage() {
           </div>
         </div>
       </section>
-      <MiniFooter />
+      <Footer showLinks={false} showLogo={false} />
     </main>
   )
 }

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import { Container } from '@/components/Container'
+import { Container } from '@/components/base/Container'
 import backgroundImage from '@/images/background-faqs.jpg'
 
 const faqs = [
@@ -12,7 +12,8 @@ const faqs = [
     },
     {
       question: 'How does API Integration benefit my business?',
-      answer: 'API Integration allows you to seamlessly connect PayBoss with your existing systems, automating financial workflows and reducing manual intervention, thus saving time and minimizing errors.',
+      answer:
+        'API Integration allows you to seamlessly connect PayBoss with your existing systems, automating financial workflows and reducing manual intervention, thus saving time and minimizing errors.',
     },
     {
       question: 'Can I create and send invoices using PayBoss?',
@@ -27,14 +28,12 @@ const faqs = [
         'Payment Forms on PayBoss can be customized and deployed to cater to your business needs, simplifying the payment process and enhancing the customer experience.',
     },
     {
-      question:
-        'What are the options for selling products with PayBoss?',
+      question: 'What are the options for selling products with PayBoss?',
       answer:
         'PayBoss offers a Store feature, allowing you to sell products and services online through a web store or via WhatsApp, expanding your sales channels and reaching more customers.',
     },
     {
-      question:
-        'How does PayBoss handle recurring payments?',
+      question: 'How does PayBoss handle recurring payments?',
       answer:
         'With the Subscriptions feature, you can manage recurring payments and subscriptions effortlessly, keeping track of subscribers and their payments in one centralized location.',
     },
@@ -47,7 +46,8 @@ const faqs = [
     },
     {
       question: 'What spending management features does PayBoss offer?',
-      answer: 'PayBoss offers several spending management features, including Bill Payments, Bulk Data, Bulk Airtime, Bulk Direct Payment, Bulk Vouchers Payment, and Expense Cards (Virtual or Physical), allowing you to manage various expenses efficiently.',
+      answer:
+        'PayBoss offers several spending management features, including Bill Payments, Bulk Data, Bulk Airtime, Bulk Direct Payment, Bulk Vouchers Payment, and Expense Cards (Virtual or Physical), allowing you to manage various expenses efficiently.',
     },
     {
       question: 'How secure is my financial data with PayBoss?',
@@ -78,7 +78,7 @@ export function Faqs() {
             id="faq-title"
             className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl"
           >
-          Frequently Asked Questions
+            Frequently Asked Questions
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
             If you can’t find what you’re looking for, email our support team

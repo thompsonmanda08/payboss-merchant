@@ -1,7 +1,7 @@
 'use client'
+import { EmptyState } from '@/components/base'
 import { formatCurrency } from '@/lib/utils'
 import React, { useState } from 'react'
-import EmptyState from '../EmptyState'
 
 export default function TransactionsTable({
   data,

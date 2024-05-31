@@ -12,9 +12,9 @@ import {
   TransitionChild,
 } from '@headlessui/react'
 
-import { Button } from '@/components/Button'
-import { Container } from '@/components/Container'
-import { NavLink } from '@/components/NavLink'
+import { Button } from '@/components/ui/Button'
+import { Container } from '@/components/base/Container'
+import { NavLink } from '@/components/base/NavLink'
 import { cn } from '@/lib/utils'
 import { Logo } from '.'
 

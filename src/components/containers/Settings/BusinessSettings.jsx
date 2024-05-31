@@ -1,7 +1,7 @@
 'use client'
+import { Modal } from '@/components/base'
 import useProfileStore from '@/state/profileStore'
 import useSettingsStore from '@/state/settingsStore'
-import { Modal } from '..'
 import { useState } from 'react'
 
 export default function BusinessSettings() {

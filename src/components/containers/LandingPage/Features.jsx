@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { Container } from '@/components/Container'
+import { Container } from '@/components/base/Container'
 import Tab from '@/components/Tab'
 // import api from '@/images/avatars/avatar-3.png'
 
