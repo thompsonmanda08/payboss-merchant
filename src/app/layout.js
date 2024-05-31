@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
             toastOptions={{
               duration: 3000,
             }}
-            position="top-center"
+            position="top-right"
             containerClassName="z-[10000000!important]"
           />
         </Providers>
