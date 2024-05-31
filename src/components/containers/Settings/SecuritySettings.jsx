@@ -1,6 +1,6 @@
 // TODO: THIS COMPONENT WILL BE A REFFERENCE POINT FOR THE SETTINGS PAGE
 
-import { Modal } from '..'
+import { Modal } from '@/components/base'
 import useProfileStore from '@/state/profileStore'
 import useSettingsStore from '@/state/settingsStore'
 

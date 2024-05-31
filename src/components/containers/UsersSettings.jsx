@@ -1,5 +1,5 @@
 
-import UsersTable from '../tables/UsersTable'
+import UsersTable from './Tables/UsersTable'
 
 export default function UsersSettings() {
   return (

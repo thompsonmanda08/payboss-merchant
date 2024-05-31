@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import clsx from 'clsx'
 
-import { Container } from '@/components/Container'
+import { Container } from '@/components/base/Container'
 import { placeHolderImage } from '@/lib/constants'
 import backgroundImage from '@/images/background-features.jpg'
 // import screenshotExpenses from '@/images/screenshots/expenses.png'

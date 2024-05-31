@@ -1,7 +1,8 @@
 import React from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
-import { Button } from './Button'
-import Spinner from './Spinner'
+
+import { Button } from '../ui/Button'
+import { Spinner } from '.'
 
 function Modal({
   show,

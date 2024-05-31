@@ -1,10 +1,12 @@
-import { CallToAction } from '@/components/CallToAction'
-import { Faqs } from '@/components/Faqs'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { Hero } from '@/components/Hero'
-import { PrimaryFeatures } from '@/components/PrimaryFeatures'
-import { Features } from '@/components/Features'
+import { Header } from '@/components/base'
+import {
+  CallToAction,
+  Faqs,
+  Features,
+  Footer,
+  Hero,
+  PrimaryFeatures,
+} from '@/components/containers'
 
 export default function Home() {
   return (
@@ -12,7 +14,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <PrimaryFeatures/>
+        <PrimaryFeatures />
         <Features />
         <CallToAction />
         <Faqs />

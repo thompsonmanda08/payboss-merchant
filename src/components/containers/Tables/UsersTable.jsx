@@ -1,17 +1,17 @@
 'use client'
 import useSettingsStore from '@/state/settingsStore'
-import { Avatar, Modal } from '..'
 import { Fragment, useState } from 'react'
-import { DotsVerticalIcon } from "@radix-ui/react-icons"
-import ToggleSwitch from '../ui/switch'
+import { DotsVerticalIcon, TrashIcon } from "@radix-ui/react-icons"
+import { Avatar, Modal } from '@/components/base'
+import ToggleSwitch from '@/components/ui/ToggleSwitch'
 
 const people = [
-    { name: 'Mwansa Mwila', title: 'Financial Analyst', email: 'mwansa.mwila@example.com', role: 'Admin' },
-    { name: 'Chisomo Banda', title: 'Software Developer', email: 'chisomo.banda@example.com', role: 'Initiator' },
-    { name: 'Misozi Zulu', title: 'Marketing Manager', email: ' misozi.zulu@example.com', role: 'Member' },
-    { name: 'Kunda Phiri', title: 'Human Resources Specialist', email: 'kunda.phiri@example.com', role: 'Approver' },
-    { name: 'Chanda Mulenga', title: 'IT Consultant', email: 'chanda.mulenga@example.com', role: 'Member' },
-    { name: 'Mwaka Tembo', title: 'Business Analyst', email: 'mwaka.tembo@example.com', role: 'Initiator' },
+    { name: 'Mwansa Mwila', title: 'Financial Analyst', phone: '+260 770 000 000', email: 'mwansa.mwila@example.com', role: 'Admin' },
+    { name: 'Chisomo Banda', title: 'Software Developer', phone: '+260 770 000 000', email: 'chisomo.banda@example.com', role: 'Initiator' },
+    { name: 'Misozi Zulu', title: 'Marketing Manager', phone: '+260 770 000 000', email: ' misozi.zulu@example.com', role: 'Member' },
+    { name: 'Kunda Phiri', title: 'Human Resources Specialist', phone: '+260 770 000 000', email: 'kunda.phiri@example.com', role: 'Approver' },
+    { name: 'Chanda Mulenga', title: 'IT Consultant', phone: '+260 770 000 000', email: 'chanda.mulenga@example.com', role: 'Member' },
+    { name: 'Mwaka Tembo', title: 'Business Analyst', phone: '+260 770 000 000', email: 'mwaka.tembo@example.com', role: 'Initiator' },
   ]
   
   const permissions_data = [
@@ -38,7 +38,7 @@ const people = [
 
 
   export default function UsersTable() {
-    const { openEditModal, setOpenEditModal } = useSettingsStore()
+    const { openEditModal, setOpenEditModal, openCreateUserModal, setOpenCreateUserModal } = useSettingsStore()
 
 
     function handleToggleModal() {
@@ -47,6 +47,13 @@ const people = [
 
     function handleConfirm() {
       handleToggleModal()
+    }
+    function handleCreateModal() {
+      setOpenEditModal(!openCreateUserModal)
+    }
+
+    function handleCreate() {
+      handleCreateModal()
     }
 
     return (
@@ -81,6 +88,9 @@ const people = [
                       Title
                     </th>
                     <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      phone #
+                    </th>
+                    <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">
                       Email
                     </th>
                     <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-0">
@@ -95,6 +105,7 @@ const people = [
                         {person.name}
                       </td>
                       <td className="whitespace-nowrap p-4 text-sm text-gray-500">{person.title}</td>
+                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">{person.phone}</td>
                       <td className="whitespace-nowrap p-4 text-sm text-gray-500">{person.email}</td>
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0">{person.role}</td>
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0">
@@ -116,7 +127,13 @@ const people = [
           title={'User Permissions'}
           infoText={'Ensure that your account information is up to date.'}
         >
-            <Avatar userData={{firstName:'Ael', lastName:'Mbewe', email:'ael@gmail.com'}}/>
+           <div className='pb-4 flex justify-between items-center'>
+           <Avatar userData={{firstName:'Ael', lastName:'Mbewe', email:'ael@gmail.com'}}/>
+           <span className='flex space-x-1 cursor-pointer group'>
+           <p className='text-[13px] text-red-400 group-hover:text-red-600 font-semibold '>Delete</p>
+           <TrashIcon className='h-5 w-5 text-red-400 group-hover:text-red-600'/>
+           </span>
+           </div>
            {permissions_data.map((permissions, index) => (
             <Fragment key={index}>
               {permissions.data.map((permission, index) => (

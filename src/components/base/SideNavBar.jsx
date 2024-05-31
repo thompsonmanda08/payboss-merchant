@@ -3,18 +3,18 @@
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ExitIcon,
-  GearIcon,
-  HomeIcon,
-  ReaderIcon,
-} from '@radix-ui/react-icons'
 import useAuthStore from '@/state/authStore'
 import useNavigationStore from '@/state/navigationStore'
 import MobileNavBar from './MobileNavBar'
 import Link from 'next/link'
+
+import {
+  HomeIcon,
+  XMarkIcon,
+  Cog6ToothIcon,
+  QueueListIcon,
+  ArrowLeftStartOnRectangleIcon,
+} from '@heroicons/react/24/outline'
 
 export const SIDE_BAR_OPTIONS = [
   {
@@ -25,13 +25,13 @@ export const SIDE_BAR_OPTIONS = [
   {
     name: 'Disbursements',
     href: '/dashboard/disbursements',
-    Icon: ReaderIcon,
+    Icon: QueueListIcon,
   },
 
   {
     name: 'Settings',
     href: '/dashboard/settings',
-    Icon: GearIcon,
+    Icon: Cog6ToothIcon,
   },
 ]
 
@@ -110,7 +110,7 @@ function SideNavBar() {
             } relative mb-2 mt-auto flex cursor-pointer items-center gap-3 rounded-lg p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
             onClick={logUserOut}
           >
-            <ExitIcon className="h-6 w-6" />
+            <ArrowLeftStartOnRectangleIcon className="h-6 w-6" />
             {isSideNavCollapsed ? (
               <span
                 className={`${

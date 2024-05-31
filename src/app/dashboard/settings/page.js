@@ -1,7 +1,7 @@
 'use client'
 
 import LoadingPage from '@/app/loading'
-import Tabs from '@/components/SettingsTabs'
+import Tabs from '@/components/base/SettingsTabs'
 import {
   BusinessSettings,
   GeneralSettings,
