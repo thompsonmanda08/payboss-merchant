@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import { SelectField, TextField } from '@/components/Fields'
-import { SlimLayout } from '@/components/SlimLayout'
-import { Logo } from '@/components/base'
 import { Input } from '@/components/ui/input'
 
 export const metadata = {
