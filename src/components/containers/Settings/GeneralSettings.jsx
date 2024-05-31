@@ -1,30 +1,30 @@
-"use client";
+'use client'
 
-import useProfileStore from "@/state/profileStore";
-import useSettingsStore from "@/state/settingsStore";
-import { Modal } from "..";
-import { maskString } from "@/lib/utils";
+import useProfileStore from '@/state/profileStore'
+import useSettingsStore from '@/state/settingsStore'
+import { maskString } from '@/lib/utils'
+import { Modal } from '@/components/base'
 
 export default function GeneralSettings() {
-  const { user } = useProfileStore();
-  const { openEditModal, setOpenEditModal } = useSettingsStore();
+  const { user } = useProfileStore()
+  const { openEditModal, setOpenEditModal } = useSettingsStore()
 
   function handleToggleModal() {
-    setOpenEditModal(!openEditModal);
+    setOpenEditModal(!openEditModal)
   }
 
   function handleConfirm() {
-    handleToggleModal();
+    handleToggleModal()
   }
 
   function handleProfileUpdate() {
-    handleToggleModal();
+    handleToggleModal()
   }
   return (
     <>
-      <div className="flex flex-col rounded-md w-full p-5">
+      <div className="flex w-full flex-col rounded-md p-5">
         <div>
-          <div className="flex justify-between items-end w-full">
+          <div className="flex w-full items-end justify-between">
             <div>
               <h2 className="text-base font-semibold leading-7 text-gray-900">
                 Profile
@@ -100,12 +100,12 @@ export default function GeneralSettings() {
           show={openEditModal}
           onClose={handleToggleModal}
           onConfirm={handleConfirm}
-          title={"Update Profile Details"}
-          infoText={"Ensure that your account information is up to date."}
+          title={'Update Profile Details'}
+          infoText={'Ensure that your account information is up to date.'}
         >
-          <div className="flex bg-red-500 w-full h-24"></div>
+          <div className="flex h-24 w-full bg-red-500"></div>
         </Modal>
       )}
     </>
-  );
+  )
 }

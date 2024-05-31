@@ -1,5 +1,4 @@
-import { SideNavBar } from '@/components'
-import TopNavBar from '@/components/TopBar'
+import { SideNavBar, TopNavBar } from '@/components/base'
 
 export default async function DashboardLayout({ children }) {
   return (

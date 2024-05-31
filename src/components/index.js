@@ -1,5 +1,0 @@
-export { default as SideNavBar } from './SideNavBar'
-export { default as TopNavBar } from './TopBar'
-export { default as Modal } from './Modal'
-export { default as Avatar } from './Avatar'
-export { default as Logo } from './Logo'

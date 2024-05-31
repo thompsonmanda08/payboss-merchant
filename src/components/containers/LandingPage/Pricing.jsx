@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 
-import { Button } from '@/components/Button'
-import { Container } from '@/components/Container'
+import { Button } from '@/components/ui/Button'
+import { Container } from '@/components/base/Container'
 
 function SwirlyDoodle(props) {
   return (
@@ -55,7 +55,7 @@ function Plan({ name, price, description, href, features, featured = false }) {
         featured ? 'order-first bg-accent py-8 lg:order-none' : 'lg:py-8',
       )}
     >
-      <h3 className="font-display mt-5 text-lg text-white">{name}</h3>
+      <h3 className="mt-5 font-display text-lg text-white">{name}</h3>
       <p
         className={clsx(
           'mt-2 text-base',
@@ -64,7 +64,7 @@ function Plan({ name, price, description, href, features, featured = false }) {
       >
         {description}
       </p>
-      <p className="font-display order-first text-5xl font-light tracking-tight text-white">
+      <p className="order-first font-display text-5xl font-light tracking-tight text-white">
         {price}
       </p>
       <ul
