@@ -23,8 +23,8 @@ export const SIDE_BAR_OPTIONS = [
     Icon: HomeIcon,
   },
   {
-    name: 'Disbursements',
-    href: '/dashboard/disbursements',
+    name: 'Payments',
+    href: '/dashboard/payments',
     Icon: QueueListIcon,
   },
 
