@@ -14,6 +14,18 @@ import {
   Cog6ToothIcon,
   QueueListIcon,
   ArrowLeftOnRectangleIcon,
+  BanknotesIcon,
+  NewspaperIcon,
+  IdentificationIcon,
+  ArrowsRightLeftIcon,
+  PhoneArrowDownLeftIcon,
+  ChartBarSquareIcon,
+  InboxArrowDownIcon,
+  AdjustmentsVerticalIcon,
+  ClipboardDocumentIcon,
+  BuildingStorefrontIcon,
+  CreditCardIcon,
+  ReceiptPercentIcon,
 } from '@heroicons/react/24/outline'
 
 export const SIDE_BAR_OPTIONS = [
@@ -23,83 +35,84 @@ export const SIDE_BAR_OPTIONS = [
     Icon: HomeIcon,
   },
   {
-    name: 'Disbursements',
+    name: 'Invoicing',
+    href: '/dashboard/collections/invoicing',
+    Icon: NewspaperIcon,
+  },
+  {
+    name: 'Payments',
     href: '/dashboard/payments',
-    Icon: QueueListIcon,
+    Icon: BanknotesIcon,
     subMenuItems: [
       {
-        name: 'Bulk Payments',
-        href: '/dashboard/payments/bulkpayments',
-        Icon: QueueListIcon,
+        name: 'Direct Payments',
+        href: '/dashboard/payments/direct',
+        Icon: ArrowsRightLeftIcon,
       },
       {
-        name: 'Bulk Vouchers',
-        href: '/dashboard/payments/bulkvouchers',
-        Icon: QueueListIcon,
+        name: 'Payment Vouchers',
+        href: '/dashboard/payments/vouchers',
+        Icon: IdentificationIcon,
       },
       {
         name: 'Data Bundles',
-        href: '/dashboard/payments/databundles',
-        Icon: QueueListIcon,
+        href: '/dashboard/payments/data-bundles',
+        Icon: ChartBarSquareIcon,
       },
       {
         name: 'Airtime',
         href: '/dashboard/payments/airtime',
-        Icon: QueueListIcon,
+        Icon: PhoneArrowDownLeftIcon,
       },
     ],
   },
   {
     name: 'Collections',
     href: '/dashboard/collections',
-    Icon: QueueListIcon,
+    Icon: InboxArrowDownIcon,
     subMenuItems: [
       {
         name: 'API Integration',
-        href: '/dashboard/collections/apiintegration',
-        Icon: QueueListIcon,
+        href: '/dashboard/collections/api-integration',
+        Icon: AdjustmentsVerticalIcon,
       },
       {
         name: 'Payment Forms',
-        href: '/dashboard/collections/paymentforms',
-        Icon: QueueListIcon,
+        href: '/dashboard/collections/payment-forms',
+        Icon: ClipboardDocumentIcon,
       },
       {
         name: 'Subscriptions',
         href: '/dashboard/collections/subscriptions',
-        Icon: QueueListIcon,
+        Icon: CreditCardIcon,
       },
-      {
-        name: 'Invoicing',
-        href: '/dashboard/collections/invoicing',
-        Icon: QueueListIcon,
-      },
+
       {
         name: 'Store',
         href: '/dashboard/collections/store',
-        Icon: QueueListIcon,
+        Icon: BuildingStorefrontIcon,
       },
     ],
   },
   {
     name: 'Bill Payments',
     href: '/dashboard/bills',
-    Icon: QueueListIcon,
+    Icon: ReceiptPercentIcon,
     subMenuItems: [
       {
         name: 'Zesco',
         href: '/dashboard/bills/zesco',
-        Icon: QueueListIcon,
+        Icon: ReceiptPercentIcon,
       },
       {
         name: 'DSTV',
         href: '/dashboard/bills/dstv',
-        Icon: QueueListIcon,
+        Icon: ReceiptPercentIcon,
       },
       {
         name: 'Water',
         href: '/dashboard/bills/water',
-        Icon: QueueListIcon,
+        Icon: ReceiptPercentIcon,
       },
     ],
   },
@@ -135,7 +148,7 @@ function SideNavBar() {
   useEffect(() => {
     SIDE_BAR_OPTIONS.forEach((option, index) => {
       if (option.subMenuItems) {
-        option.subMenuItems.forEach(subItem => {
+        option.subMenuItems.forEach((subItem) => {
           if (pathname === subItem.href) {
             setExpandedSection(index)
           }
@@ -160,68 +173,70 @@ function SideNavBar() {
         <div className="flex h-full w-full flex-col">
           {/* MENU ITEMS CONTAINER */}
           <div className="mt-6 flex h-full w-full flex-col gap-4">
-            {SIDE_BAR_OPTIONS.map(({ name, href, Icon, subMenuItems }, index) => (
-              <div key={index} className="flex flex-col">
-                {subMenuItems ? (
-                  <button
-                    onClick={() => handleExpand(index)}
-                    className={`group rounded-sm  ${
-                      pathname === href
-                        ? 'bg-primary/10 font-medium text-primary'
-                        : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
-                    } 
+            {SIDE_BAR_OPTIONS.map(
+              ({ name, href, Icon, subMenuItems }, index) => (
+                <div key={index} className="flex flex-col">
+                  {subMenuItems ? (
+                    <button
+                      onClick={() => handleExpand(index)}
+                      className={`group rounded-sm  ${
+                        pathname === href
+                          ? 'bg-primary/10 font-medium text-primary'
+                          : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
+                      } 
                     ${isSideNavCollapsed ? 'justify-center' : 'gap-3'}
                       flex items-center p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
-                  >
-                    <Icon className="h-6 w-6" />
-                    {!isSideNavCollapsed && name}
-                  </button>
-                ) : (
-                  <Link
-                    href={href}
-                    className={`group rounded-sm  ${
-                      pathname === href
-                        ? 'bg-primary/10 font-medium text-primary'
-                        : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
-                    } 
+                    >
+                      <Icon className="h-6 w-6" />
+                      {!isSideNavCollapsed && name}
+                    </button>
+                  ) : (
+                    <Link
+                      href={href}
+                      className={`group rounded-sm  ${
+                        pathname === href
+                          ? 'bg-primary/10 font-medium text-primary'
+                          : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
+                      } 
                     ${isSideNavCollapsed ? 'justify-center' : 'gap-3'}
                       flex items-center p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
-                    onClick={handleMainLinkClick}
-                  >
-                    <Icon className="h-6 w-6" />
-                    {!isSideNavCollapsed && name}
-                  </Link>
-                )}
-                {subMenuItems && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{
-                      height: expandedSection === index ? 'auto' : 0,
-                      opacity: expandedSection === index ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden pl-6"
-                  >
-                    {subMenuItems.map((subItem, subIndex) => (
-                      <Link
-                        key={subIndex}
-                        href={subItem.href}
-                        className={`group rounded-sm ${
-                          pathname === subItem.href
-                            ? 'bg-primary/10 font-medium text-primary'
-                            : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
-                        } 
+                      onClick={handleMainLinkClick}
+                    >
+                      <Icon className="h-6 w-6" />
+                      {!isSideNavCollapsed && name}
+                    </Link>
+                  )}
+                  {subMenuItems && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{
+                        height: expandedSection === index ? 'auto' : 0,
+                        opacity: expandedSection === index ? 1 : 0,
+                      }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden pl-6"
+                    >
+                      {subMenuItems.map((subItem, subIndex) => (
+                        <Link
+                          key={subIndex}
+                          href={subItem.href}
+                          className={`group rounded-sm ${
+                            pathname === subItem.href
+                              ? 'bg-primary/10 font-medium text-primary'
+                              : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
+                          } 
                         ${isSideNavCollapsed ? 'justify-center' : 'gap-3'}
                           flex items-center p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
-                      >
-                        <subItem.Icon className="h-6 w-6" />
-                        {!isSideNavCollapsed && subItem.name}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </div>
-            ))}
+                        >
+                          <subItem.Icon className="h-6 w-6" />
+                          {!isSideNavCollapsed && subItem.name}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </div>
+              ),
+            )}
           </div>
           <button
             className={`group ${
