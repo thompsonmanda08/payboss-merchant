@@ -187,7 +187,7 @@ const SingleFileDropzone = React.forwardRef(
         </div>
 
         {/* Error Text */}
-        <div className="mt-1 text-xs text-red-500">{errorMessage}</div>
+        <div className="mt-1 text-sm text-red-500">{errorMessage}</div>
       </div>
     )
   },

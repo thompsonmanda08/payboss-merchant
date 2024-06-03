@@ -18,4 +18,4 @@ export { default as UsersSettings } from './UsersSettings'
 export { default as TransactionsTable } from './Tables/TransactionsTable'
 
 //PAYMENTS
-export { default as BatchPayment } from './Payments/index'
+export { default as PaymentsAction } from './Payments/index'

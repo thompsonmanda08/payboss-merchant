@@ -26,7 +26,10 @@ import {
   BuildingStorefrontIcon,
   CreditCardIcon,
   ReceiptPercentIcon,
+  ChevronUpDownIcon,
 } from '@heroicons/react/24/outline'
+import { cn } from '@/lib/utils'
+import { ChevronDownIcon } from '@radix-ui/react-icons'
 
 export const SIDE_BAR_OPTIONS = [
   {
@@ -164,11 +167,10 @@ function SideNavBar() {
   return (
     <>
       <nav
-        className={`${
-          isSideNavCollapsed
-            ? 'max-w-[96px] items-center'
-            : 'min-w-[220px] max-w-[320px]'
-        } z-20 hidden h-full max-h-screen w-full bg-white px-4 pb-10 shadow-md shadow-slate-800/5 transition-all duration-500 ease-in-out lg:block`}
+        className={cn(
+          `z-20 hidden h-full max-h-screen w-full min-w-[220px] max-w-[320px] bg-white px-4 pb-10 shadow-md shadow-slate-800/5 transition-all duration-500 ease-in-out lg:block`,
+          { 'max-w-[96px] items-center': isSideNavCollapsed },
+        )}
       >
         <div className="flex h-full w-full flex-col">
           {/* MENU ITEMS CONTAINER */}
@@ -179,27 +181,38 @@ function SideNavBar() {
                   {subMenuItems ? (
                     <button
                       onClick={() => handleExpand(index)}
-                      className={`group rounded-sm  ${
-                        pathname === href
-                          ? 'bg-primary/10 font-medium text-primary'
-                          : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
-                      } 
-                    ${isSideNavCollapsed ? 'justify-center' : 'gap-3'}
-                      flex items-center p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
+                      className={cn(
+                        `group flex items-center gap-3 rounded-sm bg-transparent p-3
+                      text-sm font-medium text-slate-800 transition-all duration-200 ease-in-out hover:bg-primary/10`,
+                        {
+                          'bg-primary/10 font-medium text-primary':
+                            pathname === href,
+                          'justify-center': isSideNavCollapsed,
+                        },
+                      )}
                     >
-                      <Icon className="h-6 w-6" />
+                      <Icon fontSize={18} className="h-5 w-5" />
                       {!isSideNavCollapsed && name}
+                      <ChevronDownIcon
+                        className={cn(
+                          'ml-auto h-4 w-4 transition-all duration-300 ease-in-out',
+                          {
+                            'rotate-180': expandedSection === index,
+                          },
+                        )}
+                      />
                     </button>
                   ) : (
                     <Link
                       href={href}
-                      className={`group rounded-sm  ${
-                        pathname === href
-                          ? 'bg-primary/10 font-medium text-primary'
-                          : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
-                      } 
-                    ${isSideNavCollapsed ? 'justify-center' : 'gap-3'}
-                      flex items-center p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
+                      className={cn(
+                        `group flex items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium text-slate-800 transition-all duration-200 ease-in-out hover:bg-primary/10`,
+                        {
+                          'bg-primary/10 font-medium text-primary':
+                            pathname === href,
+                          'justify-center': isSideNavCollapsed,
+                        },
+                      )}
                       onClick={handleMainLinkClick}
                     >
                       <Icon className="h-6 w-6" />
@@ -220,15 +233,16 @@ function SideNavBar() {
                         <Link
                           key={subIndex}
                           href={subItem.href}
-                          className={`group rounded-sm ${
-                            pathname === subItem.href
-                              ? 'bg-primary/10 font-medium text-primary'
-                              : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
-                          } 
-                        ${isSideNavCollapsed ? 'justify-center' : 'gap-3'}
-                          flex items-center p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
+                          className={cn(
+                            `group flex items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium text-slate-800 transition-all duration-200 ease-in-out hover:bg-primary/10`,
+                            {
+                              'bg-primary/10 font-medium text-primary':
+                                pathname === subItem.href,
+                              'justify-center': isSideNavCollapsed,
+                            },
+                          )}
                         >
-                          <subItem.Icon className="h-6 w-6" />
+                          <subItem.Icon className="h-5 w-5" />
                           {!isSideNavCollapsed && subItem.name}
                         </Link>
                       ))}
@@ -239,14 +253,16 @@ function SideNavBar() {
             )}
           </div>
           <button
-            className={`group ${
-              isSideNavCollapsed
-                ? 'mx-auto w-12 justify-center bg-primary/20 text-primary hover:rounded-md hover:bg-primary hover:text-white'
-                : 'bg-primary/10 font-medium text-slate-600 hover:bg-primary/20 hover:text-primary'
-            } relative mb-2 mt-auto flex cursor-pointer items-center gap-3 rounded-lg p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
+            className={cn(
+              `group relative mb-2 mt-auto flex cursor-pointer items-center gap-3 rounded-lg bg-primary/10 p-3 text-sm font-medium text-slate-600 transition-all duration-200 ease-in-out hover:bg-primary/20 hover:text-primary`,
+              {
+                'mx-auto w-12 justify-center bg-primary/20 text-primary hover:rounded-md hover:bg-primary hover:text-white':
+                  isSideNavCollapsed,
+              },
+            )}
             onClick={logUserOut}
           >
-            <ArrowLeftOnRectangleIcon className="h-6 w-6" />
+            <ArrowLeftOnRectangleIcon className="h-5 w-5" />
             {!isSideNavCollapsed && 'Logout'}
           </button>
         </div>

@@ -14,11 +14,12 @@ function StatusCard({
   invalidText,
   invalidInfo,
   viewInvalidRecords,
+  tooltipText,
   Icon,
   IconColor = '#4c5cf7',
 }) {
   return (
-    <div className="flex w-full min-w-[300px] flex-1 flex-col rounded-md border border-primary/30 bg-card p-5 shadow-xl shadow-slate-400/10">
+    <div className="flex w-full min-w-[300px] flex-1 flex-col rounded-md border border-primary/30 bg-card p-5 shadow-xl shadow-slate-200/10">
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
           <p className="text-sm text-foreground/60 md:text-base lg:text-lg ">
@@ -27,7 +28,10 @@ function StatusCard({
           <span className="my-4 mb-1 text-2xl font-bold text-primary lg:text-3xl">
             {totalText}
           </span>
-          <p onClick={viewAllRecords} className=" cursor-pointer text-xs text-primary sm:text-sm">
+          <p
+            onClick={viewAllRecords}
+            className=" cursor-pointer text-xs text-primary sm:text-sm"
+          >
             {totalInfo}
           </p>
         </div>
@@ -39,7 +43,10 @@ function StatusCard({
           <span className="my-4 mb-1 text-2xl font-bold text-green-500 lg:text-3xl">
             {validText}
           </span>
-          <p onClick={viewValidRecords} className=" cursor-pointer text-xs text-primary sm:text-sm">
+          <p
+            onClick={viewValidRecords}
+            className=" cursor-pointer text-xs text-primary sm:text-sm"
+          >
             {validInfo}
           </p>
         </div>
@@ -51,19 +58,22 @@ function StatusCard({
           <span className="my-4 mb-1 text-2xl font-bold text-red-500 lg:text-3xl">
             {invalidText}
           </span>
-          <p onClick={viewInvalidRecords} className="cursor-pointer text-xs text-primary sm:text-sm">
+          <p
+            onClick={viewInvalidRecords}
+            className="cursor-pointer text-xs text-primary sm:text-sm"
+          >
             {invalidInfo}
           </p>
         </div>
       </div>
       <div className="mt-4 flex items-center justify-end">
         {Icon && (
-         <Tooltip content={'kindly fix all invalid records'}>
-           <Icon
-            color={IconColor}
-            className="my-auto ml-4 aspect-square h-6 w-6"
-          />
-         </Tooltip>
+          <Tooltip className={'text-red-500'} content={tooltipText || ''}>
+            <Icon
+              color={IconColor}
+              className="my-auto ml-4 aspect-square h-6 w-6"
+            />
+          </Tooltip>
         )}
       </div>
     </div>

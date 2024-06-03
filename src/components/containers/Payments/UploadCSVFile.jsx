@@ -1,6 +1,7 @@
 'use client'
 import { FileDropZone } from '@/components/base'
 import { Button } from '@/components/ui/Button'
+import { notify } from '@/lib/utils'
 import Link from 'next/link'
 import React from 'react'
 
@@ -8,7 +9,17 @@ const UploadCSVFile = ({
   paymentAction,
   changeScreen,
   updatePaymentFields,
+  navigateForward,
+  navigateBackwards,
 }) => {
+  function handleProceed() {
+    if (paymentAction?.file !== null) {
+      navigateForward()
+      return
+    }
+    notify('error', 'A valid file is required!')
+  }
+
   return (
     <>
       <div className="flex h-full w-full flex-col justify-between">
@@ -20,18 +31,25 @@ const UploadCSVFile = ({
         />
 
         <p className="mt-2 text-xs font-medium text-gray-500 lg:text-[13px]">
-          Having trouble with the file uploads?
+          Having trouble with the validation and file uploads?
           <Link
-            href={'#'}
-            download={'#'}
+            href={'/batch_record_template.csv'}
+            download={'batch_record_template.csv'}
             className="ml-1 font-bold text-primary"
           >
             Download a template here
           </Link>
         </p>
 
-        <div className="mt-4 flex h-1/6 w-full items-end justify-end">
-          <Button onClick={() => changeScreen(2)}>Next</Button>
+        <div className="mt-4 flex h-1/6 w-full items-end justify-end gap-4">
+          <Button
+            className={'font-medium text-primary'}
+            variant="outline"
+            onClick={navigateBackwards}
+          >
+            Back
+          </Button>
+          <Button onClick={handleProceed}>Next</Button>
         </div>
       </div>
     </>
