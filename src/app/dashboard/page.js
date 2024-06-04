@@ -2,17 +2,18 @@ import { Balance, Card, PaymentMethods, SimpleStats } from '@/components/base'
 import ReportsBarChart from '@/components/charts/ReportsBarChart'
 import { TransactionsTable } from '@/components/containers'
 import { ChevronRightIcon } from '@radix-ui/react-icons'
-import React from 'react'
+import React, { Suspense } from 'react'
 import reportsBarChartData from './data/reportsBarChartData'
 import { ArrowUpIcon } from '@heroicons/react/24/outline'
 import GradientLineChart from '@/components/charts/LineCharts/GradientLineChart'
 import gradientLineChartData from './data/gradientLineChartData'
+import LoadingPage from '../loading'
 
 function Home() {
   const { chart, items } = reportsBarChartData
 
   return (
-    <div className="">
+    <Suspense fallback={<LoadingPage />}>
       <div className="flex w-full flex-col gap-4 md:gap-6">
         <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-4 ">
           <SimpleStats
@@ -75,7 +76,7 @@ function Home() {
           <RecentTransactions />
         </div>
       </div>
-    </div>
+    </Suspense>
   )
 }
 
