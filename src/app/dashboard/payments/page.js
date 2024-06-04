@@ -1,7 +1,7 @@
 'use client'
 import LoadingPage from '@/app/loading'
 import { Card, FileDropZone, Tabs } from '@/components/base'
-import { BatchPayment } from '@/components/containers'
+import { BatchPayment, PaymentsAction } from '@/components/containers'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
@@ -110,7 +110,7 @@ export default function Payments() {
   return (
     <Suspense fallback={<LoadingPage />}>
       {/* MODAL */}
-      {openPaymentsModal && <BatchPayment></BatchPayment>}
+      {openPaymentsModal && <PaymentsAction />}
 
       <div className="flex flex-col">
         <Card className={''}>

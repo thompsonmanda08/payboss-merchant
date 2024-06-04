@@ -235,7 +235,7 @@ function SideNavBar() {
   )
 }
 
-export function NavItemIcon({ isSelected, Icon, activeLayer }) {
+export function NavItemIcon({ isSelected, Icon, activeLayer, isExpanded }) {
   return (
     <div
       className={cn(
@@ -243,6 +243,7 @@ export function NavItemIcon({ isSelected, Icon, activeLayer }) {
         {
           'bg-primary font-bold': isSelected,
           'bg-primary text-white': activeLayer,
+          ' shadow-none': isExpanded,
         },
       )}
     >
@@ -305,6 +306,7 @@ export function SideNavItems({
                   <NavItemIcon
                     isSelected={isSelected}
                     activeLayer={activeLayer}
+                    isExpanded={isExpanded}
                     Icon={Icon}
                   />
 
@@ -315,14 +317,14 @@ export function SideNavItems({
                   >
                     {!isSideNavCollapsed && name}
                   </span>
-                  <ChevronDownIcon
+                  {/* <ChevronDownIcon
                     className={cn(
                       'ml-auto h-4 w-4 transition-all duration-300 ease-in-out',
                       {
                         'rotate-180': isExpanded,
                       },
                     )}
-                  />
+                  /> */}
                 </button>
               ) : (
                 <Link
@@ -337,7 +339,11 @@ export function SideNavItems({
                   )}
                   onClick={handleMainLinkClick}
                 >
-                  <NavItemIcon isSelected={isSelected} Icon={Icon} />
+                  <NavItemIcon
+                    isSelected={isSelected}
+                    isExpanded={isExpanded}
+                    Icon={Icon}
+                  />
 
                   {!isSideNavCollapsed && name}
                 </Link>
