@@ -1,16 +1,19 @@
-import { Balance, PaymentMethods, SimpleStats } from '@/components/base'
+import { Balance, Card, PaymentMethods, SimpleStats } from '@/components/base'
+import ReportsBarChart from '@/components/charts/ReportsBarChart'
 import { TransactionsTable } from '@/components/containers'
 import { ChevronRightIcon } from '@radix-ui/react-icons'
 import React from 'react'
+import reportsBarChartData from './data/reportsBarChartData'
+import { ArrowUpIcon } from '@heroicons/react/24/outline'
+import GradientLineChart from '@/components/charts/LineCharts/GradientLineChart'
+import gradientLineChartData from './data/gradientLineChartData'
 
 function Home() {
+  const { chart, items } = reportsBarChartData
+
   return (
     <div className="">
       <div className="flex w-full flex-col gap-4 md:gap-6">
-        <div className="flex w-full gap-4 ">
-          <Balance title={'PayBoss Wallet'} amount={'K10, 500'} />
-          <PaymentMethods />
-        </div>
         <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-4 ">
           <SimpleStats
             title={'Todays Transactions'}
@@ -35,8 +38,50 @@ function Home() {
             // figurePercentage={'14%'}
           />
         </div>
-      </div>
 
+        <div className="flex w-full gap-4">
+          <PaymentMethods />
+          <div className="flex flex-col gap-4">
+            <Balance title={'PayBoss Wallet'} amount={'K10, 500'} />
+            <Balance title={'Bank'} amount={'K10, 500'} />
+          </div>
+          <ReportsBarChart
+            title="transactions"
+            description={
+              <>
+                (<strong>+23%</strong>) than last week
+              </>
+            }
+            chart={chart}
+            items={items}
+          />
+        </div>
+        <div className="flex gap-6">
+          <GradientLineChart
+            title="Transactions Overview"
+            description={
+              <div className="flex items-center">
+                <div className="mb-1 mr-1 text-lg leading-none text-green-500">
+                  <ArrowUpIcon className="h-5 w-5 font-bold" />
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  4% more <span className="font-normal">in 2021</span>
+                </span>
+              </div>
+            }
+            height="20.25rem"
+            chart={gradientLineChartData}
+          />
+          <RecentTransactions />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function RecentTransactions() {
+  return (
+    <Card>
       <div className="min-h-2/3 mt-8 flex w-full flex-col">
         <div className="flex w-full items-end justify-between">
           <div className="flex flex-col gap-2">
@@ -52,7 +97,7 @@ function Home() {
         </div>
         <TransactionsTable limit={5} />
       </div>
-    </div>
+    </Card>
   )
 }
 

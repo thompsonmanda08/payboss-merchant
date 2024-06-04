@@ -1,10 +1,12 @@
-import { forwardRef } from "react";
+import { forwardRef } from 'react'
 
-const Progress = forwardRef(({ value, }, ref) => (
-<div className="w-full bg-gray-200 rounded-full h-2 w-full" ref={ref}>
-  <div className={`bg-black/80  h-2 rounded-full w-[${value}%]`}></div>
-</div>
+const Progress = forwardRef(({ value }, ref) => (
+  <div className="h-2 w-full rounded-full bg-gray-200" ref={ref}>
+    <div
+      style={{ width: value + '%' }}
+      className={`h-2 rounded-full bg-black/80 `}
+    ></div>
+  </div>
+))
 
-));
-
-export default Progress;
+export default Progress

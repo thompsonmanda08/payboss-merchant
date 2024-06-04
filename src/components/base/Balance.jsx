@@ -12,7 +12,7 @@ function Balance({ title, amount }) {
         'w-fit min-w-[180px] max-w-xs items-center gap-4 rounded-2xl px-5'
       }
     >
-      <div className="grid aspect-square h-16 w-16 place-items-center rounded-lg bg-gradient-to-tr from-primary to-blue-300 p-3 text-white">
+      <div className="grid aspect-square h-12 w-12 place-items-center rounded-lg bg-gradient-to-tr from-primary to-blue-300 p-3 text-white">
         <BuildingLibraryIcon className="h-6 w-6" />
       </div>
       <div className="pt-2 text-center">
