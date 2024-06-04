@@ -88,3 +88,17 @@
     padding-right: 2rem;
   }
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: #ecedf0;
+  border-radius: 5px;
+  height: px;
+}
+
+::-webkit-scrollbar-thumb {
+  width: 8px;
+  height: 2px;
+  background-color: #787c86;
+  border-radius: 5px;
+}

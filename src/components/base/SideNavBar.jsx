@@ -12,7 +12,6 @@ import Link from 'next/link'
 import {
   HomeIcon,
   Cog6ToothIcon,
-  QueueListIcon,
   ArrowLeftOnRectangleIcon,
   BanknotesIcon,
   NewspaperIcon,
@@ -26,10 +25,13 @@ import {
   BuildingStorefrontIcon,
   CreditCardIcon,
   ReceiptPercentIcon,
-  ChevronUpDownIcon,
+  Bars3BottomLeftIcon,
+  ChevronDownIcon,
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
-import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { Logo } from '.'
 
 export const SIDE_BAR_OPTIONS = [
   {
@@ -175,10 +177,37 @@ function SideNavBar() {
     <>
       <nav
         className={cn(
-          `z-20 hidden h-full max-h-screen w-full min-w-[220px] max-w-[320px] px-4 pb-10 transition-all duration-500 ease-in-out lg:block`,
+          `sticky z-20 hidden h-[95svh] w-full min-w-[220px] max-w-[320px] px-4 pb-10 transition-all duration-500 ease-in-out lg:block`,
           { 'max-w-[96px] items-center': isSideNavCollapsed },
         )}
       >
+        <div className="group flex justify-start p-2">
+          <div className="w-fit p-2 lg:hidden" onClick={toggleMobileMenu}>
+            <Bars3BottomLeftIcon className="h-6 w-6 text-slate-700" />
+          </div>
+          <div
+            className={`flex translate-x-2 flex-col items-center transition-all duration-300 ease-in-out md:translate-x-4 lg:translate-x-0`}
+          >
+            <Link href="/" aria-label="Home">
+              <Logo className="my-auto mt-2" />
+            </Link>
+          </div>
+          {/* <button onClick={toggleSideNav} className="ml-auto">
+            {isSideNavCollapsed ? (
+              <ChevronDoubleRightIcon
+                className={`${
+                  isSideNavCollapsed
+                    ? 'group-hover:delay-400 absolute bottom-0 top-2 rounded-xl text-white opacity-0 group-hover:block group-hover:rounded-lg group-hover:bg-primary group-hover:opacity-100'
+                    : 'hidden'
+                } aspect-square h-5 w-5 p-1 text-4xl transition-all delay-200 duration-500 ease-in-out`}
+              />
+            ) : (
+              <ChevronDoubleLeftIcon
+                className={`aspect-square h-5 w-5  text-slate-600 opacity-0 transition-all delay-200 duration-300 ease-in-out group-hover:opacity-100`}
+              />
+            )}
+          </button> */}
+        </div>
         <SideNavItems
           pathname={pathname}
           expandedSection={expandedSection}

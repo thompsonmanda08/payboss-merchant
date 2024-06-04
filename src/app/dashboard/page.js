@@ -1,12 +1,36 @@
+import { SimpleStats } from '@/components/base'
 import { TransactionsTable } from '@/components/containers'
 import { ChevronRightIcon } from '@radix-ui/react-icons'
 import React from 'react'
 
 function Home() {
   return (
-    <main className="flex min-h-screen w-full flex-col items-center gap-6 overflow-clip bg-background text-foreground ">
+    <div className="overflow-y-aut">
       <div className="flex w-full flex-col gap-4 md:gap-6 lg:flex-row">
-        {/*  */}
+        <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-4 ">
+          <SimpleStats
+            title={'Todays Transactions'}
+            figure={'10, 500'}
+            figurePercentage={'75%'}
+            isGood={true}
+          />
+          <SimpleStats
+            title={"Yesterday's Transactions"}
+            figure={'5, 685'}
+            figurePercentage={'15%'}
+            isBad={true}
+          />
+          <SimpleStats
+            title={'Total Sales'}
+            figure={'125, 685'}
+            figurePercentage={'14%'}
+          />
+          <SimpleStats
+            title={'Total Stock'}
+            figure={'125, 685'}
+            // figurePercentage={'14%'}
+          />
+        </div>
       </div>
       <div className="min-h-2/3 mt-4 flex w-full flex-col">
         <div className="flex w-full items-end justify-between">
@@ -22,8 +46,12 @@ function Home() {
           </div>
         </div>
         <TransactionsTable limit={5} />
+        <TransactionsTable limit={5} />
+        <TransactionsTable limit={5} />
+        <TransactionsTable limit={5} />
+        <TransactionsTable limit={5} />
       </div>
-    </main>
+    </div>
   )
 }
 
