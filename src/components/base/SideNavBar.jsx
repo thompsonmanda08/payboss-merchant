@@ -206,29 +206,21 @@ function SideNavBar() {
   )
 }
 
-export function NavItemIcon({
-  isSelected,
-  isExpanded,
-  Icon,
-  isLink,
-  activeLayer,
-}) {
+export function NavItemIcon({ isSelected, Icon, activeLayer }) {
   return (
     <div
       className={cn(
         'z-10 flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-xl shadow-slate-700/10',
         {
-          'bg-primary/10 font-medium': isSelected,
-          'text-primary shadow-none': isExpanded,
-          'bg-transparent shadow-none': isLink && isSelected,
-          'bg-transparent shadow-none': activeLayer,
+          'bg-primary font-bold': isSelected,
+          'bg-primary text-white': activeLayer,
         },
       )}
     >
       <Icon
         fontSize={18}
         className={cn('h-5 w-5', {
-          // 'font-bold': pathname === href,
+          'text-white': isSelected,
         })}
       />
     </div>
@@ -251,7 +243,7 @@ export function SideNavItems({
         {SIDE_BAR_OPTIONS.map(({ name, href, Icon, subMenuItems }, index) => {
           const isExpanded = expandedSection === index
 
-          let currentPage =
+          const currentPage =
             subMenuItems != undefined && subMenuItems.length > 0
               ? subMenuItems.href
               : href
@@ -260,8 +252,6 @@ export function SideNavItems({
           const activeLayer = pathname
             .split('/')
             .includes(name.toLocaleLowerCase())
-
-          console.log(activeLayer)
 
           return (
             <div key={index} className="flex flex-col">
@@ -275,8 +265,7 @@ export function SideNavItems({
                       'justify-center': isSideNavCollapsed,
                       ' bg-white font-bold text-primary shadow-xl shadow-slate-700/10':
                         isExpanded,
-                      'rounded-lg bg-white font-medium text-primary shadow-xl shadow-slate-400/10':
-                        isSelected,
+
                       'rounded-lg bg-white font-bold text-primary shadow-xl shadow-slate-400/10':
                         activeLayer,
 
@@ -286,7 +275,6 @@ export function SideNavItems({
                 >
                   <NavItemIcon
                     isSelected={isSelected}
-                    isExpanded={isExpanded}
                     activeLayer={activeLayer}
                     Icon={Icon}
                   />
@@ -320,12 +308,7 @@ export function SideNavItems({
                   )}
                   onClick={handleMainLinkClick}
                 >
-                  <NavItemIcon
-                    isSelected={isSelected}
-                    isExpanded={isExpanded}
-                    Icon={Icon}
-                    isLink={true}
-                  />
+                  <NavItemIcon isSelected={isSelected} Icon={Icon} />
 
                   {!isSideNavCollapsed && name}
                 </Link>
