@@ -8,6 +8,7 @@ const INITIAL_STATE = {
   },
   bulkPayments: [],
   openPaymentsModal: false,
+  openAddOrEditModal: false,
   loading: false,
 }
 
@@ -16,6 +17,7 @@ const usePaymentsStore = create((set, get) => ({
 
   // METHODS AND ACTIONS
   setOpenPaymentsModal: (open) => set({ openPaymentsModal: open }),
+  setOpenAddOrEditModal: (open) => set({ openAddOrEditModal: open }),
   setLoading: (loading) => set({ loading }),
 
   updatePaymentFields: (values) => {
