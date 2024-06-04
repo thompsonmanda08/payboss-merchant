@@ -3,8 +3,9 @@ import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { cn } from '@/lib/utils'
 
-export default function BreadCrumb({ baseUrl = '/' }) {
+export default function BreadCrumb({ baseUrl = '/', isProfile }) {
   const pathname = usePathname()
   const [path, setPath] = useState([baseUrl])
 
@@ -30,14 +31,22 @@ export default function BreadCrumb({ baseUrl = '/' }) {
                   '//',
                   '/',
                 )}
-                className={`${
-                  idx === path.length - 1 ? 'text-slate-700' : 'text-slate-400'
-                } cursor-pointer px-2 font-medium capitalize`}
+                className={cn(
+                  ` cursor-pointer px-2 font-medium capitalize text-slate-400`,
+                  {
+                    'text-slate-700': idx === path.length - 1,
+                    'text-white': isProfile,
+                  },
+                )}
               >
                 {segment.replace(/-|%20/g, ' ')}
-              </Link>{' '}
+              </Link>
               {idx < path.length - 1 && (
-                <ChevronRightIcon className="h-3 w-3 text-slate-500 hover:text-primary" />
+                <ChevronRightIcon
+                  className={cn('h-3 w-3 text-slate-500 hover:text-primary', {
+                    'text-white': isProfile,
+                  })}
+                />
               )}
             </div>
           ))}

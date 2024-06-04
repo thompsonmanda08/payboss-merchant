@@ -1,12 +1,12 @@
 'use client'
 
 import Image from 'next/image'
-import { getUserInitials } from '@/lib/utils'
+import { cn, getUserInitials } from '@/lib/utils'
 
 import { useEffect } from 'react'
 import Spinner from './Spinner'
 
-function Avatar({ userData }) {
+function Avatar({ userData, isProfile }) {
   useEffect(() => {
     console.log('AVATAR RERENDERED: ')
   }, [userData])
@@ -37,8 +37,16 @@ function Avatar({ userData }) {
       {userData && (
         <span className="hidden lg:items-center xl:flex">
           <div className="flex min-w-[120px] flex-col items-start">
-            <p className="text-sm font-semibold text-gray-700">{`${userData?.firstName || 'PayBoss'} ${userData?.lastName || 'Admin'}`}</p>
-            <p className="text-xs font-medium text-gray-500">
+            <p
+              className={cn('text-sm font-semibold text-gray-700', {
+                'text-white': isProfile,
+              })}
+            >{`${userData?.firstName || 'PayBoss'} ${userData?.lastName || 'Admin'}`}</p>
+            <p
+              className={cn('text-xs font-medium text-gray-500', {
+                'text-white': isProfile,
+              })}
+            >
               {userData?.email || 'admin@payboss'}
             </p>
           </div>

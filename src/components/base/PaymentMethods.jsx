@@ -10,7 +10,7 @@ import { PencilSquareIcon } from '@heroicons/react/24/outline'
 
 export function CardDetails({ logoSrc, cardNumber, handleEdit }) {
   return (
-    <div className="flex flex-1 items-center justify-between gap-4 rounded-xl border p-4">
+    <div className="flex w-full items-center justify-between gap-4 rounded-xl border p-4">
       <div className="flex h-10 w-12">
         <Image
           className="flex w-full scale-75 object-contain"
@@ -32,7 +32,7 @@ export function CardDetails({ logoSrc, cardNumber, handleEdit }) {
 
 function PaymentMethods() {
   return (
-    <Card className={'w-full flex-1 gap-4 rounded-2xl'}>
+    <Card className={'gap-4 rounded-2xl'}>
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-700 sm:text-base">
           Payment Methods
@@ -41,7 +41,7 @@ function PaymentMethods() {
           <PlusIcon className="mr-2 h-5 w-5 font-bold" /> ADD NEW
         </Button>
       </div>
-      <div className="flex w-full items-center justify-between gap-4">
+      <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-4 ">
         <CardDetails logoSrc={VisaLogo} />
         <CardDetails logoSrc={MaterCardLogo} />
         <CardDetails />

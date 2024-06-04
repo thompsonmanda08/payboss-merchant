@@ -1,21 +1,21 @@
 'use client'
-import React, { useEffect, useState } from 'react';
-import { Cross1Icon } from '@radix-ui/react-icons';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '../ui/Button';
-import { Spinner } from '.';
+import React, { useEffect, useState } from 'react'
+import { Cross1Icon } from '@radix-ui/react-icons'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Button } from '../ui/Button'
+import { Spinner } from '.'
 
 const modalVariants = {
   hidden: { opacity: 0, y: '-50%', scale: 0.8 },
   visible: { opacity: 1, y: '0%', scale: 1 },
   exit: { opacity: 0, y: '-50%', scale: 0.8 },
-};
+}
 
 const overlayVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
   exit: { opacity: 0 },
-};
+}
 
 function Modal({
   show,
@@ -32,18 +32,20 @@ function Modal({
   disableAction,
   removeCallToAction,
 }) {
-  const [isOpen, setIsOpen] = useState(show || false);
-  const [noCallToAction, setNoCallToAction] = useState(removeCallToAction || false);
+  const [isOpen, setIsOpen] = useState(show || false)
+  const [noCallToAction, setNoCallToAction] = useState(
+    removeCallToAction || false,
+  )
 
   useEffect(() => {
-    setIsOpen(show);
-  }, [show]);
+    setIsOpen(show)
+  }, [show])
 
   const handleClose = (e) => {
-    e.stopPropagation();
-    setIsOpen(false);
-    setTimeout(onClose, 250); // Match the duration of the exit animation
-  };
+    e.stopPropagation()
+    setIsOpen(false)
+    setTimeout(onClose, 250) // Match the duration of the exit animation
+  }
 
   return (
     <AnimatePresence>
@@ -104,14 +106,14 @@ function Modal({
               <div className="flex w-full justify-end gap-3">
                 <Button
                   onClick={handleClose}
-                  className="h-12 bg-rose-500/10 text-rose-400 hover:bg-rose-500/30"
+                  className="bg-red-500/10 !text-red-500 hover:bg-red-500 hover:!text-white"
                 >
                   {cancelText || 'Cancel'}
                 </Button>
                 <Button
                   onClick={onConfirm}
                   disabled={loading || disableAction}
-                  className="h-12 px-6"
+                  className=" px-6"
                 >
                   {loading ? (
                     <Spinner color="#fff" size={18} />
@@ -125,7 +127,7 @@ function Modal({
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  )
 }
 
-export default Modal;
+export default Modal
