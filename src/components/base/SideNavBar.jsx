@@ -26,7 +26,10 @@ import {
   BuildingStorefrontIcon,
   CreditCardIcon,
   ReceiptPercentIcon,
+  ChevronUpDownIcon,
 } from '@heroicons/react/24/outline'
+import { cn } from '@/lib/utils'
+import { ChevronDownIcon } from '@radix-ui/react-icons'
 
 export const SIDE_BAR_OPTIONS = [
   {
@@ -159,97 +162,32 @@ function SideNavBar() {
 
   function handleMainLinkClick() {
     setExpandedSection(null)
+    handleLinkClick()
+  }
+
+  function handleLinkClick() {
+    if (openMobileMenu) {
+      toggleMobileMenu()
+    }
   }
 
   return (
     <>
       <nav
-        className={`${
-          isSideNavCollapsed
-            ? 'max-w-[96px] items-center'
-            : 'min-w-[220px] max-w-[320px]'
-        } z-20 hidden h-full max-h-screen w-full bg-white px-4 pb-10 shadow-md shadow-slate-800/5 transition-all duration-500 ease-in-out lg:block`}
+        className={cn(
+          `z-20 hidden h-full max-h-screen w-full min-w-[220px] max-w-[320px] px-4 pb-10 transition-all duration-500 ease-in-out lg:block`,
+          { 'max-w-[96px] items-center': isSideNavCollapsed },
+        )}
       >
-        <div className="flex h-full w-full flex-col">
-          {/* MENU ITEMS CONTAINER */}
-          <div className="mt-6 flex h-full w-full flex-col gap-4">
-            {SIDE_BAR_OPTIONS.map(
-              ({ name, href, Icon, subMenuItems }, index) => (
-                <div key={index} className="flex flex-col">
-                  {subMenuItems ? (
-                    <button
-                      onClick={() => handleExpand(index)}
-                      className={`group rounded-sm  ${
-                        pathname === href
-                          ? 'bg-primary/10 font-medium text-primary'
-                          : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
-                      } 
-                    ${isSideNavCollapsed ? 'justify-center' : 'gap-3'}
-                      flex items-center p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
-                    >
-                      <Icon className="h-6 w-6" />
-                      {!isSideNavCollapsed && name}
-                    </button>
-                  ) : (
-                    <Link
-                      href={href}
-                      className={`group rounded-sm  ${
-                        pathname === href
-                          ? 'bg-primary/10 font-medium text-primary'
-                          : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
-                      } 
-                    ${isSideNavCollapsed ? 'justify-center' : 'gap-3'}
-                      flex items-center p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
-                      onClick={handleMainLinkClick}
-                    >
-                      <Icon className="h-6 w-6" />
-                      {!isSideNavCollapsed && name}
-                    </Link>
-                  )}
-                  {subMenuItems && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{
-                        height: expandedSection === index ? 'auto' : 0,
-                        opacity: expandedSection === index ? 1 : 0,
-                      }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden pl-6"
-                    >
-                      {subMenuItems.map((subItem, subIndex) => (
-                        <Link
-                          key={subIndex}
-                          href={subItem.href}
-                          className={`group rounded-sm ${
-                            pathname === subItem.href
-                              ? 'bg-primary/10 font-medium text-primary'
-                              : 'bg-transparent font-normal text-slate-800 hover:bg-primary/10'
-                          } 
-                        ${isSideNavCollapsed ? 'justify-center' : 'gap-3'}
-                          flex items-center p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
-                        >
-                          <subItem.Icon className="h-6 w-6" />
-                          {!isSideNavCollapsed && subItem.name}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </div>
-              ),
-            )}
-          </div>
-          <button
-            className={`group ${
-              isSideNavCollapsed
-                ? 'mx-auto w-12 justify-center bg-primary/20 text-primary hover:rounded-md hover:bg-primary hover:text-white'
-                : 'bg-primary/10 font-medium text-slate-600 hover:bg-primary/20 hover:text-primary'
-            } relative mb-2 mt-auto flex cursor-pointer items-center gap-3 rounded-lg p-3 text-sm font-medium transition-all duration-200 ease-in-out`}
-            onClick={logUserOut}
-          >
-            <ArrowLeftOnRectangleIcon className="h-6 w-6" />
-            {!isSideNavCollapsed && 'Logout'}
-          </button>
-        </div>
+        <SideNavItems
+          pathname={pathname}
+          expandedSection={expandedSection}
+          isSideNavCollapsed={isSideNavCollapsed}
+          handleExpand={handleExpand}
+          handleMainLinkClick={handleMainLinkClick}
+          toggleSideNav={toggleSideNav}
+          logUserOut={logUserOut}
+        />
       </nav>
 
       {/* MOBILE NAVIGATION */}
@@ -257,11 +195,198 @@ function SideNavBar() {
         isMobileMenuOpen={openMobileMenu}
         setIsMobileMenuOpen={toggleMobileMenu}
         pathname={pathname}
-        currentPage={currentPage}
-        setPage={setPage}
-        setCurrentPage={setCurrentPage}
+        expandedSection={expandedSection}
+        isSideNavCollapsed={isSideNavCollapsed}
+        handleExpand={handleExpand}
+        handleMainLinkClick={handleMainLinkClick}
+        toggleSideNav={toggleSideNav}
+        logUserOut={logUserOut}
       />
     </>
+  )
+}
+
+export function NavItemIcon({
+  isSelected,
+  isExpanded,
+  Icon,
+  isLink,
+  activeLayer,
+}) {
+  return (
+    <div
+      className={cn(
+        'z-10 flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-xl shadow-slate-700/10',
+        {
+          'bg-primary/10 font-medium': isSelected,
+          'text-primary shadow-none': isExpanded,
+          'bg-transparent shadow-none': isLink && isSelected,
+          'bg-transparent shadow-none': activeLayer,
+        },
+      )}
+    >
+      <Icon
+        fontSize={18}
+        className={cn('h-5 w-5', {
+          // 'font-bold': pathname === href,
+        })}
+      />
+    </div>
+  )
+}
+
+export function SideNavItems({
+  pathname,
+  expandedSection,
+  isSideNavCollapsed,
+  handleExpand,
+  handleMainLinkClick,
+  toggleSideNav,
+  handleLinkClick,
+  logUserOut,
+}) {
+  return (
+    <div className="flex h-full w-full flex-col">
+      <div className="mt-6 flex h-full w-full flex-col gap-2">
+        {SIDE_BAR_OPTIONS.map(({ name, href, Icon, subMenuItems }, index) => {
+          const isExpanded = expandedSection === index
+
+          let currentPage =
+            subMenuItems != undefined && subMenuItems.length > 0
+              ? subMenuItems.href
+              : href
+          const isSelected = pathname === currentPage
+
+          const activeLayer = pathname
+            .split('/')
+            .includes(name.toLocaleLowerCase())
+
+          console.log(activeLayer)
+
+          return (
+            <div key={index} className="flex flex-col">
+              {subMenuItems ? (
+                <button
+                  onClick={() => handleExpand(index)}
+                  className={cn(
+                    `group flex items-center gap-3 rounded-sm bg-transparent p-3
+                      text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out`,
+                    {
+                      'justify-center': isSideNavCollapsed,
+                      ' bg-white font-bold text-primary shadow-xl shadow-slate-700/10':
+                        isExpanded,
+                      'rounded-lg bg-white font-medium text-primary shadow-xl shadow-slate-400/10':
+                        isSelected,
+                      'rounded-lg bg-white font-bold text-primary shadow-xl shadow-slate-400/10':
+                        activeLayer,
+
+                      'rounded-b-none': activeLayer && isExpanded,
+                    },
+                  )}
+                >
+                  <NavItemIcon
+                    isSelected={isSelected}
+                    isExpanded={isExpanded}
+                    activeLayer={activeLayer}
+                    Icon={Icon}
+                  />
+
+                  <span
+                    className={cn(' ', {
+                      'font-bold text-primary': isSelected,
+                    })}
+                  >
+                    {!isSideNavCollapsed && name}
+                  </span>
+                  <ChevronDownIcon
+                    className={cn(
+                      'ml-auto h-4 w-4 transition-all duration-300 ease-in-out',
+                      {
+                        'rotate-180': isExpanded,
+                      },
+                    )}
+                  />
+                </button>
+              ) : (
+                <Link
+                  href={href}
+                  className={cn(
+                    `group flex items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium text-slate-800 transition-all duration-200 ease-in-out `,
+                    {
+                      'rounded-lg bg-white font-medium text-primary shadow-xl shadow-slate-400/10':
+                        isSelected,
+                      'justify-center': isSideNavCollapsed,
+                    },
+                  )}
+                  onClick={handleMainLinkClick}
+                >
+                  <NavItemIcon
+                    isSelected={isSelected}
+                    isExpanded={isExpanded}
+                    Icon={Icon}
+                    isLink={true}
+                  />
+
+                  {!isSideNavCollapsed && name}
+                </Link>
+              )}
+              {subMenuItems && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{
+                    height: isExpanded ? 'auto' : 0,
+                    opacity: isExpanded ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden rounded-lg rounded-t-none bg-white pl-6 shadow-xl shadow-slate-700/5"
+                >
+                  {subMenuItems.map((subItem, subIndex) => (
+                    <Link
+                      key={subIndex}
+                      href={subItem.href}
+                      onClick={handleLinkClick}
+                      className={cn(
+                        `group relative ml-4 flex items-center gap-3 rounded-sm  bg-transparent p-3 text-sm font-medium text-gray-600 text-primary/80 transition-all duration-200 ease-in-out before:absolute before:-left-5 before:-top-10 before:h-16 before:w-6 before:rounded-lg before:border-b before:border-l-[2px] before:border-r-8 before:border-t-8 before:border-[#e4ebf6] before:border-r-transparent before:border-t-transparent before:content-[""] md:ml-6`,
+                        {
+                          'bg-primary/5 font-medium': pathname === subItem.href,
+                        },
+                      )}
+                    >
+                      <subItem.Icon
+                        className={cn('h-5 w-5 text-gray-600', {
+                          'font-bold text-primary': pathname === subItem.href,
+                        })}
+                      />
+                      <span
+                        className={cn('text-gray-600', {
+                          'font-bold text-primary': pathname === subItem.href,
+                        })}
+                      >
+                        {' '}
+                        {!isSideNavCollapsed && subItem.name}
+                      </span>
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+      <button
+        className={cn(
+          `group relative mb-2 mt-auto flex cursor-pointer items-center gap-3 rounded-lg bg-primary/10 p-3 text-sm font-medium text-slate-600 transition-all duration-200 ease-in-out hover:bg-primary/20 hover:text-primary`,
+          {
+            'mx-auto w-12 justify-center bg-primary/20 text-primary hover:rounded-md hover:bg-primary hover:text-white':
+              isSideNavCollapsed,
+          },
+        )}
+        onClick={logUserOut}
+      >
+        <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+        {!isSideNavCollapsed && 'Logout'}
+      </button>
+    </div>
   )
 }
 

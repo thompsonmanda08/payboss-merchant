@@ -2,7 +2,10 @@ import axios from 'axios'
 import { create } from 'zustand'
 
 const INITIAL_STATE = {
-  paymentAction: null,
+  paymentAction: {
+    type: '',
+    file: null,
+  },
   bulkPayments: [],
   openPaymentsModal: false,
   loading: false,
@@ -13,13 +16,12 @@ const usePaymentsStore = create((set, get) => ({
 
   // METHODS AND ACTIONS
   setOpenPaymentsModal: (open) => set({ openPaymentsModal: open }),
+  setLoading: (loading) => set({ loading }),
 
   updatePaymentFields: (values) => {
-    set((state) => {
-      return {
-        payment: { ...state.paymentAction, ...values },
-      }
-    })
+    set((state) => ({
+      paymentAction: { ...state.paymentAction, ...values },
+    }))
   },
 
   // Clear & Reset
