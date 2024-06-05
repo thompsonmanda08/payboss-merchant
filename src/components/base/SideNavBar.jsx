@@ -29,9 +29,15 @@ import {
   ChevronDownIcon,
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
+  DocumentChartBarIcon,
+  LinkIcon,
+  CalculatorIcon,
+  TicketIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { Logo } from '.'
+import { PowerIcon } from '@heroicons/react/24/solid'
+import { Button } from '../ui/Button'
 
 export const SIDE_BAR_OPTIONS = [
   {
@@ -39,14 +45,10 @@ export const SIDE_BAR_OPTIONS = [
     href: '/dashboard',
     Icon: HomeIcon,
   },
+
   {
-    name: 'Invoicing',
-    href: '/dashboard/collections/invoicing',
-    Icon: NewspaperIcon,
-  },
-  {
-    name: 'Payments',
-    href: '/dashboard/payments',
+    name: 'Make Payments',
+    href: '/dashboard/make-payments',
     Icon: BanknotesIcon,
     subMenuItems: [
       {
@@ -57,35 +59,32 @@ export const SIDE_BAR_OPTIONS = [
       {
         name: 'Payment Vouchers',
         href: '/dashboard/payments/vouchers',
-        Icon: IdentificationIcon,
-      },
-      {
-        name: 'Data Bundles',
-        href: '/dashboard/payments/data-bundles',
-        Icon: ChartBarSquareIcon,
-      },
-      {
-        name: 'Airtime',
-        href: '/dashboard/payments/airtime',
-        Icon: PhoneArrowDownLeftIcon,
+        Icon: TicketIcon,
       },
     ],
   },
   {
-    name: 'Collections',
+    name: 'Manage Income',
     href: '/dashboard/collections',
     Icon: InboxArrowDownIcon,
     subMenuItems: [
       {
-        name: 'API Integration',
-        href: '/dashboard/collections/api-integration',
-        Icon: AdjustmentsVerticalIcon,
+        name: 'Invoicing',
+        href: '/dashboard/collections/invoicing',
+        Icon: NewspaperIcon,
       },
+
       {
         name: 'Payment Forms',
         href: '/dashboard/collections/payment-forms',
         Icon: ClipboardDocumentIcon,
       },
+      {
+        name: 'Payment Links',
+        href: '/dashboard/collections/payment-links',
+        Icon: LinkIcon,
+      },
+
       {
         name: 'Subscriptions',
         href: '/dashboard/collections/subscriptions',
@@ -93,36 +92,61 @@ export const SIDE_BAR_OPTIONS = [
       },
 
       {
-        name: 'Store',
+        name: 'Online Store',
         href: '/dashboard/collections/store',
         Icon: BuildingStorefrontIcon,
+      },
+      {
+        name: 'Till Payments',
+        href: '/dashboard/collections/store',
+        Icon: CalculatorIcon,
+      },
+      {
+        name: 'API Integration',
+        href: '/dashboard/collections/api-integration',
+        Icon: AdjustmentsVerticalIcon,
       },
     ],
   },
   {
-    name: 'Bill Payments',
-    href: '/dashboard/bills',
+    name: 'Manage Expenses',
+    href: '/dashboard/payments',
     Icon: ReceiptPercentIcon,
     subMenuItems: [
       {
-        name: 'Zesco',
-        href: '/dashboard/bills/zesco',
+        name: 'ZESCO',
+        href: '/dashboard/payments/zesco',
         Icon: ReceiptPercentIcon,
       },
       {
         name: 'DSTV',
-        href: '/dashboard/bills/dstv',
+        href: '/dashboard/payments/dstv',
         Icon: ReceiptPercentIcon,
       },
       {
-        name: 'Water',
-        href: '/dashboard/bills/water',
+        name: 'Airtime',
+        href: '/dashboard/payments/airtime',
+        Icon: PhoneArrowDownLeftIcon,
+      },
+      {
+        name: 'Data Bundles',
+        href: '/dashboard/payments/data-bundles',
+        Icon: ReceiptPercentIcon,
+      },
+      {
+        name: 'Expense Cards',
+        href: '/dashboard/payments/data-bundles',
         Icon: ReceiptPercentIcon,
       },
     ],
   },
   {
-    name: 'Settings',
+    name: 'Reports & Analytics',
+    href: '/dashboard/reports',
+    Icon: DocumentChartBarIcon,
+  },
+  {
+    name: 'Account Settings',
     href: '/dashboard/settings',
     Icon: Cog6ToothIcon,
   },
@@ -134,13 +158,7 @@ function SideNavBar() {
   const [isSideNavCollapsed, setIsSideNavCollapsed] = useState(false)
   const [expandedSection, setExpandedSection] = useState(null)
 
-  const {
-    currentPage,
-    setCurrentPage,
-    setPage,
-    openMobileMenu,
-    toggleMobileMenu,
-  } = useNavigationStore()
+  const { openMobileMenu, toggleMobileMenu } = useNavigationStore()
 
   function toggleSideNav() {
     setIsSideNavCollapsed(!isSideNavCollapsed)
@@ -268,8 +286,8 @@ export function SideNavItems({
   logUserOut,
 }) {
   return (
-    <div className="flex h-full w-full flex-col">
-      <div className="mt-6 flex h-full w-full flex-col gap-2">
+    <div className="flex h-full w-full flex-col overflow-clip">
+      <div className="no-scrollbar flex h-full w-full flex-col gap-2 overflow-y-auto ">
         {SIDE_BAR_OPTIONS.map(({ name, href, Icon, subMenuItems }, index) => {
           const isExpanded = expandedSection === index
 
@@ -391,19 +409,10 @@ export function SideNavItems({
           )
         })}
       </div>
-      <button
-        className={cn(
-          `group relative mb-2 mt-auto flex cursor-pointer items-center gap-3 rounded-lg bg-primary/10 p-3 text-sm font-medium text-slate-600 transition-all duration-200 ease-in-out hover:bg-primary/20 hover:text-primary`,
-          {
-            'mx-auto w-12 justify-center bg-primary/20 text-primary hover:rounded-md hover:bg-primary hover:text-white':
-              isSideNavCollapsed,
-          },
-        )}
-        onClick={logUserOut}
-      >
-        <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+      <Button className={'flex items-center gap-2'} onClick={logUserOut}>
+        <PowerIcon className="h-5 w-5" />
         {!isSideNavCollapsed && 'Logout'}
-      </button>
+      </Button>
     </div>
   )
 }
