@@ -8,6 +8,7 @@ import { ArrowUpIcon } from '@heroicons/react/24/outline'
 import GradientLineChart from '@/components/charts/LineCharts/GradientLineChart'
 import gradientLineChartData from './data/gradientLineChartData'
 import LoadingPage from '../loading'
+import Batches from '@/components/batch'
 
 function Home() {
   const { chart, items } = reportsBarChartData
@@ -74,6 +75,14 @@ function Home() {
             chart={gradientLineChartData}
           />
           <RecentTransactions />
+        </div>
+        <div className="grid grid-cols-10 gap-6">
+        <div className='col-span-6'>
+        <Batches/>
+        </div>
+        <div className='col-span-4 flex'>
+        <RecentTransactions />
+        </div>
         </div>
       </div>
     </Suspense>
