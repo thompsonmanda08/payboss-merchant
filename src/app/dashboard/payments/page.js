@@ -1,7 +1,7 @@
 'use client'
 import LoadingPage from '@/app/loading'
 import { Card, FileDropZone, Tabs } from '@/components/base'
-import { BatchPayment } from '@/components/containers'
+import { BatchPayment, PaymentsAction } from '@/components/containers'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
@@ -110,102 +110,12 @@ export default function Payments() {
   return (
     <Suspense fallback={<LoadingPage />}>
       {/* MODAL */}
-      {openPaymentsModal && <BatchPayment></BatchPayment>}
+      {openPaymentsModal && <PaymentsAction />}
 
       <div className="flex flex-col">
         <Card className={''}>
-          <div className="flex justify-between">
-            <div>
-              <h1 className="text-xl font-bold">Bulk Actions</h1>
-              <p className="text-gary-500 text-xs md:text-sm">
-                Make payments to multiple recipients simultaneously
-              </p>
-            </div>
-            <Button
-              onClick={() => {
-                setOpenPaymentsModal(true)
-              }}
-            >
-              Create Payment
-            </Button>
-          </div>
-          <div>
-            <div className="flex w-full items-center justify-between">
-              <Tabs tabs={PAYMENT_TYPES} />
-            </div>
-
-            <div className=" mt-4 rounded-lg border">
-              <div className="relative m-2">
-                <MagnifyingGlassIcon className="absolute left-2 top-[25%] h-5 w-5 text-gray-500" />
-                <Input className={'max-w-sm pl-9'} placeholder={'Search...'} />
-              </div>
-
-              <div className="mt-4 flow-root border-t">
-                <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                  <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                    <table className="w-full min-w-full divide-y divide-gray-300">
-                      <thead>
-                        <tr className="flex h-full w-full justify-between divide-x divide-gray-200">
-                          <th className="min-w-[250px] items-start px-2 py-2 text-left text-xs">
-                            Batch Name
-                          </th>
-                          <th className="min-w-[150px] items-start px-2 py-2 text-left text-xs">
-                            Type
-                          </th>
-                          <th className="min-w-[100px] items-start  px-2 py-2 text-left text-xs">
-                            Date Created
-                          </th>
-                          <th className="min-w-[100px] items-start px-2 py-2 text-left text-xs">
-                            Quantity
-                          </th>
-                          <th className="min-w-[100px] items-start px-2 py-2 text-left text-xs">
-                            Total Amount
-                          </th>
-                          <th className="min-w-[100px] items-start px-2 py-2 text-left text-xs">
-                            Status
-                          </th>
-                        </tr>
-                      </thead>
-
-                      <tbody className="divide-y divide-gray-200 ">
-                        {SAMPLE_BATCHES.map((batch) => (
-                          <tr
-                            key={batch.name}
-                            className="flex h-full w-full justify-between divide-x divide-gray-200"
-                          >
-                            <td className=" min-w-[250px] items-start whitespace-nowrap px-2 py-3 text-left text-xs font-medium">
-                              {batch.batchName}
-                            </td>
-                            <td className="min-w-[150px] items-start whitespace-nowrap px-2 py-3 text-left text-xs">
-                              {batch.type}
-                            </td>
-                            <td className=" min-w-[100px] items-start whitespace-nowrap px-2 py-3 text-left text-xs">
-                              {batch.createdAt}
-                            </td>
-                            <td className="min-w-[100px] items-start whitespace-nowrap px-2 py-3 text-left text-xs">
-                              {batch.quantity}
-                            </td>
-                            <td className="min-w-[100px] items-start whitespace-nowrap px-2 py-3 text-left text-xs">
-                              {batch.totalAmount}
-                            </td>
-                            <td className="flex min-w-[100px] items-start whitespace-nowrap px-2 py-3 text-left text-xs">
-                              <Status status={batch.status} />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <h1>DISBURSEMENTS ACTION LIST</h1>
         </Card>
-        {/* <FileDropZone
-          onChange={(file) => {
-            console.log('ON CHANGE SHOW FILE NAME:', file.name)
-          }}
-        /> */}
       </div>
     </Suspense>
   )

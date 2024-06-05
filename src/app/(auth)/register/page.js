@@ -1,9 +1,8 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
-import { SelectField, TextField } from '@/components/Fields'
 import { Input } from '@/components/ui/input'
 import { SlimLayout } from '@/components/base/SlimLayout'
-import { Logo } from '@/components/base'
+import { Logo, SelectField } from '@/components/base'
 
 export const metadata = {
   title: 'Sign Up',
@@ -74,16 +73,14 @@ export default function Register() {
             required
           />
         </div>
-        <SelectField
-          className="col-span-full"
-          label="How did you hear about us?"
-          name="referral_source"
-        >
-          <option>AltaVista search</option>
-          <option>Super Bowl commercial</option>
-          <option>Our route 34 city bus ad</option>
-          <option>The “Never Use This” podcast</option>
-        </SelectField>
+        <div className="col-span-full w-full ">
+          <SelectField
+            // className="col-span-full w-full"
+            label="How did you hear about us?"
+            name="referral_source"
+            options={['LinkedIn', 'Facebook', 'Whatsapp', 'Friends/Relatives']}
+          />
+        </div>
         <div className="col-span-full">
           <Button type="submit" variant="solid" color="blue" className="w-full">
             <span>
