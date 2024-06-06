@@ -33,6 +33,10 @@ import {
   LinkIcon,
   CalculatorIcon,
   TicketIcon,
+  WrenchScrewdriverIcon,
+  UserGroupIcon,
+  ShoppingCartIcon,
+  BriefcaseIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { Logo } from '.'
@@ -146,9 +150,31 @@ export const SIDE_BAR_OPTIONS = [
     Icon: DocumentChartBarIcon,
   },
   {
-    name: 'Account Settings',
+    name: 'Manage Account ',
     href: '/dashboard/settings',
-    Icon: Cog6ToothIcon,
+    Icon: WrenchScrewdriverIcon,
+    subMenuItems: [
+      {
+        name: 'Team',
+        href: '/dashboard/users',
+        Icon: UserGroupIcon,
+      },
+      {
+        name: 'Products',
+        href: '/dashboard/products',
+        Icon: ShoppingCartIcon,
+      },
+      {
+        name: 'Services',
+        href: '/dashboard/services',
+        Icon: BriefcaseIcon,
+      },
+      {
+        name: 'Preferences',
+        href: '/dashboard/settings',
+        Icon: Cog6ToothIcon,
+      },
+    ],
   },
 ]
 

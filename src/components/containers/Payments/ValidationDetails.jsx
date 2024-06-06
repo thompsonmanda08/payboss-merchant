@@ -4,9 +4,6 @@ import usePaymentsStore from '@/state/paymentsStore'
 import { Button } from '@/components/ui/Button'
 import { Modal, Spinner, StatusCard } from '@/components/base'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
-import InvalidRecords from '../Tables/InvalidRecords'
-import AllRecords from '../Tables/AllRecords'
-import ValidRecords from '../Tables/ValidRecords'
 
 const ValidationDetails = ({
   changeScreen,
@@ -14,10 +11,8 @@ const ValidationDetails = ({
   paymentAction,
 }) => {
   const queryClient = useQueryClient()
-  const { loading, setLoading } = usePaymentsStore()
-  const [openAll, setOpenAll] = useState(false)
-  const [openValid, setOpenValid] = useState(false)
-  const [openInvalid, setOpenInvalid] = useState(false)
+  const { loading, setLoading, openRecordsModal, closeRecordsModal } =
+    usePaymentsStore()
 
   const date = new Date()
   const aDayPlus = new Date(date)
@@ -40,22 +35,6 @@ const ValidationDetails = ({
     )
   }
 
-  const closeModal = () => {
-    setOpenAll(false)
-    setOpenValid(false)
-    setOpenInvalid(false)
-  }
-
-  const openModal = (type) => {
-    if (type === 'all') {
-      setOpenAll(true)
-    } else if (type === 'valid') {
-      setOpenValid(true)
-    } else if (type === 'invalid') {
-      setOpenInvalid(true)
-    }
-  }
-
   return (
     <>
       <div className="flex h-full w-full flex-col justify-between ">
@@ -72,9 +51,9 @@ const ValidationDetails = ({
           tooltipText={'All records must be valid to proceed'}
           Icon={QuestionMarkCircleIcon}
           IconColor="#ffb100"
-          viewAllRecords={() => openModal('all')}
-          viewValidRecords={() => openModal('valid')}
-          viewInvalidRecords={() => openModal('invalid')}
+          viewAllRecords={() => openRecordsModal('all')}
+          viewValidRecords={() => openRecordsModal('valid')}
+          viewInvalidRecords={() => openRecordsModal('invalid')}
         />
 
         <div className="mt-8 flex h-1/6 w-full items-end justify-end gap-4">
@@ -96,30 +75,6 @@ const ValidationDetails = ({
           </Button>
         </div>
       </div>
-      <Modal
-        show={openInvalid || openValid || openAll}
-        onClose={closeModal}
-        onConfirm={openModal}
-        title={
-          openAll
-            ? 'All Records'
-            : openValid
-              ? 'Valid Records'
-              : 'Invalid Records'
-        }
-        infoText={
-          openAll
-            ? 'This list includes all the records that have been processed. Review them carefully.'
-            : openValid
-              ? 'All records in this list are valid and ready for the next step.'
-              : 'The records listed here contain errors or missing information. Please update them to proceed with the transaction.'
-        }
-        width={1500}
-      >
-        {openAll && <AllRecords />}
-        {openValid && <ValidRecords />}
-        {openInvalid && <InvalidRecords />}
-      </Modal>
     </>
   )
 }

@@ -13,6 +13,7 @@ import ValidationDetails from './ValidationDetails'
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { capitalize } from '@/lib/utils'
+import RecordDetailsViewer from './RecordDetailsViewer'
 
 export const PAYMENT_TYPES = [
   { name: 'Bulk Payment', Icon: CircleStackIcon },
@@ -52,6 +53,14 @@ const PaymentsAction = ({}) => {
     resetPaymentData,
     openPaymentsModal,
     setOpenPaymentsModal,
+    openAllRecordsModal,
+    openValidRecordsModal,
+    openInvalidRecordsModal,
+    setOpenAllRecordsModal,
+    setOpenValidRecordsModal,
+    setOpenInvalidRecordsModal,
+    openRecordsModal,
+    closeRecordsModal,
   } = usePaymentsStore()
 
   //************ STEPS TO CREATE A TASK FOR A STUDY PLAN *****************/
@@ -122,31 +131,41 @@ const PaymentsAction = ({}) => {
   }, [])
 
   return (
-    <Modal
-      show={openPaymentsModal}
-      width={900}
-      title={currentStep.title}
-      infoText={currentStep.infoText}
-      disableAction={true}
-      removeCallToAction={true}
-      onClose={() => {
-        setOpenPaymentsModal(false)
-        resetPaymentData()
-      }}
-    >
-      <div className="flex h-full w-full flex-col items-center justify-between gap-2 pt-2">
-        {tabs ? (
-          activeTab
-        ) : (
-          <EmptyState
-            title={'Oops Sorry!'}
-            message={'There seems to be a problem here, Try again later.'}
-          >
-            <div></div>
-          </EmptyState>
-        )}
-      </div>
-    </Modal>
+    <>
+      {/************************* MAIN MODAL RENDERER *************************/}
+      <Modal
+        show={openPaymentsModal}
+        width={900}
+        title={currentStep.title}
+        infoText={currentStep.infoText}
+        disableAction={true}
+        removeCallToAction={true}
+        isDismissible={false}
+        onClose={() => {
+          setOpenPaymentsModal(false)
+          resetPaymentData()
+        }}
+      >
+        <div className="flex h-full w-full flex-col items-center justify-between gap-2 pt-2">
+          {tabs ? ( // IF TABS ARRAY IS NOT UNDEFINED
+            activeTab
+          ) : (
+            <EmptyState
+              title={'Oops Sorry!'}
+              message={'There seems to be a problem here, Try again later.'}
+            >
+              <div></div>
+            </EmptyState>
+          )}
+        </div>
+      </Modal>
+      {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
+
+      {(openAllRecordsModal ||
+        openValidRecordsModal ||
+        openInvalidRecordsModal) && <RecordDetailsViewer />}
+      {/************************************************************************/}
+    </>
   )
 }
 

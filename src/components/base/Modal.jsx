@@ -45,7 +45,7 @@ function Modal({
   }, [show])
 
   const handleClose = (e) => {
-    e.stopPropagation()
+    e?.stopPropagation()
     setIsOpen(false)
     setTimeout(onClose, 250) // Match the duration of the exit animation
   }

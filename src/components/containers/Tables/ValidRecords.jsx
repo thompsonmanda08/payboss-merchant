@@ -88,9 +88,5 @@ const people = [
   },
 ]
 export default function ValidRecords() {
-  return (
-    <Card>
-      <SummaryTable columns={columns} data={people} />
-    </Card>
-  )
+  return <SummaryTable columns={columns} data={people} />
 }

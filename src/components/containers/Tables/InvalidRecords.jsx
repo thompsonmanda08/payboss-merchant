@@ -118,20 +118,18 @@ export default function InvalidRecords () {
         </div>
       );
 
-    return(
-       <>
-        <Card>
+    return (
+      <>
         <SummaryTable columns={columns} data={people} actions={renderActions} />
-        </Card>
         <ConfirmationModal
-        show={openDelete}
-        setShow={closeDeleteModal}
-        title='Delete Entry'
-        content='Are you sure you want to delete this entry from batch?'
-        onConfirm={() => {
-          closeDeleteModal();
-        }}
-      />
-       </>
+          show={openDelete}
+          setShow={closeDeleteModal}
+          title="Delete Entry"
+          content="Are you sure you want to delete this entry from batch?"
+          onConfirm={() => {
+            closeDeleteModal()
+          }}
+        />
+      </>
     )
 }
