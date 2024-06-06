@@ -361,14 +361,14 @@ export function SideNavItems({
                   >
                     {!isSideNavCollapsed && name}
                   </span>
-                  {/* <ChevronDownIcon
+                  <ChevronDownIcon
                     className={cn(
                       'ml-auto h-4 w-4 transition-all duration-300 ease-in-out',
                       {
                         'rotate-180': isExpanded,
                       },
                     )}
-                  /> */}
+                  />
                 </button>
               ) : (
                 <Link
