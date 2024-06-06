@@ -20,7 +20,7 @@ function ReportsBarChartItem({icon, label, progress }) {
         </h4>
         <div className="w-3/4 mt-1">
           
-            <Progress value={progress.percentage}/>
+            <Progress value={progress.percentage} color='black from-black to-black/80'/>
           
         </div>
       </div>

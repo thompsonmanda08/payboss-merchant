@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-const Progress = forwardRef(({ value , color='black/80'}, ref) => (
+const Progress = forwardRef(({ value , color}, ref) => (
   <div className="h-2 w-full rounded-full bg-gray-200" ref={ref}>
     <div
       style={{ width: value + '%' }}
