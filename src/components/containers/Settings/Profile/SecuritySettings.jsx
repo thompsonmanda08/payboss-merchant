@@ -82,7 +82,7 @@ export default function ProfileSecuritySettings() {
           </dl>
         </div>
       </div>
-      {openEditModal && (
+      {/* {openEditModal && (
         <Modal
           show={openEditModal}
           onClose={handleToggleModal}
@@ -92,7 +92,7 @@ export default function ProfileSecuritySettings() {
         >
           <div className="flex h-24 w-full bg-red-500"></div>
         </Modal>
-      )}
+      )} */}
     </Card>
   )
 }

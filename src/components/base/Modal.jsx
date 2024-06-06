@@ -4,6 +4,7 @@ import { Cross1Icon } from '@radix-ui/react-icons'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '../ui/Button'
 import { Spinner } from '.'
+import { cn } from '@/lib/utils'
 
 const modalVariants = {
   hidden: { opacity: 0, y: '-50%', scale: 0.8 },
@@ -31,6 +32,8 @@ function Modal({
   loading,
   disableAction,
   removeCallToAction,
+  isDismissible = true,
+  className,
 }) {
   const [isOpen, setIsOpen] = useState(show || false)
   const [noCallToAction, setNoCallToAction] = useState(
@@ -47,6 +50,12 @@ function Modal({
     setTimeout(onClose, 250) // Match the duration of the exit animation
   }
 
+  function dismissModal() {
+    if (isDismissible) {
+      handleClose()
+    }
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -56,7 +65,7 @@ function Modal({
           exit="exit"
           variants={overlayVariants}
           transition={{ duration: 0.25 }}
-          onClick={handleClose}
+          onClick={dismissModal}
           className="absolute inset-0 z-[999] flex h-screen w-full items-center justify-center bg-slate-800/50"
         >
           <motion.div
@@ -70,7 +79,10 @@ function Modal({
               height: height ? `${height}px` : 'auto',
             }}
             onClick={(e) => e.stopPropagation()}
-            className="z-[999] flex w-full flex-col items-center justify-between gap-1 rounded-lg bg-white p-4"
+            className={cn(
+              'z-[999] flex w-full flex-col items-center justify-between gap-1 rounded-lg bg-white p-4',
+              className,
+            )}
           >
             {/* CLOSE MODAL ICON */}
             <div className="relative flex w-full items-center justify-between py-4">

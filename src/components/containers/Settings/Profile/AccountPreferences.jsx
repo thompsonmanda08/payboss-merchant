@@ -75,17 +75,7 @@ export default function AccountPreferences() {
           </dl>
         </div>
       </div>
-      {openEditModal && (
-        <Modal
-          show={openEditModal}
-          onClose={handleToggleModal}
-          onConfirm={handleConfirm}
-          title={'Update Profile Details'}
-          infoText={'Ensure that your account information is up to date.'}
-        >
-          <div className="flex h-24 w-full bg-red-500"></div>
-        </Modal>
-      )}
+    
     </Card>
   )
 }
