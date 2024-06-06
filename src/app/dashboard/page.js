@@ -1,4 +1,3 @@
-'use client'
 import { Balance, Card, PaymentMethods, SimpleStats } from '@/components/base'
 import ReportsBarChart from '@/components/charts/ReportsBarChart'
 import { TransactionsTable } from '@/components/containers'
@@ -10,7 +9,6 @@ import GradientLineChart from '@/components/charts/LineCharts/GradientLineChart'
 import gradientLineChartData from './data/gradientLineChartData'
 import LoadingPage from '../loading'
 import Batches from '@/components/batch'
-import AllRecords from '@/components/containers/Tables/AllRecords'
 
 function Home() {
   const { chart, items } = reportsBarChartData
@@ -86,7 +84,6 @@ function Home() {
         <RecentTransactions />
         </div>
         </div>
-        <AllRecords/>
       </div>
     </Suspense>
   )
