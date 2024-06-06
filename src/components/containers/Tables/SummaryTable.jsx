@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 function SummaryTable({ columns, data, actions }) {
   const [currentPage, setCurrentPage] = useState(1)
-  const rowsPerPage = 1
+  const rowsPerPage = 10
   const totalPages = Math.ceil(data.length / rowsPerPage)
 
   const handlePageChange = (page) => {
