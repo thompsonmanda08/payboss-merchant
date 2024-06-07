@@ -221,7 +221,7 @@ function SideNavBar() {
     <>
       <nav
         className={cn(
-          `sticky z-20 hidden h-[95svh] w-full min-w-[220px] max-w-[320px] px-4 pb-10 transition-all duration-500 ease-in-out lg:block`,
+          `sticky z-20 hidden h-[95svh] w-full min-w-[220px] max-w-[320px] bg-white px-2 px-4 pb-10 transition-all duration-500 ease-in-out lg:block `,
           { 'max-w-[96px] items-center': isSideNavCollapsed },
         )}
       >
@@ -283,7 +283,7 @@ export function NavItemIcon({ isSelected, Icon, activeLayer, isExpanded }) {
   return (
     <div
       className={cn(
-        'z-10 flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-xl shadow-slate-700/10',
+        'z-10 flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-none shadow-slate-700/10',
         {
           'bg-primary font-bold': isSelected,
           'bg-primary text-white': activeLayer,
@@ -312,8 +312,8 @@ export function SideNavItems({
   logUserOut,
 }) {
   return (
-    <div className="flex h-full w-full flex-col overflow-clip">
-      <div className="no-scrollbar flex h-full w-full flex-col gap-2 overflow-y-auto ">
+    <div className="flex h-full w-full flex-col overflow-clip ">
+      <div className="no-scrollbar flex h-full w-full flex-col gap-2 divide-y divide-slate-100/50 overflow-y-auto ">
         {SIDE_BAR_OPTIONS.map(({ name, href, Icon, subMenuItems }, index) => {
           const isExpanded = expandedSection === index
 
@@ -337,10 +337,10 @@ export function SideNavItems({
                       text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out`,
                     {
                       'justify-center': isSideNavCollapsed,
-                      ' bg-white font-bold text-primary shadow-xl shadow-slate-700/10':
+                      '  font-bold text-primary shadow-none shadow-slate-700/10':
                         isExpanded,
 
-                      'rounded-lg bg-white font-bold text-primary shadow-xl shadow-slate-400/10':
+                      'rounded-lg bg-primary/10 font-bold text-primary shadow-none shadow-slate-400/10':
                         activeLayer,
 
                       'rounded-b-none': activeLayer && isExpanded,
@@ -376,7 +376,7 @@ export function SideNavItems({
                   className={cn(
                     `group flex items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium text-slate-800 transition-all duration-200 ease-in-out `,
                     {
-                      'rounded-lg bg-white font-medium text-primary shadow-xl shadow-slate-400/10':
+                      'rounded-lg bg-primary/10 font-medium text-primary shadow-none shadow-slate-400/10':
                         isSelected,
                       'justify-center': isSideNavCollapsed,
                     },
@@ -400,7 +400,7 @@ export function SideNavItems({
                     opacity: isExpanded ? 1 : 0,
                   }}
                   transition={{ duration: 0.3 }}
-                  className="overflow-hidden rounded-lg rounded-t-none bg-white pl-6 shadow-xl shadow-slate-700/5"
+                  className="overflow-hidden rounded-lg rounded-t-none bg-white pl-6 shadow-none shadow-slate-700/5"
                 >
                   {subMenuItems.map((subItem, subIndex) => (
                     <Link
