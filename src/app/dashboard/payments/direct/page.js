@@ -2,6 +2,7 @@
 import LoadingPage from '@/app/loading'
 import { Card, Tabs } from '@/components/base'
 import { PaymentsAction } from '@/components/containers'
+import SelectPaymentType from '@/components/containers/Payments/SelectPaymentType'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { cn, formatDate } from '@/lib/utils'
@@ -113,7 +114,7 @@ export default function Payments() {
   return (
     <Suspense fallback={<LoadingPage />}>
       {/* MODAL */}
-      {openPaymentsModal && <PaymentsAction />}
+      {openPaymentsModal && <SelectPaymentType />}
 
       <div className="flex flex-col">
         <Card className={''}>
