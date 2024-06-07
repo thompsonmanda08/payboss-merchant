@@ -12,13 +12,14 @@ import backgroundImage from '@/images/background-features.jpg'
 // import screenshotPayroll from '@/images/screenshots/payroll.png'
 // import screenshotReporting from '@/images/screenshots/reporting.png'
 // import screenshotVatReturns from '@/images/screenshots/vat-returns.png'
+import dashboardScreenShot from '@/images/screenshots/home.png'
 
 const features = [
   {
     title: 'Comprehensive Financial Management',
     description:
       ' From invoicing to expense tracking, PayBoss covers all aspects of your financial needs.',
-    image: placeHolderImage,
+    image: dashboardScreenShot,
   },
   {
     title: 'User-Friendly Interface',
@@ -61,7 +62,7 @@ export function PrimaryFeatures() {
   return (
     <section
       id="why-payboss"
-      aria-label="why paybossfor running your business"
+      aria-label="why payboss for running your business"
       className="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32"
     >
       <Image
