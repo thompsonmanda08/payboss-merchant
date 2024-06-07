@@ -130,11 +130,8 @@ export function Header() {
             <div className="hidden md:block">
               <NavLink href="/login">Sign in</NavLink>
             </div>
-            <Button href="/register" className={'h-10'}>
-              <span>
-                Get started
-                {/* <span className="hidden lg:inline">today</span> */}
-              </span>
+            <Button href="/dashboard" className={'h-10'}>
+              <span>Dashboard</span>
             </Button>
             <div className="-mr-1 md:hidden">
               <MobileNavigation />
