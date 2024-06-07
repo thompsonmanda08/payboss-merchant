@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '../ui/Button'
-import { Spinner } from '.'
+import { CardHeader, Spinner } from '.'
 import { cn } from '@/lib/utils'
 
 const modalVariants = {
@@ -84,28 +84,11 @@ function Modal({
               className,
             )}
           >
-            {/* CLOSE MODAL ICON */}
-            <div className="relative flex w-full items-center justify-between py-4">
-              {title && (
-                <div className="flex flex-col gap-2">
-                  <h3 className="text-sm font-semibold tracking-tight text-slate-800 xl:text-base">
-                    {title}
-                  </h3>
-                  {infoText && (
-                    <p className="mb-2 text-xs text-gray-500 sm:text-sm">
-                      {infoText}
-                    </p>
-                  )}
-                </div>
-              )}
-              <div
-                onClick={handleClose}
-                className="absolute -right-1 -top-2 cursor-pointer rounded-full p-2 text-primary/30 transition-all duration-300 ease-in-out hover:bg-primary/10 hover:text-primary"
-              >
-                <Cross1Icon className="aspect-square w-6" />
-              </div>
-            </div>
-
+            <CardHeader
+              title={title}
+              infoText={infoText}
+              onClose={handleClose}
+            />
             {/* MODAL CONTENT */}
             <div
               onClick={(e) => e.stopPropagation()}
@@ -113,7 +96,6 @@ function Modal({
             >
               {children}
             </div>
-
             {!noCallToAction && (
               <div className="flex w-full justify-end gap-3">
                 <Button
