@@ -8,18 +8,14 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 const ValidationDetails = ({
   changeScreen,
   updatePaymentFields,
+  navigateBackwards,
   paymentAction,
 }) => {
   const queryClient = useQueryClient()
   const { loading, setLoading, openRecordsModal, closeRecordsModal } =
     usePaymentsStore()
 
-  const date = new Date()
-  const aDayPlus = new Date(date)
-  aDayPlus.setDate(date.getDate() + 1)
 
-  const nextDay = aDayPlus.toISOString().split('T')[0]
-  const currentDate = date.toISOString().split('T')[0]
 
   if (loading) {
     // TODO: REMOVE AFTER SERVER CONNECTION
@@ -60,9 +56,7 @@ const ValidationDetails = ({
           <Button
             className={'font-medium text-primary'}
             variant="outline"
-            onClick={() => {
-              changeScreen(2)
-            }}
+            onClick={navigateBackwards}
           >
             Back
           </Button>

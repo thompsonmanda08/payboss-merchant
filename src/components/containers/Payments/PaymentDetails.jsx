@@ -8,27 +8,15 @@ import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
 import { SelectField } from '@/components/base'
 import { BanknotesIcon } from '@heroicons/react/24/outline'
+import { useSearchParams } from 'next/navigation'
 
-const PaymentDetails = ({
-  changeScreen,
-  updatePaymentFields,
-  paymentAction,
-  navigateForward,
-  navigateBackwards,
-}) => {
-  const queryClient = useQueryClient()
-  const { loading, setLoading } = usePaymentsStore()
+const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
+  const { setLoading, updatePaymentFields, paymentAction } = usePaymentsStore()
 
-  const date = new Date()
-  const aDayPlus = new Date(date)
-  aDayPlus.setDate(date.getDate() + 1)
+  const urlParams = useSearchParams()
+  const service = urlParams.get('service')
 
-  const nextDay = aDayPlus.toISOString().split('T')[0]
-  const currentDate = date.toISOString().split('T')[0]
-
-  const selectedActionType = PAYMENT_TYPES.find(
-    (type) => type.name === paymentAction.type,
-  )
+  const selectedActionType = PAYMENT_TYPES[0]
 
   function handleProceed() {
     if (
@@ -36,11 +24,16 @@ const PaymentDetails = ({
       paymentAction?.batchName !== (null || undefined) &&
       paymentAction?.batchName?.length > 3
     ) {
-      navigateForward()
       setLoading(true)
+      navigateForward()
       return
     }
     notify('error', 'A valid filename is required!')
+  }
+
+  function handleBackwardsNavigation() {
+    updatePaymentFields({ file: null })
+    navigateBackwards()
   }
 
   return (
@@ -49,15 +42,14 @@ const PaymentDetails = ({
         <selectedActionType.Icon className="h-5 w-5 text-primary" />
         <div className="h-6 border-r-2 border-primary/60" />
         <div className="flex w-full justify-between text-sm font-medium text-primary 2xl:text-base">
-          <div>{selectedActionType?.name}</div>
-          {/* <button className="text-xs">Change</button> */}
+          <p>{selectedActionType?.name}</p>
         </div>
       </div>
       <div className="flex w-full items-center gap-3 rounded-md bg-primary/20 p-2">
         <BanknotesIcon className="h-5 w-5 text-primary" />
         <div className="h-6 border-r-2 border-primary/60" />
-        <div className="flex w-full justify-between text-sm font-medium text-primary 2xl:text-base">
-          <div>{paymentAction?.serviceAction}</div>
+        <div className="flex w-full justify-between text-sm font-medium capitalize text-primary 2xl:text-base">
+          <p>{service}</p>
         </div>
       </div>
       {/* <SelectField
@@ -77,7 +69,7 @@ const PaymentDetails = ({
         <Button
           className={'font-medium text-primary'}
           variant="outline"
-          onClick={navigateBackwards}
+          onClick={handleBackwardsNavigation}
         >
           Back
         </Button>

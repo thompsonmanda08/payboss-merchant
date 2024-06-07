@@ -1,6 +1,7 @@
 /* ******************* BASE COMPONENTS ********************* */
 export { default as Avatar } from './Avatar'
 export { default as Card } from './Card'
+export { default as CardHeader } from './CardHeader'
 export { default as EmptyState } from './EmptyState'
 export { default as BackgroundSVG } from './BackgroundSVG'
 export { Container } from './Container'
@@ -20,3 +21,4 @@ export { default as SimpleStats } from './SimpleStats'
 export { default as Tooltip } from './Tooltip'
 export { default as Balance } from './Balance'
 export { default as PaymentMethods } from './PaymentMethods'
+export { default as ProgressStep } from './ProgressStep'

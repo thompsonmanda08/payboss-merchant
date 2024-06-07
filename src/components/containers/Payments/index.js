@@ -1,8 +1,13 @@
 'use client'
-import { EmptyState, Modal } from '@/components/base'
+import {
+  Card,
+  CardHeader,
+  EmptyState,
+  Modal,
+  ProgressStep,
+} from '@/components/base'
 import useCustomTabsHook from '@/hooks/CustomTabsHook'
 import usePaymentsStore from '@/state/paymentsStore'
-import CreatePayment from './CreatePayment'
 import UploadCSVFile from './UploadCSVFile'
 import PaymentDetails from './PaymentDetails'
 import {
@@ -16,91 +21,70 @@ import { capitalize } from '@/lib/utils'
 import RecordDetailsViewer from './RecordDetailsViewer'
 
 export const PAYMENT_TYPES = [
-  { name: 'Bulk Payment', Icon: CircleStackIcon },
-  { name: 'Single Payment', Icon: ArrowRightCircleIcon },
+  {
+    name: 'Bulk Payment',
+    Icon: CircleStackIcon,
+    href: '/dashboard/payments/create/bulk',
+  },
+  {
+    name: 'Single Payment',
+    Icon: ArrowRightCircleIcon,
+    href: '/dashboard/payments/create/single',
+  },
 ]
 
 export const STEPS = [
   {
-    title: 'Create a payment',
-    infoText: 'Choose a payment you would like to initiate',
-  },
-  {
-    title: 'Create a payment - Upload File',
+    title: 'Create a Bulk payment',
     infoText: 'Upload a file with records of the recipient in `.csv` format',
+    step: 'Upload File',
   },
   {
-    title: 'Create a payment - Details',
+    title: 'Create a Bulk payment',
     infoText: 'Provide details for the payment action batch files',
+    step: 'Batch Details',
   },
   {
     title: 'Create a payment - File Record Validation',
     infoText:
       'The validation will make sure all record entries do not cause internal errors',
+    step: 'Validation',
   },
 ]
 
-const PaymentsAction = ({}) => {
+const BulkPaymentAction = ({}) => {
   // ** INITIALIZES STEPS **//
   const [currentStep, setCurrentStep] = useState(STEPS[0])
-
-  const pathname = usePathname()
 
   // ** INITIALIZEs PAYMENT STATE **//
   const {
     updatePaymentFields,
-    paymentAction,
     resetPaymentData,
-    openPaymentsModal,
-    setOpenPaymentsModal,
     openAllRecordsModal,
     openValidRecordsModal,
     openInvalidRecordsModal,
-    setOpenAllRecordsModal,
-    setOpenValidRecordsModal,
-    setOpenInvalidRecordsModal,
-    openRecordsModal,
-    closeRecordsModal,
   } = usePaymentsStore()
 
   //************ STEPS TO CREATE A TASK FOR A STUDY PLAN *****************/
   const {
     activeTab,
-    tabs,
     currentTabIndex,
     navigateTo,
     navigateForward,
     navigateBackwards,
   } = useCustomTabsHook([
-    <CreatePayment
-      key={'step-1'}
-      changeScreen={handleScreenChange} //  forwards => navigateTo(1)
-      updatePaymentFields={updatePaymentFields}
-      paymentAction={paymentAction}
-      navigateForward={goForward}
-      navigateBackwards={goBack}
-    />,
     <UploadCSVFile
       key={'step-2'}
-      changeScreen={handleScreenChange} //  forwards => navigateTo(2)
-      paymentAction={paymentAction}
-      updatePaymentFields={updatePaymentFields}
       navigateForward={goForward}
       navigateBackwards={goBack}
     />,
     <PaymentDetails
       key={'step-3'}
-      changeScreen={handleScreenChange} //  forwards => navigateTo(3)
-      paymentAction={paymentAction}
-      updatePaymentFields={updatePaymentFields}
       navigateForward={goForward}
       navigateBackwards={goBack}
     />,
     <ValidationDetails
       key={'step-4'}
-      changeScreen={handleScreenChange} //  backwards => navigateTo(3)
-      paymentAction={paymentAction}
-      updatePaymentFields={updatePaymentFields}
       navigateForward={goForward}
       navigateBackwards={goBack}
     />,
@@ -121,46 +105,24 @@ const PaymentsAction = ({}) => {
 
   useEffect(() => {
     setCurrentStep(STEPS[currentTabIndex])
+
+    // CLEAR DATA WHEN THE THE COMPONENT IS UNMOUNTED
+    // return () => {
+    //   resetPaymentData()
+    // }
   }, [currentTabIndex])
-
-  useEffect(() => {
-    const pathArr = pathname.split('/')
-    const service = pathArr[pathArr.length - 1].replaceAll('-', ' ')
-
-    updatePaymentFields({ serviceAction: service.toUpperCase() })
-  }, [])
 
   return (
     <>
-      {/************************* MAIN MODAL RENDERER *************************/}
-      <Modal
-        show={openPaymentsModal}
-        width={900}
-        title={currentStep.title}
-        infoText={currentStep.infoText}
-        disableAction={true}
-        removeCallToAction={true}
-        isDismissible={false}
-        onClose={() => {
-          setOpenPaymentsModal(false)
-          resetPaymentData()
-        }}
-      >
-        <div className="flex h-full w-full flex-col items-center justify-between gap-2 pt-2">
-          {tabs ? ( // IF TABS ARRAY IS NOT UNDEFINED
-            activeTab
-          ) : (
-            <EmptyState
-              title={'Oops Sorry!'}
-              message={'There seems to be a problem here, Try again later.'}
-            >
-              <div></div>
-            </EmptyState>
-          )}
-        </div>
-      </Modal>
-      {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
+      {/************************* COMPONENT RENDERER *************************/}
 
+      <Card className={'max-w-4xl rounded-2xl'}>
+        <CardHeader title={currentStep.title} infoText={currentStep.infoText} />
+        <ProgressStep STEPS={STEPS} currentTabIndex={currentTabIndex} />
+        {activeTab}
+      </Card>
+
+      {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
       {(openAllRecordsModal ||
         openValidRecordsModal ||
         openInvalidRecordsModal) && <RecordDetailsViewer />}
@@ -169,4 +131,4 @@ const PaymentsAction = ({}) => {
   )
 }
 
-export default PaymentsAction
+export default BulkPaymentAction
