@@ -1,0 +1,29 @@
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import React from 'react'
+
+function CardHeader({ title, infoText, handleClose }) {
+  return (
+    <div className="relative flex w-full items-center justify-between py-4">
+      {title && (
+        <div className="flex flex-col gap-2">
+          <h3 className="text-sm font-semibold tracking-tight text-slate-800 xl:text-base">
+            {title}
+          </h3>
+          {infoText && (
+            <p className="mb-2 text-xs text-gray-500 sm:text-sm">{infoText}</p>
+          )}
+        </div>
+      )}
+      {handleClose && (
+        <div
+          onClick={handleClose}
+          className="absolute -right-1 -top-2 cursor-pointer rounded-full p-2 text-primary/30 transition-all duration-300 ease-in-out hover:bg-primary/10 hover:text-primary"
+        >
+          <XMarkIcon className="aspect-square w-6" />
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default CardHeader
