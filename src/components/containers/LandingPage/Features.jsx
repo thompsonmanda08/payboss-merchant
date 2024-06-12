@@ -7,6 +7,10 @@ import Tab from '@/components/Tab'
 // import api from '@/images/avatars/avatar-3.png'
 
 import api from '@/images/logos/payboss-icon.svg'
+import {
+  AdjustmentsVerticalIcon,
+  NewspaperIcon,
+} from '@heroicons/react/24/solid'
 
 function QuoteIcon(props) {
   return (
@@ -37,19 +41,19 @@ function Collections() {
       {
         content:
           'Seamlessly connect with your existing systems and automate your financial workflows with our robust API.',
-        author: {
+        Icon: {
           name: 'API Integration',
           role: 'Connect Seamlessly',
-          image: api,
+          element: AdjustmentsVerticalIcon,
         },
       },
       {
         content:
           'Create, send, and manage professional invoices with ease. Stay on top of your income and ensure timely payments.',
-        author: {
+        Icon: {
           name: 'Invoicing',
           role: 'Effortless Billing',
-          image: api,
+          element: NewspaperIcon,
         },
       },
     ],
@@ -57,19 +61,19 @@ function Collections() {
       {
         content:
           'Customize and deploy payment forms that cater to your business needs. Easy payments process for your customers.',
-        author: {
+        Icon: {
           name: 'Payment Forms',
           role: 'Simplify Transactions',
-          image: api,
+          element: NewspaperIcon,
         },
       },
       {
         content:
           'Sell your products and services online or via WhatsApp. Increase your sales with flexible store options.',
-        author: {
+        Icon: {
           name: 'Store',
           role: 'Expand Sales Channels',
-          image: api,
+          element: NewspaperIcon,
         },
       },
     ],
@@ -77,19 +81,19 @@ function Collections() {
       {
         content:
           'Manage recurring payments and subscriptions effortlessly. Keep track of your subscribers and their payments.',
-        author: {
+        Icon: {
           name: 'Subscriptions',
           role: 'Automate Recurring Payments',
-          image: api,
+          element: NewspaperIcon,
         },
       },
       {
         content:
           'Enable quick and secure in-store payments with our USSD feature. A convenient and cashless payment option.',
-        author: {
+        Icon: {
           name: 'USSD',
           role: 'Quick Cashless Payments',
-          image: api,
+          element: NewspaperIcon,
         },
       },
     ],
@@ -118,20 +122,21 @@ function Collections() {
                   <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
                     <div>
                       <div className="font-display text-base text-slate-900">
-                        {revenue.author.name}
+                        {revenue.Icon.name}
                       </div>
                       <div className="mt-1 text-sm text-slate-500">
-                        {revenue.author.role}
+                        {revenue.Icon.role}
                       </div>
                     </div>
-                    <div className="overflow-hidden rounded-full bg-slate-50">
-                      <Image
+                    <div className="overflow-hidden rounded-full bg-slate-800 p-3">
+                      {/* <Image
                         className="h-14 w-14 object-cover"
-                        src={revenue.author.image}
+                        src={revenue.Icon.element}
                         alt=""
                         width={56}
                         height={56}
-                      />
+                      /> */}
+                      <revenue.Icon.element className="h-6 w-6 text-white" />
                     </div>
                   </figcaption>
                 </figure>
@@ -150,19 +155,19 @@ function Spending() {
       {
         content:
           'Pay your bills on time and avoid late fees. Manage all your bill payments from a single dashboard.',
-        author: {
+        Icon: {
           name: 'Bill Payment',
           role: 'Pay Bills Easily',
-          image: api,
+          element: NewspaperIcon,
         },
       },
       {
         content:
           'Purchase bulk data for your business needs at competitive rates. Ensure your team stays connected and productive.',
-        author: {
+        Icon: {
           name: 'Bulk Data',
           role: 'Connect Your Team',
-          image: api,
+          element: NewspaperIcon,
         },
       },
     ],
@@ -170,19 +175,19 @@ function Spending() {
       {
         content:
           'Top up airtime for multiple employees in one go. Save time and reduce the hassle of individual top-ups.',
-        author: {
+        Icon: {
           name: 'Bulk Airtime',
           role: 'Top Up Effortlessly',
-          image: api,
+          element: NewspaperIcon,
         },
       },
       {
         content:
           'Make bulk payments to vendors, suppliers, or employees and enjoy streamlined payments automation.',
-        author: {
+        Icon: {
           name: 'Bulk Direct Payment',
           role: 'Pay Multiple Vendors',
-          image: api,
+          element: NewspaperIcon,
         },
       },
     ],
@@ -190,23 +195,24 @@ function Spending() {
       {
         content:
           'Distribute bulk vouchers to your customers or employees efficiently. Enhanced reward programs.',
-        author: {
+        Icon: {
           name: 'Bulk Vouchers Payment',
           role: 'Distribute Rewards Efficiently',
-          image: api,
+          element: NewspaperIcon,
         },
       },
       {
         content:
           'Issue virtual or physical expense cards for your team. Control and track business spending with ease.',
-        author: {
+        Icon: {
           name: 'Expense Cards',
           role: 'Control Business Spending',
-          image: api,
+          element: NewspaperIcon,
         },
       },
     ],
   ]
+
   return (
     <motion.ul
       role="list"
@@ -231,20 +237,14 @@ function Spending() {
                   <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
                     <div>
                       <div className="font-display text-base text-slate-900">
-                        {expense.author.name}
+                        {expense.Icon.name}
                       </div>
                       <div className="mt-1 text-sm text-slate-500">
-                        {expense.author.role}
+                        {expense.Icon.role}
                       </div>
                     </div>
-                    <div className="overflow-hidden rounded-full bg-slate-50">
-                      <Image
-                        className="h-14 w-14 object-cover"
-                        src={expense.author.image}
-                        alt=""
-                        width={56}
-                        height={56}
-                      />
+                    <div className="overflow-hidden rounded-full bg-slate-800 p-3">
+                      <expense.Icon.element className="h-6 w-6 text-white" />
                     </div>
                   </figcaption>
                 </figure>

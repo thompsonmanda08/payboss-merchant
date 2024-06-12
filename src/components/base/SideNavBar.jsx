@@ -12,7 +12,6 @@ import Link from 'next/link'
 import {
   HomeIcon,
   Cog6ToothIcon,
-  ArrowLeftOnRectangleIcon,
   BanknotesIcon,
   NewspaperIcon,
   IdentificationIcon,
