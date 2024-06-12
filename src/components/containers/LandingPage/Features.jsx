@@ -1,15 +1,20 @@
 'use client'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
 import { Container } from '@/components/base/Container'
 import Tab from '@/components/Tab'
-// import api from '@/images/avatars/avatar-3.png'
-
-import api from '@/images/logos/payboss-icon.svg'
 import {
-  AdjustmentsVerticalIcon,
+  BanknotesIcon,
   NewspaperIcon,
+  ArrowsRightLeftIcon,
+  PhoneArrowDownLeftIcon,
+  AdjustmentsVerticalIcon,
+  ClipboardDocumentIcon,
+  BuildingStorefrontIcon,
+  CreditCardIcon,
+  ReceiptPercentIcon,
+  CalculatorIcon,
+  TicketIcon,
 } from '@heroicons/react/24/solid'
 
 function QuoteIcon(props) {
@@ -64,7 +69,7 @@ function Collections() {
         Icon: {
           name: 'Payment Forms',
           role: 'Simplify Transactions',
-          element: NewspaperIcon,
+          element: ClipboardDocumentIcon
         },
       },
       {
@@ -73,7 +78,7 @@ function Collections() {
         Icon: {
           name: 'Store',
           role: 'Expand Sales Channels',
-          element: NewspaperIcon,
+          element: BuildingStorefrontIcon,
         },
       },
     ],
@@ -84,7 +89,7 @@ function Collections() {
         Icon: {
           name: 'Subscriptions',
           role: 'Automate Recurring Payments',
-          element: NewspaperIcon,
+          element: CreditCardIcon,
         },
       },
       {
@@ -93,7 +98,7 @@ function Collections() {
         Icon: {
           name: 'USSD',
           role: 'Quick Cashless Payments',
-          element: NewspaperIcon,
+          element: CalculatorIcon,
         },
       },
     ],
@@ -158,7 +163,7 @@ function Spending() {
         Icon: {
           name: 'Bill Payment',
           role: 'Pay Bills Easily',
-          element: NewspaperIcon,
+          element: BanknotesIcon,
         },
       },
       {
@@ -167,7 +172,7 @@ function Spending() {
         Icon: {
           name: 'Bulk Data',
           role: 'Connect Your Team',
-          element: NewspaperIcon,
+          element: ReceiptPercentIcon,
         },
       },
     ],
@@ -178,7 +183,7 @@ function Spending() {
         Icon: {
           name: 'Bulk Airtime',
           role: 'Top Up Effortlessly',
-          element: NewspaperIcon,
+          element: PhoneArrowDownLeftIcon,
         },
       },
       {
@@ -187,7 +192,7 @@ function Spending() {
         Icon: {
           name: 'Bulk Direct Payment',
           role: 'Pay Multiple Vendors',
-          element: NewspaperIcon,
+          element: ArrowsRightLeftIcon,
         },
       },
     ],
@@ -198,7 +203,7 @@ function Spending() {
         Icon: {
           name: 'Bulk Vouchers Payment',
           role: 'Distribute Rewards Efficiently',
-          element: NewspaperIcon,
+          element: TicketIcon,
         },
       },
       {
@@ -207,7 +212,7 @@ function Spending() {
         Icon: {
           name: 'Expense Cards',
           role: 'Control Business Spending',
-          element: NewspaperIcon,
+          element: CreditCardIcon,
         },
       },
     ],
