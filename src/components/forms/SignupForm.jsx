@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import useCustomTabsHook from '@/hooks/CustomTabsHook'
-import { CustomRadioButton, StatusMessage } from '../base'
+import { CustomRadioButton, FileDropZone, StatusMessage } from '../base'
 import { Button } from '../ui/Button'
 import {
   staggerContainerItemVariants,
@@ -14,17 +14,37 @@ import {
 } from '@/lib/constants'
 import { ArrowUturnLeftIcon, BackwardIcon } from '@heroicons/react/24/outline'
 
+const STEPS = [
+  'business-registration',
+  'business-information',
+  'business-documentation',
+  'personal-information',
+]
+
 export default function SignUpForm() {
   const { push } = useRouter()
   const [error, setError] = useState({})
-  const [newUser, setNewUser] = useState({})
+  const [businessInfo, setBusinessInfo] = useState({})
+  const [businessDocs, setBusinessDocs] = useState({})
+  const [newAdminUser, setNewAdminUser] = useState({})
   const [isLoading, setIsLoading] = useState(false)
 
   function updateErrorStatus(fields) {
     setError({ ...error, ...fields })
   }
-  function updateUserDetails(fields) {
-    setNewUser({ ...newUser, ...fields })
+
+  function updateAccountDetails(step, fields) {
+    if (STEPS[0] == step) {
+      setBusinessInfo({ ...businessInfo, ...fields })
+    }
+
+    if (STEPS[1] == step) {
+      businessDocs({ ...businessDocs, ...fields })
+    }
+
+    if (STEPS[2] == step) {
+      newAdminUser({ ...newAdminUser, ...fields })
+    }
   }
 
   const {
@@ -36,9 +56,10 @@ export default function SignUpForm() {
     firstTab,
     lastTab,
   } = useCustomTabsHook([
-    <Step1 key="personal-info" updateUserDetails={updateUserDetails} />,
-    <Step2 key={'business-info'} updateUserDetails={updateUserDetails} />,
-    <Step3 key={'password-info'} updateUserDetails={updateUserDetails} />,
+    <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />,
+    <Step1 key={STEPS[1]} updateDetails={updateAccountDetails} />,
+    <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />,
+    <Step3 key={STEPS[4]} updateDetails={updateAccountDetails} />,
   ])
 
   const isLastStep = currentTabIndex === lastTab
@@ -67,11 +88,13 @@ export default function SignUpForm() {
       return
     }
 
-    console.log('SIGN UP DETAILS: ', newUser)
+    console.log('BUSINESS DETAILS: ', businessInfo)
+    console.log('DOCUMENTS: ', businessDocs)
+    console.log('USER DETAILS: ', newAdminUser)
   }
 
   useEffect(() => {
-    updateUserDetails({ role: 'USER' })
+    // updateDetails({ role: 'USER' })
   }, [])
 
   return (
@@ -130,7 +153,134 @@ export default function SignUpForm() {
   )
 }
 
-function Step1({ updateUserDetails }) {
+function Step0({ updateDetails }) {
+  return (
+    <>
+      <RadioGroup
+        label="What type of business do you run?"
+        className="flex w-full"
+        description=" Payboss gives you the tools to simplify money management and take control of your financial operations - no matter your business size or structure."
+        defaultValue={'REGISTERED_BUSINESS'}
+        onChange={(e) =>
+          updateDetails(STEPS[0], {
+            businessRegistrationStatus: e.target.value,
+          })
+        }
+      >
+        <motion.div
+          key={'step-0-1'}
+          className="w-full"
+          variants={staggerContainerItemVariants}
+        >
+          <CustomRadioButton
+            description="Works for Sole Proprietors, Limited Liability Companies, and Non-Profit Organizations."
+            value="REGISTERED_BUSINESS"
+          >
+            <p className="mb-1 font-semibold">Registered Business</p>
+          </CustomRadioButton>
+        </motion.div>
+
+        <motion.div
+          className="w-full"
+          key={'step-0-2'}
+          variants={staggerContainerItemVariants}
+        >
+          <CustomRadioButton
+            description="Works for individuals, one-person business, social media vendors and stores"
+            value="UNREGISTERED_BUSINESS"
+          >
+            <p className="mb-1 font-semibold">Unregistered Business</p>
+          </CustomRadioButton>
+        </motion.div>
+      </RadioGroup>
+    </>
+  )
+}
+
+function Step1({ updateDetails }) {
+  return (
+    <>
+      <motion.div
+        key={'step-1-2'}
+        className="w-full"
+        variants={staggerContainerItemVariants}
+      >
+        <Input
+          type="text"
+          label="Business Name"
+          name="businessName"
+          required={true}
+          onChange={(e) => {
+            updateDetails(STEPS[0], { businessName: e.target.value })
+          }}
+        />
+      </motion.div>
+
+      <motion.div
+        key={'step-1-1'}
+        variants={staggerContainerItemVariants}
+        className="flex w-full gap-4"
+      >
+        <Input
+          type="number"
+          label="Business Phone"
+          name="businessPhone"
+          required={true}
+          onChange={(e) => {
+            updateDetails(STEPS[0], { businessPhone: e.target.value })
+          }}
+        />
+        <Input
+          type="number"
+          label="Business Tel"
+          name="businessLandLine"
+          onChange={(e) => {
+            updateDetails(STEPS[0], { businessLandLine: e.target.value })
+          }}
+        />
+      </motion.div>
+
+      <motion.div
+        key={'step-1-3'}
+        className="w-full"
+        variants={staggerContainerItemVariants}
+      >
+        <Input
+          type="email"
+          label="Business Email"
+          name="businessEmail"
+          required={true}
+          onChange={(e) => {
+            updateDetails({ businessEmail: e.target.value })
+          }}
+        />
+      </motion.div>
+    </>
+  )
+}
+
+function Step2({ updateDetails }) {
+  return (
+    <div className="flex w-full flex-col gap-4">
+      <UploadField
+        label={'Business Incorporation Certificate'}
+        handleFile={(file) => {
+          // console.log('ON CHANGE SHOW FILE NAME:', file.name)
+          updateDetails({ incorporationCertificate: file })
+        }}
+      />
+      <UploadField
+        label={'Compliance Certificate'}
+        handleFile={(file) => {
+          // console.log('ON CHANGE SHOW FILE NAME:', file.name)
+          updateDetails({ incorporationCertificate: file })
+        }}
+      />
+    </div>
+  )
+}
+
+function Step3({ key, updateDetails }) {
   return (
     <>
       <motion.div
@@ -144,7 +294,7 @@ function Step1({ updateUserDetails }) {
           name="firstName"
           required={true}
           onChange={(e) => {
-            updateUserDetails({ firstName: e.target.value })
+            updateDetails({ firstName: e.target.value })
           }}
         />
         <Input
@@ -153,7 +303,7 @@ function Step1({ updateUserDetails }) {
           name="lastName"
           required={true}
           onChange={(e) => {
-            updateUserDetails({ lastName: e.target.value })
+            updateDetails({ lastName: e.target.value })
           }}
         />
       </motion.div>
@@ -166,10 +316,10 @@ function Step1({ updateUserDetails }) {
         <Input
           type="text"
           label="Mobile Number"
-          name="username"
+          name="mobileNo"
           required={true}
           onChange={(e) => {
-            updateUserDetails({ username: e.target.value })
+            updateDetails({ mobileNo: e.target.value })
           }}
         />
       </motion.div>
@@ -185,57 +335,10 @@ function Step1({ updateUserDetails }) {
           name="email"
           required={true}
           onChange={(e) => {
-            updateUserDetails({ email: e.target.value })
+            updateDetails({ email: e.target.value })
           }}
         />
       </motion.div>
-    </>
-  )
-}
-
-function Step2({ updateUserDetails }) {
-  return (
-    <>
-      <RadioGroup
-        label="What best describes you?"
-        className="flex w-full"
-        description="This will help us to provide you better service."
-        defaultValue={'REGISTERED_BUSINESS'}
-        onChange={(e) => updateUserDetails({ role: e.target.value })}
-      >
-        <motion.div
-          key={'step-2-1'}
-          className="w-full"
-          variants={staggerContainerItemVariants}
-        >
-          <CustomRadioButton
-            description="Designed for any registered business, including Sole Proprietors, Limited Liability Companies, and Non-Profit Organizations."
-            value="REGISTERED_BUSINESS"
-          >
-            <p className="mb-1 font-semibold">Registered Business</p>
-          </CustomRadioButton>
-        </motion.div>
-
-        <motion.div
-          className="w-full"
-          key={'step-2-2'}
-          variants={staggerContainerItemVariants}
-        >
-          <CustomRadioButton
-            description="Works for individuals, one-person business, social media vendors and stores"
-            value="UNREGISTERED_BUSINESS"
-          >
-            <p className="mb-1 font-semibold">Unregistered Business</p>
-          </CustomRadioButton>
-        </motion.div>
-      </RadioGroup>
-    </>
-  )
-}
-
-function Step3({ key, updateUserDetails }) {
-  return (
-    <>
       <motion.div
         key={'step-3-1'}
         className="w-full"
@@ -247,7 +350,7 @@ function Step3({ key, updateUserDetails }) {
           name="password"
           required={true}
           onChange={(e) => {
-            updateUserDetails({ password: e.target.value })
+            updateDetails({ password: e.target.value })
           }}
         />
       </motion.div>
@@ -262,10 +365,35 @@ function Step3({ key, updateUserDetails }) {
           name="password2"
           required={true}
           onChange={(e) => {
-            updateUserDetails({ confirmPassword: e.target.value })
+            updateDetails({ confirmPassword: e.target.value })
           }}
         />
       </motion.div>
     </>
+  )
+}
+
+function UploadField({ label, handleFile }) {
+  return (
+    <motion.div
+      key={'step-2-1'}
+      className="w-full"
+      variants={staggerContainerItemVariants}
+    >
+      <label className="mb-2 text-xs font-medium capitalize text-gray-500 lg:text-[13px]">
+        {label}
+      </label>
+      <FileDropZone
+        isLandscape
+        className={'min-h-12 p-2'}
+        otherAcceptedFiles={{
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            [],
+          'application/pdf': [],
+          'application/msword': [],
+        }}
+        onChange={(file) => handleFile(file)}
+      />
+    </motion.div>
   )
 }

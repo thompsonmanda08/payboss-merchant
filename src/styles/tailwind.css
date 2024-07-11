@@ -99,6 +99,14 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number'] {
+    -webkit-appearance: none; /* IE and Edge */
+    -moz-appearance: textfield; /* Firefox */
+    margin: 0;
+  }
 }
 
 ::-webkit-scrollbar {

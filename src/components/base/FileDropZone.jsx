@@ -9,9 +9,12 @@ import * as React from 'react'
 import { useDropzone } from 'react-dropzone'
 import { twMerge } from 'tailwind-merge'
 import { Button } from '../ui/Button'
+import { cn } from '@/lib/utils'
 
 const variants = {
-  base: 'relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out',
+  base: cn(
+    'relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out',
+  ),
   image:
     'border-0 p-0 min-h-0 min-w-0 relative shadow-md bg-slate-200 dark:bg-slate-900 rounded-md',
   active: 'border-2',
@@ -38,7 +41,18 @@ const ERROR_MESSAGES = {
 
 const SingleFileDropzone = React.forwardRef(
   (
-    { dropzoneOptions, width, height, value, className, disabled, onChange },
+    {
+      dropzoneOptions,
+      width,
+      height,
+      value,
+      className,
+      disabled,
+      onChange,
+      otherAcceptedFiles,
+      isMultipleFiles = false,
+      isLandscape,
+    },
     ref,
   ) => {
     const imageUrl = React.useMemo(() => {
@@ -69,8 +83,9 @@ const SingleFileDropzone = React.forwardRef(
         // 'application/*': [],
         'application/vnd.ms-excel': [],
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [],
+        ...otherAcceptedFiles,
       },
-      multiple: false,
+      multiple: isMultipleFiles,
       disabled,
       onDrop: (acceptedFiles) => {
         const file = acceptedFiles[0]
@@ -144,25 +159,63 @@ const SingleFileDropzone = React.forwardRef(
             />
           ) : acceptedFiles[0] ? (
             // File Preview
-            <div className="bg-red-60 relative flex flex-col items-center gap-4">
-              <DocumentArrowUpIcon className="absolute -z-0 h-24 w-24  text-gray-200" />
-              <div className="z-10 flex flex-col items-center gap-4">
-                <p className="py-2 font-medium">Your file is ready to upload</p>
-                <span className="test-base font-bold">
-                  {' '}
+            <div
+              className={cn(
+                'bg-red-60 relative flex flex-col items-center gap-4',
+                {
+                  'w-full flex-row items-center justify-between ': isLandscape,
+                },
+              )}
+            >
+              <DocumentArrowUpIcon
+                className={cn('absolute -z-0 h-24 w-24  text-gray-200', {
+                  'm-0 h-8 w-8': isLandscape,
+                })}
+              />
+              <div
+                className={cn('z-10 flex flex-col items-center gap-4', {
+                  'bg-red-10 w-full gap-0': isLandscape,
+                })}
+              >
+                {!isLandscape && (
+                  // ONLY SHOWS ON THE UPRIGHT COMPONENT
+                  <p className="py-2 font-medium">
+                    Your file is ready to upload
+                  </p>
+                )}
+                <span className="font-bold text-primary">
                   {acceptedFiles[0]?.name}
                 </span>
-                <Button disabled={disabled}>Change</Button>
+                {/* // ONLY SHOWS ON THE UPRIGHT COMPONENT */}
+                {!isLandscape && <Button disabled={disabled}>Change</Button>}
               </div>
             </div>
           ) : (
             // Upload Icon
-            <div className="flex flex-col items-center justify-center text-xs text-gray-400">
-              <CloudArrowUpIcon className="mb-2 h-12 w-12" />
-              <div className="text-gray-400">Drag & Drop to Upload</div>
-              <div className="mt-3">
-                <Button disabled={disabled}>Upload</Button>
+            <div
+              className={cn(
+                'flex flex-col items-center justify-center text-xs text-gray-400',
+                {
+                  'w-full flex-row items-center justify-between ': isLandscape,
+                },
+              )}
+            >
+              <div
+                className={cn('flex flex-col items-center', {
+                  'flex-row gap-2 font-medium': isLandscape,
+                })}
+              >
+                <CloudArrowUpIcon
+                  className={cn('mb-2 h-12 w-12', { 'm-0 w-8': isLandscape })}
+                />
+                <div className="text-gray-400">Drag & Drop to Upload</div>
               </div>
+              {!isLandscape && (
+                // ONLY SHOWS ON THE UPRIGHT COMPONENT
+                <div className={cn('mt-3', { 'm-0': isLandscape })}>
+                  <Button disabled={disabled}>Upload</Button>
+                </div>
+              )}
             </div>
           )}
 
@@ -193,26 +246,6 @@ const SingleFileDropzone = React.forwardRef(
   },
 )
 SingleFileDropzone.displayName = 'SingleFileDropzone'
-
-// const Button = React.forwardRef
-// (({ className, ...props }, ref) => {
-//   return (
-//     <button
-//       className={twMerge(
-//         // base
-//         'focus-visible:ring-ring inline-flex cursor-pointer items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50',
-//         // color
-//         'border border-gray-400 text-gray-400 shadow hover:bg-gray-100 hover:text-gray-500 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-700',
-//         // size
-//         'h-6 rounded-md px-2 text-xs',
-//         className,
-//       )}
-//       ref={ref}
-//       {...props}
-//     />
-//   );
-// });
-// Button.displayName = 'Button';
 
 function formatFileSize(bytes) {
   if (!bytes) {
