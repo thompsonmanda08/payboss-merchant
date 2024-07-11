@@ -28,7 +28,10 @@ const lexend = Lexend({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={cn('light scroll-smooth bg-white antialiased')}>
+    <html
+      lang="en"
+      className={cn('light min-h-screen scroll-smooth bg-white antialiased')}
+    >
       <head>
         <link
           rel="apple-touch-icon"
@@ -53,7 +56,11 @@ export default function RootLayout({ children }) {
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={cn('flex h-full flex-col', inter.variable, lexend.variable)}
+        className={cn(
+          'flex h-full min-h-screen flex-col',
+          inter.variable,
+          lexend.variable,
+        )}
       >
         <Providers>
           {children}
@@ -62,7 +69,7 @@ export default function RootLayout({ children }) {
               duration: 3000,
             }}
             position="top-right"
-            containerClassName="z-[10000000!important]"
+            containerClassName="z-[10000!important]"
           />
         </Providers>
       </body>

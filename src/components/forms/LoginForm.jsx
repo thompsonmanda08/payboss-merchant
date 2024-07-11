@@ -19,6 +19,7 @@ function LoginForm() {
         </div>
 
         <div className="mb-4">
+          
           <Input
             type="password"
             placeholder="Password"
@@ -46,7 +47,7 @@ function LoginForm() {
         </div>
         <div className="">
           <Button
-            type="button"
+            as={Link}
             href={'/dashboard'}
             className={'my-4 mt-6 w-full px-6'}
           >

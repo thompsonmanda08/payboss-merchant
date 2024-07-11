@@ -7,7 +7,7 @@ export function Button({ children, loadingText, className, ...props }) {
   props.variant ??= 'solid'
   props.color ??= 'primary'
 
-  return typeof props.href === 'undefined' ? (
+  return (
     <NextUIButton
       radius="sm"
       spinner={
@@ -37,7 +37,5 @@ export function Button({ children, loadingText, className, ...props }) {
     >
       {props.isLoading ? loadingText || '' : children}
     </NextUIButton>
-  ) : (
-    <Link className={className} {...props} />
   )
 }
