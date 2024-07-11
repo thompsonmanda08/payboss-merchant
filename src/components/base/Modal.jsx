@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { Cross1Icon } from '@radix-ui/react-icons'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '../ui/Button'
 import { CardHeader, Spinner } from '.'

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/RoundedSwitch'
+import { Switch } from '@nextui-org/switch'
 import { Button } from '../ui/Button'
 import Link from 'next/link'
 

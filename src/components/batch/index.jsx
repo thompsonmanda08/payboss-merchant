@@ -3,9 +3,8 @@ import { useState } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Table from "../containers/Tables/Table";
 import data from "@/app/dashboard/data/tableData";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { Card } from "../base";
-import { CheckIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 
 function Batches() {
   const { columns, rows } = data();
@@ -28,7 +27,7 @@ function Batches() {
             {({ open }) => (
               <>
                 <MenuButton className="cursor-pointer font-bold">
-                <DotsVerticalIcon
+                <EllipsisVerticalIcon
                           className="h-5 w-5 cursor-pointer hover:text-primary"
                         />
                 </MenuButton>

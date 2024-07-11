@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils'
-import { AvatarIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 
 export function NavLink({ href, children, active, Icon }) {

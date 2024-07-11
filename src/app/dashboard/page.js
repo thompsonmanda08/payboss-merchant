@@ -1,7 +1,6 @@
 import { Balance, Card, PaymentMethods, SimpleStats } from '@/components/base'
 import ReportsBarChart from '@/components/charts/ReportsBarChart'
 import { TransactionsTable } from '@/components/containers'
-import { ChevronRightIcon } from '@radix-ui/react-icons'
 import React, { Suspense } from 'react'
 import reportsBarChartData from './data/reportsBarChartData'
 import { ArrowUpIcon } from '@heroicons/react/24/outline'
@@ -9,6 +8,7 @@ import GradientLineChart from '@/components/charts/LineCharts/GradientLineChart'
 import gradientLineChartData from './data/gradientLineChartData'
 import LoadingPage from '../loading'
 import Batches from '@/components/batch'
+import { ChevronRightIcon } from '@heroicons/react/24/solid'
 
 function Home() {
   const { chart, items } = reportsBarChartData
@@ -77,12 +77,12 @@ function Home() {
           <RecentTransactions />
         </div>
         <div className="grid grid-cols-10 gap-6">
-        <div className='col-span-6'>
-        <Batches/>
-        </div>
-        <div className='col-span-4 flex'>
-        <RecentTransactions />
-        </div>
+          <div className="col-span-6">
+            <Batches />
+          </div>
+          <div className="col-span-4 flex">
+            <RecentTransactions />
+          </div>
         </div>
       </div>
     </Suspense>

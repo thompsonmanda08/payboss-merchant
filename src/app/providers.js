@@ -1,6 +1,7 @@
 'use client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { NextUIProvider } from '@nextui-org/react'
 // import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
 const queryClient = new QueryClient()
@@ -14,7 +15,7 @@ function Providers({ children }) {
         enableSystem
         disableTransitionOnChange
       > */}
-      {children}
+      <NextUIProvider>{children}</NextUIProvider>
       {/* </NextThemesProvider> */}
 
       <ReactQueryDevtools initialIsOpen={false} />

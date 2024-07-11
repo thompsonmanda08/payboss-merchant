@@ -1,6 +1,6 @@
 'use client'
 import { Card, Modal } from '@/components/base'
-import { Switch } from '@/components/ui/RoundedSwitch'
+import { Switch } from '@nextui-org/switch'
 import useProfileStore from '@/state/profileStore'
 import useSettingsStore from '@/state/settingsStore'
 

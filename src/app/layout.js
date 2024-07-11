@@ -28,14 +28,7 @@ const lexend = Lexend({
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={cn(
-        'h-full scroll-smooth bg-white antialiased',
-        inter.variable,
-        lexend.variable,
-      )}
-    >
+    <html lang="en" className={cn('light scroll-smooth bg-white antialiased')}>
       <head>
         <link
           rel="apple-touch-icon"
@@ -59,7 +52,9 @@ export default function RootLayout({ children }) {
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </head>
-      <body className="flex h-full flex-col">
+      <body
+        className={cn('flex h-full flex-col', inter.variable, lexend.variable)}
+      >
         <Providers>
           {children}
           <Toaster

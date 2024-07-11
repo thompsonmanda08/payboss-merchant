@@ -4,8 +4,12 @@ const headlessuiPlugin = require('@headlessui/tailwindcss')
 const formsPlugin = require('@tailwindcss/forms')
 const tailwindAnimate = require('tailwindcss-animate')
 
+const { nextui } = require('@nextui-org/theme')
 export const darkMode = ['class']
-export const content = ['./src/**/*.{js,jsx,ts,tsx}']
+export const content = [
+  './src/**/*.{js,jsx,ts,tsx}',
+  './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+]
 export const prefix = ''
 export const theme = {
   container: {
@@ -35,7 +39,7 @@ export const theme = {
       '2xl': '40rem',
     },
     fontFamily: {
-      sans: 'var(--font-inter)',
+      inter: 'var(--font-inter)',
       display: 'var(--font-lexend)',
     },
     colors: {
@@ -80,20 +84,26 @@ export const theme = {
       sm: 'calc(var(--radius) - 4px)',
       '4xl': '2rem',
     },
-    keyframes: {
-      'accordion-down': {
-        from: { height: '0' },
-        to: { height: 'var(--radix-accordion-content-height)' },
-      },
-      'accordion-up': {
-        from: { height: 'var(--radix-accordion-content-height)' },
-        to: { height: '0' },
-      },
-    },
-    animation: {
-      'accordion-down': 'accordion-down 0.2s ease-out',
-      'accordion-up': 'accordion-up 0.2s ease-out',
-    },
+    // keyframes: {
+    //   'accordion-down': {
+    //     from: { height: '0' },
+    //     to: { height: 'var(--radix-accordion-content-height)' },
+    //   },
+    //   'accordion-up': {
+    //     from: { height: 'var(--radix-accordion-content-height)' },
+    //     to: { height: '0' },
+    //   },
+    // },
+    // animation: {
+    //   'accordion-down': 'accordion-down 0.2s ease-out',
+    //   'accordion-up': 'accordion-up 0.2s ease-out',
+    // },
   },
 }
-export const plugins = [tailwindAnimate, headlessuiPlugin, formsPlugin]
+
+export const plugins = [
+  tailwindAnimate,
+  headlessuiPlugin,
+  formsPlugin,
+  nextui(),
+]

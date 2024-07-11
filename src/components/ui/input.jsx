@@ -9,7 +9,7 @@ const Input = React.forwardRef(
         {label && (
           <label
             htmlFor={name}
-            class="mb-1 ml-1 text-sm font-medium text-slate-700"
+            className="mb-1 ml-1 text-sm font-medium text-slate-700"
           >
             {label}
           </label>
