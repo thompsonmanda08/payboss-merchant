@@ -1,7 +1,7 @@
+import { Logo } from '@/components/base'
 import { LoginForm } from '@/components/forms'
 import Link from 'next/link'
 import React from 'react'
-import { Logo } from '@/components/base'
 
 function LoginPage() {
   return (
@@ -25,7 +25,7 @@ function LoginPage() {
             href="/register"
             className="relative z-10 ml-1 bg-gradient-to-br from-primary to-primary/80 bg-clip-text font-semibold text-transparent"
           >
-            Contact us
+            Create Account
           </Link>
         </p>
       </div>

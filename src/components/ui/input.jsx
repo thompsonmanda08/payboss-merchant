@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 const Input = React.forwardRef(
   ({ className, type, label, name, containerClasses, ...props }, ref) => {
     return (
-      <div className={cn('flex flex-col ', containerClasses)}>
+      <div className={cn('flex w-full max-w-md flex-col', containerClasses)}>
         {label && (
           <label
             htmlFor={name}
