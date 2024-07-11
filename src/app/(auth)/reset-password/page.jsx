@@ -1,6 +1,6 @@
 'use client'
 
-import { CustomInputField } from '@/components/base'
+import { Input } from '@/components/ui/input'
 import useCustomTabsHook from '@/hooks/CustomTabsHook'
 import { Button, Spinner } from '@nextui-org/react'
 
@@ -127,7 +127,7 @@ function ResetMyPassword({
         Provide the code in the next step for verification.
       </p>
 
-      <CustomInputField
+      <Input
         required
         label={'Email Address'}
         type={'email'}
@@ -163,7 +163,7 @@ function ValidatePassCode({
         provided to verify that the account belongs to you.
       </p>
       {/* OTP FIELD */}
-      <CustomInputField
+      <Input
         label={'OTP'}
         type="text"
         value={passwordReset?.otp}
@@ -206,7 +206,7 @@ function CreateNewPassword({
         Make sure its secure and safe.
       </p>
       {/* Create Password */}
-      <CustomInputField
+      <Input
         label={'New Password'}
         value={passwordReset.password}
         onChange={(e) =>
@@ -220,7 +220,7 @@ function CreateNewPassword({
       />
       {/* Confirm Password */}
 
-      <CustomInputField
+      <Input
         label={'Confirm Password'}
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
