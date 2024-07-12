@@ -4,20 +4,23 @@ import Logo from './Logo'
 
 export default function MobileNavBar({
   isMobileMenuOpen,
-  setIsMobileMenuOpen,
+  toggleMobileMenu,
   pathname,
   expandedSection,
-  isSideNavCollapsed,
   handleExpand,
   handleMainLinkClick,
-  toggleSideNav,
   logUserOut,
 }) {
+  function handleLinkClick() {
+    if (isMobileMenuOpen) {
+      toggleMobileMenu()
+    }
+  }
   return (
     <>
       {isMobileMenuOpen && (
         <div
-          onClick={setIsMobileMenuOpen}
+          onClick={toggleMobileMenu}
           className={`absolute ${
             isMobileMenuOpen ? 'inset-0 block' : 'left-[-100%] hidden'
           }  z-[10] bg-slate-900/80`}
@@ -30,7 +33,7 @@ export default function MobileNavBar({
       >
         <button
           className="absolute right-0 mr-2 mt-1 max-w-fit p-2"
-          onClick={setIsMobileMenuOpen}
+          onClick={toggleMobileMenu}
         >
           <XMarkIcon className="h-5 w-5 text-slate-600 transition-all duration-200 ease-in hover:text-primary/80" />
         </button>
@@ -42,10 +45,10 @@ export default function MobileNavBar({
           <SideNavItems
             pathname={pathname}
             expandedSection={expandedSection}
-            isSideNavCollapsed={isSideNavCollapsed}
+            toggleMobileMenu={toggleMobileMenu}
             handleExpand={handleExpand}
             handleMainLinkClick={handleMainLinkClick}
-            toggleSideNav={toggleSideNav}
+            handleLinkClick={handleLinkClick}
             logUserOut={logUserOut}
           />
         </div>

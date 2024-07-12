@@ -32,7 +32,7 @@ export function Button({ children, loadingText, className, ...props }) {
           />
         </svg>
       }
-      className={cn('font-semibold', className)}
+      className={cn('h-12 font-semibold', className)}
       {...props}
     >
       {props.isLoading ? loadingText || '' : children}

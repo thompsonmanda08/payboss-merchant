@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/base/Container'
 import backgroundImage from '@/images/background-call-to-action.jpg'
+import Link from 'next/link'
 
 export function CallToAction() {
   return (
@@ -27,8 +28,12 @@ export function CallToAction() {
             Ready to take control of your business finances? Sign up for PayBoss
             and experience the future of financial management.
           </p>
-          <Button href="/register" color="white" className="mt-10">
-            Book a free demo
+          <Button
+            as={Link}
+            href="/register"
+            className="mt-10 bg-white text-primary"
+          >
+            Get Started Now
           </Button>
         </div>
       </Container>

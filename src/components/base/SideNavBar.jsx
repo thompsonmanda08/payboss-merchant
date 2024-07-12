@@ -180,7 +180,6 @@ export const SIDE_BAR_OPTIONS = [
 function SideNavBar() {
   const pathname = usePathname()
   const { logUserOut } = useAuthStore()
-  const [isSideNavCollapsed, setIsSideNavCollapsed] = useState(false)
   const [expandedSection, setExpandedSection] = useState(null)
 
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore()
@@ -218,16 +217,19 @@ function SideNavBar() {
 
   return (
     <>
+      <Button
+        isIconOnly
+        className="absolute left-6 top-0 z-50 w-fit bg-transparent p-2 hover:bg-primary/5 lg:hidden"
+        onClick={toggleMobileMenu}
+      >
+        <Bars3BottomLeftIcon className="h-7 w-7 text-slate-700" />
+      </Button>
       <nav
         className={cn(
-          `sticky z-20 hidden h-[95svh] w-full min-w-[220px] max-w-[320px] bg-white px-2 px-4 pb-10 transition-all duration-500 ease-in-out lg:block `,
-          { 'max-w-[96px] items-center': isSideNavCollapsed },
+          `sticky z-20 hidden h-[95svh] w-full min-w-[220px] max-w-[320px] bg-white px-4 pb-10 transition-all duration-500 ease-in-out lg:block `,
         )}
       >
         <div className="group flex justify-start p-2">
-          <div className="w-fit p-2 lg:hidden" onClick={toggleMobileMenu}>
-            <Bars3BottomLeftIcon className="h-6 w-6 text-slate-700" />
-          </div>
           <div
             className={`flex translate-x-2 flex-col items-center transition-all duration-300 ease-in-out md:translate-x-4 lg:translate-x-0`}
           >
@@ -235,43 +237,27 @@ function SideNavBar() {
               <Logo className="my-auto mt-2" />
             </Link>
           </div>
-          {/* <button onClick={toggleSideNav} className="ml-auto">
-            {isSideNavCollapsed ? (
-              <ChevronDoubleRightIcon
-                className={`${
-                  isSideNavCollapsed
-                    ? 'group-hover:delay-400 absolute bottom-0 top-2 rounded-xl text-white opacity-0 group-hover:block group-hover:rounded-lg group-hover:bg-primary group-hover:opacity-100'
-                    : 'hidden'
-                } aspect-square h-5 w-5 p-1 text-4xl transition-all delay-200 duration-500 ease-in-out`}
-              />
-            ) : (
-              <ChevronDoubleLeftIcon
-                className={`aspect-square h-5 w-5  text-slate-600 opacity-0 transition-all delay-200 duration-300 ease-in-out group-hover:opacity-100`}
-              />
-            )}
-          </button> */}
         </div>
         <SideNavItems
           pathname={pathname}
           expandedSection={expandedSection}
-          isSideNavCollapsed={isSideNavCollapsed}
           handleExpand={handleExpand}
           handleMainLinkClick={handleMainLinkClick}
           toggleSideNav={toggleSideNav}
           logUserOut={logUserOut}
+          isMobileMenuOpen={openMobileMenu}
+          toggleMobileMenu={toggleMobileMenu}
         />
       </nav>
 
       {/* MOBILE NAVIGATION */}
       <MobileNavBar
         isMobileMenuOpen={openMobileMenu}
-        setIsMobileMenuOpen={toggleMobileMenu}
+        toggleMobileMenu={toggleMobileMenu}
         pathname={pathname}
         expandedSection={expandedSection}
-        isSideNavCollapsed={isSideNavCollapsed}
         handleExpand={handleExpand}
         handleMainLinkClick={handleMainLinkClick}
-        toggleSideNav={toggleSideNav}
         logUserOut={logUserOut}
       />
     </>
@@ -303,10 +289,8 @@ export function NavItemIcon({ isSelected, Icon, activeLayer, isExpanded }) {
 export function SideNavItems({
   pathname,
   expandedSection,
-  isSideNavCollapsed,
   handleExpand,
   handleMainLinkClick,
-  toggleSideNav,
   handleLinkClick,
   logUserOut,
 }) {
@@ -335,7 +319,6 @@ export function SideNavItems({
                     `group flex items-center gap-3 rounded-sm bg-transparent p-3
                       text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out`,
                     {
-                      'justify-center': isSideNavCollapsed,
                       '  font-bold text-primary shadow-none shadow-slate-700/10':
                         isExpanded,
 
@@ -354,11 +337,11 @@ export function SideNavItems({
                   />
 
                   <span
-                    className={cn(' ', {
+                    className={cn({
                       'font-bold text-primary': isSelected,
                     })}
                   >
-                    {!isSideNavCollapsed && name}
+                    {name}
                   </span>
                   <ChevronDownIcon
                     className={cn(
@@ -377,7 +360,6 @@ export function SideNavItems({
                     {
                       'rounded-lg bg-primary/10 font-medium text-primary shadow-none shadow-slate-400/10':
                         isSelected,
-                      'justify-center': isSideNavCollapsed,
                     },
                   )}
                   onClick={handleMainLinkClick}
@@ -388,7 +370,7 @@ export function SideNavItems({
                     Icon={Icon}
                   />
 
-                  {!isSideNavCollapsed && name}
+                  {name}
                 </Link>
               )}
               {subMenuItems && (
@@ -423,8 +405,7 @@ export function SideNavItems({
                           'font-bold text-primary': pathname === subItem.href,
                         })}
                       >
-                        {' '}
-                        {!isSideNavCollapsed && subItem.name}
+                        {subItem.name}
                       </span>
                     </Link>
                   ))}
@@ -436,7 +417,7 @@ export function SideNavItems({
       </div>
       <Button className={'flex items-center gap-2'} onClick={logUserOut}>
         <PowerIcon className="h-5 w-5" />
-        {!isSideNavCollapsed && 'Logout'}
+        Logout
       </Button>
     </div>
   )
