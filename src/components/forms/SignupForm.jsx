@@ -1,18 +1,28 @@
 'use client'
 import React, { FormEvent, useEffect, useState } from 'react'
-import { Spinner, RadioGroup } from '@nextui-org/react'
+import { Spinner, RadioGroup, DatePicker } from '@nextui-org/react'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import useCustomTabsHook from '@/hooks/CustomTabsHook'
-import { CustomRadioButton, FileDropZone, StatusMessage } from '../base'
+import {
+  CustomRadioButton,
+  FileDropZone,
+  SelectField,
+  StatusMessage,
+} from '../base'
 import { Button } from '../ui/Button'
+import { DateInput } from '@nextui-org/react'
+import { CalendarDate } from '@internationalized/date'
 import {
   staggerContainerItemVariants,
   staggerContainerVariants,
 } from '@/lib/constants'
 import { ArrowUturnLeftIcon, BackwardIcon } from '@heroicons/react/24/outline'
+import useConfigStore from '@/context/configStore'
+import { useGeneralConfigOptions } from '@/hooks/useQueryHooks'
+import DateSelectField from '../ui/DateSelectField'
 
 const STEPS = [
   'business-registration',
@@ -28,6 +38,11 @@ export default function SignUpForm() {
   const [businessDocs, setBusinessDocs] = useState({})
   const [newAdminUser, setNewAdminUser] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const {
+    data: configs,
+
+    isSuccess,
+  } = useGeneralConfigOptions()
 
   function updateErrorStatus(fields) {
     setError({ ...error, ...fields })
@@ -56,10 +71,11 @@ export default function SignUpForm() {
     firstTab,
     lastTab,
   } = useCustomTabsHook([
+    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />,
     <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />,
     <Step1 key={STEPS[1]} updateDetails={updateAccountDetails} />,
     <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />,
-    <Step3 key={STEPS[4]} updateDetails={updateAccountDetails} />,
+    <Step4 key={STEPS[4]} updateDetails={updateAccountDetails} />,
   ])
 
   const isLastStep = currentTabIndex === lastTab
@@ -93,12 +109,8 @@ export default function SignUpForm() {
     console.log('USER DETAILS: ', newAdminUser)
   }
 
-  useEffect(() => {
-    // updateDetails({ role: 'USER' })
-  }, [])
-
   return (
-    <div className="flex flex-col">
+    <div className="flex max-h-[420px] flex-col overflow-y-auto">
       {!isFirstStep && (
         <Button
           aria-label="back"
@@ -112,7 +124,7 @@ export default function SignUpForm() {
       )}
       <form
         onSubmit={handleCreateAccount}
-        className="mx-auto flex w-full max-w-sm flex-col items-center justify-center gap-4"
+        className="mx-auto flex w-full max-w-sm flex-col items-center justify-center gap-4 "
       >
         {error && error.status && (
           <StatusMessage error={error.status} message={error.message} />
@@ -169,7 +181,7 @@ function Step0({ updateDetails }) {
       >
         <motion.div
           key={'step-0-1'}
-          className="w-full"
+          className="my-2 w-full"
           variants={staggerContainerItemVariants}
         >
           <CustomRadioButton
@@ -198,8 +210,14 @@ function Step0({ updateDetails }) {
 }
 
 function Step1({ updateDetails }) {
+  const { configOptions } = useConfigStore()
+  const companyTypes = configOptions?.companyTypes
+
   return (
-    <>
+    <div className="flex w-full flex-col items-center justify-center gap-y-4 px-2">
+      <h3 className="self-start text-lg font-semibold leading-6 tracking-tight text-neutral-700">
+        Business Details
+      </h3>
       <motion.div
         key={'step-1-2'}
         className="w-full"
@@ -211,7 +229,62 @@ function Step1({ updateDetails }) {
           name="businessName"
           required={true}
           onChange={(e) => {
-            updateDetails(STEPS[0], { businessName: e.target.value })
+            updateDetails(STEPS[0], { name: e.target.value })
+          }}
+        />
+      </motion.div>
+
+      <motion.div
+        key={'step-1-1'}
+        variants={staggerContainerItemVariants}
+        className="flex w-full gap-4"
+      >
+        <SelectField
+          options={companyTypes}
+          label="Company Type"
+          name="companyTypeID"
+          listItemName={'type'}
+          required={true}
+          onChange={(e) => {
+            console.log(e.target.value)
+
+            updateDetails(STEPS[0], { companyTypeID: e.target.value })
+          }}
+        />
+        <Input
+          type="number"
+          label="TPIN"
+          name="tpin"
+          onChange={(e) => {
+            updateDetails(STEPS[0], { tpin: e.target.value })
+          }}
+        />
+      </motion.div>
+
+      <motion.div
+        key={'step-1-3'}
+        className="w-full"
+        variants={staggerContainerItemVariants}
+      >
+        <DateSelectField
+          label={'Date of Incorporation'}
+          className="max-w-sm"
+          description={'Date the company was registered'}
+          labelPlacement={'outside'}
+        />
+      </motion.div>
+
+      <motion.div
+        key={'step-1-1'}
+        variants={staggerContainerItemVariants}
+        className="flex w-full gap-4"
+      >
+        <Input
+          label="Physical Address"
+          name="physical_address"
+          required={true}
+          onChange={(e) => {
+            updateDetails(STEPS[0], { physical_address: e.target.value })
           }}
         />
       </motion.div>
@@ -223,19 +296,19 @@ function Step1({ updateDetails }) {
       >
         <Input
           type="number"
-          label="Business Phone"
+          label="Phone"
           name="businessPhone"
           required={true}
           onChange={(e) => {
-            updateDetails(STEPS[0], { businessPhone: e.target.value })
+            updateDetails(STEPS[0], { contact: e.target.value })
           }}
         />
         <Input
-          type="number"
-          label="Business Tel"
-          name="businessLandLine"
+          // TODO: REGEX FOR WEBSITE TEST
+          label="Website"
+          name="website"
           onChange={(e) => {
-            updateDetails(STEPS[0], { businessLandLine: e.target.value })
+            updateDetails(STEPS[0], { website: e.target.value })
           }}
         />
       </motion.div>
@@ -247,11 +320,104 @@ function Step1({ updateDetails }) {
       >
         <Input
           type="email"
-          label="Business Email"
-          name="businessEmail"
+          label="Company Email"
+          name="company_email"
           required={true}
           onChange={(e) => {
-            updateDetails({ businessEmail: e.target.value })
+            updateDetails({ company_email: e.target.value })
+          }}
+        />
+      </motion.div>
+    </div>
+  )
+}
+
+function Step2({ updateDetails }) {
+  const { configOptions } = useConfigStore()
+  const banks = configOptions?.banks
+  return (
+    <>
+      <h3 className="self-start text-lg font-semibold leading-6 tracking-tight text-neutral-700">
+        Banking Details
+      </h3>
+      <motion.div
+        key={'step-1-3'}
+        className="w-full"
+        variants={staggerContainerItemVariants}
+      >
+        <SelectField
+          options={configOptions?.banks}
+          label="Bank"
+          name="bankID"
+          listItemName={'bank_name'}
+          required={true}
+          onChange={(e) => {
+            updateDetails(STEPS[0], { bankID: e.target.value })
+          }}
+        />
+      </motion.div>
+
+      <motion.div
+        key={'step-1-3'}
+        className="w-full"
+        variants={staggerContainerItemVariants}
+      >
+        <Input
+          label="Account Name"
+          name="account_name"
+          required={true}
+          onChange={(e) => {
+            updateDetails({ account_name: e.target.value })
+          }}
+        />
+      </motion.div>
+
+      <motion.div
+        key={'step-1-3'}
+        className="w-full"
+        variants={staggerContainerItemVariants}
+      >
+        <Input
+          label="Branch Name"
+          name="branch_name"
+          required={true}
+          onChange={(e) => {
+            updateDetails({ branch_name: e.target.value })
+          }}
+        />
+        <Input
+          label="Branch Code"
+          name="branch_code"
+          required={true}
+          onChange={(e) => {
+            updateDetails({ branch_code: e.target.value })
+          }}
+        />
+      </motion.div>
+
+      <motion.div
+        variants={staggerContainerItemVariants}
+        className="flex w-full gap-4"
+      >
+        <Input
+          label="Account Number"
+          name="account_number"
+          className="w-full"
+          required={true}
+          onChange={(e) => {
+            updateDetails({ account_number: e.target.value })
+          }}
+        />
+        <SelectField
+          options={configOptions?.currencies}
+          className={'w-[100px]'}
+          wrapperClassName={'w-max'}
+          label="Currency"
+          name="currencyID"
+          listItemName={'currency'}
+          required={true}
+          onChange={(e) => {
+            updateDetails(STEPS[0], { currencyID: e.target.value })
           }}
         />
       </motion.div>
@@ -259,7 +425,7 @@ function Step1({ updateDetails }) {
   )
 }
 
-function Step2({ updateDetails }) {
+function Step3({ updateDetails }) {
   return (
     <div className="flex w-full flex-col gap-4">
       <UploadField
@@ -276,11 +442,25 @@ function Step2({ updateDetails }) {
           updateDetails({ incorporationCertificate: file })
         }}
       />
+      <UploadField
+        label={'Compliance Certificate'}
+        handleFile={(file) => {
+          // console.log('ON CHANGE SHOW FILE NAME:', file.name)
+          updateDetails({ incorporationCertificate: file })
+        }}
+      />
+      <UploadField
+        label={'Compliance Certificate'}
+        handleFile={(file) => {
+          // console.log('ON CHANGE SHOW FILE NAME:', file.name)
+          updateDetails({ incorporationCertificate: file })
+        }}
+      />
     </div>
   )
 }
 
-function Step3({ key, updateDetails }) {
+function Step4({ key, updateDetails }) {
   return (
     <>
       <motion.div

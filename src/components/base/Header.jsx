@@ -17,6 +17,7 @@ import { Container } from '@/components/base/Container'
 import { NavLink } from '@/components/base/NavLink'
 import { cn } from '@/lib/utils'
 import { Logo } from '.'
+import { UserIcon } from '@heroicons/react/24/solid'
 
 function MobileNavLink({ href, children }) {
   return (
@@ -128,7 +129,10 @@ export function Header() {
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
             <div className="hidden md:block">
-              <NavLink href="/login">Sign in</NavLink>
+              <NavLink href="/login">
+                <UserIcon className="h-5 w-5 " />
+                <span>Sign in</span>
+              </NavLink>
             </div>
             <Button as={Link} href="/dashboard" className={''}>
               Dashboard

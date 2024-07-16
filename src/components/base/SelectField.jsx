@@ -1,28 +1,39 @@
 import { cn } from '@/lib/utils'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import React from 'react'
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from '@/components/ui/select'
+
+import { Select, SelectItem } from '@nextui-org/react'
 
 function SelectField({
   value,
   onChange,
   options,
   placeholder,
-  labelClasses,
+  listItemName,
   name,
   label,
   props,
   type,
+  selectedItem,
+  defaultValue,
   className,
+  wrapperClassName,
 }) {
   return (
-    <div className="flex w-full flex-col items-start gap-1">
+    <div
+      className={cn('flex w-full flex-col items-start gap-1', wrapperClassName)}
+    >
       {label && (
         <label
           htmlFor={name}
-          className={cn(
-            'block text-sm font-medium leading-6 text-slate-500',
-            labelClasses,
-          )}
+          className="ml-1 text-sm font-medium text-slate-700"
         >
           {label}
         </label>
@@ -30,33 +41,46 @@ function SelectField({
       <div
         className={`group relative flex w-full flex-col items-start justify-start gap-1`}
       >
-        <select
-          className={cn(
-            `text-primary-900 group group relative h-[48px] w-full rounded-[8px] border border-slate-300 bg-transparent px-4 py-3         leading-normal outline-none placeholder:text-sm placeholder:italic
-          placeholder:text-slate-300 focus:border-primary/80 focus:ring-primary/80`,
-            className,
-          )}
-          placeholder={placeholder}
+        <Select
+          className={cn('font-medium ', className)}
+          classNames={{
+            base: 'text-lg shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground ',
+            value: 'font-semibold text-neutral-700',
+            trigger:
+              'focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1  focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70',
+            listbox: 'font-medium',
+            popoverContent:
+              'font-medium rounded-md text-neutral-7000 font-medium',
+            selectorIcon: 'w-4 h-4',
+          }}
+          variant="bordered"
+          placeholder={placeholder || 'Select'}
           value={value}
           onChange={onChange}
+          defaultValue={defaultValue}
           name={name}
           id={name}
-          type={type}
           {...props}
         >
           {/* OPTIONS ARRAY MUST BE AN ARRAY OF OBJECTS WITH ID, NAME AND VALUE PROPERTIES. */}
           {options &&
-            options.map((item, idx) => (
-              <option className="" key={idx} value={item?.id || item}>
-                {item?.name || item}
-              </option>
-            ))}
-        </select>
-        <ChevronDownIcon
-          className={cn(
-            'group-focus:rotate- absolute right-4 top-4 h-5 w-5 opacity-50 transition-all duration-300  ease-in-out group-active:rotate-180',
-          )}
-        />
+            options.map((item, idx) => {
+              let ItemValue = item?.id || item?.ID || item
+              let ItemLabel = item?.name || item[listItemName] || item
+              return (
+                <SelectItem
+                  className="font-medium"
+                  classNames={{
+                    base: '__OPTION__  bg-transparent data-[hover=true]:bg-primary/20 data-[selected=true]:text-white data-[selected=true]:bg-primary data-[selected=true]:font-semibold data-[selectable=true]:focus:text-primary data-[selectable=true]:focus:bg-primary/20 data-[selectable=true]:hover:text-primary data-[selected=true]:focus:text-white data-[selectable=true]:hover:bg-primary/20 data-[selectable=true]:font-[600] data-[selected=true]:focus:bg-primary data-[hover=true]:hover:text-white ',
+                  }}
+                  key={ItemValue}
+                  value={ItemValue}
+                >
+                  {ItemLabel}
+                </SelectItem>
+              )
+            })}
+        </Select>
       </div>
     </div>
   )

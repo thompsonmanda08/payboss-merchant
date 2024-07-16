@@ -1,0 +1,40 @@
+import { cn } from '@/lib/utils'
+import { DatePicker } from '@nextui-org/react'
+import React from 'react'
+
+function DateSelectField({
+  label,
+  className,
+  description,
+  labelPlacement,
+  onChange,
+  ...props
+}) {
+  return (
+    <DatePicker
+      label={label}
+      variant="bordered"
+      className={cn('max-w-sm ', className)}
+      dateInputClassNames={{
+        label: 'ml-1 text-sm font-medium text-slate-700',
+        inputWrapper: cn(
+          'focus:border-1 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[focus=true]:border-primary hover:border-primary/60 focus-within:border-primary/60',
+        ),
+        input: 'focus:border-none',
+      }}
+      // classNames={{
+      //   helperWrapper: 'bg-red-700',
+      //   input: 'bg-red-900',
+      //   segment: 'bg-red-900',
+
+      //   selectorButton: 'text-neutral-500 ',
+      // }}
+      description={description}
+      labelPlacement={labelPlacement || 'outside'}
+      onChange={onChange}
+      // {...props}
+    />
+  )
+}
+
+export default DateSelectField

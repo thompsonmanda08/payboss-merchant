@@ -2,10 +2,16 @@ import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import toast from 'react-hot-toast'
 import axios from 'axios'
-import { AIRTEL_NO, MTN_NO, ZAMTEL_NO } from './constants'
+import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from './constants'
 
 export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_SERVER_URL || process.env.SERVER_URL,
+  baseURL: BASE_URL,
+})
+
+export const authenticatedClient = axios.create({
+  baseURL: BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 })
 
 export function cn(...inputs) {

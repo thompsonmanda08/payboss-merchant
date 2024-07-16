@@ -2,6 +2,7 @@ import React from 'react'
 import paymentsImage from '@/images/product/payments.avif'
 import Image from 'next/image'
 import { Footer } from '@/components/containers'
+import { Logo } from '@/components/base'
 
 function AuthLayout({ children }) {
   return (
@@ -16,9 +17,9 @@ function AuthLayout({ children }) {
               <div className="md:flex-0 mx-auto flex w-full max-w-full shrink-0 flex-col px-3 md:w-6/12 lg:w-5/12 xl:w-4/12">
                 {children}
               </div>
-              <div className="lg:flex-0 w-full max-w-full shrink-0 px-3 md:w-6/12">
-                <div className="absolute -right-40 top-0 -mr-32 hidden h-full w-3/5 -skew-x-12 overflow-hidden rounded-bl-[60px] md:block">
-                  <div className="absolute inset-x-0 top-0 z-0 -ml-16 h-full skew-x-12 bg-slate-800 bg-cover">
+              <div className="h-[85svh] w-full max-w-full px-3 md:w-6/12">
+                <div className="absolute -right-40 top-0 -mr-32 hidden h-full w-3/5 -skew-x-12 overflow-hidden rounded-bl-[100px] md:block">
+                  <div className="absolute inset-x-0 top-0 z-0 -ml-16 h-full flex-none skew-x-12 bg-slate-800 bg-cover">
                     <Image
                       src={paymentsImage}
                       layout="fill"

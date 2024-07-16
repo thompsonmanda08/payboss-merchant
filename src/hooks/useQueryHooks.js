@@ -1,11 +1,11 @@
-import { getUserProfile } from "@/app/actions";
-import { USER_DATA_KEY } from "@/lib/constants";
-import { useQuery } from "@tanstack/react-query";
 
-export const useProfileData = () =>
+import { getAccountConfigOptions } from '@/app/_actions/config-actions'
+import { USER_DATA_KEY, CONFIGS_QUERY_KEY } from '@/lib/constants'
+import { useQuery } from '@tanstack/react-query'
+
+export const useGeneralConfigOptions = () =>
   useQuery({
-    queryKey: [USER_DATA_KEY],
-    queryFn: async () => await getUserProfile(),
-    refetchOnMount: true,
+    queryKey: [CONFIGS_QUERY_KEY],
+    queryFn: async () => await getAccountConfigOptions(),
     staleTime: Infinity,
-  });
+  })

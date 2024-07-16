@@ -4,7 +4,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 const INITIAL_STATE = {
-  openMobileMenu: false,
+  configOptions: null,
 }
 
 const useConfigStore = create(
@@ -13,7 +13,7 @@ const useConfigStore = create(
       ...INITIAL_STATE,
 
       //SETTERS
-      
+      setConfigOptions: (configOptions) => set({ configOptions }),
 
       // METHODS AND ACTIONS
 
@@ -24,7 +24,7 @@ const useConfigStore = create(
         }),
     }),
     {
-      name: 'navigation',
+      name: 'pb-config-store',
     },
   ),
 )
