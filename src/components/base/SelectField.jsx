@@ -1,14 +1,5 @@
 import { cn } from '@/lib/utils'
-import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import React from 'react'
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from '@/components/ui/select'
-
 import { Select, SelectItem } from '@nextui-org/react'
 
 function SelectField({
@@ -19,12 +10,12 @@ function SelectField({
   listItemName,
   name,
   label,
-  props,
   type,
   selectedItem,
   defaultValue,
   className,
   wrapperClassName,
+  ...props
 }) {
   return (
     <div

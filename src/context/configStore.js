@@ -4,7 +4,8 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 const INITIAL_STATE = {
-  configOptions: null,
+  configOptions: [],
+  userRoles: [],
 }
 
 const useConfigStore = create(
@@ -14,6 +15,7 @@ const useConfigStore = create(
 
       //SETTERS
       setConfigOptions: (configOptions) => set({ configOptions }),
+      setUserRoles: (userRoles) => set({ userRoles }),
 
       // METHODS AND ACTIONS
 

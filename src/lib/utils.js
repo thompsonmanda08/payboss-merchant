@@ -2,6 +2,7 @@ import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import toast from 'react-hot-toast'
 import axios from 'axios'
+import { parseDate, getLocalTimeZone } from '@internationalized/date'
 import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from './constants'
 
 export const apiClient = axios.create({
@@ -34,6 +35,7 @@ export function formatDate(inputDate) {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
+    timeZone: getLocalTimeZone(),
   }
 
   const formattedDate = new Date(inputDate).toLocaleDateString('en', options)

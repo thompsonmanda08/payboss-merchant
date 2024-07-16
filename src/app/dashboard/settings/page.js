@@ -9,7 +9,7 @@ import {
   UsersSettings,
 } from '@/components/containers'
 
-import useCustomTabsHook from '@/hooks/CustomTabsHook'
+import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import React, { Suspense } from 'react'
 
 const tabs = [

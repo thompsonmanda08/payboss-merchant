@@ -1,57 +1,48 @@
 'use server'
-import { COOKIE_ME } from '@/lib/constants'
+import { verifySession } from '@/lib/session'
 import { apiClient } from '@/lib/utils'
-import { cookies } from 'next/headers'
 
-export async function getUserProfile() {
-  const accessToken = await getToken()
-
-  if (!accessToken) {
-    return {
-      success: false,
-      message: 'No token found',
-      data: null,
-      status: 401,
-    }
-  }
+export async function createNewMerchant(businessInfo) {
   try {
-    const response = await apiClient.get('/merchants/profile', {
+    const res = await apiClient.post(`kyc/merchant/new`, businessInfo, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
       },
     })
 
-    if (response.status == 200 || response.statusText == 'OK') {
-      return {
-        success: true,
-        message: response.data.message,
-        data: response.data.data,
-        status: response.status,
-      }
-    }
-  } catch (error) {
-    if (error.response) {
+    if (res.status !== 200) {
+      const response = res?.data || res
       return {
         success: false,
-        message: error.response.data.message,
-        data: error.response.data,
-        status: error.response.status,
+        message: response?.error || response?.message,
+        data: null,
+        status: res.status,
       }
     }
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+    }
+  } catch (error) {
     return {
       success: false,
-      message: error.message,
+      message: error?.response?.data?.error || 'No Server Response',
       data: null,
-      status: 500,
+      status: error?.response?.status || error.status,
     }
   }
 }
-export async function authenticateUser(loginDetails) {
+
+export async function updateMerchantDetails(businessInfo) {
+  const { session } = await verifySession()
+  const merchantId = session?.user?.id
   try {
-    const response = await apiClient.post(
-      '/auth/login', // URL
-      loginDetails, // BODY
+    const res = await apiClient.post(
+      `kyc/merchant/${merchantId}`,
+      businessInfo,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -59,63 +50,106 @@ export async function authenticateUser(loginDetails) {
       },
     )
 
-    if (response.status == 200 || response.statusText == 'OK') {
-      // GET TOKEN FROM RESPONSE
-      const token = response.data.data.token
-      // SET COOKIE HERE...
-      cookies().set({
-        name: COOKIE_ME,
-        value: token,
-        maxAge: 60 * 30,
-        httpOnly: true,
-        // path: "/",
-      })
-
-      return {
-        success: true,
-        message: response.data.message,
-        data: response.data.data,
-        status: response.status,
-      }
-    }
-  } catch (error) {
-    if (error.response) {
+    if (res.status !== 200) {
+      const response = res?.data || res
       return {
         success: false,
-        message: error.response.data.message,
-        data: error.response.data,
-        status: error.response.status,
+        message: response?.error || response?.message,
+        data: null,
+        status: res.status,
       }
     }
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+    }
+  } catch (error) {
     return {
       success: false,
-      message: error.message,
+      message: error?.response?.data?.error || 'No Server Response',
       data: null,
-      status: 500,
+      status: error?.response?.status || error.status,
     }
   }
 }
 
-export async function isAuthenticated() {
-  const cookieStore = cookies()
-  const hasCookie = cookieStore.has(COOKIE_ME)
-  if (hasCookie) return true
-  // TOKEN NOT FOUND
-  return false
-}
+export async function createMerchantAdminUser(newAdminUser) {
+  const { session } = await verifySession()
+  const merchantId = session?.user?.id
+  try {
+    const res = await apiClient.post(
+      `kyc/merchant/${merchantId}/user/new`,
+      newAdminUser,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
 
-export async function getToken() {
-  const cookieStore = cookies()
-  const accessToken = cookieStore.get(COOKIE_ME)
-  if (accessToken?.value) {
-    return accessToken.value
+    if (res.status !== 200) {
+      const response = res?.data || res
+      return {
+        success: false,
+        message: response?.error || response?.message,
+        data: null,
+        status: res.status,
+      }
+    }
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'No Server Response',
+      data: null,
+      status: error?.response?.status || error.status,
+    }
   }
-  return null
 }
 
-export async function revokeToken() {
-  cookies().delete(COOKIE_ME)
-  cookies().set('theme', '')
+export async function authenticateUser(loginCredentials) {
+  try {
+    const res = await apiClient.post(
+      `authentication/merchant/user`,
+      loginCredentials,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
 
-  return getToken()
+    if (res.status !== 200) {
+      const response = res?.data || res
+      return {
+        success: false,
+        message: response?.error || response?.message,
+        data: null,
+        status: res.status,
+      }
+    }
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'No Server Response',
+      data: null,
+      status: error?.response?.status || error.status,
+    }
+  }
 }

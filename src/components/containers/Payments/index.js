@@ -6,7 +6,7 @@ import {
   Modal,
   ProgressStep,
 } from '@/components/base'
-import useCustomTabsHook from '@/hooks/CustomTabsHook'
+import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import usePaymentsStore from '@/context/paymentsStore'
 import UploadCSVFile from './UploadCSVFile'
 import PaymentDetails from './PaymentDetails'

@@ -8,12 +8,15 @@ function DateSelectField({
   description,
   labelPlacement,
   onChange,
+  value,
   ...props
 }) {
   return (
     <DatePicker
       label={label}
       variant="bordered"
+      value={value}
+      onChange={onChange}
       className={cn('max-w-sm ', className)}
       dateInputClassNames={{
         label: 'ml-1 text-sm font-medium text-slate-700',
@@ -22,17 +25,9 @@ function DateSelectField({
         ),
         input: 'focus:border-none',
       }}
-      // classNames={{
-      //   helperWrapper: 'bg-red-700',
-      //   input: 'bg-red-900',
-      //   segment: 'bg-red-900',
-
-      //   selectorButton: 'text-neutral-500 ',
-      // }}
       description={description}
       labelPlacement={labelPlacement || 'outside'}
-      onChange={onChange}
-      // {...props}
+      {...props}
     />
   )
 }

@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
-import useCustomTabsHook from '@/hooks/CustomTabsHook'
+import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import {
   CustomRadioButton,
   FileDropZone,
@@ -23,42 +23,47 @@ import { ArrowUturnLeftIcon, BackwardIcon } from '@heroicons/react/24/outline'
 import useConfigStore from '@/context/configStore'
 import { useGeneralConfigOptions } from '@/hooks/useQueryHooks'
 import DateSelectField from '../ui/DateSelectField'
+import { cn, formatDate, notify } from '@/lib/utils'
+import useAuthStore from '@/context/authStore'
 
 const STEPS = [
   'business-registration',
   'business-information',
+  'business-bank-details',
   'business-documentation',
   'personal-information',
 ]
 
 export default function SignUpForm() {
   const { push } = useRouter()
-  const [error, setError] = useState({})
-  const [businessInfo, setBusinessInfo] = useState({})
-  const [businessDocs, setBusinessDocs] = useState({})
-  const [newAdminUser, setNewAdminUser] = useState({})
-  const [isLoading, setIsLoading] = useState(false)
+
   const {
-    data: configs,
-
-    isSuccess,
-  } = useGeneralConfigOptions()
-
-  function updateErrorStatus(fields) {
-    setError({ ...error, ...fields })
-  }
+    businessInfo,
+    newAdminUser,
+    businessDocs,
+    error,
+    updateErrorStatus,
+    setBusinessInfo,
+    setNewAdminUser,
+    setBusinessDocs,
+    isLoading,
+    setIsLoading,
+  } = useAuthStore()
 
   function updateAccountDetails(step, fields) {
+    // BUSINESS INFO
     if (STEPS[0] == step) {
       setBusinessInfo({ ...businessInfo, ...fields })
     }
 
-    if (STEPS[1] == step) {
-      businessDocs({ ...businessDocs, ...fields })
+    // BUSINESS DOCS
+    if (STEPS[3] == step) {
+      setBusinessDocs({ ...businessDocs, ...fields })
     }
 
-    if (STEPS[2] == step) {
-      newAdminUser({ ...newAdminUser, ...fields })
+    // NEW ADMIN USER
+    if (STEPS[4] == step) {
+      setNewAdminUser({ ...newAdminUser, ...fields })
     }
   }
 
@@ -71,11 +76,11 @@ export default function SignUpForm() {
     firstTab,
     lastTab,
   } = useCustomTabsHook([
-    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />,
-    <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />,
-    <Step1 key={STEPS[1]} updateDetails={updateAccountDetails} />,
-    <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />,
     <Step4 key={STEPS[4]} updateDetails={updateAccountDetails} />,
+    <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />,
+    <Step1 key={STEPS[0]} updateDetails={updateAccountDetails} />,
+    <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />,
+    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />,
   ])
 
   const isLastStep = currentTabIndex === lastTab
@@ -86,21 +91,26 @@ export default function SignUpForm() {
     setIsLoading(true)
     updateErrorStatus({ status: false, message: '' })
 
+    if (businessInfo.businessRegistrationStatus == 'UNREGISTERED_BUSINESS') {
+      notify('error', 'Not Available Yet')
+      setIsLoading(false)
+      return
+    }
+
     if (!isLastStep) {
       navigateForward()
       setIsLoading(false)
       return
     }
 
-    if (newUser?.password !== newUser?.confirmPassword) {
-      updateErrorStatus({ status: true, message: 'Passwords do not match' })
+    if (newAdminUser?.password !== newAdminUser?.confirmPassword) {
+      updateErrorStatus({
+        status: true,
+        onPassword: true,
+        message: 'Passwords do not match',
+      })
       setIsLoading(false)
-      setTimeout(() => {
-        setError({
-          message: '',
-          status: false,
-        })
-      }, 5000)
+
       return
     }
 
@@ -110,12 +120,12 @@ export default function SignUpForm() {
   }
 
   return (
-    <div className="flex max-h-[420px] flex-col overflow-y-auto">
+    <div className="flex lg:max-h-[450px] flex-col overflow-y-auto">
       {!isFirstStep && (
         <Button
           aria-label="back"
           color="light"
-          className={'absolute -top-20 max-w-fit text-primary lg:-left-[60%]'}
+          className={'absolute -top-14 max-w-fit text-primary lg:-left-[60%]'}
           disabled={isLoading}
           onClick={() => navigateBackwards()}
         >
@@ -165,6 +175,7 @@ export default function SignUpForm() {
   )
 }
 
+//BUSINESS REGISTRATION STATUS
 function Step0({ updateDetails }) {
   return (
     <>
@@ -175,7 +186,7 @@ function Step0({ updateDetails }) {
         defaultValue={'REGISTERED_BUSINESS'}
         onChange={(e) =>
           updateDetails(STEPS[0], {
-            businessRegistrationStatus: e.target.value,
+            business_registration_status: e.target.value,
           })
         }
       >
@@ -200,6 +211,7 @@ function Step0({ updateDetails }) {
           <CustomRadioButton
             description="Works for individuals, one-person business, social media vendors and stores"
             value="UNREGISTERED_BUSINESS"
+            disabled={true}
           >
             <p className="mb-1 font-semibold">Unregistered Business</p>
           </CustomRadioButton>
@@ -209,8 +221,10 @@ function Step0({ updateDetails }) {
   )
 }
 
+// BUSINESS DETAILS AND OTHER INFORMATION
 function Step1({ updateDetails }) {
   const { configOptions } = useConfigStore()
+
   const companyTypes = configOptions?.companyTypes
 
   return (
@@ -244,7 +258,7 @@ function Step1({ updateDetails }) {
           label="Company Type"
           name="companyTypeID"
           listItemName={'type'}
-          required={true}
+          // required={true}
           onChange={(e) => {
             console.log(e.target.value)
 
@@ -271,6 +285,9 @@ function Step1({ updateDetails }) {
           className="max-w-sm"
           description={'Date the company was registered'}
           labelPlacement={'outside'}
+          onChange={(date) => {
+            updateDetails(STEPS[0], { date_of_incorporation: formatDate(date) })
+          }}
         />
       </motion.div>
 
@@ -282,7 +299,7 @@ function Step1({ updateDetails }) {
         <Input
           label="Physical Address"
           name="physical_address"
-          required={true}
+          // required={true}
           onChange={(e) => {
             updateDetails(STEPS[0], { physical_address: e.target.value })
           }}
@@ -298,7 +315,7 @@ function Step1({ updateDetails }) {
           type="number"
           label="Phone"
           name="businessPhone"
-          required={true}
+          // required={true}
           onChange={(e) => {
             updateDetails(STEPS[0], { contact: e.target.value })
           }}
@@ -322,9 +339,9 @@ function Step1({ updateDetails }) {
           type="email"
           label="Company Email"
           name="company_email"
-          required={true}
+          // required={true}
           onChange={(e) => {
-            updateDetails({ company_email: e.target.value })
+            updateDetails(STEPS[0], { company_email: e.target.value })
           }}
         />
       </motion.div>
@@ -332,6 +349,7 @@ function Step1({ updateDetails }) {
   )
 }
 
+// BUSINESS BANKING DETAILS
 function Step2({ updateDetails }) {
   const { configOptions } = useConfigStore()
   const banks = configOptions?.banks
@@ -340,13 +358,9 @@ function Step2({ updateDetails }) {
       <h3 className="self-start text-lg font-semibold leading-6 tracking-tight text-neutral-700">
         Banking Details
       </h3>
-      <motion.div
-        key={'step-1-3'}
-        className="w-full"
-        variants={staggerContainerItemVariants}
-      >
+      <motion.div className="w-full" variants={staggerContainerItemVariants}>
         <SelectField
-          options={configOptions?.banks}
+          options={banks}
           label="Bank"
           name="bankID"
           listItemName={'bank_name'}
@@ -357,32 +371,24 @@ function Step2({ updateDetails }) {
         />
       </motion.div>
 
-      <motion.div
-        key={'step-1-3'}
-        className="w-full"
-        variants={staggerContainerItemVariants}
-      >
+      <motion.div className="w-full" variants={staggerContainerItemVariants}>
         <Input
           label="Account Name"
           name="account_name"
           required={true}
           onChange={(e) => {
-            updateDetails({ account_name: e.target.value })
+            updateDetails(STEPS[0], { account_name: e.target.value })
           }}
         />
       </motion.div>
 
-      <motion.div
-        key={'step-1-3'}
-        className="w-full"
-        variants={staggerContainerItemVariants}
-      >
+      <motion.div className="w-full" variants={staggerContainerItemVariants}>
         <Input
           label="Branch Name"
           name="branch_name"
           required={true}
           onChange={(e) => {
-            updateDetails({ branch_name: e.target.value })
+            updateDetails(STEPS[0], { branch_name: e.target.value })
           }}
         />
         <Input
@@ -390,7 +396,7 @@ function Step2({ updateDetails }) {
           name="branch_code"
           required={true}
           onChange={(e) => {
-            updateDetails({ branch_code: e.target.value })
+            updateDetails(STEPS[0], { branch_code: e.target.value })
           }}
         />
       </motion.div>
@@ -405,7 +411,7 @@ function Step2({ updateDetails }) {
           className="w-full"
           required={true}
           onChange={(e) => {
-            updateDetails({ account_number: e.target.value })
+            updateDetails(STEPS[0], { account_number: e.target.value })
           }}
         />
         <SelectField
@@ -425,6 +431,7 @@ function Step2({ updateDetails }) {
   )
 }
 
+// BUSINESS DOCUMENTS AND ATTACHMENTS
 function Step3({ updateDetails }) {
   return (
     <div className="flex w-full flex-col gap-4">
@@ -432,39 +439,77 @@ function Step3({ updateDetails }) {
         label={'Business Incorporation Certificate'}
         handleFile={(file) => {
           // console.log('ON CHANGE SHOW FILE NAME:', file.name)
-          updateDetails({ incorporationCertificate: file })
+          updateDetails(STEPS[3], { incorporationCertificate: file })
         }}
       />
       <UploadField
         label={'Compliance Certificate'}
         handleFile={(file) => {
           // console.log('ON CHANGE SHOW FILE NAME:', file.name)
-          updateDetails({ incorporationCertificate: file })
+          updateDetails(STEPS[3], { incorporationCertificate: file })
         }}
       />
       <UploadField
         label={'Compliance Certificate'}
         handleFile={(file) => {
           // console.log('ON CHANGE SHOW FILE NAME:', file.name)
-          updateDetails({ incorporationCertificate: file })
+          updateDetails(STEPS[3], { incorporationCertificate: file })
         }}
       />
       <UploadField
         label={'Compliance Certificate'}
         handleFile={(file) => {
           // console.log('ON CHANGE SHOW FILE NAME:', file.name)
-          updateDetails({ incorporationCertificate: file })
+          updateDetails(STEPS[3], { incorporationCertificate: file })
         }}
       />
     </div>
   )
 }
 
+// CREATE NEW ADMIN USER
 function Step4({ key, updateDetails }) {
+  const {
+    businessInfo,
+    newAdminUser,
+    businessDocs,
+    error,
+    updateErrorStatus,
+    setBusinessInfo,
+    setNewAdminUser,
+    setBusinessDocs,
+    isLoading,
+    setError,
+  } = useAuthStore()
+  const userRoles = useConfigStore((state) => state.userRoles)
+
+  const ADMIN_ROLE =
+    userRoles.find((item) => item.role == 'Admin')?.ID || userRoles[0]?.ID
+
+  useEffect(() => {
+    // Clean out any errors if the user makes any changes to the form
+    setError({})
+  }, [newAdminUser])
+
+  useEffect(() => {
+    updateDetails(STEPS[4], { roleID: ADMIN_ROLE })
+  }, [])
+
   return (
     <>
+      <motion.div className="w-full" variants={staggerContainerItemVariants}>
+        <SelectField
+          options={userRoles}
+          placeholder={'ADMIN USER'}
+          name="user_role"
+          label="User Role"
+          isDisabled={true}
+          value={ADMIN_ROLE}
+          defaultValue={ADMIN_ROLE}
+          listItemName={'role'}
+        />
+      </motion.div>
       <motion.div
-        key={'step-1-1'}
         variants={staggerContainerItemVariants}
         className="flex w-full gap-4"
       >
@@ -474,7 +519,7 @@ function Step4({ key, updateDetails }) {
           name="firstName"
           required={true}
           onChange={(e) => {
-            updateDetails({ firstName: e.target.value })
+            updateDetails(STEPS[4], { first_name: e.target.value })
           }}
         />
         <Input
@@ -483,69 +528,81 @@ function Step4({ key, updateDetails }) {
           name="lastName"
           required={true}
           onChange={(e) => {
-            updateDetails({ lastName: e.target.value })
+            updateDetails(STEPS[4], { last_name: e.target.value })
           }}
         />
       </motion.div>
 
-      <motion.div
-        key={'step-1-2'}
-        className="w-full"
-        variants={staggerContainerItemVariants}
-      >
+      <motion.div className="w-full" variants={staggerContainerItemVariants}>
         <Input
           type="text"
-          label="Mobile Number"
-          name="mobileNo"
+          label="Username"
+          name="username"
           required={true}
           onChange={(e) => {
-            updateDetails({ mobileNo: e.target.value })
+            updateDetails(STEPS[4], { username: e.target.value })
           }}
         />
       </motion.div>
 
-      <motion.div
-        key={'step-1-3'}
-        className="w-full"
-        variants={staggerContainerItemVariants}
-      >
+      <motion.div className="w-full" variants={staggerContainerItemVariants}>
+        <Input
+          type="number"
+          label="Mobile Number"
+          name="phone_number"
+          required={true}
+          onChange={(e) => {
+            updateDetails(STEPS[4], { phone_number: e.target.value })
+          }}
+        />
+      </motion.div>
+
+      <motion.div className="w-full" variants={staggerContainerItemVariants}>
         <Input
           type="text"
           label="Email"
           name="email"
           required={true}
           onChange={(e) => {
-            updateDetails({ email: e.target.value })
+            updateDetails(STEPS[4], { email: e.target.value })
           }}
         />
       </motion.div>
-      <motion.div
-        key={'step-3-1'}
-        className="w-full"
-        variants={staggerContainerItemVariants}
-      >
+      <motion.div className="w-full" variants={staggerContainerItemVariants}>
         <Input
           label="Password"
           type="password"
           name="password"
+          onError={error?.onPassword}
           required={true}
           onChange={(e) => {
-            updateDetails({ password: e.target.value })
+            updateDetails(STEPS[4], { password: e.target.value })
           }}
+          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          title="Must contain at least 8 characters, including uppercase letters, lowercase letters, and numbers"
         />
+        {error && error?.onPassword && (
+          <motion.span
+            whileInView={{
+              scale: [0, 1],
+              opacity: [0, 1],
+              transition: { duration: 0.3 },
+            }}
+            className="ml-1 text-xs font-semibold text-red-600 "
+          >
+            {error?.message}
+          </motion.span>
+        )}
       </motion.div>
-      <motion.div
-        key={'step-3-1'}
-        className="w-full"
-        variants={staggerContainerItemVariants}
-      >
+      <motion.div className="w-full" variants={staggerContainerItemVariants}>
         <Input
           label="Confirm Password"
           type="password"
           name="password2"
+          onError={error?.onPassword}
           required={true}
           onChange={(e) => {
-            updateDetails({ confirmPassword: e.target.value })
+            updateDetails(STEPS[4], { confirmPassword: e.target.value })
           }}
         />
       </motion.div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { Input } from '@/components/ui/input'
-import useCustomTabsHook from '@/hooks/CustomTabsHook'
+import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { Button, Spinner } from '@nextui-org/react'
 
 import { AnimatePresence, motion } from 'framer-motion'
@@ -81,13 +81,13 @@ export default function PasswordReset() {
         <div className="">
           <span
             className={
-              'font-inter flex text-[15px] font-medium leading-6 text-primary'
+              'flex font-inter text-[15px] font-medium leading-6 text-primary'
             }
           >
             LOST ACCESS TO YOUR ACCOUNT?
           </span>
           <h2
-            className={`font-inter my-1 text-2xl font-bold leading-8 text-slate-800 md:text-3xl`}
+            className={`my-1 font-inter text-2xl font-bold leading-8 text-slate-800 md:text-3xl`}
           >
             Account Password Reset
           </h2>

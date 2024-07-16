@@ -5,9 +5,11 @@ export const BASE_URL = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL
 export const AUTH_SESSION = 'pb-session'
 
 export const placeHolderImage = IMG
+
 // QUERY KEYS
 export const USER_DATA_KEY = 'user-query-data'
 export const CONFIGS_QUERY_KEY = 'configs-query-data'
+export const USER_ROLES_QUERY_KEY = 'user-roles-query-data'
 
 // ANIMATION_VARIANTS
 export const staggerContainerVariants = {

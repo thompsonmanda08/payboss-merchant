@@ -1,18 +1,27 @@
 import { create } from 'zustand'
 
 const INITIAL_STATE = {
-  loading: false,
-  error: false,
-  message: '',
+  isLoading: false,
+  error: {}, // STATUS, MESSAGE, FIELD-ERROR
+
+  businessInfo: {},
+  businessDocs: {},
+  newAdminUser: {},
 }
 
 const useAuthStore = create((set, get) => ({
   ...INITIAL_STATE,
 
   //SETTERS
-  setLoading: (loading) => set({ loading }),
+  setIsLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
-  setMessage: (message) => set({ message }),
+  setBusinessInfo: (businessInfo) => set({ businessInfo }),
+  setBusinessDocs: (businessDocs) => set({ businessDocs }),
+  setNewAdminUser: (newAdminUser) => set({ newAdminUser }),
+
+  updateErrorStatus: (fields) => {
+    set((state) => ({ error: { ...state.error, ...fields } }))
+  },
 
   // METHODS AND ACTIONS
 
