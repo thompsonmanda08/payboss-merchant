@@ -1,6 +1,6 @@
 'use client'
 import { Modal } from '@/components/base'
-import usePaymentsStore from '@/state/paymentsStore'
+import usePaymentsStore from '@/context/paymentsStore'
 import { usePathname, useRouter } from 'next/navigation'
 import { PAYMENT_TYPES } from '.'
 import { cn, notify } from '@/lib/utils'
@@ -81,7 +81,7 @@ function PaymentTypeOption({
     <button
       onClick={handleSelect}
       className={cn(
-        `border-primary-100 relative flex aspect-square max-h-40 flex-1 cursor-pointer items-center justify-center   rounded-md border bg-white p-5 text-[24px] tracking-tighter text-primary transition-colors duration-200 ease-in-out`,
+        `relative flex aspect-square max-h-40 flex-1 cursor-pointer items-center justify-center rounded-md   border border-primary-100 bg-white p-5 text-[24px] tracking-tighter text-primary transition-colors duration-200 ease-in-out`,
         className,
         {
           'bg-primary text-white shadow-xl shadow-slate-500/10': selected,

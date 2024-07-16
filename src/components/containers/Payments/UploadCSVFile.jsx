@@ -2,7 +2,7 @@
 import { FileDropZone } from '@/components/base'
 import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
-import usePaymentsStore from '@/state/paymentsStore'
+import usePaymentsStore from '@/context/paymentsStore'
 import Link from 'next/link'
 import React from 'react'
 

@@ -1,6 +1,6 @@
 'use client'
 import { EmptyState, Modal } from '@/components/base'
-import usePaymentsStore from '@/state/paymentsStore'
+import usePaymentsStore from '@/context/paymentsStore'
 
 export const ADD_EDIT_MODES = [
   {

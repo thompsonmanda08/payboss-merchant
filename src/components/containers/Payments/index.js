@@ -7,7 +7,7 @@ import {
   ProgressStep,
 } from '@/components/base'
 import useCustomTabsHook from '@/hooks/CustomTabsHook'
-import usePaymentsStore from '@/state/paymentsStore'
+import usePaymentsStore from '@/context/paymentsStore'
 import UploadCSVFile from './UploadCSVFile'
 import PaymentDetails from './PaymentDetails'
 import {

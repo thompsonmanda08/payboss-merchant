@@ -1,5 +1,5 @@
 'use client'
-import useSettingsStore from '@/state/settingsStore'
+import useSettingsStore from '@/context/settingsStore'
 import { Fragment, useState } from 'react'
 import { Avatar, EmptyState, Modal } from '@/components/base'
 import { Switch } from '@nextui-org/switch'

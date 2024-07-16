@@ -6,7 +6,7 @@ import SelectPaymentType from '@/components/containers/Payments/SelectPaymentTyp
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { cn, formatDate } from '@/lib/utils'
-import usePaymentsStore from '@/state/paymentsStore'
+import usePaymentsStore from '@/context/paymentsStore'
 import {
   ChevronDownIcon,
   MagnifyingGlassIcon,

@@ -1,8 +1,8 @@
 // TODO: THIS COMPONENT WILL BE A REFFERENCE POINT FOR THE SETTINGS PAGE
 
 import { Modal } from '@/components/base'
-import useProfileStore from '@/state/profileStore'
-import useSettingsStore from '@/state/settingsStore'
+import useProfileStore from '@/context/profileStore'
+import useSettingsStore from '@/context/settingsStore'
 
 export default function SecuritySettings() {
   const { user } = useProfileStore()

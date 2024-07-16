@@ -5,7 +5,7 @@ import { Modal } from '@/components/base'
 import AllRecords from '../Tables/AllRecords'
 import ValidRecords from '../Tables/ValidRecords'
 import InvalidRecords from '../Tables/InvalidRecords'
-import usePaymentsStore from '@/state/paymentsStore'
+import usePaymentsStore from '@/context/paymentsStore'
 
 function RecordDetailsViewer() {
   const {

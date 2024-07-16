@@ -5,7 +5,7 @@ import { BatchPayment, PaymentsAction } from '@/components/containers'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import usePaymentsStore from '@/state/paymentsStore'
+import usePaymentsStore from '@/context/paymentsStore'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import React, { Suspense } from 'react'
 

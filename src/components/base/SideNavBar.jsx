@@ -4,8 +4,8 @@ import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 
-import useAuthStore from '@/state/authStore'
-import useNavigationStore from '@/state/navigationStore'
+import useAuthStore from '@/context/authStore'
+import useNavigationStore from '@/context/navigationStore'
 import MobileNavBar from './MobileNavBar'
 import Link from 'next/link'
 

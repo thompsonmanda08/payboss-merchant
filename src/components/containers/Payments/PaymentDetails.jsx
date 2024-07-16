@@ -1,7 +1,7 @@
 import React, { act } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import usePaymentsStore from '@/state/paymentsStore'
+import usePaymentsStore from '@/context/paymentsStore'
 import { Input } from '@/components/ui/input'
 import { PAYMENT_TYPES } from '.'
 import { Button } from '@/components/ui/Button'

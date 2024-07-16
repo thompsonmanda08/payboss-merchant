@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import usePaymentsStore from '@/state/paymentsStore'
+import usePaymentsStore from '@/context/paymentsStore'
 import { Button } from '@/components/ui/Button'
 import { Modal, Spinner, StatusCard } from '@/components/base'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
@@ -14,8 +14,6 @@ const ValidationDetails = ({
   const queryClient = useQueryClient()
   const { loading, setLoading, openRecordsModal, closeRecordsModal } =
     usePaymentsStore()
-
-
 
   if (loading) {
     // TODO: REMOVE AFTER SERVER CONNECTION

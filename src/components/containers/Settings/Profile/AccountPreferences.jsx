@@ -1,8 +1,8 @@
 'use client'
 import { Card, Modal } from '@/components/base'
 import { Switch } from '@nextui-org/switch'
-import useProfileStore from '@/state/profileStore'
-import useSettingsStore from '@/state/settingsStore'
+import useProfileStore from '@/context/profileStore'
+import useSettingsStore from '@/context/settingsStore'
 
 export default function AccountPreferences() {
   const { user } = useProfileStore()
@@ -75,7 +75,6 @@ export default function AccountPreferences() {
           </dl>
         </div>
       </div>
-    
     </Card>
   )
 }

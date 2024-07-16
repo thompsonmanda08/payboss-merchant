@@ -1,7 +1,7 @@
 'use client'
 
-import useProfileStore from '@/state/profileStore'
-import useSettingsStore from '@/state/settingsStore'
+import useProfileStore from '@/context/profileStore'
+import useSettingsStore from '@/context/settingsStore'
 import { maskString } from '@/lib/utils'
 import { Card, Modal } from '@/components/base'
 
@@ -94,7 +94,6 @@ export default function ProfileDetails() {
           </dl>
         </div>
       </div>
-    
     </Card>
   )
 }
