@@ -1,25 +1,26 @@
-import { create } from 'zustand'
-import pb from '@/app/_actions/pocketbase-actions'
+// import { create } from 'zustand'
+// import pb from '@/app/_actions/pocketbase-actions'
 
-const usePocketbaseStore = create((set) => ({
-  upload: null,
-  isloading: false,
-  uploadFile: async (file) => {
-    set({ upload: null, isloading: true })
-    try {
-      const formData = new FormData()
-      formData.append('file', file)
+// const usePocketbaseStore = create((set) => ({
+//   upload: null,
+//   isLoading: false,
 
-      const data = await pb.collection('files').create(formData)
-      set({ upload: data, isloading: false })
-      const url = pb.getFileUrl(data, data['docs'])
+//   uploadFile: async (file) => {
+//     set({ upload: null, isLoading: true })
+//     try {
+//       const formData = new FormData()
+//       formData.append('file', file)
 
-      console.log('URL', url)
-    } catch (error) {
-      console.log('uplaod Failed:', error)
-      set({ upload: error.response, isloading: false })
-    }
-  },
-}))
+//       const data = await pb.collection('files').create(formData)
+//       set({ upload: data, isLoading: false })
+//       const url = pb.getFileUrl(data, data['docs'])
 
-export default usePocketbaseStore
+//       console.log('URL', url)
+//     } catch (error) {
+//       console.error(error)
+//       set({ upload: error.response, isLoading: false })
+//     }
+//   },
+// }))
+
+// export default usePocketbaseStore

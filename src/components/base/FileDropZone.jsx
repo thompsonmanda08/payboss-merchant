@@ -3,6 +3,8 @@
 import {
   CloudArrowUpIcon,
   DocumentArrowUpIcon,
+  PencilSquareIcon,
+  PercentBadgeIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import * as React from 'react'
@@ -10,6 +12,7 @@ import { useDropzone } from 'react-dropzone'
 import { twMerge } from 'tailwind-merge'
 import { Button } from '../ui/Button'
 import { cn } from '@/lib/utils'
+import { PencilIcon } from '@heroicons/react/20/solid'
 
 const variants = {
   base: cn(
@@ -161,7 +164,7 @@ const SingleFileDropzone = React.forwardRef(
             // File Preview
             <div
               className={cn(
-                'bg-red-60 relative flex flex-col items-center gap-4',
+                'bg-red-60 relative flex flex-col items-center gap-4 py-2',
                 {
                   'w-full flex-row items-center justify-between ': isLandscape,
                 },
@@ -173,9 +176,12 @@ const SingleFileDropzone = React.forwardRef(
                 })}
               />
               <div
-                className={cn('z-10 flex flex-col items-center gap-4', {
-                  'bg-red-10 w-full gap-0': isLandscape,
-                })}
+                className={cn(
+                  'relative z-10 flex flex-col items-center gap-4',
+                  {
+                    'bg-red-10 w-full gap-0': isLandscape,
+                  },
+                )}
               >
                 {!isLandscape && (
                   // ONLY SHOWS ON THE UPRIGHT COMPONENT
@@ -188,6 +194,9 @@ const SingleFileDropzone = React.forwardRef(
                 </span>
                 {/* // ONLY SHOWS ON THE UPRIGHT COMPONENT */}
                 {!isLandscape && <Button disabled={disabled}>Change</Button>}
+                {isLandscape && (
+                  <XMarkIcon className="absolute -right-0 aspect-square w-5 rounded-md bg-red-100 p-0.5 text-red-500 hover:text-red-500" />
+                )}
               </div>
             </div>
           ) : (

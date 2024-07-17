@@ -1,27 +1,41 @@
+import { STEPS } from '@/components/forms/SignupForm'
 import { create } from 'zustand'
 
 const INITIAL_STATE = {
   isLoading: false,
+  businessInfoSent: false,
+  documentsInfoSent: false,
+
   error: {}, // STATUS, MESSAGE, FIELD-ERROR
+  merchantID: '',
 
   businessInfo: {},
   businessDocs: {},
   newAdminUser: {},
+  loginDetails: {},
 }
 
 const useAuthStore = create((set, get) => ({
   ...INITIAL_STATE,
 
   //SETTERS
-  setIsLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
+  setIsLoading: (isLoading) => set({ isLoading }),
   setBusinessInfo: (businessInfo) => set({ businessInfo }),
+  setMerchantID: (merchantID) => set({ merchantID }),
   setBusinessDocs: (businessDocs) => set({ businessDocs }),
+  setBusinessInfoSent: (businessInfoSent) => set({ businessInfoSent }),
+  setDocumentsInfoSent: (documentsInfoSent) => set({ documentsInfoSent }),
   setNewAdminUser: (newAdminUser) => set({ newAdminUser }),
 
   updateErrorStatus: (fields) => {
     set((state) => ({ error: { ...state.error, ...fields } }))
   },
+
+  updateLoginDetails: (fields) =>
+    set((state) => {
+      return { loginDetails: { ...state.loginDetails, ...fields } }
+    }),
 
   // METHODS AND ACTIONS
 

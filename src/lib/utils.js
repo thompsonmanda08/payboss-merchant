@@ -30,12 +30,23 @@ export function formatCurrency(amount) {
   return amount ? currencyFormat.format(amount) : ''
 }
 
-export function formatDate(inputDate) {
+export function formatDate(inputDate, dateStyle = '') {
+  if (dateStyle === 'YYYY-MM-DD') {
+    const date = new Date(inputDate)
+
+    // Get the year, month, and day components
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-indexed, pad single digits with a leading zero
+    const day = String(date.getDate()).padStart(2, '0') // Pad single digits with a leading zero
+
+    // Format the date as "YYYY-MM-DD"
+    return `${year}-${month}-${day}`
+  }
+
   const options = {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-    timeZone: getLocalTimeZone(),
   }
 
   const formattedDate = new Date(inputDate).toLocaleDateString('en', options)
@@ -67,15 +78,12 @@ export function capitalize(str) {
 }
 
 export function isValidZambianMobileNumber(mobileNumber) {
-  if (mobileNumber?.replaceAll(/\D/g, '').toString()?.length < 10) {
+  let number = mobileNumber?.replaceAll(/\D/g, '').toString()
+  if (number?.length < 10 || number?.length > 12) {
     return false
   }
 
-  if (
-    MTN_NO.test(mobileNumber) ||
-    AIRTEL_NO.test(mobileNumber) ||
-    ZAMTEL_NO.test(mobileNumber)
-  )
+  if (MTN_NO.test(number) || AIRTEL_NO.test(number) || ZAMTEL_NO.test(number))
     return true // Valid Zambian mobile number
 
   return false // INvalid Zambian mobile number

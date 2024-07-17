@@ -1,8 +1,8 @@
-"use client";
-import React from "react";
-import { motion } from "framer-motion";
+'use client'
+import React from 'react'
+import { motion } from 'framer-motion'
 
-function StatusMessage({ error = false, message = "Error Message" }) {
+function StatusMessage({ error = false, message = 'Error Message' }) {
   return (
     <motion.div
       whileInView={{
@@ -10,18 +10,18 @@ function StatusMessage({ error = false, message = "Error Message" }) {
         // scale: [0, 1],
         transition: {
           duration: 0.5,
-          ease: "easeInOut",
+          ease: 'easeInOut',
         },
       }}
       className={`${
         error
-          ? "bg-rose-500/10 text-rose-600"
-          : "bg-green-500/10 text-green-600"
-      } p-4 flex justify-center items-center rounded-lg my-2 min-h-[60px] w-full max-w-sm xl:max-w-md px-5`}
+          ? 'bg-rose-500/10 text-rose-600'
+          : 'bg-green-500/10 text-green-600'
+      } my-2 flex min-h-[60px] w-full max-w-sm items-center justify-center rounded-lg p-4 px-5 capitalize xl:max-w-md`}
     >
-      <p className={`text-xs md:text-sm font-semibold`}>{message}</p>
+      <p className={`text-xs font-semibold md:text-sm`}>{message}!</p>
     </motion.div>
-  );
+  )
 }
 
-export default StatusMessage;
+export default StatusMessage

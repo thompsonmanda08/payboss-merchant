@@ -1,6 +1,8 @@
 import IMG from '@/images/placeholder-image.webp'
 
 export const BASE_URL = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL
+export const POCKET_BASE_URL =
+  process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL
 
 export const AUTH_SESSION = 'pb-session'
 
@@ -30,11 +32,6 @@ export const staggerContainerItemVariants = {
 }
 
 // REGEX
-export const MTN_NO =
-  /^(?:(?:\+?26|0?26)?096|\d{5})(\d{7})|(?:(?:\+?26|0?26)?076|\d{5})(\d{7})$/
-
-export const AIRTEL_NO =
-  /^(?:(?:\+?26|0?26)?097|\d{5})(\d{7})|(?:(?:\+?26|0?26)?077|\d{5})(\d{7})$/
-
-export const ZAMTEL_NO =
-  /^(?:(?:\+?26|0?26)?095|\d{5})(\d{7})|(?:(?:\+?26|0?26)?075|\d{5})(\d{7})$/
+export const MTN_NO = /^(?:\+?26|26)?(096|076)\d{7}$/
+export const AIRTEL_NO = /^(?:\+?26|26)?(097|077)\d{7}$/
+export const ZAMTEL_NO = /^(?:\+?26|26)?(095|075)\d{7}$/
