@@ -11,7 +11,7 @@ import { notify } from '@/lib/utils'
 
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function Step3({ updateDetails }) {
-  const { merchantID } = useAuthStore((state) => state.merchantID)
+  const merchantID = useAuthStore((state) => state.merchantID)
 
   const handleFileUpload = async (file) => {
     // AWAIT SAVE TO POCKET-BASE DB AND RETURN FILE_URL
