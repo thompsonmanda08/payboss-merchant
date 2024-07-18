@@ -1,23 +1,42 @@
 'use client'
+import { cn } from '@/lib/utils'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 
-function CardHeader({ title, infoText, handleClose }) {
+function CardHeader({ title, infoText, handleClose, className, classNames }) {
   const urlParams = useSearchParams()
   const service = urlParams.get('service')
+  const { titleClasses, infoClasses, innerWrapper } = classNames || ''
   return (
-    <div className="relative flex w-full items-center justify-between py-4">
+    <div
+      className={cn(
+        'relative flex w-full items-center justify-between py-4',
+        className,
+      )}
+    >
       {title && (
-        <div className="flex flex-col gap-2">
-          <h3 className="text-sm font-semibold tracking-tight text-slate-800 xl:text-base">
+        <div className={cn('flex flex-col gap-2', innerWrapper)}>
+          <h3
+            className={cn(
+              'text-sm font-semibold tracking-tight text-slate-800 xl:text-base',
+              titleClasses,
+            )}
+          >
             {title}
             {
               service && <span className="capitalize"> ({service})</span> //ONLY FOR THE CREATE PAYMENTS PAGE
             }
           </h3>
           {infoText && (
-            <p className="mb-2 text-xs text-gray-500 sm:text-sm">{infoText}</p>
+            <p
+              className={cn(
+                'mb-2 text-xs text-gray-500 sm:text-sm',
+                infoClasses,
+              )}
+            >
+              {infoText}
+            </p>
           )}
         </div>
       )}

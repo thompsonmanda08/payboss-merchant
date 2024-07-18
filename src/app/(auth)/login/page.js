@@ -5,25 +5,28 @@ import React from 'react'
 
 function LoginPage() {
   return (
-    <div className="relative mt-32 flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none">
-      <div className="mb-0 rounded-t-2xl border-b-0 bg-transparent p-6 pb-0">
-        <Link href={'/'} className="mb-4 flex w-full justify-start">
-          <Logo />
-        </Link>
-        <h3 className="relative z-10 bg-gradient-to-tr from-primary via-primary/80 to-primary-light bg-clip-text text-2xl font-bold text-transparent lg:text-4xl">
-          Welcome back
-        </h3>
-        <p className="mb-0">Enter your email and password to sign in</p>
+    <div className="mx-auto flex max-h-[100%-180px] w-full min-w-0 max-w-lg -translate-y-[130px] flex-col break-words rounded-2xl border-0  bg-clip-border shadow-none">
+      <div className="mb-0 -translate-y-[100px] rounded-t-2xl border-b-0 p-6 pb-0">
+        <h2
+          className={
+            'w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-transparent text-white'
+          }
+        >
+          Welcome Back!
+        </h2>
+        <p className="mb-0 text-center text-slate-100">
+          Enter your email and password to sign in
+        </p>
       </div>
       {/********************* LOGIN FORM *********************/}
       <LoginForm />
       {/********************* LOGIN FORM *********************/}
-      <div className="border-t-solid rounded-b-2xl border-t-0 bg-transparent p-6 px-1 pt-0 text-center lg:px-2">
-        <p className="mx-auto mb-6 text-sm leading-normal">
+      <div className="bg-transparent text-center">
+        <p className="mx-auto  font-inter text-base font-medium leading-6 tracking-normal text-slate-500">
           Don't have an account?
           <Link
             href="/register"
-            className="relative z-10 ml-1 bg-gradient-to-br from-primary to-primary/80 bg-clip-text font-semibold text-transparent"
+            className="relative z-10 ml-1 bg-gradient-to-br from-primary to-primary/80 bg-clip-text font-bold text-transparent"
           >
             Create Account
           </Link>

@@ -19,7 +19,10 @@ function SelectField({
 }) {
   return (
     <div
-      className={cn('flex w-full flex-col items-start gap-1', wrapperClassName)}
+      className={cn(
+        'flex w-full max-w-md flex-col items-start',
+        wrapperClassName,
+      )}
     >
       {label && (
         <label

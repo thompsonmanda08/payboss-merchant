@@ -14,7 +14,7 @@ export default function Step0({ updateDetails }) {
     })
   }, [])
   return (
-    <>
+    <div className="max-w-">
       <RadioGroup
         label="What type of business do you run?"
         className="flex w-full"
@@ -26,33 +26,35 @@ export default function Step0({ updateDetails }) {
           })
         }
       >
-        <motion.div
-          key={'step-0-1'}
-          className="my-2 w-full"
-          variants={staggerContainerItemVariants}
-        >
-          <CustomRadioButton
-            description="Works for Sole Proprietors, Limited Liability Companies, and Non-Profit Organizations."
-            value="REGISTERED_BUSINESS"
+        <div className="mt-2 flex flex-col items-center gap-5 sm:flex-row">
+          <motion.div
+            key={'step-0-1'}
+            className="my-2 w-full"
+            variants={staggerContainerItemVariants}
           >
-            <p className="mb-1 font-semibold">Registered Business</p>
-          </CustomRadioButton>
-        </motion.div>
+            <CustomRadioButton
+              description="Works for Sole Proprietors, Limited Liability Companies, and Non-Profit Organizations."
+              value="REGISTERED_BUSINESS"
+            >
+              <p className="mb-1 font-semibold">Registered Business</p>
+            </CustomRadioButton>
+          </motion.div>
 
-        <motion.div
-          className="w-full"
-          key={'step-0-2'}
-          variants={staggerContainerItemVariants}
-        >
-          <CustomRadioButton
-            description="Works for individuals, one-person business, social media vendors and stores"
-            value="UNREGISTERED_BUSINESS"
-            disabled={true}
+          <motion.div
+            className="w-full"
+            key={'step-0-2'}
+            variants={staggerContainerItemVariants}
           >
-            <p className="mb-1 font-semibold">Unregistered Business</p>
-          </CustomRadioButton>
-        </motion.div>
+            <CustomRadioButton
+              description="Works for individuals, one-person business, social media vendors and stores"
+              value="UNREGISTERED_BUSINESS"
+              disabled={true}
+            >
+              <p className="mb-1 font-semibold">Unregistered Business</p>
+            </CustomRadioButton>
+          </motion.div>
+        </div>
       </RadioGroup>
-    </>
+    </div>
   )
 }

@@ -56,11 +56,7 @@ export default function RootLayout({ children }) {
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={cn(
-          'flex h-screen flex-col',
-          inter.variable,
-          lexend.variable,
-        )}
+        className={cn('flex min-h-screen flex-col bg-background font-inter')}
       >
         <Providers>
           {children}

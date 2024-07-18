@@ -25,7 +25,7 @@ const Input = React.forwardRef(
         {label && (
           <label
             htmlFor={name}
-            className="mb-1 ml-1 text-sm font-medium text-slate-700"
+            className="pl-1 text-sm font-medium text-slate-700"
           >
             {label}
           </label>

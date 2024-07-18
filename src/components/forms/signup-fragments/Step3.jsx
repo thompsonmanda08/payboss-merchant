@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import useAuthStore from '@/context/authStore'
 import { uploadBusinessFile } from '@/app/_actions/pocketbase-actions'
-import { FileDropZone } from '@/components/base'
+import { CardHeader, FileDropZone } from '@/components/base'
 import { STEPS } from '../SignupForm'
 import { notify } from '@/lib/utils'
 
@@ -25,49 +25,68 @@ export default function Step3({ updateDetails }) {
   }
 
   return (
-    <div className="flex w-full flex-col gap-2">
-      <UploadField
-        label={'Business Incorporation Certificate'}
-        handleFile={async (file) =>
-          updateDetails(STEPS[3], {
-            cert_of_incorporation_url: await handleFileUpload(file),
-          })
+    <>
+      <CardHeader
+        className={'py-0'}
+        classNames={{
+          infoClasses: 'mb-0',
+          innerWrapper: 'gap-0',
+        }}
+        title="Business Documents and Attachments"
+        infoText={
+          'Documents that prove your company registrations and compliance with regulatory bodies.'
         }
       />
-      <UploadField
-        label={'Articles of Association'}
-        handleFile={async (file) =>
-          updateDetails(STEPS[3], {
-            articles_of_association_url: await handleFileUpload(file),
-          })
-        }
-      />
-      <UploadField
-        label={'Shareholders Agreement'}
-        handleFile={async (file) =>
-          updateDetails(STEPS[3], {
-            share_holder_url: await handleFileUpload(file),
-          })
-        }
-      />
-      <UploadField
-        label={'Tax Clearance Certificate'}
-        handleFile={async (file) =>
-          updateDetails(STEPS[3], {
-            tax_clearance_certificate_url: await handleFileUpload(file),
-          })
-        }
-      />
+    
+      <div className="flex w-full flex-col gap-2 md:flex-row">
+        <div className="flex w-full flex-1 flex-col gap-2">
+          <UploadField
+            label={'Business Incorporation Certificate'}
+            handleFile={async (file) =>
+              updateDetails(STEPS[3], {
+                cert_of_incorporation_url: await handleFileUpload(file),
+              })
+            }
+          />
+          <UploadField
+            label={'Articles of Association'}
+            handleFile={async (file) =>
+              updateDetails(STEPS[3], {
+                articles_of_association_url: await handleFileUpload(file),
+              })
+            }
+          />
+          <UploadField
+            label={'Shareholders Agreement'}
+            handleFile={async (file) =>
+              updateDetails(STEPS[3], {
+                share_holder_url: await handleFileUpload(file),
+              })
+            }
+          />
+        </div>
 
-      <UploadField
-        label={'Company Profile'}
-        handleFile={async (file) =>
-          updateDetails(STEPS[3], {
-            company_profile_url: await handleFileUpload(file),
-          })
-        }
-      />
-    </div>
+        <div className="flex w-full flex-1 flex-col gap-2">
+          <UploadField
+            label={'Tax Clearance Certificate'}
+            handleFile={async (file) =>
+              updateDetails(STEPS[3], {
+                tax_clearance_certificate_url: await handleFileUpload(file),
+              })
+            }
+          />
+
+          <UploadField
+            label={'Company Profile'}
+            handleFile={async (file) =>
+              updateDetails(STEPS[3], {
+                company_profile_url: await handleFileUpload(file),
+              })
+            }
+          />
+        </div>
+      </div>
+    </>
   )
 }
 

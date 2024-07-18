@@ -4,31 +4,29 @@ import Image from 'next/image'
 import { Footer } from '@/components/containers'
 import { Logo } from '@/components/base'
 
-function AuthLayout({ children }) {
+import DefaultCover from '@/images/profile-cover.jpg'
+
+function AuthLayout({ children, params }) {
   return (
-    <main className="ease-soft-in-out relative mt-0 flex h-screen flex-col justify-between overflow-clip transition-all duration-200">
-      {/* <div className="rounded-blur fixed left-0  right-0 top-4  z-50 mx-10 flex flex-wrap items-center justify-start rounded-full bg-white/60 px-32 py-4 backdrop-blur-2xl backdrop-saturate-200 transition-all lg:flex-nowrap lg:justify-start">
-        <Logo />
-      </div> */}
+    <main className="ease-soft-in-out relative flex h-full min-h-screen flex-grow flex-col justify-between transition-all duration-200">
       <section>
-        <div className="min-h-75-screen relative flex h-full items-center bg-cover bg-center">
+        <div className="relative flex h-full flex-col items-center bg-center px-5 pt-2 last:bg-cover">
+          {/* BG IMAGES HERE */}
+          {/* <div className="absolute left-0  right-0 top-6 z-50 mx-10 flex flex-wrap items-center justify-center rounded-xl bg-white/0 px-32 py-4  transition-all lg:flex-nowrap lg:justify-start">
+            <Logo isWhite />
+          </div> */}
+          <div className="relative h-[400px] w-full overflow-clip rounded-2xl bg-gray-900">
+            <Image
+              className="z-0 h-full w-full object-cover"
+              src={DefaultCover}
+              width={1024}
+              height={300}
+            />
+            <div className="absolute inset-0 z-10 bg-black/30"></div>
+          </div>
           <div className="container z-10">
-            <div className="-mx-3 mt-0 flex flex-wrap">
-              <div className="md:flex-0 mx-auto flex w-full max-w-full shrink-0 flex-col px-3 md:w-6/12 lg:w-5/12 xl:w-4/12">
-                {children}
-              </div>
-              <div className="h-[85svh] w-full max-w-full px-3 md:w-6/12">
-                <div className="absolute -right-40 top-0 -mr-32 hidden h-full w-3/5 -skew-x-12 overflow-hidden rounded-bl-[100px] md:block">
-                  <div className="absolute inset-x-0 top-0 z-0 -ml-16 h-full flex-none skew-x-12 bg-slate-800 bg-cover">
-                    <Image
-                      src={paymentsImage}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                    <div className="via-black-60 absolute inset-x-0 top-0 z-0 -ml-16 h-full skew-x-12 bg-gradient-to-bl from-black/90 to-primary/0" />
-                  </div>
-                </div>
-              </div>
+            <div className="md:flex-0 mx-auto flex w-full shrink-0 flex-col px-3">
+              {children}
             </div>
           </div>
         </div>

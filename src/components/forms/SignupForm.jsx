@@ -21,6 +21,7 @@ import {
   updateBusinessDocumentRefs,
   updateMerchantDetails,
 } from '@/app/_actions/auth-actions'
+import { Card } from '@nextui-org/react'
 
 export const STEPS = [
   'business-registration',
@@ -201,24 +202,11 @@ export default function SignUpForm() {
   }, [newAdminUser, businessInfo])
 
   return (
-    <>
-      <div className="flex flex-col overflow-y-auto lg:max-h-[450px]">
-        {!isFirstStep && (
-          <Button
-            aria-label="back"
-            color="light"
-            className={
-              'absolute -top-14 max-w-fit text-primary lg:-left-[calc(100%-15vw)] lg:-top-2'
-            }
-            disabled={isLoading}
-            onClick={() => navigateBackwards()}
-          >
-            <ArrowUturnLeftIcon className="h-5 w-5" /> Back
-          </Button>
-        )}
+    <Card className="mx-auto w-full max-w-sm flex-auto p-6 sm:max-w-[790px]">
+      <div className="flex flex-col ">
         <form
           onSubmit={handleCreateAccount}
-          className="mx-auto flex w-full max-w-sm flex-col items-center justify-center gap-4 "
+          className="mx-auto flex w-full flex-col items-center justify-center gap-4 "
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -234,14 +222,27 @@ export default function SignUpForm() {
             </motion.div>
           </AnimatePresence>
 
-          <div className="mt-5 flex w-full gap-4">
+          <div className="mt-5 flex w-full items-end justify-center gap-4 md:justify-end">
+            {!isFirstStep && (
+              <Button
+                aria-label="back"
+                color="light"
+                className={
+                  'w-full max-w-xs text-primary sm:w-auto sm:max-w-fit'
+                }
+                disabled={isLoading}
+                onClick={() => navigateBackwards()}
+              >
+                <ArrowUturnLeftIcon className="h-5 w-5" /> Back
+              </Button>
+            )}
             <Button
               type={'submit'}
               size="lg"
               color="primary"
               isLoading={isLoading}
               disabled={isLoading}
-              className="w-full max-w-sm "
+              className="w-full max-w-xs sm:w-auto"
             >
               {isFirstStep
                 ? 'Get Started'
@@ -258,6 +259,6 @@ export default function SignUpForm() {
           <StatusMessage error={error.status} message={error.message} />
         </div>
       )}
-    </>
+    </Card>
   )
 }
