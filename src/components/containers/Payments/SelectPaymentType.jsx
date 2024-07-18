@@ -2,10 +2,11 @@
 import { Modal } from '@/components/base'
 import usePaymentsStore from '@/context/paymentsStore'
 import { usePathname, useRouter } from 'next/navigation'
-import { PAYMENT_TYPES } from '.'
-import { cn, notify } from '@/lib/utils'
 
-const SelectPaymentType = ({}) => {
+import { cn, notify } from '@/lib/utils'
+import { PAYMENT_TYPES } from '.'
+
+const SelectPaymentType = ({ service }) => {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -16,8 +17,8 @@ const SelectPaymentType = ({}) => {
     setOpenPaymentsModal,
   } = usePaymentsStore()
 
-  const pathArr = pathname.split('/')
-  const service = pathArr[pathArr.length - 1].replaceAll('-', ' ')
+  // const pathArr = pathname.split('/')
+  // const service = pathArr[pathArr.length - 1].replaceAll('-', ' ')
 
   function handleSelectServiceType(type) {
     updatePaymentFields({ type: type.name })

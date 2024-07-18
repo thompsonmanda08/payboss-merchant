@@ -193,7 +193,11 @@ const SingleFileDropzone = React.forwardRef(
                   {acceptedFiles[0]?.name}
                 </span>
                 {/* // ONLY SHOWS ON THE UPRIGHT COMPONENT */}
-                {!isLandscape && <Button disabled={disabled}>Change</Button>}
+                {!isLandscape && (
+                  <Button isDisabled className={'opacity-100'}>
+                    Change
+                  </Button>
+                )}
                 {isLandscape && (
                   <XMarkIcon className="absolute -right-0 aspect-square w-5 rounded-md bg-red-100 p-0.5 text-red-500 hover:text-red-500" />
                 )}
@@ -222,7 +226,9 @@ const SingleFileDropzone = React.forwardRef(
               {!isLandscape && (
                 // ONLY SHOWS ON THE UPRIGHT COMPONENT
                 <div className={cn('mt-3', { 'm-0': isLandscape })}>
-                  <Button disabled={disabled}>Upload</Button>
+                  <Button isDisabled className={'opacity-100'}>
+                    Upload
+                  </Button>
                 </div>
               )}
             </div>

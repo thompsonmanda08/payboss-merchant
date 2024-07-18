@@ -1,11 +1,5 @@
 'use client'
-import {
-  Card,
-  CardHeader,
-  EmptyState,
-  Modal,
-  ProgressStep,
-} from '@/components/base'
+import { Card, CardHeader, ProgressStep } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import usePaymentsStore from '@/context/paymentsStore'
 import UploadCSVFile from './UploadCSVFile'
@@ -16,8 +10,6 @@ import {
 } from '@heroicons/react/24/outline'
 import ValidationDetails from './ValidationDetails'
 import { useEffect, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
-import { capitalize } from '@/lib/utils'
 import RecordDetailsViewer from './RecordDetailsViewer'
 
 export const PAYMENT_TYPES = [
@@ -25,11 +17,13 @@ export const PAYMENT_TYPES = [
     name: 'Bulk Payment',
     Icon: CircleStackIcon,
     href: '/dashboard/payments/create/bulk',
+    index: 0,
   },
   {
     name: 'Single Payment',
     Icon: ArrowRightCircleIcon,
     href: '/dashboard/payments/create/single',
+    index: 1,
   },
 ]
 
@@ -52,7 +46,7 @@ export const STEPS = [
   },
 ]
 
-const BulkPaymentAction = ({}) => {
+const BulkPaymentAction = ({ service }) => {
   // ** INITIALIZES STEPS **//
   const [currentStep, setCurrentStep] = useState(STEPS[0])
 

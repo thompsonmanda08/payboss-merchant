@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={cn('light min-h-screen scroll-smooth bg-white antialiased')}
+      className={cn('h-screen scroll-smooth bg-white antialiased light')}
     >
       <head>
         <link
@@ -57,7 +57,7 @@ export default function RootLayout({ children }) {
       </head>
       <body
         className={cn(
-          'flex h-full min-h-screen flex-col',
+          'flex h-screen flex-col',
           inter.variable,
           lexend.variable,
         )}
