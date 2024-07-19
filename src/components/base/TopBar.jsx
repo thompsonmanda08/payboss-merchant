@@ -1,12 +1,12 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import Avatar from './Avatar'
 import useNavigationStore from '@/context/navigationStore'
 import Link from 'next/link'
 import BreadCrumb from './BreadCrumb'
 import { BellIcon, Cog6ToothIcon, UserIcon } from '@heroicons/react/24/solid'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import Avatar from '../ui/Avatar'
 
 export default function TopNavBar({}) {
   const userData = [undefined]

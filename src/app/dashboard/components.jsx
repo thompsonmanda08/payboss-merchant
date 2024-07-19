@@ -94,24 +94,32 @@ export const TransactionStatusTag = ({ status, className }) => {
   )
 }
 
-export const ProgressStageTracker = () => {
-  const date = new Date(now(getLocalTimeZone()).toString().split('T')[0])
+export const TimelineItem = ({ }) => {
+  const fullDate = new Date(now(getLocalTimeZone()).toString().split('T')[0])
+  const date = formatDate(fullDate).replaceAll('-', ' ')
 
-  let formatter = useDateFormatter({ dateStyle: 'full' })
+
+  return (
+    <div className="flex gap-4">
+      <SoftBoxIcon>
+        <CreditCardIcon />
+      </SoftBoxIcon>
+
+      <div className="flex flex-col">
+        <p className="font-medium text-slate-600">Account Details Submitted</p>
+        <span className="text-xs font-medium uppercase leading-5 text-slate-400">
+          {formatDate(date).replaceAll('-', ' ')}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+export const ProgressStageTracker = ({}) => {
+  
   return (
     <Card>
-      <div className="flex gap-4">
-        <SoftBoxIcon>
-          <CreditCardIcon />
-        </SoftBoxIcon>
-
-        <div className="flex flex-col">
-          <p className="text-slate-600 font-medium">Account Details Submitted</p>
-          <span className="text-xs font-medium uppercase leading-5 text-slate-400">
-            {formatDate(date).replaceAll('-', ' ')}
-          </span>
-        </div>
-      </div>
+      <TimelineItem />
     </Card>
   )
 }

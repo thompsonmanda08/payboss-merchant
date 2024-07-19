@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { cn, getUserInitials } from '@/lib/utils'
 
 import { useEffect } from 'react'
-import Spinner from './Spinner'
+import Spinner from '../ui/Spinner'
 
 function Avatar({ userData, isProfile }) {
   useEffect(() => {

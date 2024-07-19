@@ -1,4 +1,4 @@
-import Spinner from '@/components/base/Spinner'
+import Spinner from '@/components/ui/Spinner'
 
 export default function LoadingPage() {
   return (

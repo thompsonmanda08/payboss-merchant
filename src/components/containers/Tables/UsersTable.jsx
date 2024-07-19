@@ -6,7 +6,7 @@ import { Switch } from '@nextui-org/switch'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
-import Search from '@/components/base/Search'
+import Search from '@/components/ui/Search'
 import {
   CheckIcon,
   EllipsisVerticalIcon,
