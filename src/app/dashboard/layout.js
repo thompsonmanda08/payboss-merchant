@@ -1,6 +1,10 @@
 import { SideNavBar, TopNavBar } from '@/components/base'
+import { verifySession } from '@/lib/session'
+import { redirect } from 'next/navigation'
 
 export default async function DashboardLayout({ children }) {
+  //! await verifySession()
+
   return (
     <main className="flex h-screen items-start justify-start overflow-hidden bg-background text-foreground">
       <SideNavBar />

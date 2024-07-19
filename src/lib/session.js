@@ -60,11 +60,18 @@ export async function verifySession() {
   const cookie = cookies().get(AUTH_SESSION)?.value
   const session = await decrypt(cookie)
 
-  if (!session?.accessToken || !session?.user) {
-    redirect('auth/login')
-  }
+  if (session?.accessToken || session?.user) return true
 
-  return { isAuthenticated: true, session }
+  redirect('/login')
+}
+
+export async function getServerSession() {
+  const cookie = cookies().get(AUTH_SESSION)?.value
+  const session = await decrypt(cookie)
+
+  if (session?.accessToken || session?.user) return session
+
+  return null
 }
 
 export async function updateSession() {

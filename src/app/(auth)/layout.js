@@ -5,8 +5,10 @@ import { Footer } from '@/components/containers'
 import { Logo } from '@/components/base'
 
 import DefaultCover from '@/images/profile-cover.jpg'
+import DashboardHome from '../dashboard/page'
+import { verifySession } from '@/lib/session'
 
-function AuthLayout({ children, params }) {
+async function AuthLayout({ children, params }) {
   return (
     <main className="ease-soft-in-out relative flex h-full min-h-screen flex-grow flex-col justify-between transition-all duration-200">
       <section>

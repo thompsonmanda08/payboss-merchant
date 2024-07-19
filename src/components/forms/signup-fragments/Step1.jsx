@@ -1,14 +1,9 @@
 //BUSINESS REGISTRATION STATUS
 'use client'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Input } from '@/components/ui/input'
 import { motion } from 'framer-motion'
-import {
-  AIRTEL_NO,
-  MTN_NO,
-  staggerContainerItemVariants,
-  ZAMTEL_NO,
-} from '@/lib/constants'
+import { staggerContainerItemVariants } from '@/lib/constants'
 import useConfigStore from '@/context/configStore'
 import { formatDate, isValidZambianMobileNumber } from '@/lib/utils'
 import { STEPS } from '../SignupForm'
@@ -20,7 +15,7 @@ import { getLocalTimeZone, today } from '@internationalized/date'
 export default function Step1({ updateDetails }) {
   const configOptions = useConfigStore((state) => state.configOptions)
   const step = useAuthStore((state) => state.businessInfo)
-  const { updateErrorStatus, error, setError } = useAuthStore((state) => state)
+  useAuthStore((state) => state)
 
   const companyTypes = configOptions?.companyTypes
   const TPINError = step?.tpin?.length > 10

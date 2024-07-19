@@ -29,7 +29,7 @@ function LoginForm() {
   }
 
   return (
-    <Card className="mx-auto max-w-sm flex-auto -translate-y-16 py-6">
+    <Card className="mx-auto w-full max-w-sm flex-auto p-6 ">
       <form role="form" onSubmit={handleLogin} className="flex flex-col gap-4">
         <Input
           placeholder="Enter your email or username"

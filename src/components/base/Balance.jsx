@@ -1,9 +1,11 @@
+'use client'
 import React from 'react'
 import { Card } from '.'
 import {
   BuildingLibraryIcon,
   BuildingStorefrontIcon,
 } from '@heroicons/react/24/solid'
+import { SoftBoxIcon } from '@/app/dashboard/components'
 
 function Balance({ title, amount }) {
   return (
@@ -15,6 +17,7 @@ function Balance({ title, amount }) {
       <div className="grid aspect-square h-12 w-12 place-items-center rounded-lg bg-gradient-to-tr from-primary to-blue-300 p-3 text-white">
         <BuildingLibraryIcon className="h-6 w-6" />
       </div>
+
       <div className="pt-2 text-center">
         <h2 className="text-nowrap text-xs font-semibold text-gray-500 md:text-sm">
           {title || 'Title'}

@@ -9,7 +9,6 @@ import gradientLineChartData from './data/gradientLineChartData'
 import LoadingPage from '../loading'
 import Batches from '@/components/batch'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
-import { InfoBanner } from './components'
 
 function DashboardHome() {
   const { chart, items } = reportsBarChartData
@@ -17,11 +16,6 @@ function DashboardHome() {
   return (
     <Suspense fallback={<LoadingPage />}>
       <div className="flex w-full flex-col gap-4 md:gap-6">
-        <InfoBanner
-          buttonText="Verify Account"
-          infoText="You have not verified your account yet. Please verify your account to access all the features of the app."
-          href={'/approval-status'}
-        />
         <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-4 ">
           <SimpleStats
             title={'Todays Transactions'}

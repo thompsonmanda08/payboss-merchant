@@ -36,6 +36,7 @@ import {
   UserGroupIcon,
   ShoppingCartIcon,
   BriefcaseIcon,
+  CheckBadgeIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { Logo } from '.'
@@ -153,6 +154,11 @@ export const SIDE_BAR_OPTIONS = [
     href: '/dashboard/settings',
     Icon: WrenchScrewdriverIcon,
     subMenuItems: [
+      {
+        name: 'Account Verification',
+        href: '/dashboard/approval-status',
+        Icon: CheckBadgeIcon,
+      },
       {
         name: 'Team',
         href: '/dashboard/users',

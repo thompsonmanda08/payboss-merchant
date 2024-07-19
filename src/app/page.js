@@ -7,8 +7,17 @@ import {
   Hero,
   PrimaryFeatures,
 } from '@/components/containers'
+import { getServerSession } from '@/lib/session'
+import DashboardHome from './dashboard/page'
+import { redirect } from 'next/navigation'
 
-export default function Home() {
+export default async function App() {
+  const session = await getServerSession()
+
+  if (session) {
+    return redirect('/dashboard')
+  }
+
   return (
     <>
       <Header />
