@@ -15,6 +15,7 @@ import { STEPS } from '../SignupForm'
 import { CardHeader, SelectField } from '@/components/base'
 import DateSelectField from '@/components/ui/DateSelectField'
 import useAuthStore from '@/context/authStore'
+import { getLocalTimeZone, today } from '@internationalized/date'
 
 export default function Step1({ updateDetails }) {
   const configOptions = useConfigStore((state) => state.configOptions)
@@ -96,9 +97,10 @@ export default function Step1({ updateDetails }) {
               label={'Date of Incorporation'}
               className="max-w-sm"
               description={'Date the company was registered'}
+              value={step?.date_of_incorporation}
+              maxValue={today(getLocalTimeZone())}
               labelPlacement={'outside'}
               onChange={(date) => {
-                console.log(formatDate(date, 'YYYY-MM-DD'))
                 updateDetails(STEPS[0], {
                   date_of_incorporation: formatDate(date, 'YYYY-MM-DD'),
                 })

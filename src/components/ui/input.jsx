@@ -25,7 +25,9 @@ const Input = React.forwardRef(
         {label && (
           <label
             htmlFor={name}
-            className="pl-1 text-sm font-medium text-slate-700"
+            className={cn('pl-1 text-sm font-medium text-slate-700', {
+              'text-red-500': onError,
+            })}
           >
             {label}
           </label>
@@ -55,7 +57,7 @@ const Input = React.forwardRef(
               opacity: [0, 1],
               transition: { duration: 0.3 },
             }}
-            className="ml-1 text-xs font-semibold text-red-600 "
+            className="ml-1 text-xs text-red-500 "
           >
             {errorText}
           </motion.span>

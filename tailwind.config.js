@@ -52,6 +52,16 @@ export const theme = {
         DEFAULT: 'hsl(var(--primary))',
         foreground: 'hsl(var(--primary-foreground))',
         light: 'hsl(var(--primary-light))',
+        50: '#f0f6ff',
+        100: '#e1edff',
+        200: '#bbd6ff',
+        300: '#9DC4FF',
+        400: '#c031e2',
+        500: '#1B64CE',
+        600: '#175abc',
+        700: '#1551a9',
+        800: '#10438d',
+        900: '#071e40',
       },
       secondary: {
         DEFAULT: 'hsl(var(--secondary))',
@@ -105,5 +115,7 @@ export const plugins = [
   tailwindAnimate,
   headlessuiPlugin,
   formsPlugin,
-  nextui(),
+  nextui({
+    addCommonColors: true,
+  }),
 ]
