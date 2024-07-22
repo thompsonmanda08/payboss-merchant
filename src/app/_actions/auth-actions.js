@@ -1,5 +1,5 @@
 'use server'
-import { createSession, verifySession } from '@/lib/session'
+import { createSession, deleteSession, verifySession } from '@/lib/session'
 import { apiClient } from '@/lib/utils'
 
 export async function createNewMerchant(businessInfo) {
@@ -246,4 +246,13 @@ export async function authenticateUser(loginCredentials) {
       status: error?.response?.status || error.status,
     }
   }
+}
+
+export async function logUserOut() {
+  const isLoggedIn = await verifySession()
+  if (isLoggedIn) {
+    deleteSession()
+    return true
+  }
+  return false
 }

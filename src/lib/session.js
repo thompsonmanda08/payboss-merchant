@@ -94,5 +94,5 @@ export async function updateSession() {
 
 export function deleteSession() {
   cookies().delete(AUTH_SESSION)
-  redirect('/auth/login')
+  redirect('/login')
 }

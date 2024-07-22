@@ -42,6 +42,7 @@ import { cn } from '@/lib/utils'
 import { Logo } from '.'
 import { PowerIcon } from '@heroicons/react/24/solid'
 import { Button } from '../ui/Button'
+import { logUserOut } from '@/app/_actions/auth-actions'
 
 export const SIDE_BAR_OPTIONS = [
   {
@@ -298,8 +299,13 @@ export function SideNavItems({
   handleExpand,
   handleMainLinkClick,
   handleLinkClick,
-  logUserOut,
 }) {
+  async function handleLogOut() {
+    const isLoggedOut = await logUserOut()
+    if (isLoggedOut) {
+      window.location.href = '/'
+    }
+  }
   return (
     <div className="flex h-full w-full flex-col overflow-clip ">
       <div className="no-scrollbar flex h-full w-full flex-col gap-2 divide-y divide-slate-100/50 overflow-y-auto ">
@@ -421,7 +427,7 @@ export function SideNavItems({
           )
         })}
       </div>
-      <Button className={'flex items-center gap-2'} onClick={logUserOut}>
+      <Button className={'flex items-center gap-2'} onClick={handleLogOut}>
         <PowerIcon className="h-5 w-5" />
         Logout
       </Button>

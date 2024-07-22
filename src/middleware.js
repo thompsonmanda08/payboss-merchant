@@ -5,6 +5,9 @@ import { decrypt } from './lib/session'
 
 const PROTECTED_ROUTES = [
   '/dashboard',
+  '/dashboard/profile',
+  '/dashboard/payments/',
+  '/dashboard/payments/direct',
   // Add more protected routes as needed
 ]
 

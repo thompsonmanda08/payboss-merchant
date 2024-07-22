@@ -8,11 +8,19 @@ import useAuthStore from '@/context/authStore'
 import { authenticateUser } from '@/app/_actions/auth-actions'
 import { useRouter } from 'next/navigation'
 import { Card } from '../base'
+import { useNetwork } from '@/hooks/useNetwork'
 
 function LoginForm() {
   const { push } = useRouter()
-  const { loginDetails, updateLoginDetails, setIsLoading, isLoading } =
-    useAuthStore()
+  const {
+    loginDetails,
+    updateLoginDetails,
+    updateErrorStatus,
+    setIsLoading,
+    isLoading,
+  } = useAuthStore()
+
+  
 
   async function handleLogin(e) {
     e.preventDefault()
@@ -20,11 +28,17 @@ function LoginForm() {
     console.log(loginDetails)
     const { emailusername, password } = loginDetails
     if (emailusername && password) {
-      const payload = await authenticateUser(loginDetails)
-      console.log(payload)
+      const response = await authenticateUser(loginDetails)
 
-      if (payload.success) push('/dashboard')
-      if (!payload.success) setIsLoading(false)
+      if (response.success) push('/dashboard')
+
+      if (!response.success) {
+        updateErrorStatus({
+          status: response.status,
+          message: response.message,
+        })
+        setIsLoading(false)
+      }
     }
   }
 
