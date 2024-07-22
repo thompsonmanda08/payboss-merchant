@@ -80,7 +80,7 @@ export default function SignUpForm() {
     firstTab,
     lastTab,
   } = useCustomTabsHook([
-    <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />, // BUSINESS REG STATUS
+    <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />, // BUSINESS SPACE TYPE 
     <Step1 key={STEPS[1]} updateDetails={updateAccountDetails} />, // BUSINESS INFO
     <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />, // BANK DETAILS
     <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />, // BUSINESS DOCS
@@ -95,7 +95,7 @@ export default function SignUpForm() {
     setIsLoading(true)
     updateErrorStatus({ status: false, message: '' })
 
-    if (businessInfo.business_registration_status == 'UNREGISTERED_BUSINESS') {
+    if (businessInfo.business_type == 'INDIVIDUAL_SOLE_TRADER') {
       notify('error', 'Not Available Yet')
       setIsLoading(false)
       return

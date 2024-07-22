@@ -1,4 +1,5 @@
 'use server'
+import useAuthStore from '@/context/authStore'
 import { createSession, deleteSession, verifySession } from '@/lib/session'
 import { apiClient } from '@/lib/utils'
 
@@ -251,6 +252,7 @@ export async function authenticateUser(loginCredentials) {
 export async function logUserOut() {
   const isLoggedIn = await verifySession()
   if (isLoggedIn) {
+    useAuthStore.getState.resetAuthData()
     deleteSession()
     return true
   }

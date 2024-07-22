@@ -71,7 +71,7 @@ function LoginForm() {
             <Switch size="sm" />
             <label
               className="cursor-pointer select-none text-sm font-normal"
-              for="rememberMe"
+              htmlFor="rememberMe"
             >
               Remember me
             </label>
