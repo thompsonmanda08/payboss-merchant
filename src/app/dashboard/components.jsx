@@ -1,19 +1,22 @@
 'use client'
 import { cn, formatDate } from '@/lib/utils'
+import approvalIllustration from '@/images/illustrations/approval.svg'
 
 import Link from 'next/link'
 import React from 'react'
 import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/base'
+import { Card, CardHeader } from '@/components/base'
 import { CreditCardIcon } from '@heroicons/react/24/outline'
 import { now, getLocalTimeZone } from '@internationalized/date'
 import { useDateFormatter } from '@react-aria/i18n'
+import { CardBody } from '@nextui-org/react'
+import Image from 'next/image'
 
 export function SoftBoxIcon({ className, children }) {
   return (
     <div
       className={cn(
-        'grid aspect-square h-12 w-12 place-items-center rounded-lg bg-gradient-to-tr from-primary to-blue-300 p-3 text-white',
+        'z-10 grid aspect-square h-12 w-12 place-items-center rounded-lg bg-gradient-to-tr from-primary to-blue-300 p-3 text-white transition-all duration-300 ease-in-out',
         className,
       )}
     >
@@ -94,14 +97,29 @@ export const TransactionStatusTag = ({ status, className }) => {
   )
 }
 
-export const TimelineItem = ({ }) => {
+export const TimelineItem = ({ isLastItem, isCompleted }) => {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split('T')[0])
-  const date = formatDate(fullDate).replaceAll('-', ' ')
 
+  const date = formatDate(fullDate).replaceAll('-', ' ')
+  const time = fullDate.toLocaleTimeString()
+  console.log(time)
 
   return (
-    <div className="flex gap-4">
-      <SoftBoxIcon>
+    <div
+      className={cn(
+        "relative mb-2 flex gap-4 before:absolute before:left-5 before:top-[115%] before:z-0 before:h-[30px] before:w-1 before:bg-slate-500/10 before:content-['']",
+        {
+          'before:bg-primary/20': isCompleted,
+          'before:hidden': isLastItem,
+        },
+      )}
+    >
+      <SoftBoxIcon
+        className={{
+          'border border-slate-300 from-transparent to-transparent text-slate-400':
+            !isCompleted,
+        }}
+      >
         <CreditCardIcon />
       </SoftBoxIcon>
 
@@ -116,10 +134,40 @@ export const TimelineItem = ({ }) => {
 }
 
 export const ProgressStageTracker = ({}) => {
-  
   return (
-    <Card>
-      <TimelineItem />
+    <Card className={'w-full gap-5 pb-5'}>
+      <CardHeader
+        className={'py-0'}
+        classNames={{
+          infoClasses: 'mb-0',
+          innerWrapper: 'gap-0',
+        }}
+        title="Account Approval Status"
+        infoText={
+          'Your account is under review! We will notify you when your account is approved.'
+        }
+      />
+      <div className="flex w-full gap-12 lg:px-10">
+        <div className="flex w-full flex-col gap-9">
+          <TimelineItem />
+          <TimelineItem />
+          <TimelineItem />
+          {/* <TimelineItem /> */}
+          <TimelineItem isLastItem />
+        </div>
+        <div className="flex w-full min-w-80 flex-col items-center gap-9 p-9">
+          <Image
+            className="aspect-square max-w-80 object-contain"
+            src={approvalIllustration}
+            width={200}
+            height={200}
+          />
+          <p className="text-center font-medium leading-6 tracking-tight text-slate-600">
+            This process usually takes up to 24 hours, try reloading the page or
+            come back later for a status update.
+          </p>
+        </div>
+      </div>
     </Card>
   )
 }

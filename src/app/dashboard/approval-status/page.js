@@ -5,17 +5,20 @@ import LoadingPage from '@/app/loading'
 function ApprovalPage() {
   return (
     <Suspense fallback={<LoadingPage />}>
-      <section role="account-approval">
+      <section
+        role="account-approval"
+        className="flex w-full flex-col bg-red-500"
+      >
         {/* 
       //
        */}
+        <ProgressStageTracker />
       </section>
       <section
         role="profile-content"
         className="grid w-full grid-cols-[repeat(auto-fill,minmax(580px,1fr))] place-items-center gap-4 "
       >
         {/*  */}
-        <ProgressStageTracker />
       </section>
     </Suspense>
   )

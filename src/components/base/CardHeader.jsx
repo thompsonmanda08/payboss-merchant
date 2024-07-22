@@ -43,9 +43,9 @@ function CardHeader({ title, infoText, handleClose, className, classNames }) {
       {handleClose && (
         <div
           onClick={handleClose}
-          className="absolute -right-1 -top-2 cursor-pointer rounded-full p-2 text-primary/30 transition-all duration-300 ease-in-out hover:bg-primary/10 hover:text-primary"
+          className="absolute -right-1 -top-2 cursor-pointer rounded-full p-2 text-primary/30 transition-all duration-300 ease-in-out hover:bg-primary/5 hover:text-primary"
         >
-          <XMarkIcon className="aspect-square w-6" />
+          <XMarkIcon className="aspect-square w-5" />
         </div>
       )}
     </div>

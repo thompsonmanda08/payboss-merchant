@@ -86,7 +86,7 @@ function Modal({
             <CardHeader
               title={title}
               infoText={infoText}
-              onClose={handleClose}
+              handleClose={handleClose}
             />
             {/* MODAL CONTENT */}
             <div

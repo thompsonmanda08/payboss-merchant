@@ -20,7 +20,7 @@ export default async function App() {
 
   return (
     <>
-      <Header />
+      <Header session={session} />
       <main>
         <Hero />
         <PrimaryFeatures />

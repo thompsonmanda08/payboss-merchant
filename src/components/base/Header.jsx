@@ -51,7 +51,7 @@ function MobileNavIcon({ open }) {
   )
 }
 
-function MobileNavigation() {
+function MobileNavigation({ session }) {
   return (
     <Popover>
       <PopoverButton
@@ -84,7 +84,11 @@ function MobileNavigation() {
             <MobileNavLink href="#why-payboss">Why PayBoss</MobileNavLink>
             <MobileNavLink href="#faqs">FAQs</MobileNavLink>
             <hr className="m-2 border-slate-300/40" />
-            <MobileNavLink href="/login">Sign in</MobileNavLink>
+            {session ? (
+              <MobileNavLink href="/dashboard">Dashboard</MobileNavLink>
+            ) : (
+              <MobileNavLink href="/login">Sign in</MobileNavLink>
+            )}
           </PopoverPanel>
         </TransitionChild>
       </Transition>
@@ -92,7 +96,7 @@ function MobileNavigation() {
   )
 }
 
-export function Header() {
+export function Header({ session }) {
   const [isFloating, setIsFloating] = useState(false)
 
   const pathname = usePathname()
@@ -128,15 +132,22 @@ export function Header() {
             </div>
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
-            <div className="hidden md:block">
-              <NavLink href="/login">
-                <UserIcon className="h-5 w-5 " />
-                <span>Sign in</span>
-              </NavLink>
-            </div>
-            <Button as={Link} href="/dashboard" className={''}>
-              Dashboard
-            </Button>
+            {!session && (
+              <div className="hidden gap-4 md:flex">
+                <NavLink href="/login">
+                  <UserIcon className="h-5 w-5 " />
+                  <span>Sign in</span>
+                </NavLink>
+                <Button as={Link} href="/register" className={''}>
+                  Get Started
+                </Button>
+              </div>
+            )}
+            {session && (
+              <Button as={Link} href="/dashboard" className={''}>
+                Dashboard
+              </Button>
+            )}
             <div className="-mr-1 md:hidden">
               <MobileNavigation />
             </div>
