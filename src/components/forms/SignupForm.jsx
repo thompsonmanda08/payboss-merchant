@@ -95,7 +95,7 @@ export default function SignUpForm() {
     setIsLoading(true)
     updateErrorStatus({ status: false, message: '' })
 
-    if (businessInfo.business_type == 'INDIVIDUAL_SOLE_TRADER') {
+    if (businessInfo.business_type == 'INDIVIDUAL') {
       notify('error', 'Not Available Yet')
       setIsLoading(false)
       return

@@ -10,7 +10,7 @@ export default function Step0({ updateDetails }) {
   useEffect(() => {
     // Set Default Business Registration Status to REGISTERED_BUSINESS
     updateDetails(STEPS[0], {
-      // business_registration_status: 'REGISTERED_BUSINESS',
+      business_type: 'ORGANIZATION',
     })
   }, [])
   return (
@@ -18,8 +18,8 @@ export default function Step0({ updateDetails }) {
       <RadioGroup
         label="What type of business do you run?"
         className="flex w-full"
-        description=" Payboss gives you the tools to simplify money management and take control of your financial operations - no matter your business size or structure."
-        defaultValue={'LARGE_CORPORATE_ORGANIZATION'}
+        description="Payboss gives you the tools to simplify money management and take control of your financial operations - no matter your business size or structure."
+        defaultValue={'ORGANIZATION'}
         onChange={(e) =>
           updateDetails(STEPS[0], {
             business_type: e.target.value,
@@ -33,10 +33,10 @@ export default function Step0({ updateDetails }) {
             variants={staggerContainerItemVariants}
           >
             <CustomRadioButton
-              description="Works for large Organizations, Limited Liability Companies, and Non-Profit Organizations."
-              value="LARGE_CORPORATE_ORGANIZATION"
+              description="Works for large Organizations, Limited Liability Companies, NGOs etc."
+              value="ORGANIZATION"
             >
-              <p className="mb-1 font-semibold">Corporate or Organization</p>
+              <p className="mb-1 font-semibold">Corporate/Organization</p>
             </CustomRadioButton>
           </motion.div>
 
@@ -46,11 +46,11 @@ export default function Step0({ updateDetails }) {
             variants={staggerContainerItemVariants}
           >
             <CustomRadioButton
-              description="Works well for individuals, one-person business, social media vendors and stores"
-              value="INDIVIDUAL_SOLE_TRADER"
+              description="Works for individuals, one-person business, social media vendors and stores"
+              value="INDIVIDUAL"
               disabled={true}
             >
-              <p className="mb-1 font-semibold">Individual / Sole Trader</p>
+              <p className="mb-1 font-semibold">Individual/Sole Trader</p>
             </CustomRadioButton>
           </motion.div>
         </div>

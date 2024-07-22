@@ -17,7 +17,7 @@ const INITIAL_STATE = {
 
 const useAuthStore = create((set, get) => ({
 
-  //
+
   ...INITIAL_STATE,
 
   //SETTERS
