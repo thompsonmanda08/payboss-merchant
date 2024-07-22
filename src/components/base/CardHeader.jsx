@@ -11,12 +11,12 @@ function CardHeader({ title, infoText, handleClose, className, classNames }) {
   return (
     <div
       className={cn(
-        'relative flex w-full items-center justify-between py-4',
+        'relative flex w-full items-center justify-between ',
         className,
       )}
     >
       {title && (
-        <div className={cn('flex flex-col gap-2', innerWrapper)}>
+        <div className={cn('flex flex-col', innerWrapper)}>
           <h3
             className={cn(
               'text-sm font-semibold tracking-tight text-slate-800 xl:text-base',
