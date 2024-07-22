@@ -55,7 +55,7 @@ const APIIntegration = () => {
         <Button variant="bordered">
           <FunnelIcon className="mr-2 h-5 w-5 font-bold" /> Filters
         </Button>
-        <Button onClick={() => setCreateKey(!createKey)}>
+        <Button disabled={createKey} onClick={() => setCreateKey(!createKey)}>
           <PlusIcon className="mr-2 h-5 w-5 font-bold" /> ADD NEW
         </Button>
       </div>
