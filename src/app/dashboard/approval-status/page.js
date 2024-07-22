@@ -7,7 +7,7 @@ function ApprovalPage() {
     <Suspense fallback={<LoadingPage />}>
       <section
         role="account-approval"
-        className="flex w-full flex-col bg-red-500"
+        className="flex w-full max-w-[1024px] flex-col"
       >
         {/* 
       //

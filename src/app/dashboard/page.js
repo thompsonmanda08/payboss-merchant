@@ -20,7 +20,7 @@ function DashboardHome() {
         <InfoBanner
           buttonText="Verify Account"
           infoText="You have not verified your account yet. Please verify your account to access all the features of the app."
-          href={'/approval-status'}
+          href={'dashboard/approval-status'}
         />
         <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-4 ">
           <SimpleStats

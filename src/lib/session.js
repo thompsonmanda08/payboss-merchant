@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { AUTH_SESSION } from './constants'
 
-const secretKey = process.env.NEXT_PUBLIC_AUTH_SECRET
+const secretKey = process.env.NEXT_PUBLIC_AUTH_SECRET || process.env.AUTH_SECRET
 const key = new TextEncoder().encode(secretKey)
 
 export async function encrypt(payload) {

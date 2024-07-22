@@ -50,7 +50,7 @@ export const InfoBanner = ({
         <>
           <p
             className={cn(
-              'select-none text-xs font-semibold tracking-tight text-primary md:text-base',
+              'select-none text-xs font-semibold tracking-tight text-primary md:text-sm',
               infoTextClasses,
             )}
           >
@@ -58,7 +58,8 @@ export const InfoBanner = ({
           </p>
           {!href ? (
             <Button
-              className={cn('text-xs md:text-base', buttonClasses)}
+              size="sm"
+              className={cn('text-xs', buttonClasses)}
               onClick={onButtonPress}
             >
               {buttonText}
@@ -67,7 +68,8 @@ export const InfoBanner = ({
             <Button
               as={Link}
               href={href}
-              className={cn('text-xs md:text-base', buttonClasses)}
+              size="sm"
+              className={cn('text-xs', buttonClasses)}
             >
               {buttonText}
             </Button>
@@ -107,7 +109,7 @@ export const TimelineItem = ({ isLastItem, isCompleted }) => {
   return (
     <div
       className={cn(
-        "relative mb-2 flex gap-4 before:absolute before:left-5 before:top-[115%] before:z-0 before:h-[30px] before:w-1 before:bg-slate-500/10 before:content-['']",
+        "relative flex gap-4 bg-gradient-to-r from-card to-primary-50 p-2 before:absolute before:left-7 before:top-[110%] before:z-0 before:h-[40px] before:w-1 before:bg-slate-500/10 before:content-['']",
         {
           'before:bg-primary/20': isCompleted,
           'before:hidden': isLastItem,
@@ -137,35 +139,35 @@ export const ProgressStageTracker = ({}) => {
   return (
     <Card className={'w-full gap-5 pb-5'}>
       <CardHeader
-        className={'py-0'}
-        classNames={{
-          infoClasses: 'mb-0',
-          innerWrapper: 'gap-0',
-        }}
-        title="Account Approval Status"
+        title="Account Verification Status"
         infoText={
           'Your account is under review! We will notify you when your account is approved.'
         }
       />
-      <div className="flex w-full gap-12 lg:px-10">
+      <div className="flex w-full items-center  lg:px-10">
         <div className="flex w-full flex-col gap-9">
-          <TimelineItem />
+          <TimelineItem isCompleted />
           <TimelineItem />
           <TimelineItem />
           {/* <TimelineItem /> */}
           <TimelineItem isLastItem />
         </div>
-        <div className="flex w-full min-w-80 flex-col items-center gap-9 p-9">
+        <div className="flex w-full min-w-80 flex-col items-center gap-9 rounded-2xl bg-primary-50 p-9">
           <Image
             className="aspect-square max-w-80 object-contain"
             src={approvalIllustration}
             width={200}
             height={200}
           />
-          <p className="text-center font-medium leading-6 tracking-tight text-slate-600">
-            This process usually takes up to 24 hours, try reloading the page or
-            come back later for a status update.
-          </p>
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3 className="leading-0 m-0 font-bold">
+              Account Pending Approval
+            </h3>
+            <p className="text-center text-sm tracking-tight text-slate-600">
+              This process usually takes up to 24 hours, try reloading the page
+              or come back later for a status update.
+            </p>
+          </div>
         </div>
       </div>
     </Card>

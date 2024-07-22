@@ -7,7 +7,7 @@ import Link from 'next/link'
 import useAuthStore from '@/context/authStore'
 import { authenticateUser } from '@/app/_actions/auth-actions'
 import { useRouter } from 'next/navigation'
-import { Card } from '../base'
+import { Card, StatusMessage } from '../base'
 import { useNetwork } from '@/hooks/useNetwork'
 
 function LoginForm() {
@@ -17,6 +17,7 @@ function LoginForm() {
     updateLoginDetails,
     updateErrorStatus,
     setIsLoading,
+    error,
     isLoading,
   } = useAuthStore()
 
@@ -93,6 +94,11 @@ function LoginForm() {
           </Button>
         </div>
       </form>
+      {error && error.status && (
+        <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center gap-4">
+          <StatusMessage error={error.status} message={error.message} />
+        </div>
+      )}
     </Card>
   )
 }
