@@ -1,7 +1,7 @@
 'use client'
 import useSettingsStore from '@/context/settingsStore'
 import { Fragment, useState } from 'react'
-import { Avatar, EmptyState, Modal } from '@/components/base'
+import { EmptyState, Modal } from '@/components/base'
 import { Switch } from '@nextui-org/switch'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/Button'
@@ -13,6 +13,7 @@ import {
   TrashIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
+import Avatar from '@/components/ui/Avatar'
 
 const people = [
   {

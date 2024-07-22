@@ -20,16 +20,14 @@ function LoginForm() {
     isLoading,
   } = useAuthStore()
 
-  
-
   async function handleLogin(e) {
     e.preventDefault()
     setIsLoading(true)
-    console.log(loginDetails)
     const { emailusername, password } = loginDetails
     if (emailusername && password) {
       const response = await authenticateUser(loginDetails)
 
+      console.log(response)
       if (response.success) push('/dashboard')
 
       if (!response.success) {
