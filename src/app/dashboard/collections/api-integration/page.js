@@ -51,7 +51,7 @@ const APIIntegration = () => {
 
   return (
     <div className="mt-1 flex w-full flex-col rounded-xl bg-white p-12">
-      <div className="mb-4 flex justify-end space-x-10">
+      <div className="mb-4 flex justify-end space-x-6">
         <Button variant="bordered">
           <FunnelIcon className="mr-2 h-5 w-5 font-bold" /> Filters
         </Button>
@@ -78,7 +78,7 @@ const APIIntegration = () => {
               Use the API key associated with name to integrate with your
               system.
             </p>
-            <div className="mb-4 flex items-center space-x-10">
+            <div className="mb-4 flex items-center space-x-6">
               <Button disabled={!name} onClick={handleSave}>
                 Save
               </Button>
