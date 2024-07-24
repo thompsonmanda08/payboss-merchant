@@ -5,7 +5,7 @@ import {
   BuildingLibraryIcon,
   BuildingStorefrontIcon,
 } from '@heroicons/react/24/solid'
-import { SoftBoxIcon } from '@/app/dashboard/components'
+import SoftBoxIcon from './SoftBoxIcon'
 
 function Balance({ title, amount }) {
   return (
@@ -14,9 +14,9 @@ function Balance({ title, amount }) {
         'w-fit min-w-[180px] max-w-xs items-center gap-4 rounded-2xl px-5'
       }
     >
-      <div className="grid aspect-square h-12 w-12 place-items-center rounded-lg bg-gradient-to-tr from-primary to-blue-300 p-3 text-white">
+      <SoftBoxIcon>
         <BuildingLibraryIcon className="h-6 w-6" />
-      </div>
+      </SoftBoxIcon>
 
       <div className="pt-2 text-center">
         <h2 className="text-nowrap text-xs font-semibold text-gray-500 md:text-sm">

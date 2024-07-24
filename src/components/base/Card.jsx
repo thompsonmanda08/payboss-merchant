@@ -11,8 +11,20 @@ function Card({ className, classObject, href, children }) {
     classObject,
   )
   return href ? (
-    <Link href={href} className={cardClasses}>
-      {children}
+    <Link href={href}>
+      <motion.div
+        animate={{
+          transition: {
+            type: 'spring',
+            stiffness: 200,
+            damping: 20,
+            duration: 0.3,
+          },
+        }}
+        className={cardClasses}
+      >
+        {children}
+      </motion.div>
     </Link>
   ) : (
     <motion.div
