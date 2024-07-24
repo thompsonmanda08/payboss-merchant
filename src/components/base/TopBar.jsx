@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import useNavigationStore from '@/context/navigationStore'
 import Link from 'next/link'
-import BreadCrumb from './BreadCrumb'
 import { BellIcon, Cog6ToothIcon, UserIcon } from '@heroicons/react/24/solid'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Avatar from '../ui/Avatar'
+import BreadCrumbLinks from './BreadCrumbLinks'
 
 export default function TopNavBar({}) {
   const userData = [undefined]
@@ -26,7 +26,7 @@ export default function TopNavBar({}) {
     >
       <div className="flex w-full items-center rounded-3xl">
         <div className="relative left-16 transition-all duration-300 ease-in-out lg:left-0">
-          <BreadCrumb isProfile={isProfile} />
+          <BreadCrumbLinks isProfile={isProfile} />
           <h2
             className={cn(
               'pl-2 text-lg font-semibold capitalize leading-8 text-slate-800 md:text-xl',

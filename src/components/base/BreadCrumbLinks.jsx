@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 
-export default function BreadCrumb({ baseUrl = '/', isProfile }) {
+export default function BreadCrumbLinks({ baseUrl = '/', isProfile }) {
   const pathname = usePathname()
   const [path, setPath] = useState([baseUrl])
 

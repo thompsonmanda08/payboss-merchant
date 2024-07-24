@@ -71,8 +71,9 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background font-inter text-foreground;
   }
 
   select {
@@ -121,4 +122,24 @@
   height: 2px;
   background-color: #787c86;
   border-radius: 5px;
+}
+
+.heading-1 {
+  font-size: clamp(2rem, 1rem + 3vw, 4rem);
+  font-weight: bold;
+}
+
+.heading-2 {
+  font-size: clamp(1.75rem, 1rem + 3vw, 3rem);
+  font-weight: bold;
+}
+
+.heading-3 {
+  font-size: clamp(1.5rem, 1rem + 3vw, 2rem);
+  font-weight: 600;
+}
+
+.heading-4 {
+  font-size: clamp(1.125rem, 1.125rem + 1vw, 1.5rem);
+  font-weight: 500;
 }

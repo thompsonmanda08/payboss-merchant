@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -7,8 +8,7 @@ const drawerVariants = {
   exit: { x: '100%' },
 }
 
-
-const Drawer = ({ isOpen, onClose, title,children }) => {
+const Drawer = ({ isOpen, onClose, title, children }) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -51,9 +51,7 @@ const Drawer = ({ isOpen, onClose, title,children }) => {
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 flex-1 px-4 sm:px-6">
-                  {children}
-                </div>
+                <div className="mt-4 flex-1 px-4 sm:px-6">{children}</div>
               </div>
             </div>
           </motion.div>
