@@ -1,0 +1,42 @@
+import React from 'react'
+import SoftBoxIcon from './SoftBoxIcon'
+import { formatDate } from '@/lib/utils'
+
+function TimelineItem() {
+  const fullDate = new Date(now(getLocalTimeZone()).toString().split('T')[0])
+
+  const date = formatDate(fullDate).replaceAll('-', ' ')
+  const time = fullDate.toLocaleTimeString()
+  console.log(time)
+
+  return (
+    <div
+      className={cn('flex cursor-pointer p-2 py-4', {
+        'before:bg-primary/20': isCompleted,
+        'bg-gradient-to-r from-card to-primary-50/70': isPending,
+      })}
+    >
+      <SoftBoxIcon
+        className={
+          "relative before:absolute before:top-[115%] before:z-0 before:h-[36px] before:w-1 before:bg-slate-500/10 before:content-['']"
+        }
+        classNames={{
+          'border border-slate-300 from-transparent to-transparent text-slate-400':
+            !isCompleted,
+          'before:hidden': isLastItem,
+        }}
+      >
+        <CreditCardIcon />
+      </SoftBoxIcon>
+
+      <div className="ml-4 flex flex-col">
+        <p className="font-medium text-slate-600">Account Details Submitted</p>
+        <span className="text-xs font-medium uppercase leading-5 text-slate-400">
+          {formatDate(date).replaceAll('-', ' ')}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+export default TimelineItem

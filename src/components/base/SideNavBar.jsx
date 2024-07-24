@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 
 import useAuthStore from '@/context/authStore'
@@ -14,10 +14,8 @@ import {
   Cog6ToothIcon,
   BanknotesIcon,
   NewspaperIcon,
-  IdentificationIcon,
   ArrowsRightLeftIcon,
   PhoneArrowDownLeftIcon,
-  ChartBarSquareIcon,
   InboxArrowDownIcon,
   AdjustmentsVerticalIcon,
   ClipboardDocumentIcon,
@@ -26,8 +24,6 @@ import {
   ReceiptPercentIcon,
   Bars3BottomLeftIcon,
   ChevronDownIcon,
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
   DocumentChartBarIcon,
   LinkIcon,
   CalculatorIcon,
@@ -40,9 +36,10 @@ import {
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { Logo } from '.'
-import { PowerIcon } from '@heroicons/react/24/solid'
+import { PlusIcon, PowerIcon } from '@heroicons/react/24/solid'
 import { Button } from '../ui/Button'
 import { logUserOut } from '@/app/_actions/auth-actions'
+import WorkspaceSelection from './WorkspaceSelection'
 
 export const SIDE_BAR_OPTIONS = [
   {
@@ -233,17 +230,18 @@ function SideNavBar() {
       </Button>
       <nav
         className={cn(
-          `sticky z-20 hidden h-[95svh] w-full min-w-[220px] max-w-[320px] bg-white px-4 pb-10 transition-all duration-500 ease-in-out lg:block `,
+          `sticky z-20 hidden min-h-[100svh] w-full min-w-[220px] max-w-[320px] bg-white px-4 pb-10 transition-all duration-500 ease-in-out lg:block `,
         )}
       >
         <div className="group flex justify-start p-2">
           <div
             className={`flex translate-x-2 flex-col items-center transition-all duration-300 ease-in-out md:translate-x-4 lg:translate-x-0`}
           >
-            <Link href="/" aria-label="Home">
-              <Logo className="my-auto mt-2" />
-            </Link>
+            <Logo className="my-auto mt-2" />
           </div>
+        </div>
+        <div className="relative py-2">
+          <WorkspaceSelection />
         </div>
         <SideNavItems
           pathname={pathname}

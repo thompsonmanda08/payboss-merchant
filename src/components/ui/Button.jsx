@@ -1,5 +1,3 @@
-import Link from 'next/link'
-import clsx from 'clsx'
 import { Button as NextUIButton } from '@nextui-org/react'
 import { cn } from '@/lib/utils'
 
