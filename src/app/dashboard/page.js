@@ -9,7 +9,7 @@ import gradientLineChartData from './data/gradientLineChartData'
 import LoadingPage from '../loading'
 import Batches from '@/components/batch'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
-import { InfoBanner } from './components'
+import InfoBanner from '@/components/base/InfoBanner'
 
 function DashboardHome() {
   const { chart, items } = reportsBarChartData

@@ -1,8 +1,9 @@
 'use client'
 
+import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import { Button, Spinner } from '@nextui-org/react'
+import { Spinner } from '@nextui-org/react'
 
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
@@ -266,9 +267,9 @@ function Success({}) {
         </p>
 
         <div className="grid w-full gap-4">
-          <Link href={'/auth/login'}>
-            <Button className={'w-full flex-1'}>Login</Button>
-          </Link>
+          <Button as={Link} href={'/login'} className={'w-full flex-1'}>
+            Login
+          </Button>
         </div>
       </div>
     </>

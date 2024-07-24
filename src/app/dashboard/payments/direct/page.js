@@ -10,7 +10,7 @@ import React, { Suspense } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { PAYMENT_TYPES } from '@/components/containers/Payments'
 import { SAMPLE_BATCHES } from '../../data/sampleData'
-import { TransactionStatusTag } from '../../components'
+import TransactionStatusTag from '@/components/base/TransactionStatusTag'
 
 export default function Payments() {
   const { openPaymentsModal, setOpenPaymentsModal } = usePaymentsStore(
