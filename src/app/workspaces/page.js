@@ -5,14 +5,7 @@ import { Cog6ToothIcon, PlusIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import React from 'react'
 
-import {
-  Avatar,
-  AvatarGroup,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-} from '@nextui-org/react'
+import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react'
 
 function WorkSpaces() {
   return (
@@ -37,6 +30,7 @@ function WorkSpaces() {
                 </Button>
                 <Button
                   isIconOnly
+                  as={Link}
                   href={'/settings'}
                   className="aspect-square h-10 w-10 rounded-full"
                 >
@@ -48,7 +42,7 @@ function WorkSpaces() {
         </nav>
 
         <div className="flex h-full min-h-[80svh] w-full flex-col items-center justify-center ">
-          <Card className="flex w-full max-w-lg flex-col">
+          <Card className="flex w-full max-w-3xl flex-col">
             <CardHeader className="flex-col">
               <div className="flex w-full flex-col px-4">
                 <h3 className="heading-3 font-semibold">Welcome back👋</h3>
@@ -56,13 +50,19 @@ function WorkSpaces() {
               </div>
             </CardHeader>
 
-            <CardBody className="flex w-full flex-col rounded-lg">
+            <CardBody className="flex w-full rounded-lg">
               <div>
                 <WorkspaceItem />
                 <WorkspaceItem />
                 <WorkspaceItem />
               </div>
             </CardBody>
+            <CardFooter className="px-5">
+              <Button className="h-20 w-full flex-col border border-primary-100 bg-primary-50 font-medium text-primary hover:border-primary-100 hover:bg-primary-50">
+                <PlusIcon className=" h-6 w-6" />
+                Create Workspace
+              </Button>
+            </CardFooter>
           </Card>
         </div>
       </div>
