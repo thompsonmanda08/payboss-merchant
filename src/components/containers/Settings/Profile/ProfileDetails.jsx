@@ -21,7 +21,7 @@ export default function ProfileDetails() {
     handleToggleModal()
   }
   return (
-    <Card className={'rounded-2xl bg-white/65 backdrop-blur-md'}>
+    <Card className={'rounded-2xl backdrop-blur-md'}>
       <div className="flex w-full flex-col rounded-md p-5">
         <div>
           <div className="flex w-full items-end justify-between">

@@ -53,7 +53,6 @@ export async function createSession(
     path: '/',
   })
 
-  // redirect("/"); // OR GO TO DASHBOARD
 }
 
 export async function verifySession() {

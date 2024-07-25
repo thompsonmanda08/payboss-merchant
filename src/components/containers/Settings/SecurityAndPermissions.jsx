@@ -1,10 +1,8 @@
-// TODO: THIS COMPONENT WILL BE A REFFERENCE POINT FOR THE SETTINGS PAGE
-
 import { Modal } from '@/components/base'
 import useProfileStore from '@/context/profileStore'
 import useSettingsStore from '@/context/settingsStore'
 
-export default function SecuritySettings() {
+export default function SecurityAndPermissions() {
   const { user } = useProfileStore()
   const { openEditModal, setOpenEditModal } = useSettingsStore()
 

@@ -1,20 +1,21 @@
 import IMG from '@/images/placeholder-image.webp'
+import DefaultCover from '@/images/profile-cover.jpg'
 
-export const BASE_URL = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL
-export const POCKET_BASE_URL =
+const BASE_URL = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL
+const POCKET_BASE_URL =
   process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL
 
-export const AUTH_SESSION = 'pb-session'
+const AUTH_SESSION = 'pb-session'
 
-export const placeHolderImage = IMG
+const placeHolderImage = IMG
 
 // QUERY KEYS
-export const USER_DATA_KEY = 'user-query-data'
-export const CONFIGS_QUERY_KEY = 'configs-query-data'
-export const USER_ROLES_QUERY_KEY = 'user-roles-query-data'
+const USER_DATA_KEY = 'user-query-data'
+const CONFIGS_QUERY_KEY = 'configs-query-data'
+const USER_ROLES_QUERY_KEY = 'user-roles-query-data'
 
 // ANIMATION_VARIANTS
-export const staggerContainerVariants = {
+const staggerContainerVariants = {
   hidden: { opacity: 1 },
   show: {
     opacity: 1,
@@ -25,13 +26,38 @@ export const staggerContainerVariants = {
   exit: { opacity: 0 },
 }
 
-export const staggerContainerItemVariants = {
+const staggerContainerItemVariants = {
   hidden: { opacity: 0, y: -60 },
   show: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 60 },
 }
 
 // REGEX
-export const MTN_NO = /^(?:\+?26|26)?(096|076)\d{7}$/
-export const AIRTEL_NO = /^(?:\+?26|26)?(097|077)\d{7}$/
-export const ZAMTEL_NO = /^(?:\+?26|26)?(095|075)\d{7}$/
+const MTN_NO = /^(?:\+?26|26)?(096|076)\d{7}$/
+const AIRTEL_NO = /^(?:\+?26|26)?(097|077)\d{7}$/
+const ZAMTEL_NO = /^(?:\+?26|26)?(095|075)\d{7}$/
+
+// ***************** EXPORTS ******************** //
+
+export {
+  // BASE CONSTANTS
+  BASE_URL,
+  POCKET_BASE_URL,
+  AUTH_SESSION,
+
+  //
+  DefaultCover,
+  MTN_NO,
+  AIRTEL_NO,
+  ZAMTEL_NO,
+  placeHolderImage,
+
+  // ANIMATIONS
+  staggerContainerItemVariants,
+  staggerContainerVariants,
+
+  // REACT QUERY KEYS
+  USER_DATA_KEY,
+  CONFIGS_QUERY_KEY,
+  USER_ROLES_QUERY_KEY,
+}
