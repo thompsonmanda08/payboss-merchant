@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, CardHeader } from '.'
 import TimelineItem from './TimelineItem'
 import Image from 'next/image'
+import approvalIllustration from '@/images/illustrations/approval.svg'
 
 function ProgressStageTracker() {
   return (

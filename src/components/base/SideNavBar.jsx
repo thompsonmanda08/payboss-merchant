@@ -50,7 +50,6 @@ export const SIDE_BAR_OPTIONS = [
 
   {
     name: 'Make Payments',
-    href: '/dashboard/make-payments',
     Icon: BanknotesIcon,
     subMenuItems: [
       {
@@ -67,7 +66,6 @@ export const SIDE_BAR_OPTIONS = [
   },
   {
     name: 'Manage Income',
-    href: '/dashboard/collections',
     Icon: InboxArrowDownIcon,
     subMenuItems: [
       {
@@ -112,7 +110,6 @@ export const SIDE_BAR_OPTIONS = [
   },
   {
     name: 'Manage Expenses',
-    href: '/dashboard/payments',
     Icon: ReceiptPercentIcon,
     subMenuItems: [
       {
@@ -153,29 +150,14 @@ export const SIDE_BAR_OPTIONS = [
     Icon: WrenchScrewdriverIcon,
     subMenuItems: [
       {
-        name: 'Account Verification',
-        href: '/dashboard/approval-status',
-        Icon: CheckBadgeIcon,
-      },
-      {
-        name: 'Team',
-        href: '/dashboard/users',
-        Icon: UserGroupIcon,
-      },
-      {
         name: 'Products',
         href: '/dashboard/products',
         Icon: ShoppingCartIcon,
       },
       {
-        name: 'Services',
-        href: '/dashboard/services',
-        Icon: BriefcaseIcon,
-      },
-      {
-        name: 'Preferences',
-        href: '/dashboard/settings',
-        Icon: Cog6ToothIcon,
+        name: 'Online Store',
+        href: '/dashboard/products',
+        Icon: ShoppingCartIcon,
       },
     ],
   },

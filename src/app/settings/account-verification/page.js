@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react'
-import { ProgressStageTracker } from '../components'
 import LoadingPage from '@/app/loading'
+import ProgressStageTracker from '@/components/base/ProgressStageTracker'
+import React, { Suspense } from 'react'
 
 function ApprovalPage() {
   return (

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import {
   BriefcaseIcon,
+  CheckBadgeIcon,
   Cog6ToothIcon,
   PowerIcon,
   UserCircleIcon,
@@ -32,6 +33,11 @@ const ACCOUNT_SETTINGS = [
     name: 'My Settings',
     Icon: UserCircleIcon,
     href: '/settings/profile',
+  },
+  {
+    name: 'Account Verification',
+    Icon: CheckBadgeIcon,
+    href: '/settings/account-verification',
   },
 ]
 

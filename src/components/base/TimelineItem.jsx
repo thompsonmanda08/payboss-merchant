@@ -1,8 +1,10 @@
 import React from 'react'
 import SoftBoxIcon from './SoftBoxIcon'
-import { formatDate } from '@/lib/utils'
+import { cn, formatDate } from '@/lib/utils'
+import { now, getLocalTimeZone } from '@internationalized/date'
+import { CheckBadgeIcon, CreditCardIcon } from '@heroicons/react/24/outline'
 
-function TimelineItem() {
+function TimelineItem({ isLastItem, isCompleted, isPending, Icon }) {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split('T')[0])
 
   const date = formatDate(fullDate).replaceAll('-', ' ')
@@ -26,7 +28,7 @@ function TimelineItem() {
           'before:hidden': isLastItem,
         }}
       >
-        <CreditCardIcon />
+        {Icon || <CheckBadgeIcon />}
       </SoftBoxIcon>
 
       <div className="ml-4 flex flex-col">
