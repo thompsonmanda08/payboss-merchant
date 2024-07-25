@@ -5,6 +5,7 @@ import { decrypt } from './lib/session'
 
 const PROTECTED_ROUTES = [
   // '/dashboard',
+  // '/settings',
   // '/dashboard/profile',
   // '/dashboard/payments/',
   // '/dashboard/payments/direct',
@@ -33,7 +34,10 @@ export async function middleware(request) {
   }
 
   // IF THERE IS AN ACTIVE USER SESSION - REDIRECT TO HOME
-  if (session?.user && pathname.startsWith('/auth')) {
+  if (
+    session?.user &&
+    (pathname.startsWith('/login') || pathname.startsWith('/register'))
+  ) {
     url.pathname = '/dashboard'
 
     return NextResponse.redirect(url)
