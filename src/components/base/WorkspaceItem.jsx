@@ -20,7 +20,7 @@ function WorkspaceItem() {
         }
       >
         <div className="flex flex-col gap-2">
-          <h3 className="heading-4 mb-1 capitalize text-primary-600">
+          <h3 className="heading-5 mb-1 capitalize text-primary-600">
             Workspace Name
           </h3>
           <div className="flex justify-between gap-2">
