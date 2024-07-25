@@ -143,3 +143,12 @@
   font-size: clamp(1.125rem, 1.125rem + 1vw, 1.5rem);
   font-weight: 500;
 }
+
+.heading-5 {
+  font-size: clamp(1rem, 1rem + 1vw, 1.125rem);
+  font-weight: 500;
+}
+
+.paragraph {
+  @apply text-sm leading-6 text-slate-700;
+}
