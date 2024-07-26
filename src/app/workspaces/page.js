@@ -1,73 +1,64 @@
-import { Logo, WorkspaceItem } from '@/components/base'
+import { Card, Logo } from '@/components/base'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
-import { Cog6ToothIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import React from 'react'
 
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react'
+import { Workspaces } from '@/components/containers'
+import Image from 'next/image'
+import { DefaultCover } from '@/lib/constants'
 
-function WorkSpaces() {
+function WorkSpacesPage() {
   return (
     <main className="flex h-full min-h-screen items-start justify-start overflow-hidden bg-background text-foreground">
-      <div className="relative flex h-full max-h-screen w-full flex-col overflow-y-auto p-8 pt-20 lg:static lg:pt-8">
-        <nav
-          className={cn(
-            `rounded-blur fixed left-0 right-0 top-5 z-30 flex w-full -translate-y-5 items-center bg-white py-2 pr-5 shadow-sm transition-all lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:shadow-none`,
-          )}
-        >
-          <div className="flex w-full items-center rounded-3xl">
-            <div className="relative left-16 transition-all duration-300 ease-in-out lg:left-0">
-              <Logo className="mr-auto" />
-            </div>
-            <div className="relative z-50 ml-auto flex  items-center justify-center rounded-full">
-              <div className={cn('flex items-center gap-4 text-slate-500', {})}>
-                <Button
-                  startContent={<PlusIcon className=" h-6 w-6" />}
-                  className=""
-                >
-                  Create Workspace
-                </Button>
-                <Button
-                  isIconOnly
-                  as={Link}
-                  href={'/settings'}
-                  className="aspect-square h-10 w-10 rounded-full"
-                >
-                  <Cog6ToothIcon className=" h-6 w-6" />
-                </Button>
-              </div>
-            </div>
+      <div className="relative flex h-full max-h-screen w-full flex-col overflow-y-auto ">
+        <section role="workspace-header">
+          <div className="relative h-[380px] w-full overflow-clip rounded-b-3xl bg-gray-900">
+            <Logo isWhite className="absolute left-5 top-5 z-30 " />
+            <Button
+              as={Link}
+              href={'/settings'}
+              variant="light"
+              className="absolute right-5 top-5 z-30 aspect-square min-w-[120px] rounded-full text-white"
+              startContent={<Cog6ToothIcon className=" h-6 w-6" />}
+            >
+              Settings
+            </Button>
+            <Image
+              className="z-0 h-full w-full object-cover"
+              src={DefaultCover}
+              width={1024}
+              height={300}
+            />
+
+            <div className="absolute inset-0 z-10 bg-black/30"></div>
           </div>
-        </nav>
+        </section>
 
-        <div className="flex h-full min-h-[80svh] w-full flex-col items-center justify-center ">
-          <Card className="flex w-full max-w-3xl flex-col">
-            <CardHeader className="flex-col">
-              <div className="flex w-full flex-col px-4">
-                <h3 className="heading-3 font-semibold">Welcome back👋</h3>
-                <p className="font-medium text-slate-500">Choose a workspace</p>
-              </div>
-            </CardHeader>
-
-            <CardBody className="flex w-full rounded-lg">
+        <section
+          role="workspace-header"
+          className="z-20 mx-auto -mt-40 w-full max-w-[1440px] px-5 md:px-10"
+        >
+          <Card className="gap-6">
+            <div className="flex justify-between bg-red-500/0">
               <div>
-                <WorkspaceItem />
-                <WorkspaceItem />
-                <WorkspaceItem />
+                <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
+                  Choose a Workspace
+                </h2>
+                <p className=" text-sm text-slate-600">
+                  Access your account through a workspace for the convenience of
+                  having all your tools and resources organized in one place.
+                </p>
               </div>
-            </CardBody>
-            <CardFooter className="px-5">
-              <Button className="h-20 w-full flex-col border border-primary-100 bg-primary-50 font-medium text-primary hover:border-primary-100 hover:bg-primary-50">
-                <PlusIcon className=" h-6 w-6" />
-                Create Workspace
-              </Button>
-            </CardFooter>
+            </div>
+
+            <Workspaces />
           </Card>
-        </div>
+        </section>
       </div>
     </main>
   )
 }
 
-export default WorkSpaces
+export default WorkSpacesPage

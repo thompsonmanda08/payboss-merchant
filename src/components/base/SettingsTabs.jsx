@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { Button } from '../ui/Button'
 
 export default function Tabs({ tabs, navigateTo, currentTab }) {
   return (
@@ -19,27 +20,30 @@ export default function Tabs({ tabs, navigateTo, currentTab }) {
           ))}
         </select>
       </div> */}
-      <div className="hidden sm:block ">
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-            {tabs.map((tab, index) => (
-              <button
-                key={tab.name}
-                // href={tab.href}
-                onClick={() => navigateTo(index)}
-                className={cn(
-                  'whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                  {
-                    'border-primary text-primary': tab.index == currentTab,
-                  },
-                )}
-                aria-current={tab.index == currentTab ? 'active' : undefined}
-              >
-                {tab.name}
-              </button>
-            ))}
-          </nav>
-        </div>
+      <div className="my-2 hidden sm:block">
+        <nav
+          className="-mb-px flex gap-x-4 rounded-lg bg-slate-100 p-1 "
+          aria-label="Tabs"
+        >
+          {tabs.map((tab, index) => (
+            <Button
+              key={tab.name}
+              // href={tab.href}
+              variant={'light'}
+              onClick={() => navigateTo(index)}
+              className={cn(
+                'whitespace-nowrap border-b-1 border-transparent px-4 text-sm  text-gray-500 hover:border-gray-300 hover:bg-white hover:text-primary data-[hover=true]:bg-white',
+                {
+                  'border-primary bg-white text-primary shadow-sm':
+                    tab.index == currentTab,
+                },
+              )}
+              aria-current={tab.index == currentTab ? 'active' : undefined}
+            >
+              {tab.name}
+            </Button>
+          ))}
+        </nav>
       </div>
     </div>
   )

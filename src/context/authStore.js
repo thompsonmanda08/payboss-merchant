@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   isLoading: false,
   businessInfoSent: false,
   documentsInfoSent: false,
+  auth: {},
 
   error: {}, // STATUS, MESSAGE, FIELD-ERROR
   merchantID: '',
@@ -16,12 +17,11 @@ const INITIAL_STATE = {
 }
 
 const useAuthStore = create((set, get) => ({
-
-
   ...INITIAL_STATE,
 
   //SETTERS
   setError: (error) => set({ error }),
+  setAuth: (auth) => set({ auth }), // TODO => TO HANDLE REFRESH TOKENS
   setIsLoading: (isLoading) => set({ isLoading }),
   setBusinessInfo: (businessInfo) => set({ businessInfo }),
   setMerchantID: (merchantID) => set({ merchantID }),

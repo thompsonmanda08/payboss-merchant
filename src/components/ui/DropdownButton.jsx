@@ -9,11 +9,8 @@ import {
   Card,
 } from '@nextui-org/react'
 import { cn } from '@/lib/utils'
-import {
-  ChevronRightIcon,
-  EllipsisHorizontalIcon,
-} from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
+import { ChevronDownIcon } from '@heroicons/react/24/solid'
 
 export default function DropdownButton({
   className,
@@ -79,7 +76,7 @@ export default function DropdownButton({
             key={item?.key}
             color={item?.key === 'new' ? 'primary' : 'default'}
             className={cn(
-              'bg-red-5000 relativex group w-[260px] text-medium hover:bg-primary-100 focus:bg-primary-100 data-[hover=true]:border-primary-200 data-[hover=true]:bg-primary-100 data-[hover=true]:text-primary',
+              'group w-[260px] text-medium hover:bg-primary-100 focus:bg-primary-100 data-[hover=true]:border-primary-200 data-[hover=true]:bg-primary-100 data-[hover=true]:text-primary',
               {
                 'text-danger': item?.key === 'delete',
               },
@@ -135,6 +132,60 @@ export default function DropdownButton({
             )}
           </DropdownItem>
         )}
+      </DropdownMenu>
+    </Dropdown>
+  )
+}
+
+export function SingleSelectionDropdown({
+  dropdownItems,
+  selectedKeys,
+  setSelectedKeys,
+  selectedValue,
+  className,
+  classNames,
+}) {
+  const { trigger, innerWrapper, dropdownItem } = classNames || ''
+  return (
+    <Dropdown className={cn('', className)}>
+      <DropdownTrigger>
+        <Button
+          variant="bordered"
+          className={cn(
+            'border-px h-auto min-w-[110px] items-center justify-between gap-2 rounded-lg border border-input  bg-transparent p-2 px-3 font-medium capitalize text-primary shadow-sm',
+            trigger,
+          )}
+          endContent={
+            <ChevronDownIcon className="h-4 w-4 text-slate-500 focus-within:rotate-180 focus:rotate-180 " />
+          }
+        >
+          {`${selectedValue}`}
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu
+        aria-label="Single selection example"
+        variant="flat"
+        disallowEmptySelection
+        selectionMode="single"
+        selectedKeys={selectedKeys}
+        onSelectionChange={setSelectedKeys}
+        items={dropdownItems}
+        className={innerWrapper}
+      >
+        {dropdownItems.map((item, index) => {
+          return (
+            <DropdownItem
+              key={item.key}
+              description={item?.description}
+              className={cn(
+                'data-[hover=true]:border-primary-200 group w-[260px] focus-within:bg-primary-100 hover:bg-primary-100 focus:bg-primary-100 data-[focus=true]:bg-primary-100 data-[hover=true]:bg-primary-100 data-[hover=true]:text-primary',
+                dropdownItem,
+              )}
+            >
+              {item?.label}
+            </DropdownItem>
+          )
+        })}
       </DropdownMenu>
     </Dropdown>
   )

@@ -4,10 +4,24 @@ import toast from 'react-hot-toast'
 import axios from 'axios'
 import { parseDate, getLocalTimeZone } from '@internationalized/date'
 import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from './constants'
+// import { getSessionToken } from '@/app/_actions/auth-actions'
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
 })
+
+// export const authenticatedClient = async (request) => {
+//   const accessToken = await getSessionToken()
+//   return await axios.create({
+//     baseURL: BASE_URL,
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: `Bearer ${accessToken}`,
+//     },
+//     withCredentials: true,
+//     ...request,
+//   })
+// }
 
 export const authenticatedClient = axios.create({
   baseURL: BASE_URL,

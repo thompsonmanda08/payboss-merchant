@@ -1,23 +1,32 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 const INITIAL_STATE = {
-  openEditModal: false,
   openCreateUserModal: false,
-};
+  openEditUserModal: false,
+}
 
 const useSettingsStore = create((set, get) => ({
   ...INITIAL_STATE,
 
   //SETTERS
   setOpenEditModal: (open) => set({ openEditModal: open }),
-  setOpenCreateUserModal: (open) => set({ openCreateUserModal: open }),
+
+  // METHODS
+  toggleCreateUserModal: () =>
+    set((state) => {
+      openCreateUserModal: !state.openCreateUserModal
+    }),
+  toggleEditUserModal: () =>
+    set((state) => {
+      openCreateUserModal: !state.openEditUserModal
+    }),
 
   // CLear & Reset
   resetSettingsData: () =>
     set({
       ...INITIAL_STATE,
     }),
-}));
+}))
 
-export default useSettingsStore;
+export default useSettingsStore

@@ -13,6 +13,7 @@ const placeHolderImage = IMG
 const USER_DATA_KEY = 'user-query-data'
 const CONFIGS_QUERY_KEY = 'configs-query-data'
 const USER_ROLES_QUERY_KEY = 'user-roles-query-data'
+const SETUP_QUERY_KEY = 'setup-query-data'
 
 // ANIMATION_VARIANTS
 const staggerContainerVariants = {
@@ -60,4 +61,5 @@ export {
   USER_DATA_KEY,
   CONFIGS_QUERY_KEY,
   USER_ROLES_QUERY_KEY,
+  SETUP_QUERY_KEY,
 }

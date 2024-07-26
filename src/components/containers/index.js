@@ -14,8 +14,11 @@ export { default as GeneralSettings } from './Settings/GeneralSettings'
 export { default as SecurityAndPermissions } from './Settings/SecurityAndPermissions'
 export { default as UsersSettings } from './UsersSettings'
 
-/* *********************** WORKSPACE-USERS *************************** */
+/* *********************** USERS *************************** */
 export { default as ManagePeople } from './Settings/users/ManagePeople'
+
+/* *********************** WORKSPACES *************************** */
+export { default as Workspaces } from './Settings/workspace/Workspaces'
 
 /* *********************** PROFILE SETTINGS PAGE *************************** */
 export { default as AccountPreferences } from './Settings/profile/AccountPreferences'

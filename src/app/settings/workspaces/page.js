@@ -1,7 +1,22 @@
+import { Workspaces } from '@/components/containers'
 import React from 'react'
 
 function WorkspaceSettings() {
-  return <div>WorkspaceSettings</div>
+  return (
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
+      <div>
+        <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
+          My Workspaces
+        </h2>
+        <p className=" text-sm text-slate-600">
+          Workspaces provide a structured way to group and manage services,
+          users, and transactions effectively.
+        </p>
+      </div>
+
+      <Workspaces />
+    </div>
+  )
 }
 
 export default WorkspaceSettings
