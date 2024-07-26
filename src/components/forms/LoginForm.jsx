@@ -9,6 +9,7 @@ import { authenticateUser } from '@/app/_actions/auth-actions'
 import { useRouter } from 'next/navigation'
 import { Card, StatusMessage } from '../base'
 import { useNetwork } from '@/hooks/useNetwork'
+import { setupUserPreferences } from '@/app/_actions/config-actions'
 
 function LoginForm() {
   const { push } = useRouter()
@@ -29,7 +30,11 @@ function LoginForm() {
       const response = await authenticateUser(loginDetails)
 
       console.log(response)
-      if (response.success) push('/dashboard')
+      if (response.success) {
+        
+        await setupUserPreferences()
+        push('/workspaces')
+      }
 
       if (!response.success) {
         updateErrorStatus({

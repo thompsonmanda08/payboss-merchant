@@ -13,7 +13,6 @@ import Step0 from './signup-fragments/Step0'
 import Step1 from './signup-fragments/Step1'
 import Step2 from './signup-fragments/Step2'
 import Step3 from './signup-fragments/Step3'
-import Step4 from './signup-fragments/Step4'
 import {
   createMerchantAdminUser,
   createNewMerchant,
@@ -27,7 +26,6 @@ export const STEPS = [
   'business-registration',
   'business-information',
   'business-bank-details',
-  'business-documentation',
   'personal-information',
 ]
 
@@ -80,11 +78,11 @@ export default function SignUpForm() {
     firstTab,
     lastTab,
   } = useCustomTabsHook([
-    <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />, // BUSINESS SPACE TYPE 
+    <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />, // BUSINESS SPACE TYPE
     <Step1 key={STEPS[1]} updateDetails={updateAccountDetails} />, // BUSINESS INFO
     <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />, // BANK DETAILS
-    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />, // BUSINESS DOCS
-    <Step4 key={STEPS[4]} updateDetails={updateAccountDetails} />, // BUSINESS ADMIN USER
+
+    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />, // BUSINESS ADMIN USER
   ])
 
   const isLastStep = currentTabIndex === lastTab
@@ -133,30 +131,7 @@ export default function SignUpForm() {
       }
     }
 
-    // SAVE FILES TO PAYBOSS BACKEND
-    if (currentTabIndex === 3 && STEPS[currentTabIndex] === STEPS[3]) {
-      console.log(merchantID)
-      // POST AND PATCH
-      let payload
-      if (!documentsInfoSent) {
-        payload = await sendBusinessDocumentRefs(businessDocs, merchantID)
-        setDocumentsInfoSent(true)
-      } else if (documentsInfoSent && merchantID) {
-        payload = await updateBusinessDocumentRefs(businessDocs, merchantID)
-      }
-
-      if (payload.success && merchantID) {
-        notify('success', 'Documents Submitted For Approval')
-        navigateForward()
-        setIsLoading(false)
-        return
-      } else {
-        notify('error', 'Error Submitting Documents')
-        setIsLoading(false)
-        updateErrorStatus({ status: true, message: payload.message })
-        return
-      }
-    }
+    
 
     // CREATE ADMIN USER - LAST STEP
     if (isLastStep && STEPS[currentTabIndex] === STEPS[lastTab]) {
