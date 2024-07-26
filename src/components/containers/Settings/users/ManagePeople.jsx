@@ -1,11 +1,12 @@
 'use client'
-import { Tabs } from '@/components/base'
+import { AddToWorkspace, Tabs } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import React from 'react'
 import AllUsers from './AllUsers'
 import WorkspaceMembers from './WorkspaceMembers'
 import InternalGuestUsers from './InternalGuests'
 import ExternalGuestUsers from './ExternalGuests'
+import Search from '@/components/ui/Search'
 
 const TABS = [
   { name: 'All Users', href: '#', current: 0 }, // ONLY THE OWNER CAN SEE ALL USER
@@ -29,6 +30,11 @@ function ManagePeople() {
       <p className=" text-sm text-slate-600">
         Manage user accounts and their workspaces
       </p>
+
+      <div className="relative flex min-h-40 w-full flex-col justify-between gap-4 bg-primary-50 py-8 md:flex-row">
+        <Search />
+        <AddToWorkspace />
+      </div>
 
       {/* 
       //TODO => A SEARCH FIELD FOR USERS

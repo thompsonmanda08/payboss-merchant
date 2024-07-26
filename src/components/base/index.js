@@ -1,4 +1,5 @@
 export { default as AddOrEditPaymentMethod } from './AddOrEditPaymentMethod'
+export { default as AddToWorkspace } from './AddToWorkspace'
 export { default as BackgroundSVG } from './BackgroundSVG'
 export { default as Balance } from './Balance'
 export { default as BreadCrumbLinks } from './BreadCrumbLinks'

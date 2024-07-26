@@ -9,16 +9,22 @@ import {
   Card,
 } from '@nextui-org/react'
 import { cn } from '@/lib/utils'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import {
+  ChevronRightIcon,
+  EllipsisHorizontalIcon,
+} from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
 
 export default function DropdownButton({
+  className,
+  classNames,
   dropDownItems,
   isIconOnly,
-  classNames,
   backdropBlur,
+  selectedValue,
   variant,
   children,
+  ...props
 }) {
   const items = [
     {
@@ -45,7 +51,7 @@ export default function DropdownButton({
     'text-slate-500 pointer-events-none hover:text-primary data-[hover=true]:text-primary data-[focus=true]:text-primary flex-shrink-0 w-5 aspect-square'
 
   return (
-    <Dropdown className={cn('z-10', wrapper)}>
+    <Dropdown className={cn('z-10', wrapper, className)}>
       <DropdownTrigger>
         <Button
           variant="bordered"
@@ -56,7 +62,9 @@ export default function DropdownButton({
             trigger,
           )}
         >
-          {children || 'Open'}
+          {children || selectedValue || (
+            <EllipsisHorizontalIcon className="h-6 w-6 text-slate-500" />
+          )}
         </Button>
       </DropdownTrigger>
       <DropdownMenu
@@ -64,6 +72,7 @@ export default function DropdownButton({
         variant={variant || 'faded'}
         items={dropDownItems || items}
         className={innerWrapper}
+        {...props}
       >
         {(item) => (
           <DropdownItem
