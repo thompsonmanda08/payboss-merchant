@@ -1,6 +1,11 @@
 'use server'
 import useAuthStore from '@/context/authStore'
-import { createSession, deleteSession, verifySession } from '@/lib/session'
+import {
+  createSession,
+  deleteSession,
+  getServerSession,
+  verifySession,
+} from '@/lib/session'
 import { apiClient } from '@/lib/utils'
 
 export async function createNewMerchant(businessInfo) {
@@ -255,6 +260,15 @@ export async function logUserOut() {
     useAuthStore.getState.resetAuthData()
     deleteSession()
     return true
+  }
+  return false
+}
+
+export async function getSessionToken() {
+  const isLoggedIn = await verifySession()
+  if (isLoggedIn) {
+    const session = await getServerSession()
+    return session?.accessToken
   }
   return false
 }
