@@ -264,11 +264,13 @@ export async function logUserOut() {
   return false
 }
 
-export async function getSessionToken() {
+export async function getServerSideSession() {
   const isLoggedIn = await verifySession()
   if (isLoggedIn) {
     const session = await getServerSession()
-    return session?.accessToken
+    return session
   }
   return false
 }
+
+

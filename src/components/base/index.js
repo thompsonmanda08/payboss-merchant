@@ -1,5 +1,4 @@
 export { default as AddOrEditPaymentMethod } from './AddOrEditPaymentMethod'
-export { default as AddToWorkspace } from './AddToWorkspace'
 export { default as BackgroundSVG } from './BackgroundSVG'
 export { default as Balance } from './Balance'
 export { default as BreadCrumbLinks } from './BreadCrumbLinks'
@@ -25,6 +24,7 @@ export { default as Spinner } from '../ui/Spinner'
 export { default as StatusCard } from './StatusCard'
 export { default as SelectField } from '../ui/SelectField'
 export { default as SimpleStats } from './SimpleStats'
+
 export { default as Tooltip } from './Tooltip'
 export { default as PaymentMethods } from './PaymentMethods'
 export { default as ProgressStep } from './ProgressStep'
