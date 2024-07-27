@@ -9,9 +9,8 @@ import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import { Button } from '@/components/ui/Button'
 import { USERS } from '@/app/dashboard/data/sampleData'
 import UsersTable from './UsersTable'
-import useSettingsStore from '@/context/settingsStore'
-import CreateNewUserModal from './createNewUserModal'
 import { useUserRoles } from '@/hooks/useQueryHooks'
+import CreateNewUserModal from './CreateNewUserModal'
 
 const ROLES = [
   {
