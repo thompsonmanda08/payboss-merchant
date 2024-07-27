@@ -10,7 +10,11 @@ import {
 } from '@nextui-org/react'
 import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
-import { ChevronDownIcon } from '@heroicons/react/24/solid'
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  EllipsisHorizontalIcon,
+} from '@heroicons/react/24/outline'
 
 export default function DropdownButton({
   className,
@@ -178,7 +182,7 @@ export function SingleSelectionDropdown({
               key={item.key}
               description={item?.description}
               className={cn(
-                'data-[hover=true]:border-primary-200 group w-[260px] focus-within:bg-primary-100 hover:bg-primary-100 focus:bg-primary-100 data-[focus=true]:bg-primary-100 data-[hover=true]:bg-primary-100 data-[hover=true]:text-primary',
+                'group w-[260px] focus-within:bg-primary-100 hover:bg-primary-100 focus:bg-primary-100 data-[hover=true]:border-primary-200 data-[focus=true]:bg-primary-100 data-[hover=true]:bg-primary-100 data-[hover=true]:text-primary',
                 dropdownItem,
               )}
             >

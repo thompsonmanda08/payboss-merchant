@@ -1,30 +1,18 @@
 'use client'
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownSection,
-  DropdownItem,
-  Avatar,
-} from '@nextui-org/react'
 
 import { cn } from '@/lib/utils'
-import { Button } from '../ui/Button'
-import { useMemo, useState } from 'react'
 import {
   ArrowPathIcon,
   Cog8ToothIcon,
   PlusIcon,
   UserGroupIcon,
   BriefcaseIcon,
-  ChevronDownIcon,
   ChevronRightIcon,
 } from '@heroicons/react/24/outline'
 import SoftBoxIcon from './SoftBoxIcon'
 import DropdownButton from '../ui/DropdownButton'
 
 export default function WorkspaceSelection({ isSelected }) {
-
   const workspaceOptions = [
     {
       key: 'home',
@@ -44,19 +32,15 @@ export default function WorkspaceSelection({ isSelected }) {
       subMenuItems: [
         {
           key: 'new',
-          label: 'New file',
+          label: 'Commercial',
         },
         {
           key: 'copy',
-          label: 'Copy link',
+          label: 'Field Deployments',
         },
         {
           key: 'edit',
-          label: 'Edit file',
-        },
-        {
-          key: 'delete',
-          label: 'Delete file',
+          label: 'Sales Team',
         },
       ],
     },
@@ -69,14 +53,15 @@ export default function WorkspaceSelection({ isSelected }) {
       Icon: Cog8ToothIcon,
     },
     {
-      key: 'people',
-      name: 'Workspace Members',
-      href: '/settings/members',
+      key: 'users',
+      name: 'Manage Members',
+      href: '/settings/users',
       shortcut: '⌘M',
       description: 'Manage workspace members',
       Icon: UserGroupIcon,
       showDivider: true,
     },
+    // TODO: => ONLY THE OWNER CAN SEE THIS OPTION
     {
       key: 'new',
       name: 'New Workspace',
@@ -94,7 +79,12 @@ export default function WorkspaceSelection({ isSelected }) {
           <BriefcaseIcon />
         </SoftBoxIcon>
         <div className="flex w-full items-center justify-between text-primary">
-          <p className="text-base font-semibold uppercase">Workspace#1</p>
+          <div className="flex flex-col items-start justify-start gap-0">
+            <p className="text-base font-semibold uppercase">Workspace#1</p>
+            <span className="-mt-1 text-xs font-medium italic text-slate-500">
+              Team: 6 Members
+            </span>
+          </div>
           <ChevronRightIcon className={cn('h-4 w-4 ease-in-out')} />
         </div>
       </DropdownButton>
