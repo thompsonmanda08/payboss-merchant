@@ -1,9 +1,8 @@
 import LoadingPage from '@/app/loading'
-import { BreadCrumbLinks } from '@/components/base'
-import { AccountPreferences, ProfileDetails } from '@/components/containers'
+import AccountPreferences from '@/components/containers/Settings/profile/AccountPreferences'
+import ProfileDetails from '@/components/containers/Settings/profile/ProfileDetails'
 import ProfileSecuritySettings from '@/components/containers/Settings/profile/SecuritySettings'
 import { DefaultCover } from '@/lib/constants'
-import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { Suspense } from 'react'
 

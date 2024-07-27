@@ -19,11 +19,6 @@ export { default as ManagePeople } from './Settings/users/ManagePeople'
 /* *********************** WORKSPACES *************************** */
 export { default as Workspaces } from './Settings/workspace/Workspaces'
 
-/* *********************** PROFILE SETTINGS PAGE *************************** */
-export { default as AccountPreferences } from './Settings/profile/AccountPreferences'
-export { default as ProfileDetails } from './Settings/profile/ProfileDetails'
-export { default as SecuritySettings } from './Settings/profile/SecuritySettings'
-
 // TABLES
 export { default as TransactionsTable } from './Tables/TransactionsTable'
 
