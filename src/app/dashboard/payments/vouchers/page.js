@@ -43,6 +43,7 @@ export default function VoucherPaymentsPage() {
             </Button>
           </div>
           <Tabs
+            className={'my-2 max-w-md'}
             tabs={PAYMENT_SERVICE_TYPES}
             currentTab={currentTabIndex}
             navigateTo={navigateTo}
