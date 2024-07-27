@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+'use client'
+import React from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Button } from '@/components/ui/Button'
-import { Modal, Spinner, StatusCard } from '@/components/base'
+import { StatusCard } from '@/components/base'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import Spinner from '@/components/ui/Spinner'
 
 const ValidationDetails = ({
   changeScreen,

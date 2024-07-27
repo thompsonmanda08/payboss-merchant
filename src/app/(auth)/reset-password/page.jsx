@@ -2,8 +2,8 @@
 
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
+import Spinner from '@/components/ui/Spinner'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import { Spinner } from '@nextui-org/react'
 
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
@@ -104,7 +104,7 @@ export default function PasswordReset() {
           >
             {isLoading ? (
               <div className="my-10 flex items-center justify-center">
-                <Spinner size={'lg'} />
+                <Spinner size={48} />
               </div>
             ) : (
               activeTab

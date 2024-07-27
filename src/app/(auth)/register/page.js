@@ -1,11 +1,12 @@
 'use client'
 import Link from 'next/link'
-import { Card, EmptyState, Logo, Spinner } from '@/components/base'
+import { Card, EmptyState, Logo } from '@/components/base'
 import React from 'react'
 import SignUpForm from '@/components/forms/SignupForm'
 import { useGeneralConfigOptions, useUserRoles } from '@/hooks/useQueryHooks'
 import useConfigStore from '@/context/configStore'
 import { useRouter } from 'next/navigation'
+import Spinner from '@/components/ui/Spinner'
 
 export default function Register() {
   const {

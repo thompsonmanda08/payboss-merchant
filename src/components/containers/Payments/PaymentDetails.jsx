@@ -1,12 +1,10 @@
-import React, { act } from 'react'
-
-import { useQueryClient } from '@tanstack/react-query'
+'use client'
+import React from 'react'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Input } from '@/components/ui/input'
 import { PAYMENT_TYPES } from './BulkPaymentAction'
 import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
-import { SelectField } from '@/components/base'
 import { BanknotesIcon } from '@heroicons/react/24/outline'
 import { useSearchParams } from 'next/navigation'
 

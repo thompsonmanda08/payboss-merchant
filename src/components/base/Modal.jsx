@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '../ui/Button'
-import { CardHeader, Spinner } from '.'
+import { CardHeader } from '.'
 import { cn } from '@/lib/utils'
 
 const modalVariants = {
@@ -104,15 +104,12 @@ function Modal({
                   {cancelText || 'Cancel'}
                 </Button>
                 <Button
+                  isLoading={loading}
                   onClick={onConfirm}
                   disabled={loading || disableAction}
                   className=" px-6"
                 >
-                  {loading ? (
-                    <Spinner color="#fff" size={18} />
-                  ) : (
-                    confirmText || 'Done'
-                  )}
+                  {confirmText || 'Done'}
                 </Button>
               </div>
             )}

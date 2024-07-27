@@ -7,10 +7,11 @@ import { staggerContainerItemVariants } from '@/lib/constants'
 import useConfigStore from '@/context/configStore'
 import { formatDate, isValidZambianMobileNumber } from '@/lib/utils'
 import { STEPS } from '../SignupForm'
-import { CardHeader, SelectField } from '@/components/base'
+import { CardHeader } from '@/components/base'
 import DateSelectField from '@/components/ui/DateSelectField'
 import useAuthStore from '@/context/authStore'
 import { getLocalTimeZone, today } from '@internationalized/date'
+import SelectField from '@/components/ui/SelectField'
 
 export default function Step1({ updateDetails }) {
   const configOptions = useConfigStore((state) => state.configOptions)

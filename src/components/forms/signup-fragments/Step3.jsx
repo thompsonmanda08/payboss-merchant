@@ -3,11 +3,12 @@
 import React, { useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { motion } from 'framer-motion'
-import { CardHeader, SelectField } from '@/components/base'
+import { CardHeader } from '@/components/base'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import useConfigStore from '@/context/configStore'
 import useAuthStore from '@/context/authStore'
 import { STEPS } from '../SignupForm'
+import SelectField from '@/components/ui/SelectField'
 
 // CREATE NEW ADMIN USER
 export default function Step4({ updateDetails }) {

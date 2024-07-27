@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/Button'
-import { SelectField } from '.'
+import SelectField from '../ui/SelectField'
 
 export default function Tabs({
   tabs,
