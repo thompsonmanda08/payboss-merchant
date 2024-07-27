@@ -4,7 +4,7 @@ import usePaymentsStore from '@/context/paymentsStore'
 import { usePathname, useRouter } from 'next/navigation'
 
 import { cn, notify } from '@/lib/utils'
-import { PAYMENT_TYPES } from '.'
+import { PAYMENT_TYPES } from './BulkPaymentAction'
 
 const SelectPaymentType = ({ service }) => {
   const pathname = usePathname()

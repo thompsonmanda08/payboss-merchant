@@ -21,6 +21,14 @@ export { default as ProfileSecuritySettings } from './settings/profile/ProfileSe
 /* *********************** USERS *************************** */
 export { default as ManagePeople } from './settings/users/ManagePeople'
 
+/* *********************** PAYMENTS *************************** */
+export { default as PaymentDetails } from './payments/PaymentDetails'
+export { default as RecordDetailsViewer } from './payments/RecordDetailsViewer'
+export { default as SelectPaymentType } from './payments/SelectPaymentType'
+export { default as UploadCSVFile } from './payments/UploadCSVFile'
+export { default as ValidationDetails } from './payments/ValidationDetails'
+export { default as BulkPaymentAction } from './payments/BulkPaymentAction'
+
 /* *********************** WORKSPACES *************************** */
 export { default as Workspaces } from './settings/workspace/Workspaces'
 
@@ -28,4 +36,4 @@ export { default as Workspaces } from './settings/workspace/Workspaces'
 export { default as TransactionsTable } from './Tables/TransactionsTable'
 
 //PAYMENTS
-export { default as PaymentsAction } from './payments/index'
+export { default as PaymentsAction } from './payments/BulkPaymentAction'
