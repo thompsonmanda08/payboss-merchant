@@ -8,8 +8,8 @@ import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { SAMPLE_BATCHES } from '../../data/sampleData'
 import TransactionStatusTag from '@/components/base/TransactionStatusTag'
 import Search from '@/components/ui/Search'
-import { SelectPaymentType } from '@/components/containers'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
+import SelectPaymentType from '@/components/containers/payments/SelectPaymentType'
 
 export default function Payments() {
   const { openPaymentsModal, setOpenPaymentsModal } = usePaymentsStore(

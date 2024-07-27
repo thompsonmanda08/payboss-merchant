@@ -1,12 +1,11 @@
 'use client'
+import { useEffect, useState } from 'react'
 import { Card, CardHeader, ProgressStep } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import usePaymentsStore from '@/context/paymentsStore'
 import UploadCSVFile from './UploadCSVFile'
 import PaymentDetails from './PaymentDetails'
-
 import ValidationDetails from './ValidationDetails'
-import { useEffect, useState } from 'react'
 import RecordDetailsViewer from './RecordDetailsViewer'
 
 export const STEPS = [

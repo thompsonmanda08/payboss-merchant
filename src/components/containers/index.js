@@ -23,11 +23,6 @@ export { default as ManagePeople } from './users/ManagePeople'
 
 /* *********************** PAYMENTS *************************** */
 export { default as BulkPaymentAction } from './payments/BulkPaymentAction'
-export { default as PaymentDetails } from './payments/PaymentDetails'
-export { default as RecordDetailsViewer } from './payments/RecordDetailsViewer'
-export { default as SelectPaymentType } from './payments/SelectPaymentType'
-export { default as UploadCSVFile } from './payments/UploadCSVFile'
-export { default as ValidationDetails } from './payments/ValidationDetails'
 
 /* *********************** WORKSPACES *************************** */
 export { default as Workspaces } from './workspace/Workspaces'

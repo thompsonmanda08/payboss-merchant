@@ -9,18 +9,9 @@ import usePaymentsStore from '@/context/paymentsStore'
 
 function RecordDetailsViewer() {
   const {
-    updatePaymentFields,
-    paymentAction,
-    resetPaymentData,
-    openPaymentsModal,
-    setOpenPaymentsModal,
     openAllRecordsModal,
     openValidRecordsModal,
     openInvalidRecordsModal,
-    setOpenAllRecordsModal,
-    setOpenValidRecordsModal,
-    setOpenInvalidRecordsModal,
-    openRecordsModal,
     closeRecordsModal,
   } = usePaymentsStore()
 
