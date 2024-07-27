@@ -5,9 +5,10 @@ import { Input } from '@/components/ui/input'
 import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import useConfigStore from '@/context/configStore'
-import { CardHeader, SelectField } from '@/components/base'
+import { CardHeader } from '@/components/base'
 import { STEPS } from '../SignupForm'
 import useAuthStore from '@/context/authStore'
+import SelectField from '@/components/ui/SelectField'
 
 // BUSINESS BANKING DETAILS
 export default function Step2({ updateDetails }) {
