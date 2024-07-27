@@ -1,7 +1,7 @@
 import LoadingPage from '@/app/loading'
 import { BreadCrumbLinks } from '@/components/base'
 import { AccountPreferences, ProfileDetails } from '@/components/containers'
-import ProfileSecuritySettings from '@/components/containers/Settings/Profile/SecuritySettings'
+import ProfileSecuritySettings from '@/components/containers/Settings/profile/SecuritySettings'
 import { DefaultCover } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
