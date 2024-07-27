@@ -14,8 +14,8 @@ export { SecondaryFeatures } from './landing-page/SecondaryFeatures'
 // export { default as SecurityAndPermissions } from './Settings/SecurityAndPermissions'
 
 /* *********************** PROFILE PAGE *************************** */
-export { default as AccountPreferences } from './Settings/profile/AccountPreferences'
-export { default as ProfileDetails } from './Settings/profile/ProfileDetails'
+export { default as AccountPreferences } from './settings/profile/AccountPreferences'
+export { default as ProfileDetails } from './settings/profile/ProfileDetails'
 export { default as ProfileSecuritySettings } from './settings/profile/ProfileSecuritySettings'
 
 /* *********************** USERS *************************** */
