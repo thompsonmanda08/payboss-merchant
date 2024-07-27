@@ -41,9 +41,9 @@ const allUsersTableHeadings = [
 ]
 
 const TABS = [
-  { name: 'All Users', href: '#', current: 0 }, // ONLY THE OWNER CAN SEE ALL USER
-  { name: 'Workspace Members', href: '#', current: 1 },
-  { name: 'Internal Guests', href: '#', current: 2 },
+  { name: 'All Users', index: 0 }, // ONLY THE OWNER CAN SEE ALL USER
+  { name: 'Workspace Members', index: 1 },
+  { name: 'Internal Guests', index: 2 },
 ]
 
 function ManagePeople() {
@@ -148,12 +148,7 @@ function ManagePeople() {
         </form>
       </div>
 
-      {/* 
-      //TODO => A SEARCH FIELD FOR USERS
-      //TODO => A FIELD TO INVITE USERS to WORKSPACE =REF: CLICK UP
-      //TODO => A BUTTON TO CREATE NEW USER - ONLY FOR THE OWNER 
-      */}
-      <div className="flex items-center justify-between gap-8">
+      <div className="flex items-center justify-between gap-8 ">
         <Tabs
           tabs={TABS}
           navigateTo={navigateTo}

@@ -60,7 +60,8 @@ function SelectField({
           {/* OPTIONS ARRAY MUST BE AN ARRAY OF OBJECTS WITH ID, NAME AND VALUE PROPERTIES. */}
           {options &&
             options.map((item, idx) => {
-              let ItemValue = item?.id || item?.ID || item
+              let ItemValue =
+                item?.id || item?.ID || item?.index.toString() || item
               let ItemLabel = item?.name || item[listItemName] || item
               return (
                 <SelectItem

@@ -1,28 +1,44 @@
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/Button'
+import { SelectField } from '.'
 
-export default function Tabs({ tabs, navigateTo, currentTab }) {
+export default function Tabs({
+  tabs,
+  navigateTo,
+  currentTab,
+  className,
+  classNames,
+}) {
+  const { innerWrapper, button, nav } = classNames || ''
   return (
-    <div className="mb-2 w-full">
-      {/* <div className="sm:hidden">
+    <div className={cn('w-full sm:w-auto', className)}>
+      <div className="w-full sm:hidden sm:w-auto">
         <label htmlFor="tabs" className="sr-only">
           Select a tab
         </label>
 
-        <select
+        <SelectField
           id="tabs"
           name="tabs"
-          className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-          defaultValue={tabs.find((tab) => tab.current).name}
-        >
-          {tabs.map((tab, index) => (
-            <option key={tab.name}>{tab.name}</option>
-          ))}
-        </select>
-      </div> */}
-      <div className="my-2 hidden sm:block">
+          options={tabs}
+          className=" h-auto w-full"
+          placeholder={'Select a tab'}
+          value={tabs.find((tab) => tab?.index == currentTab)?.index.toString()}
+          defaultValue={tabs
+            .find((tab) => tab?.index == currentTab)
+            ?.index.toString()}
+          onChange={(e) => {
+            let tab = tabs.find((tab) => tab?.index == parseInt(e.target.value))
+            navigateTo(tab?.index)
+          }}
+        />
+      </div>
+      <div className={cn('hidden sm:block', innerWrapper)}>
         <nav
-          className="-mb-px flex gap-x-4 rounded-lg bg-slate-100 p-1 "
+          className={cn(
+            'min-w-md -mb-px flex gap-x-4 rounded-lg bg-slate-500/5  p-1',
+            nav,
+          )}
           aria-label="Tabs"
         >
           {tabs.map((tab, index) => (
@@ -37,6 +53,7 @@ export default function Tabs({ tabs, navigateTo, currentTab }) {
                   'border-primary bg-white text-primary shadow-sm':
                     tab.index == currentTab,
                 },
+                button,
               )}
               aria-current={tab.index == currentTab ? 'active' : undefined}
             >
