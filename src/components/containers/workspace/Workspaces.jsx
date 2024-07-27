@@ -1,13 +1,16 @@
 'use client'
+import LoadingPage from '@/app/loading'
 import { WorkspaceItem } from '@/components/base'
 import { Button } from '@/components/ui/Button'
 import { useSetupConfig } from '@/hooks/useQueryHooks'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react'
 import React from 'react'
 
 function Workspaces() {
-  const { isLoading } = useSetupConfig()
+  const { data: setupResponse, isLoading } = useSetupConfig()
+
+  if (isLoading) return <LoadingPage />
+
   return (
     <div className="flex w-full flex-col items-center justify-center ">
       <div className="flex w-full flex-col">
@@ -20,7 +23,6 @@ function Workspaces() {
             Create Workspace
           </Button>
         </div>
-        <div className="px-5"></div>
       </div>
     </div>
   )
