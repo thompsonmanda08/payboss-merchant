@@ -41,7 +41,7 @@ const ACCOUNT_SETTINGS = [
   },
 ]
 
-export function SettingsSideBar() {
+function SettingsSideBar() {
   const router = useRouter()
 
   return (
@@ -56,7 +56,7 @@ export function SettingsSideBar() {
             variant="light"
             // size="sm"
             className="mb-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
-            onClick={() => router.back()}
+            onClick={() => router.push('/dashboard')}
             startContent={<ArrowLeftIcon className="h-4 w-4" />}
           >
             Back to Workspace
@@ -126,3 +126,5 @@ export function SettingsSideBar() {
     </>
   )
 }
+
+export default SettingsSideBar

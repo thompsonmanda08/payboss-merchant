@@ -1,6 +1,5 @@
 import LoadingPage from '@/app/loading'
-import AccountVerification from '@/components/containers/settings/account-verification/AccountVerification'
-import ProgressStageTracker from '@/components/containers/settings/account-verification/ProgressStageTracker'
+import AccountVerification from '@/components/containers/account-verification/AccountVerification'
 import React, { Suspense } from 'react'
 
 function ApprovalPage() {

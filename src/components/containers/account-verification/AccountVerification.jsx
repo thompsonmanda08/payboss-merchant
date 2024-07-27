@@ -2,10 +2,9 @@
 import { Tabs } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import React from 'react'
-
-import ProgressStageTracker from './ProgressStageTracker'
 import BusinessAccountDetails from './BusinessAccountDetails'
 import DocumentAttachments from './DocumentAttachments'
+import ProgressStageTracker from './ProgressStageTracker'
 
 const TABS = [
   { name: 'Business Details', href: '#', index: 0 },
@@ -37,6 +36,7 @@ function AccountVerification() {
 
         <div className="flex items-center justify-between gap-8">
           <Tabs
+            className={'my-4'}
             tabs={TABS}
             navigateTo={navigateTo}
             currentTab={currentTabIndex}

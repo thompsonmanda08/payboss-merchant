@@ -42,7 +42,7 @@ const MTN_NO = /^(?:\+?26|26)?(096|076)\d{7}$/
 const AIRTEL_NO = /^(?:\+?26|26)?(097|077)\d{7}$/
 const ZAMTEL_NO = /^(?:\+?26|26)?(095|075)\d{7}$/
 
-export const PAYMENT_SERVICE_TYPES = [
+const PAYMENT_SERVICE_TYPES = [
   {
     name: 'Bulk Payment',
     Icon: CircleStackIcon,

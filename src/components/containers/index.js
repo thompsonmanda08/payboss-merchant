@@ -14,12 +14,12 @@ export { SecondaryFeatures } from './landing-page/SecondaryFeatures'
 // export { default as SecurityAndPermissions } from './Settings/SecurityAndPermissions'
 
 /* *********************** PROFILE PAGE *************************** */
-export { default as AccountPreferences } from './settings/profile/AccountPreferences'
-export { default as ProfileDetails } from './settings/profile/ProfileDetails'
-export { default as ProfileSecuritySettings } from './settings/profile/ProfileSecuritySettings'
+export { default as AccountPreferences } from './profile/AccountPreferences'
+export { default as ProfileDetails } from './profile/ProfileDetails'
+export { default as ProfileSecuritySettings } from './profile/ProfileSecuritySettings'
 
 /* *********************** USERS *************************** */
-export { default as ManagePeople } from './settings/users/ManagePeople'
+export { default as ManagePeople } from './users/ManagePeople'
 
 /* *********************** PAYMENTS *************************** */
 export { default as PaymentDetails } from './payments/PaymentDetails'
@@ -30,10 +30,7 @@ export { default as ValidationDetails } from './payments/ValidationDetails'
 export { default as BulkPaymentAction } from './payments/BulkPaymentAction'
 
 /* *********************** WORKSPACES *************************** */
-export { default as Workspaces } from './settings/workspace/Workspaces'
+export { default as Workspaces } from './workspace/Workspaces'
 
 // TABLES
 export { default as TransactionsTable } from './Tables/TransactionsTable'
-
-//PAYMENTS
-export { default as PaymentsAction } from './payments/BulkPaymentAction'

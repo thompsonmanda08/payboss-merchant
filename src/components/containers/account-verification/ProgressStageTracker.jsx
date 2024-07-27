@@ -1,8 +1,7 @@
 import React from 'react'
-import { Card, CardHeader } from '../../../base'
-import TimelineItem from '../../../base/TimelineItem'
 import Image from 'next/image'
 import approvalIllustration from '@/images/illustrations/approval.svg'
+import { Card, CardHeader, TimelineItem } from '@/components/base'
 
 function ProgressStageTracker() {
   return (
