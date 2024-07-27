@@ -2,11 +2,11 @@
 import React from 'react'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Input } from '@/components/ui/input'
-import { PAYMENT_TYPES } from './BulkPaymentAction'
 import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
 import { BanknotesIcon } from '@heroicons/react/24/outline'
 import { useSearchParams } from 'next/navigation'
+import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 
 const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   const { setLoading, updatePaymentFields, paymentAction } = usePaymentsStore()
@@ -14,7 +14,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   const urlParams = useSearchParams()
   const service = urlParams.get('service')
 
-  const selectedActionType = PAYMENT_TYPES[0]
+  const selectedActionType = PAYMENT_SERVICE_TYPES[0]
 
   function handleProceed() {
     if (

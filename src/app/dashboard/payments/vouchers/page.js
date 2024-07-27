@@ -5,11 +5,10 @@ import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
 import React, { Suspense } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import { PAYMENT_TYPES } from '@/components/containers/payments/BulkPaymentAction'
 import { SAMPLE_BATCHES } from '../../data/sampleData'
 import Search from '@/components/ui/Search'
 import { SelectPaymentType } from '@/components/containers'
-// import { PAYMENT_TYPES } from '../page'
+import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 
 export default function VoucherPaymentsPage() {
   const { openPaymentsModal, setOpenPaymentsModal } = usePaymentsStore(
@@ -44,7 +43,7 @@ export default function VoucherPaymentsPage() {
             </Button>
           </div>
           <Tabs
-            tabs={PAYMENT_TYPES}
+            tabs={PAYMENT_SERVICE_TYPES}
             currentTab={currentTabIndex}
             navigateTo={navigateTo}
           />

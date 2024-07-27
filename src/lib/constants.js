@@ -1,5 +1,9 @@
 import IMG from '@/images/placeholder-image.webp'
 import DefaultCover from '@/images/profile-cover.jpg'
+import {
+  ArrowRightCircleIcon,
+  CircleStackIcon,
+} from '@heroicons/react/24/outline'
 
 const BASE_URL = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL
 const POCKET_BASE_URL =
@@ -38,6 +42,21 @@ const MTN_NO = /^(?:\+?26|26)?(096|076)\d{7}$/
 const AIRTEL_NO = /^(?:\+?26|26)?(097|077)\d{7}$/
 const ZAMTEL_NO = /^(?:\+?26|26)?(095|075)\d{7}$/
 
+export const PAYMENT_SERVICE_TYPES = [
+  {
+    name: 'Bulk Payment',
+    Icon: CircleStackIcon,
+    href: '/dashboard/payments/create/bulk',
+    index: 0,
+  },
+  {
+    name: 'Single Payment',
+    Icon: ArrowRightCircleIcon,
+    href: '/dashboard/payments/create/single',
+    index: 1,
+  },
+]
+
 // ***************** EXPORTS ******************** //
 
 export {
@@ -45,6 +64,7 @@ export {
   BASE_URL,
   POCKET_BASE_URL,
   AUTH_SESSION,
+  PAYMENT_SERVICE_TYPES,
 
   //
   DefaultCover,

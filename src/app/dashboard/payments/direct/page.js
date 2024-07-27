@@ -1,15 +1,15 @@
 'use client'
 import LoadingPage from '@/app/loading'
 import { Card, Tabs } from '@/components/base'
-import SelectPaymentType from '@/components/containers/payments/SelectPaymentType'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
 import React, { Suspense } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import { PAYMENT_TYPES } from '@/components/containers/payments/BulkPaymentAction'
 import { SAMPLE_BATCHES } from '../../data/sampleData'
 import TransactionStatusTag from '@/components/base/TransactionStatusTag'
 import Search from '@/components/ui/Search'
+import { SelectPaymentType } from '@/components/containers'
+import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 
 export default function Payments() {
   const { openPaymentsModal, setOpenPaymentsModal } = usePaymentsStore(
@@ -43,7 +43,7 @@ export default function Payments() {
             </Button>
           </div>
           <Tabs
-            tabs={PAYMENT_TYPES}
+            tabs={PAYMENT_SERVICE_TYPES}
             currentTab={currentTabIndex}
             navigateTo={navigateTo}
           />

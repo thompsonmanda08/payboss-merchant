@@ -4,7 +4,7 @@ import usePaymentsStore from '@/context/paymentsStore'
 import { usePathname, useRouter } from 'next/navigation'
 
 import { cn, notify } from '@/lib/utils'
-import { PAYMENT_TYPES } from './BulkPaymentAction'
+import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 
 const SelectPaymentType = ({ service }) => {
   const pathname = usePathname()
@@ -23,7 +23,7 @@ const SelectPaymentType = ({ service }) => {
   function handleSelectServiceType(type) {
     updatePaymentFields({ type: type.name })
     setTimeout(() => {
-      const isDisabled = type?.name === PAYMENT_TYPES[1]?.name
+      const isDisabled = type?.name === PAYMENT_SERVICE_TYPES[1]?.name
       if (isDisabled) {
         notify('error', 'Not Available, Try again later')
         setOpenPaymentsModal(false)
@@ -50,7 +50,7 @@ const SelectPaymentType = ({ service }) => {
       >
         <div className="flex h-full w-full flex-col justify-between">
           <div className="flex h-5/6 w-full items-center gap-2">
-            {PAYMENT_TYPES.map((type, index) => {
+            {PAYMENT_SERVICE_TYPES.map((type, index) => {
               return (
                 <PaymentTypeOption
                   key={index}
@@ -77,7 +77,7 @@ function PaymentTypeOption({
   Icon,
   className,
 }) {
-  const isDisabled = fieldOption === PAYMENT_TYPES[1]?.name
+  const isDisabled = fieldOption === PAYMENT_SERVICE_TYPES[1]?.name
   return (
     <button
       onClick={handleSelect}
