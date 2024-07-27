@@ -1,14 +1,14 @@
 'use client'
+import React, { Suspense } from 'react'
 import LoadingPage from '@/app/loading'
 import { Card, Tabs, TransactionStatusTag } from '@/components/base'
+import Search from '@/components/ui/Search'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
-import React, { Suspense } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { SAMPLE_BATCHES } from '../../data/sampleData'
-import Search from '@/components/ui/Search'
-import { SelectPaymentType } from '@/components/containers'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
+import { SelectPaymentType } from '@/components/containers'
 
 export default function VoucherPaymentsPage() {
   const { openPaymentsModal, setOpenPaymentsModal } = usePaymentsStore(
