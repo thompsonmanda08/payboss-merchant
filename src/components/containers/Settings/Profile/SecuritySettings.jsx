@@ -4,7 +4,7 @@ import { Switch } from '@nextui-org/switch'
 import useProfileStore from '@/context/profileStore'
 import useSettingsStore from '@/context/settingsStore'
 
-export default function ProfileSecuritySettings() {
+function ProfileSecuritySettings() {
   const { user } = useProfileStore()
   const { openEditModal, setOpenEditModal } = useSettingsStore()
 
@@ -96,3 +96,5 @@ export default function ProfileSecuritySettings() {
     </Card>
   )
 }
+
+export default ProfileSecuritySettings

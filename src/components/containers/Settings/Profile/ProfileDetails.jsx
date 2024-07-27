@@ -5,7 +5,7 @@ import useSettingsStore from '@/context/settingsStore'
 import { maskString } from '@/lib/utils'
 import { Card, Modal } from '@/components/base'
 
-export default function ProfileDetails() {
+function ProfileDetails() {
   const { user } = useProfileStore()
   const { openEditModal, setOpenEditModal } = useSettingsStore()
 
@@ -97,3 +97,5 @@ export default function ProfileDetails() {
     </Card>
   )
 }
+
+export default ProfileDetails
