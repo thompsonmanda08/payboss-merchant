@@ -33,12 +33,20 @@ export async function middleware(request) {
     return NextResponse.redirect(url)
   }
 
-  // IF THERE IS AN ACTIVE USER SESSION - REDIRECT TO HOME
+  // IF THERE IS AN ACTIVE USER SESSION - REDIRECT TO DASHBOARD
   if (
-    session?.user &&
+    session?.accessToken &&
     (pathname.startsWith('/login') || pathname.startsWith('/register'))
   ) {
     url.pathname = '/dashboard'
+
+    // USER CAN ONLY SEE THE SETTINGS PAGE IF NO WORKSPACE IS CHOSEN
+    if (
+      (session?.workspaceID == null || session?.workspaceID == undefined) &&
+      !pathname.startsWith('/settings')
+    ) {
+      url.pathname = '/workspaces'
+    }
 
     return NextResponse.redirect(url)
   }
