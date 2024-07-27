@@ -1,10 +1,12 @@
-import LoadingPage from '@/app/loading'
-import AccountPreferences from '@/components/containers/Settings/profile/AccountPreferences'
-import ProfileDetails from '@/components/containers/Settings/profile/ProfileDetails'
-import ProfileSecuritySettings from '@/components/containers/Settings/profile/SecuritySettings'
-import { DefaultCover } from '@/lib/constants'
 import Image from 'next/image'
 import { Suspense } from 'react'
+import LoadingPage from '@/app/loading'
+import { DefaultCover } from '@/lib/constants'
+import {
+  AccountPreferences,
+  ProfileDetails,
+  ProfileSecuritySettings,
+} from '@/components/containers'
 
 function ProfilePage() {
   return (

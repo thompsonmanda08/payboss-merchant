@@ -1,5 +1,5 @@
 import React from 'react'
-import { SettingsSideBar } from '../../components/containers/Settings/SettingsSideBar'
+import { SettingsSideBar } from '../../components/containers/settings/SettingsSideBar'
 import { TopNavBar } from '@/components/base'
 
 function SettingsLayout({ children }) {
