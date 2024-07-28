@@ -1,6 +1,9 @@
+'use client'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { SideNavItems } from './SideNavBar'
 import Logo from './Logo'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 export default function MobileNavBar({
   isMobileMenuOpen,
@@ -19,17 +22,19 @@ export default function MobileNavBar({
   return (
     <>
       {isMobileMenuOpen && (
-        <div
+        <motion.div
+          whileInView={{ opacity: [0, 1], transition: { duration: 0.3 } }}
           onClick={toggleMobileMenu}
-          className={`absolute ${
-            isMobileMenuOpen ? 'inset-0 block' : 'left-[-100%] hidden'
-          }  z-[99] bg-slate-900/80`}
+          className={cn(`absolute left-[-100%] z-[99] hidden bg-slate-900/80`, {
+            'inset-0 block': isMobileMenuOpen,
+          })}
         />
       )}
       <nav
-        className={`${
-          isMobileMenuOpen ? 'left-0 flex' : 'left-[-100%]'
-        } fixed top-0 z-[999] h-full w-[70%] min-w-[300px] max-w-[412px] flex-col bg-white p-5 transition-all duration-300 ease-in-out`}
+        className={cn(
+          `fixed left-[-100%] top-0 z-[999] h-full w-[70%] min-w-[300px] max-w-[412px] flex-col bg-white p-5 transition-all duration-300 ease-in-out`,
+          { 'left-0 flex': isMobileMenuOpen },
+        )}
       >
         <button
           className="absolute right-0 mr-2 mt-1 max-w-fit p-2"
