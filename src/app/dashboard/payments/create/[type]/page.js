@@ -1,7 +1,7 @@
 import LoadingPage from '@/app/loading'
 import NotFound from '@/app/not-found'
 import { Balance } from '@/components/base'
-import BulkPaymentAction from '@/components/containers/payments/BulkPaymentAction'
+import { BulkPaymentAction } from '@/components/containers'
 import React, { Suspense } from 'react'
 
 function CreatePayment({ params }) {

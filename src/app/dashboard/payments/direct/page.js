@@ -9,7 +9,7 @@ import { SAMPLE_BATCHES } from '../../data/sampleData'
 import TransactionStatusTag from '@/components/base/TransactionStatusTag'
 import Search from '@/components/ui/Search'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
-import SelectPaymentType from '@/components/containers/payments/SelectPaymentType'
+import { SelectPaymentType } from '@/components/containers'
 
 export default function Payments() {
   const { openPaymentsModal, setOpenPaymentsModal } = usePaymentsStore(

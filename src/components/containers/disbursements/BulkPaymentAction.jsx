@@ -27,7 +27,7 @@ export const STEPS = [
   },
 ]
 
-const BulkPaymentAction = ({ service }) => {
+function BulkPaymentAction({ service }) {
   // ** INITIALIZES STEPS **//
   const [currentStep, setCurrentStep] = useState(STEPS[0])
 

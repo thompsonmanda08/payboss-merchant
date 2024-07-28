@@ -1,9 +1,8 @@
 'use client'
+import { cn, notify } from '@/lib/utils'
 import { Modal } from '@/components/base'
 import usePaymentsStore from '@/context/paymentsStore'
 import { usePathname, useRouter } from 'next/navigation'
-
-import { cn, notify } from '@/lib/utils'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 
 const SelectPaymentType = ({ service }) => {

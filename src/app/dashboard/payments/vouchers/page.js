@@ -8,7 +8,7 @@ import usePaymentsStore from '@/context/paymentsStore'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { SAMPLE_BATCHES } from '../../data/sampleData'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
-import SelectPaymentType from '@/components/containers/payments/SelectPaymentType'
+import { SelectPaymentType } from '@/components/containers'
 
 export default function VoucherPaymentsPage() {
   const { openPaymentsModal, setOpenPaymentsModal } = usePaymentsStore(

@@ -22,7 +22,8 @@ export { default as ProfileSecuritySettings } from './profile/ProfileSecuritySet
 export { default as ManagePeople } from './users/ManagePeople'
 
 /* *********************** PAYMENTS *************************** */
-export { default as BulkPaymentAction } from './payments/BulkPaymentAction'
+export { default as BulkPaymentAction } from './disbursements/BulkPaymentAction'
+export { default as SelectPaymentType } from './disbursements/SelectPaymentType'
 
 /* *********************** WORKSPACES *************************** */
 export { default as Workspaces } from './workspace/Workspaces'
