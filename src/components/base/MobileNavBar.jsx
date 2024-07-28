@@ -23,7 +23,7 @@ export default function MobileNavBar({
           onClick={toggleMobileMenu}
           className={`absolute ${
             isMobileMenuOpen ? 'inset-0 block' : 'left-[-100%] hidden'
-          }  z-[10] bg-slate-900/80`}
+          }  z-[99] bg-slate-900/80`}
         />
       )}
       <nav
