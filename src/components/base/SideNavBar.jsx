@@ -204,11 +204,12 @@ function SideNavBar() {
   return (
     <>
       <Button
-        isIconOnly
-        className="absolute left-6 top-0 z-50 w-fit bg-transparent p-2 hover:bg-primary/5 lg:hidden"
+        size="sm"
+        // isIconOnly
+        className="absolute left-6 top-3 z-50 h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
         onClick={toggleMobileMenu}
       >
-        <Bars3BottomLeftIcon className="h-7 w-7 text-slate-700" />
+        <Bars3BottomLeftIcon className="h-7 w-7  text-slate-700" />
       </Button>
       <nav
         className={cn(
