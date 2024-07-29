@@ -8,7 +8,7 @@ import {
   PrimaryFeatures,
 } from '@/components/containers'
 import { getServerSession } from '@/lib/session'
-import DashboardHome from './dashboard/page'
+import DashboardHome from './dashboard/[workspaceID]/Dashboard'
 import { redirect } from 'next/navigation'
 
 export default async function App() {
