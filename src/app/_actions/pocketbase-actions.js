@@ -21,7 +21,7 @@ export async function uploadBusinessFile(file, merchantID) {
 
     const file_url = pb.getFileUrl(fileRecord, fileRecord['file'])
 
-    console.log('URL', file_url)
+    // console.log('URL', file_url)
 
     return {
       success: true,
@@ -32,7 +32,6 @@ export async function uploadBusinessFile(file, merchantID) {
       },
     }
   } catch (error) {
-    console.log(error)
     console.error(error)
 
     return {

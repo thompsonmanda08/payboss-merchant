@@ -1,7 +1,7 @@
 'use server'
 import useAuthStore from '@/context/authStore'
 import {
-  createSession,
+  createAuthSession,
   deleteSession,
   getServerSession,
   verifySession,
@@ -9,9 +9,7 @@ import {
 import { apiClient } from '@/lib/utils'
 
 export async function createNewMerchant(businessInfo) {
-  console.log(businessInfo)
   delete businessInfo.business_registration_status // THIS IS BAD...
-  console.log(businessInfo)
 
   try {
     const res = await apiClient.post(`kyc/merchant/new`, businessInfo, {
@@ -19,8 +17,6 @@ export async function createNewMerchant(businessInfo) {
         'Content-Type': 'application/json',
       },
     })
-
-    // console.log(res)
 
     if (res.status !== 201) {
       const response = res?.data || res
@@ -39,7 +35,7 @@ export async function createNewMerchant(businessInfo) {
       status: res.status,
     }
   } catch (error) {
-    console.log(error?.response?.data)
+    console.error(error?.response?.data)
     return {
       success: false,
       message: error?.response?.data?.error || 'No Server Response',
@@ -116,7 +112,6 @@ export async function createMerchantAdminUser(newAdminUser, merchantID) {
       status: res.status,
     }
   } catch (error) {
-    console.log(error.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'No Server Response',
@@ -220,13 +215,12 @@ export async function authenticateUser(loginCredentials) {
     }
 
     const response = res.data
-    console.log(response)
 
     const accessToken = response?.token
     const refreshToken = response?.refreshToken
     const expiresIn = response?.expires_in
 
-    await createSession(accessToken, expiresIn, refreshToken)
+    await createAuthSession(accessToken, expiresIn, refreshToken)
 
     return {
       success: true,
@@ -237,7 +231,7 @@ export async function authenticateUser(loginCredentials) {
   } catch (error) {
     return {
       success: false,
-      message: error?.response?.data?.error || 'No Server Response',
+      message: error?.response?.data?.error || 'Oops! Something went wrong.',
       data: null,
       status: error?.response?.status || error.status,
     }
@@ -250,15 +244,6 @@ export async function logUserOut() {
     useAuthStore.getState.resetAuthData()
     deleteSession()
     return true
-  }
-  return false
-}
-
-export async function getServerSideSession() {
-  const isLoggedIn = await verifySession()
-  if (isLoggedIn) {
-    const session = await getServerSession()
-    return session
   }
   return false
 }
