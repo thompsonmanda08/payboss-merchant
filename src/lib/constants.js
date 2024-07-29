@@ -10,6 +10,8 @@ const POCKET_BASE_URL =
   process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL
 
 const AUTH_SESSION = 'pb-session'
+const USER_SESSION = 'pb-next-usr'
+const WORKSPACE_SESSION = 'pb-next-workspace'
 
 const placeHolderImage = IMG
 
@@ -64,6 +66,8 @@ export {
   BASE_URL,
   POCKET_BASE_URL,
   AUTH_SESSION,
+  USER_SESSION,
+  WORKSPACE_SESSION,
   PAYMENT_SERVICE_TYPES,
 
   //

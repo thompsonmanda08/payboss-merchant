@@ -6,6 +6,8 @@ import { persist } from 'zustand/middleware'
 const INITIAL_STATE = {
   configOptions: [],
   userRoles: [],
+  workspaces: [],
+  activeWorkspace: {},
 }
 
 const useConfigStore = create(
@@ -16,6 +18,8 @@ const useConfigStore = create(
       //SETTERS
       setConfigOptions: (configOptions) => set({ configOptions }),
       setUserRoles: (userRoles) => set({ userRoles }),
+      setWorkspaces: (workspaces) => set({ workspaces }),
+      setActiveWorkspace: (activeWorkspace) => set({ activeWorkspace }),
 
       // METHODS AND ACTIONS
 

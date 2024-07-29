@@ -3,7 +3,7 @@ import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { AUTH_SESSION } from './constants'
+import { AUTH_SESSION, USER_SESSION, WORKSPACE_SESSION } from './constants'
 
 const secretKey = process.env.NEXT_PUBLIC_AUTH_SECRET || process.env.AUTH_SECRET
 const key = new TextEncoder().encode(secretKey)
@@ -27,7 +27,11 @@ export async function decrypt(session) {
   }
 }
 
-export async function createSession(accessToken, expiresIn, refreshToken = '') {
+export async function createAuthSession(
+  accessToken,
+  expiresIn,
+  refreshToken = '',
+) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000) // AFTER 1 HOUR
   const session = await encrypt({
     accessToken: accessToken || '', // NEEDS TO BE KEPT IN APP STATE
@@ -45,67 +49,79 @@ export async function createSession(accessToken, expiresIn, refreshToken = '') {
   })
 }
 
+export async function createUserSession(user, merchantID) {
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000) // AFTER 1 HOUR
+  const session = await encrypt({
+    user,
+    merchantID,
+  })
+
+  cookies().set(USER_SESSION, session, {
+    httpOnly: true,
+    secure: true,
+    expires: expiresAt,
+    sameSite: 'lax',
+    path: '/',
+  })
+}
+
+export async function createWorkspaceSession(workspaces) {
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24) // AFTER 1 DAY
+  const session = await encrypt({
+    workspaces,
+  })
+
+  cookies().set(WORKSPACE_SESSION, session, {
+    httpOnly: true,
+    secure: true,
+    expires: expiresAt,
+    sameSite: 'lax',
+    path: '/',
+  })
+}
+
 export async function verifySession() {
   const cookie = cookies().get(AUTH_SESSION)?.value
   const session = await decrypt(cookie)
 
   if (session?.accessToken || session?.user) return true
 
-  redirect('/login')
+  // redirect('/login')
+  return false
 }
 
 export async function getServerSession() {
+  const isLoggedIn = await verifySession()
   const cookie = cookies().get(AUTH_SESSION)?.value
   const session = await decrypt(cookie)
-
-  if (session?.accessToken || session?.user) return session
+  if (isLoggedIn) return session
 
   return null
 }
 
-export async function updateSession() {
-  const session = cookies().get(AUTH_SESSION)?.value
-  const payload = await decrypt(session)
+export async function getUserSession() {
+  const isLoggedIn = await verifySession()
+  const cookie = cookies().get(USER_SESSION)?.value
+  const session = await decrypt(cookie)
 
-  if (!session || !payload) {
-    return null
-  }
+  if (isLoggedIn) return session
 
-  const expires = new Date(Date.now() + 60 * 60 * 1000) // ADD 1 HOUR
-  cookies().set(AUTH_SESSION, session, {
-    httpOnly: true,
-    secure: true,
-    expires: expires,
-    sameSite: 'lax',
-    path: '/',
-  })
+  return null
 }
 
-export async function changeSessionWorkspace(merchantID, workspaceID) {
-  const session = cookies().get(AUTH_SESSION)?.value
-  let payload = await decrypt(session)
+export async function getWorkspaceIDs() {
+  const isLoggedIn = await verifySession()
+  const cookie = cookies().get(WORKSPACE_SESSION)?.value
+  const session = await decrypt(cookie)
 
-  if (!session || !payload) {
-    return null
-  }
+  if (isLoggedIn) return session?.workspaces
 
-  const newSession = await encrypt({
-    ...payload,
-    workspaceID,
-    merchantID,
-  })
-
-  // const expires = new Date(Date.now() + 60 * 60 * 1000) // ADD 1 HOUR
-  cookies().set(AUTH_SESSION, newSession, {
-    httpOnly: true,
-    secure: true,
-    expires: expires,
-    sameSite: 'lax',
-    path: '/',
-  })
+  return null
 }
 
 export function deleteSession() {
   cookies().delete(AUTH_SESSION)
+  cookies().delete(USER_SESSION)
+  cookies().delete(WORKSPACE_SESSION)
   redirect('/login')
 }

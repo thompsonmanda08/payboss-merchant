@@ -105,7 +105,7 @@ export default function SignUpForm() {
       let payload
       if (!businessInfoSent) {
         payload = await createNewMerchant(businessInfo)
-        console.log(payload.data)
+      
 
         let merchantID = payload?.data?.merchantID
 
@@ -159,10 +159,7 @@ export default function SignUpForm() {
       }
     }
 
-    console.log('BUSINESS DETAILS: ', businessInfo)
-    // console.log('DOCUMENTS: ', businessDocs)
-    console.log('USER DETAILS: ', newAdminUser)
-    console.log('MERCHANT ID: ', merchantID)
+
     if (!isLastStep) {
       navigateForward()
       setIsLoading(false)

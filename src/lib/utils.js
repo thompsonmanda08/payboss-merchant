@@ -4,17 +4,9 @@ import toast from 'react-hot-toast'
 import axios from 'axios'
 import { parseDate, getLocalTimeZone } from '@internationalized/date'
 import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from './constants'
-// import { getSessionToken } from '@/app/_actions/auth-actions'
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
-})
-export const authenticatedService = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true,
 })
 
 export function cn(...inputs) {
@@ -26,7 +18,7 @@ export const notify = (type, message) => toast[type](message)
 export function formatCurrency(amount) {
   const currencyFormat = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'Z<W',
     minimumFractionDigits: 2,
   })
   return amount ? currencyFormat.format(amount) : ''

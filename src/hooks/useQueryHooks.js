@@ -22,7 +22,7 @@ export const useSetupConfig = () =>
   useQuery({
     queryKey: [SETUP_QUERY_KEY],
     queryFn: async () => await getUserSetupConfigs(),
-    staleTime: 0,
+    staleTime: Infinity,
   })
 
 export const useUserRoles = () =>
