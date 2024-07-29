@@ -81,7 +81,6 @@ export default function SignUpForm() {
     <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />, // BUSINESS SPACE TYPE
     <Step1 key={STEPS[1]} updateDetails={updateAccountDetails} />, // BUSINESS INFO
     <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />, // BANK DETAILS
-
     <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />, // BUSINESS ADMIN USER
   ])
 
@@ -149,7 +148,7 @@ export default function SignUpForm() {
 
       if (payload.success) {
         notify('success', 'Account Created Successfully')
-        payload('/register/success?merchantID=' + merchantID)
+        push('/register/success?merchantID=' + merchantID)
         setIsLoading(false)
         return
       } else {
@@ -161,7 +160,7 @@ export default function SignUpForm() {
     }
 
     console.log('BUSINESS DETAILS: ', businessInfo)
-    console.log('DOCUMENTS: ', businessDocs)
+    // console.log('DOCUMENTS: ', businessDocs)
     console.log('USER DETAILS: ', newAdminUser)
     console.log('MERCHANT ID: ', merchantID)
     if (!isLastStep) {

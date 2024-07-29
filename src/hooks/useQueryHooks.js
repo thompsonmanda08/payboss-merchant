@@ -1,7 +1,7 @@
 import {
   getAccountConfigOptions,
   getUserRoles,
-  setupUserPreferences,
+  getUserSetupConfigs,
 } from '@/app/_actions/config-actions'
 import {
   USER_DATA_KEY,
@@ -21,7 +21,7 @@ export const useGeneralConfigOptions = () =>
 export const useSetupConfig = () =>
   useQuery({
     queryKey: [SETUP_QUERY_KEY],
-    queryFn: async () => await setupUserPreferences(),
+    queryFn: async () => await getUserSetupConfigs(),
     staleTime: 0,
   })
 

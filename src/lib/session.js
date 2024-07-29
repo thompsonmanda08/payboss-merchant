@@ -27,18 +27,9 @@ export async function decrypt(session) {
   }
 }
 
-export async function createSession(
-  user,
-  role,
-  accessToken,
-  expiresIn,
-  refreshToken = '',
-) {
+export async function createSession(accessToken, expiresIn, refreshToken = '') {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000) // AFTER 1 HOUR
   const session = await encrypt({
-    user,
-    role,
-    merchantID,
     accessToken: accessToken || '', // NEEDS TO BE KEPT IN APP STATE
     refreshToken: refreshToken || '',
     expiresAt,
@@ -52,7 +43,6 @@ export async function createSession(
     sameSite: 'lax',
     path: '/',
   })
-
 }
 
 export async function verifySession() {
@@ -91,7 +81,7 @@ export async function updateSession() {
   })
 }
 
-export async function changeSessionWorkspace(workspaceID) {
+export async function changeSessionWorkspace(merchantID, workspaceID) {
   const session = cookies().get(AUTH_SESSION)?.value
   let payload = await decrypt(session)
 
@@ -102,9 +92,10 @@ export async function changeSessionWorkspace(workspaceID) {
   const newSession = await encrypt({
     ...payload,
     workspaceID,
+    merchantID,
   })
 
-  const expires = new Date(Date.now() + 60 * 60 * 1000) // ADD 1 HOUR
+  // const expires = new Date(Date.now() + 60 * 60 * 1000) // ADD 1 HOUR
   cookies().set(AUTH_SESSION, newSession, {
     httpOnly: true,
     secure: true,

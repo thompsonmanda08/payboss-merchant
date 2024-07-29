@@ -1,6 +1,7 @@
 'use server'
+
 import { getServerSession } from '@/lib/session'
-import { apiClient, authenticatedClient } from '@/lib/utils'
+import { apiClient, authenticatedService } from '@/lib/utils'
 
 export async function getAccountConfigOptions() {
   try {
@@ -36,9 +37,15 @@ export async function getAccountConfigOptions() {
   }
 }
 
-export async function setupUserPreferences() {
+export async function getUserSetupConfigs() {
+  const session = await getServerSession()
   try {
-    const res = await authenticatedClient.get(`merchant/user/setup`)
+    const res = await authenticatedService.get(`merchant/user/setup`, {
+      headers: {
+        Authorization: `Bearer ${session?.accessToken}`,
+      },
+    })
+
 
     if (res.status !== 200) {
       const response = res?.data || res
@@ -71,7 +78,7 @@ export async function getUserRoles() {
   const merchantID = session?.user?.merchantID
 
   try {
-    const res = await authenticatedClient.get(
+    const res = await apiClient.get(
       `merchant/${merchantID}/roles`, //URL
     )
 
@@ -106,7 +113,7 @@ export async function createUserRole() {
   const merchantID = session?.user?.merchantID
 
   try {
-    const res = await authenticatedClient.post(
+    const res = await apiClient.post(
       `merchant/${merchantID}/roles/new`, //URL
       roleDetails, //BODY
     )
@@ -184,7 +191,7 @@ export async function createNewWorkspace({ workspace, description }) {
   }
 
   try {
-    const res = await authenticatedClient.post(
+    const res = await apiClient.post(
       `merchant/workspace/new`, //URL
       newWorkspace, // BODY
     )
@@ -225,7 +232,7 @@ export async function updateWorkspace({ workspace, description }) {
   }
 
   try {
-    const res = await authenticatedClient.patch(
+    const res = await apiClient.patch(
       `merchant/workspace/${workspaceID}`,
 
       updatedWorkspace,
@@ -262,9 +269,7 @@ export async function deleteWorkspace({ workspace, description }) {
   const workspaceID = session?.workspaceID
 
   try {
-    const res = await authenticatedClient.delete(
-      `merchant/workspace/${workspaceID}`,
-    )
+    const res = await apiClient.delete(`merchant/workspace/${workspaceID}`)
 
     if (res.status !== 201) {
       const response = res?.data || res

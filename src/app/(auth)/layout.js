@@ -13,6 +13,7 @@ async function AuthLayout({ children }) {
             <Image
               className="z-0 h-full w-full object-cover"
               src={DefaultCover}
+              alt=""
               width={1024}
               height={300}
             />

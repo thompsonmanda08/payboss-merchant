@@ -17,7 +17,7 @@ function StatusMessage({ error = false, message = 'Error Message' }) {
         error
           ? 'bg-rose-500/10 text-rose-600'
           : 'bg-green-500/10 text-green-600'
-      } my-2 flex min-h-[60px] w-full max-w-md items-center justify-center rounded-lg p-4 px-5 capitalize xl:max-w-md`}
+      } my-2 flex min-h-[60px] w-full items-center justify-center rounded-lg p-4 px-5 capitalize xl:max-w-md`}
     >
       <p className={`text-xs font-semibold md:text-sm`}>{message}!</p>
     </motion.div>

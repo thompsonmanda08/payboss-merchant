@@ -1,11 +1,11 @@
-import { Logo } from '@/components/base'
+import { Card, Logo } from '@/components/base'
 import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
 
 export default function Success() {
   return (
     <>
-      <div className="m-auto flex max-w-[600px] flex-col items-center justify-center">
+      <Card className="m-auto -mt-10 flex max-w-[600px] -translate-y-10 flex-col items-center justify-center">
         <div className="mx-auto mb-4 flex">
           <Logo />
         </div>
@@ -20,7 +20,7 @@ export default function Success() {
           <strong>Your account was created successfully!</strong> An email will
           be sent to you to verify your account. Approval takes{' '}
           <strong>
-            up to <span class="font-semibold">24 hours</span>
+            up to <span className="font-semibold">24 hours</span>
           </strong>
           . You have access to your account with limited features until approval
           is completed.
@@ -31,7 +31,7 @@ export default function Success() {
             Login
           </Button>
         </div>
-      </div>
+      </Card>
     </>
   )
 }

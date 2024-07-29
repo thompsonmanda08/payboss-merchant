@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input'
 import { motion } from 'framer-motion'
 import { CardHeader } from '@/components/base'
 import { staggerContainerItemVariants } from '@/lib/constants'
-import useConfigStore from '@/context/configStore'
 import useAuthStore from '@/context/authStore'
 import { STEPS } from '../SignupForm'
 import SelectField from '@/components/ui/SelectField'
@@ -14,13 +13,8 @@ import SelectField from '@/components/ui/SelectField'
 export default function Step4({ updateDetails }) {
   const { newAdminUser, error, setError } = useAuthStore()
 
-  const userRoles = useConfigStore((state) => state.userRoles)
-
-  const ADMIN_ROLE =
-    userRoles.find((item) => item.role == 'Admin')?.ID || userRoles[0]?.ID
-
   useEffect(() => {
-    updateDetails(STEPS[4], { roleID: ADMIN_ROLE })
+    updateDetails(STEPS[4], { role: 'owner' })
   }, [])
 
   return (
@@ -42,14 +36,12 @@ export default function Step4({ updateDetails }) {
             variants={staggerContainerItemVariants}
           >
             <SelectField
-              options={userRoles}
-              placeholder={'ADMIN USER'}
+              placeholder={'ADMIN'}
               name="user_role"
               label="User Role"
               isDisabled={true}
-              value={ADMIN_ROLE}
-              defaultValue={ADMIN_ROLE}
-              listItemName={'role'}
+              value={'owner'}
+              defaultValue={'owner'}
             />
           </motion.div>
           <motion.div

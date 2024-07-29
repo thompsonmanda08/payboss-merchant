@@ -9,23 +9,11 @@ import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from './constants'
 export const apiClient = axios.create({
   baseURL: BASE_URL,
 })
-
-// export const authenticatedClient = async (request) => {
-//   const accessToken = await getSessionToken()
-//   return await axios.create({
-//     baseURL: BASE_URL,
-//     headers: {
-//       'Content-Type': 'application/json',
-//       Authorization: `Bearer ${accessToken}`,
-//     },
-//     withCredentials: true,
-//     ...request,
-//   })
-// }
-
-export const authenticatedClient = axios.create({
+export const authenticatedService = axios.create({
   baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
+  headers: {
+    'Content-Type': 'application/json',
+  },
   withCredentials: true,
 })
 

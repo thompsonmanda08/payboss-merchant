@@ -20,7 +20,7 @@ export async function createNewMerchant(businessInfo) {
       },
     })
 
-    console.log(res)
+    // console.log(res)
 
     if (res.status !== 201) {
       const response = res?.data || res
@@ -207,11 +207,6 @@ export async function authenticateUser(loginCredentials) {
     const res = await apiClient.post(
       `authentication/merchant/user`,
       loginCredentials,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
     )
 
     if (res.status !== 200) {
@@ -226,22 +221,17 @@ export async function authenticateUser(loginCredentials) {
 
     const response = res.data
     console.log(response)
-    //
-    const user = {
-      profile: response?.user,
-      merchantID: response?.merchantID,
-    }
-    const role = response?.user?.role
+
     const accessToken = response?.token
     const refreshToken = response?.refreshToken
     const expiresIn = response?.expires_in
 
-    await createSession(user, role, accessToken, expiresIn, refreshToken)
+    await createSession(accessToken, expiresIn, refreshToken)
 
     return {
       success: true,
       message: res.message,
-      data: res.data,
+      data: { accessToken, expiresIn },
       status: res.status,
     }
   } catch (error) {
@@ -272,5 +262,3 @@ export async function getServerSideSession() {
   }
   return false
 }
-
-

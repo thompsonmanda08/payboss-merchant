@@ -1,4 +1,3 @@
-import { STEPS } from '@/components/forms/SignupForm'
 import { create } from 'zustand'
 
 const INITIAL_STATE = {

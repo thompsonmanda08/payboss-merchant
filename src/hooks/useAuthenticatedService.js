@@ -1,4 +1,4 @@
-import { authenticatedClient } from '@/lib/utils'
+import { authenticatedService } from '@/lib/utils'
 import { useEffect } from 'react'
 import useRefreshToken from './useRefreshToken'
 import useAuthStore from '@/context/authStore'
@@ -6,50 +6,47 @@ import { getServerSideSession } from '@/app/_actions/auth-actions'
 
 const useAuthenticatedService = () => {
   const refresh = useRefreshToken()
-  // const { auth } = useAuthStore();
-
-  async function getAccessToken() {
-    const session = await getServerSideSession()
-    return session?.accessToken
-  }
+  const auth = useAuthStore((state) => state.auth)
 
   useEffect(async () => {
     console.log('Adding Token...')
-    // console.log('Refreshing Token...')
+    // console.log('Refreshing Token...') // TODO IN THE FUTURE
 
-    const accessToken = await getAccessToken()
-
-    const requestIntercept = authenticatedClient.interceptors.request.use(
+    const requestIntercept = authenticatedService.interceptors.request.use(
       (config) => {
         if (!config.headers['Authorization']) {
-          config.headers['Authorization'] = `Bearer ${accessToken}`
+          config.headers['Authorization'] = `Bearer ${auth?.accessToken}`
         }
         return config
       },
       (error) => Promise.reject(error),
     )
 
-    const responseIntercept = authenticatedClient.interceptors.response.use(
+    // TODO: THIS IS WHERE WE TRIGGER A REFRESH IN THE FUTURE
+    const responseIntercept = authenticatedService.interceptors.response.use(
+      // IF THE RESPONSE IS OK
       (response) => response,
+
+      //IF AN ERROR OCCURS
       async (error) => {
         const prevRequest = error?.config
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true
           const newAccessToken = await refresh()
           prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
-          return authenticatedClient(prevRequest)
+          return authenticatedService(prevRequest)
         }
         return Promise.reject(error)
       },
     )
 
     return () => {
-      authenticatedClient.interceptors.request.eject(requestIntercept)
-      authenticatedClient.interceptors.response.eject(responseIntercept)
+      authenticatedService.interceptors.request.eject(requestIntercept)
+      authenticatedService.interceptors.response.eject(responseIntercept)
     }
-  }, [auth, refresh, authenticatedClient])
+  }, [auth, refresh])
 
-  return authenticatedClient
+  return authenticatedService
 }
 
 export default useAuthenticatedService

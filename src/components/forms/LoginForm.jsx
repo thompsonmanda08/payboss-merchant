@@ -20,6 +20,7 @@ function LoginForm() {
     setIsLoading,
     error,
     isLoading,
+    setAuth
   } = useAuthStore()
 
   async function handleLogin(e) {
@@ -31,8 +32,7 @@ function LoginForm() {
 
       console.log(response)
       if (response.success) {
-        
-        await setupUserPreferences()
+        setAuth(response?.data)
         push('/workspaces')
       }
 

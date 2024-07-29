@@ -2,12 +2,17 @@
 import LoadingPage from '@/app/loading'
 import { WorkspaceItem } from '@/components/base'
 import { Button } from '@/components/ui/Button'
+import useAuthStore from '@/context/authStore'
 import { useSetupConfig } from '@/hooks/useQueryHooks'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import React from 'react'
 
 function Workspaces() {
   const { data: setupResponse, isLoading } = useSetupConfig()
+  const { auth } = useAuthStore()
+  console.log(auth)
+
+  console.log(setupResponse)
 
   if (isLoading) return <LoadingPage />
 
