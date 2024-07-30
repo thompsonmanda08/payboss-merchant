@@ -20,7 +20,7 @@ function LoginForm() {
     setIsLoading,
     error,
     isLoading,
-    setAuth
+    setAuth,
   } = useAuthStore()
 
   async function handleLogin(e) {
@@ -30,7 +30,8 @@ function LoginForm() {
     if (emailusername && password) {
       const response = await authenticateUser(loginDetails)
 
-      console.log(response)
+      // console.log(response)
+
       if (response.success) {
         setAuth(response?.data)
         push('/workspaces')
@@ -41,8 +42,11 @@ function LoginForm() {
           status: response.status,
           message: response.message,
         })
-        setIsLoading(false)
       }
+
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 10000)
     }
   }
 

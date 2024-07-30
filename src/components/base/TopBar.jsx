@@ -24,7 +24,7 @@ export default function TopNavBar({}) {
   const pathname = usePathname()
 
   const currentPath =
-    pathname.split('/')[2]?.replaceAll('-', ' ') || pathname.split('/')[1]
+    pathname.split('/')[3]?.replaceAll('-', ' ') || pathname.split('/')[1]
 
   const isProfile = currentPath.toLowerCase() === 'profile'
 
