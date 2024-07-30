@@ -23,17 +23,31 @@ export async function middleware(request) {
   const workspaces = (await getWorkspaceIDs()) || []
   const session = await getServerSession()
   const urlRouteParams = pathname.match(/^\/dashboard\/([^\/]+)\/?$/)
+  const accessToken = session?.accessToken || ''
+  const isAuthPage =
+    pathname.startsWith('/login') || pathname.startsWith('/register')
 
   const isUserInWorkspace =
     pathname.startsWith('/dashboard') && pathname.split('/').length >= 3
 
-  /**********USER MUCH CHOOSE A WORKSPACE TO SEE DASHBOARDS *********/
+  const isDashboardRoute = pathname == '/dashboard'
+
+  // CHECK FOR PUBLIC AND PROTECTED ROUTES
+  const isProtectedRoute = PROTECTED_ROUTES.includes(pathname)
+  const isPublicRoute = PUBLIC_ROUTE.includes(pathname)
+
+  if (pathname == '/') return response
+  if (isPublicRoute && !accessToken) return response
+
+  /**********USER MUST CHOOSE A WORKSPACE TO SEE DASHBOARDS *********/
   if (urlRouteParams && isUserInWorkspace) {
     const workspaceID = urlRouteParams[1]
     const userId = urlRouteParams[2]
 
-    // console.log('URL Parameter (workspaceID):', workspaceID)
-    // console.log('URL Parameter (userId):', userId)
+    if (accessToken && isAuthPage) {
+      url.pathname = `/dashboard${workspaceID}`
+      return NextResponse.redirect(url)
+    }
 
     if (!workspaces.includes(workspaceID)) {
       url.pathname = '/workspaces'
@@ -41,34 +55,15 @@ export async function middleware(request) {
     }
   }
 
-  // const workspaceID = workspace?.workspaceID || ''
-  const accessToken = session?.accessToken || ''
-  const isAuthPage =
-    pathname.startsWith('/login') || pathname.startsWith('/register')
-  // console.log(workspaceID, accessToken)
-
-  // CHECK FOR PUBLIC AND PROTECTED ROUTES
-  const isProtectedRoute = PROTECTED_ROUTES.includes(pathname)
-  const isPublicRoute = PUBLIC_ROUTE.includes(pathname)
-
-  // IF NO ACCESS TOKEN AND PUBLIC ROUTE - ALLOW ACCESS
-  if (isPublicRoute && !accessToken) return response
-
-  // // IF PAGE IS PROTECTED AND THERE IS NO USER SESSION - REDIRECT TO LOGIN
-  // if (isProtectedRoute && !session) {
-  //   url.pathname = '/login'
-  //   return NextResponse.redirect(url)
-  // }
-
-  // IF THERE IS AN ACCESS TOKEN EXISTS - REDIRECT TO DASHBOARD
-  if (accessToken && isAuthPage) {
-    url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
-  }
-
   // IF NO ACCESS TOKEN AT ALL>>> REDIRECT BACK TO AUTH PAGE
   if (!accessToken && !isPublicRoute) {
     url.pathname = '/login'
+    return NextResponse.redirect(url)
+  }
+
+  // IF THERE IS AN ACCESS TOKEN EXISTS - REDIRECT TO DASHBOARD
+  if ((accessToken && isAuthPage) || isDashboardRoute) {
+    url.pathname = `/workspaces`
     return NextResponse.redirect(url)
   }
 
