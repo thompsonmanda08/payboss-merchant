@@ -1,19 +1,20 @@
 'use client'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { SideNavItems } from './SideNavBar'
 import Logo from './Logo'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import SideNavItems from './SideNavItems'
 
-export default function MobileNavBar({
+function MobileNavBar({
   isMobileMenuOpen,
   toggleMobileMenu,
   pathname,
   expandedSection,
   handleExpand,
   handleMainLinkClick,
-  logUserOut,
 }) {
+
+
   function handleLinkClick() {
     if (isMobileMenuOpen) {
       toggleMobileMenu()
@@ -54,10 +55,11 @@ export default function MobileNavBar({
             handleExpand={handleExpand}
             handleMainLinkClick={handleMainLinkClick}
             handleLinkClick={handleLinkClick}
-            logUserOut={logUserOut}
           />
         </div>
       </nav>
     </>
   )
 }
+
+export default MobileNavBar
