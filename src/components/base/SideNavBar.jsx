@@ -202,7 +202,7 @@ function SideNavBar() {
   }
 
   return (
-    <>
+    <div className="h-full w-full min-w-[220px] max-w-[320px]">
       <Button
         size="sm"
         // isIconOnly
@@ -213,16 +213,10 @@ function SideNavBar() {
       </Button>
       <nav
         className={cn(
-          `sticky z-20 hidden min-h-[100svh] w-full min-w-[220px] max-w-[320px] bg-white px-4 pb-10 transition-all duration-500 ease-in-out lg:block `,
+          `z-20 hidden h-full flex-col rounded-r-3xl bg-white p-5 transition-all duration-500 ease-in-out lg:flex`,
         )}
       >
-        <div className="group flex justify-start p-2">
-          <div
-            className={`flex translate-x-2 flex-col items-center transition-all duration-300 ease-in-out md:translate-x-4 lg:translate-x-0`}
-          >
-            <Logo className="my-auto mt-2" />
-          </div>
-        </div>
+        <Logo />
         <div className="relative py-2">
           <WorkspaceSelection />
         </div>
@@ -248,15 +242,16 @@ function SideNavBar() {
         handleMainLinkClick={handleMainLinkClick}
         logUserOut={logUserOut}
       />
-    </>
+    </div>
   )
 }
 
 export function NavItemIcon({ isSelected, Icon, activeLayer, isExpanded }) {
   return (
-    <div
+    <Button
+      isIconOnly
       className={cn(
-        'z-10 flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-none shadow-slate-700/10',
+        'z-10 flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-none shadow-slate-700/10 transition-all duration-500 ease-in-out group-hover:bg-primary group-hover:text-white',
         {
           'bg-primary font-bold': isSelected,
           'bg-primary text-white': activeLayer,
@@ -266,11 +261,11 @@ export function NavItemIcon({ isSelected, Icon, activeLayer, isExpanded }) {
     >
       <Icon
         fontSize={18}
-        className={cn('h-5 w-5', {
+        className={cn('h-5 w-5 text-slate-500 group-hover:text-white', {
           'text-white': isSelected,
         })}
       />
-    </div>
+    </Button>
   )
 }
 
@@ -288,8 +283,8 @@ export function SideNavItems({
     }
   }
   return (
-    <div className="flex h-full w-full flex-col overflow-clip ">
-      <div className="no-scrollbar flex h-full w-full flex-col gap-2 divide-y divide-slate-100/50 overflow-y-auto ">
+    <>
+      <ul className="mb-auto flex w-full flex-col divide-y divide-slate-100/50 ">
         {SIDE_BAR_OPTIONS.map(({ name, href, Icon, subMenuItems }, index) => {
           const isExpanded = expandedSection === index
 
@@ -304,13 +299,13 @@ export function SideNavItems({
             .includes(name.toLocaleLowerCase())
 
           return (
-            <div key={index} className="flex flex-col">
+            <li key={index} className="flex flex-col">
               {subMenuItems ? (
-                <button
+                <div
                   onClick={() => handleExpand(index)}
                   className={cn(
                     `group flex items-center gap-3 rounded-sm bg-transparent p-3
-                      text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out`,
+                        text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out`,
                     {
                       '  font-bold text-primary shadow-none shadow-slate-700/10':
                         isExpanded,
@@ -344,12 +339,12 @@ export function SideNavItems({
                       },
                     )}
                   />
-                </button>
+                </div>
               ) : (
                 <Link
                   href={href}
                   className={cn(
-                    `group flex items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium text-slate-800 transition-all duration-200 ease-in-out `,
+                    `group flex items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium text-slate-600 transition-all duration-200 ease-in-out `,
                     {
                       'rounded-lg bg-primary/10 font-medium text-primary shadow-none shadow-slate-400/10':
                         isSelected,
@@ -404,15 +399,21 @@ export function SideNavItems({
                   ))}
                 </motion.div>
               )}
-            </div>
+            </li>
           )
         })}
+      </ul>
+      <hr className="mt-auto" />
+      <div
+        onClick={handleLogOut}
+        className={cn(
+          `group flex items-center gap-3 rounded-lg bg-transparent p-3 text-sm font-bold text-slate-500 shadow-none transition-all duration-200 ease-in-out hover:text-primary`,
+        )}
+      >
+        <NavItemIcon isSelected={true} activeLayer={false} Icon={PowerIcon} />
+        Log out
       </div>
-      <Button className={'flex items-center gap-2'} onClick={handleLogOut}>
-        <PowerIcon className="h-5 w-5" />
-        Logout
-      </Button>
-    </div>
+    </>
   )
 }
 
