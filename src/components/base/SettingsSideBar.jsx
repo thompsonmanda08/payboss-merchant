@@ -17,6 +17,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import useConfigStore from '@/context/configStore'
 
 const WORKSPACE_SETTINGS = [
   {
@@ -47,6 +48,7 @@ const ACCOUNT_SETTINGS = [
 function SettingsSideBar() {
   const router = useRouter()
   const [openSettingsSideBar, setOpenSettingsSideBar] = useState(false)
+  const activeWorkspace = useConfigStore((state) => state?.activeWorkspace)
 
   function toggleSideBar() {
     setOpenSettingsSideBar(!openSettingsSideBar)
@@ -61,7 +63,10 @@ function SettingsSideBar() {
           <Bars3BottomLeftIcon className="h-7 w-7  text-slate-700" />
         }
       >
-        <span className="heading-5 font-bold text-slate-800"> Settings</span>
+        <span className="heading-5 font-bold text-slate-800">
+          {' '}
+          Manage Account
+        </span>
       </Button>
 
       {openSettingsSideBar && (
@@ -83,7 +88,7 @@ function SettingsSideBar() {
           <Button
             isIconOnly
             variant="light"
-            className="absolute -right-14 -top-2 aspect-square rounded-full p-2"
+            className="absolute -right-14 -top-2 aspect-square rounded-full p-2 lg:hidden"
             onClick={() => setOpenSettingsSideBar(false)}
           >
             <XMarkIcon className="h-5 w-5 text-white transition-all duration-200 ease-in hover:text-primary/80 hover:text-white" />
@@ -95,7 +100,7 @@ function SettingsSideBar() {
             onClick={() => router.push('/dashboard')}
             startContent={<ArrowLeftIcon className="h-4 w-4" />}
           >
-            Back to Workspace
+            Back to Workspaces
           </Button>
           <hr />
           {/* ******************** WORKSPACE SETTINGS ******************************* */}
@@ -104,7 +109,7 @@ function SettingsSideBar() {
             className="p- flex flex-col justify-start p-2"
           >
             <p className="m-2 text-xs font-medium uppercase tracking-wide text-slate-600">
-              WORKSPACE NAME
+              {activeWorkspace?.workspace}
             </p>
             {WORKSPACE_SETTINGS.map(({ href, Icon, name }, index) => {
               return (

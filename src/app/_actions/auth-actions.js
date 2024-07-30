@@ -241,8 +241,8 @@ export async function authenticateUser(loginCredentials) {
 export async function logUserOut() {
   const isLoggedIn = await verifySession()
   if (isLoggedIn) {
-    useAuthStore.getState.resetAuthData()
     deleteSession()
+    localStorage.removeItem('pb-config-store')
     return true
   }
   return false

@@ -11,8 +11,19 @@ import {
 } from '@heroicons/react/24/outline'
 import SoftBoxIcon from './SoftBoxIcon'
 import DropdownButton from '../ui/DropdownButton'
+import useConfigStore from '@/context/configStore'
+import { useRouter } from 'next/navigation'
+import { Skeleton } from '@nextui-org/react'
+import Spinner from '../ui/Spinner'
 
 export default function WorkspaceSelection({ isSelected }) {
+  const { activeWorkspace, setActiveWorkspace, workspaces } = useConfigStore(
+    (state) => state,
+  )
+
+  console.log(workspaces)
+
+  // const { push, refresh } = useRouter()
   const workspaceOptions = [
     {
       key: 'home',
@@ -29,25 +40,26 @@ export default function WorkspaceSelection({ isSelected }) {
       // shortcut: '>',
       description: 'Change your workspace',
       Icon: BriefcaseIcon,
-      subMenuItems: [
-        {
-          key: 'new',
-          label: 'Commercial',
-        },
-        {
-          key: 'copy',
-          label: 'Field Deployments',
-        },
-        {
-          key: 'edit',
-          label: 'Sales Team',
-        },
-      ],
+      subMenuItems: workspaces.map((item) => {
+        return {
+          key: item.ID,
+          label: item.workspace,
+          description: item?.description,
+          // href: `/dashboard/${item?.ID}`,
+          onSelect: () => {
+            setActiveWorkspace(item)
+            // push(`/dashboard/${item?.ID}`)
+            // refresh()
+            window.location.href = `/dashboard/${item?.ID}`
+          },
+          Icon: BriefcaseIcon,
+        }
+      }),
     },
     {
       key: 'settings',
       name: 'Workspace Settings',
-      href: '/settings/workspaces',
+      href: '/dashboard/settings/workspaces',
       shortcut: '⌘S',
       description: 'Workspace preferences',
       Icon: Cog8ToothIcon,
@@ -55,7 +67,7 @@ export default function WorkspaceSelection({ isSelected }) {
     {
       key: 'users',
       name: 'Manage Members',
-      href: '/settings/users',
+      href: '/dashboard/settings/users',
       shortcut: '⌘M',
       description: 'Manage workspace members',
       Icon: UserGroupIcon,
@@ -80,10 +92,19 @@ export default function WorkspaceSelection({ isSelected }) {
         </SoftBoxIcon>
         <div className="flex w-full items-center justify-between text-primary">
           <div className="flex flex-col items-start justify-start gap-0">
-            <p className="text-base font-semibold uppercase">Workspace#1</p>
-            <span className="-mt-1 text-xs font-medium italic text-slate-500">
+            <div className="text-base font-semibold uppercase">
+              {!activeWorkspace || !activeWorkspace?.workspace ? (
+                <div className="flex gap-2 text-sm font-bold capitalize">
+                  <Spinner size={18} /> Loading workspace...
+                </div>
+              ) : (
+                // <Skeleton className="h-3 w-3/5 rounded-lg bg-slate-400" />
+                activeWorkspace?.workspace
+              )}
+            </div>
+            {/* <span className="-mt-1 text-xs font-medium italic text-slate-500">
               Team: 6 Members
-            </span>
+            </span> */}
           </div>
           <ChevronRightIcon className={cn('h-4 w-4 ease-in-out')} />
         </div>

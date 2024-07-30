@@ -18,12 +18,12 @@ function WorkSpacesPage() {
             <Logo isWhite className="absolute left-5 top-5 z-30 " />
             <Button
               as={Link}
-              href={'/settings'}
+              href={'/manage-account'}
               variant="light"
-              className="absolute right-5 top-5 z-30 aspect-square min-w-[120px] rounded-full text-white"
+              className="data[hover=true]:bg-slate-900/30 absolute right-5 top-5 z-30 aspect-square min-w-[120px] rounded-full bg-slate-900/20 text-white"
               startContent={<Cog6ToothIcon className=" h-6 w-6" />}
             >
-              Settings
+              Manage
             </Button>
             <Image
               className="z-0 h-full w-full object-cover"

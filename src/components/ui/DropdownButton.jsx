@@ -15,6 +15,7 @@ import {
   ChevronRightIcon,
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 
 export default function DropdownButton({
   className,
@@ -27,36 +28,19 @@ export default function DropdownButton({
   children,
   ...props
 }) {
-  const items = [
-    {
-      key: 'new',
-      label: 'New file',
-    },
-    {
-      key: 'copy',
-      label: 'Copy link',
-    },
-    {
-      key: 'edit',
-      label: 'Edit file',
-    },
-    {
-      key: 'delete',
-      label: 'Delete file',
-    },
-  ]
-
   const { trigger, wrapper, innerWrapper, dropdownItem } = classNames || ''
 
   const iconClasses =
     'text-slate-500 pointer-events-none hover:text-primary data-[hover=true]:text-primary data-[focus=true]:text-primary flex-shrink-0 w-5 aspect-square'
 
   return (
-    <Dropdown className={cn('z-10', wrapper, className)}>
+    <Dropdown
+      className={cn('z-10', wrapper, className)}
+      backdrop={backdropBlur ? 'blur' : ''}
+    >
       <DropdownTrigger>
         <Button
           variant="bordered"
-          backdrop={backdropBlur ? 'blur' : ''}
           isIconOnly={isIconOnly}
           className={cn(
             'border-px focus: mb-1 h-auto max-h-[60px] w-full items-center justify-start border border-primary-100 bg-transparent  p-2 capitalize',
@@ -73,9 +57,10 @@ export default function DropdownButton({
         variant={variant || 'faded'}
         items={dropDownItems || items}
         className={innerWrapper}
+        onClose
         {...props}
       >
-        {(item) => (
+        {(item, onClose) => (
           <DropdownItem
             key={item?.key}
             color={item?.key === 'new' ? 'primary' : 'default'}
@@ -115,19 +100,31 @@ export default function DropdownButton({
                 className="absolute -top-1 left-[100%] z-0 hidden w-full min-w-[200px] p-2 transition-all duration-300 ease-in-out group-hover:flex"
               >
                 <Card className="w-full p-2">
-                  <motion.ul className=" flex w-full flex-col text-sm font-semibold transition-all duration-300 ease-in-out">
+                  <motion.ul className=" flex  w-full flex-col text-sm font-semibold transition-all duration-300 ease-in-out">
                     {item.subMenuItems.map((subItem) => (
                       <Button
                         key={subItem.key}
-                        endContent={
-                          subItem?.endContent ||
-                          (subItem?.Icon ? (
-                            <subItem.Icon className={cn(iconClasses)} />
-                          ) : undefined)
+                        // as={Link}
+                        // href={subItem?.href}
+                        onPress={(e) => {
+                          subItem?.onSelect()
+                          e.continuePropagation()
+                        }}
+                        startContent={
+                          subItem?.Icon ? (
+                            <subItem.Icon className={cn(iconClasses, 'mt-1')} />
+                          ) : undefined
                         }
-                        className="my-auto justify-start rounded-md bg-transparent p-2  text-slate-700 hover:bg-primary-100 hover:text-primary"
+                        className="group my-auto h-14 items-start justify-start gap-2 rounded-md bg-transparent p-2 text-medium text-slate-700 hover:bg-primary-100 hover:text-primary"
                       >
-                        {subItem.label}
+                        <div className="flex flex-col items-start justify-start font-medium">
+                          {subItem.label}
+                          {subItem?.description && (
+                            <p className="mr-auto max-w-[170px] truncate text-[11px] font-normal">
+                              {subItem.description}
+                            </p>
+                          )}
+                        </div>
                       </Button>
                     ))}
                   </motion.ul>
