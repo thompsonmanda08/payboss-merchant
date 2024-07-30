@@ -18,37 +18,37 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import useConfigStore from '@/context/configStore'
-
-const WORKSPACE_SETTINGS = [
-  {
-    name: 'People',
-    Icon: UserGroupIcon,
-    href: '/settings/users',
-  },
-  {
-    name: 'Workspaces',
-    Icon: BriefcaseIcon,
-    href: '/settings/workspaces',
-  },
-]
+import useAuthStore from '@/context/authStore'
 
 const ACCOUNT_SETTINGS = [
   {
     name: 'My Settings',
     Icon: UserCircleIcon,
-    href: '/settings/profile',
+    href: '/manage-account/profile',
+  },
+
+  {
+    name: 'People',
+    Icon: UserGroupIcon,
+    href: '/manage-account/users',
+  },
+  {
+    name: 'Workspaces',
+    Icon: BriefcaseIcon,
+    href: '/manage-account/workspaces',
   },
   {
     name: 'Account Verification',
     Icon: CheckBadgeIcon,
-    href: '/settings/account-verification',
+    href: '/manage-account/account-verification',
   },
 ]
 
-function SettingsSideBar() {
+function SettingsSideBar({ title, options }) {
   const router = useRouter()
   const [openSettingsSideBar, setOpenSettingsSideBar] = useState(false)
   const activeWorkspace = useConfigStore((state) => state?.activeWorkspace)
+  const handleUserLogOut = useAuthStore((state) => state)
 
   function toggleSideBar() {
     setOpenSettingsSideBar(!openSettingsSideBar)
@@ -97,59 +97,63 @@ function SettingsSideBar() {
             variant="light"
             // size="sm"
             className="mb-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.back()}
             startContent={<ArrowLeftIcon className="h-4 w-4" />}
           >
             Back to Workspaces
           </Button>
           <hr />
           {/* ******************** WORKSPACE SETTINGS ******************************* */}
-          <div
-            role="workspace_settings"
-            className="p- flex flex-col justify-start p-2"
-          >
-            <p className="m-2 text-xs font-medium uppercase tracking-wide text-slate-600">
-              {activeWorkspace?.workspace}
-            </p>
-            {WORKSPACE_SETTINGS.map(({ href, Icon, name }, index) => {
-              return (
-                <Button
-                  as={Link}
-                  key={href + index}
-                  href={href}
-                  variant="light"
-                  className="h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
-                  startContent={<Icon className="h-5 w-5" />}
-                >
-                  {name}
-                </Button>
-              )
-            })}
-          </div>
-          <hr />
+          {options && options.name == 'workspace_settings' && (
+            <div
+              role="`workspace_settings`"
+              className="p- flex flex-col justify-start p-2"
+            >
+              <p className="m-2 text-xs font-medium uppercase tracking-wide text-slate-600">
+                {title}
+              </p>
+              {options.links?.map(({ href, Icon, name }, index) => {
+                return (
+                  <Button
+                    as={Link}
+                    key={href + index}
+                    href={href}
+                    variant="light"
+                    className="h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
+                    startContent={<Icon className="h-5 w-5" />}
+                  >
+                    {name}
+                  </Button>
+                )
+              })}
+            </div>
+          )}
+
           {/* ******************* ACCOUNT SETTINGS **************************** */}
-          <div
-            role="account_settings"
-            className="p- flex flex-col justify-start p-2"
-          >
-            <p className="m-2 text-xs font-medium uppercase tracking-wide text-slate-600">
-              ACCOUNT
-            </p>
-            {ACCOUNT_SETTINGS.map(({ href, Icon, name }, index) => {
-              return (
-                <Button
-                  as={Link}
-                  key={href + index}
-                  href={href}
-                  variant="light"
-                  className="h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
-                  startContent={<Icon className="h-5 w-5" />}
-                >
-                  {name}
-                </Button>
-              )
-            })}
-          </div>
+          {options == 'account_settings' && (
+            <div
+              role="account_settings"
+              className="p- flex flex-col justify-start p-2"
+            >
+              <p className="m-2 text-xs font-medium uppercase tracking-wide text-slate-600">
+                ACCOUNT
+              </p>
+              {ACCOUNT_SETTINGS.map(({ href, Icon, name }, index) => {
+                return (
+                  <Button
+                    as={Link}
+                    key={href + index}
+                    href={href}
+                    variant="light"
+                    className="h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
+                    startContent={<Icon className="h-5 w-5" />}
+                  >
+                    {name}
+                  </Button>
+                )
+              })}
+            </div>
+          )}
           {/* ************************************************************* */}
 
           <hr className="mt-auto" />
@@ -157,7 +161,7 @@ function SettingsSideBar() {
             variant="light"
             // size="sm"
             className="my-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
-            onClick={logUserOut}
+            onClick={handleUserLogOut}
             startContent={<PowerIcon className="h-4 w-4" />}
           >
             Log out
