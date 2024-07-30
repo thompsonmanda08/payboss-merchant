@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { cn, getUserInitials } from '@/lib/utils'
 import { Avatar as NextAvatar } from '@nextui-org/react'
 
-
 function Avatar({
   firstName,
   lastName,
@@ -29,9 +28,8 @@ function Avatar({
           height={200}
         />
       ) : (
-        <div className="text-md grid h-10 w-10 flex-none scale-90 place-items-center items-center justify-center rounded-full bg-gray-500 font-medium uppercase text-white ring-2 ring-primary/30  ring-offset-1">
-            {getUserInitials(`${firstName || 'P'} ${lastName || 'B'}`)}
-            
+        <div className="text-md grid h-9 w-9 flex-none scale-90 place-items-center items-center justify-center rounded-full bg-primary-800 font-medium uppercase text-white ring-2 ring-primary  ring-offset-1">
+          {getUserInitials(`${firstName || 'P'} ${lastName || 'B'}`)}
         </div>
       )}
 

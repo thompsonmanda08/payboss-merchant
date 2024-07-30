@@ -15,16 +15,25 @@ import {
   DropdownItem,
   Button,
   User,
+  user,
 } from '@nextui-org/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
+import useConfigStore from '@/context/configStore'
+import { useSetupConfig } from '@/hooks/useQueryHooks'
+import SelectField from '../ui/SelectField'
 
 export default function TopNavBar({}) {
-  const userData = [undefined]
-  const [isFloating, setIsFloating] = useState(false)
   const pathname = usePathname()
+  const { activeWorkspace } = useConfigStore((state) => state)
+  const { data: response } = useSetupConfig()
+  const user = response?.data?.userDetails
+  const workspaceID = activeWorkspace?.ID
+  const settingsPathname = `/dashboard/${workspaceID}/settings`
+
+  console.log(user)
 
   const currentPath =
-    pathname.split('/')[3]?.replaceAll('-', ' ') || pathname.split('/')[1]
+    pathname.split('/')[3]?.replaceAll('-', ' ') || activeWorkspace?.workspace
 
   const isProfile = currentPath.toLowerCase() === 'profile'
 
@@ -39,7 +48,7 @@ export default function TopNavBar({}) {
           <BreadCrumbLinks isProfile={isProfile} />
           <h2
             className={cn(
-              'pl-2 text-lg font-semibold capitalize leading-8 text-slate-800 md:text-xl',
+              'pl-2 text-lg font-bold uppercase leading-8 text-slate-800',
               { 'text-white': isProfile },
             )}
           >
@@ -53,7 +62,7 @@ export default function TopNavBar({}) {
             })}
           >
             <Link
-              href={'/dashboard/settings'}
+              href={settingsPathname}
               className="flex cursor-pointer items-center gap-2 text-sm"
             >
               <Cog6ToothIcon className="h-5 w-6 " />
@@ -61,8 +70,12 @@ export default function TopNavBar({}) {
             <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:right-1 after:top-0 after:h-2 after:w-2 after:rounded-full after:bg-rose-600 after:content-['']">
               <BellIcon className="top-0 h-5 w-6 " />
             </div>
-            {userData ? (
-              <AvatarDropdown userData={userData} isProfile={isProfile} />
+            {user ? (
+              <AvatarDropdown
+                user={user}
+                isProfile={isProfile}
+                settingsPathname={settingsPathname}
+              />
             ) : (
               <Link
                 href={'/login'}
@@ -79,7 +92,7 @@ export default function TopNavBar({}) {
   )
 }
 
-export function AvatarDropdown() {
+export function AvatarDropdown({ user, settingsPathname, isProfile }) {
   return (
     <Dropdown
       // showArrow
@@ -90,8 +103,17 @@ export function AvatarDropdown() {
       }}
     >
       <DropdownTrigger>
-        <Button isIconOnly variant="light" disableRipple>
-          <Avatar />
+        <Button
+          isIconOnly
+          variant="light"
+          disableRipple
+          className="rounded-full"
+        >
+          <Avatar
+            isProfile
+            firstName={user?.first_name}
+            lastName={user?.last_name}
+          />
         </Button>
       </DropdownTrigger>
       <DropdownMenu
@@ -120,30 +142,33 @@ export function AvatarDropdown() {
             className="h-14 gap-2"
           >
             <User
-              name="Junior Garcia"
-              description="@jrgarciadev"
+              name={user?.first_name}
+              description={user?.email}
               classNames={{
                 name: 'text-default-600',
                 description: 'text-default-500',
               }}
               avatarProps={{
                 size: 'sm',
-                src: 'https://avatars.githubusercontent.com/u/30373425?v=4',
+                src:
+                  user?.image ||
+                  'https://avatars.githubusercontent.com/u/30373425?v=4',
               }}
             />
           </DropdownItem>
           <DropdownItem key="Home" href="/workspaces">
-            Home
+            Go to Workspaces
           </DropdownItem>
-          <DropdownItem key="settings" href="/settings">
+          <DropdownItem key="settings" href={settingsPathname}>
             Settings
           </DropdownItem>
-          <DropdownItem
+          {/* <DropdownItem
             key="new_workspace"
             endContent={<PlusIcon className="aspect-square h-5 w-5" />}
+            //TODO => BUTTON TO OPEN A 
           >
             New Workspace
-          </DropdownItem>
+          </DropdownItem> */}
         </DropdownSection>
 
         <DropdownSection aria-label="Preferences" showDivider>
@@ -153,20 +178,19 @@ export function AvatarDropdown() {
           <DropdownItem
             isReadOnly
             key="theme"
-            className="cursor-default"
-            endContent={
-              <select
-                className="z-10 w-16 rounded-md border-small border-default-300 bg-transparent py-0.5 text-tiny text-default-500 outline-none group-data-[hover=true]:border-default-500 dark:border-default-200"
+            className="flex cursor-default justify-between"
+          >
+            <div className="flex h-12 w-full cursor-default items-center justify-between">
+              <span>Theme</span>
+              <SelectField
+                // className="z-10 h-8 w-24 rounded-md border-small border-default-300  bg-transparent py-1 text-tiny text-default-500 outline-none group-data-[hover=true]:border-default-500 dark:border-default-200"
+                className={'ml-auto w-[100px]'}
+                wrapperClassName={'h-8'}
                 id="theme"
                 name="theme"
-              >
-                <option>System</option>
-                <option>Dark</option>
-                <option>Light</option>
-              </select>
-            }
-          >
-            Theme
+                options={['System', 'Light', 'Dark']}
+              />
+            </div>
           </DropdownItem>
         </DropdownSection>
 
