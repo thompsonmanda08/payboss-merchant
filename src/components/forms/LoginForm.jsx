@@ -6,7 +6,7 @@ import { Button } from '../ui/Button'
 import Link from 'next/link'
 import useAuthStore from '@/context/authStore'
 import { authenticateUser } from '@/app/_actions/auth-actions'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, StatusMessage } from '../base'
 import { useNetwork } from '@/hooks/useNetwork'
 import { setupUserPreferences } from '@/app/_actions/config-actions'
@@ -23,6 +23,8 @@ function LoginForm() {
     setAuth,
   } = useAuthStore()
 
+  const urlParams = useSearchParams()
+
   async function handleLogin(e) {
     e.preventDefault()
     setIsLoading(true)
@@ -34,7 +36,8 @@ function LoginForm() {
 
       if (response.success) {
         setAuth(response?.data)
-        push('/workspaces')
+        const loginUrl = urlParams.get('callbackUrl') || '/workspaces'
+        push(loginUrl)
       }
 
       if (!response.success) {

@@ -58,6 +58,7 @@ export async function middleware(request) {
   // IF NO ACCESS TOKEN AT ALL>>> REDIRECT BACK TO AUTH PAGE
   if (!accessToken && !isPublicRoute) {
     url.pathname = '/login'
+    url.searchParams.set('callbackUrl', pathname)
     return NextResponse.redirect(url)
   }
 
