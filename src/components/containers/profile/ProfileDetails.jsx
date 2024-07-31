@@ -1,16 +1,29 @@
 'use client'
 
-import useProfileStore from '@/context/profileStore'
 import useSettingsStore from '@/context/settingsStore'
-import { maskString } from '@/lib/utils'
-import { Card, Modal } from '@/components/base'
+import { Card } from '@/components/base'
+import { useSetupConfig } from '@/hooks/useQueryHooks'
+import { useEffect, useState } from 'react'
+import useConfigStore from '@/context/configStore'
+import CardLoader from '@/components/base/CardLoader'
+import { Input } from '@/components/ui/InputField'
 
 function ProfileDetails() {
-  const { user } = useProfileStore()
+  const { data: response, isSuccess, isLoading, isFetching } = useSetupConfig()
+  const { setWorkspaces } = useConfigStore((state) => state)
+  const user = response?.data?.userDetails
+  const workspaces = response?.data?.workspaces
   const { openEditModal, setOpenEditModal } = useSettingsStore()
+  const [newUserDetails, setNewUserDetails] = useState({})
 
   function handleToggleModal() {
     setOpenEditModal(!openEditModal)
+  }
+
+  function editUserField(fields) {
+    setNewUserDetails((prev) => {
+      return { ...prev, ...fields }
+    })
   }
 
   function handleConfirm() {
@@ -20,7 +33,15 @@ function ProfileDetails() {
   function handleProfileUpdate() {
     handleToggleModal()
   }
-  return (
+
+  useEffect(() => {
+    if (isSuccess) setWorkspaces(workspaces)
+  }, [])
+  //
+  // console.log(user)
+  return isFetching || isLoading ? (
+    <CardLoader />
+  ) : (
     <Card className={'rounded-2xl backdrop-blur-md'}>
       <div className="flex w-full flex-col rounded-md p-5">
         <div>
@@ -39,59 +60,53 @@ function ProfileDetails() {
               onClick={handleToggleModal}
               className="font-semibold text-primary hover:text-primary/85"
             >
-              Update
+              {openEditModal ? 'Save Changes' : 'Update'}
             </button>
           </div>
 
-          <dl className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
-            <div className="pt-6 sm:flex">
-              <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
-                Full name
-              </dt>
-              <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                <p className="text-gray-900">{`${user?.firstName} ${user?.lastName}`}</p>
-                {/* <button
-                  type="button"
-                  onClick={handleProfileUpdate}
-                  className="font-semibold text-indigo-600 hover:text-indigo-500"
-                >
-                  Update
-                </button> */}
-              </dd>
+          <div className="mt-4 space-y-4 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
+            <div className="items-center pt-6 sm:flex">
+              <span className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+                First Name
+              </span>
+              <span className="mt-1 flex justify-between gap-x-4 sm:mt-0 sm:flex-auto">
+                {openEditModal ? (
+                  <Input
+                    autoFocus
+                    defaultValue={user?.first_name}
+                    value={newUserDetails.first_name}
+                    className="mt-px"
+                    onChange={(e) => {
+                      editUserField({ first_name: e.target.value })
+                    }}
+                  />
+                ) : (
+                  <p className="text-gray-900">
+                    {`${user?.first_name} ${user?.last_name}`}
+                  </p>
+                )}
+              </span>
             </div>
-            <div className="pt-6 sm:flex">
-              <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+            {/* ************************************************* */}
+            <div className="items-center pt-4 sm:flex">
+              <span className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+                Username
+              </span>
+              <span className="mt-1 flex justify-between gap-x-4 sm:mt-0 sm:flex-auto">
+                {user?.username}
+              </span>
+            </div>
+            {/* ************************************************* */}
+            <div className="items-center pt-4 sm:flex">
+              <span className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
                 Email address
-              </dt>
-              <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                <div className="text-gray-900">
-                  {maskString(user?.email, 0, 12)}
-                </div>
-                {/* <button
-                  type="button"
-                  onClick={handleProfileUpdate}
-                  className="font-semibold text-indigo-600 hover:text-indigo-500"
-                >
-                  Update
-                </button> */}
-              </dd>
+              </span>
+              <span className="mt-1 flex justify-between gap-x-4 sm:mt-0 sm:flex-auto">
+                {user?.email}
+              </span>
             </div>
-            <div className="pt-6 sm:flex">
-              <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
-                Mobile Number
-              </dt>
-              <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                <div className="text-gray-900">{user?.phone}</div>
-                {/* <button
-                  type="button"
-                  onClick={handleProfileUpdate}
-                  className="font-semibold text-indigo-600 hover:text-indigo-500"
-                >
-                  Update
-                </button> */}
-              </dd>
-            </div>
-          </dl>
+            {/* ************************************************* */}
+          </div>
         </div>
       </div>
     </Card>
