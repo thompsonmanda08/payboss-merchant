@@ -20,7 +20,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { SETUP_QUERY_KEY } from '@/lib/constants'
 import { useRouter } from 'next/navigation'
 import useConfigStore from '@/context/configStore'
-
+import { ScrollArea } from '@/components/ui/scroll-area'
 function Workspaces() {
   const { push } = useRouter()
   const queryClient = useQueryClient()
@@ -82,7 +82,7 @@ function Workspaces() {
 
   return (
     <div className="flex w-full flex-col items-center justify-center ">
-      <div className="flex w-full min-w-[400px] flex-col">
+      <ScrollArea className="flex w-full min-w-[400px] flex-col lg:max-h-[400px] lg:px-2">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center p-10 text-center">
             <Spinner size={48} color="#1B64CE" />
@@ -120,7 +120,7 @@ function Workspaces() {
             </Button>
           </div>
         )}
-      </div>
+      </ScrollArea>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
