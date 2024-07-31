@@ -11,7 +11,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Switch } from '@nextui-org/react'
 import { notify } from '@/lib/utils'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/InputField'
 import ConfirmationModal from '@/components/base/ConfirmationModal'
 import { AnimatePresence, motion } from 'framer-motion'
 

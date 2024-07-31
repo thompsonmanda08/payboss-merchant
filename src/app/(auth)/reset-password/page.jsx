@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/InputField'
 import Spinner from '@/components/ui/Spinner'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 
