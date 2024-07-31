@@ -14,7 +14,7 @@ import {
   ModalFooter,
   useDisclosure,
 } from '@nextui-org/react'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/InputField'
 import { createNewWorkspace } from '@/app/_actions/config-actions'
 import { useQueryClient } from '@tanstack/react-query'
 import { SETUP_QUERY_KEY } from '@/lib/constants'

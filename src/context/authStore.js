@@ -41,10 +41,13 @@ const useAuthStore = create((set, get) => ({
 
   // METHODS AND ACTIONS
   handleUserLogOut: async () => {
-    const response = await logUserOut()
-    if (response) {
+    const isLoggedOut = await logUserOut()
+    if (isLoggedOut) {
       window.location.href = '/login'
+      get().resetAuthData()
+      return isLoggedOut
     }
+    return isLoggedOut
   },
 
   // CLear & Reset

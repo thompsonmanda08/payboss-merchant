@@ -1,5 +1,5 @@
 import { Modal } from '@/components/base'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/InputField'
 
 function CreateNewUserModal({ openCreateUserModal, toggleCreateUserModal }) {
   function handleCreateUser() {

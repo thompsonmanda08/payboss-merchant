@@ -1,7 +1,7 @@
 //BUSINESS REGISTRATION STATUS
 'use client'
 import React, { useEffect } from 'react'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/InputField'
 import { motion } from 'framer-motion'
 import { CardHeader } from '@/components/base'
 import { staggerContainerItemVariants } from '@/lib/constants'

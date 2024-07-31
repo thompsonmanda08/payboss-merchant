@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/InputField'
 import { Switch } from '@nextui-org/switch'
 import { Button } from '../ui/Button'
 import Link from 'next/link'

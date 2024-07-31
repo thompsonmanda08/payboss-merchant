@@ -1,12 +1,9 @@
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/ui/InputField'
 
-export default function EditForm(){
-    return (
-        <form
-        action="#"
-        className="mt-10"
-      >
-        <div className='grid grid-cols-1 gap-x-6 my-2 sm:grid-cols-2'>
+export default function EditForm() {
+  return (
+    <form action="#" className="mt-10">
+      <div className="my-2 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
         <Input
           label="First Name"
           name="first_name"
@@ -21,8 +18,8 @@ export default function EditForm(){
           autoComplete="family-name"
           required
         />
-        </div>
-        <div className='grid grid-cols-1 gap-x-6 my-2 sm:grid-cols-2'>
+      </div>
+      <div className="my-2 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
         <Input
           label="Email"
           name="email"
@@ -37,15 +34,9 @@ export default function EditForm(){
           autoComplete="tel"
           required
         />
-        </div>
-        <div className='grid grid-cols-1 gap-x-6 my-2 sm:grid-cols-2'>
-        <Input
-          label="NRC"
-          name="nrc"
-          type="text"
-          autoComplete="nrc"
-          required
-        />
+      </div>
+      <div className="my-2 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+        <Input label="NRC" name="nrc" type="text" autoComplete="nrc" required />
         <Input
           label="Account Type"
           name="account_type"
@@ -53,8 +44,8 @@ export default function EditForm(){
           autoComplete="acount-type"
           required
         />
-        </div>
-        <div className='grid grid-cols-1 gap-x-6 my-2 sm:grid-cols-2'>
+      </div>
+      <div className="my-2 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
         <Input
           label="Account #"
           name="account_number"
@@ -69,8 +60,8 @@ export default function EditForm(){
           autoComplete="amount"
           required
         />
-        </div>
-        <div className='grid grid-cols-1 gap-x-6 my-2 sm:grid-cols-2'>
+      </div>
+      <div className="my-2 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
         <Input
           label="Bank Code"
           name="bank_code"
@@ -85,7 +76,7 @@ export default function EditForm(){
           autoComplete="currency"
           required
         />
-        </div>
-        </form>
-    )
+      </div>
+    </form>
+  )
 }

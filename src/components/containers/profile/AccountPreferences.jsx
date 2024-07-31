@@ -3,9 +3,12 @@ import { Card, Modal } from '@/components/base'
 import { Switch } from '@nextui-org/switch'
 import useProfileStore from '@/context/profileStore'
 import useSettingsStore from '@/context/settingsStore'
+import useConfigStore from '@/context/configStore'
+import { useSetupConfig } from '@/hooks/useQueryHooks'
 
 function AccountPreferences() {
-  const { user } = useProfileStore()
+  const { data: response } = useSetupConfig()
+  const user = response?.data?.userDetails
   const { openEditModal, setOpenEditModal } = useSettingsStore()
 
   function handleToggleModal() {
@@ -45,34 +48,19 @@ function AccountPreferences() {
             </div>
           </div>
 
-          <dl className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
-            {/* <div className="pt-6 sm:flex">
-              <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
-                Password
-              </dt>
-              <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                <div className="text-gray-900">************</div>
-                <button
-                  type="button"
-                  onClick={handleToggleModal}
-                  className="font-semibold text-primary hover:text-primary/80"
-                >
-                  Change
-                </button>
-              </dd>
-            </div> */}
+          <div className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
             <h3 className="text-base font-semibold leading-7 text-gray-900">
               Platform
             </h3>
             {APPLICATION_CONFIG.map((config, index) => (
-              <div className="pt-6 sm:flex">
-                <dd className="mt-1 flex items-center gap-x-6 sm:mt-0 sm:flex-auto">
+              <div key={config.title} className="pt-6 sm:flex">
+                <div className="mt-1 flex items-center gap-x-6 sm:mt-0 sm:flex-auto">
                   <Switch />
                   <p className="font-medium text-gray-900">{config.title}</p>
-                </dd>
+                </div>
               </div>
             ))}
-          </dl>
+          </div>
         </div>
       </div>
     </Card>

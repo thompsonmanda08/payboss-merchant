@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import usePaymentsStore from '@/context/paymentsStore'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/InputField'
 import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
 import { BanknotesIcon } from '@heroicons/react/24/outline'

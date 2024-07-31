@@ -1,7 +1,7 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 
 import { cn } from '@/lib/utils'
-import { Input } from './input'
+import { Input } from './InputField'
 import { Button } from './Button'
 
 export default function Search({ placeholder, onChange, value, handleSearch }) {

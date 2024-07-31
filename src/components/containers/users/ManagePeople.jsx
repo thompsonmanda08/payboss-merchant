@@ -4,7 +4,7 @@ import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import React, { useState } from 'react'
 
 import Search from '@/components/ui/Search'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/InputField'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import { Button } from '@/components/ui/Button'
 import { USERS } from '@/app/dashboard/data/sampleData'
