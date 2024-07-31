@@ -31,7 +31,7 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
   async function handleChangePassword() {
     setLoading(true)
 
-    if (!passwordFields.newPassword) {
+    if (!passwordFields.currentPassword) {
       setError({
         noPassword: true,
         message: 'Provide your current password!',
@@ -172,7 +172,6 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
                 size="sm"
                 className="h-10 px-6 text-sm"
                 color="danger"
-                isLoading={loading}
                 disabled={loading}
                 onClick={async () => setUpdatePassword(false)}
               >
