@@ -42,7 +42,7 @@ function ProfileDetails() {
   return isFetching || isLoading ? (
     <CardLoader />
   ) : (
-    <Card className={'rounded-2xl backdrop-blur-md'}>
+    <Card className={'rounded-2xl bg-white/70 backdrop-blur-md'}>
       <div className="flex w-full flex-col rounded-md p-5">
         <div>
           <div className="flex w-full items-end justify-between">

@@ -28,11 +28,15 @@ export default function ProfilePage() {
       </section>
       <section
         role="profile-content"
-        className="z-10 -mt-[180px] grid w-full grid-cols-[repeat(auto-fill,minmax(580px,1fr))] place-items-center gap-4 p-5"
+        className="z-50 -mt-[160px] flex flex-col gap-4 p-5 md:-mt-[180px] lg:place-items-center"
       >
-        <ProfileDetails />
-        <ProfileSecuritySettings />
-        <AccountPreferences />
+        <div className="flex w-full flex-col items-start gap-4 xl:flex-row">
+          <ProfileDetails />
+          <AccountPreferences />
+        </div>
+        <div className="flex w-full flex-col gap-4 xl:flex-row">
+          <ProfileSecuritySettings />
+        </div>
       </section>
     </Suspense>
   )
