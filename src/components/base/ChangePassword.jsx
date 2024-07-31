@@ -170,8 +170,8 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
             <div className="mt-2 flex justify-end gap-2">
               <Button
                 size="sm"
-                className="h-10 bg-red-50 px-6 text-sm text-red-500 hover:bg-red-100 hover:opacity-90"
-                variant={'danger'}
+                className="h-10 px-6 text-sm"
+                color="danger"
                 isLoading={loading}
                 disabled={loading}
                 onClick={async () => setUpdatePassword(false)}

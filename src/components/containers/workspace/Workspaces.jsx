@@ -149,11 +149,7 @@ function Workspaces() {
                 />
               </ModalBody>
               <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="flat"
-                  onPress={() => handleClose(onClose)}
-                >
+                <Button color="danger" onPress={() => handleClose(onClose)}>
                   Cancel
                 </Button>
                 <Button
