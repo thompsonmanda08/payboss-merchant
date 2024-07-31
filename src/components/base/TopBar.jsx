@@ -21,6 +21,7 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import useConfigStore from '@/context/configStore'
 import { useSetupConfig } from '@/hooks/useQueryHooks'
 import SelectField from '../ui/SelectField'
+import useAuthStore from '@/context/authStore'
 
 export default function TopNavBar({}) {
   const pathname = usePathname()
@@ -30,21 +31,24 @@ export default function TopNavBar({}) {
   const workspaceID = activeWorkspace?.ID
   const settingsPathname = `/dashboard/${workspaceID}/settings`
 
-  console.log(user)
+  // console.log(user)
 
   const currentPath =
     pathname.split('/')[3]?.replaceAll('-', ' ') || activeWorkspace?.workspace
-
-  const isProfile = currentPath.toLowerCase() === 'profile'
+  // console.log(currentPath)
+  const isProfile =
+    pathname?.split('/')[3]?.replaceAll('-', ' ').toLowerCase() ===
+      'settings' || currentPath?.toLowerCase() === 'settings'
 
   return (
     <nav
       className={cn(
-        `rounded-blur fixed left-0 right-0 top-5 z-30 flex w-full -translate-y-5 items-center bg-white py-2 pr-5 shadow-sm transition-all lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:shadow-none`,
+        `rounded-blur fixed left-0 right-0 top-5 z-30 flex w-full -translate-y-5 items-center bg-white py-2 pr-5  shadow-sm transition-all lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:shadow-none`,
+        { 'bg-transparent pl-5 text-white': isProfile },
       )}
     >
       <div className="flex w-full items-center rounded-3xl">
-        <div className="relative left-16 transition-all duration-300 ease-in-out lg:left-0">
+        <div className="relative left-12 transition-all duration-300 ease-in-out lg:left-0">
           <BreadCrumbLinks isProfile={isProfile} />
           <h2
             className={cn(
@@ -93,6 +97,7 @@ export default function TopNavBar({}) {
 }
 
 export function AvatarDropdown({ user, settingsPathname, isProfile }) {
+  const { handleUserLogOut } = useAuthStore((state) => state)
   return (
     <Dropdown
       // showArrow
@@ -138,7 +143,7 @@ export function AvatarDropdown({ user, settingsPathname, isProfile }) {
           <DropdownItem
             isReadOnly
             key="profile"
-            href="/settings/profile"
+            href={settingsPathname}
             className="h-14 gap-2"
           >
             <User
@@ -159,7 +164,7 @@ export function AvatarDropdown({ user, settingsPathname, isProfile }) {
           <DropdownItem key="Home" href="/workspaces">
             Go to Workspaces
           </DropdownItem>
-          <DropdownItem key="settings" href={settingsPathname}>
+          <DropdownItem key="settings" href={settingsPathname + '/workspaces'}>
             Settings
           </DropdownItem>
           {/* <DropdownItem
@@ -195,8 +200,12 @@ export function AvatarDropdown({ user, settingsPathname, isProfile }) {
         </DropdownSection>
 
         <DropdownSection aria-label="Help & Feedback">
-          <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-          <DropdownItem key="logout">Log Out</DropdownItem>
+          <DropdownItem key="help_and_feedback" href="/support">
+            Help & Feedback
+          </DropdownItem>
+          <DropdownItem key="logout" onClick={handleUserLogOut}>
+            Log Out
+          </DropdownItem>
         </DropdownSection>
       </DropdownMenu>
     </Dropdown>

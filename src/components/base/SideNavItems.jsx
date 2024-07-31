@@ -16,7 +16,7 @@ export default function SideNavItems({
   handleMainLinkClick,
   handleLinkClick,
 }) {
-  const handleUserLogOut = useAuthStore((state) => state)
+  const { handleUserLogOut } = useAuthStore((state) => state)
 
   return (
     <>
@@ -141,12 +141,17 @@ export default function SideNavItems({
       </ul>
       <hr className="mt-auto" />
       <div
-        onClick={handleUserLogOut}
+        onClick={() => handleUserLogOut()}
         className={cn(
-          `group flex items-center gap-3 rounded-lg bg-transparent p-3 text-sm font-bold text-slate-500 shadow-none transition-all duration-200 ease-in-out hover:text-primary`,
+          `group flex cursor-pointer items-center gap-3 rounded-lg bg-transparent p-3 text-sm font-bold text-slate-500 shadow-none transition-all duration-200 ease-in-out hover:text-primary`,
         )}
       >
-        <NavItemIcon isSelected={true} activeLayer={false} Icon={PowerIcon} />
+        <NavItemIcon
+          isSelected={true}
+          activeLayer={false}
+          Icon={PowerIcon}
+          onIconPress={handleUserLogOut}
+        />
         Log out
       </div>
     </>

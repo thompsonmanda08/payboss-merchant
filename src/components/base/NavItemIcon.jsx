@@ -8,10 +8,12 @@ export default function NavItemIcon({
   Icon,
   activeLayer,
   isExpanded,
+  onIconPress,
 }) {
   return (
     <Button
       isIconOnly
+      onClick={onIconPress}
       className={cn(
         'z-10 flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-none shadow-slate-700/10 transition-all duration-500 ease-in-out group-hover:bg-primary group-hover:text-white',
         {
