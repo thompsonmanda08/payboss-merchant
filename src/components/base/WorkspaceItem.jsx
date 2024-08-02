@@ -6,7 +6,8 @@ import { SoftBoxIcon } from '.'
 import { ArrowRightIcon, BriefcaseIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 
-function WorkspaceItem({ name, href, members, setActiveWorkspace }) {
+function WorkspaceItem({ name, href, setActiveWorkspace }) {
+  //
   return (
     <Button
       as={Link}

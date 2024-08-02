@@ -13,17 +13,21 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  usePagination,
 } from '@nextui-org/react'
 import { Input } from '@/components/ui/InputField'
 import { createNewWorkspace } from '@/app/_actions/config-actions'
 import { useQueryClient } from '@tanstack/react-query'
 import { SETUP_QUERY_KEY } from '@/lib/constants'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import useConfigStore from '@/context/configStore'
 import { ScrollArea } from '@/components/ui/scroll-area'
+
 function Workspaces() {
   const { push } = useRouter()
+  const pathname = usePathname()
   const queryClient = useQueryClient()
+
   const { setWorkspaces, setActiveWorkspace } = useConfigStore((state) => state)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { data: response, isLoading, isSuccess } = useSetupConfig()
@@ -34,6 +38,10 @@ function Workspaces() {
     description: '',
     merchantID: userDetails?.merchantID,
   }
+
+  const isWorkspaceSettings =
+    pathname.split('/')[2] == 'workspaces' ||
+    pathname.split('/')[2] == 'workspaces'
 
   // console.log(response)
 
@@ -80,6 +88,29 @@ function Workspaces() {
     if (isSuccess) setWorkspaces(workspaces)
   }, [])
 
+  const samples = [
+    {
+      workspace: 'Interwebb1',
+      members: 50,
+      ID: '89776516846',
+    },
+    {
+      workspace: 'Interwebb2',
+      members: 20,
+      ID: '123987651987456',
+    },
+    {
+      workspace: 'Interwebb3',
+      members: 87,
+      ID: '12345454156',
+    },
+    {
+      workspace: 'Interwebb4',
+      members: 9,
+      ID: '9875468',
+    },
+  ]
+
   return (
     <div className="flex w-full flex-col items-center justify-center ">
       <ScrollArea className="flex w-full min-w-[400px] flex-col lg:max-h-[400px] lg:px-2">
@@ -94,16 +125,23 @@ function Workspaces() {
           <div
             className={cn('grid w-full place-items-center gap-4 rounded-lg', {
               'grid-cols-[repeat(auto-fill,minmax(400px,1fr))]':
-                workspaces?.length > 0,
+                workspaces?.length > 0 || samples?.length > 0,
             })}
           >
             {workspaces &&
               workspaces?.map((item) => {
+                const href = !isWorkspaceSettings
+                  ? `/dashboard/${item?.ID}`
+                  : pathname + `/${item?.ID}`
+
+                const selectWorkspace = !isWorkspaceSettings
+                  ? () => setActiveWorkspace(item)
+                  : undefined
                 return (
                   <WorkspaceItem
-                    href={`/dashboard/${item?.ID}`}
+                    href={href}
                     name={item?.workspace}
-                    setActiveWorkspace={() => setActiveWorkspace(item)}
+                    setActiveWorkspace={selectWorkspace}
                   />
                 )
               })}
