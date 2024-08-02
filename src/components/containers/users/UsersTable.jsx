@@ -9,13 +9,14 @@ import {
   User,
   Chip,
   Tooltip,
-  getKeyValue,
 } from '@nextui-org/react'
 import {
   EyeIcon,
+  EyeSlashIcon,
   PencilSquareIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const roleColorMap = {
   owner: 'success',
@@ -71,17 +72,18 @@ export default function UsersTable({ users, columns }) {
         )
       case 'actions':
         return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
-              <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
-                <EyeIcon />
+          <div className="relative flex items-center justify-center gap-2">
+            <Tooltip content="View user">
+              <span className="cursor-pointer text-lg text-secondary active:opacity-50">
+                <EyeIcon className="h-5 w-5" />
               </span>
             </Tooltip>
-            <Tooltip content="Edit user">
-              <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
+            <Tooltip color="primary" content="Edit user">
+              <span className="cursor-pointer text-lg text-primary active:opacity-50">
                 <PencilSquareIcon className="h-5 w-5" />
               </span>
             </Tooltip>
+
             <Tooltip color="danger" content="Delete user">
               <span className="cursor-pointer text-lg text-danger active:opacity-50">
                 <TrashIcon className="h-5 w-5" />
@@ -98,8 +100,10 @@ export default function UsersTable({ users, columns }) {
     <Table
       aria-label="Example table with custom cells"
       className="max-h-[600px]"
+      isStriped
+      isHeaderSticky
     >
-      <TableHeader columns={columns}>
+      <TableHeader columns={columns} className="fixed">
         {(column) => (
           <TableColumn
             key={column.uid}

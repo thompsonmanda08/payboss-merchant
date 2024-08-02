@@ -12,7 +12,7 @@ import UsersTable from './UsersTable'
 import { useUserRoles } from '@/hooks/useQueryHooks'
 import CreateNewUserModal from './CreateNewUserModal'
 
-const ROLES = [
+export const ROLES = [
   {
     key: 'member',
     label: 'Member',
@@ -32,7 +32,7 @@ const ROLES = [
   },
 ]
 
-const allUsersTableHeadings = [
+export const allUsersTableHeadings = [
   { name: 'NAME', uid: 'name' },
   { name: 'TITLE', uid: 'title' },
   { name: 'ROLE', uid: 'role' },
@@ -48,8 +48,6 @@ const TABS = [
 function ManagePeople() {
   const { data: rolesResponse } = useUserRoles()
   const [openCreateUserModal, setOpenCreateUserModal] = useState(false)
-
-  console.log(rolesResponse)
 
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -108,44 +106,13 @@ function ManagePeople() {
         Streamline the management of user accounts and their workspaces.
       </p>
 
-      <div className="relative flex min-h-20 w-full flex-col justify-between gap-4 py-8 md:flex-row">
-        {/*  USER SEARCH */}
-        <Search
-          onChange={(e) => {
-            setSearchQuery(e.target.value)
-          }}
-        />
-
-        {/******** ADD USER TO WORKSPACE ************/}
-
-        <form
-          onSubmit={resolveAddToWorkspace}
-          className={'group relative flex h-fit w-full flex-grow-0 justify-end'}
-        >
-          <Input
-            className={
-              'h h-12 w-full max-w-lg rounded-r-none text-base placeholder:text-sm placeholder:font-normal placeholder:text-slate-400'
-            }
-            placeholder={'Invite users to workspace...'}
-            // value={value}
-            // onChange={onChange}
-          />
-          <SingleSelectionDropdown
-            className={'max-w-[280px]'}
-            classNames={{
-              trigger: 'rounded-none',
-            }}
-            dropdownItems={ROLES}
-            selectedKeys={selectedKeys}
-            selectedValue={selectedValue}
-            setSelectedKeys={setSelectedKeys}
-          />
-
-          <Button type="submit" className={'rounded-l-none px-8'}>
-            Invite
-          </Button>
-        </form>
-      </div>
+      <SearchOrInviteUsers
+        selectedKeys={selectedKeys}
+        selectedValue={selectedValue}
+        setSelectedKeys={setSelectedKeys}
+        setSearchQuery={setSearchQuery}
+        resolveAddToWorkspace={resolveAddToWorkspace}
+      />
 
       <div className="flex items-center justify-between gap-8 ">
         <Tabs
@@ -165,6 +132,57 @@ function ManagePeople() {
           toggleCreateUserModal={toggleCreateUserModal}
         />
       )}
+    </div>
+  )
+}
+
+export function SearchOrInviteUsers({ setSearchQuery, resolveAddToWorkspace }) {
+  const [selectedKeys, setSelectedKeys] = useState(
+    new Set([ROLES.map((role) => role.label)[0]]),
+  )
+
+  const selectedValue = React.useMemo(
+    () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
+    [selectedKeys],
+  )
+  return (
+    <div className="relative flex min-h-20 w-full flex-col justify-between gap-4 py-8 md:flex-row">
+      {/*  USER SEARCH */}
+      <Search
+        onChange={(e) => {
+          setSearchQuery(e.target.value)
+        }}
+      />
+
+      {/******** ADD USER TO WORKSPACE ************/}
+
+      <form
+        onSubmit={resolveAddToWorkspace}
+        className={'group relative flex h-fit w-full flex-grow-0 justify-end'}
+      >
+        <Input
+          className={
+            'h h-12 w-full max-w-lg rounded-r-none text-base placeholder:text-sm placeholder:font-normal placeholder:text-slate-400'
+          }
+          placeholder={'Invite users to workspace...'}
+          // value={value}
+          // onChange={onChange}
+        />
+        <SingleSelectionDropdown
+          className={'max-w-[280px]'}
+          classNames={{
+            trigger: 'rounded-none',
+          }}
+          dropdownItems={ROLES}
+          selectedKeys={selectedKeys}
+          selectedValue={selectedValue}
+          setSelectedKeys={setSelectedKeys}
+        />
+
+        <Button type="submit" className={'h-12 rounded-l-none px-8'}>
+          Invite
+        </Button>
+      </form>
     </div>
   )
 }
