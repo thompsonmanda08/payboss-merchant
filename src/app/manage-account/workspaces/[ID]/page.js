@@ -3,7 +3,10 @@ import Spinner from '@/components/ui/Spinner'
 import React, { Suspense } from 'react'
 
 function WorkSpaceIDPage({ params }) {
-  const WorkSpaceID = params.id
+  const WorkSpaceID = params.ID
+
+  // TODO: fetch workspace data using WorkSpaceID from API
+  //ONLY RENDER WORKSPACE DATA WITH VALID ID
   console.log(WorkSpaceID)
   return (
     <Suspense fallback={<Spinner size={64} />}>

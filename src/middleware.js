@@ -24,16 +24,14 @@ export async function middleware(request) {
   const session = await getServerSession()
   const urlRouteParams = pathname.match(/^\/dashboard\/([^\/]+)\/?$/)
   const accessToken = session?.accessToken || ''
+  
+
+  // CHECK FOR  ROUTES
   const isAuthPage =
     pathname.startsWith('/login') || pathname.startsWith('/register')
-
   const isUserInWorkspace =
     pathname.startsWith('/dashboard') && pathname.split('/').length >= 3
-
   const isDashboardRoute = pathname == '/dashboard'
-
-  // CHECK FOR PUBLIC AND PROTECTED ROUTES
-  const isProtectedRoute = PROTECTED_ROUTES.includes(pathname)
   const isPublicRoute = PUBLIC_ROUTE.includes(pathname)
 
   if (pathname == '/') return response

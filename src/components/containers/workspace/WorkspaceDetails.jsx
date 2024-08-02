@@ -74,12 +74,7 @@ function WorkspaceDetails({ WorkSpaceID }) {
               className="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover"
             />
             <div>
-              <Button
-                type="button"
-                className="rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20"
-              >
-                Change Workspace Image
-              </Button>
+              <Button type="button">Change Workspace Image</Button>
               <p className="mt-2 text-xs leading-5 text-gray-400">
                 JPG, GIF or PNG. 2MB max.
               </p>

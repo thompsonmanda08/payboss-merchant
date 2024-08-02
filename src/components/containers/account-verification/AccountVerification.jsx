@@ -5,6 +5,7 @@ import React from 'react'
 import BusinessAccountDetails from './BusinessAccountDetails'
 import DocumentAttachments from './DocumentAttachments'
 import ProgressStageTracker from './ProgressStageTracker'
+import { useGeneralConfigOptions, useSetupConfig } from '@/hooks/useQueryHooks'
 
 const TABS = [
   { name: 'Business Details', href: '#', index: 0 },
@@ -13,9 +14,23 @@ const TABS = [
 ]
 
 function AccountVerification() {
+  const { data: response, isLoading, isSuccess } = useSetupConfig()
+  const { data: config } = useGeneralConfigOptions()
+  const { userDetails } = response?.data || []
+  const { companyTypes, banks, currencies } = config?.data || []
+
+  // console.log(response?.data)
+  // console.log(companyTypes)
+
   // ***** COMPONENT RENDERER ************** //
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
-    <BusinessAccountDetails key={'business-details'} />,
+    <BusinessAccountDetails
+      key={'business-details'}
+      user={userDetails}
+      companyTypes={companyTypes}
+      banks={banks}
+      currencies={currencies}
+    />,
     <DocumentAttachments key={'documents'} />,
     <ProgressStageTracker key={'verification-status'} />,
   ])
