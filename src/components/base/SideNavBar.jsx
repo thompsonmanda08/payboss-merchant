@@ -209,7 +209,7 @@ function SideNavBar() {
       <SettingsSideBar
         backButtonText="Dashboard Home"
         title={activeWorkspace?.workspace}
-        options={{ title: 'workspace_settings', links: WORKSPACE_SETTINGS }}
+        // options={{ title: 'workspace_settings', links: WORKSPACE_SETTINGS }}
         isProfile={isProfile}
         settingsPathname={settingsPathname}
       />

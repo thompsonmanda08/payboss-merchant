@@ -5,6 +5,7 @@ import {
   Bars3BottomLeftIcon,
   BriefcaseIcon,
   CheckBadgeIcon,
+  LockClosedIcon,
   PowerIcon,
   UserCircleIcon,
   UserGroupIcon,
@@ -35,6 +36,11 @@ const ACCOUNT_SETTINGS = [
     href: '/manage-account/workspaces',
   },
   {
+    name: 'Security & Permissions',
+    Icon: LockClosedIcon,
+    href: '/manage-account/security',
+  },
+  {
     name: 'Account Verification',
     Icon: CheckBadgeIcon,
     href: '/manage-account/account-verification',
@@ -55,15 +61,29 @@ function SettingsSideBar({
     setOpenSettingsSideBar(!openSettingsSideBar)
   }
 
-
   const dashboardHome = settingsPathname?.split('/')?.slice(0, 3)?.join('/')
   const homeRoute = dashboardHome || '/workspaces'
 
   const WORKSPACE_SETTINGS = [
     {
+      name: 'My Settings',
+      Icon: UserCircleIcon,
+      href: `${settingsPathname}`,
+    },
+    {
       name: 'People',
       Icon: UserGroupIcon,
       href: `${settingsPathname}/users`,
+    },
+    {
+      name: 'Workspaces',
+      Icon: BriefcaseIcon,
+      href: `${settingsPathname}/workspaces`,
+    },
+    {
+      name: 'Security & Permissions',
+      Icon: LockClosedIcon,
+      href: `${settingsPathname}/security`,
     },
   ]
 

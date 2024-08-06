@@ -1,7 +1,10 @@
 import { deleteWorkspace, updateWorkspace } from '@/app/_actions/config-actions'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/InputField'
+import useWorkspaces from '@/hooks/useWorkspace'
 import { notify } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 const INITIAL_WORKSPACE = {
@@ -10,8 +13,13 @@ const INITIAL_WORKSPACE = {
 }
 
 function WorkspaceDetails({ WorkSpaceID }) {
+  const { back } = useRouter()
+  const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
+  const { workspaces } = useWorkspaces()
+  const workspace = workspaces.find((workspace) => workspace.ID === WorkSpaceID)
+
   const [newWorkspace, setNewWorkspace] = useState(INITIAL_WORKSPACE)
 
   function editWorkspaceField(fields) {
@@ -36,15 +44,15 @@ function WorkspaceDetails({ WorkSpaceID }) {
 
     const response = await updateWorkspace({ ...newWorkspace, ID: WorkSpaceID })
 
-    if (!response.success) {
-      notify('error', 'Failed to Update Workspace!')
+    if (response.success) {
+      queryClient.invalidateQueries({ queryKey: [SETUP_QUERY_KEY] })
       setLoading(false)
+      notify('success', 'Workspaces created successfully!')
       return
     }
 
-    // UPDATE WORKSPACE
+    notify('error', 'Failed to Update Workspace!')
     setLoading(false)
-    notify('success', 'Workspaces created successfully!')
   }
 
   async function handleDeleteWorkspace() {
@@ -52,22 +60,23 @@ function WorkspaceDetails({ WorkSpaceID }) {
 
     const response = await deleteWorkspace(WorkSpaceID)
 
-    if (!response.success) {
-      notify('error', 'Failed to Deactivate Workspace!')
+    if (response.success) {
+      queryClient.invalidateQueries({ queryKey: [SETUP_QUERY_KEY] })
       setDeleteLoading(false)
+      notify('success', 'Workspaces Deactivated successfully!')
+      back()
       return
     }
 
-    // UPDATE WORKSPACE
+    notify('error', 'Failed to Deactivate Workspace!')
     setDeleteLoading(false)
-    notify('success', 'Workspaces Deactivated successfully!')
   }
 
   return (
     <>
       <div className="flex w-full flex-1 flex-col gap-4">
         <div className="flex flex-col gap-6 ">
-          <div className="flex w-full items-center gap-x-8">
+          {/* <div className="flex w-full items-center gap-x-8">
             <img
               alt=""
               src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -79,7 +88,7 @@ function WorkspaceDetails({ WorkSpaceID }) {
                 JPG, GIF or PNG. 2MB max.
               </p>
             </div>
-          </div>
+          </div> */}
 
           <form
             onSubmit={handleUpdateWorkspace}
@@ -88,6 +97,7 @@ function WorkspaceDetails({ WorkSpaceID }) {
           >
             <Input
               label="Workspace Name"
+              defaultValue={workspace?.workspace}
               onChange={(e) => {
                 editWorkspaceField({ workspace: e.target.value })
               }}
@@ -95,6 +105,7 @@ function WorkspaceDetails({ WorkSpaceID }) {
 
             <Input
               label="Description"
+              defaultValue={workspace?.description}
               onChange={(e) => {
                 editWorkspaceField({ description: e.target.value })
               }}
