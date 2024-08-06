@@ -8,9 +8,9 @@ import { CustomRadioButton } from '@/components/base'
 import { STEPS } from '../SignupForm'
 export default function Step0({ updateDetails }) {
   useEffect(() => {
-    // Set Default Business Registration Status to REGISTERED_BUSINESS
+    // Set Default  Registration STAGE
     updateDetails(STEPS[0], {
-      business_type: 'ORGANIZATION',
+      registration: 'NEW',
     })
   }, [])
   return (
@@ -18,11 +18,11 @@ export default function Step0({ updateDetails }) {
       <RadioGroup
         label="What type of business do you run?"
         className="flex w-full"
-        description="Payboss gives you the tools to simplify money management and take control of your financial operations - no matter your business size or structure."
-        defaultValue={'ORGANIZATION'}
+        description="Payboss gives you the tools to simplify money management, no matter your business size or structure."
+        defaultValue={'NEW'}
         onChange={(e) =>
           updateDetails(STEPS[0], {
-            business_type: e.target.value,
+            registration: e.target.value,
           })
         }
       >
@@ -33,10 +33,10 @@ export default function Step0({ updateDetails }) {
             variants={staggerContainerItemVariants}
           >
             <CustomRadioButton
-              description="Works for large Organizations, Limited Liability Companies, NGOs etc."
-              value="ORGANIZATION"
+              description="Create a new account for your business and take control of your financial operations"
+              value="NEW"
             >
-              <p className="mb-1 font-semibold">Corporate/Organization</p>
+              <p className="mb-1 font-semibold">Create New Account</p>
             </CustomRadioButton>
           </motion.div>
 
@@ -46,11 +46,11 @@ export default function Step0({ updateDetails }) {
             variants={staggerContainerItemVariants}
           >
             <CustomRadioButton
-              description="Works for individuals, one-person business, social media vendors and stores"
-              value="INDIVIDUAL"
+              description="Pick up from where you left off in the account creation process"
+              value="CONTINUE"
               disabled={true}
             >
-              <p className="mb-1 font-semibold">Individual/Sole Trader</p>
+              <p className="mb-1 font-semibold">Continue Registration</p>
             </CustomRadioButton>
           </motion.div>
         </div>

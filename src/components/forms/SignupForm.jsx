@@ -21,6 +21,7 @@ import {
   updateMerchantDetails,
 } from '@/app/_actions/auth-actions'
 import { Card } from '@nextui-org/react'
+import Step1_TPIN from './signup-fragments/Step1_1'
 
 export const STEPS = [
   'business-registration',
@@ -45,12 +46,45 @@ export default function SignUpForm() {
     setIsLoading,
     businessInfoSent,
     setBusinessInfoSent,
-    documentsInfoSent,
-    setDocumentsInfoSent,
+
     merchantID,
     setMerchantID,
     setError,
+    isValidTPIN,
   } = useAuthStore()
+
+  const NEW_REGISTRATION = [
+    <Step1 key={STEPS[1]} updateDetails={updateAccountDetails} />, // BUSINESS INFO
+    <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />, // BANK DETAILS
+    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />, // BUSINESS ADMIN USER
+  ]
+
+  const CONTINUE_REGISTRATION = [
+    <Step1_TPIN key={STEPS[1]} updateDetails={updateAccountDetails} />, // BUSINESS INFO
+    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />, // BUSINESS ADMIN USER
+    <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />, // BANK DETAILS
+  ]
+
+  const RENDERED_COMPONENTS =
+    businessInfo?.registration != 'NEW'
+      ? CONTINUE_REGISTRATION
+      : NEW_REGISTRATION
+
+  const {
+    activeTab,
+    navigateForward,
+    navigateBackwards,
+    navigateTo,
+    currentTabIndex,
+    firstTab,
+    lastTab,
+  } = useCustomTabsHook([
+    <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />, // BUSINESS SPACE TYPE
+    ...RENDERED_COMPONENTS,
+  ])
+
+  const isLastStep = currentTabIndex === lastTab
+  const isFirstStep = currentTabIndex === firstTab
 
   function updateAccountDetails(step, fields) {
     // BUSINESS INFO
@@ -69,43 +103,27 @@ export default function SignUpForm() {
     }
   }
 
-  const {
-    activeTab,
-    navigateForward,
-    navigateBackwards,
-    navigateTo,
-    currentTabIndex,
-    firstTab,
-    lastTab,
-  } = useCustomTabsHook([
-    <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />, // BUSINESS SPACE TYPE
-    <Step1 key={STEPS[1]} updateDetails={updateAccountDetails} />, // BUSINESS INFO
-    <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />, // BANK DETAILS
-    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />, // BUSINESS ADMIN USER
-  ])
-
-  const isLastStep = currentTabIndex === lastTab
-  const isFirstStep = currentTabIndex === firstTab
-
   async function handleCreateAccount(e) {
     e.preventDefault()
     setIsLoading(true)
     updateErrorStatus({ status: false, message: '' })
 
-    if (businessInfo.business_type == 'INDIVIDUAL') {
-      notify('error', 'Not Available Yet')
+    if (businessInfo.registration == 'CONTINUE') {
+      // notify('error', 'Not Available Yet')
+      // TODO: => SET SENT BUSINESS INFO TO TRUE
+      // TODO: => SET MERCHANT ID IN STATE
+      // TODO: => ALLOW MERCHANT TO EDIT THEIR DETAILS
+      navigateForward()
       setIsLoading(false)
       return
     }
-    console.log('CURRENT STEP: ', currentTabIndex)
 
-    // CREATE MERCHANT ACCOUNT & BANK DETAILS
+    // CREATE OR VERIFY MERCHANT ACCOUNT & BANK DETAILS
     if (currentTabIndex === 2 && STEPS[currentTabIndex] === STEPS[2]) {
       // POST AND PATCH
       let payload
       if (!businessInfoSent) {
         payload = await createNewMerchant(businessInfo)
-      
 
         let merchantID = payload?.data?.merchantID
 
@@ -129,8 +147,6 @@ export default function SignUpForm() {
         return
       }
     }
-
-    
 
     // CREATE ADMIN USER - LAST STEP
     if (isLastStep && STEPS[currentTabIndex] === STEPS[lastTab]) {
@@ -158,7 +174,6 @@ export default function SignUpForm() {
         return
       }
     }
-
 
     if (!isLastStep) {
       navigateForward()

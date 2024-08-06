@@ -4,17 +4,17 @@ import React from 'react'
 import { Input } from '@/components/ui/InputField'
 import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
-import useConfigStore from '@/context/configStore'
+
 import { CardHeader } from '@/components/base'
 import { STEPS } from '../SignupForm'
 import useAuthStore from '@/context/authStore'
 import SelectField from '@/components/ui/SelectField'
+import useConfigOptions from '@/hooks/useConfigOptions'
 
 // BUSINESS BANKING DETAILS
 export default function Step2({ updateDetails }) {
-  const configOptions = useConfigStore((state) => state.configOptions)
+  const { banks, currencies } = useConfigOptions()
   const step = useAuthStore((state) => state.businessInfo)
-  const banks = configOptions?.banks
   const branchCodeError =
     (step?.branch_code?.length > 1 && step?.branch_code?.length < 6) ||
     step?.branch_code?.length > 8
@@ -117,7 +117,7 @@ export default function Step2({ updateDetails }) {
             variants={staggerContainerItemVariants}
           >
             <SelectField
-              options={configOptions?.currencies}
+              options={currencies}
               label="Currency"
               name="currencyID"
               value={step?.currencyID}
