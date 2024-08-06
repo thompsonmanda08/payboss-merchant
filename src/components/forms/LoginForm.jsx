@@ -22,6 +22,7 @@ function LoginForm() {
     setError,
     isLoading,
     setAuth,
+    resetAuthData,
   } = useAuthStore()
 
   const urlParams = useSearchParams()
@@ -29,7 +30,12 @@ function LoginForm() {
   async function handleLogin(e) {
     e.preventDefault()
     setIsLoading(true)
-    const { emailusername, password } = loginDetails
+
+    const formData = new FormData(e.target)
+    const emailusername = formData.get('emailusername')
+    const password = formData.get('password')
+    const loginDetails = { emailusername, password }
+
 
     if (!emailusername || !password) {
       updateErrorStatus({
@@ -41,7 +47,6 @@ function LoginForm() {
     }
 
     const response = await authenticateUser(loginDetails)
-
     if (response.success) {
       setAuth(response?.data)
       const loginUrl = urlParams.get('callbackUrl') || '/workspaces'
@@ -53,16 +58,21 @@ function LoginForm() {
         status: response.status,
         message: response.message,
       })
-    }
-
-    setTimeout(() => {
       setIsLoading(false)
-    }, 10000)
+      return
+    }
   }
+
 
   useEffect(() => {
     // Clean out any errors if the user makes any changes to the form
     setError({})
+
+    // RESET ALL AUTH DATA
+    return () => {
+      setError({})
+      resetAuthData()
+    }
   }, [loginDetails])
 
   return (
