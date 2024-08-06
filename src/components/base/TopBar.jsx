@@ -35,8 +35,8 @@ export default function TopNavBar({}) {
     pathname.split('/')[3]?.replaceAll('-', ' ') || activeWorkspace?.workspace
   // console.log(currentPath)
   const isProfile =
-    pathname?.split('/')[3]?.replaceAll('-', ' ').toLowerCase() ===
-      'settings' || currentPath?.toLowerCase() === 'settings'
+    pathname?.split('/').length == 4 &&
+    pathname?.split('/')[3]?.replaceAll('-', ' ').toLowerCase() === 'settings'
 
   return (
     <nav
