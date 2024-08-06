@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Input } from '@/components/ui/InputField'
 import { Switch } from '@nextui-org/switch'
 import { Button } from '../ui/Button'
@@ -19,6 +19,7 @@ function LoginForm() {
     updateErrorStatus,
     setIsLoading,
     error,
+    setError,
     isLoading,
     setAuth,
   } = useAuthStore()
@@ -29,29 +30,40 @@ function LoginForm() {
     e.preventDefault()
     setIsLoading(true)
     const { emailusername, password } = loginDetails
-    if (emailusername && password) {
-      const response = await authenticateUser(loginDetails)
 
-      // console.log(response)
-
-      if (response.success) {
-        setAuth(response?.data)
-        const loginUrl = urlParams.get('callbackUrl') || '/workspaces'
-        push(loginUrl)
-      }
-
-      if (!response.success) {
-        updateErrorStatus({
-          status: response.status,
-          message: response.message,
-        })
-      }
-
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 10000)
+    if (!emailusername || !password) {
+      updateErrorStatus({
+        status: true,
+        message: 'Provide login credentials',
+      })
+      setIsLoading(false)
+      return
     }
+
+    const response = await authenticateUser(loginDetails)
+
+    if (response.success) {
+      setAuth(response?.data)
+      const loginUrl = urlParams.get('callbackUrl') || '/workspaces'
+      push(loginUrl)
+    }
+
+    if (!response.success) {
+      updateErrorStatus({
+        status: response.status,
+        message: response.message,
+      })
+    }
+
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 10000)
   }
+
+  useEffect(() => {
+    // Clean out any errors if the user makes any changes to the form
+    setError({})
+  }, [loginDetails])
 
   return (
     <Card className="mx-auto w-full max-w-sm flex-auto p-6 ">
@@ -62,6 +74,7 @@ function LoginForm() {
           name={'emailusername'}
           label="Email or Username"
           aria-describedby="email-addon"
+          onError={error?.status}
           onChange={(e) => {
             updateLoginDetails({ emailusername: e.target.value })
           }}
@@ -74,11 +87,12 @@ function LoginForm() {
           aria-label="Password"
           label="Password"
           aria-describedby="password-addon"
+          onError={error?.status}
           onChange={(e) => {
             updateLoginDetails({ password: e.target.value })
           }}
         />
-        <div className="flex items-center justify-between text-gray-500">
+        {/* <div className="flex items-center justify-between text-gray-500">
           <div className="flex items-center justify-start gap-1">
             <Switch size="sm" />
             <label
@@ -94,13 +108,13 @@ function LoginForm() {
           >
             Forgot Password?
           </Link>
-        </div>
+        </div> */}
         <div className="">
           <Button
             type="submit"
             isLoading={isLoading}
             loadingText={'Signing In...'}
-            className={'mt-6 w-full'}
+            className={'mt-2 w-full'}
           >
             Sign in
           </Button>
