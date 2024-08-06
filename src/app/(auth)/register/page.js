@@ -3,25 +3,14 @@ import Link from 'next/link'
 import { Card, EmptyState, Logo } from '@/components/base'
 import React from 'react'
 import SignUpForm from '@/components/forms/SignupForm'
-import { useGeneralConfigOptions, useUserRoles } from '@/hooks/useQueryHooks'
-import useConfigStore from '@/context/configStore'
+
 import { useRouter } from 'next/navigation'
 import Spinner from '@/components/ui/Spinner'
+import useConfigOptions from '@/hooks/useConfigOptions'
 
 export default function Register() {
-  const {
-    data: configs,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useGeneralConfigOptions()
-  
-  const setConfigOptions = useConfigStore((state) => state.setConfigOptions)
-
+  const { isLoading, isError } = useConfigOptions()
   const router = useRouter()
-
-  if (isSuccess) setConfigOptions(configs?.data)
-  
 
   return (
     <div className="relative -mt-[260px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none">
