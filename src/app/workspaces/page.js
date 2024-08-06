@@ -1,13 +1,10 @@
-import { Card, Logo } from '@/components/base'
-import { Button } from '@/components/ui/Button'
-import { cn } from '@/lib/utils'
-import { Cog6ToothIcon } from '@heroicons/react/24/outline'
-import Link from 'next/link'
+import { Card } from '@/components/base'
 import React from 'react'
 
 import { Workspaces } from '@/components/containers'
 import Image from 'next/image'
 import { DefaultCover } from '@/lib/constants'
+import WorkspaceHeader from '@/components/containers/workspace/WorkspaceHeader'
 
 function WorkSpacesPage() {
   return (
@@ -15,16 +12,7 @@ function WorkSpacesPage() {
       <div className="relative flex h-full max-h-screen w-full flex-col overflow-y-auto ">
         <section role="workspace-header">
           <div className="relative h-[380px] w-full overflow-clip rounded-b-3xl bg-gray-900">
-            <Logo isWhite className="absolute left-5 top-5 z-30 " />
-            <Button
-              as={Link}
-              href={'/manage-account'}
-              variant="light"
-              className="data[hover=true]:bg-slate-900/30 absolute right-5 top-5 z-30 aspect-square min-w-[120px] rounded-full bg-slate-900/20 text-white"
-              startContent={<Cog6ToothIcon className=" h-6 w-6" />}
-            >
-              Manage
-            </Button>
+            <WorkspaceHeader />
             <Image
               className="z-0 h-full w-full object-cover"
               src={DefaultCover}
