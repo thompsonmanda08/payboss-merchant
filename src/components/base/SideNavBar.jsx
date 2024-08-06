@@ -3,7 +3,6 @@
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
-import useAuthStore from '@/context/authStore'
 import useNavigationStore from '@/context/navigationStore'
 import MobileNavBar from './MobileNavBar'
 
@@ -33,8 +32,8 @@ import { Logo, SettingsSideBar } from '.'
 import { Button } from '../ui/Button'
 import WorkspaceSelection from './WorkspaceSelection'
 import SideNavItems from './SideNavItems'
-import useConfigStore from '@/context/configStore'
-import { Card, Skeleton } from '@nextui-org/react'
+import useWorkspaces from '@/hooks/useWorkspace'
+import { Skeleton } from '../ui/skeleton'
 
 export const SIDE_BAR_OPTIONS = [
   {
@@ -162,7 +161,7 @@ function SideNavBar() {
   const pathname = usePathname()
   const [expandedSection, setExpandedSection] = useState(null)
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore()
-  const { activeWorkspace } = useConfigStore((state) => state)
+  const { activeWorkspace } = useWorkspaces()
   const workspaceID = activeWorkspace?.ID
 
   const settingsPathname = `/dashboard/${workspaceID}/settings`
@@ -261,7 +260,18 @@ function SideNavBar() {
     )
   }
 
-  return <></>
+  // LOADING SKELETON
+  return (
+    <div className="flex h-full max-w-[320px] flex-col space-y-6 p-5 lg:w-full lg:min-w-[220px]">
+      <Skeleton className="h-[50px] w-[250px] rounded-xl" />
+      <div className="space-y-4">
+        {Array.from({ length: 9 }).map((_, index) => (
+          <Skeleton className="h-10 w-[250px]" key={index} />
+        ))}
+      </div>
+      <Skeleton className="mt-auto h-[50px] w-[250px] rounded-xl" />
+    </div>
+  )
 }
 
 export default SideNavBar

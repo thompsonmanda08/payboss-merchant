@@ -6,13 +6,13 @@ import { SoftBoxIcon } from '.'
 import { ArrowRightIcon, BriefcaseIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 
-function WorkspaceItem({ name, href, setActiveWorkspace }) {
+function WorkspaceItem({ name, href }) {
   //
   return (
     <Button
       as={Link}
       href={href}
-      onPress={setActiveWorkspace}
+      // onPress={setActiveWorkspace}
       className="flex h-auto w-full justify-start gap-4 border-[1px] border-primary-50 bg-transparent p-2 hover:border-primary-100 hover:bg-primary-50"
       startContent={
         <SoftBoxIcon className={'w-18 h-20'}>

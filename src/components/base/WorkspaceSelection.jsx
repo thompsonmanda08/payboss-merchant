@@ -11,19 +11,12 @@ import {
 } from '@heroicons/react/24/outline'
 import SoftBoxIcon from './SoftBoxIcon'
 import DropdownButton from '../ui/DropdownButton'
-import useConfigStore from '@/context/configStore'
-import { useRouter } from 'next/navigation'
-import { Skeleton } from '@nextui-org/react'
 import Spinner from '../ui/Spinner'
+import useWorkspaces from '@/hooks/useWorkspace'
 
 export default function WorkspaceSelection({ isSelected }) {
-  const { activeWorkspace, setActiveWorkspace, workspaces } = useConfigStore(
-    (state) => state,
-  )
+  const { activeWorkspace, workspaces } = useWorkspaces()
 
-  console.log(workspaces)
-
-  // const { push, refresh } = useRouter()
   const workspaceOptions = [
     {
       key: 'home',
@@ -47,7 +40,7 @@ export default function WorkspaceSelection({ isSelected }) {
           description: item?.description,
           // href: `/dashboard/${item?.ID}`,
           onSelect: () => {
-            setActiveWorkspace(item)
+            // setActiveWorkspace(item)
             // push(`/dashboard/${item?.ID}`)
             // refresh()
             window.location.href = `/dashboard/${item?.ID}`

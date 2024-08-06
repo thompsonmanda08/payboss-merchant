@@ -55,9 +55,7 @@ function SettingsSideBar({
     setOpenSettingsSideBar(!openSettingsSideBar)
   }
 
-  // const router = useRouter()
-  // const activeWorkspace = useConfigStore((state) => state?.activeWorkspace)
-  // console.log(settingsPathname)
+
   const dashboardHome = settingsPathname?.split('/')?.slice(0, 3)?.join('/')
   const homeRoute = dashboardHome || '/workspaces'
 

@@ -5,7 +5,7 @@ import Spinner from '@/components/ui/Spinner'
 import { useSetupConfig } from '@/hooks/useQueryHooks'
 import { cn, notify } from '@/lib/utils'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Modal,
   ModalContent,
@@ -13,22 +13,21 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-  usePagination,
 } from '@nextui-org/react'
 import { Input } from '@/components/ui/InputField'
 import { createNewWorkspace } from '@/app/_actions/config-actions'
 import { useQueryClient } from '@tanstack/react-query'
 import { SETUP_QUERY_KEY } from '@/lib/constants'
 import { usePathname, useRouter } from 'next/navigation'
-import useConfigStore from '@/context/configStore'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import useWorkspace from '@/hooks/useWorkspace'
 
 function Workspaces() {
   const { push } = useRouter()
   const pathname = usePathname()
   const queryClient = useQueryClient()
+  const { activeWorkspace } = useWorkspace()
 
-  const { setWorkspaces, setActiveWorkspace } = useConfigStore((state) => state)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { data: response, isLoading, isSuccess } = useSetupConfig()
   const { workspaces, userDetails } = response?.data || []
@@ -84,33 +83,6 @@ function Workspaces() {
     setLoading(false)
   }
 
-  useEffect(() => {
-    if (isSuccess) setWorkspaces(workspaces)
-  }, [])
-
-  const samples = [
-    {
-      workspace: 'Interwebb1',
-      members: 50,
-      ID: '89776516846',
-    },
-    {
-      workspace: 'Interwebb2',
-      members: 20,
-      ID: '123987651987456',
-    },
-    {
-      workspace: 'Interwebb3',
-      members: 87,
-      ID: '12345454156',
-    },
-    {
-      workspace: 'Interwebb4',
-      members: 9,
-      ID: '9875468',
-    },
-  ]
-
   return (
     <div className="flex w-full flex-col items-center justify-center ">
       <ScrollArea className="flex w-full min-w-[400px] flex-col lg:max-h-[400px] lg:px-2">
@@ -125,23 +97,19 @@ function Workspaces() {
           <div
             className={cn('grid w-full place-items-center gap-4 rounded-lg', {
               'grid-cols-[repeat(auto-fill,minmax(400px,1fr))]':
-                workspaces?.length > 0 || samples?.length > 0,
+                workspaces?.length > 0,
             })}
           >
             {workspaces &&
               workspaces?.map((item) => {
-                const href = !isWorkspaceSettings
-                  ? `/dashboard/${item?.ID}`
-                  : pathname + `/${item?.ID}`
-
-                const selectWorkspace = !isWorkspaceSettings
-                  ? () => setActiveWorkspace(item)
-                  : undefined
                 return (
                   <WorkspaceItem
-                    href={href}
                     name={item?.workspace}
-                    setActiveWorkspace={selectWorkspace}
+                    href={
+                      !isWorkspaceSettings
+                        ? `/dashboard/${item?.ID}`
+                        : pathname + `/${item?.ID}`
+                    }
                   />
                 )
               })}

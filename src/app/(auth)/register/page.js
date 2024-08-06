@@ -15,13 +15,13 @@ export default function Register() {
     isError,
     isSuccess,
   } = useGeneralConfigOptions()
-  const { data: userRoleResponse, isFetched } = useUserRoles()
+  
   const setConfigOptions = useConfigStore((state) => state.setConfigOptions)
-  const setUserRoles = useConfigStore((state) => state.setUserRoles)
+
   const router = useRouter()
 
   if (isSuccess) setConfigOptions(configs?.data)
-  if (isFetched) setUserRoles(userRoleResponse?.data?.roles)
+  
 
   return (
     <div className="relative -mt-[260px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none">
