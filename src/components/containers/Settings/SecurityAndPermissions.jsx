@@ -1,10 +1,11 @@
+'use client'
 import { Modal } from '@/components/base'
-import useProfileStore from '@/context/profileStore'
 import useSettingsStore from '@/context/settingsStore'
+import useAccountProfile from '@/hooks/useProfileDetails'
 
 export default function SecurityAndPermissions() {
-  const { user } = useProfileStore()
   const { openEditModal, setOpenEditModal } = useSettingsStore()
+  const { user } = useAccountProfile()
 
   function handleToggleModal() {
     setOpenEditModal(!openEditModal)

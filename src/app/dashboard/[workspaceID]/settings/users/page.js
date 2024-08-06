@@ -5,9 +5,7 @@ import { ManagePeople } from '@/components/containers'
 function UsersSettingsPage() {
   return (
     <Suspense fallback={<LoadingPage />}>
-      <div>
-        <ManagePeople />
-      </div>
+      <ManagePeople classNames={{ wrapper: 'px-8 md:px-10 max-w-full' }} />
     </Suspense>
   )
 }

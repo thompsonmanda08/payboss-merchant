@@ -3,7 +3,7 @@ import React from 'react'
 
 function WorkspaceSettings() {
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
+    <div className="mx-auto flex w-full  flex-col gap-8 px-8 md:px-10 ">
       <div>
         <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
           My Workspaces

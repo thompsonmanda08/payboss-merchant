@@ -11,6 +11,7 @@ import { USERS } from '@/app/dashboard/data/sampleData'
 import UsersTable from './UsersTable'
 import { useUserRoles } from '@/hooks/useQueryHooks'
 import CreateNewUserModal from './CreateNewUserModal'
+import { cn } from '@/lib/utils'
 
 export const ROLES = [
   {
@@ -45,7 +46,7 @@ const TABS = [
   { name: 'Internal Guests', index: 2 },
 ]
 
-function ManagePeople() {
+function ManagePeople({ classNames }) {
   const { data: rolesResponse } = useUserRoles()
   const [openCreateUserModal, setOpenCreateUserModal] = useState(false)
 
@@ -97,8 +98,10 @@ function ManagePeople() {
     />,
   ])
 
+  const { wrapper } = classNames || ''
+
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col">
+    <div className={cn('mx-auto flex w-full max-w-7xl flex-col', wrapper)}>
       <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
         Manage People
       </h2>

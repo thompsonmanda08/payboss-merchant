@@ -41,8 +41,8 @@ export default function TopNavBar({}) {
   return (
     <nav
       className={cn(
-        `rounded-blur fixed left-0 right-0 top-5 z-30 flex w-full -translate-y-5 items-center bg-white py-2 pr-5  shadow-sm transition-all lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:shadow-none`,
-        { 'bg-transparent pl-5 text-white': isProfile },
+        `rounded-blur fixed left-0 right-0 top-5 z-30 flex w-full -translate-y-5 items-center bg-white px-10 py-2 shadow-sm transition-all lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:shadow-none`,
+        { 'bg-transparent text-white': isProfile },
       )}
     >
       <div className="flex w-full items-center rounded-3xl">
