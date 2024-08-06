@@ -1,8 +1,7 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import useNavigationStore from '@/context/navigationStore'
+import React from 'react'
 import Link from 'next/link'
-import { BellIcon, Cog6ToothIcon, UserIcon } from '@heroicons/react/24/solid'
+import { BellIcon, Cog6ToothIcon } from '@heroicons/react/24/solid'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Avatar from '../ui/Avatar'
@@ -15,17 +14,16 @@ import {
   DropdownItem,
   Button,
   User,
-  user,
 } from '@nextui-org/react'
-import { PlusIcon } from '@heroicons/react/24/outline'
-import useConfigStore from '@/context/configStore'
 import { useSetupConfig } from '@/hooks/useQueryHooks'
 import SelectField from '../ui/SelectField'
 import useAuthStore from '@/context/authStore'
+import useWorkspaces from '@/hooks/useWorkspace'
+import { Skeleton } from '../ui/skeleton'
 
 export default function TopNavBar({}) {
   const pathname = usePathname()
-  const { activeWorkspace } = useConfigStore((state) => state)
+  const { activeWorkspace } = useWorkspaces()
   const { data: response } = useSetupConfig()
   const user = response?.data?.userDetails
   const workspaceID = activeWorkspace?.ID
@@ -49,15 +47,24 @@ export default function TopNavBar({}) {
     >
       <div className="flex w-full items-center rounded-3xl">
         <div className="relative left-12 transition-all duration-300 ease-in-out lg:left-0">
-          <BreadCrumbLinks isProfile={isProfile} />
-          <h2
-            className={cn(
-              'pl-2 text-lg font-bold uppercase leading-8 text-slate-800',
-              { 'text-white': isProfile },
-            )}
-          >
-            {currentPath}
-          </h2>
+          {currentPath || user ? (
+            <>
+              <BreadCrumbLinks isProfile={isProfile} />
+              <h2
+                className={cn(
+                  'pl-2 text-lg font-bold uppercase leading-8 text-slate-800',
+                  { 'text-white': isProfile },
+                )}
+              >
+                {currentPath}
+              </h2>
+            </>
+          ) : (
+            <div className="flex flex-col items-start gap-2">
+              <Skeleton className="h-4 w-[250px] rounded-xl" />
+              <Skeleton className="h-5 w-[150px] rounded-xl" />
+            </div>
+          )}
         </div>
         <div className="relative z-50 ml-auto flex  items-center justify-center rounded-full">
           <div
@@ -65,29 +72,43 @@ export default function TopNavBar({}) {
               'text-white': isProfile,
             })}
           >
-            <Link
-              href={settingsPathname}
-              className="flex cursor-pointer items-center gap-2 text-sm"
-            >
-              <Cog6ToothIcon className="h-5 w-6 " />
-            </Link>
-            <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:right-1 after:top-0 after:h-2 after:w-2 after:rounded-full after:bg-rose-600 after:content-['']">
-              <BellIcon className="top-0 h-5 w-6 " />
-            </div>
             {user ? (
-              <AvatarDropdown
-                user={user}
-                isProfile={isProfile}
-                settingsPathname={settingsPathname}
-              />
+              <>
+                <Link
+                  href={settingsPathname}
+                  className="flex cursor-pointer items-center gap-2 text-sm"
+                >
+                  <Cog6ToothIcon className="h-5 w-6 " />
+                </Link>
+                <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:right-1 after:top-0 after:h-2 after:w-2 after:rounded-full after:bg-rose-600 after:content-['']">
+                  <BellIcon className="top-0 h-5 w-6 " />
+                </div>
+                <AvatarDropdown
+                  user={user}
+                  isProfile={isProfile}
+                  settingsPathname={settingsPathname}
+                />
+              </>
             ) : (
-              <Link
-                href={'/login'}
-                className="mr-4 flex cursor-pointer items-center gap-2 text-sm"
-              >
-                <UserIcon className="h-4 w-4 " />
-                <span>Sign in</span>
-              </Link>
+              <div className="flex items-center justify-end space-x-3">
+                <div className=" flex space-x-2">
+                  <Skeleton
+                    className={cn('aspect-square h-8 rounded-full', {
+                      'bg-background/10 p-4 backdrop-blur-md': isProfile,
+                    })}
+                  />
+                  <Skeleton
+                    className={cn('aspect-square h-8 rounded-full', {
+                      'bg-background/10 p-4 backdrop-blur-md': isProfile,
+                    })}
+                  />
+                </div>
+                <Skeleton
+                  className={cn('aspect-square h-12 rounded-full', {
+                    'bg-background/10 p-4 backdrop-blur-md': isProfile,
+                  })}
+                />
+              </div>
             )}
           </div>
         </div>
@@ -104,7 +125,9 @@ export function AvatarDropdown({ user, settingsPathname, isProfile }) {
       radius="sm"
       classNames={{
         base: 'before:bg-default-200', // change arrow background
-        content: 'p-0 border-small border-divider bg-background',
+        content: cn('p-0 border-small border-divider bg-background', {
+          'bg-background/80 backdrop-blur-md': isProfile,
+        }),
       }}
     >
       <DropdownTrigger>

@@ -1,7 +1,6 @@
 'use client'
 import { Card } from '@/components/base'
 import { Switch } from '@nextui-org/switch'
-import useProfileStore from '@/context/profileStore'
 import ChangePasswordField from '@/components/base/ChangePassword'
 import { useState } from 'react'
 

@@ -2,17 +2,15 @@
 
 import useSettingsStore from '@/context/settingsStore'
 import { Card } from '@/components/base'
-import { useSetupConfig } from '@/hooks/useQueryHooks'
-import { useEffect, useState } from 'react'
-import useConfigStore from '@/context/configStore'
+import { useState } from 'react'
 import CardLoader from '@/components/base/CardLoader'
 import { Input } from '@/components/ui/InputField'
+import useWorkspaces from '@/hooks/useWorkspace'
+import useAccountProfile from '@/hooks/useProfileDetails'
 
 function ProfileDetails() {
-  const { data: response, isSuccess, isLoading, isFetching } = useSetupConfig()
-  const { setWorkspaces } = useConfigStore((state) => state)
-  const user = response?.data?.userDetails
-  const workspaces = response?.data?.workspaces
+  const { user } = useAccountProfile()
+  const { workspaces, isFetching, isLoading } = useWorkspaces()
   const { openEditModal, setOpenEditModal } = useSettingsStore()
   const [newUserDetails, setNewUserDetails] = useState({})
 
@@ -34,11 +32,6 @@ function ProfileDetails() {
     handleToggleModal()
   }
 
-  useEffect(() => {
-    if (isSuccess) setWorkspaces(workspaces)
-  }, [])
-  //
-  // console.log(user)
   return isFetching || isLoading ? (
     <CardLoader />
   ) : (

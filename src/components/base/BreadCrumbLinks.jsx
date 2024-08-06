@@ -1,39 +1,30 @@
 'use client'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
-import useConfigStore from '@/context/configStore'
-import { useSetupConfig } from '@/hooks/useQueryHooks'
+import useWorkspaces from '@/hooks/useWorkspace'
 
 export default function BreadCrumbLinks({ baseUrl = '/', isProfile }) {
-  const stateWorkspaces = useConfigStore((state) => state.workspaces)
-  const { data: response, isLoading, isSuccess } = useSetupConfig()
-  const { workspaces: myWorkspaces } = response?.data || []
-  const workspaces = stateWorkspaces || myWorkspaces
-
-  const pathname = usePathname()
   const router = useRouter()
+  const pathname = usePathname()
+  const { workspaces } = useWorkspaces()
+
   const [path, setPath] = useState([baseUrl])
   const [href, setHref] = useState([])
   let newPathArr = pathname.split('/')
   const workspaceID = pathname.startsWith('/dashboard') ? newPathArr[2] : ''
 
   useEffect(() => {
-    console.log(workspaces)
-    console.log(newPathArr)
-    console.log(workspaceID)
-
     /********************* WORKSPACE NAME ********************** */
-    if (newPathArr.length > 2 && pathname.startsWith('/dashboard')) {
-      let workspace = workspaces.find(
+    if (newPathArr.length > 2 && pathname?.startsWith('/dashboard')) {
+      let workspace = workspaces?.find(
         (item) => item?.ID == workspaceID,
       )?.workspace
-      console.log(workspace)
       newPathArr[2] = workspace
-      console.log(newPathArr)
 
+      // SET A NEW HREF ARRAY
       setHref((prev) => [...prev, 'dashboard', workspaceID])
     }
 
@@ -41,14 +32,6 @@ export default function BreadCrumbLinks({ baseUrl = '/', isProfile }) {
     setPath([...newPathArr.filter((path) => path !== '')])
   }, [pathname, workspaceID])
 
-  // function handleBreadCrumbClick(idx) {
-  //   window.location.href = `${baseUrl}/${path
-  //     .slice(0, idx + 1)
-  //     .join('/')}`.replace('//', '/')
-  // }
-
-  // useEffect(() => {}, [pathname])
-  console.log(href)
   return (
     <div className="flex w-full justify-between text-xs ">
       <div className="flex pr-1 pt-1">
