@@ -20,6 +20,7 @@ const USER_DATA_KEY = 'user-query-data'
 const CONFIGS_QUERY_KEY = 'configs-query-data'
 const USER_ROLES_QUERY_KEY = 'user-roles-query-data'
 const SETUP_QUERY_KEY = 'setup-query-data'
+const WORKSPACES_QUERY_KEY = 'workspaces-query-data'
 
 // ANIMATION_VARIANTS
 const staggerContainerVariants = {
@@ -70,6 +71,7 @@ export {
   USER_SESSION,
   WORKSPACE_SESSION,
   PAYMENT_SERVICE_TYPES,
+  WORKSPACES_QUERY_KEY,
 
   //
   DefaultCover,

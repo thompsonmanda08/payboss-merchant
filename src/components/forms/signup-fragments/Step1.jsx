@@ -1,6 +1,6 @@
 //BUSINESS REGISTRATION STATUS
 'use client'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Input } from '@/components/ui/InputField'
 import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
@@ -14,13 +14,22 @@ import SelectField from '@/components/ui/SelectField'
 import useConfigOptions from '@/hooks/useConfigOptions'
 
 export default function Step1({ updateDetails }) {
+  const { companyTypes, provinces } = useConfigOptions()
   const step = useAuthStore((state) => state.businessInfo)
-  useAuthStore((state) => state)
 
-  const { companyTypes } = useConfigOptions()
   const TPINError = step?.tpin?.length > 10
   const phoneNoError =
     !isValidZambianMobileNumber(step?.contact) && step?.contact?.length > 1
+
+  const cities = useMemo(() => {
+    if (step?.provinceID) {
+      return (
+        provinces?.find((province) => province?.ID === step?.provinceID)
+          ?.cities || provinces[0]?.cities
+      )
+    }
+    return []
+  }, [step?.provinceID, provinces])
 
   return (
     <>
@@ -83,7 +92,21 @@ export default function Step1({ updateDetails }) {
               }}
             />
           </motion.div>
-
+          <motion.div
+            className="w-full"
+            variants={staggerContainerItemVariants}
+          >
+            <Input
+              type="email"
+              label="Company Email"
+              name="company_email"
+              value={step?.company_email}
+              // required={true}
+              onChange={(e) => {
+                updateDetails(STEPS[0], { company_email: e.target.value })
+              }}
+            />
+          </motion.div>
           <motion.div
             className="w-full"
             variants={staggerContainerItemVariants}
@@ -105,6 +128,40 @@ export default function Step1({ updateDetails }) {
         </div>
 
         <div className="mb-5 flex w-full flex-1 flex-col gap-2">
+          <motion.div
+            className="w-full"
+            variants={staggerContainerItemVariants}
+          >
+            <SelectField
+              options={provinces}
+              label="Province"
+              name="provinceID"
+              defaultValue={provinces[0]?.ID}
+              listItemName={'province'}
+              value={step?.provinceID}
+              // required={true}
+              onChange={(e) => {
+                updateDetails(STEPS[0], { provinceID: e.target.value })
+              }}
+            />
+          </motion.div>
+          <motion.div
+            className="w-full"
+            variants={staggerContainerItemVariants}
+          >
+            <SelectField
+              options={cities}
+              label="City/Town"
+              name="cityID"
+              listItemName={'city'}
+              defaultValue={cities[0]?.ID}
+              value={step?.cityID}
+              // required={true}
+              onChange={(e) => {
+                updateDetails(STEPS[0], { cityID: e.target.value })
+              }}
+            />
+          </motion.div>
           <motion.div
             variants={staggerContainerItemVariants}
             className="flex w-full gap-4"
@@ -146,23 +203,6 @@ export default function Step1({ updateDetails }) {
               // pattern="https?://.+"
               onChange={(e) => {
                 updateDetails(STEPS[0], { website: e.target.value })
-              }}
-            />
-          </motion.div>
-
-          <motion.div
-            key={'step-1-3'}
-            className="w-full"
-            variants={staggerContainerItemVariants}
-          >
-            <Input
-              type="email"
-              label="Company Email"
-              name="company_email"
-              value={step?.company_email}
-              // required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { company_email: e.target.value })
               }}
             />
           </motion.div>

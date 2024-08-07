@@ -6,25 +6,50 @@ import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { STEPS } from '../SignupForm'
-import { CardHeader } from '@/components/base'
+import { CardHeader, SoftBoxIcon } from '@/components/base'
 import useAuthStore from '@/context/authStore'
 import { Button } from '@/components/ui/Button'
-import { Checkbox } from '@nextui-org/react'
+import { Avatar, Checkbox } from '@nextui-org/react'
+import { validateTPIN } from '@/app/_actions/auth-actions'
+import { BriefcaseIcon } from '@heroicons/react/24/outline'
 
 export default function Step1_TPIN({ updateDetails }) {
-  const step = useAuthStore((state) => state.businessInfo)
+  const {
+    businessInfo: step,
+    setMerchantID,
+    setBusinessInfoSent,
+  } = useAuthStore((state) => state)
   const isValidTPIN = useAuthStore((state) => state.isValidTPIN)
   const setIsValidTPIN = useAuthStore((state) => state.setIsValidTPIN)
+  const error = useAuthStore((state) => state.error)
+  const updateErrorStatus = useAuthStore((state) => state.updateErrorStatus)
   const [loading, setLoading] = React.useState(false)
 
+  const [merchant, setMerchant] = React.useState(null)
   const TPINError = step?.tpin?.length < 3 || step?.tpin?.length > 10
 
-  function validateTPIN() {
+  async function handleTPINValidation() {
+    setLoading(true)
+    setMerchant(null)
+    setMerchantID(null)
+    setIsValidTPIN(false)
     const tpin = step?.tpin
-    if (tpin.length === 10 && !TPINError) {
-      // TODO => GET MERCHANT DETAILS
-      // TODO =>  PRE FILL THE INPUT FIELDS
-      // TODO => SET VALID TPIN FLAG
+
+    const response = await validateTPIN(tpin)
+
+    if (!response.success) {
+      updateErrorStatus({ status: true, message: response.message })
+      setLoading(false)
+      return
+    }
+
+    if (response.success) {
+      setMerchant(response.data)
+      setMerchantID(response.data.ID)
+      setBusinessInfoSent(response.success)
+      setIsValidTPIN(response.success)
+      setLoading(false)
+      return
     }
   }
 
@@ -40,52 +65,84 @@ export default function Step1_TPIN({ updateDetails }) {
         infoText={'Enter your TPIN to retrieve your business information.'}
       />
       <div className="flex w-full flex-col items-center justify-center gap-6">
-        {loading ? (
-          <Spinner siz></Spinner>
-        ) : (
-          <div className="flex w-full flex-1 flex-col gap-2 md:flex-row">
-            <motion.div
-              key={'step-1-2'}
-              className="flex w-full flex-col items-end justify-center gap-2 md:flex-row"
-              variants={staggerContainerItemVariants}
+        <div className="flex w-full flex-1 flex-col gap-2 md:flex-row">
+          <motion.div
+            className="flex w-full flex-col items-end justify-center gap-2 md:flex-row"
+            variants={staggerContainerItemVariants}
+          >
+            <Input
+              type="number"
+              label="TPIN"
+              name="tpin"
+              maxLength={10}
+              isDisabled={loading}
+              value={step?.tpin}
+              onError={TPINError || error?.status}
+              errorText="Invalid TPIN"
+              onChange={(e) => {
+                updateDetails(STEPS[0], { tpin: e.target.value })
+              }}
+            />
+            <Button
+              onPress={handleTPINValidation}
+              className={cn('flex-[1]', { 'mb-4': TPINError || error?.status })}
+              isDisabled={TPINError}
+              isLoading={loading}
+              loadingText={'Validating...'}
             >
-              <Input
-                type="number"
-                label="TPIN"
-                name="tpin"
-                maxLength={10}
-                value={step?.tpin}
-                onError={TPINError}
-                errorText="Invalid TPIN"
-                onChange={(e) => {
-                  updateDetails(STEPS[0], { tpin: e.target.value })
-                }}
-              />
-              <Button
-                className={cn('', { 'mb-4': TPINError })}
-                isDisabled={TPINError}
-              >
-                Retrieve Business Information
-              </Button>
-            </motion.div>
-          </div>
-        )}
+              Validate TPIN
+            </Button>
+          </motion.div>
+        </div>
 
-        {!loading && step?.tpin && (
-          <div className="flex w-[90%] flex-col gap-4 rounded-lg bg-slate-50 p-4">
-            <ul>
-              <li className="heading-5">Business Name</li>
-              <li className="paragraph">TPIN</li>
-              <li className="paragraph">Email</li>
-            </ul>
+        {merchant && (
+          <motion.div
+            whileInView={{
+              y: [-100, 0],
+              opacity: [0, 1],
+              transition: {
+                duration: 0.3,
+                ease: 'easeInOut',
+              },
+            }}
+            className="flex w-full flex-col gap-4 rounded-lg bg-slate-50 p-4"
+          >
+            <div className="flex items-start gap-4">
+              <SoftBoxIcon>
+                <BriefcaseIcon className="aspect-square w-6" />
+              </SoftBoxIcon>
+              <ul>
+                <li className="heading-5 -mt-1 uppercase">{merchant.name}</li>
+                <li className="text-xs font-medium text-slate-600 sm:text-sm">
+                  {merchant.company_email}
+                </li>
+              </ul>
+
+              <div className="ml-5">
+                <li className="text-xs font-medium text-slate-600 sm:text-sm">
+                  Contact NO.: {merchant.contact}
+                </li>
+                <li className="text-xs font-medium text-slate-600 sm:text-sm">
+                  TPIN: {merchant.tpin}
+                </li>
+              </div>
+            </div>
+
             <Checkbox
-              className="text-xs sm:text-sm"
+              className="mx-auto mt-2 items-start text-xs sm:text-sm"
+              classNames={{
+                label: 'flex flex-col items-start -mt-1',
+              }}
               isSelected={isValidTPIN}
               onValueChange={setIsValidTPIN}
             >
-              Yes, this is my Business.
+              <span className="text-xs font-medium italic text-slate-700 md:text-sm">
+                Yes, I confirm that the details provided accurately represent my
+                business. I understand that any misrepresentation of my business
+                may result in the rejection of my application.
+              </span>
             </Checkbox>
-          </div>
+          </motion.div>
         )}
       </div>
     </>

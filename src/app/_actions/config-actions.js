@@ -1,7 +1,6 @@
 'use server'
 
 import authenticatedService from '@/lib/authenticatedService'
-import { WORKSPACE_SESSION } from '@/lib/constants'
 import {
   createUserSession,
   createWorkspaceSession,
@@ -13,32 +12,31 @@ import { cookies } from 'next/headers'
 
 export async function getAccountConfigOptions() {
   try {
-    const res = await apiClient.get(`general/details`, {
+    const res = await apiClient.get(`/merchant/onboard/dropdowns`, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
 
-    if (res.status !== 200) {
-      const response = res?.data || res
+    if (res.status == 200) {
       return {
-        success: false,
-        message: response?.error || response?.message,
-        data: null,
+        success: true,
+        message: res.message,
+        data: res?.data,
         status: res.status,
       }
     }
 
     return {
-      success: true,
-      message: res.message,
-      data: res.data,
+      success: false,
+      message: res?.data?.error || res?.message,
+      data: null,
       status: res.status,
     }
   } catch (error) {
     return {
       success: false,
-      message: error?.response?.data?.error || 'No Server Response',
+      message: error?.response?.data?.error || 'Oops! Error Occurred!',
       data: null,
       status: error?.response?.status || error.status,
     }
@@ -79,7 +77,7 @@ export async function getUserSetupConfigs() {
   } catch (error) {
     return {
       success: false,
-      message: error?.response?.data?.error || 'No Server Response',
+      message: error?.response?.data?.error || 'Oops! Error Occurred!',
       data: null,
       status: error?.response?.status || error.status,
     }
@@ -192,13 +190,55 @@ export async function updateUserRole() {
     }
   }
 }
+export async function changeWorkspaceVisibility(workspaceID, isVisible) {
+  // const session = await getUserSession()
+  // const merchantID = session?.user?.merchantID
+
+  try {
+    const res = await authenticatedService({
+      url: `merchant/workspace/visibility/${workspaceID}`,
+      method: 'PATCH',
+      data: {
+        isVisible,
+      },
+    })
+
+    if (res.status === 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+      }
+    }
+
+    const response = res?.data || res
+
+    return {
+      success: false,
+      message: response?.error || response?.message,
+      data: null,
+      status: res.status,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status || error.status,
+    }
+  }
+}
 
 export async function createNewWorkspace(newWorkspace) {
+  const session = await getUserSession()
+  const merchantID = session?.user?.merchantID
+
   try {
     const res = await authenticatedService({
       method: 'POST',
       url: `merchant/workspace/new`,
-      data: newWorkspace,
+      data: { ...newWorkspace, merchantID },
     })
 
     if (res.status == 201 || res.status == 200) {
@@ -302,6 +342,41 @@ export async function deleteWorkspace(workspaceID) {
   }
 }
 
+export async function getAllWorkspaces() {
+  const session = await getUserSession()
+  const merchantID = session?.user?.merchantID
+  try {
+    const res = await authenticatedService({
+      url: `merchant/workspaces/${merchantID}`, //URL
+    })
+
+    if (res.status === 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+      }
+    }
+
+    const response = res?.data || res
+
+    return {
+      success: false,
+      message: response?.error || response?.message,
+      data: null,
+      status: res.status,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Oops! Error Occurred!',
+      data: null,
+      status: error?.response?.status || error.status,
+    }
+  }
+}
+
 export async function getAuthSession() {
   const session = await getServerSession()
   return session
@@ -312,7 +387,7 @@ export async function getUserDetails() {
   return session
 }
 
-export async function getWorkspace() {
-  const session = await getWorkspaceSession()
-  return session
-}
+// export async function getWorkspace() {
+//   const session = await getWorkspaceSession()
+//   return session
+// }

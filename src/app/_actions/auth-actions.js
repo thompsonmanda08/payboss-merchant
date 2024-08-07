@@ -8,37 +8,74 @@ import {
 } from '@/lib/session'
 import { apiClient } from '@/lib/utils'
 
-export async function createNewMerchant(businessInfo) {
-  delete businessInfo.business_registration_status // THIS IS BAD...
-
+export async function validateTPIN(tpin) {
   try {
-    const res = await apiClient.post(`kyc/merchant/new`, businessInfo, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    const res = await apiClient.get(
+      `merchant/onboard/continue/${tpin}`,
 
-    if (res.status !== 201) {
-      const response = res?.data || res
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    if (res.status == 200) {
       return {
-        success: false,
-        message: response?.error || response?.message,
-        data: response?.data || 'No Data',
+        success: true,
+        message: res.message,
+        data: res?.data,
         status: res.status,
       }
     }
 
     return {
-      success: true,
-      message: res.message,
-      data: res.data,
+      success: false,
+      message: res?.data?.error || res?.message,
+      data: null,
       status: res.status,
     }
   } catch (error) {
     console.error(error?.response?.data)
     return {
       success: false,
-      message: error?.response?.data?.error || 'No Server Response',
+      message: error?.response?.data?.error || 'Oops! Error Occurred!',
+      data: null,
+      status: error?.response?.status || error.status,
+    }
+  }
+}
+
+export async function createNewMerchant(businessInfo) {
+  // delete businessInfo.registration // THIS IS BAD...
+
+  try {
+    const res = await apiClient.post(`merchant/onboard/new`, businessInfo, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (res.status == 201) {
+      return {
+        success: true,
+        message: res.message,
+        data: res?.data,
+        status: res.status,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || res?.message,
+      data: null,
+      status: res.status,
+    }
+  } catch (error) {
+    console.error(error?.response?.data)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Oops! Error Occurred!',
       data: null,
       status: error?.response?.status || error.status,
     }
@@ -86,7 +123,7 @@ export async function updateMerchantDetails(businessInfo, merchantID) {
 export async function createMerchantAdminUser(newAdminUser, merchantID) {
   try {
     const res = await apiClient.post(
-      `kyc/merchant/${merchantID}/user/new`,
+      `/merchant/${merchantID}/user/new`,
       newAdminUser,
       {
         headers: {
@@ -95,26 +132,25 @@ export async function createMerchantAdminUser(newAdminUser, merchantID) {
       },
     )
 
-    if (res.status !== 201) {
-      const response = res?.data || res
+    if (res.status == 201) {
       return {
-        success: false,
-        message: response?.error || response?.message,
-        data: null,
+        success: true,
+        message: res.message,
+        data: res?.data,
         status: res.status,
       }
     }
 
     return {
-      success: true,
-      message: res.message,
-      data: res.data,
+      success: false,
+      message: res?.data?.error || res?.message,
+      data: null,
       status: res.status,
     }
   } catch (error) {
     return {
       success: false,
-      message: error?.response?.data?.error || 'No Server Response',
+      message: error?.response?.data?.error || 'Oops! Error Occurred.',
       data: null,
       status: error?.response?.status || error.status,
     }
@@ -200,7 +236,7 @@ export async function updateBusinessDocumentRefs(payloadUrls, merchantID) {
 export async function authenticateUser(loginCredentials) {
   try {
     const res = await apiClient.post(
-      `authentication/merchant/user`,
+      `merchant/user/authentication`,
       loginCredentials,
     )
 

@@ -1,30 +1,65 @@
 'use client'
 import { usePathname } from 'next/navigation'
 import React, { useState, useEffect } from 'react'
-import { useSetupConfig } from './useQueryHooks'
+import { useGetWorkspaces, useSetupConfig } from './useQueryHooks'
 
 const useWorkspaces = () => {
   const pathname = usePathname()
+  const [userInSandbox, setUserInSandbox] = useState(false)
   const [activeWorkspace, setActiveWorkspace] = useState({})
+  const [isSandboxVisible, setIsSandboxVisible] = useState(false)
+  const { data: workspacesData } = useGetWorkspaces()
   const { data: setup, isFetching, isLoading } = useSetupConfig()
+
   const workspaces = setup?.data?.workspaces || []
+  const allWorkspaces = workspacesData?.data?.workspaces || []
 
   const isUserInWorkspace =
     pathname.split('/')[1] == 'dashboard' && pathname.split('/').length >= 3
 
   const workspaceID = isUserInWorkspace ? pathname.split('/')[2] : ''
 
+  const sandbox = workspaces?.find(
+    (item) => item?.workspace?.toLowerCase() === 'sandbox',
+  )
+
   useEffect(() => {
+    // CHECK IF THE USER IS IN A WORKSPACE
     if (isUserInWorkspace) {
       const workspace = workspaces?.find(
         (workspace) => workspace?.ID === workspaceID,
       )
 
+      // CHECK IF THE USER IS IN A SANDBOX WORKSPACE
+      if (workspace === sandbox) {
+        setUserInSandbox(true)
+      }
+
+      // SET CURRENTLY ACTIVE WORKSPACE
       setActiveWorkspace(workspace)
     }
-  }, [pathname])
+  }, [pathname, workspaces, sandbox])
 
-  return { activeWorkspace, workspaces, isFetching, isLoading }
+  // CHECK IF SANDBOX WORKSPACE IS UNDEFINED
+  useEffect(() => {
+    if (sandbox != undefined) {
+      setIsSandboxVisible(true)
+    }
+  }, [])
+
+  // console.log(allWorkspaces)
+
+  return {
+    activeWorkspace,
+    allWorkspaces,
+    workspaces,
+    sandbox,
+    isSandboxVisible,
+    setIsSandboxVisible,
+    userInSandbox,
+    isFetching,
+    isLoading,
+  }
 }
 
 export default useWorkspaces

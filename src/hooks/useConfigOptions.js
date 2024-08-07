@@ -1,6 +1,4 @@
 'use client'
-import { usePathname } from 'next/navigation'
-import React, { useState, useEffect } from 'react'
 import { useGeneralConfigOptions } from './useQueryHooks'
 
 const useConfigOptions = () => {

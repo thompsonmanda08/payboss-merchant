@@ -103,7 +103,6 @@ export async function getUserSession() {
   const isLoggedIn = await verifySession()
   const cookie = cookies().get(USER_SESSION)?.value
   const session = await decrypt(cookie)
-
   if (isLoggedIn) return session
 
   return null

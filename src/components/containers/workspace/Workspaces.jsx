@@ -1,8 +1,6 @@
 'use client'
-import { WorkspaceItem } from '@/components/base'
 import { Button } from '@/components/ui/Button'
 import Spinner from '@/components/ui/Spinner'
-import { useSetupConfig } from '@/hooks/useQueryHooks'
 import { cn, notify } from '@/lib/utils'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import React, { useState } from 'react'
@@ -21,31 +19,30 @@ import { SETUP_QUERY_KEY } from '@/lib/constants'
 import { usePathname, useRouter } from 'next/navigation'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import useWorkspace from '@/hooks/useWorkspace'
+import useAccountProfile from '@/hooks/useProfileDetails'
+import WorkspaceItem from './WorkspaceItem'
 
 function Workspaces() {
   const { push } = useRouter()
   const pathname = usePathname()
   const queryClient = useQueryClient()
-  const { activeWorkspace } = useWorkspace()
+  const { activeWorkspace, workspaces, allWorkspaces, isLoading } =
+    useWorkspace()
+  const { user } = useAccountProfile()
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const { data: response, isLoading, isSuccess } = useSetupConfig()
-  const { workspaces, userDetails } = response?.data || []
-
-  const INITIAL_WORKSPACE = {
-    workspace: '',
-    description: '',
-    merchantID: userDetails?.merchantID,
-  }
 
   const isWorkspaceSettings =
     pathname.split('/')[2] == 'workspaces' ||
-    pathname.split('/')[2] == 'workspaces'
+    pathname.split('/')[4] == 'workspaces'
 
   // console.log(response)
 
+  const RENDER_WORKSPACES =
+    pathname.split('/').length > 2 ? allWorkspaces : workspaces
+
   const [loading, setLoading] = useState(false)
-  const [newWorkspace, setNewWorkspace] = useState(INITIAL_WORKSPACE)
+  const [newWorkspace, setNewWorkspace] = useState({})
 
   function editWorkspaceField(fields) {
     setNewWorkspace((prev) => {
@@ -54,7 +51,7 @@ function Workspaces() {
   }
 
   function handleClose(onClose) {
-    setNewWorkspace(INITIAL_WORKSPACE)
+    setNewWorkspace({})
 
     onClose()
   }
@@ -70,18 +67,27 @@ function Workspaces() {
       setLoading(false)
     }
 
+    console.log(newWorkspace)
+
     const response = await createNewWorkspace(newWorkspace)
 
-    if (!response.success) {
-      notify('error', 'Failed to Create Workspace!')
+    if (response.success) {
+      queryClient.invalidateQueries({ queryKey: [SETUP_QUERY_KEY] })
+      notify('success', 'Workspace Created!')
+      onOpenChange()
       setLoading(false)
       return
     }
 
-    queryClient.invalidateQueries({ queryKey: [SETUP_QUERY_KEY] })
-    notify('success', 'Workspace Created!')
+    notify('error', 'Failed to Create Workspace!')
+    notify('error', response.message)
+    console.log(response.message)
+
     setLoading(false)
+    onOpenChange()
   }
+
+  console.log(newWorkspace)
 
   return (
     <div className="flex w-full flex-col items-center justify-center ">
@@ -100,11 +106,12 @@ function Workspaces() {
                 workspaces?.length > 0,
             })}
           >
-            {workspaces &&
-              workspaces?.map((item) => {
+            {RENDER_WORKSPACES &&
+              RENDER_WORKSPACES?.map((item) => {
                 return (
                   <WorkspaceItem
                     name={item?.workspace}
+                    isVisible={item?.isVisible}
                     href={
                       !isWorkspaceSettings
                         ? `/dashboard/${item?.ID}`

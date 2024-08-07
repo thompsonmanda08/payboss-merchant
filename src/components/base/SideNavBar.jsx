@@ -30,10 +30,10 @@ import {
 import { cn } from '@/lib/utils'
 import { Logo, SettingsSideBar } from '.'
 import { Button } from '../ui/Button'
-import WorkspaceSelection from './WorkspaceSelection'
 import SideNavItems from './SideNavItems'
 import useWorkspaces from '@/hooks/useWorkspace'
 import { Skeleton } from '../ui/skeleton'
+import WorkspaceSelection from '../containers/workspace/WorkspaceSelection'
 
 export const SIDE_BAR_OPTIONS = [
   {

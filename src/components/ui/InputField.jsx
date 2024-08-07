@@ -15,13 +15,18 @@ const Input = React.forwardRef(
       maxLength,
       max,
       min,
+      isDisabled,
       errorText = '',
       ...props
     },
     ref,
   ) => {
     return (
-      <div className={cn('flex w-full max-w-md flex-col', containerClasses)}>
+      <div
+        className={cn('flex w-full max-w-md flex-col', containerClasses, {
+          'cursor-not-allowed opacity-50': isDisabled,
+        })}
+      >
         {label && (
           <label
             htmlFor={name}
@@ -37,6 +42,7 @@ const Input = React.forwardRef(
           type={type}
           max={max}
           min={min}
+          disabled={isDisabled}
           maxLength={maxLength}
           className={cn(
             'flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1  focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50',

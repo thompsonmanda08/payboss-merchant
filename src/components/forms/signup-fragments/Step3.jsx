@@ -8,13 +8,15 @@ import { staggerContainerItemVariants } from '@/lib/constants'
 import useAuthStore from '@/context/authStore'
 import { STEPS } from '../SignupForm'
 import SelectField from '@/components/ui/SelectField'
+import IMG from '@/images/auth-img.png'
+import Image from 'next/image'
 
 // CREATE NEW ADMIN USER
 export default function Step4({ updateDetails }) {
   const { newAdminUser, error, setError } = useAuthStore()
 
   useEffect(() => {
-    updateDetails(STEPS[4], { role: 'owner' })
+    updateDetails(STEPS[4], { role: 'owner', changePassword: false })
   }, [])
 
   return (
@@ -30,22 +32,45 @@ export default function Step4({ updateDetails }) {
       />
 
       <div className="flex w-full flex-col gap-4 md:flex-row">
-        <div className="flex w-full flex-1 flex-col gap-y-2">
+        <div className="hidden w-full flex-1 flex-col gap-y-2 lg:flex">
           <motion.div
+            className="flex w-full flex-col gap-5"
+            variants={staggerContainerItemVariants}
+          >
+            <div className="mx-auto aspect-square w-60 ">
+              <Image
+                className="w-fit object-contain"
+                src={IMG}
+                alt={''}
+                width={440}
+                height={320}
+              />
+            </div>
+            <div className="mx-auto flex flex-col items-center justify-center">
+              <h2 className="heading-5 ">Account Approval</h2>
+              <p className="text-center text-sm  text-slate-500">
+                Gain unrestricted access by submitting the additional required
+                KYC documentation.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+        <div className="flex w-full flex-1 flex-col gap-y-2">
+          {/* <motion.div
             className="w-full"
             variants={staggerContainerItemVariants}
           >
             <SelectField
-              placeholder={'ADMIN'}
+              placeholder={'SUPER ADMIN'}
               name="user_role"
               label="User Role"
               isDisabled={true}
               value={'owner'}
               defaultValue={'owner'}
             />
-          </motion.div>
+          </motion.div> */}
           <motion.div
-            className="w-full"
+            className="flex w-full gap-2"
             variants={staggerContainerItemVariants}
           >
             <Input
@@ -58,12 +83,6 @@ export default function Step4({ updateDetails }) {
                 updateDetails(STEPS[4], { first_name: e.target.value })
               }}
             />
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainerItemVariants}
-            className="flex w-full gap-4"
-          >
             <Input
               type="text"
               label="Last Name"
@@ -72,39 +91,6 @@ export default function Step4({ updateDetails }) {
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[4], { last_name: e.target.value })
-              }}
-            />
-          </motion.div>
-          <motion.div
-            className="w-full"
-            variants={staggerContainerItemVariants}
-          >
-            <Input
-              type="number"
-              label="Mobile Number"
-              name="phone_number"
-              value={newAdminUser?.phone_number}
-              required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[4], { phone_number: e.target.value })
-              }}
-            />
-          </motion.div>
-        </div>
-
-        <div className="flex w-full flex-1 flex-col gap-y-2">
-          <motion.div
-            className="w-full"
-            variants={staggerContainerItemVariants}
-          >
-            <Input
-              type="text"
-              label="Username"
-              name="username"
-              value={newAdminUser?.username}
-              required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[4], { username: e.target.value })
               }}
             />
           </motion.div>
@@ -121,6 +107,31 @@ export default function Step4({ updateDetails }) {
               value={newAdminUser?.email}
               onChange={(e) => {
                 updateDetails(STEPS[4], { email: e.target.value })
+              }}
+            />
+          </motion.div>
+          <motion.div
+            className="flex w-full gap-2"
+            variants={staggerContainerItemVariants}
+          >
+            <Input
+              type="number"
+              label="Mobile Number"
+              name="phone_number"
+              value={newAdminUser?.phone_number}
+              required={true}
+              onChange={(e) => {
+                updateDetails(STEPS[4], { phone_number: e.target.value })
+              }}
+            />
+            <Input
+              type="text"
+              label="Username"
+              name="username"
+              value={newAdminUser?.username}
+              required={true}
+              onChange={(e) => {
+                updateDetails(STEPS[4], { username: e.target.value })
               }}
             />
           </motion.div>

@@ -46,7 +46,7 @@ export default function SignUpForm() {
     setIsLoading,
     businessInfoSent,
     setBusinessInfoSent,
-
+    setAccountCreated,
     merchantID,
     setMerchantID,
     setError,
@@ -60,9 +60,8 @@ export default function SignUpForm() {
   ]
 
   const CONTINUE_REGISTRATION = [
-    <Step1_TPIN key={STEPS[1]} updateDetails={updateAccountDetails} />, // BUSINESS INFO
-    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />, // BUSINESS ADMIN USER
-    <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />, // BANK DETAILS
+    <Step1_TPIN key={STEPS[1]} updateDetails={updateAccountDetails} />,
+    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />,
   ]
 
   const RENDERED_COMPONENTS =
@@ -108,7 +107,7 @@ export default function SignUpForm() {
     setIsLoading(true)
     updateErrorStatus({ status: false, message: '' })
 
-    if (businessInfo.registration == 'CONTINUE') {
+    if (businessInfo.registration == 'CONTINUE' && !isValidTPIN) {
       // notify('error', 'Not Available Yet')
       // TODO: => SET SENT BUSINESS INFO TO TRUE
       // TODO: => SET MERCHANT ID IN STATE
@@ -118,8 +117,12 @@ export default function SignUpForm() {
       return
     }
 
-    // CREATE OR VERIFY MERCHANT ACCOUNT & BANK DETAILS
-    if (currentTabIndex === 2 && STEPS[currentTabIndex] === STEPS[2]) {
+    // CREATE NEW MERCHANT ACCOUNT & BANK DETAILS
+    if (
+      currentTabIndex === 2 &&
+      STEPS[currentTabIndex] === STEPS[2] &&
+      !isValidTPIN
+    ) {
       // POST AND PATCH
       let payload
       if (!businessInfoSent) {
@@ -164,7 +167,7 @@ export default function SignUpForm() {
 
       if (payload.success) {
         notify('success', 'Account Created Successfully')
-        push('/register/success?merchantID=' + merchantID)
+        setAccountCreated(true)
         setIsLoading(false)
         return
       } else {
@@ -227,7 +230,12 @@ export default function SignUpForm() {
               size="lg"
               color="primary"
               isLoading={isLoading}
-              disabled={isLoading}
+              disabled={
+                isLoading ||
+                (businessInfo.registration == 'CONTINUE' &&
+                  !isValidTPIN &&
+                  currentTabIndex === 1)
+              }
               className="w-full max-w-xs sm:w-auto"
             >
               {isFirstStep

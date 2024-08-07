@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   error: {}, // STATUS, MESSAGE, FIELD-ERROR
   merchantID: '',
   isValidTPIN: false,
+  accountCreated: false,
 
   businessInfo: {},
   businessDocs: {},
@@ -31,6 +32,7 @@ const useAuthStore = create((set, get) => ({
   setDocumentsInfoSent: (documentsInfoSent) => set({ documentsInfoSent }),
   setNewAdminUser: (newAdminUser) => set({ newAdminUser }),
   setIsValidTPIN: (isValidTPIN) => set({ isValidTPIN }),
+  setAccountCreated: (accountCreated) => set({ accountCreated }),
 
   updateErrorStatus: (fields) => {
     set((state) => ({ error: { ...state.error, ...fields } }))

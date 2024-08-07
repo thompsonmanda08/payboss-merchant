@@ -1,11 +1,17 @@
-import { deleteWorkspace, updateWorkspace } from '@/app/_actions/config-actions'
+import {
+  changeWorkspaceVisibility,
+  deleteWorkspace,
+  updateWorkspace,
+} from '@/app/_actions/config-actions'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/InputField'
 import useWorkspaces from '@/hooks/useWorkspace'
-import { notify } from '@/lib/utils'
+import { SETUP_QUERY_KEY, WORKSPACES_QUERY_KEY } from '@/lib/constants'
+import { cn, notify } from '@/lib/utils'
+import { Switch } from '@nextui-org/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const INITIAL_WORKSPACE = {
   workspace: '',
@@ -13,15 +19,22 @@ const INITIAL_WORKSPACE = {
 }
 
 function WorkspaceDetails({ WorkSpaceID }) {
+  const { workspaces, allWorkspaces } = useWorkspaces()
+  const workspace = allWorkspaces.find(
+    (workspace) => workspace.ID === WorkSpaceID,
+  )
+
   const { back } = useRouter()
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
-  const [deleteLoading, setDeleteLoading] = useState(false)
-  const { workspaces } = useWorkspaces()
-  const workspace = workspaces.find((workspace) => workspace.ID === WorkSpaceID)
+  const [deleteLoading, setDeleteLoading] = useState(false) // DEACTIVATION STATE
+  const [isSandbox, setIsSandbox] = useState(
+    workspace?.workspace.toLowerCase() == 'sandbox',
+  )
 
+  // TO EDIT THE WORKSPACE FIELDS
   const [newWorkspace, setNewWorkspace] = useState(INITIAL_WORKSPACE)
-
+  const [isVisible, setIsVisible] = useState(workspace?.isVisible)
   function editWorkspaceField(fields) {
     setNewWorkspace((prev) => {
       return { ...prev, ...fields }
@@ -61,7 +74,12 @@ function WorkspaceDetails({ WorkSpaceID }) {
     const response = await deleteWorkspace(WorkSpaceID)
 
     if (response.success) {
-      queryClient.invalidateQueries({ queryKey: [SETUP_QUERY_KEY] })
+      queryClient.invalidateQueries({
+        queryKey: [WORKSPACES_QUERY_KEY],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [SETUP_QUERY_KEY],
+      })
       setDeleteLoading(false)
       notify('success', 'Workspaces Deactivated successfully!')
       back()
@@ -71,6 +89,34 @@ function WorkspaceDetails({ WorkSpaceID }) {
     notify('error', 'Failed to Deactivate Workspace!')
     setDeleteLoading(false)
   }
+
+  async function handleWorkspaceVisibility() {
+    setIsVisible(!isVisible)
+    const response = await changeWorkspaceVisibility(WorkSpaceID, !isVisible)
+
+    if (response.success) {
+      queryClient.invalidateQueries([SETUP_QUERY_KEY])
+      notify('success', 'Visibility updated successfully')
+      return
+    }
+
+    setIsVisible(!isVisible)
+    notify('error', 'Failed to update visibility')
+  }
+
+  // CHECK IF WORKSPACE IS VISIBLE
+  useEffect(() => {
+    if (workspace != undefined && workspace?.isVisible) {
+      setIsVisible(workspace?.isVisible)
+    }
+
+    if (
+      workspace != undefined &&
+      workspace?.workspace.toLowerCase() == 'sandbox'
+    ) {
+      setIsSandbox(true)
+    }
+  }, [])
 
   return (
     <>
@@ -93,11 +139,12 @@ function WorkspaceDetails({ WorkSpaceID }) {
           <form
             onSubmit={handleUpdateWorkspace}
             role={'edit-workspace-details'}
-            className="flex w-full items-end gap-4"
+            className="flex w-full flex-col items-center gap-4 sm:items-start md:flex-row md:items-end"
           >
             <Input
               label="Workspace Name"
               defaultValue={workspace?.workspace}
+              isDisabled={loading || isSandbox}
               onChange={(e) => {
                 editWorkspaceField({ workspace: e.target.value })
               }}
@@ -105,20 +152,39 @@ function WorkspaceDetails({ WorkSpaceID }) {
 
             <Input
               label="Description"
+              isDisabled={loading || isSandbox}
               defaultValue={workspace?.description}
+              containerClasses={cn('', { 'w-full max-w-[700px]': isSandbox })}
               onChange={(e) => {
                 editWorkspaceField({ description: e.target.value })
               }}
             />
-            <Button
-              type="submit"
-              isDisabled={loading}
-              isLoading={loading}
-              loadingText={'Saving... '}
-            >
-              Save Changes
-            </Button>
+            {!isSandbox && (
+              <Button
+                type="submit"
+                isDisabled={loading || isSandbox}
+                isLoading={loading}
+                loadingText={'Saving... '}
+                className={'w-full max-w-full sm:max-w-sm '}
+              >
+                Save Changes
+              </Button>
+            )}
           </form>
+        </div>
+      </div>
+      <hr className="my-10 h-px bg-slate-900/5" />
+      <div className="flex items-center gap-x-4 sm:mt-0 sm:flex-auto">
+        <Switch
+          isSelected={isVisible}
+          onValueChange={handleWorkspaceVisibility}
+        />
+        <div className="flex flex-col ">
+          <p className="font-medium text-gray-900">Workspace Visibility</p>
+          <span className="text-xs text-slate-600 xl:text-sm">
+            Activate a to interact with the PayBoss platform using this
+            workspace.
+          </span>
         </div>
       </div>
       <hr className="my-10 h-px bg-slate-900/5" />

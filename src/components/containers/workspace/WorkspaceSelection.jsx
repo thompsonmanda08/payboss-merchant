@@ -9,10 +9,10 @@ import {
   BriefcaseIcon,
   ChevronRightIcon,
 } from '@heroicons/react/24/outline'
-import SoftBoxIcon from './SoftBoxIcon'
-import DropdownButton from '../ui/DropdownButton'
-import Spinner from '../ui/Spinner'
+import DropdownButton from '@/components/ui/DropdownButton'
+import Spinner from '@/components/ui/Spinner'
 import useWorkspaces from '@/hooks/useWorkspace'
+import { SoftBoxIcon } from '@/components/base'
 
 export default function WorkspaceSelection({ isSelected }) {
   const { activeWorkspace, workspaces } = useWorkspaces()

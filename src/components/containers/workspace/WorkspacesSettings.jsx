@@ -24,8 +24,8 @@ const TABS = [
 function WorkspaceSettings({ WorkSpaceID }) {
   const { back } = useRouter()
 
-  const { workspaces } = useWorkspaces()
-  const selectedWorkspace = workspaces.find(
+  const { allWorkspaces } = useWorkspaces()
+  const selectedWorkspace = allWorkspaces.find(
     (workspace) => workspace.ID === WorkSpaceID,
   )
 

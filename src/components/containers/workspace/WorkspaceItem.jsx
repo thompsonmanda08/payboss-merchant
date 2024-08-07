@@ -1,19 +1,22 @@
 'use client'
 import { Avatar, AvatarGroup } from '@nextui-org/react'
 import React from 'react'
-import { Button } from '../ui/Button'
-import { SoftBoxIcon } from '.'
+import { Button } from '../../ui/Button'
+import { SoftBoxIcon } from '../../base'
 import { ArrowRightIcon, BriefcaseIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
-function WorkspaceItem({ name, href }) {
+function WorkspaceItem({ name, href, isVisible }) {
   //
   return (
     <Button
       as={Link}
       href={href}
-      // onPress={setActiveWorkspace}
-      className="flex h-auto w-full justify-start gap-4 border-[1px] border-primary-50 bg-transparent p-2 hover:border-primary-100 hover:bg-primary-50"
+      className={cn(
+        'flex h-auto w-full justify-start gap-4 border-[1px] border-primary-50 bg-transparent p-2 hover:border-primary-100 hover:bg-primary-50',
+        { 'opacity-50 hover:opacity-90': !isVisible },
+      )}
       startContent={
         <SoftBoxIcon className={'w-18 h-20'}>
           <BriefcaseIcon />

@@ -2,11 +2,19 @@
 import { Card } from '@/components/base'
 import { Switch } from '@nextui-org/switch'
 import useSettingsStore from '@/context/settingsStore'
-import { useSetupConfig } from '@/hooks/useQueryHooks'
+import { changeWorkspaceVisibility } from '@/app/_actions/config-actions'
+import useWorkspaces from '@/hooks/useWorkspace'
+import useAccountProfile from '@/hooks/useProfileDetails'
+import { useState } from 'react'
+import { notify } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
+import { SETUP_QUERY_KEY } from '@/lib/constants'
 
 function AccountPreferences() {
-  const { data: response } = useSetupConfig()
-  const user = response?.data?.userDetails
+  const queryClient = useQueryClient()
+  const { sandbox, isSandboxVisible, setIsSandboxVisible } = useWorkspaces()
+  const { user } = useAccountProfile()
+
   const { openEditModal, setOpenEditModal } = useSettingsStore()
 
   function handleToggleModal() {
@@ -17,10 +25,6 @@ function AccountPreferences() {
   }
 
   const APPLICATION_CONFIG = [
-    {
-      title: 'Account Workspace SandBox',
-      active: true,
-    },
     {
       title: 'Receive Email Notifications',
       active: true,
@@ -34,6 +38,24 @@ function AccountPreferences() {
       active: false,
     },
   ]
+
+  async function handleSandboxVisibility() {
+    setIsSandboxVisible(!isSandboxVisible)
+    const response = await changeWorkspaceVisibility(
+      sandbox?.ID,
+      !isSandboxVisible,
+    )
+
+
+    if (response.success) {
+      queryClient.invalidateQueries([SETUP_QUERY_KEY])
+      notify('success', 'Sandbox visibility updated successfully')
+      return
+    }
+
+    setIsSandboxVisible(!isSandboxVisible)
+    notify('error', 'Failed to update sandbox visibility')
+  }
 
   return (
     <Card className={'rounded-2xl bg-white/70 backdrop-blur-md'}>
@@ -51,6 +73,32 @@ function AccountPreferences() {
           </div>
 
           <div className="mt-4 space-y-4 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
+            <div className="mt-4 pt-4 sm:flex">
+              <div className="mt-1 flex items-center gap-x-4 sm:mt-0 sm:flex-auto">
+                <Switch
+                  startContent={
+                    <span className="mr-1 text-[10px] font-bold uppercase">
+                      on
+                    </span>
+                  }
+                  endContent={
+                    <span className="ml-1 text-[10px] font-bold uppercase">
+                      off
+                    </span>
+                  }
+                  isSelected={isSandboxVisible}
+                  onValueChange={handleSandboxVisibility}
+                />
+                <div className="flex flex-col ">
+                  <p className="font-medium text-gray-900">Sandbox Workspace</p>
+                  <span className="text-xs text-slate-600 xl:text-sm">
+                    Activate a Sandbox to interact with the PayBoss platform
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/*  TODO: Add a switch for each of the application config */}
             {APPLICATION_CONFIG.map((config, index) => (
               <div key={config.title} className="mt-4 pt-4 sm:flex">
                 <div className="mt-1 flex items-center gap-x-4 sm:mt-0 sm:flex-auto">
