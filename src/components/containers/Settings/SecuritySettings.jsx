@@ -3,7 +3,7 @@ import { Modal } from '@/components/base'
 import useSettingsStore from '@/context/settingsStore'
 import useAccountProfile from '@/hooks/useProfileDetails'
 
-export default function SecurityAndPermissions() {
+function SecuritySettings() {
   const { openEditModal, setOpenEditModal } = useSettingsStore()
   const { user } = useAccountProfile()
 
@@ -100,3 +100,5 @@ export default function SecurityAndPermissions() {
     </>
   )
 }
+
+export default SecuritySettings

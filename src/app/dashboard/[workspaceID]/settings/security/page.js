@@ -1,5 +1,5 @@
 import LoadingPage from '@/app/loading'
-import SecurityAndPermissions from '@/components/containers/settings/SecurityAndPermissions'
+import SecurityRolesPermissions from '@/components/containers/settings/SecurityRolesPermissions'
 
 import React, { Suspense } from 'react'
 
@@ -17,8 +17,7 @@ function SecurityPermissions() {
           </p>
         </div>
 
-        <SecurityAndPermissions />
-        {/* <SecurityRolesPermissions /> */}
+        <SecurityRolesPermissions />
       </div>
     </Suspense>
   )

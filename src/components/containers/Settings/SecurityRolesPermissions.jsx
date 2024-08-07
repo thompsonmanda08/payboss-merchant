@@ -2,6 +2,7 @@
 import { Tabs } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import React from 'react'
+import SecuritySettings from './SecuritySettings'
 
 const TABS = [
   { name: 'All Users', href: '#', current: 0 }, // ONLY THE OWNER CAN SEE ALL USER
@@ -12,19 +13,10 @@ const TABS = [
 
 function SecurityRolesPermissions() {
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
-    <GeneralSettings key="general" />,
     <SecuritySettings key={'security'} />,
-    <BusinessSettings key={'business'} />,
-    <UsersSettings key={'all-users'} />,
-    <UsersSettings key={'members'} />,
-    <UsersSettings key={'external-guests'} />,
-    <UsersSettings key={'internal-guests'} />,
   ])
   return (
-    <div className="flex w-full flex-col rounded-xl bg-white p-5 md:p-8 lg:p-10">
-      <h2 className="mb-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-        Manage People
-      </h2>
+    <div className="flex w-full flex-col gap-5 p-5 md:p-8 lg:p-10">
       <Tabs tabs={TABS} navigateTo={navigateTo} currentTab={currentTabIndex} />
       {activeTab}
     </div>
