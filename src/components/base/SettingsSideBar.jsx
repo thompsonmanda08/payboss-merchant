@@ -22,7 +22,7 @@ const ACCOUNT_SETTINGS = [
   {
     name: 'My Settings',
     Icon: UserCircleIcon,
-    href: '/manage-account/profile',
+    href: '/manage-account',
   },
 
   {
@@ -93,7 +93,7 @@ function SettingsSideBar({
     links: settingsPathname ? WORKSPACE_SETTINGS : ACCOUNT_SETTINGS,
   }
 
-  useEffect(() => {}, [pathname, settingsPathname])
+  // useEffect(() => {}, [pathname, settingsPathname])
 
   return (
     <>

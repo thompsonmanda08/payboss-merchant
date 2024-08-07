@@ -16,7 +16,7 @@ export { SecondaryFeatures } from './landing-page/SecondaryFeatures'
 /* *********************** PROFILE PAGE *************************** */
 export { default as AccountPreferences } from './profile/AccountPreferences'
 export { default as ProfileDetails } from './profile/ProfileDetails'
-export { default as ProfileSecuritySettings } from './profile/ProfileSecuritySettings'
+export { default as ProfileSecuritySettings } from './settings/ProfileSecuritySettings'
 
 /* *********************** USERS *************************** */
 export { default as ManagePeople } from './users/ManagePeople'

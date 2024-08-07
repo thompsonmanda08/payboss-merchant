@@ -18,6 +18,10 @@ function AccountPreferences() {
 
   const APPLICATION_CONFIG = [
     {
+      title: 'Account Workspace SandBox',
+      active: true,
+    },
+    {
       title: 'Receive Email Notifications',
       active: true,
     },
@@ -41,7 +45,7 @@ function AccountPreferences() {
                 Platform Preferences
               </h2>
               <p className="mt-1 text-sm leading-6 text-gray-500">
-                Manage your info, option and privacy preferences
+                Manage your preferences and other platform options
               </p>
             </div>
           </div>
