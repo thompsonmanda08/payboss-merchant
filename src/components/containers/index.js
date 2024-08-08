@@ -19,4 +19,4 @@ export { default as SelectPaymentType } from './disbursements/SelectPaymentType'
 export { default as Workspaces } from './workspace/Workspaces'
 
 // TABLES
-export { default as TransactionsTable } from './Tables/TransactionsTable'
+export { default as TransactionsTable } from './tables/TransactionsTable'

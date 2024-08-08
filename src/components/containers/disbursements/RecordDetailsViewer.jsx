@@ -2,9 +2,9 @@
 import React from 'react'
 
 import { Modal } from '@/components/base'
-import AllRecords from '../Tables/AllRecords'
-import ValidRecords from '../Tables/ValidRecords'
-import InvalidRecords from '../Tables/InvalidRecords'
+import AllRecords from '../tables/AllRecords'
+import ValidRecords from '../tables/ValidRecords'
+import InvalidRecords from '../tables/InvalidRecords'
 import usePaymentsStore from '@/context/paymentsStore'
 
 function RecordDetailsViewer() {
