@@ -6,34 +6,53 @@ import BusinessAccountDetails from './BusinessAccountDetails'
 import DocumentAttachments from './DocumentAttachments'
 import ProgressStageTracker from './ProgressStageTracker'
 import { useGeneralConfigOptions, useSetupConfig } from '@/hooks/useQueryHooks'
-
-const TABS = [
-  { name: 'Business Details', href: '#', index: 0 },
-  { name: 'Attachments', href: '#', index: 1 },
-  { name: 'Verification Status', href: '#', index: 2 },
-]
+import useConfigOptions from '@/hooks/useConfigOptions'
+import useAccountProfile from '@/hooks/useProfileDetails'
 
 function AccountVerification() {
-  const { data: response, isLoading, isSuccess } = useSetupConfig()
-  const { data: config } = useGeneralConfigOptions()
-  const { userDetails } = response?.data || []
-  const { companyTypes, banks, currencies } = config?.data || []
+  const { user, businessDetails, businessDocs, merchantID } =
+    useAccountProfile()
+  const { companyTypes, banks, currencies } = useConfigOptions()
 
-  // console.log(response?.data)
-  // console.log(companyTypes)
+  // ************* TABS RENDERER ************** //
+  const TABS = [
+    { name: 'Business Details', href: '#', index: 0 },
+    { name: 'Attachments', href: '#', index: 1 },
+    { name: 'Verification Status', href: '#', index: 2 },
+  ]
 
-  // ***** COMPONENT RENDERER ************** //
-  const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
+  const KYC_COMPONENTS = [
     <BusinessAccountDetails
       key={'business-details'}
-      user={userDetails}
+      user={user}
+      businessDetails={businessDetails}
       companyTypes={companyTypes}
       banks={banks}
       currencies={currencies}
+      navigateToPage={navigateToPage}
     />,
-    <DocumentAttachments key={'documents'} />,
+    <DocumentAttachments
+      key={'documents'}
+      businessDocs={businessDocs}
+      navigateToPage={navigateToPage}
+    />,
+  ]
+
+  const TRACKING_COMPONENTS = [
+    <ProgressStageTracker key={'verification-status'} />,
+  ]
+
+  const RENDER_COMPONENTS = true ? KYC_COMPONENTS : TRACKING_COMPONENTS
+
+  // ************* COMPONENT RENDERER ************** //
+  const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
+    ...RENDER_COMPONENTS,
     <ProgressStageTracker key={'verification-status'} />,
   ])
+
+  function navigateToPage(index) {
+    navigateTo(index)
+  }
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col">

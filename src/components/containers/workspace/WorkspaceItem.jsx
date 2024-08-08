@@ -7,15 +7,17 @@ import { ArrowRightIcon, BriefcaseIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
-function WorkspaceItem({ name, href, isVisible }) {
-  //
+function WorkspaceItem({ name, href, isVisible, onClick }) {
   return (
     <Button
       as={Link}
       href={href}
+      onPress={onClick}
       className={cn(
-        'flex h-auto w-full justify-start gap-4 border-[1px] border-primary-50 bg-transparent p-2 hover:border-primary-100 hover:bg-primary-50',
-        { 'opacity-50 hover:opacity-90': !isVisible },
+        'flex h-auto w-full justify-start gap-4 border-[1px] border-primary-50 bg-transparent p-2 opacity-100 hover:border-primary-100 hover:bg-primary-50',
+        {
+          'opacity-50 hover:opacity-90': !isVisible,
+        },
       )}
       startContent={
         <SoftBoxIcon className={'w-18 h-20'}>

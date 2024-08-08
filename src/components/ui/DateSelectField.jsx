@@ -14,6 +14,7 @@ function DateSelectField({
   description,
   labelPlacement,
   onChange,
+  defaultValue,
   value,
   ...props
 }) {
@@ -24,7 +25,7 @@ function DateSelectField({
       value={value ? parseDate(value) : undefined}
       // hideTimeZone
       showMonthAndYearPickers
-      // defaultValue={today(getLocalTimeZone()).subtract({ days: 1 })}
+      defaultValue={defaultValue}
       onChange={onChange}
       className={cn('max-w-sm ', className)}
       classNames={{

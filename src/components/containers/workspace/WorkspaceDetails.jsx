@@ -139,7 +139,7 @@ function WorkspaceDetails({ WorkSpaceID }) {
           <form
             onSubmit={handleUpdateWorkspace}
             role={'edit-workspace-details'}
-            className="flex w-full flex-col items-center gap-4 sm:items-start md:flex-row md:items-end"
+            className="flex w-full flex-col gap-4 sm:items-start md:flex-row md:items-end"
           >
             <Input
               label="Workspace Name"
@@ -165,7 +165,6 @@ function WorkspaceDetails({ WorkSpaceID }) {
                 isDisabled={loading || isSandbox}
                 isLoading={loading}
                 loadingText={'Saving... '}
-                className={'w-full max-w-full sm:max-w-sm '}
               >
                 Save Changes
               </Button>

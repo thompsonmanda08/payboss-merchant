@@ -5,20 +5,29 @@ import SelectField from '@/components/ui/SelectField'
 import { isValidZambianMobileNumber } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import React from 'react'
-import { getLocalTimeZone, today } from '@internationalized/date'
+import { getLocalTimeZone, today, parseDate } from '@internationalized/date'
+import { Button } from '@/components/ui/Button'
 
-function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
+function BusinessAccountDetails({
+  businessDetails,
+  companyTypes,
+  banks,
+  currencies,
+  navigateToPage,
+}) {
   const branchCodeError =
-    (user?.branch_code?.length > 1 && user?.branch_code?.length < 6) ||
-    user?.branch_code?.length > 8
+    (businessDetails?.branch_code?.length > 1 &&
+      businessDetails?.branch_code?.length < 6) ||
+    businessDetails?.branch_code?.length > 8
 
-  const accountNumberError = user?.account_number?.length > 16
+  const accountNumberError = businessDetails?.account_number?.length > 16
 
-  const TPINError = user?.tpin?.length > 10
+  const TPINError = businessDetails?.tpin?.length > 10
   const phoneNoError =
-    !isValidZambianMobileNumber(user?.contact) && user?.contact?.length > 1
+    !isValidZambianMobileNumber(businessDetails?.contact) &&
+    businessDetails?.contact?.length > 1
 
-  
+  // console.log()
 
   //TODO => FETCH ALL KYC DATA - INPUT FIELDS TO BE DISABLED
   return (
@@ -41,7 +50,8 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
               type="text"
               label="Business Name"
               name="businessName"
-              value={user?.merchant}
+              isDisabled
+              value={businessDetails?.name}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { name: e.target.value })
@@ -51,21 +61,23 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
             <div className="flex w-full gap-4">
               <SelectField
                 options={companyTypes}
+                isDisabled
                 label="Company Type"
                 name="companyTypeID"
                 listItemName={'type'}
-                value={user?.companyTypeID}
+                value={businessDetails?.companyTypeID}
                 // required={true}
-                onChange={(e) => {
-                  updateDetails(STEPS[0], { companyTypeID: e.target.value })
-                }}
+                // onChange={(e) => {
+                //   updateDetails(STEPS[0], { companyTypeID: e.target.value })
+                // }}
               />
               <Input
                 type="number"
                 label="TPIN"
                 name="tpin"
                 maxLength={10}
-                value={user?.tpin}
+                isDisabled
+                value={businessDetails?.tpin}
                 onError={TPINError}
                 errorText="Invalid TPIN"
                 onChange={(e) => {
@@ -76,9 +88,10 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
 
             <DateSelectField
               label={'Date of Incorporation'}
+              isDisabled
               className="max-w-sm"
               description={'Date the company was registered'}
-              value={user?.date_of_incorporation}
+              value={businessDetails?.date_of_incorporation?.split('T')[0]}
               maxValue={today(getLocalTimeZone())}
               labelPlacement={'outside'}
               onChange={(date) => {
@@ -94,7 +107,8 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
             <Input
               label="Physical Address"
               name="physical_address"
-              value={user?.physical_address}
+              isDisabled
+              value={businessDetails?.physical_address}
               // required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { physical_address: e.target.value })
@@ -105,9 +119,10 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
               <Input
                 type="number"
                 label="Mobile Number"
+                isDisabled
                 name="contact"
                 maxLength={12}
-                value={user?.contact}
+                value={businessDetails?.contact}
                 onError={phoneNoError}
                 errorText="Invalid Mobile Number"
                 // required={true}
@@ -119,7 +134,8 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
               <Input
                 label="Website"
                 name="website"
-                value={user?.website}
+                isDisabled
+                value={businessDetails?.website}
                 // pattern="https?://.+"
                 onChange={(e) => {
                   updateDetails(STEPS[0], { website: e.target.value })
@@ -131,7 +147,8 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
               type="email"
               label="Company Email"
               name="company_email"
-              value={user?.company_email}
+              isDisabled
+              value={businessDetails?.company_email}
               // required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { company_email: e.target.value })
@@ -141,7 +158,7 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
         </div>
       </div>
       {/* *********** BANKING DETAILS ***************** */}
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col items-start gap-4">
         <CardHeader
           className={'py-0'}
           classNames={{
@@ -158,7 +175,8 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
             <Input
               label="Account Holder Name"
               name="account_name"
-              value={user?.account_name}
+              isDisabled
+              value={businessDetails?.account_name}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { account_name: e.target.value })
@@ -167,7 +185,8 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
             <Input
               label="Account Number"
               name="account_number"
-              value={user?.account_number}
+              isDisabled
+              value={businessDetails?.account_number}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { account_number: e.target.value })
@@ -177,7 +196,8 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
               options={banks}
               label="Bank"
               name="bankID"
-              value={user?.bankID}
+              value={businessDetails?.bankID}
+              isDisabled
               listItemName={'bank_name'}
               required={true}
               onChange={(e) => {
@@ -189,7 +209,8 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
             <Input
               label="Branch Name"
               name="branch_name"
-              value={user?.branch_name}
+              isDisabled
+              value={businessDetails?.branch_name}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { branch_name: e.target.value })
@@ -198,7 +219,8 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
             <Input
               label="Branch Code"
               name="branch_code"
-              value={user?.branch_code}
+              isDisabled
+              value={businessDetails?.branch_code}
               onError={branchCodeError}
               errorText={'Valid Code is required'}
               required={true}
@@ -210,7 +232,8 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
               options={currencies}
               label="Currency"
               name="currencyID"
-              value={user?.currencyID}
+              isDisabled
+              value={businessDetails?.currencyID}
               listItemName={'currency'}
               required={true}
               onChange={(e) => {
@@ -219,6 +242,9 @@ function BusinessAccountDetails({ user, companyTypes, banks, currencies }) {
             />
           </div>
         </div>
+
+        {/*  */}
+        <Button onPress={() => navigateToPage(1)}>Proceed</Button>
       </div>
     </div>
   )

@@ -4,13 +4,7 @@ import { cn, formatDate } from '@/lib/utils'
 import { now, getLocalTimeZone } from '@internationalized/date'
 import { CheckBadgeIcon, CreditCardIcon } from '@heroicons/react/24/outline'
 
-function TimelineItem({ isLastItem, isCompleted, isPending, Icon }) {
-  const fullDate = new Date(now(getLocalTimeZone()).toString().split('T')[0])
-
-  const date = formatDate(fullDate).replaceAll('-', ' ')
-  const time = fullDate.toLocaleTimeString()
-  console.log(time)
-
+function TimelineItem({ stage, isLastItem, isCompleted, isPending, Icon }) {
   return (
     <div
       className={cn('flex cursor-pointer p-2 py-4', {
@@ -28,13 +22,13 @@ function TimelineItem({ isLastItem, isCompleted, isPending, Icon }) {
           'before:hidden': isLastItem,
         }}
       >
-        {Icon || <CheckBadgeIcon />}
+        {Icon ? <Icon /> : <CheckBadgeIcon />}
       </SoftBoxIcon>
 
       <div className="ml-4 flex flex-col">
-        <p className="font-medium text-slate-600">Account Details Submitted</p>
+        <p className="font-medium text-slate-600">{stage?.name}</p>
         <span className="text-xs font-medium uppercase leading-5 text-slate-400">
-          {formatDate(date).replaceAll('-', ' ')}
+          {stage?.date} | {stage?.time}
         </span>
       </div>
     </div>

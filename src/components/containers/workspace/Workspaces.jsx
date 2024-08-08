@@ -15,12 +15,13 @@ import {
 import { Input } from '@/components/ui/InputField'
 import { createNewWorkspace } from '@/app/_actions/config-actions'
 import { useQueryClient } from '@tanstack/react-query'
-import { SETUP_QUERY_KEY } from '@/lib/constants'
+import { SETUP_QUERY_KEY, WORKSPACES_QUERY_KEY } from '@/lib/constants'
 import { usePathname, useRouter } from 'next/navigation'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import useWorkspace from '@/hooks/useWorkspace'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import WorkspaceItem from './WorkspaceItem'
+import OverlayLoader from '@/components/ui/OverlayLoader'
 
 function Workspaces() {
   const { push } = useRouter()
@@ -33,10 +34,9 @@ function Workspaces() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const isWorkspaceSettings =
-    pathname.split('/')[2] == 'workspaces' ||
-    pathname.split('/')[4] == 'workspaces'
-
-  // console.log(response)
+    pathname.split('/').length > 2 &&
+    (pathname.split('/')[2] == 'workspaces' ||
+      pathname.split('/')[4] == 'workspaces')
 
   const RENDER_WORKSPACES =
     pathname.split('/').length > 2 ? allWorkspaces : workspaces
@@ -52,7 +52,6 @@ function Workspaces() {
 
   function handleClose(onClose) {
     setNewWorkspace({})
-
     onClose()
   }
 
@@ -72,7 +71,10 @@ function Workspaces() {
     const response = await createNewWorkspace(newWorkspace)
 
     if (response.success) {
-      queryClient.invalidateQueries({ queryKey: [SETUP_QUERY_KEY] })
+      queryClient.invalidateQueries({
+        queryKey: [SETUP_QUERY_KEY],
+      })
+      queryClient.invalidateQueries({ queryKey: [WORKSPACES_QUERY_KEY] })
       notify('success', 'Workspace Created!')
       onOpenChange()
       setLoading(false)
@@ -87,98 +89,111 @@ function Workspaces() {
     onOpenChange()
   }
 
-  console.log(newWorkspace)
-
   return (
-    <div className="flex w-full flex-col items-center justify-center ">
-      <ScrollArea className="flex w-full min-w-[400px] flex-col lg:max-h-[400px] lg:px-2">
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center p-10 text-center">
-            <Spinner size={48} color="#1B64CE" />
-            <p className="mt-8 max-w-sm break-words font-bold text-slate-800">
-              Loading Workspaces...
-            </p>
-          </div>
-        ) : (
-          <div
-            className={cn('grid w-full place-items-center gap-4 rounded-lg', {
-              'grid-cols-[repeat(auto-fill,minmax(400px,1fr))]':
-                workspaces?.length > 0,
-            })}
-          >
-            {RENDER_WORKSPACES &&
-              RENDER_WORKSPACES?.map((item) => {
-                return (
-                  <WorkspaceItem
-                    name={item?.workspace}
-                    isVisible={item?.isVisible}
-                    href={
-                      !isWorkspaceSettings
-                        ? `/dashboard/${item?.ID}`
-                        : pathname + `/${item?.ID}`
-                    }
-                  />
-                )
-              })}
-
-            <Button
-              onPress={onOpen}
-              className={cn(
-                'h-24 w-full flex-col border border-primary-100 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50',
-                { 'col-span-full': workspaces?.length < 0 },
-              )}
-            >
-              <PlusIcon className=" h-6 w-6" />
-              Create Workspace
-            </Button>
-          </div>
-        )}
-      </ScrollArea>
-
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Create New Workspace
-              </ModalHeader>
-              <ModalBody>
-                <Input
-                  autoFocus
-                  label="Workspace Name"
-                  placeholder="Commercial Team"
-                  className="mt-px"
-                  onChange={(e) => {
-                    editWorkspaceField({ workspace: e.target.value })
-                  }}
-                />
-                <Input
-                  label="Description"
-                  placeholder="Describe the workspace"
-                  onChange={(e) => {
-                    editWorkspaceField({ description: e.target.value })
-                  }}
-                  className="mt-px"
-                />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" onPress={() => handleClose(onClose)}>
-                  Cancel
-                </Button>
-                <Button
-                  color="primary"
-                  isLoading={loading}
-                  isDisabled={loading}
-                  onPress={() => handleCreateWorkspace(onClose)}
-                >
-                  Create
-                </Button>
-              </ModalFooter>
-            </>
+    <>
+      {loading && <OverlayLoader show={!loading} />}
+      <div className="flex w-full flex-col items-center justify-center">
+        <ScrollArea
+          className={cn(
+            'flex w-full min-w-[400px] flex-col lg:max-h-[400px] lg:px-2',
+            { 'max-h-auto lg:max-h-max ': isWorkspaceSettings },
           )}
-        </ModalContent>
-      </Modal>
-    </div>
+        >
+          {isLoading ? (
+            <div className="flex h-full min-h-[400px] flex-1 flex-col items-center justify-center p-10 text-center">
+              <div>
+                <Spinner size={48} color="#1B64CE" />
+                <p className="mt-4 max-w-sm break-words font-bold text-slate-800">
+                  Loading Workspaces...
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div
+              className={cn('grid w-full place-items-center gap-4 rounded-lg', {
+                'grid-cols-[repeat(auto-fill,minmax(400px,1fr))]':
+                  workspaces?.length > 0,
+              })}
+            >
+              {RENDER_WORKSPACES &&
+                RENDER_WORKSPACES?.map((item) => {
+                  return (
+                    <WorkspaceItem
+                      onClick={() => setLoading(true)}
+                      name={item?.workspace}
+                      isVisible={item?.isVisible}
+                      href={
+                        !isWorkspaceSettings
+                          ? `/dashboard/${item?.ID}`
+                          : pathname + `/${item?.ID}`
+                      }
+                    />
+                  )
+                })}
+
+              <Button
+                onPress={onOpen}
+                className={cn(
+                  'h-24 w-full flex-col border border-primary-100 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50',
+                  { 'col-span-full': workspaces?.length < 0 },
+                )}
+              >
+                <PlusIcon className=" h-6 w-6" />
+                Create Workspace
+              </Button>
+            </div>
+          )}
+        </ScrollArea>
+
+        <Modal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          placement="top-center"
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Create New Workspace
+                </ModalHeader>
+                <ModalBody>
+                  <Input
+                    autoFocus
+                    label="Workspace Name"
+                    placeholder="Commercial Team"
+                    className="mt-px"
+                    onChange={(e) => {
+                      editWorkspaceField({ workspace: e.target.value })
+                    }}
+                  />
+                  <Input
+                    label="Description"
+                    placeholder="Describe the workspace"
+                    onChange={(e) => {
+                      editWorkspaceField({ description: e.target.value })
+                    }}
+                    className="mt-px"
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" onPress={() => handleClose(onClose)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    color="primary"
+                    isLoading={loading}
+                    isDisabled={loading}
+                    onPress={() => handleCreateWorkspace(onClose)}
+                  >
+                    Create
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </div>
+    </>
   )
 }
 

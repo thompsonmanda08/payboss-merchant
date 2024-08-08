@@ -1,57 +1,96 @@
 //BUSINESS REGISTRATION STATUS
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import useAuthStore from '@/context/authStore'
 import { uploadBusinessFile } from '@/app/_actions/pocketbase-actions'
 import { CardHeader, FileDropZone } from '@/components/base'
 import { notify } from '@/lib/utils'
+import { Button } from '@/components/ui/Button'
+import { Checkbox } from '@nextui-org/react'
+import useAccountProfile from '@/hooks/useProfileDetails'
+import {
+  sendBusinessDocumentRefs,
+  updateBusinessDocumentRefs,
+} from '@/app/_actions/auth-actions'
+
+const DOCUMENTS = [
+  'CERTIFICATE_INC',
+  'ARTICLES',
+  'SHAREHOLDER_AGREEMENT',
+  'TAX_CLEARANCE',
+  'COMPANY_PROFILE',
+]
 
 // BUSINESS DOCUMENTS AND ATTACHMENTS
-export default function DocumentAttachments({}) {
-  const { setBusinessDocs, businessDocs } = useAuthStore((state) => state)
+export default function DocumentAttachments({ navigateToPage }) {
+  const { merchantID, businessDocs } = useAccountProfile()
+  const { isKYCSent, setIsKYCSent } = useAuthStore((state) => state)
+  const [docFiles, setDocFiles] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
-  function updateDetails(fields) {
-    setBusinessDocs({ ...businessDocs, ...fields })
+  function updateDocs(fields) {
+    setDocFiles({ ...docFiles, ...fields })
   }
 
-  function submitKYCDocuments() {
+  async function submitKYCDocuments() {
+    setIsLoading(true)
+
+    const documentUrls = {
+      company_profile_url: docFiles['COMPANY_PROFILE']?.file_url,
+      cert_of_incorporation_url: docFiles['CERTIFICATE_INC']?.file_url,
+      share_holder_url: docFiles['SHAREHOLDER_AGREEMENT']?.file_url,
+      tax_clearance_certificate_url: docFiles['TAX_CLEARANCE']?.file_url,
+      articles_of_association_url: docFiles['ARTICLES_ASSOCIATION']?.file_url,
+    }
+
+    console.log(documentUrls)
+
+    if (!isKYCSent) {
+      notify('error', 'Checkbox is unmarked')
+      setIsLoading(false)
+      return
+    }
+
+    if (Object.keys(documentUrls).length < 5 && isKYCSent) {
+      notify('error', 'Provide all required files!')
+      setIsLoading(false)
+      return
+    }
+
     // SAVE FILES TO PAYBOSS BACKEND
-    // if (currentTabIndex === 3 && STEPS[currentTabIndex] === STEPS[3]) {
-    //   console.log(merchantID)
-    //   // POST AND PATCH
-    //   let payload
-    //   if (!documentsInfoSent) {
-    //     payload = await sendBusinessDocumentRefs(businessDocs, merchantID)
-    //     setDocumentsInfoSent(true)
-    //   } else if (documentsInfoSent && merchantID) {
-    //     payload = await updateBusinessDocumentRefs(businessDocs, merchantID)
-    //   }
-    //   if (payload.success && merchantID) {
-    //     notify('success', 'Documents Submitted For Approval')
-    //     navigateForward()
-    //     setIsLoading(false)
-    //     return
-    //   } else {
-    //     notify('error', 'Error Submitting Documents')
-    //     setIsLoading(false)
-    //     updateErrorStatus({ status: true, message: payload.message })
-    //     return
-    //   }
-    // }
+    let response
+    if (Object.keys(businessDocs).length === 0 && isKYCSent) {
+      response = await sendBusinessDocumentRefs(documentUrls)
+    } else if (!Object.keys(businessDocs).length === 0 && isKYCSent) {
+      response = await updateBusinessDocumentRefs(documentUrls)
+    }
+
+    if (response?.success) {
+      notify('success', 'Documents Submitted For Approval')
+      navigateToPage(2)
+      setIsLoading(false)
+      return
+    } else {
+      notify('error', 'Error Submitting Documents')
+      setIsLoading(false)
+      return
+    }
   }
 
-  const handleFileUpload = async (file) => {
+  async function handleFileUpload(file, recordID) {
     // AWAIT SAVE TO POCKET-BASE DB AND RETURN FILE_URL
-    let response = await uploadBusinessFile(file, merchantID)
+    let response = await uploadBusinessFile(file, merchantID, recordID)
     if (response.success) {
       notify('success', response?.message)
-      let { file_url } = response?.data
-      return file_url
+      return response?.data
     }
     notify('error', 'Failed to upload file')
+    notify('error', response.message)
   }
+
+  console.log(docFiles)
 
   return (
     <>
@@ -72,24 +111,33 @@ export default function DocumentAttachments({}) {
           <UploadField
             label={'Business Incorporation Certificate'}
             handleFile={async (file) =>
-              updateDetails({
-                cert_of_incorporation_url: await handleFileUpload(file),
+              updateDocs({
+                CERTIFICATE_INC: await handleFileUpload(
+                  file,
+                  docFiles['CERTIFICATE_INC']?.file_record_id,
+                ),
               })
             }
           />
           <UploadField
             label={'Articles of Association'}
             handleFile={async (file) =>
-              updateDetails({
-                articles_of_association_url: await handleFileUpload(file),
+              updateDocs({
+                ARTICLES_ASSOCIATION: await handleFileUpload(
+                  file,
+                  docFiles['ARTICLES_ASSOCIATION']?.file_record_id,
+                ),
               })
             }
           />
           <UploadField
             label={'Shareholders Agreement'}
             handleFile={async (file) =>
-              updateDetails({
-                share_holder_url: await handleFileUpload(file),
+              updateDocs({
+                SHAREHOLDER_AGREEMENT: await handleFileUpload(
+                  file,
+                  docFiles['SHAREHOLDER_AGREEMENT']?.file_record_id,
+                ),
               })
             }
           />
@@ -99,8 +147,11 @@ export default function DocumentAttachments({}) {
           <UploadField
             label={'Tax Clearance Certificate'}
             handleFile={async (file) =>
-              updateDetails({
-                tax_clearance_certificate_url: await handleFileUpload(file),
+              updateDocs({
+                TAX_CLEARANCE: await handleFileUpload(
+                  file,
+                  docFiles['TAX_CLEARANCE']?.file_record_id,
+                ),
               })
             }
           />
@@ -108,12 +159,40 @@ export default function DocumentAttachments({}) {
           <UploadField
             label={'Company Profile'}
             handleFile={async (file) =>
-              updateDetails({
-                company_profile_url: await handleFileUpload(file),
+              updateDocs({
+                COMPANY_PROFILE: await handleFileUpload(
+                  file,
+                  docFiles['COMPANY_PROFILE']?.file_record_id,
+                ),
               })
             }
           />
         </div>
+      </div>
+      <div className="mt-8 flex w-full flex-col items-start gap-4">
+        <Checkbox
+          className="flex items-start"
+          classNames={{
+            label: 'flex flex-col items-start -mt-1',
+          }}
+          isSelected={isKYCSent}
+          onValueChange={setIsKYCSent}
+        >
+          <span className="max-w-xl text-xs font-medium italic text-slate-700 md:text-sm">
+            Yes, I confirm that the details provided accurately represent my
+            business. I understand that any misrepresentation of my business may
+            result in the rejection of my application.
+          </span>
+        </Checkbox>
+        {
+          <Button
+            isLoading={isLoading}
+            loadingText={'Submitting...'}
+            onPress={async () => await submitKYCDocuments()}
+          >
+            Submit for Approval
+          </Button>
+        }
       </div>
     </>
   )
