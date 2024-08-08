@@ -4,6 +4,7 @@ import {
   createAuthSession,
   deleteSession,
   getServerSession,
+  getUserSession,
   verifySession,
 } from '@/lib/session'
 import { apiClient } from '@/lib/utils'
@@ -157,10 +158,12 @@ export async function createMerchantAdminUser(newAdminUser, merchantID) {
   }
 }
 
-export async function sendBusinessDocumentRefs(payloadUrls, merchantID) {
+export async function sendBusinessDocumentRefs(payloadUrls) {
+  const session = await getUserSession()
+  const merchantID = session?.user?.merchantID
   try {
     const res = await apiClient.post(
-      `kyc/merchant/${merchantID}/docs`,
+      `merchant/onboard/documents/${merchantID}`,
       payloadUrls,
       {
         headers: {
@@ -195,10 +198,12 @@ export async function sendBusinessDocumentRefs(payloadUrls, merchantID) {
   }
 }
 
-export async function updateBusinessDocumentRefs(payloadUrls, merchantID) {
+export async function updateBusinessDocumentRefs(payloadUrls) {
+  const session = await getUserSession()
+  const merchantID = session?.user?.merchantID
   try {
     const res = await apiClient.patch(
-      `kyc/merchant/${merchantID}/docs`,
+      `merchant/onboard/update/documents/${merchantID}`,
       payloadUrls,
       {
         headers: {

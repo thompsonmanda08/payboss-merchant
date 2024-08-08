@@ -377,6 +377,41 @@ export async function getAllWorkspaces() {
   }
 }
 
+export async function getAllKYCData() {
+  const session = await getUserSession()
+  const merchantID = session?.user?.merchantID
+  try {
+    const res = await authenticatedService({
+      url: `merchant/${merchantID}`, //URL
+    })
+
+    if (res.status === 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+      }
+    }
+
+    const response = res?.data || res
+
+    return {
+      success: false,
+      message: response?.error || response?.message,
+      data: null,
+      status: res.status,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Oops! Error Occurred!',
+      data: null,
+      status: error?.response?.status || error.status,
+    }
+  }
+}
+
 export async function getAuthSession() {
   const session = await getServerSession()
   return session
