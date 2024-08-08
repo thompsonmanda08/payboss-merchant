@@ -1,7 +1,6 @@
+import React, { Suspense } from 'react'
 import LoadingPage from '@/app/loading'
 import SecurityRolesPermissions from '@/components/containers/settings/SecurityRolesPermissions'
-
-import React, { Suspense } from 'react'
 
 function SecurityPermissions() {
   return (
