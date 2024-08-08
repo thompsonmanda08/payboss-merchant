@@ -47,8 +47,6 @@ const useWorkspaces = () => {
     }
   }, [])
 
-  // console.log(allWorkspaces)
-
   return {
     activeWorkspace,
     allWorkspaces,

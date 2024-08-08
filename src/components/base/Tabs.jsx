@@ -43,7 +43,7 @@ export default function Tabs({
         >
           {tabs.map((tab, index) => (
             <Button
-              key={tab.name}
+              key={tab?.name}
               // href={tab.href}
               variant={'light'}
               onClick={() => navigateTo(index)}
@@ -51,13 +51,13 @@ export default function Tabs({
                 'whitespace-nowrap border-b-1 border-transparent px-4 text-sm  text-gray-500 hover:border-gray-300 hover:bg-white hover:text-primary data-[hover=true]:bg-white',
                 {
                   'border-primary bg-white text-primary shadow-sm':
-                    tab.index == currentTab,
+                    tab?.index == currentTab,
                 },
                 button,
               )}
-              aria-current={tab.index == currentTab ? 'active' : undefined}
+              aria-current={tab?.index == currentTab ? 'active' : undefined}
             >
-              {tab.name}
+              {tab?.name}
             </Button>
           ))}
         </nav>

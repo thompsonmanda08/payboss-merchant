@@ -1,5 +1,5 @@
 import LoadingPage from '@/app/loading'
-import WorkspaceSettings from '@/components/containers/workspace/WorkspacesSettings'
+import WorkspaceSettings from '@/components/containers/workspace/WorkspaceSettings'
 import Spinner from '@/components/ui/Spinner'
 import React, { Suspense } from 'react'
 

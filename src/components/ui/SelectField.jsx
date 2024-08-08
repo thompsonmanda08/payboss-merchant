@@ -27,7 +27,9 @@ function SelectField({
       {label && (
         <label
           htmlFor={name}
-          className="ml-1 text-sm font-medium text-slate-700"
+          className={cn('ml-1 text-sm font-medium text-slate-700', {
+            'opacity-50': props?.isDisabled,
+          })}
         >
           {label}
         </label>
@@ -62,7 +64,7 @@ function SelectField({
             options.map((item, idx) => {
               let ItemValue =
                 item?.id || item?.ID || item?.index?.toString() || item
-              let ItemLabel = item?.name || item[listItemName] || item
+              let ItemLabel = item?.name || item?.[listItemName] || item
               return (
                 <SelectItem
                   className="font-medium"

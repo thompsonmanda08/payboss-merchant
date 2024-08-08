@@ -1,5 +1,6 @@
 import {
   getAccountConfigOptions,
+  getAllKYCData,
   getAllWorkspaces,
   getUserRoles,
   getUserSetupConfigs,
@@ -31,6 +32,13 @@ export const useGetWorkspaces = () =>
   useQuery({
     queryKey: [WORKSPACES_QUERY_KEY],
     queryFn: async () => await getAllWorkspaces(),
+    staleTime: Infinity,
+  })
+
+export const useKYCData = () =>
+  useQuery({
+    queryKey: ['KYC'],
+    queryFn: async () => await getAllKYCData(),
     staleTime: Infinity,
   })
 

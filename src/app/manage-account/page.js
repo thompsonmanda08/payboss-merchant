@@ -2,12 +2,10 @@ import Image from 'next/image'
 import { Suspense } from 'react'
 import LoadingPage from '@/app/loading'
 import { DefaultCover } from '@/lib/constants'
-import {
-  AccountPreferences,
-  ProfileDetails,
-  ProfileSecuritySettings,
-} from '@/components/containers'
+
 import ProfileBanner from '@/components/base/ProfileBanner'
+import ProfileDetails from '@/components/containers/profile/ProfileDetails'
+import AccountPreferences from '@/components/containers/profile/AccountPreferences'
 
 function AccountSettings() {
   return (

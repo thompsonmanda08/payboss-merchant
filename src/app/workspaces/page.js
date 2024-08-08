@@ -9,7 +9,7 @@ import WorkspaceHeader from '@/components/containers/workspace/WorkspaceHeader'
 function WorkSpacesPage() {
   return (
     <main className="flex h-full min-h-screen items-start justify-start overflow-hidden bg-background text-foreground">
-      <div className="relative flex h-full max-h-screen w-full flex-col overflow-y-auto ">
+      <div className="flex h-full max-h-screen w-full flex-col">
         <section role="workspace-header">
           <div className="relative h-[380px] w-full overflow-clip rounded-b-3xl bg-gray-900">
             <WorkspaceHeader />

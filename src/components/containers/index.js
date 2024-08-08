@@ -8,17 +8,7 @@ export { Pricing } from './landing-page/Pricing'
 export { PrimaryFeatures } from './landing-page/PrimaryFeatures'
 export { SecondaryFeatures } from './landing-page/SecondaryFeatures'
 
-/* *********************** SETTINGS PAGE *************************** */
-// export { default as BusinessSettings } from './Settings/BusinessSettings'
-// export { default as GeneralSettings } from './Settings/GeneralSettings'
-// export { default as SecurityAndPermissions } from './Settings/SecurityAndPermissions'
-
-/* *********************** PROFILE PAGE *************************** */
-export { default as AccountPreferences } from './profile/AccountPreferences'
-export { default as ProfileDetails } from './profile/ProfileDetails'
-export { default as ProfileSecuritySettings } from './settings/ProfileSecuritySettings'
-
-/* *********************** USERS *************************** */
+/* *********************** PROFILE *************************** */
 export { default as ManagePeople } from './users/ManagePeople'
 
 /* *********************** PAYMENTS *************************** */
