@@ -8,7 +8,7 @@ const TABS = [
   { name: 'All Users', href: '#', current: 0 }, // ONLY THE OWNER CAN SEE ALL USER
   { name: 'Workspace Members', href: '#', current: 1 },
   { name: 'Internal Guests', href: '#', current: 2 },
-  { name: 'External Guests', href: '#', current: 3 },
+  // { name: 'External Guests', href: '#', current: 3 },
 ]
 
 function SecurityRolesPermissions() {
