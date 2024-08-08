@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import React from 'react'
 import { getLocalTimeZone, today, parseDate } from '@internationalized/date'
 import { Button } from '@/components/ui/Button'
+import useAccountProfile from '@/hooks/useProfileDetails'
 
 function BusinessAccountDetails({
   businessDetails,
@@ -15,6 +16,8 @@ function BusinessAccountDetails({
   currencies,
   navigateToPage,
 }) {
+  const { isCompleteKYC } = useAccountProfile()
+
   const branchCodeError =
     (businessDetails?.branch_code?.length > 1 &&
       businessDetails?.branch_code?.length < 6) ||
@@ -27,7 +30,7 @@ function BusinessAccountDetails({
     !isValidZambianMobileNumber(businessDetails?.contact) &&
     businessDetails?.contact?.length > 1
 
-  // console.log()
+  console.log(isCompleteKYC)
 
   //TODO => FETCH ALL KYC DATA - INPUT FIELDS TO BE DISABLED
   return (

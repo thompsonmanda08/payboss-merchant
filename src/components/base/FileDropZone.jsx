@@ -3,8 +3,6 @@
 import {
   CloudArrowUpIcon,
   DocumentArrowUpIcon,
-  PencilSquareIcon,
-  PercentBadgeIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import * as React from 'react'
@@ -12,7 +10,6 @@ import { useDropzone } from 'react-dropzone'
 import { twMerge } from 'tailwind-merge'
 import { Button } from '../ui/Button'
 import { cn } from '@/lib/utils'
-import { PencilIcon } from '@heroicons/react/20/solid'
 
 const variants = {
   base: cn(
@@ -81,8 +78,8 @@ const SingleFileDropzone = React.forwardRef(
     } = useDropzone({
       accept: {
         // 'image/png': [],
-        'text/csv': [],
-        'text/*': [],
+        // 'text/csv': [],
+        // 'text/*': [],
         // 'application/*': [],
         'application/vnd.ms-excel': [],
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [],

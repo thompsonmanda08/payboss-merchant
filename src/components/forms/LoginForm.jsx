@@ -36,9 +36,9 @@ function LoginForm() {
     const password = formData.get('password')
     const loginDetails = { emailusername, password }
 
-
     if (!emailusername || !password) {
       updateErrorStatus({
+        onFields: true,
         status: true,
         message: 'Provide login credentials',
       })
@@ -63,7 +63,6 @@ function LoginForm() {
     }
   }
 
-
   useEffect(() => {
     // Clean out any errors if the user makes any changes to the form
     setError({})
@@ -84,7 +83,7 @@ function LoginForm() {
           name={'emailusername'}
           label="Email or Username"
           aria-describedby="email-addon"
-          onError={error?.status}
+          onError={error?.onFields}
           onChange={(e) => {
             updateLoginDetails({ emailusername: e.target.value })
           }}
@@ -97,7 +96,7 @@ function LoginForm() {
           aria-label="Password"
           label="Password"
           aria-describedby="password-addon"
-          onError={error?.status}
+          onError={error?.onFields}
           onChange={(e) => {
             updateLoginDetails({ password: e.target.value })
           }}

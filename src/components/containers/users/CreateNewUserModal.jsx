@@ -23,7 +23,7 @@ function CreateNewUserModal({ isOpen, onOpen, onOpenChange }) {
   }
   function handleCreateUser() {
     setLoading(true)
-    
+
     // CREATE A USER
 
     setTimeout(() => {
@@ -34,7 +34,7 @@ function CreateNewUserModal({ isOpen, onOpen, onOpenChange }) {
 
   return (
     <>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
         <ModalContent>
           {(onClose) => (
             <>
