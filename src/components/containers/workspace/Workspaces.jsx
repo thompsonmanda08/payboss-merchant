@@ -91,7 +91,7 @@ function Workspaces() {
 
   return (
     <>
-      {loading && <OverlayLoader show={!loading} />}
+      {loading && <OverlayLoader show={loading} />}
       <div className="flex w-full flex-col items-center justify-center">
         <ScrollArea
           className={cn(

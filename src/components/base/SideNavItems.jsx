@@ -15,13 +15,14 @@ export default function SideNavItems({
   handleExpand,
   handleMainLinkClick,
   handleLinkClick,
+  navBarItems,
 }) {
   const { handleUserLogOut } = useAuthStore((state) => state)
 
   return (
     <>
       <ul className="mb-auto flex w-full flex-col divide-y divide-slate-100/50 ">
-        {SIDE_BAR_OPTIONS.map(({ name, href, Icon, subMenuItems }, index) => {
+        {navBarItems.map(({ name, href, Icon, subMenuItems }, index) => {
           const isExpanded = expandedSection === index
 
           const currentPage =

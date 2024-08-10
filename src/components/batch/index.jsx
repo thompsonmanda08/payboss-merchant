@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import Table from '../containers/tables/Table'
-import data from '@/app/dashboard/data/tableData'
+import data from '@/app/dashboard/[workspaceID]/data/tableData'
 import { Card } from '../base'
 import { CheckIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid'
 

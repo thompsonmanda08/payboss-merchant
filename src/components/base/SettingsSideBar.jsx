@@ -14,7 +14,7 @@ import {
 import { ArrowLeftIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import useAuthStore from '@/context/authStore'
 
@@ -68,7 +68,7 @@ function SettingsSideBar({
     {
       name: 'My Settings',
       Icon: UserCircleIcon,
-      href: `${settingsPathname}`,
+      href: settingsPathname,
     },
     {
       name: 'People',
@@ -88,12 +88,9 @@ function SettingsSideBar({
   ]
 
   // SETTINGS OPTIONS
-  const SETTINGS_LINKS = {
-    title: 'account_settings',
-    links: settingsPathname ? WORKSPACE_SETTINGS : ACCOUNT_SETTINGS,
-  }
-
-  // useEffect(() => {}, [pathname, settingsPathname])
+  const SETTINGS_LINKS = settingsPathname
+    ? WORKSPACE_SETTINGS
+    : ACCOUNT_SETTINGS
 
   return (
     <>
@@ -150,16 +147,22 @@ function SettingsSideBar({
             className="p- flex flex-col justify-start p-2"
           >
             <p className="m-2 text-xs font-medium uppercase tracking-wide text-slate-600">
-              {title || 'ACCOUNT SETTINGS'}
+              {settingsPathname ? title : 'ACCOUNT SETTINGS'}
             </p>
-            {SETTINGS_LINKS.links?.map(({ href, Icon, name }, index) => {
+
+            {SETTINGS_LINKS?.map(({ href, Icon, name }, index) => {
               return (
                 <Button
                   as={Link}
                   key={href + index}
                   href={href}
                   variant="light"
-                  className="h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
+                  className={cn(
+                    'my-1 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50',
+                    {
+                      'bg-primary-50 text-primary-600': pathname == href,
+                    },
+                  )}
                   startContent={<Icon className="h-5 w-5" />}
                 >
                   {name}
@@ -167,8 +170,8 @@ function SettingsSideBar({
               )
             })}
           </div>
-          {/* ************************************************************* */}
 
+          {/* ************************************************************* */}
           <hr className="mt-auto" />
           <Button
             variant="light"

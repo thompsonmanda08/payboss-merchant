@@ -2,7 +2,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { BellIcon, Cog6ToothIcon } from '@heroicons/react/24/solid'
-import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Avatar from '../ui/Avatar'
 import BreadCrumbLinks from './BreadCrumbLinks'
@@ -15,56 +14,34 @@ import {
   Button,
   User,
 } from '@nextui-org/react'
-import { useSetupConfig } from '@/hooks/useQueryHooks'
 import SelectField from '../ui/SelectField'
 import useAuthStore from '@/context/authStore'
-import useWorkspaces from '@/hooks/useWorkspace'
 import { Skeleton } from '../ui/skeleton'
+import useAccountProfile from '@/hooks/useProfileDetails'
+import useNavigation from '@/hooks/useNavigation'
 
 export default function TopNavBar({}) {
-  const pathname = usePathname()
-  const { activeWorkspace } = useWorkspaces()
-  const { data: response } = useSetupConfig()
-  const user = response?.data?.userDetails
-  const workspaceID = activeWorkspace?.ID
-  const settingsPathname = `/dashboard/${workspaceID}/settings`
-
-  // console.log(user)
-
-  const currentPath =
-    pathname.split('/')[3]?.replaceAll('-', ' ') || activeWorkspace?.workspace
-  // console.log(currentPath)
-  const isProfile =
-    pathname?.split('/').length == 4 &&
-    pathname?.split('/')[3]?.replaceAll('-', ' ').toLowerCase() === 'settings'
+  const { user } = useAccountProfile()
+  const { settingsPathname, isProfile, currentPath } = useNavigation()
 
   return (
     <nav
       className={cn(
-        `rounded-blur fixed left-0 right-0 top-5 z-30 flex w-full -translate-y-5 items-center bg-white px-10 py-2 shadow-sm transition-all lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:shadow-none`,
-        { 'bg-transparent text-white': isProfile },
+        `rounded-blur fixed left-0 right-0 top-5 z-30 flex w-full -translate-y-5 items-center bg-white  py-2 pr-10 shadow-sm transition-all lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:shadow-none`,
+        { 'bg-transparent px-10 text-white': isProfile },
       )}
     >
       <div className="flex w-full items-center rounded-3xl">
         <div className="relative left-12 transition-all duration-300 ease-in-out lg:left-0">
-          {currentPath || user ? (
-            <>
-              <BreadCrumbLinks isProfile={isProfile} />
-              <h2
-                className={cn(
-                  'pl-2 text-lg font-bold uppercase leading-8 text-slate-800',
-                  { 'text-white': isProfile },
-                )}
-              >
-                {currentPath}
-              </h2>
-            </>
-          ) : (
-            <div className="flex flex-col items-start gap-2">
-              <Skeleton className="h-4 w-[250px] rounded-xl" />
-              <Skeleton className="h-5 w-[150px] rounded-xl" />
-            </div>
-          )}
+          <BreadCrumbLinks isProfile={isProfile} />
+          <h2
+            className={cn(
+              'pl-2 text-lg font-bold uppercase leading-8 text-slate-800',
+              { 'text-white': isProfile },
+            )}
+          >
+            {currentPath}
+          </h2>
         </div>
         <div className="relative z-50 ml-auto flex  items-center justify-center rounded-full">
           <div
@@ -80,7 +57,7 @@ export default function TopNavBar({}) {
                 >
                   <Cog6ToothIcon className="h-5 w-6 " />
                 </Link>
-                <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:right-1 after:top-0 after:h-2 after:w-2 after:rounded-full after:bg-rose-600 after:content-['']">
+                <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:right-1 after:top-0 after:h-2 after:w-2 after:rounded-full after:bg-primary-500 after:content-['']">
                   <BellIcon className="top-0 h-5 w-6 " />
                 </div>
                 <AvatarDropdown

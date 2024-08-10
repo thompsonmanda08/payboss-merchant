@@ -2,7 +2,6 @@
 
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
-
 import useNavigationStore from '@/context/navigationStore'
 import MobileNavBar from './MobileNavBar'
 
@@ -25,7 +24,6 @@ import {
   TicketIcon,
   WrenchScrewdriverIcon,
   ShoppingCartIcon,
-  UserGroupIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { Logo, SettingsSideBar } from '.'
@@ -34,150 +32,151 @@ import SideNavItems from './SideNavItems'
 import useWorkspaces from '@/hooks/useWorkspace'
 import { Skeleton } from '../ui/skeleton'
 import WorkspaceSelection from '../containers/workspace/WorkspaceSelection'
-
-export const SIDE_BAR_OPTIONS = [
-  {
-    name: 'Dashboard',
-    href: '/dashboard',
-    Icon: HomeIcon,
-  },
-
-  {
-    name: 'Make Payments',
-    Icon: BanknotesIcon,
-    subMenuItems: [
-      {
-        name: 'Direct Payments',
-        href: '/dashboard/payments/direct',
-        Icon: ArrowsRightLeftIcon,
-      },
-      {
-        name: 'Payment Vouchers',
-        href: '/dashboard/payments/vouchers',
-        Icon: TicketIcon,
-      },
-    ],
-  },
-  {
-    name: 'Manage Income',
-    Icon: InboxArrowDownIcon,
-    subMenuItems: [
-      {
-        name: 'Invoicing',
-        href: '/dashboard/collections/invoicing',
-        Icon: NewspaperIcon,
-      },
-
-      {
-        name: 'Payment Forms',
-        href: '/dashboard/collections/payment-forms',
-        Icon: ClipboardDocumentIcon,
-      },
-      {
-        name: 'Payment Links',
-        href: '/dashboard/collections/payment-links',
-        Icon: LinkIcon,
-      },
-
-      {
-        name: 'Subscriptions',
-        href: '/dashboard/collections/subscriptions',
-        Icon: CreditCardIcon,
-      },
-
-      {
-        name: 'Online Store',
-        href: '/dashboard/collections/store',
-        Icon: BuildingStorefrontIcon,
-      },
-      {
-        name: 'Till Payments',
-        href: '/dashboard/collections/store',
-        Icon: CalculatorIcon,
-      },
-      {
-        name: 'API Integration',
-        href: '/dashboard/collections/api-integration',
-        Icon: AdjustmentsVerticalIcon,
-      },
-    ],
-  },
-  {
-    name: 'Manage Expenses',
-    Icon: ReceiptPercentIcon,
-    subMenuItems: [
-      {
-        name: 'ZESCO',
-        href: '/dashboard/payments/zesco',
-        Icon: ReceiptPercentIcon,
-      },
-      {
-        name: 'DSTV',
-        href: '/dashboard/payments/dstv',
-        Icon: ReceiptPercentIcon,
-      },
-      {
-        name: 'Airtime',
-        href: '/dashboard/payments/airtime',
-        Icon: PhoneArrowDownLeftIcon,
-      },
-      {
-        name: 'Data Bundles',
-        href: '/dashboard/payments/data-bundles',
-        Icon: ReceiptPercentIcon,
-      },
-      {
-        name: 'Expense Cards',
-        href: '/dashboard/payments/data-bundles',
-        Icon: ReceiptPercentIcon,
-      },
-    ],
-  },
-  {
-    name: 'Reports & Analytics',
-    href: '/dashboard/reports',
-    Icon: DocumentChartBarIcon,
-  },
-  {
-    name: 'Manage Account ',
-    href: '/dashboard/settings',
-    Icon: WrenchScrewdriverIcon,
-    subMenuItems: [
-      {
-        name: 'Products',
-        href: '/dashboard/products',
-        Icon: ShoppingCartIcon,
-      },
-      {
-        name: 'Online Store',
-        href: '/dashboard/products',
-        Icon: ShoppingCartIcon,
-      },
-    ],
-  },
-]
+import useNavigation from '@/hooks/useNavigation'
 
 function SideNavBar() {
   const pathname = usePathname()
   const [expandedSection, setExpandedSection] = useState(null)
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore()
-  const { activeWorkspace } = useWorkspaces()
-  const workspaceID = activeWorkspace?.ID
+  const { activeWorkspace, workspaceID } = useWorkspaces()
+  const { dashboardRoute, settingsPathname, isProfile, isSettingsPage } =
+    useNavigation()
 
-  const settingsPathname = `/dashboard/${workspaceID}/settings`
-  const isProfile = settingsPathname == pathname
-  const isSettingsPage = pathname.split('/')[3]?.toLowerCase() == 'settings'
-
-  const WORKSPACE_SETTINGS = [
+  const SIDE_BAR_OPTIONS = [
     {
-      name: 'People',
-      Icon: UserGroupIcon,
-      href: settingsPathname + '/users',
+      name: 'Dashboard',
+      href: dashboardRoute,
+      Icon: HomeIcon,
+    },
+
+    {
+      name: 'Make Payments',
+      Icon: BanknotesIcon,
+      subMenuItems: [
+        {
+          name: 'Direct Payments',
+          href: `${dashboardRoute}/payments/direct`,
+          Icon: ArrowsRightLeftIcon,
+        },
+        {
+          name: 'Payment Vouchers',
+          href: `${dashboardRoute}/payments/vouchers`,
+          Icon: TicketIcon,
+        },
+      ],
+    },
+    {
+      name: 'Manage Income',
+      Icon: InboxArrowDownIcon,
+      subMenuItems: [
+        {
+          name: 'Invoicing',
+          href: `${dashboardRoute}/collections/invoicing`,
+          Icon: NewspaperIcon,
+        },
+
+        {
+          name: 'Payment Forms',
+          href: `${dashboardRoute}/collections/payment-forms`,
+          Icon: ClipboardDocumentIcon,
+        },
+        {
+          name: 'Payment Links',
+          href: `${dashboardRoute}/collections/payment-links`,
+          Icon: LinkIcon,
+        },
+
+        {
+          name: 'Subscriptions',
+          href: `${dashboardRoute}/collections/subscriptions`,
+          Icon: CreditCardIcon,
+        },
+
+        {
+          name: 'Online Store',
+          href: `${dashboardRoute}/collections/store`,
+          Icon: BuildingStorefrontIcon,
+        },
+        {
+          name: 'Till Payments',
+          href: `${dashboardRoute}/collections/store`,
+          Icon: CalculatorIcon,
+        },
+        {
+          name: 'API Integration',
+          href: `${dashboardRoute}/collections/api-integration`,
+          Icon: AdjustmentsVerticalIcon,
+        },
+      ],
+    },
+    {
+      name: 'Manage Expenses',
+      Icon: ReceiptPercentIcon,
+      subMenuItems: [
+        {
+          name: 'ZESCO',
+          href: `${dashboardRoute}/payments/zesco`,
+          Icon: ReceiptPercentIcon,
+        },
+        {
+          name: 'DSTV',
+          href: `${dashboardRoute}/payments/dstv`,
+          Icon: ReceiptPercentIcon,
+        },
+        {
+          name: 'Airtime',
+          href: `${dashboardRoute}/payments/airtime`,
+          Icon: PhoneArrowDownLeftIcon,
+        },
+        {
+          name: 'Data Bundles',
+          href: `${dashboardRoute}/payments/data-bundles`,
+          Icon: ReceiptPercentIcon,
+        },
+        {
+          name: 'Expense Cards',
+          href: `${dashboardRoute}/payments/data-bundles`,
+          Icon: ReceiptPercentIcon,
+        },
+      ],
+    },
+    {
+      name: 'Reports & Analytics',
+      href: `${dashboardRoute}/reports`,
+      Icon: DocumentChartBarIcon,
+    },
+    {
+      name: 'Manage Account ',
+      href: `${dashboardRoute}/settings`,
+      Icon: WrenchScrewdriverIcon,
+      subMenuItems: [
+        {
+          name: 'Products',
+          href: `${dashboardRoute}/products`,
+          Icon: ShoppingCartIcon,
+        },
+        {
+          name: 'Online Store',
+          href: `${dashboardRoute}/products`,
+          Icon: ShoppingCartIcon,
+        },
+      ],
     },
   ]
 
   function handleExpand(index) {
     setExpandedSection(expandedSection === index ? null : index)
+  }
+
+  function handleMainLinkClick() {
+    setExpandedSection(null)
+    handleLinkClick()
+  }
+
+  function handleLinkClick() {
+    if (openMobileMenu) {
+      toggleMobileMenu()
+    }
   }
 
   useEffect(() => {
@@ -192,24 +191,12 @@ function SideNavBar() {
     })
   }, [pathname])
 
-  function handleMainLinkClick() {
-    setExpandedSection(null)
-    handleLinkClick()
-  }
-
-  function handleLinkClick() {
-    if (openMobileMenu) {
-      toggleMobileMenu()
-    }
-  }
-
   // SETTINGS PAGE NEEDS A DIFFERENT SIDE BAR
   if (isSettingsPage) {
     return (
       <SettingsSideBar
         backButtonText="Dashboard Home"
         title={activeWorkspace?.workspace}
-        // options={{ title: 'workspace_settings', links: WORKSPACE_SETTINGS }}
         isProfile={isProfile}
         settingsPathname={settingsPathname}
       />
@@ -238,6 +225,7 @@ function SideNavBar() {
             <WorkspaceSelection />
           </div>
           <SideNavItems
+            navBarItems={SIDE_BAR_OPTIONS}
             pathname={pathname}
             expandedSection={expandedSection}
             handleExpand={handleExpand}
@@ -255,6 +243,7 @@ function SideNavBar() {
           expandedSection={expandedSection}
           handleExpand={handleExpand}
           handleMainLinkClick={handleMainLinkClick}
+          navBarItems={SIDE_BAR_OPTIONS}
         />
       </div>
     )

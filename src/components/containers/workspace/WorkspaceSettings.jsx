@@ -6,7 +6,7 @@ import { Tabs } from '@/components/base'
 import UsersTable from '../users/UsersTable'
 import WorkspaceDetails from './WorkspaceDetails'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import { USERS } from '@/app/dashboard/data/sampleData'
+import { USERS } from '@/app/dashboard/[workspaceID]/data/sampleData'
 import {
   allUsersTableHeadings,
   SearchOrInviteUsers,

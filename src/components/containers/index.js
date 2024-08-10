@@ -18,5 +18,5 @@ export { default as SelectPaymentType } from './disbursements/SelectPaymentType'
 /* *********************** WORKSPACES *************************** */
 export { default as Workspaces } from './workspace/Workspaces'
 
-// TABLES
+/* *********************** TABLES *************************** */
 export { default as TransactionsTable } from './tables/TransactionsTable'

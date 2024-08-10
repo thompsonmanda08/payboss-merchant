@@ -12,9 +12,8 @@ function MobileNavBar({
   expandedSection,
   handleExpand,
   handleMainLinkClick,
+  navBarItems,
 }) {
-
-
   function handleLinkClick() {
     if (isMobileMenuOpen) {
       toggleMobileMenu()
@@ -55,6 +54,7 @@ function MobileNavBar({
             handleExpand={handleExpand}
             handleMainLinkClick={handleMainLinkClick}
             handleLinkClick={handleLinkClick}
+            navBarItems={navBarItems}
           />
         </div>
       </nav>

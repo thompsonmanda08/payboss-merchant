@@ -51,6 +51,7 @@ const useWorkspaces = () => {
     activeWorkspace,
     allWorkspaces,
     workspaces,
+    workspaceID: activeWorkspace?.ID,
     sandbox,
     isSandboxVisible,
     setIsSandboxVisible,
