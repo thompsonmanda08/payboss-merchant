@@ -3,8 +3,9 @@ import { create } from 'zustand'
 const INITIAL_STATE = {
   paymentAction: {
     type: '',
-    file: null,
+    url: '',
   },
+
   bulkPayments: [],
   openPaymentsModal: false,
   openAllRecordsModal: false,

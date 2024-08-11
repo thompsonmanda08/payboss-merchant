@@ -32,8 +32,6 @@ const useAccountProfile = () => {
     }
   }, [kycData])
 
-  console.log(isCompleteKYC)
-
   return {
     user,
     roles,

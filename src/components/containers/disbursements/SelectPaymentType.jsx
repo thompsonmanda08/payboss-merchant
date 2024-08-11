@@ -3,10 +3,14 @@ import { cn, notify } from '@/lib/utils'
 import { Modal } from '@/components/base'
 import usePaymentsStore from '@/context/paymentsStore'
 import { usePathname, useRouter } from 'next/navigation'
-import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
+import useNavigation from '@/hooks/useNavigation'
+import {
+  ArrowRightCircleIcon,
+  CircleStackIcon,
+} from '@heroicons/react/24/outline'
+import { Button } from '@/components/ui/Button'
 
 const SelectPaymentType = ({ service }) => {
-  const pathname = usePathname()
   const router = useRouter()
 
   const {
@@ -16,13 +20,27 @@ const SelectPaymentType = ({ service }) => {
     setOpenPaymentsModal,
   } = usePaymentsStore()
 
-  // const pathArr = pathname.split('/')
-  // const service = pathArr[pathArr.length - 1].replaceAll('-', ' ')
+  const { dashboardRoute } = useNavigation()
+
+  const PAYMENT_SERVICE_TYPES = [
+    {
+      name: 'Bulk Payment',
+      Icon: CircleStackIcon,
+      href: `${dashboardRoute}/payments/create/bulk`,
+      index: 0,
+    },
+    {
+      name: 'Single Payment',
+      Icon: ArrowRightCircleIcon,
+      href: `${dashboardRoute}/payments/create/single`,
+      index: 1,
+    },
+  ]
 
   function handleSelectServiceType(type) {
-    updatePaymentFields({ type: type.name })
+    updatePaymentFields({ type: type?.name })
     setTimeout(() => {
-      const isDisabled = type?.name === PAYMENT_SERVICE_TYPES[1]?.name
+      const isDisabled = type?.name === 'Single Payment'
       if (isDisabled) {
         notify('error', 'Not Available, Try again later')
         setOpenPaymentsModal(false)
@@ -76,12 +94,11 @@ function PaymentTypeOption({
   Icon,
   className,
 }) {
-  const isDisabled = fieldOption === PAYMENT_SERVICE_TYPES[1]?.name
   return (
-    <button
+    <Button
       onClick={handleSelect}
       className={cn(
-        `relative flex aspect-square max-h-40 flex-1 cursor-pointer items-center justify-center rounded-md   border border-primary-100 bg-white p-5 text-[24px] tracking-tighter text-primary transition-colors duration-200 ease-in-out`,
+        `relative flex aspect-square h-40 max-h-40 flex-1 cursor-pointer items-center justify-center rounded-md   border border-primary-100 bg-white p-5 text-[24px] tracking-tighter text-primary transition-colors duration-200 ease-in-out`,
         className,
         {
           'bg-primary text-white shadow-xl shadow-slate-500/10': selected,
@@ -90,14 +107,14 @@ function PaymentTypeOption({
     >
       <Icon
         className={cn(
-          'absolute left-20 z-0 h-24 w-24 font-bold text-gray-200/50 transition-all duration-150 ease-in-out',
+          'absolute left-20 z-0 scale-[2.5] font-bold text-gray-200/50 transition-all duration-150 ease-in-out',
           {
-            'left-8': selected,
+            'left-12': selected,
           },
         )}
       />
       <span className="z-10 font-bold">{fieldOption}</span>
-    </button>
+    </Button>
   )
 }
 

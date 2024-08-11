@@ -50,13 +50,13 @@ const PAYMENT_SERVICE_TYPES = [
   {
     name: 'Bulk Payment',
     Icon: CircleStackIcon,
-    href: '/dashboard/payments/create/bulk',
+    // href: '/dashboard/payments/create/bulk',
     index: 0,
   },
   {
     name: 'Single Payment',
     Icon: ArrowRightCircleIcon,
-    href: '/dashboard/payments/create/single',
+    // href: '/dashboard/payments/create/single',
     index: 1,
   },
 ]

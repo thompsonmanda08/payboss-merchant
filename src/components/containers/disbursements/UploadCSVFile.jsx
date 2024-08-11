@@ -5,16 +5,42 @@ import { notify } from '@/lib/utils'
 import usePaymentsStore from '@/context/paymentsStore'
 import Link from 'next/link'
 import React from 'react'
+import { uploadBusinessFile } from '@/app/_actions/pocketbase-actions'
+import useAccountProfile from '@/hooks/useProfileDetails'
+import Spinner from '@/components/ui/Spinner'
 
 const UploadCSVFile = ({ navigateForward }) => {
   const { paymentAction, updatePaymentFields } = usePaymentsStore()
+  const [isLoading, setIsLoading] = React.useState(false)
+  const { merchantID } = useAccountProfile()
 
   function handleProceed() {
-    if (paymentAction?.file !== null) {
+    if (paymentAction?.url !== '') {
       navigateForward()
       return
     }
     notify('error', 'A valid file is required!')
+  }
+
+  async function handleFileUpload(file, recordID) {
+    setIsLoading(true)
+
+    let response = await uploadBusinessFile(file, merchantID, recordID)
+
+    if (response.success) {
+      notify('success', 'File Added!')
+      updatePaymentFields({
+        url: response?.data?.file_url,
+        recordID: response?.data?.file_record_id,
+      })
+      setIsLoading(false)
+      return response?.data
+    }
+
+    notify('error', 'Failed to add file')
+    notify('error', response.message)
+    setIsLoading(false)
+    return {}
   }
 
   return (
@@ -22,17 +48,21 @@ const UploadCSVFile = ({ navigateForward }) => {
       <div className="flex h-full w-full flex-col justify-between">
         <div className="flex flex-col">
           <FileDropZone
-            onChange={(file) => {
-              // console.log('ON CHANGE SHOW FILE NAME:', file.name)
-              updatePaymentFields({ file })
+            otherAcceptedFiles={{
+              'application/vnd.ms-excel': [],
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                [],
             }}
+            onChange={async (file) =>
+              await handleFileUpload(file, paymentAction?.recordID)
+            }
           />
 
           <p className="mt-2 text-xs font-medium text-gray-500 lg:text-[13px]">
             Having trouble with the validation and file uploads?
             <Link
-              href={'/batch_record_template.csv'}
-              download={'batch_record_template.csv'}
+              href={'/batch_record_template.xlsx'}
+              download={'batch_record_template.xlsx'}
               className="ml-1 font-bold text-primary"
             >
               Download a template here
@@ -40,14 +70,7 @@ const UploadCSVFile = ({ navigateForward }) => {
           </p>
         </div>
 
-        <div className="mt-4 flex h-1/6 w-full items-end justify-end gap-4">
-          {/* <Button
-            className={'font-medium text-primary'}
-            variant="outline"
-            onClick={navigateBackwards}
-          >
-            Back
-          </Button> */}
+        <div className="flex h-1/6 w-full items-end justify-end gap-4">
           <Button onClick={handleProceed}>Next</Button>
         </div>
       </div>
