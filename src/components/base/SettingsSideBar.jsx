@@ -17,6 +17,7 @@ import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import useAuthStore from '@/context/authStore'
+import useNavigation from '@/hooks/useNavigation'
 
 const ACCOUNT_SETTINGS = [
   {
@@ -50,12 +51,13 @@ const ACCOUNT_SETTINGS = [
 function SettingsSideBar({
   title,
   backButtonText,
-  isProfile,
-  settingsPathname,
+  // isProfile,
+  // settingsPathname,
 }) {
   const pathname = usePathname()
   const [openSettingsSideBar, setOpenSettingsSideBar] = useState(false)
   const handleUserLogOut = useAuthStore((state) => state.handleUserLogOut)
+  const { settingsPathname, isProfile, currentPath } = useNavigation()
 
   function toggleSideBar() {
     setOpenSettingsSideBar(!openSettingsSideBar)
@@ -94,7 +96,14 @@ function SettingsSideBar({
 
   return (
     <>
-      <div className="fixed z-[77] flex h-16 w-screen bg-white shadow-sm lg:hidden">
+      <div
+        className={cn(
+          'fixed z-[77] flex h-16 w-screen bg-white shadow-sm lg:hidden',
+          {
+            'bg-transparent': isProfile,
+          },
+        )}
+      >
         <Button
           className={cn(
             'absolute left-6 top-3 z-50 h-8 min-w-5 items-center bg-transparent p-2 py-3 text-slate-700 hover:bg-transparent lg:hidden',
@@ -103,7 +112,7 @@ function SettingsSideBar({
           onClick={toggleSideBar}
           startContent={<Bars3BottomLeftIcon className="h-7 w-7  " />}
         >
-          {homeRoute == '/workspaces' ? 'Manage Account' : null}
+          {homeRoute == '/workspaces' ? 'Manage Account' : currentPath}
         </Button>
       </div>
 
@@ -118,7 +127,7 @@ function SettingsSideBar({
       )}
       <motion.nav
         className={cn(
-          `sticky -left-[110%] z-50 hidden h-full min-h-screen w-full min-w-[200px] max-w-[280px] rounded-r-3xl bg-popover px-2 py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
+          `sticky -left-[110%] z-50 hidden h-full min-h-screen w-[280px] rounded-r-3xl bg-popover px-2 py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
           { 'absolute left-0 z-[100] block': openSettingsSideBar },
         )}
       >

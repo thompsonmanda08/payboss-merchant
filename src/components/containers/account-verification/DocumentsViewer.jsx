@@ -13,41 +13,28 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
 import { Modal } from '@/components/base'
+import useAccountProfile from '@/hooks/useProfileDetails'
 
 const DocumentsViewer = () => {
-  const docs = [
-    {
-      uri: 'https://mypphysed.wordpress.com/wp-content/uploads/2015/10/traditionalgamesteachingresource.pdf',
-      fileName: 'NRC',
-    },
-    {
-      uri: 'https://www.cartercenter.org/resources/pdfs/health/ephti/library/modules/FinalModuleCommonMentalIllnesses.pdf',
-      fileName: 'BRN Certificate',
-    },
-    {
-      uri: 'https://irp-cdn.multiscreensite.com/cb9165b2/files/uploaded/The+48+Laws+Of+Power.pdf',
-      fileName: 'TPIN Certificate',
-    },
-  ]
+  const { businessDocs } = useAccountProfile()
 
-  const [selectedDoc, setSelectedDoc] = useState(docs[0])
+  const [selectedDoc, setSelectedDoc] = useState(businessDocs[0])
   const [isOpen, setIsOpen] = useState(false)
-
 
   return (
     <>
-      <div className="flex flex-wrap gap-4 self-start py-5">
-        {docs.map((doc, index) => (
+      <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-5">
+        {businessDocs?.map((doc, index) => (
           <Button
-            key={index}
+            key={doc?.type}
             variant="light"
-            className="relative flex h-40 w-[150px] cursor-pointer flex-col gap-y-2 rounded-[10px] border border-primary-100 bg-slate-100 p-4 transition-all duration-300 ease-in-out"
+            className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border border-primary-100 bg-slate-100 p-4 transition-all duration-300 ease-in-out"
             onClick={() => {
               setSelectedDoc(doc)
               setIsOpen(true)
             }}
           >
-            <Link href={doc.uri} target="_blank">
+            <Link href={doc?.url} target="_blank">
               <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 z-50 h-5 w-5 text-primary/20 hover:text-primary" />
             </Link>
             <div className="h-[65%]">
@@ -58,7 +45,7 @@ const DocumentsViewer = () => {
                 unoptimized
               />
             </div>
-            <span className="text-[13px] text-black/90">{doc.fileName}</span>
+            <span className="text-[13px] text-black/90">{doc?.name}</span>
           </Button>
         ))}
       </div>
@@ -68,14 +55,14 @@ const DocumentsViewer = () => {
         onClose={() => setIsOpen(false)}
         cancelText="Close"
         isDismissible={true}
-        title={selectedDoc.fileName}
+        title={selectedDoc?.name}
         infoText="Ensure the document aligns with the submitted details"
         width={1200}
         removeCallToAction
       >
         <iframe
-          src={selectedDoc.uri}
-          title={selectedDoc.fileName}
+          src={selectedDoc?.url}
+          title={selectedDoc?.name}
           className="min-h-[60vh]  w-full py-4"
           style={{ border: 'none' }}
         />

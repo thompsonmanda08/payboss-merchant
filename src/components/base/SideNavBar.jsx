@@ -206,18 +206,18 @@ function SideNavBar() {
   // SETTINGS PAGE NEEDS A DIFFERENT SIDE BAR
   if (workspaceID) {
     return (
-      <div className="h-full max-w-[320px] lg:w-full lg:min-w-[220px]">
+      <div className="h-full max-w-[320px] lg:w-full">
         <Button
           size="sm"
           // isIconOnly
-          className="absolute left-6 top-3 z-50 h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
+          className="absolute left-6 top-3 z-[99] h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
           onClick={toggleMobileMenu}
         >
           <Bars3BottomLeftIcon className="h-7 w-7  text-slate-700" />
         </Button>
         <nav
           className={cn(
-            `z-20 hidden h-full max-w-[280px] flex-col rounded-r-3xl bg-white p-5 transition-all duration-500 ease-in-out lg:flex`,
+            `z-20 hidden h-full w-full flex-col rounded-r-3xl bg-white p-5 transition-all duration-500 ease-in-out lg:flex`,
           )}
         >
           <Logo />

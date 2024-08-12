@@ -27,17 +27,22 @@ export default function TopNavBar({}) {
   return (
     <nav
       className={cn(
-        `rounded-blur fixed left-0 right-0 top-5 z-30 flex w-full -translate-y-5 items-center bg-white  py-2 pr-10 shadow-sm transition-all lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:shadow-none`,
-        { 'bg-transparent px-10 text-white': isProfile },
+        `__TOPBAR rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center bg-red-500 py-2 pr-10 shadow-sm transition-all md:pl-2 lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:pl-0 lg:shadow-none`,
+        { 'bg-transparent px-10 pl-20 text-white': isProfile },
       )}
     >
-      <div className="flex w-full items-center rounded-3xl">
-        <div className="relative left-12 transition-all duration-300 ease-in-out lg:left-0">
+      <div className="flex w-full items-center">
+        <div
+          className={cn(
+            'relative left-16 hidden transition-all duration-300 ease-in-out lg:left-0 lg:block',
+            { 'pl-5': isProfile },
+          )}
+        >
           <BreadCrumbLinks isProfile={isProfile} />
           <h2
             className={cn(
               'pl-2 text-lg font-bold uppercase leading-8 text-slate-800',
-              { 'text-white': isProfile },
+              { ' text-white': isProfile },
             )}
           >
             {currentPath}

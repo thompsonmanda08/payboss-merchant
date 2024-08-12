@@ -33,7 +33,7 @@ export default function BreadCrumbLinks({ baseUrl = '/', isProfile }) {
   }, [pathname, workspaceID])
 
   return (
-    <div className="flex w-full justify-between text-xs ">
+    <div className="hidden w-full justify-between text-xs md:flex ">
       <div className="flex pr-1 pt-1">
         {path &&
           path.map((segment, idx) => (

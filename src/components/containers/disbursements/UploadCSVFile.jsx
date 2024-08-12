@@ -5,9 +5,8 @@ import { notify } from '@/lib/utils'
 import usePaymentsStore from '@/context/paymentsStore'
 import Link from 'next/link'
 import React from 'react'
-import { uploadBusinessFile } from '@/app/_actions/pocketbase-actions'
+import { uploadPaymentBatchFile } from '@/app/_actions/pocketbase-actions'
 import useAccountProfile from '@/hooks/useProfileDetails'
-import Spinner from '@/components/ui/Spinner'
 
 const UploadCSVFile = ({ navigateForward }) => {
   const { paymentAction, updatePaymentFields } = usePaymentsStore()
@@ -25,7 +24,7 @@ const UploadCSVFile = ({ navigateForward }) => {
   async function handleFileUpload(file, recordID) {
     setIsLoading(true)
 
-    let response = await uploadBusinessFile(file, merchantID, recordID)
+    let response = await uploadPaymentBatchFile(file, merchantID, recordID)
 
     if (response.success) {
       notify('success', 'File Added!')
