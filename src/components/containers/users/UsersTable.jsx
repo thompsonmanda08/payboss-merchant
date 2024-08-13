@@ -35,7 +35,7 @@ const columns = [
 ]
 
 //! NOTE: ONLY THE OWNER WILL BE ABLE TO SEE ALL THE USERS
-export default function UsersTable({ users, columns }) {
+export default function UsersTable({ users }) {
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey]
 

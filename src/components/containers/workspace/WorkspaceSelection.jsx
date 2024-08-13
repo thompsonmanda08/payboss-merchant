@@ -91,7 +91,6 @@ export default function WorkspaceSelection({ isSelected }) {
                   <Spinner size={18} /> Loading workspace...
                 </div>
               ) : (
-                // <Skeleton className="h-3 w-3/5 rounded-lg bg-slate-400" />
                 activeWorkspace?.workspace
               )}
             </div>

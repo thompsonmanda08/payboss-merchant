@@ -9,17 +9,21 @@ import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import { Button } from '@/components/ui/Button'
 import { USERS } from '@/app/dashboard/[workspaceID]/data/sampleData'
 import UsersTable from './UsersTable'
-import { useUserRoles } from '@/hooks/useQueryHooks'
 import CreateNewUserModal from './CreateNewUserModal'
 import { cn } from '@/lib/utils'
+import { useRoles } from '@/hooks/useRoles'
+import { useDisclosure } from '@nextui-org/react'
+import { PlusIcon } from '@heroicons/react/24/outline'
 
 export const ROLES = [
   {
+    id: 'member',
     key: 'member',
     label: 'Member',
     description: 'Access to workspaces, documents and dashboards',
   },
   {
+    id: 'guest',
     key: 'guest',
     label: 'Guest',
     description:
@@ -27,17 +31,28 @@ export const ROLES = [
   },
   {
     key: 'admin',
+    id: 'admin',
     label: 'Admin',
     description:
       'Manage people, payments, billing and other workspace settings.',
   },
 ]
 
-export const allUsersTableHeadings = [
-  { name: 'NAME', uid: 'name' },
-  { name: 'TITLE', uid: 'title' },
-  { name: 'ROLE', uid: 'role' },
-  { name: 'ACTIONS', uid: 'actions' },
+export const SYSTEM_ROLES = [
+  {
+    key: 'admin',
+    id: 'admin',
+    label: 'Admin',
+    description:
+      'Manage people, payments, billing and other workspace settings.',
+  },
+  {
+    id: 'guest',
+    key: 'guest',
+    label: 'Guest',
+    description:
+      'Can not be added to other workspaces by admin. View-only access is granted',
+  },
 ]
 
 const TABS = [
@@ -47,10 +62,11 @@ const TABS = [
 ]
 
 function ManagePeople({ classNames }) {
-  const { data: rolesResponse } = useUserRoles()
+  const { accountRoles, workspaceRoles } = useRoles()
   const [openCreateUserModal, setOpenCreateUserModal] = useState(false)
 
   const [searchQuery, setSearchQuery] = useState('')
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const [selectedKeys, setSelectedKeys] = useState(
     new Set([ROLES.map((role) => role.label)[0]]),
@@ -67,35 +83,17 @@ function ManagePeople({ classNames }) {
     () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
     [selectedKeys],
   )
-  // console.log(selectedKeys)
-  // console.log(selectedValue)
 
   function resolveAddToWorkspace(e) {
     e.preventDefault()
     if (onAdd) return onAdd()
   }
 
-  function toggleCreateUserModal() {
-    setOpenCreateUserModal(!openCreateUserModal)
-  }
-
   // ***** COMPONENT RENDERER ************** //
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
-    <UsersTable
-      key={'all-users'}
-      users={userSearchResults}
-      columns={allUsersTableHeadings}
-    />,
-    <UsersTable
-      key={'members'}
-      users={userSearchResults}
-      columns={allUsersTableHeadings}
-    />,
-    <UsersTable
-      key={'internal-guests'}
-      users={userSearchResults}
-      columns={allUsersTableHeadings}
-    />,
+    <UsersTable key={'all-users'} users={userSearchResults} />,
+    <UsersTable key={'members'} users={userSearchResults} />,
+    <UsersTable key={'internal-guests'} users={userSearchResults} />,
   ])
 
   const { wrapper } = classNames || ''
@@ -123,17 +121,19 @@ function ManagePeople({ classNames }) {
           navigateTo={navigateTo}
           currentTab={currentTabIndex}
         />
-        <Button onClick={toggleCreateUserModal}>Create New User</Button>
+        <Button
+          startContent={<PlusIcon className=" h-6 w-6" />}
+          onPress={onOpen}
+        >
+          Create New User
+        </Button>
       </div>
       <div className="mb-4"></div>
       {activeTab}
 
       {/* MODALS */}
-      {openCreateUserModal && (
-        <CreateNewUserModal
-          openCreateUserModal
-          toggleCreateUserModal={toggleCreateUserModal}
-        />
+      {isOpen && (
+        <CreateNewUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
       )}
     </div>
   )

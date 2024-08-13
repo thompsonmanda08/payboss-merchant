@@ -63,8 +63,13 @@ function SelectField({
           {options &&
             options.map((item, idx) => {
               let ItemValue =
-                item?.id || item?.ID || item?.index?.toString() || item
-              let ItemLabel = item?.name || item?.[listItemName] || item
+                item?.key ||
+                item?.id ||
+                item?.ID ||
+                item?.index?.toString() ||
+                item
+              let ItemLabel =
+                item?.name || item?.label || item?.[listItemName] || item
               return (
                 <SelectItem
                   className="font-medium"
