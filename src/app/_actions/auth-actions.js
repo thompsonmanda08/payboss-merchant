@@ -121,11 +121,11 @@ export async function updateMerchantDetails(businessInfo, merchantID) {
   }
 }
 
-export async function createMerchantAdminUser(newAdminUser, merchantID) {
+export async function createMerchantAdminUser(newUser, merchantID) {
   try {
     const res = await apiClient.post(
       `/merchant/${merchantID}/user/new`,
-      newAdminUser,
+      newUser,
       {
         headers: {
           'Content-Type': 'application/json',

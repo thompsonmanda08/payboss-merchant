@@ -8,7 +8,6 @@ import {
   getUserSession,
 } from '@/lib/session'
 import { apiClient } from '@/lib/utils'
-import { cookies } from 'next/headers'
 
 export async function getAccountConfigOptions() {
   try {
@@ -36,7 +35,7 @@ export async function getAccountConfigOptions() {
   } catch (error) {
     return {
       success: false,
-      message: error?.response?.data?.error || 'Oops! Error Occurred!',
+      message: error?.response?.data?.error || 'Operation failed!',
       data: null,
       status: error?.response?.status || error.status,
     }
@@ -77,21 +76,21 @@ export async function getUserSetupConfigs() {
   } catch (error) {
     return {
       success: false,
-      message: error?.response?.data?.error || 'Oops! Error Occurred!',
+      message: error?.response?.data?.error || 'Operation failed!',
       data: null,
       status: error?.response?.status || error.status,
     }
   }
 }
 
-export async function getUserRoles() {
+export async function getUserAccountRoles() {
   const session = await getServerSession()
   const merchantID = session?.user?.merchantID
 
   try {
-    const res = await apiClient.get(
-      `merchant/${merchantID}/roles`, //URL
-    )
+    const res = await authenticatedService({
+      url: `merchant/roles`,
+    })
 
     if (res.status !== 200) {
       const response = res?.data || res
@@ -112,7 +111,42 @@ export async function getUserRoles() {
   } catch (error) {
     return {
       success: false,
-      message: error?.response?.data?.error || 'No Server Response',
+      message: error?.response?.data?.error || 'Operation failed!',
+      data: null,
+      status: error?.response?.status || error.status,
+    }
+  }
+}
+
+export async function getWorkspaceRoles() {
+  const session = await getServerSession()
+  const merchantID = session?.user?.merchantID
+
+  try {
+    const res = await authenticatedService({
+      url: `merchant/workspace/roles/${merchantID}`,
+    })
+
+    if (res.status !== 200) {
+      const response = res?.data || res
+      return {
+        success: false,
+        message: response?.error || response?.message,
+        data: null,
+        status: res.status,
+      }
+    }
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation failed!',
       data: null,
       status: error?.response?.status || error.status,
     }
@@ -421,8 +455,3 @@ export async function getUserDetails() {
   const session = await getUserSession()
   return session
 }
-
-// export async function getWorkspace() {
-//   const session = await getWorkspaceSession()
-//   return session
-// }
