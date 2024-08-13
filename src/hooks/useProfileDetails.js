@@ -1,12 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { useKYCData, useSetupConfig } from './useQueryHooks'
+import { useAccountRoles, useKYCData, useSetupConfig } from './useQueryHooks'
 
 const useAccountProfile = () => {
   const { data: setup } = useSetupConfig()
   const { data: kycData } = useKYCData()
+
   const user = setup?.data?.userDetails || []
-  const roles = setup?.data?.userDetails?.roles || []
 
   const businessDetails = kycData?.data?.details || {}
   const documents = kycData?.data?.documents || {}
@@ -68,7 +68,6 @@ const useAccountProfile = () => {
 
   return {
     user,
-    roles,
     businessDetails,
     businessDocs,
     merchantID,

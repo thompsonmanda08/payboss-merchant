@@ -7,15 +7,15 @@ const useRefreshToken = () => {
   const setAuth = useAuthStore((state) => state.setAuth)
 
   const refresh = async () => {
-    // const response = await apiClient.get('/auth/refresh', {
-    //   withCredentials: true,
-    // })
+    const response = await apiClient.get('merchant/user/refresh/token', {
+      withCredentials: true,
+    })
 
-    let session = await getServerSideSession()
+    let accessToken = response?.data?.accessToken
     setAuth((prev) => {
-      // console.log(JSON.stringify(prev))
-      // console.log(response.data.accessToken)
-      return { ...prev, accessToken: session?.accessToken }
+      console.log(JSON.stringify(prev))
+      console.log(response.data.accessToken)
+      return { ...prev, accessToken: accessToken }
     })
     return session?.accessToken
   }
