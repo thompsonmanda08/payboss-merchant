@@ -29,7 +29,8 @@ function Workspaces() {
   const queryClient = useQueryClient()
   const { activeWorkspace, workspaces, allWorkspaces, isLoading } =
     useWorkspace()
-  const { user } = useAccountProfile()
+
+  const { isOwner, isAccountAdmin } = useAccountProfile()
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
@@ -66,8 +67,6 @@ function Workspaces() {
       setLoading(false)
     }
 
-    console.log(newWorkspace)
-
     const response = await createNewWorkspace(newWorkspace)
 
     if (response.success) {
@@ -83,7 +82,6 @@ function Workspaces() {
 
     notify('error', 'Failed to Create Workspace!')
     notify('error', response.message)
-    console.log(response.message)
 
     setLoading(false)
     onOpenChange()

@@ -7,22 +7,26 @@ import UsersTable from '../users/UsersTable'
 import WorkspaceDetails from './WorkspaceDetails'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { USERS } from '@/app/dashboard/[workspaceID]/data/sampleData'
-import {
-  allUsersTableHeadings,
-  SearchOrInviteUsers,
-} from '../users/ManagePeople'
+import { SearchOrInviteUsers } from '../users/ManagePeople'
 import CreateNewUserModal from '../users/CreateNewUserModal'
 import { useDisclosure } from '@nextui-org/react'
 import useWorkspaces from '@/hooks/useWorkspace'
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
+import useAccountProfile from '@/hooks/useProfileDetails'
+import useNavigation from '@/hooks/useNavigation'
 
 const TABS = [
   { name: 'General', index: 0 }, // ONLY THE OWNER & ADMIN
   { name: 'Members', index: 1 },
+  { name: 'Wallet', index: 2 }, // TODO: shows the wallet details and balances
+  // { name: 'Services', index: 2 },
 ]
 
 function WorkspaceSettings({ WorkSpaceID }) {
   const { back } = useRouter()
+  const { user } = useAccountProfile()
+  const { isUserInWorkspace } = useNavigation()
+  const { isOwner } = useAccountProfile()
 
   const { allWorkspaces } = useWorkspaces()
   const selectedWorkspace = allWorkspaces.find(
@@ -45,10 +49,12 @@ function WorkspaceSettings({ WorkSpaceID }) {
     <UsersTable
       key={'members'}
       users={userSearchResults}
-      columns={allUsersTableHeadings}
       WorkSpaceID={WorkSpaceID}
     />,
   ])
+
+  const allowUserCreation =
+    currentTabIndex == 1 && (isOwner || isAccountAdmin) && !isUserInWorkspace
 
   return (
     <>
@@ -82,7 +88,7 @@ function WorkspaceSettings({ WorkSpaceID }) {
             navigateTo={navigateTo}
             currentTab={currentTabIndex}
           />
-          {currentTabIndex > 0 && (
+          {allowUserCreation && (
             <Button className={'absolute right-0'} onClick={onOpen}>
               Create New User
             </Button>
@@ -90,7 +96,7 @@ function WorkspaceSettings({ WorkSpaceID }) {
         </div>
 
         <div className="mb-4">
-          {currentTabIndex > 0 && (
+          {currentTabIndex == 1 && (
             <SearchOrInviteUsers setSearchQuery={setSearchQuery} />
           )}
         </div>

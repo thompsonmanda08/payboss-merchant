@@ -45,7 +45,7 @@ export const useKYCData = () =>
     staleTime: Infinity,
   })
 
-export const useUsers = () =>
+export const useAllUsers = () =>
   useQuery({
     queryKey: [USERS],
     queryFn: async () => await getAllUsers(),

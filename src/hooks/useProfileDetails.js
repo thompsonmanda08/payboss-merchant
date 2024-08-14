@@ -8,6 +8,9 @@ const useAccountProfile = () => {
 
   const user = setup?.data?.userDetails || []
 
+  const isOwner = user?.role?.toLowerCase() == 'owner'
+  const isAccountAdmin = user?.role?.toLowerCase() == 'admin'
+
   const businessDetails = kycData?.data?.details || {}
   const documents = kycData?.data?.documents || {}
   const [merchantID, setMerchantID] = useState('')
@@ -76,6 +79,8 @@ const useAccountProfile = () => {
     KYCStageID,
     KYCApprovalStatus,
     allowUserToSubmitKYC,
+    isOwner,
+    isAccountAdmin,
   }
 }
 
