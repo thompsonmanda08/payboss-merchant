@@ -16,12 +16,12 @@ function PromptModal({
   title = 'Prompt',
   cancelText = 'Cancel',
   confirmText = 'Confirm',
+  isDisabled,
+  isLoading,
+  isDismissable = true,
+  isKeyboardDismissDisabled = true,
   children,
 }) {
-  function handleOnConfirm() {
-    onConfirm()
-    onClose()
-  }
   return (
     <Modal
       size={size}
@@ -36,10 +36,15 @@ function PromptModal({
             <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
             <ModalBody>{children}</ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
+              <Button color="danger" onPress={onClose}>
                 {cancelText}
               </Button>
-              <Button color="primary" onPress={handleOnConfirm}>
+              <Button
+                color="primary"
+                isDisabled={isDisabled}
+                isLoading={isLoading}
+                onPress={onConfirm}
+              >
                 {confirmText}
               </Button>
             </ModalFooter>
@@ -50,4 +55,4 @@ function PromptModal({
   )
 }
 
-export default Prompt
+export default PromptModal
