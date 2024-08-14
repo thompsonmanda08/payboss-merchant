@@ -17,9 +17,12 @@ import useAccountProfile from '@/hooks/useProfileDetails'
 import { useQueryClient } from '@tanstack/react-query'
 import { USERS } from '@/lib/constants'
 import { createNewUser } from '@/app/_actions/user-actions'
+import useNavigation from '@/hooks/useNavigation'
 
 function CreateNewUserModal({ isOpen, onOpenChange }) {
   const queryClient = useQueryClient()
+  const { merchantID } = useAccountProfile()
+  const { isAccountLevelSettingsRoute } = useNavigation()
   const [loading, setLoading] = useState(false)
   const [newUser, setNewUser] = useState({
     role: 'guest',
@@ -27,7 +30,6 @@ function CreateNewUserModal({ isOpen, onOpenChange }) {
     password: 'PB0484G@#$%Szm',
   })
   const [error, setError] = useState({ status: false, message: '' })
-  const { merchantID } = useAccountProfile()
 
   const [selectedKeys, setSelectedKeys] = useState(
     new Set([ROLES.map((role) => role.label)[0]]),
@@ -37,6 +39,8 @@ function CreateNewUserModal({ isOpen, onOpenChange }) {
     () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
     [selectedKeys],
   )
+
+  const USER_ROLES = isAccountLevelSettingsRoute ? SYSTEM_ROLES : ROLES
 
   function updateDetails(fields) {
     setNewUser((prev) => ({ ...prev, ...fields }))
@@ -83,7 +87,7 @@ function CreateNewUserModal({ isOpen, onOpenChange }) {
               <ModalBody>
                 <SelectField
                   label="User Role"
-                  options={SYSTEM_ROLES}
+                  options={USER_ROLES}
                   placeholder="Choose a role"
                   className="mt-px"
                   defaultValue={'guest'}

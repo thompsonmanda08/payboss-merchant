@@ -4,7 +4,7 @@ import { POCKET_BASE_URL } from '@/lib/constants'
 const pb = new PocketBase(POCKET_BASE_URL)
 
 export async function uploadPaymentBatchFile(file, merchantID, fileRecordId) {
-  console.log(file)
+
 
   try {
     let file_name = file?.name
@@ -41,7 +41,6 @@ export async function uploadPaymentBatchFile(file, merchantID, fileRecordId) {
     const file_url = pb.getFileUrl(fileRecord, fileRecord['field'])
     const file_record_id = fileRecord['id']
 
-    // console.log(fileRecord)
 
     return {
       success: true,
@@ -53,7 +52,7 @@ export async function uploadPaymentBatchFile(file, merchantID, fileRecordId) {
       },
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
 
     return {
       success: false,

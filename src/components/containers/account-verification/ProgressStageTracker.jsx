@@ -14,7 +14,7 @@ function ProgressStageTracker() {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split('T')[0])
   const date = formatDate(fullDate).replaceAll('-', ' ')
   const time = fullDate.toLocaleTimeString()
-  // console.log(time)
+
 
   const [currentStage, setCurrentStage] = useState(0)
 

@@ -43,7 +43,7 @@ export default function DocumentAttachments({ navigateToPage }) {
       articles_of_association_url: docFiles['ARTICLES_ASSOCIATION']?.file_url,
     }
 
-    console.log(documentUrls)
+  
 
     if (!isKYCSent) {
       notify('error', 'Checkbox is unmarked')
