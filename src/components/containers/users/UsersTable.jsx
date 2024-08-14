@@ -9,6 +9,7 @@ import {
   User,
   Chip,
   Tooltip,
+  Avatar,
 } from '@nextui-org/react'
 import {
   EyeIcon,
@@ -17,6 +18,8 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline'
 import { ScrollArea } from '@/components/ui/scroll-area'
+
+import { cn, getUserInitials } from '@/lib/utils'
 
 const roleColorMap = {
   owner: 'success',
@@ -28,35 +31,41 @@ const roleColorMap = {
 // TODO => title ITEM SHOULD BE A DROPDOWN MENU TO CHANGE titleS - IF IN EDIT MODE?
 
 const columns = [
-  { name: 'NAME', uid: 'name' },
-  { name: 'TITLE', uid: 'title' },
+  { name: 'NAME', uid: 'first_name' },
+  { name: 'USERNAME/MOBILE NO.', uid: 'username' },
   { name: 'ROLE', uid: 'role' },
   { name: 'ACTIONS', uid: 'actions' },
 ]
 
 //! NOTE: ONLY THE OWNER WILL BE ABLE TO SEE ALL THE USERS
-export default function UsersTable({ users }) {
+export default function UsersTable({ users = [] }) {
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey]
 
+    console.log(users)
+
     switch (columnKey) {
-      case 'name':
+      case 'first_name':
         return (
-          <User
-            avatarProps={{ radius: 'lg', src: user.avatar }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
+          <UserAvatarComponent
+            key={cellValue}
+            firstName={user?.first_name}
+            lastName={user?.last_name}
+            email={user?.email}
+            size="sm"
+            className="rounded-md"
+            src={user?.image}
+            isBordered
+            radius="md"
+          />
         )
-      case 'title':
+      case 'username':
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{cellValue}</p>
-            <p className="text-bold text-sm capitalize text-default-400">
-              {user.workspace}
-            </p>
+            <p className="text-bold text-sm !lowercase">{cellValue}</p>
+            <code className="text-bold text-sm text-slate-600">
+              {user?.phone_number}
+            </code>
           </div>
         )
       case 'role':
@@ -115,7 +124,7 @@ export default function UsersTable({ users }) {
       </TableHeader>
       <TableBody items={users}>
         {(item) => (
-          <TableRow key={item.id}>
+          <TableRow key={item?.ID}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}
@@ -123,5 +132,52 @@ export default function UsersTable({ users }) {
         )}
       </TableBody>
     </Table>
+  )
+}
+
+function UserAvatarComponent({
+  firstName,
+  lastName,
+  src,
+  email,
+  classNames,
+  ...props
+}) {
+  const { wrapper, avatar } = classNames || ''
+  return (
+    <div
+      className={cn(
+        'flex max-w-max cursor-pointer items-center justify-start gap-4 transition-all duration-200 ease-in-out',
+        wrapper,
+      )}
+    >
+      {src ? (
+        <Avatar
+          className={cn('h-9 w-9 flex-none rounded-xl bg-gray-50', avatar)}
+          src={src}
+          alt={`Image - ${firstName} ${lastName}`}
+          width={200}
+          height={200}
+          {...props}
+        />
+      ) : (
+        <div className="text-md grid h-9 w-9 flex-none scale-90 place-items-center items-center justify-center rounded-xl bg-primary-700 font-medium uppercase text-white ring-2 ring-primary  ring-offset-1">
+          {getUserInitials(`${firstName} ${lastName}`)}
+        </div>
+      )}
+      <span className="hidden lg:items-center xl:flex">
+        <div className="flex min-w-[120px] flex-col items-start">
+          <p
+            className={cn(
+              'text-base font-semibold leading-6 text-slate-800',
+              {},
+            )}
+          >{`${firstName} ${lastName}`}</p>
+          <p className={cn('text-[11px] font-medium text-slate-500', {})}>
+            {email}
+          </p>
+        </div>
+      </span>
+    </div>
   )
 }

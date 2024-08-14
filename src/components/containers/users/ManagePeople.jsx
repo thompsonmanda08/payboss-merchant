@@ -11,11 +11,11 @@ import { USERS } from '@/app/dashboard/[workspaceID]/data/sampleData'
 import UsersTable from './UsersTable'
 import CreateNewUserModal from './CreateNewUserModal'
 import { cn } from '@/lib/utils'
-import { useRoles } from '@/hooks/useRoles'
 import { useDisclosure } from '@nextui-org/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import useNavigation from '@/hooks/useNavigation'
 import useAccountProfile from '@/hooks/useProfileDetails'
+import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 
 export const ROLES = [
   {
@@ -58,7 +58,7 @@ export const SYSTEM_ROLES = [
 ]
 
 function ManagePeople({ classNames }) {
-  const { accountRoles, workspaceRoles } = useRoles()
+  const { accountRoles, workspaceRoles, allUsers } = useAllUsersAndRoles()
   const [openCreateUserModal, setOpenCreateUserModal] = useState(false)
   const { wrapper } = classNames || ''
   const [searchQuery, setSearchQuery] = useState('')
@@ -70,7 +70,7 @@ function ManagePeople({ classNames }) {
     new Set([ROLES.map((role) => role.label)[0]]),
   )
 
-  const userSearchResults = USERS?.filter((user) => {
+  const userSearchResults = allUsers?.filter((user) => {
     return (
       user?.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user?.name.toLowerCase().includes(searchQuery.toLowerCase())
