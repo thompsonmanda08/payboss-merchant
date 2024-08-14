@@ -14,6 +14,7 @@ import useWorkspaces from '@/hooks/useWorkspace'
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import useNavigation from '@/hooks/useNavigation'
+import Wallet from './Wallet'
 
 const TABS = [
   { name: 'General', index: 0 }, // ONLY THE OWNER & ADMIN
@@ -51,6 +52,7 @@ function WorkspaceSettings({ WorkSpaceID }) {
       users={userSearchResults}
       WorkSpaceID={WorkSpaceID}
     />,
+    <Wallet key={'wallet-details'} />,
   ])
 
   const allowUserCreation =
