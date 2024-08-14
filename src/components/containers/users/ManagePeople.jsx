@@ -14,6 +14,8 @@ import { cn } from '@/lib/utils'
 import { useRoles } from '@/hooks/useRoles'
 import { useDisclosure } from '@nextui-org/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
+import useNavigation from '@/hooks/useNavigation'
+import useAccountProfile from '@/hooks/useProfileDetails'
 
 export const ROLES = [
   {
@@ -55,18 +57,14 @@ export const SYSTEM_ROLES = [
   },
 ]
 
-const TABS = [
-  { name: 'All Users', index: 0 }, // ONLY THE OWNER CAN SEE ALL USER
-  { name: 'Workspace Members', index: 1 },
-  { name: 'Internal Guests', index: 2 },
-]
-
 function ManagePeople({ classNames }) {
   const { accountRoles, workspaceRoles } = useRoles()
   const [openCreateUserModal, setOpenCreateUserModal] = useState(false)
-
+  const { wrapper } = classNames || ''
   const [searchQuery, setSearchQuery] = useState('')
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOwner, isAccountAdmin } = useAccountProfile()
+  const { isAccountLevelSettingsRoute, isUserInWorkspace } = useNavigation()
 
   const [selectedKeys, setSelectedKeys] = useState(
     new Set([ROLES.map((role) => role.label)[0]]),
@@ -90,13 +88,33 @@ function ManagePeople({ classNames }) {
   }
 
   // ***** COMPONENT RENDERER ************** //
-  const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
-    <UsersTable key={'all-users'} users={userSearchResults} />,
-    <UsersTable key={'members'} users={userSearchResults} />,
-    <UsersTable key={'internal-guests'} users={userSearchResults} />,
-  ])
 
-  const { wrapper } = classNames || ''
+  const TABS = !isAccountLevelSettingsRoute
+    ? [
+        { name: 'Workspace Members', index: 0 },
+        { name: 'Workspace Guests', index: 1 },
+      ]
+    : [
+        { name: 'All Users', index: 0 },
+        { name: 'Workspace Members', index: 1 },
+        { name: 'Guests', index: 2 },
+      ]
+
+  const COMPONENT_RENDERER = !isAccountLevelSettingsRoute
+    ? [
+        <UsersTable key={'members'} users={userSearchResults} />,
+        <UsersTable key={'internal-guests'} users={userSearchResults} />,
+      ]
+    : [
+        <UsersTable key={'all-users'} users={userSearchResults} />,
+        <UsersTable key={'members'} users={userSearchResults} />,
+        <UsersTable key={'guests'} users={userSearchResults} />,
+      ]
+
+  const { activeTab, navigateTo, currentTabIndex } =
+    useCustomTabsHook(COMPONENT_RENDERER)
+
+  const allowUserCreation = (isOwner || isAccountAdmin) && !isUserInWorkspace
 
   return (
     <div className={cn('mx-auto flex w-full max-w-7xl flex-col', wrapper)}>
@@ -121,12 +139,14 @@ function ManagePeople({ classNames }) {
           navigateTo={navigateTo}
           currentTab={currentTabIndex}
         />
-        <Button
-          startContent={<PlusIcon className=" h-6 w-6" />}
-          onPress={onOpen}
-        >
-          Create New User
-        </Button>
+        {allowUserCreation && (
+          <Button
+            startContent={<PlusIcon className=" h-6 w-6" />}
+            onPress={onOpen}
+          >
+            Create New User
+          </Button>
+        )}
       </div>
       <div className="mb-4"></div>
       {activeTab}

@@ -9,6 +9,10 @@ const useNavigation = () => {
 
   const dashboardRoute = `/dashboard/${workspaceID}`
   const settingsPathname = `${dashboardRoute}/settings`
+  const isAccountLevelSettingsRoute = pathname.startsWith('/manage-account')
+
+    const isUserInWorkspace =
+      pathname.split('/')[1] == 'dashboard' && pathname.split('/').length >= 3
 
   const pathArr = pathname?.split('/')
   const currentPath =
@@ -30,6 +34,8 @@ const useNavigation = () => {
     currentPath,
     dashboardRoute,
     settingsPathname,
+    isAccountLevelSettingsRoute,
+    isUserInWorkspace,
   }
 }
 

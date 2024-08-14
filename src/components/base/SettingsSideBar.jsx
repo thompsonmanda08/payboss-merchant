@@ -19,35 +19,6 @@ import { motion } from 'framer-motion'
 import useAuthStore from '@/context/authStore'
 import useNavigation from '@/hooks/useNavigation'
 
-const ACCOUNT_SETTINGS = [
-  {
-    name: 'My Settings',
-    Icon: UserCircleIcon,
-    href: '/manage-account',
-  },
-
-  {
-    name: 'People',
-    Icon: UserGroupIcon,
-    href: '/manage-account/users',
-  },
-  {
-    name: 'Workspaces',
-    Icon: BriefcaseIcon,
-    href: '/manage-account/workspaces',
-  },
-  {
-    name: 'Security & Permissions',
-    Icon: LockClosedIcon,
-    href: '/manage-account/security',
-  },
-  {
-    name: 'Account Verification',
-    Icon: CheckBadgeIcon,
-    href: '/manage-account/account-verification',
-  },
-]
-
 function SettingsSideBar({
   title,
   backButtonText,
@@ -57,7 +28,12 @@ function SettingsSideBar({
   const pathname = usePathname()
   const [openSettingsSideBar, setOpenSettingsSideBar] = useState(false)
   const handleUserLogOut = useAuthStore((state) => state.handleUserLogOut)
-  const { settingsPathname, isProfile, currentPath } = useNavigation()
+  const {
+    settingsPathname,
+    isProfile,
+    currentPath,
+    isAccountLevelSettingsRoute,
+  } = useNavigation()
 
   function toggleSideBar() {
     setOpenSettingsSideBar(!openSettingsSideBar)
@@ -65,6 +41,35 @@ function SettingsSideBar({
 
   const dashboardHome = settingsPathname?.split('/')?.slice(0, 3)?.join('/')
   const homeRoute = dashboardHome || '/workspaces'
+
+  const ACCOUNT_SETTINGS = [
+    {
+      name: 'Account Settings',
+      Icon: UserCircleIcon,
+      href: '/manage-account',
+    },
+
+    {
+      name: 'People',
+      Icon: UserGroupIcon,
+      href: '/manage-account/users',
+    },
+    {
+      name: 'Workspaces',
+      Icon: BriefcaseIcon,
+      href: '/manage-account/workspaces',
+    },
+    {
+      name: 'Security & Permissions',
+      Icon: LockClosedIcon,
+      href: '/manage-account/security',
+    },
+    {
+      name: 'Account Verification',
+      Icon: CheckBadgeIcon,
+      href: '/manage-account/account-verification',
+    },
+  ]
 
   const WORKSPACE_SETTINGS = [
     {
@@ -90,9 +95,9 @@ function SettingsSideBar({
   ]
 
   // SETTINGS OPTIONS
-  const SETTINGS_LINKS = settingsPathname
-    ? WORKSPACE_SETTINGS
-    : ACCOUNT_SETTINGS
+  const SETTINGS_LINKS = isAccountLevelSettingsRoute
+    ? ACCOUNT_SETTINGS
+    : WORKSPACE_SETTINGS
 
   return (
     <>
