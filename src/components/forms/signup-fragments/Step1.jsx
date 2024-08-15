@@ -31,6 +31,8 @@ export default function Step1({ updateDetails }) {
     return []
   }, [step?.provinceID, provinces])
 
+  console.log(step?.date_of_incorporation?.split('').length > 9)
+
   return (
     <>
       <CardHeader
@@ -115,7 +117,12 @@ export default function Step1({ updateDetails }) {
               label={'Date of Incorporation'}
               className="max-w-sm"
               description={'Date the company was registered'}
-              value={step?.date_of_incorporation}
+              defaultValue={step?.date_of_incorporation}
+              value={
+                step?.date_of_incorporation?.split('').length > 9
+                  ? step?.date_of_incorporation
+                  : undefined
+              }
               maxValue={today(getLocalTimeZone())}
               labelPlacement={'outside'}
               onChange={(date) => {

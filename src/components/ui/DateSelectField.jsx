@@ -30,7 +30,6 @@ function DateSelectField({
       className={cn('max-w-sm ', className)}
       classNames={{
         calendar: 'rounded-md !text-primary',
-
         calendarContent: 'text-primary',
       }}
       dateInputClassNames={{
