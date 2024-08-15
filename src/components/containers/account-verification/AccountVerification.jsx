@@ -1,27 +1,57 @@
 'use client'
 import { Tabs } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import React from 'react'
+import React, { useEffect } from 'react'
 import BusinessAccountDetails from './BusinessAccountDetails'
 import DocumentAttachments from './DocumentAttachments'
 import ProgressStageTracker from './ProgressStageTracker'
-import { useGeneralConfigOptions, useSetupConfig } from '@/hooks/useQueryHooks'
 import useConfigOptions from '@/hooks/useConfigOptions'
 import useAccountProfile from '@/hooks/useProfileDetails'
+import DocumentsViewer from './DocumentsViewer'
 
 function AccountVerification() {
-  const { user, businessDetails, businessDocs, merchantID } =
-    useAccountProfile()
+  const {
+    user,
+    businessDetails,
+    businessDocs,
+    allowUserToSubmitKYC,
+    KYCStageID,
+    KYCApprovalStatus,
+  } = useAccountProfile()
   const { companyTypes, banks, currencies } = useConfigOptions()
 
   // ************* TABS RENDERER ************** //
-  const TABS = [
-    { name: 'Business Details', href: '#', index: 0 },
-    { name: 'Attachments', href: '#', index: 1 },
-    { name: 'Verification Status', href: '#', index: 2 },
+  const TABS = allowUserToSubmitKYC
+    ? [
+        { name: 'Business Details', href: '#', index: 0 },
+        { name: 'Attachments', href: '#', index: 1 },
+        { name: 'Verification Status', href: '#', index: 2 },
+      ]
+    : [
+        { name: 'Verification Status', href: '#', index: 0 },
+        { name: 'Business Details', href: '#', index: 1 },
+        { name: 'Documentation', href: '#', index: 2 },
+      ]
+
+  const KYC_COMPLETE = [
+    <ProgressStageTracker key={'verification-status'} />,
+    <BusinessAccountDetails
+      key={'business-details'}
+      user={user}
+      businessDetails={businessDetails}
+      companyTypes={companyTypes}
+      banks={banks}
+      currencies={currencies}
+      navigateToPage={navigateToPage}
+    />,
+    <DocumentsViewer
+      key={'documents'}
+      businessDocs={businessDocs}
+      navigateToPage={navigateToPage}
+    />,
   ]
 
-  const KYC_COMPONENTS = [
+  const KYC_INCOMPLETE = [
     <BusinessAccountDetails
       key={'business-details'}
       user={user}
@@ -36,23 +66,20 @@ function AccountVerification() {
       businessDocs={businessDocs}
       navigateToPage={navigateToPage}
     />,
-  ]
-
-  const TRACKING_COMPONENTS = [
     <ProgressStageTracker key={'verification-status'} />,
   ]
 
-  const RENDER_COMPONENTS = true ? KYC_COMPONENTS : TRACKING_COMPONENTS
+  const RENDER_COMPONENTS = allowUserToSubmitKYC ? KYC_INCOMPLETE : KYC_COMPLETE
 
   // ************* COMPONENT RENDERER ************** //
-  const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
-    ...RENDER_COMPONENTS,
-    <ProgressStageTracker key={'verification-status'} />,
-  ])
+  const { activeTab, navigateTo, currentTabIndex } =
+    useCustomTabsHook(RENDER_COMPONENTS)
 
   function navigateToPage(index) {
     navigateTo(index)
   }
+
+  useEffect(() => {}, [KYCStageID, KYCApprovalStatus])
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col">

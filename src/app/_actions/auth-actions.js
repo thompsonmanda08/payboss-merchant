@@ -172,27 +172,32 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
       },
     )
 
-    if (res.status !== 201) {
-      const response = res?.data || res
+    console.log(res)
+
+    if (res.status == 201) {
       return {
-        success: false,
-        message: response?.error || response?.message,
-        data: null,
+        success: true,
+        message: res.message,
+        data: res?.data,
         status: res.status,
       }
     }
 
     return {
-      success: true,
-      message: res.message,
-      data: res.data,
+      success: false,
+      message: res?.data?.error || res?.message,
+      data: res?.data || res,
       status: res.status,
     }
   } catch (error) {
+    console.log(error)
     return {
       success: false,
-      message: error?.response?.data?.error || 'No Server Response',
-      data: null,
+      message: error?.response?.data?.error || 'Operation failed!',
+      data:
+        error?.response?.data?.error ||
+        error?.response?.data ||
+        error?.response,
       status: error?.response?.status || error.status,
     }
   }
@@ -211,28 +216,33 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
         },
       },
     )
+    console.log(res)
 
-    if (res.status !== 200) {
-      const response = res?.data || res
+    if (res.status == 200) {
       return {
-        success: false,
-        message: response?.error || response?.message,
-        data: null,
+        success: true,
+        message: res.message,
+        data: res?.data,
         status: res.status,
       }
     }
 
     return {
-      success: true,
-      message: res.message,
-      data: res.data,
+      success: false,
+      message: res?.data?.error || res?.message,
+      data: res?.data || res,
       status: res.status,
     }
   } catch (error) {
+    console.log(error)
+
     return {
       success: false,
       message: error?.response?.data?.error || 'No Server Response',
-      data: null,
+      data:
+        error?.response?.data?.error ||
+        error?.response?.data ||
+        error?.response,
       status: error?.response?.status || error.status,
     }
   }
@@ -270,9 +280,13 @@ export async function authenticateUser(loginCredentials) {
       status: res.status,
     }
   } catch (error) {
+    console.error(error)
+    console.log(error)
+
     return {
       success: false,
-      message: error?.response?.data?.error || 'Oops! Something went wrong.',
+      message:
+        error?.response?.data?.error || 'Oops! Login Failed, Try Again!.',
       data: null,
       status: error?.response?.status || error.status,
     }

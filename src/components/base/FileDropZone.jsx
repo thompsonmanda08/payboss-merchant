@@ -81,8 +81,6 @@ const SingleFileDropzone = React.forwardRef(
         // 'text/csv': [],
         // 'text/*': [],
         // 'application/*': [],
-        'application/vnd.ms-excel': [],
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [],
         ...otherAcceptedFiles,
       },
       multiple: isMultipleFiles,

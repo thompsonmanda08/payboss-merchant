@@ -78,3 +78,11 @@ const UploadCSVFile = ({ navigateForward }) => {
 }
 
 export default UploadCSVFile
+
+/* ***************** FILE MIME ****************
+'application/vnd.ms-excel': [],
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [], 
+
+
+
+*/

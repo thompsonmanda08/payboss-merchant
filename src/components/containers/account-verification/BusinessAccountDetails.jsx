@@ -16,7 +16,7 @@ function BusinessAccountDetails({
   currencies,
   navigateToPage,
 }) {
-  const { isCompleteKYC } = useAccountProfile()
+  const { allowUserToSubmitKYC } = useAccountProfile()
 
   const branchCodeError =
     (businessDetails?.branch_code?.length > 1 &&
@@ -29,8 +29,6 @@ function BusinessAccountDetails({
   const phoneNoError =
     !isValidZambianMobileNumber(businessDetails?.contact) &&
     businessDetails?.contact?.length > 1
-
-
 
   //TODO => FETCH ALL KYC DATA - INPUT FIELDS TO BE DISABLED
   return (
@@ -246,8 +244,9 @@ function BusinessAccountDetails({
           </div>
         </div>
 
-        {/*  */}
-        <Button onPress={() => navigateToPage(1)}>Proceed</Button>
+        {allowUserToSubmitKYC && (
+          <Button onPress={() => navigateToPage(1)}>Proceed</Button>
+        )}
       </div>
     </div>
   )

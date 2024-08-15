@@ -1,6 +1,6 @@
+import { POCKET_BASE_URL } from '@/lib/constants'
 import PocketBase from 'pocketbase'
 
-export const POCKET_BASE_URL = 'http://102.23.121.41'
 
 const pb = new PocketBase(POCKET_BASE_URL)
 
@@ -114,9 +114,11 @@ export async function uploadBusinessFile(file, merchantID, fileRecordId) {
       success: false,
       status: error.status,
       message:
-        error.response?.message ||
+        error.response?.data ||
+        error.response?.data?.error ||
         'An error occurred while uploading the file.',
-      data: null,
+      data:
+        error.response?.data?.error || error.response?.data || error.response,
     }
   }
 }

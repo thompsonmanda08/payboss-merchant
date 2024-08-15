@@ -15,50 +15,41 @@ function ProgressStageTracker() {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split('T')[0])
   const date = formatDate(fullDate).replaceAll('-', ' ')
   const time = fullDate.toLocaleTimeString()
-  const {
-    merchantID,
-    businessDocs,
-    KYCStageID,
-    allowUserToSubmitKYC,
-    KYCApprovalStatus,
-  } = useAccountProfile()
-
-
-  const [currentStage, setCurrentStage] = useState(0)
+  const { KYCStageID, KYCApprovalStatus } = useAccountProfile()
 
   const STAGES = [
     {
       ID: 1,
       name: 'Account Details & Document Submission',
+      infoText:
+        'Documents as well as business information was submitted. This process usually takes up to 24 hours, try reloading the page or come back later for a status update.',
       Icon: ClipboardDocumentCheckIcon,
-      status: 'done',
-      current: 0,
       date: formatDate(date).replaceAll('-', ' '),
       time,
     },
     {
       ID: 2,
       name: 'Account Screening Pending Approval',
-      status: 'pending',
+      infoText:
+        'Your account and your KYC data is being reviewed by the PayBoss support team. This process usually takes up to 24 hours, You will receive an email notification when your application has been reviewed',
       Icon: ShieldExclamationIcon,
-      current: 2,
       date: formatDate(date).replaceAll('-', ' '),
       time,
     },
     {
       ID: 3,
       name: 'Review & Negotiation',
+      infoText:
+        'Review & Negotiation all you to reach an understanding with the PayBoss team, on the PayBoss services and pricing as well as commission information',
       Icon: ChatBubbleOvalLeftEllipsisIcon,
-      status: 'pending',
-      current: 0,
       date: formatDate(date).replaceAll('-', ' '),
       time,
     },
     {
-      ID: 3,
+      ID: 4,
       name: 'Account Approved',
-      status: 'approved',
-      current: 0,
+      infoText:
+        'Congratulations! Your account has been approved, enjoy the PayBoss services to the fullest',
       date: formatDate(date).replaceAll('-', ' '),
       time,
     },
@@ -78,8 +69,8 @@ function ProgressStageTracker() {
               <TimelineItem
                 Icon={stage.Icon}
                 stage={stage}
-                isPending={KYCStageID == stage?.ID}
-                isCompleted={KYCStageID > stage?.ID}
+                isPending={KYCStageID === stage?.ID}
+                isCompleted={KYCStageID > stage?.ID || KYCStageID == 4}
                 isLastItem={index == STAGES.length - 1}
               />
             )
@@ -94,11 +85,11 @@ function ProgressStageTracker() {
           />
           <div className="flex flex-col items-center justify-center gap-2">
             <h3 className="leading-0 m-0 font-bold">
-              {STAGES[currentStage]?.name || 'Account Approval Process'}
+              {STAGES[KYCStageID - 1]?.name || 'Account Approval Process'}
             </h3>
             <p className="text-center text-sm tracking-tight text-slate-600">
-              This process usually takes up to 24 hours, try reloading the page
-              or come back later for a status update.
+              {STAGES[KYCStageID - 1]?.infoText ||
+                ' This process usually takes up to 24 hours, try reloading the page or come back later for a status update.'}
             </p>
           </div>
         </div>

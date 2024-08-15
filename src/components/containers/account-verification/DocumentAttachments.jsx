@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import useAuthStore from '@/context/authStore'
 import { uploadBusinessFile } from '@/app/_actions/pocketbase-actions'
-import { CardHeader, FileDropZone } from '@/components/base'
+import { CardHeader, FileDropZone, StatusMessage } from '@/components/base'
 import { notify } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@nextui-org/react'
@@ -14,19 +14,16 @@ import {
   updateBusinessDocumentRefs,
 } from '@/app/_actions/auth-actions'
 import DocumentsViewer from './DocumentsViewer'
+import { useQueryClient } from '@tanstack/react-query'
 
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function DocumentAttachments({ navigateToPage }) {
-  const {
-    merchantID,
-    businessDocs,
-    KYCStageID,
-    allowUserToSubmitKYC,
-    KYCApprovalStatus,
-  } = useAccountProfile()
+  const queryClient = useQueryClient()
+  const { merchantID, businessDocs, allowUserToSubmitKYC, refDocsExist } = useAccountProfile()
   const { isKYCSent, setIsKYCSent } = useAuthStore((state) => state)
   const [docFiles, setDocFiles] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState({ status: false, message: null })
 
   function updateDocs(fields) {
     setDocFiles({ ...docFiles, ...fields })
@@ -34,6 +31,7 @@ export default function DocumentAttachments({ navigateToPage }) {
 
   async function submitKYCDocuments() {
     setIsLoading(true)
+    setError({ message: '', status: '' })
 
     const documentUrls = {
       company_profile_url: docFiles['COMPANY_PROFILE']?.file_url,
@@ -43,48 +41,65 @@ export default function DocumentAttachments({ navigateToPage }) {
       articles_of_association_url: docFiles['ARTICLES_ASSOCIATION']?.file_url,
     }
 
-  
-
+    
     if (!isKYCSent) {
       notify('error', 'Checkbox is unmarked')
+      setError({
+        message: 'Checkbox is unmarked. Agree to the statement below.',
+        status: true,
+      })
       setIsLoading(false)
       return
     }
 
     if (Object.keys(documentUrls).length < 5 && isKYCSent) {
       notify('error', 'Provide all required files!')
+      setError({
+        message: 'Provide all required files!',
+        status: true,
+      })
       setIsLoading(false)
       return
     }
 
     // SAVE FILES TO PAYBOSS BACKEND
     let response
-    if (Object.keys(businessDocs).length === 0 && isKYCSent) {
-      response = await sendBusinessDocumentRefs(documentUrls)
-    } else if (!Object.keys(businessDocs).length === 0 && isKYCSent) {
+    if (refDocsExist) {
       response = await updateBusinessDocumentRefs(documentUrls)
+
+      if (response?.success) {
+        notify('success', 'Documents Updated Successfully!')
+        queryClient.invalidateQueries()
+        // window.location.reload()
+        setIsLoading(false)
+        return
+      }
+    } else {
+      response = await sendBusinessDocumentRefs(documentUrls)
+
+      if (response?.success) {
+        notify('success', 'Documents Submitted For Approval!')
+        queryClient.invalidateQueries()
+        // navigateToPage(2)
+        setIsLoading(false)
+        return
+      }
     }
 
-    if (response?.success) {
-      notify('success', 'Documents Submitted For Approval')
-      navigateToPage(2)
-      setIsLoading(false)
-      return
-    } else {
-      notify('error', 'Error Submitting Documents')
-      setIsLoading(false)
-      return
-    }
+    console.log(response)
+    setError({ message: response.message, status: true })
+    notify('error', 'Error Submitting Documents')
+
+    setIsLoading(false)
   }
 
   async function handleFileUpload(file, recordID) {
-    // AWAIT SAVE TO POCKET-BASE DB AND RETURN FILE_URL
+    setError({ message: '', status: '' })
     let response = await uploadBusinessFile(file, merchantID, recordID)
     if (response.success) {
       notify('success', response?.message)
       return response?.data
     }
-    notify('error', 'Failed to upload file')
     notify('error', response.message)
   }
 
@@ -102,77 +117,77 @@ export default function DocumentAttachments({ navigateToPage }) {
         }
       />
 
-      {allowUserToSubmitKYC ? (
-        <div className="flex w-full flex-col gap-2 md:flex-row">
-          <div className="flex w-full flex-1 flex-col gap-2">
-            <UploadField
-              label={'Business Incorporation Certificate'}
-              handleFile={async (file) =>
-                updateDocs({
-                  CERTIFICATE_INC: await handleFileUpload(
-                    file,
-                    docFiles['CERTIFICATE_INC']?.file_record_id,
-                  ),
-                })
-              }
-            />
-            <UploadField
-              label={'Articles of Association'}
-              handleFile={async (file) =>
-                updateDocs({
-                  ARTICLES_ASSOCIATION: await handleFileUpload(
-                    file,
-                    docFiles['ARTICLES_ASSOCIATION']?.file_record_id,
-                  ),
-                })
-              }
-            />
-            <UploadField
-              label={'Shareholders Agreement'}
-              handleFile={async (file) =>
-                updateDocs({
-                  SHAREHOLDER_AGREEMENT: await handleFileUpload(
-                    file,
-                    docFiles['SHAREHOLDER_AGREEMENT']?.file_record_id,
-                  ),
-                })
-              }
-            />
-          </div>
-
-          <div className="flex w-full flex-1 flex-col gap-2">
-            <UploadField
-              label={'Tax Clearance Certificate'}
-              handleFile={async (file) =>
-                updateDocs({
-                  TAX_CLEARANCE: await handleFileUpload(
-                    file,
-                    docFiles['TAX_CLEARANCE']?.file_record_id,
-                  ),
-                })
-              }
-            />
-
-            <UploadField
-              label={'Company Profile'}
-              handleFile={async (file) =>
-                updateDocs({
-                  COMPANY_PROFILE: await handleFileUpload(
-                    file,
-                    docFiles['COMPANY_PROFILE']?.file_record_id,
-                  ),
-                })
-              }
-            />
-          </div>
+      <div className="flex w-full flex-col gap-2 md:flex-row">
+        <div className="flex w-full flex-1 flex-col gap-2">
+          <UploadField
+            label={'Business Incorporation Certificate'}
+            handleFile={async (file) =>
+              updateDocs({
+                CERTIFICATE_INC: await handleFileUpload(
+                  file,
+                  docFiles['CERTIFICATE_INC']?.file_record_id,
+                ),
+              })
+            }
+          />
+          <UploadField
+            label={'Articles of Association'}
+            handleFile={async (file) =>
+              updateDocs({
+                ARTICLES_ASSOCIATION: await handleFileUpload(
+                  file,
+                  docFiles['ARTICLES_ASSOCIATION']?.file_record_id,
+                ),
+              })
+            }
+          />
+          <UploadField
+            label={'Shareholders Agreement'}
+            handleFile={async (file) =>
+              updateDocs({
+                SHAREHOLDER_AGREEMENT: await handleFileUpload(
+                  file,
+                  docFiles['SHAREHOLDER_AGREEMENT']?.file_record_id,
+                ),
+              })
+            }
+          />
         </div>
-      ) : (
-        <div className="flex w-full flex-col gap-2 md:flex-row">
-          <DocumentsViewer />
+
+        <div className="flex w-full flex-1 flex-col gap-2">
+          <UploadField
+            label={'Tax Clearance Certificate'}
+            handleFile={async (file) =>
+              updateDocs({
+                TAX_CLEARANCE: await handleFileUpload(
+                  file,
+                  docFiles['TAX_CLEARANCE']?.file_record_id,
+                ),
+              })
+            }
+          />
+
+          <UploadField
+            label={'Company Profile'}
+            handleFile={async (file) =>
+              updateDocs({
+                COMPANY_PROFILE: await handleFileUpload(
+                  file,
+                  docFiles['COMPANY_PROFILE']?.file_record_id,
+                ),
+              })
+            }
+          />
+        </div>
+      </div>
+      {error.status && (
+        <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
+          <StatusMessage error={error.status} message={error.message} />
         </div>
       )}
+
       {allowUserToSubmitKYC && (
-        <div className="mt-8 flex w-full flex-col items-start gap-4">
+        <div className="mt-4 flex w-full flex-col items-start gap-4">
           <Checkbox
             className="flex items-start"
             classNames={{

@@ -20,7 +20,18 @@ const useAccountProfile = () => {
   const [KYCApprovalStatus, setKYCApprovalStatus] = useState('')
   const [allowUserToSubmitKYC, setAllowUserToSubmitKYC] = useState('')
   const [businessDocs, setBusinessDocs] = useState([])
+  const [signedContractDoc, setSignedContractDoc] = useState(null)
 
+  // IF THE DOCUMENT OBJECT IS NOT EMPTY DOCS EXIST
+  const refDocsExist =
+    Object.keys(documents).length > 0 ||
+    documents?.company_profile_url ||
+    documents?.cert_of_incorporation_url ||
+    documents?.share_holder_url ||
+    documents?.tax_clearance_certificate_url ||
+    documents?.articles_of_association_url
+
+  /* ****** SET STATE VARIABLES**************** */
 
   useEffect(() => {
     if (kycData) {
@@ -30,42 +41,51 @@ const useAccountProfile = () => {
       setKYCStageID(businessDetails?.stageID)
       setKYCApprovalStatus(businessDetails?.kyc_approval_status?.toLowerCase())
       setAllowUserToSubmitKYC(
-        businessDetails?.stageID == 1 ||
+        businessDetails?.stageID < 1 ||
           businessDetails?.stage?.toLowerCase() == 'new' ||
+          !businessDetails?.isCompleteKYC ||
           businessDetails?.kyc_approval_status?.toLowerCase() == 'rejected',
       )
     }
 
-    if (documents) {
+    if (Object.keys(documents).length > 0) {
       let attachments = [
         {
           name: 'Company Profile',
-          url: businessDocs?.company_profile_url || '#',
+          url: documents?.company_profile_url || '#',
           type: 'COMPANY_PROFILE',
         },
         {
           name: 'Certificate of Incorporation',
-          url: businessDocs?.cert_of_incorporation_url || '#',
+          url: documents?.cert_of_incorporation_url || '#',
           type: 'CERTIFICATE_INC',
         },
         {
           name: 'Shareholder Agreement',
-          url: businessDocs?.share_holder_url || '#',
+          url: documents?.share_holder_url || '#',
           type: 'SHAREHOLDER_AGREEMENT',
         },
         {
           name: 'Tax Clearance Certificate',
-          url: businessDocs?.tax_clearance_certificate_url || '#',
+          url: documents?.tax_clearance_certificate_url || '#',
           type: 'TAX_CLEARANCE',
         },
         {
           name: 'Articles of Association',
-          url: businessDocs?.articles_of_association_url || '#',
+          url: documents?.articles_of_association_url || '#',
           type: 'ARTICLES_ASSOCIATION',
         },
       ]
 
       setBusinessDocs(attachments)
+    }
+
+    if (documents?.signed_contract) {
+      setSignedContractDoc({
+        name: 'Signed Contract Document',
+        url: documents?.signed_contract || '#',
+        type: 'SIGNED_CONTRACT',
+      })
     }
   }, [kycData])
 
@@ -81,6 +101,8 @@ const useAccountProfile = () => {
     allowUserToSubmitKYC,
     isOwner,
     isAccountAdmin,
+    signedContractDoc,
+    refDocsExist,
   }
 }
 
