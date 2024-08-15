@@ -9,11 +9,19 @@ import {
   ClipboardDocumentCheckIcon,
   ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
+import useAccountProfile from '@/hooks/useProfileDetails'
 
 function ProgressStageTracker() {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split('T')[0])
   const date = formatDate(fullDate).replaceAll('-', ' ')
   const time = fullDate.toLocaleTimeString()
+  const {
+    merchantID,
+    businessDocs,
+    KYCStageID,
+    allowUserToSubmitKYC,
+    KYCApprovalStatus,
+  } = useAccountProfile()
 
 
   const [currentStage, setCurrentStage] = useState(0)
@@ -49,7 +57,7 @@ function ProgressStageTracker() {
     {
       ID: 3,
       name: 'Account Approved',
-      status: 'pending',
+      status: 'approved',
       current: 0,
       date: formatDate(date).replaceAll('-', ' '),
       time,
@@ -70,8 +78,8 @@ function ProgressStageTracker() {
               <TimelineItem
                 Icon={stage.Icon}
                 stage={stage}
-                isPending={stage?.ID == stage?.current}
-                isCompleted={stage?.status == 'done'}
+                isPending={KYCStageID == stage?.ID}
+                isCompleted={KYCStageID > stage?.ID}
                 isLastItem={index == STAGES.length - 1}
               />
             )

@@ -21,6 +21,7 @@ const useAccountProfile = () => {
   const [allowUserToSubmitKYC, setAllowUserToSubmitKYC] = useState('')
   const [businessDocs, setBusinessDocs] = useState([])
 
+
   useEffect(() => {
     if (kycData) {
       setMerchantID(businessDetails?.ID)
@@ -31,8 +32,7 @@ const useAccountProfile = () => {
       setAllowUserToSubmitKYC(
         businessDetails?.stageID == 1 ||
           businessDetails?.stage?.toLowerCase() == 'new' ||
-          businessDetails?.kyc_approval_status?.toLowerCase() == 'rejected' ||
-          Object.keys(documents).length < 5,
+          businessDetails?.kyc_approval_status?.toLowerCase() == 'rejected',
       )
     }
 

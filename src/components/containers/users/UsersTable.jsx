@@ -33,6 +33,7 @@ const roleColorMap = {
 const columns = [
   { name: 'NAME', uid: 'first_name' },
   { name: 'USERNAME/MOBILE NO.', uid: 'username' },
+  { name: 'WORKSPACES', uid: 'workspace' },
   { name: 'ROLE', uid: 'role' },
   { name: 'ACTIONS', uid: 'actions' },
 ]
@@ -42,7 +43,7 @@ export default function UsersTable({ users = [] }) {
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey]
 
-    console.log(users)
+    // console.log(users)
 
     switch (columnKey) {
       case 'first_name':
@@ -66,6 +67,12 @@ export default function UsersTable({ users = [] }) {
             <code className="text-bold text-sm text-slate-600">
               {user?.phone_number}
             </code>
+          </div>
+        )
+      case 'workspace':
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize">{cellValue}</p>
           </div>
         )
       case 'role':
@@ -108,7 +115,7 @@ export default function UsersTable({ users = [] }) {
   return (
     <Table
       aria-label="Example table with custom cells"
-      className="max-h-[600px]"
+      className="max-h-[700px]"
       isStriped
       isHeaderSticky
     >

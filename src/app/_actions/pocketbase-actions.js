@@ -1,11 +1,10 @@
 import PocketBase from 'pocketbase'
-import { POCKET_BASE_URL } from '@/lib/constants'
+
+export const POCKET_BASE_URL = 'http://102.23.121.41'
 
 const pb = new PocketBase(POCKET_BASE_URL)
 
 export async function uploadPaymentBatchFile(file, merchantID, fileRecordId) {
-
-
   try {
     let file_name = file?.name
     const formData = new FormData()
@@ -40,7 +39,6 @@ export async function uploadPaymentBatchFile(file, merchantID, fileRecordId) {
 
     const file_url = pb.getFileUrl(fileRecord, fileRecord['field'])
     const file_record_id = fileRecord['id']
-
 
     return {
       success: true,
