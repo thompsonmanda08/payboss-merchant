@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { Button } from '../ui/Button'
+import { cn } from '@/lib/utils'
 
 function EmptyState({
   title,
@@ -9,16 +10,24 @@ function EmptyState({
   buttonText,
   onButtonClick,
   children,
+  classNames,
 }) {
+  const { heading, paragraph } = classNames || ''
   return (
     <div className="my-12 flex h-full w-full flex-col items-center justify-center text-gray-300">
       <h3
-        className={`${''} text-primary-800 text-center text-2xl font-bold leading-8 md:text-[48px]`}
+        className={cn(
+          `text-center text-2xl font-bold leading-8 text-primary-800 md:text-[48px]`,
+          heading,
+        )}
       >
         {title || 'Whoops-a-daisy!'}
       </h3>
       <p
-        className={`my-6 mb-4 max-w-[380px] p-2 px-5 text-center text-sm text-gray-400/80 md:max-w-[480px] md:text-base`}
+        className={cn(
+          `my-6 mb-4 max-w-[380px] p-2 px-5 text-center text-sm text-gray-400/80 md:max-w-[480px] md:text-base`,
+          paragraph,
+        )}
       >
         {message || 'There is nothing here yet. Please try again later.'}
       </p>
