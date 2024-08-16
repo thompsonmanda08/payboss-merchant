@@ -43,8 +43,6 @@ export default function UsersTable({ users = [] }) {
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey]
 
-    // console.log(users)
-
     switch (columnKey) {
       case 'first_name':
         return (
@@ -142,7 +140,7 @@ export default function UsersTable({ users = [] }) {
   )
 }
 
-function UserAvatarComponent({
+export function UserAvatarComponent({
   firstName,
   lastName,
   src,

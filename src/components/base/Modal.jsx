@@ -97,10 +97,7 @@ function Modal({
             </div>
             {!noCallToAction && (
               <div className="flex w-full justify-end gap-3">
-                <Button
-                  onClick={handleClose}
-                  className="bg-red-500/10 !text-red-500 hover:bg-red-500 hover:!text-white"
-                >
+                <Button onClick={handleClose} color="danger" className="">
                   {cancelText || 'Cancel'}
                 </Button>
                 <Button

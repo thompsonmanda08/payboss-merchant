@@ -4,15 +4,7 @@ import Image from 'next/image'
 import { cn, getUserInitials } from '@/lib/utils'
 import { Avatar as NextAvatar } from '@nextui-org/react'
 
-function Avatar({
-  firstName,
-  lastName,
-  src,
-  email,
-  username,
-  showUserInfo,
-  isProfile,
-}) {
+function Avatar({ firstName, lastName, src, email, showUserInfo, isProfile }) {
   return (
     <div
       className="flex cursor-pointer items-center justify-start gap-2

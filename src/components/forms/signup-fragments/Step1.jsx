@@ -31,8 +31,6 @@ export default function Step1({ updateDetails }) {
     return []
   }, [step?.provinceID, provinces])
 
-  console.log(step?.date_of_incorporation?.split('').length > 9)
-
   return (
     <>
       <CardHeader

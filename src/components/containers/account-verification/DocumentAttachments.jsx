@@ -19,7 +19,8 @@ import { useQueryClient } from '@tanstack/react-query'
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function DocumentAttachments({ navigateToPage }) {
   const queryClient = useQueryClient()
-  const { merchantID, businessDocs, allowUserToSubmitKYC, refDocsExist } = useAccountProfile()
+  const { merchantID, businessDocs, allowUserToSubmitKYC, refDocsExist } =
+    useAccountProfile()
   const { isKYCSent, setIsKYCSent } = useAuthStore((state) => state)
   const [docFiles, setDocFiles] = useState({})
   const [isLoading, setIsLoading] = useState(false)
@@ -41,7 +42,6 @@ export default function DocumentAttachments({ navigateToPage }) {
       articles_of_association_url: docFiles['ARTICLES_ASSOCIATION']?.file_url,
     }
 
-    
     if (!isKYCSent) {
       notify('error', 'Checkbox is unmarked')
       setError({
