@@ -30,7 +30,7 @@ function Providers({ children }) {
                 easings: 'easeInOut',
                 stiffness: {
                   type: 'spring',
-                  stiffness: 100,
+                  // stiffness: 100,
                 },
               },
             }}
