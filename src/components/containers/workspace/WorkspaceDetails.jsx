@@ -4,9 +4,9 @@ import {
   updateWorkspace,
 } from '@/app/_actions/config-actions'
 import PromptModal from '@/components/base/Prompt'
-import Prompt from '@/components/base/Prompt'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/InputField'
+import AddUserToWorkspace from '@/components/containers/workspace/AddUserToWorkspace'
 import useWorkspaces from '@/hooks/useWorkspace'
 import { SETUP_QUERY_KEY, WORKSPACES_QUERY_KEY } from '@/lib/constants'
 import { cn, notify } from '@/lib/utils'
@@ -15,17 +15,22 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-function WorkspaceDetails({ WorkSpaceID }) {
+function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
   const { back } = useRouter()
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: openAdd,
+    onOpen: onOpenAdd,
+    onClose: onCloseAdd,
+  } = useDisclosure()
   const [deleteError, setDeleteError] = useState({ status: false, message: '' })
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [deleteWorkspaceName, setDeleteWorkspaceName] = useState('')
   const { workspaces, allWorkspaces } = useWorkspaces()
   const workspace = allWorkspaces.find(
-    (workspace) => workspace.ID === WorkSpaceID,
+    (workspace) => workspace.ID === workspaceID,
   )
 
   const [isSandbox, setIsSandbox] = useState(
@@ -49,6 +54,7 @@ function WorkspaceDetails({ WorkSpaceID }) {
     })
   }
 
+  // UPDATE WORKSPACE DETAIL CHANGES
   async function handleUpdateWorkspace(e) {
     e.preventDefault()
     setLoading(true)
@@ -63,7 +69,7 @@ function WorkspaceDetails({ WorkSpaceID }) {
       return
     }
 
-    const response = await updateWorkspace({ ...newWorkspace, ID: WorkSpaceID })
+    const response = await updateWorkspace({ ...newWorkspace, ID: workspaceID })
 
     if (response.success) {
       queryClient.invalidateQueries({ queryKey: [SETUP_QUERY_KEY] })
@@ -77,6 +83,7 @@ function WorkspaceDetails({ WorkSpaceID }) {
     setLoading(false)
   }
 
+  // DEACTIVATE / DELETE WORKSPACE
   async function handleDeleteWorkspace() {
     setDeleteLoading(true)
 
@@ -90,7 +97,7 @@ function WorkspaceDetails({ WorkSpaceID }) {
       return
     }
 
-    const response = await deleteWorkspace(WorkSpaceID)
+    const response = await deleteWorkspace(workspaceID)
 
     if (response.success) {
       queryClient.invalidateQueries({
@@ -109,9 +116,10 @@ function WorkspaceDetails({ WorkSpaceID }) {
     setDeleteLoading(false)
   }
 
+  // CHANGE WORKSPACE VISIBILITY
   async function handleWorkspaceVisibility() {
     setIsVisible(!isVisible)
-    const response = await changeWorkspaceVisibility(WorkSpaceID, !isVisible)
+    const response = await changeWorkspaceVisibility(workspaceID, !isVisible)
 
     if (response.success) {
       queryClient.invalidateQueries([SETUP_QUERY_KEY])
@@ -186,8 +194,8 @@ function WorkspaceDetails({ WorkSpaceID }) {
           </form>
         </div>
       </div>
-      <hr className="my-10 h-px bg-slate-900/5" />
-      <div className="flex items-center gap-x-4 sm:mt-0 sm:flex-auto">
+      <hr className="my-6 h-px bg-slate-900/5" />
+      <div className="flex items-center gap-4 sm:mt-0 sm:flex-auto">
         <Switch
           isSelected={isVisible}
           onValueChange={handleWorkspaceVisibility}
@@ -200,8 +208,28 @@ function WorkspaceDetails({ WorkSpaceID }) {
           </span>
         </div>
       </div>
-      <hr className="my-10 h-px bg-slate-900/5" />
-      <div className="flex flex-col gap-8 md:flex-row">
+
+      <hr className="my-6 h-px bg-slate-900/5" />
+      <div className="flex flex-col gap-4 md:flex-row md:justify-between">
+        <div className="flex max-w-4xl flex-col gap-4">
+          <h2 className="text-base font-semibold leading-3 text-foreground">
+            Add Users to Workspace
+          </h2>
+          <p className="text-sm leading-6 text-gray-400">
+            Add users to this workspace to allow them to interact with the
+            PayBoss platform.
+          </p>
+        </div>
+
+        <Button
+          onClick={onOpenAdd}
+          className="self-end rounded-md px-3 py-2 text-sm font-semibold  shadow-sm"
+        >
+          Add Workspace Members
+        </Button>
+      </div>
+      <hr className="my-6 h-px bg-slate-900/5" />
+      <div className="flex flex-col gap-8 md:flex-row md:justify-between">
         <div className="flex max-w-4xl flex-col gap-4">
           <h2 className="text-base font-semibold leading-7 text-foreground">
             Deactivate Workspace
@@ -216,7 +244,6 @@ function WorkspaceDetails({ WorkSpaceID }) {
 
         <Button
           color="danger"
-          type="submit"
           onClick={onOpen}
           className="self-end rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400"
         >
@@ -256,6 +283,18 @@ function WorkspaceDetails({ WorkSpaceID }) {
             onChange={(e) => setDeleteWorkspaceName(e.target.value)}
           />
         </PromptModal>
+      )}
+
+      {/* MODALS */}
+      {openAdd && (
+        <AddUserToWorkspace
+          isOpen={openAdd}
+          onOpen={onOpenAdd}
+          onClose={onCloseAdd}
+          workspaceID={workspaceID}
+          workspaceName={workspaceName}
+          navigateTo={navigateTo}
+        />
       )}
     </>
   )

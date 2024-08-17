@@ -22,6 +22,8 @@ import useWorkspace from '@/hooks/useWorkspace'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import WorkspaceItem from './WorkspaceItem'
 import OverlayLoader from '@/components/ui/OverlayLoader'
+import { InfoBanner } from '@/components/base'
+import CreateNewWorkspaceModal from './CreateNewWorkspce'
 
 function Workspaces() {
   const { push } = useRouter()
@@ -89,7 +91,13 @@ function Workspaces() {
 
   return (
     <>
-      {loading && <OverlayLoader show={loading} />}
+      {/* ACCOUNT VERIFICATION PROMPTING BANNER */}
+      <InfoBanner
+        buttonText="Verify Account"
+        infoText="You have not verified your account yet. Please verify your account to access all the features of the app."
+        href={'manage-account/account-verification'}
+      />
+
       <div className="flex w-full flex-col items-center justify-center">
         <ScrollArea
           className={cn(
@@ -142,55 +150,18 @@ function Workspaces() {
             </div>
           )}
         </ScrollArea>
-
-        <Modal
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          placement="top-center"
-        >
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  Create New Workspace
-                </ModalHeader>
-                <ModalBody>
-                  <Input
-                    autoFocus
-                    label="Workspace Name"
-                    placeholder="Commercial Team"
-                    className="mt-px"
-                    onChange={(e) => {
-                      editWorkspaceField({ workspace: e.target.value })
-                    }}
-                  />
-                  <Input
-                    label="Description"
-                    placeholder="Describe the workspace"
-                    onChange={(e) => {
-                      editWorkspaceField({ description: e.target.value })
-                    }}
-                    className="mt-px"
-                  />
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" onPress={() => handleClose(onClose)}>
-                    Cancel
-                  </Button>
-                  <Button
-                    color="primary"
-                    isLoading={loading}
-                    isDisabled={loading}
-                    onPress={() => handleCreateWorkspace(onClose)}
-                  >
-                    Create
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
       </div>
+
+      {/* OVERLAYS AND MODALS  */}
+      {loading && <OverlayLoader show={loading} />}
+      <CreateNewWorkspaceModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        handleCreateWorkspace={handleCreateWorkspace}
+        handleClose={handleClose}
+        editWorkspaceField={editWorkspaceField}
+        loading={loading}
+      />
     </>
   )
 }
