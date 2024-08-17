@@ -15,23 +15,25 @@ import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import useNavigation from '@/hooks/useNavigation'
 import Wallet from './Wallet'
+import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 
 const TABS = [
-  { name: 'General', index: 0 }, // ONLY THE OWNER & ADMIN
+  { name: 'General', index: 0 },
   { name: 'Members', index: 1 },
   { name: 'Wallet', index: 2 }, // TODO: shows the wallet details and balances
   // { name: 'Services', index: 2 },
 ]
 
-function WorkspaceSettings({ WorkSpaceID }) {
+function WorkspaceSettings({ workspaceID }) {
   const { back } = useRouter()
   const { user } = useAccountProfile()
   const { isUserInWorkspace } = useNavigation()
-  const { isOwner } = useAccountProfile()
+  const { isOwner, isAccountAdmin } = useAccountProfile()
+  const { allUsers } = useAllUsersAndRoles()
 
   const { allWorkspaces } = useWorkspaces()
   const selectedWorkspace = allWorkspaces.find(
-    (workspace) => workspace.ID === WorkSpaceID,
+    (workspace) => workspace.ID === workspaceID,
   )
 
   const [searchQuery, setSearchQuery] = useState('')
@@ -46,14 +48,23 @@ function WorkspaceSettings({ WorkSpaceID }) {
 
   // ***** COMPONENT RENDERER ************** //
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
-    <WorkspaceDetails key={'workspace-details'} WorkSpaceID={WorkSpaceID} />,
+    <WorkspaceDetails
+      key={'workspace-details'}
+      workspaceID={workspaceID}
+      workspaceName={selectedWorkspace?.workspace}
+      navigateTo={handleNavigation}
+    />,
     <UsersTable
       key={'members'}
       users={userSearchResults}
-      WorkSpaceID={WorkSpaceID}
+      workspaceID={workspaceID}
     />,
     <Wallet key={'wallet-details'} />,
   ])
+
+  function handleNavigation(index) {
+    navigateTo(index)
+  }
 
   const allowUserCreation =
     currentTabIndex == 1 && (isOwner || isAccountAdmin) && !isUserInWorkspace

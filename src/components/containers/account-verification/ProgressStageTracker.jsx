@@ -22,7 +22,7 @@ function ProgressStageTracker() {
       ID: 1,
       name: 'Account Details & Document Submission',
       infoText:
-        'Documents as well as business information was submitted. This process usually takes up to 24 hours, try reloading the page or come back later for a status update.',
+        'Documents as well as business information submission. This process usually takes up to 24 hours, try reloading the page or come back later for a status update.',
       Icon: ClipboardDocumentCheckIcon,
       date: formatDate(date).replaceAll('-', ' '),
       time,

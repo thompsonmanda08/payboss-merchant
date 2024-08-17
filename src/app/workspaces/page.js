@@ -41,12 +41,6 @@ function WorkSpacesPage() {
               </div>
             </div>
 
-            <InfoBanner
-              buttonText="Verify Account"
-              infoText="You have not verified your account yet. Please verify your account to access all the features of the app."
-              href={'manage-account/account-verification'}
-            />
-
             <Workspaces />
           </Card>
         </section>

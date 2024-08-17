@@ -66,21 +66,12 @@ function ManagePeople({ classNames }) {
   const { isOwner, isAccountAdmin } = useAccountProfile()
   const { isAccountLevelSettingsRoute, isUserInWorkspace } = useNavigation()
 
-  const [selectedKeys, setSelectedKeys] = useState(
-    new Set([ROLES.map((role) => role.label)[0]]),
-  )
-
   const userSearchResults = allUsers?.filter((user) => {
     return (
       user?.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user?.name.toLowerCase().includes(searchQuery.toLowerCase())
     )
   })
-
-  const selectedValue = React.useMemo(
-    () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
-    [selectedKeys],
-  )
 
   function resolveAddToWorkspace(e) {
     e.preventDefault()
@@ -126,9 +117,6 @@ function ManagePeople({ classNames }) {
       </p>
 
       <SearchOrInviteUsers
-        selectedKeys={selectedKeys}
-        selectedValue={selectedValue}
-        setSelectedKeys={setSelectedKeys}
         setSearchQuery={setSearchQuery}
         resolveAddToWorkspace={resolveAddToWorkspace}
       />

@@ -146,6 +146,8 @@ export function UserAvatarComponent({
   src,
   email,
   classNames,
+  handleOnSelect,
+
   ...props
 }) {
   const { wrapper, avatar } = classNames || ''
@@ -155,6 +157,10 @@ export function UserAvatarComponent({
         'flex max-w-max cursor-pointer items-center justify-start gap-4 transition-all duration-200 ease-in-out',
         wrapper,
       )}
+      onClick={(e) => {
+        e.stopPropagation()
+        handleOnSelect && handleOnSelect()
+      }}
     >
       {src ? (
         <Avatar
@@ -170,19 +176,14 @@ export function UserAvatarComponent({
           {getUserInitials(`${firstName} ${lastName}`)}
         </div>
       )}
-      <span className="hidden lg:items-center xl:flex">
-        <div className="flex min-w-[120px] flex-col items-start">
-          <p
-            className={cn(
-              'text-base font-semibold leading-6 text-slate-800',
-              {},
-            )}
-          >{`${firstName} ${lastName}`}</p>
-          <p className={cn('text-[11px] font-medium text-slate-500', {})}>
-            {email}
-          </p>
-        </div>
-      </span>
+      <div className="flex min-w-[120px] flex-col items-start">
+        <p
+          className={cn('text-base font-semibold leading-6 text-slate-800', {})}
+        >{`${firstName} ${lastName}`}</p>
+        <p className={cn('text-[11px] font-medium text-slate-500', {})}>
+          {email}
+        </p>
+      </div>
     </div>
   )
 }

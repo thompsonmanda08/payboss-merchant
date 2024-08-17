@@ -84,7 +84,7 @@ export async function getUserSetupConfigs() {
 }
 
 export async function getUserAccountRoles() {
-  const session = await getServerSession()
+  const session = await getUserSession()
   const merchantID = session?.user?.merchantID
 
   try {
@@ -119,28 +119,30 @@ export async function getUserAccountRoles() {
 }
 
 export async function getWorkspaceRoles() {
-  const session = await getServerSession()
+  const session = await getUserSession()
   const merchantID = session?.user?.merchantID
+
+  console.log(merchantID)
 
   try {
     const res = await authenticatedService({
       url: `merchant/workspace/roles/${merchantID}`,
     })
 
-    if (res.status !== 200) {
-      const response = res?.data || res
+    if (res.status == 200) {
       return {
-        success: false,
-        message: response?.error || response?.message,
-        data: null,
+        success: true,
+        message: res.message,
+        data: res.data,
         status: res.status,
       }
     }
 
+    const response = res?.data || res
     return {
-      success: true,
-      message: res.message,
-      data: res.data,
+      success: false,
+      message: response?.error || response?.message,
+      data: null,
       status: res.status,
     }
   } catch (error) {
