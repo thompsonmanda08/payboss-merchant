@@ -30,6 +30,7 @@ import { UserPlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import { ROLES } from '../users/ManagePeople'
 import SelectField from '@/components/ui/SelectField'
+import useWorkspaceStore from '@/context/workspaceStore'
 
 const roleColorMap = {
   owner: 'success',
@@ -60,68 +61,75 @@ function AddUserToWorkspace({
   const { allUsers, workspaceRoles } = useAllUsersAndRoles()
   const router = useRouter()
 
-  const [addedUsers, setAddedUsers] = useState([])
+  // const [addedUsers, setAddedUsers] = useState([])
   const [error, setError] = useState({
     status: false,
     message: '',
   })
 
-  function handleAddToWorkspace(user) {
-    // Filter out the user with the matching email, if exists then don't add
-    const userExists = addedUsers.find((u) => u.ID === user.ID)
-    if (userExists) {
-      notify('error', 'User is already Added!')
-      return
-    }
+  const {
+    addedUsers,
+    handleAddToWorkspace,
+    handleRemoveFromWorkspace,
+    handleClearAllSelected,
+    handleUserRoleChange,
+  } = useWorkspaceStore((state) => state)
 
-    // Filter out the user with role == "owner", if exists then don't add
-    if (user?.role?.toLowerCase() == 'owner') {
-      notify('error', 'Owner is already part of the workspace!')
-      return
-    }
+  // function handleAddToWorkspace(user) {
+  //   // Filter out the user with the matching email, if exists then don't add
+  //   const userExists = addedUsers.find((u) => u.ID === user.ID)
+  //   if (userExists) {
+  //     notify('error', 'User is already Added!')
+  //     return
+  //   }
 
-    setAddedUsers((prev) => [
-      ...prev,
-      {
-        ...user,
-        workspaceRole: workspaceRoles[1]?.ID,
-      },
-    ])
-    notify('success', `You Added ${user?.first_name}!`)
-  }
+  //   // Filter out the user with role == "owner", if exists then don't add
+  //   if (user?.role?.toLowerCase() == 'owner') {
+  //     notify('error', 'Owner is already part of the workspace!')
+  //     return
+  //   }
 
-  function handleRemoveFromWorkspace(user) {
-    if (!user || !user.ID) {
-      console.error('Invalid user or user ID')
-      return
-    }
+  //   setAddedUsers((prev) => [
+  //     ...prev,
+  //     {
+  //       ...user,
+  //       workspaceRole: workspaceRoles[1]?.ID,
+  //     },
+  //   ])
+  //   notify('success', `You Added ${user?.first_name}!`)
+  // }
 
-    // Filter out the user with the matching ID
-    // Update the state with the new users list
-    setAddedUsers((prev) => prev.filter((u) => u.ID != user.ID))
-    notify('success', `You Removed ${user?.first_name}!`)
-  }
+  // function handleRemoveFromWorkspace(user) {
+  //   if (!user || !user.ID) {
+  //     console.error('Invalid user or user ID')
+  //     return
+  //   }
 
-  function handleClearAllSelected() {
-    setAddedUsers([])
-    notify('success', 'Removed all selected Users!')
-  }
+  //   // Filter out the user with the matching ID
+  //   // Update the state with the new users list
+  //   setAddedUsers((prev) => prev.filter((u) => u.ID != user.ID))
+  //   notify('success', `You Removed ${user?.first_name}!`)
+  // }
 
-  function handleUserRoleChange(user, roleID) {
-    console.log(roleID)
-    console.log(user)
+  // function handleClearAllSelected() {
+  //   setAddedUsers([])
+  //   notify('success', 'Removed all selected Users!')
+  // }
 
-    // Map through the users and add the property workspaceRole = roleID to the user with the matching ID and return the other as they are
-    const updatedUsers = addedUsers.map((u) => {
-      if (u.ID === user.ID) {
-        u.workspaceRole = roleID
-      }
-      return u
-    })
+  // function handleUserRoleChange(user, roleID) {
+  //   console.log(roleID)
+  //   console.log(user)
+  //   console.log(addedUsers)
 
-    console.log(updatedUsers)
-    setAddedUsers(updatedUsers)
-  }
+  //   // Map through the users and add the property workspaceRole = roleID to the user with the matching ID and return the other as they are
+
+  //   // console.log(updatedUsers)
+
+  //   // *** SOMETHING IS WRONG WITH THE SETTING FUNCTION
+  //   // if (updatedUsers.length == addedUsers.length) {
+  //   //   setAddedUsers(updatedUsers)
+  //   // }
+  // }
 
   const renderCell = useCallback((user, columnKey) => {
     const cellValue = user[columnKey]
@@ -250,6 +258,20 @@ function AddUserToWorkspace({
   // console.log(workspaceRoles)
   console.log(addedUsers.length)
 
+  useEffect(() => {
+    // IN CASE I NEED TO DO SOMETHING IN HERE
+
+    //
+    return () => {
+      // queryClient.cancelQueries()
+      // handleClearAllSelected()
+    }
+  }, [])
+
+  useEffect(() => {
+    console.log('Changed user role....')
+  }, [addedUsers])
+
   return (
     <Modal
       // IF ROLES AND USERS ARE LOADED THEN RENDER FULL SIZE
@@ -266,21 +288,21 @@ function AddUserToWorkspace({
                 {workspaceName && <span>({workspaceName})</span>}
               </ModalHeader>
               <ModalBody>
-                <section role="user-section" className="flex gap-8">
+                <section role="user-section" className="flex w-full gap-8">
                   {/**** A LIST OF ALL USERS THAT CAN BE ADDED TO A WORKSPACE ******/}
-                  <ScrollArea className="flex h-full w-full flex-1 flex-grow flex-col items-start gap-8">
+                  <div className="flex flex-1 flex-col">
                     <CardHeader title="All Users" />
                     <div role="ALL_USERS_LIST" className="">
                       <Table
                         aria-label="Table with dynamic content"
-                        className="shadow-none"
+                        className="max-h-[720px] shadow-none"
                       >
                         <TableHeader>
                           {columns.map((column) => (
                             <TableColumn
                               key={column.uid}
                               align={
-                                column.uid === 'isAdded' ? 'center' : 'start'
+                                column.uid === 'action_add' ? 'center' : 'start'
                               }
                             >
                               {column.name}
@@ -307,30 +329,33 @@ function AddUserToWorkspace({
                         </TableBody>
                       </Table>
                     </div>
-                  </ScrollArea>
+                  </div>
                   {/* ********************************************************* */}
 
                   {/**** A LIST OF ADDED USERS TO A WORKSPACE ******/}
-                  <ScrollArea className=" flex h-[720px] w-full flex-1 flex-grow flex-col items-start gap-8 !shadow-none">
+                  <div className="flex flex-1 flex-col">
                     <CardHeader title="Added Users" />
-
-                    {error && error.status && (
-                      <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center gap-4">
-                        <StatusMessage
-                          error={error.status}
-                          message={error.message}
-                        />
-                      </div>
-                    )}
-
                     <div role="ADDED_USERS_LIST" className="flex flex-col">
-                      <Table aria-label="Table with dynamic content">
+                      {error && error.status && (
+                        <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center gap-4">
+                          <StatusMessage
+                            error={error.status}
+                            message={error.message}
+                          />
+                        </div>
+                      )}
+                      <Table
+                        aria-label="Table with dynamic content"
+                        className="max-h-[720px] shadow-none"
+                      >
                         <TableHeader>
                           {columns_added.map((column) => (
                             <TableColumn
                               key={column.uid}
                               align={
-                                column.uid === 'isAdded' ? 'center' : 'start'
+                                column.uid === 'action_remove'
+                                  ? 'center'
+                                  : 'start'
                               }
                             >
                               {column.name}
@@ -364,7 +389,7 @@ function AddUserToWorkspace({
                         Clear All
                       </Button>
                     </div>
-                  </ScrollArea>
+                  </div>
                   {/* ********************************************************* */}
                 </section>
               </ModalBody>
