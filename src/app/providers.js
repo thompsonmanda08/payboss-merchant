@@ -4,12 +4,15 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { NextUIProvider } from '@nextui-org/react'
 import { useNetwork } from '@/hooks/useNetwork'
 import { motion } from 'framer-motion'
+import FirstLogin from '@/components/base/FirstLogin'
+import useAccountProfile from '@/hooks/useProfileDetails'
 // import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
 const queryClient = new QueryClient()
 
-function Providers({ children }) {
+function Providers({ session, children }) {
   const { online } = useNetwork()
+
   return (
     <QueryClientProvider client={queryClient}>
       {/* <NextThemesProvider
@@ -34,12 +37,13 @@ function Providers({ children }) {
                 },
               },
             }}
-            className="relative -top-1 left-0 right-0 z-[999] bg-red-500 p-2 text-xs font-bold capitalize text-white"
+            className="relative -top-1 left-0 right-0 z-[999] mb-4 bg-red-500 p-2 py-4 text-xs font-bold capitalize text-white"
           >
             NETWORK ERROR: Check your internet connection and try again!
           </motion.div>
         )}
         {children}
+        {session?.user?.changePassword && <FirstLogin />}
       </NextUIProvider>
       {/* </NextThemesProvider> */}
 

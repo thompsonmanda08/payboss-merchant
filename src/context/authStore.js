@@ -6,8 +6,12 @@ const INITIAL_STATE = {
   businessInfoSent: false,
   documentsInfoSent: false,
   auth: {},
+  password: {
+    newPassword: '',
+    confirmPassword: '',
+  },
 
-  error: {}, // STATUS, MESSAGE, FIELD-ERROR
+  error: { status: false, message: '' }, // STATUS, MESSAGE, FIELD-ERROR
   merchantID: '',
   isValidTPIN: false,
   isKYCSent: false,
@@ -26,6 +30,7 @@ const useAuthStore = create((set, get) => ({
   setError: (error) => set({ error }),
   setAuth: (auth) => set({ auth }), // TODO => TO HANDLE REFRESH TOKENS
   setIsLoading: (isLoading) => set({ isLoading }),
+
   setBusinessInfo: (businessInfo) => set({ businessInfo }),
   setMerchantID: (merchantID) => set({ merchantID }),
   setBusinessDocs: (businessDocs) => set({ businessDocs }),
@@ -43,6 +48,11 @@ const useAuthStore = create((set, get) => ({
   updateLoginDetails: (fields) =>
     set((state) => {
       return { loginDetails: { ...state.loginDetails, ...fields } }
+    }),
+
+  updatePasswordField: (fields) =>
+    set((state) => {
+      return { password: { ...state.password, ...fields } }
     }),
 
   // METHODS AND ACTIONS

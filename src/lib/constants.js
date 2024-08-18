@@ -46,7 +46,8 @@ const staggerContainerItemVariants = {
 const MTN_NO = /^(?:\+?26|26)?(096|076)\d{7}$/
 const AIRTEL_NO = /^(?:\+?26|26)?(097|077)\d{7}$/
 const ZAMTEL_NO = /^(?:\+?26|26)?(095|075)\d{7}$/
-const PASSWORD_PATTERN = /"(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/
+const PASSWORD_PATTERN =
+  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/
 
 const PAYMENT_SERVICE_TYPES = [
   {

@@ -7,6 +7,7 @@ import {
   getWorkspaceRoles,
 } from '@/app/_actions/config-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
+import { initializeWorkspace } from '@/app/_actions/workspace-actions'
 import {
   CONFIGS_QUERY_KEY,
   USER_ROLES_QUERY_KEY,
@@ -28,7 +29,7 @@ export const useSetupConfig = () =>
   useQuery({
     queryKey: [SETUP_QUERY_KEY],
     queryFn: async () => await getUserSetupConfigs(),
-    staleTime: Infinity,
+    staleTime: 3600 * 1000,
   })
 
 export const useGetWorkspaces = () =>
@@ -42,7 +43,7 @@ export const useKYCData = () =>
   useQuery({
     queryKey: ['KYC'],
     queryFn: async () => await getAllKYCData(),
-    staleTime: Infinity,
+    staleTime: 3600 * 1000,
   })
 
 export const useAllUsers = () =>
@@ -56,7 +57,7 @@ export const useUserDetails = (userID) =>
   useQuery({
     queryKey: [USERS, userID],
     queryFn: async () => await getUser(userID),
-    staleTime: Infinity,
+    staleTime: 300 * 5 * 1000,
   })
 
 export const useAccountRoles = () =>
@@ -71,4 +72,11 @@ export const useWorkspaceRoles = () =>
     queryKey: [WORKSPACE_ROLES_QUERY_KEY],
     queryFn: async () => await getWorkspaceRoles(),
     staleTime: Infinity,
+  })
+
+export const useWorkspaceInit = () =>
+  useQuery({
+    queryKey: [WORKSPACE_ROLES_QUERY_KEY],
+    queryFn: async () => await initializeWorkspace(),
+    refetchOnMount: true,
   })

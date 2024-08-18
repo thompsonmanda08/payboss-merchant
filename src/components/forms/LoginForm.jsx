@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, StatusMessage } from '../base'
 import { useNetwork } from '@/hooks/useNetwork'
 import { setupUserPreferences } from '@/app/_actions/config-actions'
+import { useQueryClient } from '@tanstack/react-query'
 
 function LoginForm() {
   const { push } = useRouter()
@@ -26,6 +27,7 @@ function LoginForm() {
   } = useAuthStore()
 
   const urlParams = useSearchParams()
+  const queryClient = useQueryClient()
 
   async function handleLogin(e) {
     e.preventDefault()
@@ -48,6 +50,7 @@ function LoginForm() {
 
     const response = await authenticateUser(loginDetails)
     if (response.success) {
+      queryClient.invalidateQueries()
       setAuth(response?.data)
       const loginUrl = urlParams.get('callbackUrl') || '/workspaces'
       push(loginUrl)

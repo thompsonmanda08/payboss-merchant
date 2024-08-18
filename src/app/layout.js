@@ -4,6 +4,7 @@ import '@/styles/tailwind.css'
 import { Toaster } from 'react-hot-toast'
 import { cn } from '@/lib/utils'
 import Providers from './providers'
+import { getUserDetails } from './_actions/config-actions'
 
 export const metadata = {
   title: {
@@ -26,7 +27,9 @@ const lexend = Lexend({
   variable: '--font-lexend',
 })
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const session = await getUserDetails()
+
   return (
     <html
       lang="en"
@@ -56,9 +59,12 @@ export default function RootLayout({ children }) {
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={cn('flex min-h-screen flex-col bg-background font-inter')}
+        className={cn(
+          'flex min-h-screen flex-col bg-background font-inter',
+          inter.className,
+        )}
       >
-        <Providers>
+        <Providers session={session}>
           {children}
           <Toaster
             toastOptions={{
