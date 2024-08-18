@@ -51,7 +51,7 @@ function SelectField({
           }}
           variant="bordered"
           placeholder={placeholder || 'Select'}
-          selectedKeys={[value]}
+          // selectedKeys={[value]}
           value={value}
           onChange={onChange}
           defaultValue={defaultValue}
