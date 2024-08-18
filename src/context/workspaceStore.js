@@ -1,9 +1,15 @@
+import { assignUsersToWorkspace } from '@/app/_actions/user-actions'
 import { notify } from '@/lib/utils'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 const INITIAL_STATE = {
   addedUsers: [],
+  error: {
+    status: false,
+    message: '',
+  },
+  isLoading: false,
 }
 
 const useWorkspaceStore = create(
@@ -13,12 +19,15 @@ const useWorkspaceStore = create(
 
       //SETTERS
       setAddedUsers: (users) => set({ addedUsers: users }),
+      setIsLoading: (status) => set({ isLoading: status }),
+      setError: (error) => set({ error }),
 
       // METHODS AND ACTIONS
 
       handleAddToWorkspace: (user) => {
         // Filter out the user with the matching email, if exists then don't add
         const userExists = get().addedUsers.find((u) => u.ID === user.ID)
+
         if (userExists) {
           notify('error', 'User is already Added!')
           return
@@ -32,14 +41,7 @@ const useWorkspaceStore = create(
 
         set((state) => {
           return {
-            addedUsers: [
-              ...state.addedUsers,
-              user,
-              // {
-              //   ...user,
-              //   workspaceRole: workspaceRoles[1]?.ID,
-              // },
-            ],
+            addedUsers: [...state.addedUsers, user],
           }
         })
 
@@ -84,12 +86,51 @@ const useWorkspaceStore = create(
         })
       },
 
+      handleSubmitAddedUsers: async (workspaceID) => {
+        const { addedUsers } = get()
+        set({
+          isLoading: true,
+          error: { status: false, message: '' },
+        })
+
+        // check if the addedUsers list is empty
+        if (addedUsers.length === 0) {
+          notify('error', 'Please select at least one user')
+          set({
+            isLoading: false,
+          })
+          return
+        }
+
+        // Check is all users in the addedUSers list have a role assigned
+        const userHasNoRole = !addedUsers?.every((user) => user.workspaceRole)
+
+        if (userHasNoRole) {
+          notify('error', 'Please assign a role to all users')
+          set({
+            isLoading: false,
+          })
+          return
+        }
+
+        const usersPayload = addedUsers.map((user) => ({
+          userID: user.ID,
+          roleID: user.workspaceRole,
+        }))
+
+        return await assignUsersToWorkspace(usersPayload, workspaceID)
+      },
+
       handleClearAllSelected: () => {
         // IF NOT SELECTED USERS RETURN
         if (!get().addedUsers.length) return
 
-        set({ addedUsers: [] })
-        notify('success', 'Removed all selected Users!')
+        set({
+          addedUsers: [],
+          error: { status: false, message: '' },
+          isLoading: false,
+        })
+        // notify('success', 'Removed all selected Users!')
       },
 
       // CLear & Reset

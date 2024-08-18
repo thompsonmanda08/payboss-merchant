@@ -18,13 +18,13 @@ import {
 
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 import { notify } from '@/lib/utils'
-import { Button } from '../../ui/Button'
+import { Button } from '@/components/ui/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { UserAvatarComponent } from '../users/UsersTable'
 import { assignUsersToWorkspace } from '@/app/_actions/user-actions'
 import { ScrollArea } from '../../ui/scroll-area'
-import { CardHeader, EmptyState } from '../../base'
+import { CardHeader, EmptyState, StatusMessage } from '@/components/base'
 import Spinner from '../../ui/Spinner'
 import { UserPlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
@@ -61,75 +61,18 @@ function AddUserToWorkspace({
   const { allUsers, workspaceRoles } = useAllUsersAndRoles()
   const router = useRouter()
 
-  // const [addedUsers, setAddedUsers] = useState([])
-  const [error, setError] = useState({
-    status: false,
-    message: '',
-  })
-
   const {
     addedUsers,
+    error,
+    setError,
+    isLoading,
+    setIsLoading,
     handleAddToWorkspace,
     handleRemoveFromWorkspace,
     handleClearAllSelected,
     handleUserRoleChange,
+    handleSubmitAddedUsers,
   } = useWorkspaceStore((state) => state)
-
-  // function handleAddToWorkspace(user) {
-  //   // Filter out the user with the matching email, if exists then don't add
-  //   const userExists = addedUsers.find((u) => u.ID === user.ID)
-  //   if (userExists) {
-  //     notify('error', 'User is already Added!')
-  //     return
-  //   }
-
-  //   // Filter out the user with role == "owner", if exists then don't add
-  //   if (user?.role?.toLowerCase() == 'owner') {
-  //     notify('error', 'Owner is already part of the workspace!')
-  //     return
-  //   }
-
-  //   setAddedUsers((prev) => [
-  //     ...prev,
-  //     {
-  //       ...user,
-  //       workspaceRole: workspaceRoles[1]?.ID,
-  //     },
-  //   ])
-  //   notify('success', `You Added ${user?.first_name}!`)
-  // }
-
-  // function handleRemoveFromWorkspace(user) {
-  //   if (!user || !user.ID) {
-  //     console.error('Invalid user or user ID')
-  //     return
-  //   }
-
-  //   // Filter out the user with the matching ID
-  //   // Update the state with the new users list
-  //   setAddedUsers((prev) => prev.filter((u) => u.ID != user.ID))
-  //   notify('success', `You Removed ${user?.first_name}!`)
-  // }
-
-  // function handleClearAllSelected() {
-  //   setAddedUsers([])
-  //   notify('success', 'Removed all selected Users!')
-  // }
-
-  // function handleUserRoleChange(user, roleID) {
-  //   console.log(roleID)
-  //   console.log(user)
-  //   console.log(addedUsers)
-
-  //   // Map through the users and add the property workspaceRole = roleID to the user with the matching ID and return the other as they are
-
-  //   // console.log(updatedUsers)
-
-  //   // *** SOMETHING IS WRONG WITH THE SETTING FUNCTION
-  //   // if (updatedUsers.length == addedUsers.length) {
-  //   //   setAddedUsers(updatedUsers)
-  //   // }
-  // }
 
   const renderCell = useCallback((user, columnKey) => {
     const cellValue = user[columnKey]
@@ -189,10 +132,11 @@ function AddUserToWorkspace({
         return (
           <>
             <SelectField
-              key={cellValue}
+              key={user?.ID}
               className={'max-w-[200px]'}
               options={workspaceRoles}
               listItemName={'role'}
+              placeholder={'Select Role'}
               name="role"
               value={user?.workspaceRole}
               onChange={(e) => handleUserRoleChange(user, e.target.value)}
@@ -239,24 +183,26 @@ function AddUserToWorkspace({
     }
   }, [])
 
-  function submitAddedUsers() {
-    const response = assignUsersToWorkspace(workspaceID, addedUsers)
+  async function submitAddedUsers() {
+    const response = await handleSubmitAddedUsers(workspaceID)
 
-    if (response.success) {
-      notify('success', 'Users Added!')
-      queryClient.invalidateQueries()
-      onClose()
-      navigateTo(1)
+    if (!response.success) {
+      setError({
+        status: true,
+        message: response?.message || response?.statusText,
+      })
+      notify('error', response?.message)
+      setIsLoading(false)
+      return
     }
 
-    // TODO => HANDLE ERRORS
-    console.log(response)
-    notify('error', response.message)
-    setError({ status: true, message: response.message })
+    notify('success', `Users were added to ${workspaceName}!`)
+    navigateTo(1)
+    onClose()
+    handleClearAllSelected()
+    queryClient.invalidateQueries()
+    return
   }
-
-  // console.log(workspaceRoles)
-  console.log(addedUsers.length)
 
   useEffect(() => {
     // IN CASE I NEED TO DO SOMETHING IN HERE
@@ -264,13 +210,9 @@ function AddUserToWorkspace({
     //
     return () => {
       // queryClient.cancelQueries()
-      // handleClearAllSelected()
+      handleClearAllSelected()
     }
   }, [])
-
-  useEffect(() => {
-    console.log('Changed user role....')
-  }, [addedUsers])
 
   return (
     <Modal
@@ -397,7 +339,12 @@ function AddUserToWorkspace({
                 <Button color="danger" onPress={onClose}>
                   Back
                 </Button>
-                <Button color="primary" onPress={submitAddedUsers}>
+                <Button
+                  color="primary"
+                  isLoading={isLoading}
+                  isDisabled={isLoading || addedUsers.length == 0}
+                  onPress={submitAddedUsers}
+                >
                   Add Selected Users
                 </Button>
               </ModalFooter>
