@@ -13,7 +13,7 @@ export async function createNewUser(newUser) {
       data: newUser,
     })
 
-    if (res.status == 201 || res.status == 200) {
+    if (res.status == 201) {
       return {
         success: true,
         message: res.message,
@@ -22,22 +22,24 @@ export async function createNewUser(newUser) {
       }
     }
 
-    const response = res?.data || res
-
     return {
       success: false,
-      message: response?.error || response?.message,
-      data: null,
+      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      data: res?.data || res,
       status: res.status,
+      statusText: res?.statusText,
     }
   } catch (error) {
     console.error(error)
-
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.statusText ||
+        'Operation Failed!',
+      data: error?.response,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     }
   }
 }
@@ -60,22 +62,24 @@ export async function getAllUsers() {
       }
     }
 
-    const response = res?.data || res
-
     return {
       success: false,
-      message: response?.error || response?.message,
-      data: null,
+      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      data: res?.data || res,
       status: res.status,
+      statusText: res?.statusText,
     }
   } catch (error) {
     console.error(error)
-
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.statusText ||
+        'Operation Failed!',
+      data: error?.response,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     }
   }
 }
@@ -93,7 +97,7 @@ export async function assignUsersToWorkspace(users, workspaceID) {
       url: `merchant/workspace/user/mapping/${workspaceID}`,
       method: 'POST',
       data: {
-        users: [...users],
+        users,
       },
     })
 
@@ -103,24 +107,28 @@ export async function assignUsersToWorkspace(users, workspaceID) {
         message: res.message,
         data: res.data,
         status: res.status,
+        statusText: res.statusText,
       }
     }
 
-    const response = res?.data || res
-
     return {
       success: false,
-      message: response?.error || response?.message,
-      data: null,
+      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      data: res?.data || res,
       status: res.status,
+      statusText: res?.statusText,
     }
   } catch (error) {
     console.error(error)
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.statusText ||
+        'Operation Failed!',
+      data: error?.response,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     }
   }
 }
@@ -147,17 +155,22 @@ export async function getUser(userID) {
 
     return {
       success: false,
-      message: response?.error || response?.message,
-      data: null,
+      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      data: res?.data || res,
       status: res.status,
+      statusText: res?.statusText,
     }
   } catch (error) {
     console.error(error)
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.statusText ||
+        'Operation Failed!',
+      data: error?.response,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     }
   }
 }
