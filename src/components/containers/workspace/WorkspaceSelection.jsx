@@ -11,7 +11,7 @@ import {
 } from '@heroicons/react/24/outline'
 import DropdownButton from '@/components/ui/DropdownButton'
 import Spinner from '@/components/ui/Spinner'
-import useWorkspaces from '@/hooks/useWorkspace'
+import useWorkspaces from '@/hooks/useWorkspaces'
 import { SoftBoxIcon } from '@/components/base'
 
 export default function WorkspaceSelection({ isSelected }) {

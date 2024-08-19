@@ -1,7 +1,7 @@
 'use client'
 import { usePathname } from 'next/navigation'
 import React, { useState, useEffect } from 'react'
-import useWorkspaces from './useWorkspace'
+import useWorkspaces from './useWorkspaces'
 
 const useNavigation = () => {
   const pathname = usePathname()
@@ -11,8 +11,8 @@ const useNavigation = () => {
   const settingsPathname = `${dashboardRoute}/settings`
   const isAccountLevelSettingsRoute = pathname.startsWith('/manage-account')
 
-    const isUserInWorkspace =
-      pathname.split('/')[1] == 'dashboard' && pathname.split('/').length >= 3
+  const isUserInWorkspace =
+    pathname.split('/')[1] == 'dashboard' && pathname.split('/').length >= 3
 
   const pathArr = pathname?.split('/')
   const currentPath =

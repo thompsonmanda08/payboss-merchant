@@ -5,7 +5,7 @@ import { Card } from '@/components/base'
 import { useState } from 'react'
 import CardLoader from '@/components/base/CardLoader'
 import { Input } from '@/components/ui/InputField'
-import useWorkspaces from '@/hooks/useWorkspace'
+import useWorkspaces from '@/hooks/useWorkspaces'
 import useAccountProfile from '@/hooks/useProfileDetails'
 
 function ProfileDetails() {

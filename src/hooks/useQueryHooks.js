@@ -14,6 +14,7 @@ import {
   WORKSPACE_ROLES_QUERY_KEY,
   SETUP_QUERY_KEY,
   WORKSPACES_QUERY_KEY,
+  WORKSPACE_DASHBOARD_QUERY_KEY,
   USERS,
 } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
@@ -74,9 +75,9 @@ export const useWorkspaceRoles = () =>
     staleTime: Infinity,
   })
 
-export const useWorkspaceInit = () =>
+export const useWorkspaceInit = (workspaceID) =>
   useQuery({
-    queryKey: [WORKSPACE_ROLES_QUERY_KEY],
-    queryFn: async () => await initializeWorkspace(),
+    queryKey: [WORKSPACE_DASHBOARD_QUERY_KEY, workspaceID],
+    queryFn: async () => await initializeWorkspace(workspaceID),
     refetchOnMount: true,
   })

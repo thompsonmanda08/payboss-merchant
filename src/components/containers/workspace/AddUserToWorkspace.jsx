@@ -32,7 +32,7 @@ import { ROLES } from '../users/ManagePeople'
 import SelectField from '@/components/ui/SelectField'
 import useWorkspaceStore from '@/context/workspaceStore'
 
-const roleColorMap = {
+export const roleColorMap = {
   owner: 'success',
   admin: 'success',
   member: 'primary',

@@ -1,15 +1,15 @@
 'use client'
+import useAccountProfile from '@/hooks/useProfileDetails'
 import { useSetupConfig } from '@/hooks/useQueryHooks'
 import { DefaultCover } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { Skeleton } from '@nextui-org/react'
+import { Chip, Skeleton } from '@nextui-org/react'
 import Image from 'next/image'
 
 export default function ProfileBanner({ className }) {
-  const { data: response, isLoading, isFetching } = useSetupConfig()
-  const user = response?.data?.userDetails
+  const { user, merchant } = useAccountProfile()
 
-  return isLoading || isFetching ? (
+  return !user || !merchant ? (
     <ProfileBannerLoader className={className} />
   ) : (
     <div
@@ -33,7 +33,14 @@ export default function ProfileBanner({ className }) {
               {`${user?.first_name} ${user?.last_name}`}
             </h2>
             <p className="heading-5 font-semibold capitalize text-slate-200">
-              {user?.merchant + ' (' + user?.role + ')'}
+              {merchant}{' '}
+              <Chip
+                color={roleColorMap[user?.role]}
+                variant="flat"
+                className="ml-2 text-sm font-bold"
+              >
+                <strong>{user?.role}</strong>
+              </Chip>
             </p>
           </div>
         </div>
@@ -43,6 +50,7 @@ export default function ProfileBanner({ className }) {
 }
 
 import React from 'react'
+import { roleColorMap } from '../containers/workspace/AddUserToWorkspace'
 
 function ProfileBannerLoader({ className }) {
   return (

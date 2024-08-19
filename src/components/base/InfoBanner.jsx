@@ -1,8 +1,10 @@
+'use client'
 import React from 'react'
 import { Button } from '../ui/Button'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import useAccountProfile from '@/hooks/useProfileDetails'
+import useDashboard from '@/hooks/useDashboard'
 
 function InfoBanner({
   buttonText,
@@ -16,6 +18,7 @@ function InfoBanner({
   const { infoTextClasses, buttonClasses } = classNames || ''
 
   const { isCompleteKYC, allowUserToSubmitKYC } = useAccountProfile()
+  const { workspaceData } = useDashboard()
 
   return (
     !isCompleteKYC &&

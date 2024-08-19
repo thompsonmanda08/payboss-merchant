@@ -23,6 +23,7 @@ const USERS = 'users-query-data'
 const SETUP_QUERY_KEY = 'setup-query-data'
 const WORKSPACES_QUERY_KEY = 'workspaces-query-data'
 const WORKSPACE_ROLES_QUERY_KEY = 'workspace-role-query-data'
+const WORKSPACE_DASHBOARD_QUERY_KEY = 'dashboard-query-data'
 
 // ANIMATION_VARIANTS
 const staggerContainerVariants = {
@@ -95,4 +96,5 @@ export {
   SETUP_QUERY_KEY,
   WORKSPACES_QUERY_KEY,
   WORKSPACE_ROLES_QUERY_KEY,
+  WORKSPACE_DASHBOARD_QUERY_KEY,
 }

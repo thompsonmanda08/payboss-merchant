@@ -4,35 +4,22 @@ import Spinner from '@/components/ui/Spinner'
 import { cn, notify } from '@/lib/utils'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import React, { useState } from 'react'
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-} from '@nextui-org/react'
-import { Input } from '@/components/ui/InputField'
+import { useDisclosure } from '@nextui-org/react'
 import { createNewWorkspace } from '@/app/_actions/config-actions'
 import { useQueryClient } from '@tanstack/react-query'
 import { SETUP_QUERY_KEY, WORKSPACES_QUERY_KEY } from '@/lib/constants'
 import { usePathname, useRouter } from 'next/navigation'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import useWorkspace from '@/hooks/useWorkspace'
-import useAccountProfile from '@/hooks/useProfileDetails'
+import useWorkspace from '@/hooks/useWorkspaces'
 import WorkspaceItem from './WorkspaceItem'
 import OverlayLoader from '@/components/ui/OverlayLoader'
 import { InfoBanner } from '@/components/base'
-import CreateNewWorkspaceModal from './CreateNewWorkspce'
+import CreateNewWorkspaceModal from './CreateNewWorkspace'
 
 function Workspaces() {
-  const { push } = useRouter()
   const pathname = usePathname()
   const queryClient = useQueryClient()
-  const { activeWorkspace, workspaces, allWorkspaces, isLoading } =
-    useWorkspace()
-
-  const { isOwner, isAccountAdmin } = useAccountProfile()
+  const { workspaces, allWorkspaces, isLoading } = useWorkspace()
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 

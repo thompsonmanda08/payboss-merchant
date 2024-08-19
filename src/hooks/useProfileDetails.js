@@ -14,6 +14,7 @@ const useAccountProfile = () => {
   const businessDetails = kycData?.data?.details || {}
   const documents = kycData?.data?.documents || {}
   const [merchantID, setMerchantID] = useState('')
+  const [merchant, setMerchant] = useState('')
   const [isCompleteKYC, setIsCompleteKYC] = useState('')
   const [KYCStage, setKYCStage] = useState('')
   const [KYCStageID, setKYCStageID] = useState('')
@@ -89,11 +90,20 @@ const useAccountProfile = () => {
     }
   }, [kycData])
 
+  console.log(businessDetails)
+
+  useEffect(() => {
+    if (businessDetails) {
+      setMerchant(businessDetails?.name)
+    }
+  }, [businessDetails])
+
   return {
     user,
     businessDetails,
     businessDocs,
     merchantID,
+    merchant,
     isCompleteKYC,
     KYCStage,
     KYCStageID,

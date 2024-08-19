@@ -3,7 +3,7 @@ import { Card } from '@/components/base'
 import { Switch } from '@nextui-org/switch'
 import useSettingsStore from '@/context/settingsStore'
 import { changeWorkspaceVisibility } from '@/app/_actions/config-actions'
-import useWorkspaces from '@/hooks/useWorkspace'
+import useWorkspaces from '@/hooks/useWorkspaces'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import { useState } from 'react'
 import { notify } from '@/lib/utils'
@@ -45,7 +45,6 @@ function AccountPreferences() {
       sandbox?.ID,
       !isSandboxVisible,
     )
-
 
     if (response.success) {
       queryClient.invalidateQueries([SETUP_QUERY_KEY])
