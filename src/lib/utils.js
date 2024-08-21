@@ -18,7 +18,7 @@ export const notify = (type, message) => toast[type](message)
 export function formatCurrency(amount) {
   const currencyFormat = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'Z<W',
+    currency: 'ZMW',
     minimumFractionDigits: 2,
   })
   return amount ? currencyFormat.format(amount) : ''

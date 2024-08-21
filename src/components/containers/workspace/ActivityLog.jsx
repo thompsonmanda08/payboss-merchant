@@ -13,7 +13,7 @@ export const sampleActivityLogs = [
         created_by: { user_name: 'John Doe' },
         createdAt: '2024-07-01T10:30:00Z',
         content:
-          'Discussed investment opportunities and portfolio performance.',
+          'Deposit made with ref No. 32168651.',
       },
       {
         type: 'Deposit',

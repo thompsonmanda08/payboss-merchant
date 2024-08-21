@@ -62,7 +62,12 @@ function WorkspaceSettings({ workspaceID }) {
       users={userSearchResults}
       workspaceID={workspaceID}
     />,
-    <Wallet key={'wallet-details'} />,
+    <Wallet
+      key={'wallet-details'}
+      workspaceName={selectedWorkspace?.workspace}
+      workspaceID={workspaceID}
+      balance={selectedWorkspace?.balance}
+    />,
   ])
 
   function handleNavigation(index) {

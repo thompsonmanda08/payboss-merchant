@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/InputField'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import React, { useEffect } from 'react'
 import { UploadField } from '../account-verification/DocumentAttachments'
-import { cn, notify } from '@/lib/utils'
+import { cn, formatCurrency, formatDate, notify } from '@/lib/utils'
 import { sampleActivityLogs } from './ActivityLog'
 import { TASK_ICON_BG_COLOR_MAP, TASK_TYPE } from '@/lib/constants'
 import { formatActivityData } from '@/lib/utils'
@@ -12,6 +12,9 @@ import { formatDistance } from 'date-fns'
 import PromptModal from '@/components/base/Prompt'
 import { useDisclosure } from '@nextui-org/react'
 import { uploadPOPDocument } from '@/app/_actions/pocketbase-actions'
+import { submitPOP } from '@/app/_actions/workspace-actions'
+import DateSelectField from '@/components/ui/DateSelectField'
+import { getLocalTimeZone, today } from '@internationalized/date'
 
 const activityLogStore = {
   activityLogs: sampleActivityLogs,
@@ -19,11 +22,12 @@ const activityLogStore = {
 
 const POP_INIT = {
   amount: 0,
-  refNo: '',
-  file: null,
+  bank_rrn: '',
+  date_of_deposit: '',
+  url: '',
 }
 
-function Wallet() {
+function Wallet({ workspaceID, workspaceName, balance }) {
   const [isLoading, setIsLoading] = React.useState(false)
   const { isOpen, onClose, onOpenChange, onOpen } = useDisclosure()
   const [formData, setFormData] = React.useState(POP_INIT)
@@ -40,21 +44,26 @@ function Wallet() {
     }))
   }
   const isDisabled =
-    !formData?.amount ||
-    formData?.amount < 0 ||
-    !formData?.refNo ||
-    !formData?.file?.file_url ||
+    // !formData?.amount ||
+    // formData?.amount < 0 ||
+    !formData?.date_of_deposit ||
+    !formData?.bank_rrn ||
+    !formData?.url ||
     isLoading
 
   async function handleFileUpload(file, recordID) {
+    setIsLoading(true)
     setError({ message: '', status: '' })
 
     let response = await uploadPOPDocument(file, recordID)
+
     if (response.success) {
+      setIsLoading(false)
       notify('success', response?.message)
       return response?.data
     }
 
+    setIsLoading(false)
     notify('error', response.message)
     return null
   }
@@ -62,7 +71,7 @@ function Wallet() {
   async function handleWalletPreFund() {
     setIsLoading(true)
 
-    if (!formData.file?.file_url) {
+    if (!formData.url) {
       notify('error', 'Attach proof of payment!')
       setError({
         message: 'Verify that you have attached a proof of payment!',
@@ -73,14 +82,24 @@ function Wallet() {
       return
     }
 
-    setTimeout(() => {
-      console.log(formData)
-      notify('success', 'Completed successfully!')
+    const response = await submitPOP(formData, workspaceID)
+
+    if (response.success) {
+      notify('success', 'POP Completed successfully!')
       setIsLoading(false)
       setFormData(POP_INIT)
       onClose()
-    }, 3000)
-    // TODO: send request to pre-fund wallet
+      setIsLoading(false)
+      return
+    }
+
+    setError({
+      status: true,
+      message: response?.message,
+    })
+    notify('error', response?.message)
+    setIsLoading(false)
+    return
   }
 
   return (
@@ -88,7 +107,11 @@ function Wallet() {
       <section role="wallet-section" className="">
         <Card className="container flex w-full flex-col items-start justify-center gap-8 md:flex-row">
           <div className="flex w-full max-w-md flex-1 flex-col gap-4">
-            <Balance title={'PayBoss Wallet'} amount={'K10, 500'} isLandscape />
+            <Balance
+              title={`${workspaceName} Wallet`}
+              amount={formatCurrency(balance)}
+              isLandscape
+            />
             <div
               className={cn(
                 'flex w-full flex-col gap-y-4 p-[25px] lg:border lg:border-y-0 lg:border-l-0 lg:border-border',
@@ -98,20 +121,56 @@ function Wallet() {
                 <p className="text-[14px] font-semibold text-slate-800">
                   Deposit funds into your PayBoss Wallet
                 </p>
-                <Input
+
+                {/* <Input
                   type="number"
                   label="Amount"
                   value={formData.amount}
                   placeholder="Amount"
                   onChange={(e) => updateFormData({ amount: e.target.value })}
                   name="amount"
-                />
+                /> */}
                 <Input
-                  placeholder="Receipt No: "
+                  placeholder="Bank Receipt No. "
                   label="Reference Number"
-                  value={formData.refNo}
-                  onChange={(e) => updateFormData({ refNo: e.target.value })}
-                  name="refNo"
+                  value={formData.bank_rrn}
+                  onChange={(e) => updateFormData({ bank_rrn: e.target.value })}
+                  name="bank_rrn"
+                />
+                <DateSelectField
+                  label={'Date of Deposit'}
+                  className="max-w-sm"
+                  description={'Date the funds were deposited'}
+                  defaultValue={formData?.date_of_deposit}
+                  value={
+                    formData?.date_of_deposit?.split('').length > 9
+                      ? formData?.date_of_deposit
+                      : undefined
+                  }
+                  maxValue={today(getLocalTimeZone())}
+                  labelPlacement={'outside'}
+                  onChange={(date) => {
+                    updateFormData({
+                      date_of_deposit: formatDate(date, 'YYYY-MM-DD'),
+                    })
+                  }}
+                />
+
+                <UploadField
+                  label="Proof of Payment"
+                  handleFile={async (file) => {
+                    const file_record = await handleFileUpload(
+                      file,
+                      formData.file?.file_record_id,
+                    )
+                    updateFormData({ url: file_record?.file_url })
+                  }}
+                  acceptedFiles={{
+                    'application/pdf': [],
+                    'image/png': [],
+                    'image/jpeg': [],
+                    'image/jpg': [],
+                  }}
                 />
                 {error.status && (
                   <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
@@ -121,24 +180,13 @@ function Wallet() {
                     />
                   </div>
                 )}
-                <UploadField
-                  label="Proof of Payment"
-                  handleFile={async (file) => {
-                    const file_record = await handleFileUpload(
-                      file,
-                      formData.file?.file_record_id,
-                    )
-                    updateFormData({ file: file_record })
-                  }}
-                  acceptedFiles={{
-                    'application/pdf': [],
-                    'image/png': [],
-                    'image/jpeg': [],
-                    'image/jpg': [],
-                  }}
-                />
 
-                <Button isDisabled={isDisabled} type="button" onClick={onOpen}>
+                <Button
+                  isDisabled={isDisabled}
+                  isLoading={isLoading}
+                  type="button"
+                  onClick={onOpen}
+                >
                   Pre-Fund Wallet
                 </Button>
               </div>
@@ -160,13 +208,10 @@ function Wallet() {
           isDisabled={isLoading}
           isLoading={isLoading}
         >
-          <p className="leading-2 m-0">
-            <strong>Are you sure you want to perform this action?</strong>
-          </p>
-          <p className="text-sm text-slate-700">
-            Your wallet will be credited with
+          <p className="text-sm text-slate-800">
+            Your wallet will be credited with the amount you deposited with ref.
             <code className="mx-1 rounded-md bg-primary/10 p-1 px-2 font-bold text-primary-700">
-              ZMW {formData?.amount}
+              {formData?.bank_rrn}
             </code>
             as soon as your transaction is verified, This will take a few
             minutes.
