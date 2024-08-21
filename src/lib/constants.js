@@ -3,6 +3,7 @@ import DefaultCover from '@/images/profile-cover.jpg'
 import {
   ArrowRightCircleIcon,
   CircleStackIcon,
+  WalletIcon,
 } from '@heroicons/react/24/outline'
 
 const BASE_URL = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL
@@ -24,6 +25,7 @@ const SETUP_QUERY_KEY = 'setup-query-data'
 const WORKSPACES_QUERY_KEY = 'workspaces-query-data'
 const WORKSPACE_ROLES_QUERY_KEY = 'workspace-role-query-data'
 const WORKSPACE_DASHBOARD_QUERY_KEY = 'dashboard-query-data'
+const WORKSPACE_MEMBERS_QUERY_KEY = 'members-query-data'
 
 // ANIMATION_VARIANTS
 const staggerContainerVariants = {
@@ -65,6 +67,48 @@ const PAYMENT_SERVICE_TYPES = [
   },
 ]
 
+const TASK_ICON_BG_COLOR_MAP = {
+  Call: 'bg-[#F7F6FF]',
+  Task: 'bg-[#FFF8F1]',
+  Note: 'bg-[#92b76229]',
+  Email: 'bg-[#F0FFFF]',
+  Tag: 'bg-[#F7F6FF]',
+  Deposit: 'bg-[#58FF5F]',
+}
+
+const TASK_TYPE = {
+  // Call: {
+  //   icon: <DevicePhoneMobileIcon className="h-5 w-5" />,
+  //   color: 'violet-800',
+  //   label: 'Call',
+  // },
+  // Task: {
+  //   icon: <DocumentArrowDownIcon className="h-5 w-5" />,
+  //   color: 'orange-900',
+  //   label: 'Task',
+  // },
+  // Note: {
+  //   icon: <PencilSquareIcon className="h-5 w-5" />,
+  //   color: 'orange-900',
+  //   label: 'Note',
+  // },
+  // Email: {
+  //   icon: <InboxArrowDownIcon className="h-5 w-5" />,
+  //   color: 'cyan-900',
+  //   label: 'Email',
+  // },
+  // Tag: {
+  //   icon: <TagIcon className="h-5 w-5" />,
+  //   color: 'black/60',
+  //   label: 'Tag',
+  // },
+  Deposit: {
+    icon: <WalletIcon className="h-5 w-5" />,
+    color: 'green-800',
+    label: 'Wallet Pre-fund',
+  },
+}
+
 // ***************** EXPORTS ******************** //
 
 export {
@@ -83,6 +127,8 @@ export {
   ZAMTEL_NO,
   PASSWORD_PATTERN,
   placeHolderImage,
+  TASK_ICON_BG_COLOR_MAP,
+  TASK_TYPE,
 
   // ANIMATIONS
   staggerContainerItemVariants,
@@ -97,4 +143,5 @@ export {
   WORKSPACES_QUERY_KEY,
   WORKSPACE_ROLES_QUERY_KEY,
   WORKSPACE_DASHBOARD_QUERY_KEY,
+  WORKSPACE_MEMBERS_QUERY_KEY,
 }

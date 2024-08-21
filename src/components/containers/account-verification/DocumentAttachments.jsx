@@ -217,7 +217,7 @@ export default function DocumentAttachments({ navigateToPage }) {
   )
 }
 
-function UploadField({ label, handleFile }) {
+export function UploadField({ label, handleFile, acceptedFiles }) {
   return (
     <motion.div
       key={'step-2-1'}
@@ -232,6 +232,7 @@ function UploadField({ label, handleFile }) {
         className={' min-h-8 px-2'}
         otherAcceptedFiles={{
           'application/pdf': [],
+          ...acceptedFiles,
         }}
         onChange={(file) => handleFile(file)}
       />

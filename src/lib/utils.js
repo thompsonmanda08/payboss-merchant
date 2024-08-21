@@ -24,6 +24,32 @@ export function formatCurrency(amount) {
   return amount ? currencyFormat.format(amount) : ''
 }
 
+export const formatActivityData = (activityLog) => {
+  const groupedData = {}
+
+  activityLog.forEach((activity) => {
+    activity.data.forEach((item) => {
+      const createdAt = new Date(item.createdAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+      if (!groupedData[createdAt]) {
+        groupedData[createdAt] = []
+      }
+
+      groupedData[createdAt].push(item)
+    })
+  })
+
+  const result = Object.keys(groupedData).map((date) => ({
+    title: date,
+    data: groupedData[date],
+  }))
+
+  return result
+}
+
 export function formatDate(inputDate, dateStyle = '') {
   if (dateStyle === 'YYYY-MM-DD') {
     const date = new Date(inputDate)
