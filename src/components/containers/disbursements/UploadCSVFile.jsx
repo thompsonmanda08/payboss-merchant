@@ -18,6 +18,7 @@ const UploadCSVFile = ({ navigateForward }) => {
       navigateForward()
       return
     }
+
     notify('error', 'A valid file is required!')
   }
 
@@ -70,7 +71,13 @@ const UploadCSVFile = ({ navigateForward }) => {
         </div>
 
         <div className="flex h-1/6 w-full items-end justify-end gap-4">
-          <Button onClick={handleProceed}>Next</Button>
+          <Button
+            isLoading={isLoading}
+            isDisabled={isLoading}
+            onClick={handleProceed}
+          >
+            Next
+          </Button>
         </div>
       </div>
     </>

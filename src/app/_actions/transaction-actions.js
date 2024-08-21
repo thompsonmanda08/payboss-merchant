@@ -12,29 +12,35 @@ export async function getAllDirectBulkBatches(workspaceID) {
       url: `transaction/direct/payments/bulk/batches/${workspaceID}`,
     })
 
-    if (res.status === 200) {
+    if (res.status == 200) {
       return {
         success: true,
         message: res.message,
         data: res.data,
         status: res.status,
+        statusText: res.statusText,
       }
     }
 
-    const response = res?.data || res
-
     return {
       success: false,
-      message: response?.error || response?.message,
-      data: null,
+      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      data: res?.data || res,
       status: res.status,
+      statusText: res?.statusText,
     }
   } catch (error) {
+    console.error(error)
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.data?.error ||
+        error?.response?.statusText ||
+        'Operation Failed!',
+      data: error?.response,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     }
   }
 }
@@ -45,29 +51,35 @@ export async function getDirectBulkBatchDetails(batchID) {
       url: `transaction/direct/payments/bulk/batch/details/${batchID}`,
     })
 
-    if (res.status === 200) {
+    if (res.status == 200) {
       return {
         success: true,
         message: res.message,
         data: res.data,
         status: res.status,
+        statusText: res.statusText,
       }
     }
 
-    const response = res?.data || res
-
     return {
       success: false,
-      message: response?.error || response?.message,
-      data: null,
+      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      data: res?.data || res,
       status: res.status,
+      statusText: res?.statusText,
     }
   } catch (error) {
+    console.error(error)
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.data?.error ||
+        error?.response?.statusText ||
+        'Operation Failed!',
+      data: error?.response,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     }
   }
 }
@@ -81,35 +93,42 @@ export async function reviewBatch(batchID, reviewDetails) {
       data: reviewDetails,
     })
 
-    if (res.status === 200) {
+    if (res.status == 200) {
       return {
         success: true,
         message: res.message,
         data: res.data,
         status: res.status,
+        statusText: res.statusText,
       }
     }
 
-    const response = res?.data || res
-
     return {
       success: false,
-      message: response?.error || response?.message,
-      data: null,
+      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      data: res?.data || res,
       status: res.status,
+      statusText: res?.statusText,
     }
   } catch (error) {
+    console.error(error)
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.data?.error ||
+        error?.response?.statusText ||
+        'Operation Failed!',
+      data: error?.response,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     }
   }
 }
 
 export async function initializeBulkTransaction(workspaceID, transactionData) {
   // const { batch_name, url } = transactionData
+  console.log(transactionData)
 
   try {
     const res = await authenticatedService({
@@ -118,29 +137,36 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
       data: transactionData,
     })
 
-    if (res.status === 200) {
+    if (res.status == 200) {
       return {
         success: true,
         message: res.message,
         data: res.data,
         status: res.status,
+        statusText: res.statusText,
       }
     }
 
-    const response = res?.data || res
-
     return {
       success: false,
-      message: response?.error || response?.message,
-      data: null,
+      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      data: res?.data || res,
       status: res.status,
+      statusText: res?.statusText,
     }
   } catch (error) {
+    console.error(error)
+    console.log(error)
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.data?.error ||
+        error?.response?.statusText ||
+        'Operation Failed!',
+      data: error?.response,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     }
   }
 }

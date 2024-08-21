@@ -22,7 +22,8 @@ function CreatePayment({ params }) {
   }
 
   if (type === 'single') {
-    return <div>CreatePayment: Single</div>
+    // return <div>CreatePayment: Single</div>
+    return <NotFound />
   }
   return <NotFound />
 }

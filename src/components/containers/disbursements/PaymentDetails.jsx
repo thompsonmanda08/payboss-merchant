@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Input } from '@/components/ui/InputField'
 import { Button } from '@/components/ui/Button'
@@ -7,32 +7,75 @@ import { notify } from '@/lib/utils'
 import { BanknotesIcon } from '@heroicons/react/24/outline'
 import { useSearchParams } from 'next/navigation'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
+import useDashboard from '@/hooks/useDashboard'
+import useWorkspaces from '@/hooks/useWorkspaces'
+import { initializeBulkTransaction } from '@/app/_actions/transaction-actions'
+import { StatusMessage } from '@/components/base'
 
 const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
-  const { setLoading, updatePaymentFields, paymentAction } = usePaymentsStore()
+  const {
+    setLoading,
+    loading,
+    updatePaymentFields,
+    setError,
+    error,
+    paymentAction,
+  } = usePaymentsStore()
+  const { workspaceUserRole } = useDashboard()
+  const { workspaceID } = useWorkspaces()
 
   const urlParams = useSearchParams()
   const service = urlParams.get('service')
 
   const selectedActionType = PAYMENT_SERVICE_TYPES[0]
 
-  function handleProceed() {
+  async function handleProceed() {
+    setLoading(true)
     if (
-      paymentAction?.batchName !== '' &&
-      paymentAction?.batchName !== (null || undefined) &&
-      paymentAction?.batchName?.length > 3
+      paymentAction?.batch_name == '' &&
+      paymentAction?.batch_name?.length < 3
     ) {
-      setLoading(true)
-      navigateForward()
+      setLoading(false)
+      notify('error', 'A valid filename is required!')
       return
     }
-    notify('error', 'A valid filename is required!')
+
+    // Create payment batch here if user is create access
+    if (workspaceUserRole.create) {
+      const response = await initializeBulkTransaction(
+        workspaceID,
+        paymentAction,
+      )
+
+      if (response.success) {
+        notify('success', 'Payment Batch Created!')
+        navigateForward() // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
+        setLoading(false)
+        return
+      }
+
+      notify('error', 'Failed to create payment batch!')
+      setError({ status: true, message: response.message })
+      notify('error', response.message)
+      setLoading(false)
+      return
+    }
+
+    // If the user cannot create then they are unauthorized
+    setLoading(false)
+    notify('error', 'Unauthorized!')
+    return
   }
 
   function handleBackwardsNavigation() {
+    // Set the file to null so that the user can upload again
     updatePaymentFields({ file: null })
     navigateBackwards()
   }
+
+  useEffect(() => {
+    setError({ status: false, message: '' })
+  }, [paymentAction, navigateBackwards])
 
   return (
     <div className="flex h-full w-full flex-col justify-between gap-4">
@@ -50,28 +93,35 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
           <p>{service}</p>
         </div>
       </div>
-      {/* <SelectField
-        name={'paymentAction'}
-        label={'Payment Action'}
-        options={[1, 2, 3, 4, 5]}
-      /> */}
 
       <Input
         label={'Batch Name'}
-        value={paymentAction?.batchName}
+        value={paymentAction?.batch_name}
         onChange={(e) => {
-          updatePaymentFields({ batchName: e.target.value })
+          updatePaymentFields({ batch_name: e.target.value })
         }}
       />
+      {error?.status && (
+        <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
+          <StatusMessage error={error.status} message={error.message} />
+        </div>
+      )}
       <div className="mt-4 flex h-1/6 w-full items-end justify-end gap-4">
         <Button
           className={'font-medium text-primary'}
           variant="outline"
           onClick={handleBackwardsNavigation}
+          isDisabled={loading}
         >
           Back
         </Button>
-        <Button onClick={handleProceed}>Validate Batch</Button>
+        <Button
+          isDisabled={loading}
+          isLoading={loading}
+          onClick={handleProceed}
+        >
+          Validate Batch
+        </Button>
       </div>
     </div>
   )

@@ -6,6 +6,11 @@ const INITIAL_STATE = {
     url: '',
   },
 
+  error: {
+    status: false,
+    message: '',
+  },
+
   bulkPayments: [],
   openPaymentsModal: false,
   openAllRecordsModal: false,
@@ -20,6 +25,9 @@ const usePaymentsStore = create((set, get) => ({
 
   // METHODS AND ACTIONS
   setOpenPaymentsModal: (open) => set({ openPaymentsModal: open }),
+  setBulkPayments: (bulkPayments) => set({ bulkPayments }),
+  setPaymentAction: (action) => set({ paymentAction: action }),
+  setError: (error) => set({ error }),
   setOpenAllRecordsModal: (open) => set({ openAllRecordsModal: open }),
   setOpenValidRecordsModal: (open) => set({ openValidRecordsModal: open }),
   setOpenInvalidRecordsModal: (open) => set({ openInvalidRecordsModal: open }),
