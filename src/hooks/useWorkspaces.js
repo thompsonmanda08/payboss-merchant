@@ -1,6 +1,6 @@
 'use client'
 import { usePathname } from 'next/navigation'
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useGetWorkspaces, useSetupConfig } from './useQueryHooks'
 
 const useWorkspaces = () => {
@@ -8,21 +8,29 @@ const useWorkspaces = () => {
   const [userInSandbox, setUserInSandbox] = useState(false)
   const [activeWorkspace, setActiveWorkspace] = useState({})
   const [isSandboxVisible, setIsSandboxVisible] = useState(false)
-  const { data: workspacesData } = useGetWorkspaces()
-  const { data: setup, isFetching, isLoading } = useSetupConfig()
-
-  // const { data: workspaceUserData, isFetching, isLoading } = useWorkspaceInit()
+  const {
+    data: workspacesData,
+    isFetching: fetchingWorkspaces,
+    isLoading: loadingWorkspaces,
+  } = useGetWorkspaces()
+  const {
+    data: setup,
+    isFetching: fetchingSetup,
+    isLoading: loadingSetup,
+  } = useSetupConfig()
 
   const workspaces = setup?.data?.workspaces || []
   const allWorkspaces = workspacesData?.data?.workspaces || []
 
-  // const workspaceUser = workspaceUserData?.data.user
   // const isWorkspaceAdmin =
   //   workspaceUserData?.data?.role.toLowerCase() == 'admin'
   // const isWorkspaceMember =
   //   workspaceUserData?.data?.role.toLowerCase() == 'member'
   // const isWorkspaceGuest =
   //   workspaceUserData?.data?.role.toLowerCase() == 'guest'
+
+  const isFetching = fetchingSetup || fetchingWorkspaces
+  const isLoading = loadingSetup || loadingWorkspaces
 
   const isUserInWorkspace =
     pathname.split('/')[1] == 'dashboard' && pathname.split('/').length >= 3
@@ -60,6 +68,8 @@ const useWorkspaces = () => {
   // console.log(workspaces)
 
   return {
+    isFetching,
+    isLoading,
     activeWorkspace,
     allWorkspaces,
     workspaces,
@@ -68,8 +78,6 @@ const useWorkspaces = () => {
     isSandboxVisible,
     setIsSandboxVisible,
     userInSandbox,
-    isFetching,
-    isLoading,
   }
 }
 

@@ -7,7 +7,10 @@ import {
   getWorkspaceRoles,
 } from '@/app/_actions/config-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
-import { initializeWorkspace } from '@/app/_actions/workspace-actions'
+import {
+  getWorkspaceMembers,
+  initializeWorkspace,
+} from '@/app/_actions/workspace-actions'
 import {
   CONFIGS_QUERY_KEY,
   USER_ROLES_QUERY_KEY,
@@ -15,6 +18,7 @@ import {
   SETUP_QUERY_KEY,
   WORKSPACES_QUERY_KEY,
   WORKSPACE_DASHBOARD_QUERY_KEY,
+  WORKSPACE_MEMBERS_QUERY_KEY,
   USERS,
 } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
@@ -31,6 +35,7 @@ export const useSetupConfig = () =>
     queryKey: [SETUP_QUERY_KEY],
     queryFn: async () => await getUserSetupConfigs(),
     staleTime: 3600 * 1000,
+    refetchOnMount: true,
   })
 
 export const useGetWorkspaces = () =>
@@ -79,5 +84,12 @@ export const useWorkspaceInit = (workspaceID) =>
   useQuery({
     queryKey: [WORKSPACE_DASHBOARD_QUERY_KEY, workspaceID],
     queryFn: async () => await initializeWorkspace(workspaceID),
+    refetchOnMount: true,
+  })
+
+export const useWorkspaceMembers = (workspaceID) =>
+  useQuery({
+    queryKey: [WORKSPACE_MEMBERS_QUERY_KEY, workspaceID],
+    queryFn: async () => await getWorkspaceMembers(workspaceID),
     refetchOnMount: true,
   })

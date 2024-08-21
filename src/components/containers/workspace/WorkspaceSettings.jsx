@@ -6,7 +6,6 @@ import { Tabs } from '@/components/base'
 import UsersTable from '../users/UsersTable'
 import WorkspaceDetails from './WorkspaceDetails'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import { USERS } from '@/app/dashboard/[workspaceID]/data/sampleData'
 import { SearchOrInviteUsers } from '../users/ManagePeople'
 import CreateNewUserModal from '../users/CreateNewUserModal'
 import { useDisclosure } from '@nextui-org/react'
@@ -16,6 +15,7 @@ import useAccountProfile from '@/hooks/useProfileDetails'
 import useNavigation from '@/hooks/useNavigation'
 import Wallet from './Wallet'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
+import { useWorkspaceMembers } from '@/hooks/useQueryHooks'
 
 const TABS = [
   { name: 'General', index: 0 },
@@ -26,20 +26,23 @@ const TABS = [
 
 function WorkspaceSettings({ workspaceID }) {
   const { back } = useRouter()
-  const { user } = useAccountProfile()
+  const [searchQuery, setSearchQuery] = useState('')
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  // const { user } = useAccountProfile()
   const { isUserInWorkspace } = useNavigation()
   const { isOwner, isAccountAdmin } = useAccountProfile()
-  const { allUsers } = useAllUsersAndRoles()
+  // const { allUsers } = useAllUsersAndRoles()
 
   const { allWorkspaces } = useWorkspaces()
+  const { data: members } = useWorkspaceMembers(workspaceID)
+
+  const workspaceUsers = members?.data?.users || []
+
   const selectedWorkspace = allWorkspaces.find(
     (workspace) => workspace.ID === workspaceID,
   )
 
-  const [searchQuery, setSearchQuery] = useState('')
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-
-  const userSearchResults = USERS?.filter((user) => {
+  const userSearchResults = workspaceUsers?.filter((user) => {
     return (
       user?.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user?.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -77,6 +80,8 @@ function WorkspaceSettings({ workspaceID }) {
           color="light"
           className={'text-primary sm:w-auto sm:max-w-fit'}
           onClick={() => back()}
+          // as={Link}
+          // href={'/manage-account/workspaces'}
         >
           <ArrowUturnLeftIcon className="h-5 w-5" /> Return to Workspaces
         </Button>
