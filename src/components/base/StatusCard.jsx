@@ -19,7 +19,7 @@ function StatusCard({
   IconColor = '#4c5cf7',
 }) {
   return (
-    <div className="flex w-full min-w-[300px] flex-1 flex-col rounded-md border border-primary/30 bg-card p-5 shadow-xl shadow-slate-200/10">
+    <div className="flex w-full min-w-[300px] flex-1 flex-col overflow-clip rounded-md border border-primary/30 bg-card p-5 shadow-xl shadow-slate-200/10">
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
           <p className="text-sm text-foreground/60 md:text-base lg:text-lg ">

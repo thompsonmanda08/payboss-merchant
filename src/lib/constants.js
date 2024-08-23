@@ -67,6 +67,8 @@ const PAYMENT_SERVICE_TYPES = [
   },
 ]
 
+const PAYMENT_SERVICE = ['direct', 'voucher']
+
 const TASK_ICON_BG_COLOR_MAP = {
   Call: 'bg-[#F7F6FF]',
   Task: 'bg-[#FFF8F1]',
@@ -119,6 +121,7 @@ export {
   USER_SESSION,
   WORKSPACE_SESSION,
   PAYMENT_SERVICE_TYPES,
+  PAYMENT_SERVICE,
 
   //
   DefaultCover,
