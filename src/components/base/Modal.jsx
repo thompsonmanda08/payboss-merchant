@@ -65,7 +65,7 @@ function Modal({
           variants={overlayVariants}
           transition={{ duration: 0.25 }}
           onClick={dismissModal}
-          className="absolute inset-0 z-[999] flex h-screen w-full items-center justify-center bg-slate-800/50"
+          className="absolute inset-0 z-50 flex h-screen w-full items-center justify-center bg-slate-800/50"
         >
           <motion.div
             initial="hidden"
@@ -79,7 +79,7 @@ function Modal({
             }}
             onClick={(e) => e.stopPropagation()}
             className={cn(
-              'z-[999] flex w-full flex-col items-center justify-between gap-1 rounded-lg bg-white p-4',
+              'z-10 flex w-full flex-col items-center justify-between gap-1 rounded-lg bg-white p-4',
               className,
             )}
           >
