@@ -122,9 +122,7 @@ export function Header({ session }) {
       <Container className={'w-full'}>
         <nav className="relative z-50 flex w-full justify-between">
           <div className="flex items-center md:gap-x-12">
-            <Link href="/" aria-label="Home">
-              <Logo className="h-10 w-auto" />
-            </Link>
+            <Logo aria-label="Home" className="h-10 w-auto" />
             <div className="hidden md:flex md:gap-x-6">
               <NavLink href="#features">Features</NavLink>
               <NavLink href="#why-payboss">Why PayBoss</NavLink>

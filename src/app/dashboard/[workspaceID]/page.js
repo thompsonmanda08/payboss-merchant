@@ -1,6 +1,6 @@
 import { Balance, Card, PaymentMethods, SimpleStats } from '@/components/base'
 import ReportsBarChart from '@/components/charts/ReportsBarChart'
-import { TransactionsTable } from '@/components/containers'
+// import { TransactionsTable } from '@/components/containers'
 import React, { Suspense } from 'react'
 import reportsBarChartData from './data/reportsBarChartData'
 import { ArrowUpIcon } from '@heroicons/react/24/outline'
@@ -82,13 +82,8 @@ function DashboardHome() {
           />
           <RecentTransactions />
         </div>
-        <div className="grid grid-cols-10 gap-6">
-          <div className="col-span-6">
-            <Batches />
-          </div>
-          <div className="col-span-4 flex">
-            <RecentTransactions />
-          </div>
+        <div className="flex w-full gap-6">
+          <Batches />
         </div>
       </div>
     </Suspense>
@@ -111,7 +106,7 @@ function RecentTransactions() {
             <ChevronRightIcon className="h-6 w-6" />
           </div>
         </div>
-        <TransactionsTable limit={5} />
+        {/* <TransactionsTable limit={5} /> */}
       </div>
     </Card>
   )

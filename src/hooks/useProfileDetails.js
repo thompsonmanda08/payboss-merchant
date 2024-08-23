@@ -90,8 +90,6 @@ const useAccountProfile = () => {
     }
   }, [kycData])
 
-  console.log(businessDetails)
-
   useEffect(() => {
     if (businessDetails) {
       setMerchant(businessDetails?.name)

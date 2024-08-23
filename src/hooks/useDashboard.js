@@ -16,7 +16,6 @@ const useDashboard = () => {
 
   const { data: workspaceData } = useWorkspaceInit(workspaceID)
 
-  console.log(workspaceData)
   const workspaceUserRole = workspaceData?.data
 
   return { workspaceData, workspaceUserRole }

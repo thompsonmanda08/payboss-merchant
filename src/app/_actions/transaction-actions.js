@@ -1,9 +1,8 @@
 'use server'
 
 import authenticatedService from '@/lib/authenticatedService'
-import { getUserSession } from '@/lib/session'
 
-export async function getAllDirectBulkBatches(workspaceID) {
+export async function getAllDirectBulkTransactions(workspaceID) {
   // const session = await getUserSession()
   // const merchantID = session?.user?.merchantID
 
@@ -45,7 +44,7 @@ export async function getAllDirectBulkBatches(workspaceID) {
   }
 }
 
-export async function getDirectBulkBatchDetails(batchID) {
+export async function getDirectBulkTransactionDetails(batchID) {
   try {
     const res = await authenticatedService({
       url: `transaction/direct/payments/bulk/batch/details/${batchID}`,
@@ -130,6 +129,85 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
       url: `transaction/direct/payments/bulk/${workspaceID}`,
       method: 'POST',
       data: transactionData,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+        statusText: res.statusText,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}
+
+export async function updateInvalidDirectBulkTransactionDetail(
+  transactionID,
+  transactionData,
+) {
+  // const { batch_name, url } = transactionData
+
+  try {
+    const res = await authenticatedService({
+      url: `transaction/direct/payments/bulk/${transactionID}`,
+      method: 'PATCH',
+      data: transactionData,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+        statusText: res.statusText,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}
+
+export async function submitBatchForReview(transactionID, transactionData) {
+  // const { batch_name, url } = transactionData
+
+  try {
+    const res = await authenticatedService({
+      url: `transaction/direct/payments/bulk/review-submission/${batchID}`,
+      method: 'POST',
+      data: batch,
     })
 
     if (res.status == 200) {

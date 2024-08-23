@@ -16,19 +16,29 @@ function RecordDetailsViewer() {
     batchDetails,
   } = usePaymentsStore()
 
+  async function handleConfirmationClose() {
+    // TODO => HANDLE RESUBMISSION FOR INVALID RECORDS
+    // If there are invalid records, open the modal again with the same data
+    // if (batchDetails.invalid.length > 0) {
+    //   const response = await submitInvalidRecordsForReview()
+    // }
+
+    closeRecordsModal()
+  }
+
   return (
     <Modal
       show={
         openInvalidRecordsModal || openValidRecordsModal || openAllRecordsModal
       }
       onClose={closeRecordsModal}
-      onConfirm={closeRecordsModal}
+      onConfirm={handleConfirmationClose}
       title={
-        openAllRecordsModal
-          ? 'All Records'
+        openInvalidRecordsModal
+          ? 'Invalid Records'
           : openValidRecordsModal
             ? 'Valid Records'
-            : 'Invalid Records'
+            : 'All Records'
       }
       infoText={
         openAllRecordsModal

@@ -1,15 +1,11 @@
 'use client'
 import React, { useEffect } from 'react'
 import { Input } from '@/components/ui/InputField'
-import { Switch } from '@nextui-org/switch'
 import { Button } from '../ui/Button'
-import Link from 'next/link'
 import useAuthStore from '@/context/authStore'
 import { authenticateUser } from '@/app/_actions/auth-actions'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, StatusMessage } from '../base'
-import { useNetwork } from '@/hooks/useNetwork'
-import { setupUserPreferences } from '@/app/_actions/config-actions'
 import { useQueryClient } from '@tanstack/react-query'
 
 function LoginForm() {
@@ -79,7 +75,7 @@ function LoginForm() {
 
   return (
     <Card className="mx-auto w-full max-w-sm flex-auto p-6 ">
-      <form role="form" onSubmit={handleLogin} className="flex flex-col gap-4">
+      <form role="form" onSubmit={handleLogin} className="flex flex-col gap-2">
         <Input
           placeholder="Enter your email or username"
           aria-label="Email"
@@ -104,33 +100,14 @@ function LoginForm() {
             updateLoginDetails({ password: e.target.value })
           }}
         />
-        {/* <div className="flex items-center justify-between text-gray-500">
-          <div className="flex items-center justify-start gap-1">
-            <Switch size="sm" />
-            <label
-              className="cursor-pointer select-none text-sm font-normal"
-              htmlFor="rememberMe"
-            >
-              Remember me
-            </label>
-          </div>
-          <Link
-            href={'#'}
-            className="px-2 pb-0.5 text-sm font-medium  transition-all duration-300 ease-in-out hover:text-primary"
-          >
-            Forgot Password?
-          </Link>
-        </div> */}
-        <div className="">
-          <Button
-            type="submit"
-            isLoading={isLoading}
-            loadingText={'Signing In...'}
-            className={'mt-2 w-full'}
-          >
-            Sign in
-          </Button>
-        </div>
+        <Button
+          type="submit"
+          isLoading={isLoading}
+          loadingText={'Signing In...'}
+          className={'mt-4 w-full'}
+        >
+          Sign in
+        </Button>
       </form>
       {error && error.status && (
         <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center gap-4">

@@ -9,7 +9,7 @@ function SummaryTable({ columns, data, actions }) {
   const rowsPerPage = 10
   const totalPages = Math.ceil(data.length / rowsPerPage)
 
-  const { openInvalidRecordsModal } = usePaymentsStore()
+  const { openInvalidRecordsModal, selectedRecord } = usePaymentsStore()
 
   const handlePageChange = (page) => {
     setCurrentPage(page)
@@ -52,6 +52,7 @@ function SummaryTable({ columns, data, actions }) {
             {
               'font-medium capitalize text-red-500':
                 accessor == 'remarks' && openInvalidRecordsModal,
+              'text-primary': row[accessor] == 'Record Modified',
             },
           )}
         >

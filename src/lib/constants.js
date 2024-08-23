@@ -26,6 +26,7 @@ const WORKSPACES_QUERY_KEY = 'workspaces-query-data'
 const WORKSPACE_ROLES_QUERY_KEY = 'workspace-role-query-data'
 const WORKSPACE_DASHBOARD_QUERY_KEY = 'dashboard-query-data'
 const WORKSPACE_MEMBERS_QUERY_KEY = 'members-query-data'
+const DIRECT_BULK_TRANSACTIONS_QUERY_KEY = 'direct-bulk-query-data'
 
 // ANIMATION_VARIANTS
 const staggerContainerVariants = {
@@ -54,13 +55,13 @@ const PASSWORD_PATTERN =
 
 const PAYMENT_SERVICE_TYPES = [
   {
-    name: 'Bulk Payment',
+    name: 'Bulk Payments',
     Icon: CircleStackIcon,
     // href: '/dashboard/payments/create/bulk',
     index: 0,
   },
   {
-    name: 'Single Payment',
+    name: 'Single Payments',
     Icon: ArrowRightCircleIcon,
     // href: '/dashboard/payments/create/single',
     index: 1,
@@ -76,6 +77,16 @@ const TASK_ICON_BG_COLOR_MAP = {
   Email: 'bg-[#F0FFFF]',
   Tag: 'bg-[#F7F6FF]',
   Deposit: 'bg-[#58FF5F]',
+}
+
+const TRANSACTION_STATUS_COLOR_MAP = {
+  submitted: 'from-primary-300 to-primary-600 ',
+  pending: 'from-secondary to-orange-700',
+  failed: 'from-red-500 to-red-700',
+  canceled: 'from-red-500 to-red-700',
+  rejected: 'from-red-500 to-red-700',
+  succeeded: 'from-[#58FF5F]/20 to-green-700',
+  approved: 'from-[#58FF5F]/20 to-green-700',
 }
 
 const TASK_TYPE = {
@@ -122,8 +133,6 @@ export {
   WORKSPACE_SESSION,
   PAYMENT_SERVICE_TYPES,
   PAYMENT_SERVICE,
-
-  //
   DefaultCover,
   MTN_NO,
   AIRTEL_NO,
@@ -132,6 +141,7 @@ export {
   placeHolderImage,
   TASK_ICON_BG_COLOR_MAP,
   TASK_TYPE,
+  TRANSACTION_STATUS_COLOR_MAP,
 
   // ANIMATIONS
   staggerContainerItemVariants,
@@ -147,4 +157,5 @@ export {
   WORKSPACE_ROLES_QUERY_KEY,
   WORKSPACE_DASHBOARD_QUERY_KEY,
   WORKSPACE_MEMBERS_QUERY_KEY,
+  DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
 }

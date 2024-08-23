@@ -57,7 +57,7 @@ export default function InvalidRecords({ records }) {
   )
 
   return (
-    <div className="">
+    <div className="overflow-clip">
       <SummaryTable
         columns={validationColumns}
         data={records}

@@ -220,7 +220,7 @@ function SideNavBar() {
             `z-20 hidden h-full w-full flex-col rounded-r-3xl bg-white p-5 transition-all duration-500 ease-in-out lg:flex`,
           )}
         >
-          <Logo />
+          <Logo href={dashboardRoute} />
           <div className="relative py-2">
             <WorkspaceSelection />
           </div>

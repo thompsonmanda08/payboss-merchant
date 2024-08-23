@@ -1,7 +1,10 @@
+import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 import { notify } from '@/lib/utils'
 import { create } from 'zustand'
 
 const INITIAL_STATE = {
+  selectedService: '', // DIRECT OR VOUCHER
+  selectedActionType: PAYMENT_SERVICE_TYPES[0],
   paymentAction: {
     type: '',
     url: '',
@@ -37,7 +40,9 @@ const usePaymentsStore = create((set, get) => ({
   setOpenInvalidRecordsModal: (open) => set({ openInvalidRecordsModal: open }),
   setOpenAddOrEditModal: (open) => set({ openAddOrEditModal: open }),
   setLoading: (loading) => set({ loading }),
+  setSelectedService: (service) => set({ selectedService: service }),
   setSelectedRecord: (record) => set({ selectedRecord: record }),
+  setSelectedActionType: (type) => set({ selectedActionType: type }),
 
   // UPDATE FIELDS ON THE SELECTED INVALID RECORD
   updateSelectedRecord: (fields) => {
@@ -77,7 +82,7 @@ const usePaymentsStore = create((set, get) => ({
   },
 
   saveSelectedRecord: () => {
-    const { selectedRecord, batchDetails } = get()
+    const { selectedRecord, batchDetails, updateSelectedRecord } = get()
 
     // find selected record in invalid records
     const selectedRecordID = selectedRecord.ID

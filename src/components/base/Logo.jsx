@@ -11,11 +11,12 @@ function Logo({
   isCollapsedNavBar,
   className,
   containerClasses,
+  href,
 }) {
   if (isCollapsedNavBar) {
     return (
       <Link
-        href="/"
+        href={href || '/'}
         className={cn(
           'flex aspect-square min-w-fit items-center justify-center ',
           containerClasses,
@@ -38,7 +39,7 @@ function Logo({
   } else {
     return (
       <Link
-        href="/"
+        href={href || '/'}
         className={cn(
           'aspect-auto max-h-[50px] min-h-12 min-w-fit',
           containerClasses,

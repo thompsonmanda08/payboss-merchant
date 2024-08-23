@@ -5,9 +5,10 @@ import { CardHeader } from '.'
 import { cn } from '@/lib/utils'
 
 const drawerVariants = {
-  hidden: { x: '100%' },
+  hidden: { x: '100%', opacity: 0 },
   visible: {
     x: 0,
+    opacity: 1,
     transition: {
       duration: 0.3,
       type: 'spring',
@@ -16,7 +17,7 @@ const drawerVariants = {
       ease: 'easeInOut',
     },
   },
-  exit: { x: '100%' },
+  exit: { x: '100%', opacity: 0 },
 }
 
 const Drawer = ({ isOpen, onClose, title, infoText, className, children }) => {
@@ -43,7 +44,7 @@ const Drawer = ({ isOpen, onClose, title, infoText, className, children }) => {
                 handleClose={onClose}
               />
 
-              <div className="mt-4 w-full flex-1 overflow-clip sm:px-6">
+              <div className="mt-4 w-full flex-1 sm:px-6">
                 {children}
               </div>
             </div>

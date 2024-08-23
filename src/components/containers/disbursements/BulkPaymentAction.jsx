@@ -7,6 +7,7 @@ import UploadCSVFile from './UploadCSVFile'
 import PaymentDetails from './PaymentDetails'
 import ValidationDetails from './ValidationDetails'
 import RecordDetailsViewer from './RecordDetailsViewer'
+import { useSearchParams } from 'next/navigation'
 
 export const STEPS = [
   {
@@ -27,9 +28,11 @@ export const STEPS = [
   },
 ]
 
-function BulkPaymentAction({ service }) {
+function BulkPaymentAction({}) {
   // ** INITIALIZES STEPS **//
   const [currentStep, setCurrentStep] = useState(STEPS[0])
+  const urlParams = useSearchParams()
+  const service = urlParams.get('service')
 
   // ** INITIALIZEs PAYMENT STATE **//
   const {
@@ -38,6 +41,8 @@ function BulkPaymentAction({ service }) {
     openAllRecordsModal,
     openValidRecordsModal,
     openInvalidRecordsModal,
+    selectedService,
+    setSelectedService,
   } = usePaymentsStore()
 
   //************ STEPS TO CREATE A TASK FOR A STUDY PLAN *****************/
@@ -87,12 +92,30 @@ function BulkPaymentAction({ service }) {
     // }
   }, [currentTabIndex])
 
+  useEffect(() => {
+    if (service) {
+      setSelectedService(service)
+    }
+  }, [service])
+
   return (
     <>
       {/************************* COMPONENT RENDERER *************************/}
 
       <Card className={'max-w-4xl rounded-2xl'}>
-        <CardHeader title={currentStep.title} infoText={currentStep.infoText} />
+        <CardHeader
+          title={
+            <>
+              {currentStep.title}
+              {
+                selectedService && (
+                  <span className="capitalize"> ({selectedService})</span>
+                ) //ONLY FOR THE CREATE PAYMENTS PAGE
+              }
+            </>
+          }
+          infoText={currentStep.infoText}
+        />
         <ProgressStep STEPS={STEPS} currentTabIndex={currentTabIndex} />
         {activeTab}
       </Card>

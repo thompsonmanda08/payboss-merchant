@@ -6,6 +6,7 @@ import {
   getUserSetupConfigs,
   getWorkspaceRoles,
 } from '@/app/_actions/config-actions'
+import { getAllDirectBulkTransactions } from '@/app/_actions/transaction-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
 import {
   getWorkspaceMembers,
@@ -19,6 +20,7 @@ import {
   WORKSPACES_QUERY_KEY,
   WORKSPACE_DASHBOARD_QUERY_KEY,
   WORKSPACE_MEMBERS_QUERY_KEY,
+  DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
   USERS,
 } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
@@ -91,5 +93,12 @@ export const useWorkspaceMembers = (workspaceID) =>
   useQuery({
     queryKey: [WORKSPACE_MEMBERS_QUERY_KEY, workspaceID],
     queryFn: async () => await getWorkspaceMembers(workspaceID),
+    refetchOnMount: true,
+  })
+
+export const useDirectBulkTransactions = (workspaceID) =>
+  useQuery({
+    queryKey: [DIRECT_BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
+    queryFn: async () => await getAllDirectBulkTransactions(workspaceID),
     refetchOnMount: true,
   })

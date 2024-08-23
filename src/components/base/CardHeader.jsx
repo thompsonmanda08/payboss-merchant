@@ -5,8 +5,6 @@ import { useSearchParams } from 'next/navigation'
 import React from 'react'
 
 function CardHeader({ title, infoText, handleClose, className, classNames }) {
-  const urlParams = useSearchParams()
-  const service = urlParams.get('service')
   const { titleClasses, infoClasses, innerWrapper } = classNames || ''
   return (
     <div
@@ -24,9 +22,6 @@ function CardHeader({ title, infoText, handleClose, className, classNames }) {
             )}
           >
             {title}
-            {
-              service && <span className="capitalize"> ({service})</span> //ONLY FOR THE CREATE PAYMENTS PAGE
-            }
           </h3>
           {infoText && (
             <p

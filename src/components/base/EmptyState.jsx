@@ -33,9 +33,9 @@ function EmptyState({
       </p>
       {children ||
         (!onButtonClick ? (
-          <Link href={href || '/'}>
-            <Button className={'h-12 px-8'}>{buttonText || 'Go Home'}</Button>
-          </Link>
+          <Button as={Link} href={href || '/'} className={'h-12 px-8'}>
+            {buttonText || 'Go Home'}
+          </Button>
         ) : (
           <Button className={'px-8 py-3'} onClick={onButtonClick}>
             {buttonText || 'Done'}

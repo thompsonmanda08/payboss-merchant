@@ -2,6 +2,7 @@
 import { Input } from '@/components/ui/InputField'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Button } from '../ui/Button'
+import { useEffect } from 'react'
 
 export default function EditBatchRecordForm({ onClose }) {
   const {
@@ -14,13 +15,15 @@ export default function EditBatchRecordForm({ onClose }) {
 
   async function onSubmit(e) {
     e.preventDefault()
+    updateSelectedRecord({ remarks: 'Record Modified', edited: true })
     setLoading(true)
     await saveSelectedRecord()
     onClose()
   }
+
   return (
     <form action="#" onSubmit={onSubmit} className="flex flex-col gap-2">
-      <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+      <div className="flex w-full flex-col gap-4 md:flex-row">
         <Input
           label="First Name"
           name="first_name"
@@ -40,7 +43,7 @@ export default function EditBatchRecordForm({ onClose }) {
           onChange={(e) => updateSelectedRecord({ last_name: e.target.value })}
         />
       </div>
-      <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+      <div className="flex w-full flex-col gap-4 md:flex-row">
         <Input
           label="Email"
           name="email"
@@ -60,7 +63,7 @@ export default function EditBatchRecordForm({ onClose }) {
           onChange={(e) => updateSelectedRecord({ contact: e.target.value })}
         />
       </div>
-      <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+      <div className="flex w-full flex-col gap-4 md:flex-row">
         <Input
           label="NRC"
           name="nrc"
@@ -70,7 +73,7 @@ export default function EditBatchRecordForm({ onClose }) {
           value={selectedRecord?.nrc}
           required
         />
-        <Input
+        {/* <Input
           label="Account Type"
           name="account_type"
           type="text"
@@ -80,18 +83,18 @@ export default function EditBatchRecordForm({ onClose }) {
           onChange={(e) =>
             updateSelectedRecord({ account_type: e.target.value })
           }
-        />
+        /> */}
       </div>
-      <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+      <div className="flex w-full flex-col gap-4 md:flex-row">
         <Input
-          label="Mobile/Account No."
-          name="account_number"
+          label="Destination Account No."
+          name="destination"
           type="text"
           autoComplete="account_number"
-          value={selectedRecord?.account_number}
+          value={selectedRecord?.destination}
           required
           onChange={(e) =>
-            updateSelectedRecord({ account_number: e.target.value })
+            updateSelectedRecord({ destination: e.target.value })
           }
         />
         <Input
@@ -104,7 +107,7 @@ export default function EditBatchRecordForm({ onClose }) {
           onChange={(e) => updateSelectedRecord({ amount: e.target.value })}
         />
       </div>
-      <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+      {/* <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
         <Input
           label="Bank Code"
           name="bank_code"
@@ -114,27 +117,28 @@ export default function EditBatchRecordForm({ onClose }) {
           required
           onChange={(e) => updateSelectedRecord({ bank_code: e.target.value })}
         />
-      </div>
-      <div className="mt-4 flex w-full items-end justify-center gap-4 md:justify-end">
-        <Button
-          aria-label="back"
-          color="danger"
-          className={'w-full max-w-xs'}
-          disabled={loading}
-          onClick={onClose}
-        >
-          Cancel
-        </Button>
+      </div> */}
+      <div className="mt-4 flex w-full flex-col gap-4 md:justify-end">
         <Button
           aria-label="save"
           type={'submit'}
           color="primary"
           isLoading={loading}
           isDisabled={loading}
-          className="w-full max-w-xs "
+          className="w-full  "
           // onClick={saveSelectedRecord}
         >
           Save Changes
+        </Button>
+        <Button
+          aria-label="back"
+          color="danger"
+          variant="light"
+          className={'w-full bg-red-50'}
+          disabled={loading}
+          onClick={onClose}
+        >
+          Cancel
         </Button>
       </div>
     </form>

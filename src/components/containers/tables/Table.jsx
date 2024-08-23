@@ -1,45 +1,103 @@
-import { useMemo } from "react";
-import { v4 as uuidv4 } from "uuid";
+import React from 'react'
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Pagination,
+  getKeyValue,
+} from '@nextui-org/react'
+import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
-function Table({ columns, rows }) {
-  const renderColumns = columns.map(({ name }) => {
-    return (
-      <th
-        key={name}
-        className="py-2 px-4 text-sm font-medium text-gray-900 border-b border-light text-left"
-      >
-        {name.toUpperCase()}
-      </th>
-    );
-  });
+export default function CustomTable({ columns, rows }) {
+  const rowsPerPage = 10
+  const [page, setPage] = React.useState(1)
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set(['']))
+  const pages = Math.ceil(rows.length / rowsPerPage)
 
-  const renderRows = rows.map((row, key) => {
-    const rowKey = `row-${key}`;
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage
+    const end = start + rowsPerPage
+    return rows.slice(start, end)
+  }, [page, rows])
 
-    const tableRow = columns.map(({ name }) => {
-      return (
-        <td
-          key={uuidv4()}
-          className="py-2 px-4 border-b border-light text-sm text-gray-500 text-left"
-        >
-          {row[name]}
-        </td>
-      );
-    });
+  const renderCell = React.useCallback((row, columnKey) => {
+    const cellValue = row[columnKey]
+    switch (columnKey) {
+      case 'status':
+        return (
+          <span
+            className={cn(
+              'my-2 cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white',
+              TRANSACTION_STATUS_COLOR_MAP[row.status],
+            )}
+          >
+            {cellValue}
+          </span>
+        )
 
-    return <tr key={rowKey}>{tableRow}</tr>;
-  });
+      default:
+        return cellValue
+    }
+  }, [])
 
-  return useMemo(() => (
-    <div className="overflow-x-auto">
-      <table className="min-w-full">
-        <thead>
-          <tr>{renderColumns}</tr>
-        </thead>
-        <tbody>{renderRows}</tbody>
-      </table>
-    </div>
-  ), [columns, rows]);
+  return (
+    <Table
+      aria-label="Example table with custom cells"
+      className="max-h-[500px]"
+      // classNames={}
+      // showSelectionCheckboxes
+      selectionMode="multiple"
+      selectedKeys={selectedKeys}
+      onSelectionChange={setSelectedKeys}
+      isStriped
+      isHeaderSticky
+      bottomContent={
+        pages > 1 && (
+          <div className="flex w-full justify-center">
+            {
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="primary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            }
+          </div>
+        )
+      }
+      classNames={{
+        wrapper: cn('min-h-[500px]', { 'min-h-max': pages <= 1 }),
+      }}
+    >
+      <TableHeader columns={columns} className="fixed">
+        {(column) => (
+          <TableColumn
+            key={column.uid}
+            align={column.uid === 'status' ? 'center' : 'start'}
+          >
+            {column.name}
+          </TableColumn>
+        )}
+      </TableHeader>
+      <TableBody items={items}>
+        {(item) => (
+          <TableRow
+            key={item?.ID || item?.key || item}
+            // className="hover:bg-primary-50"
+          >
+            {(columnKey) => (
+              <TableCell>{renderCell(item, columnKey)}</TableCell>
+            )}
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  )
 }
-
-export default Table;

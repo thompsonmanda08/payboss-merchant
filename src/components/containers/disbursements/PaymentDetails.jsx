@@ -4,7 +4,7 @@ import usePaymentsStore from '@/context/paymentsStore'
 import { Input } from '@/components/ui/InputField'
 import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
-import { BanknotesIcon } from '@heroicons/react/24/outline'
+import { BanknotesIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { useSearchParams } from 'next/navigation'
 import { PAYMENT_SERVICE, PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 import useDashboard from '@/hooks/useDashboard'
@@ -29,9 +29,8 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   const urlParams = useSearchParams()
   const service = urlParams.get('service')
 
-  const selectedActionType = PAYMENT_SERVICE_TYPES[0]
-
-  const [selectedService, setSelectedService] = useState(service)
+  const { selectedService, setSelectedService, selectedActionType } =
+    usePaymentsStore()
 
   async function handleProceed() {
     setLoading(true)
@@ -55,12 +54,11 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
         notify('success', 'Payment Batch Created!')
         setBatchDetails(response.data) // SET VALIDATION DATA INTO STATE
         navigateForward() // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
-        setLoading(false)
         return
       }
 
       notify('error', 'Failed to create payment batch!')
-      // setError({ status: true, message: response.message })
+      setError({ status: true, message: response.message })
       notify('error', response.message)
       setLoading(false)
       return
@@ -72,12 +70,12 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
     return
   }
 
-  function handleBackwardsNavigation() {
-    // Set the file to null so that the user can upload again
-    updatePaymentFields({ file: null })
-    setError({ status: false, message: '' })
-    navigateBackwards()
-  }
+  // function handleBackwardsNavigation() {
+  //   // Set the file to null so that the user can upload again
+  //   updatePaymentFields({ file: null })
+  //   setError({ status: false, message: '' })
+  //   navigateBackwards()
+  // }
 
   useEffect(() => {
     setError({ status: false, message: '' })
@@ -86,25 +84,33 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
 
   function selectServiceType(option) {
     setSelectedService(PAYMENT_SERVICE[option])
-    updatePaymentFields({ type: selectedIDOption })
+    updatePaymentFields({ type: PAYMENT_SERVICE[option] })
   }
 
   return (
     <div className="flex h-full w-full flex-col justify-between gap-4">
-      <div className="flex w-full items-center gap-3 rounded-md bg-primary/20 p-2">
-        <selectedActionType.Icon className="h-5 w-5 text-primary" />
-        <div className="h-6 border-r-2 border-primary/60" />
+      <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 p-4 ">
+        <selectedActionType.Icon className="h-6 w-6 text-primary" />
+        <div className="h-8 border-r-2 border-primary/60" />
         <div className="flex w-full justify-between text-sm font-medium text-primary 2xl:text-base">
           <p>{selectedActionType?.name}</p>
         </div>
       </div>
       {selectedService ? (
-        <div className="flex w-full items-center gap-3 rounded-md bg-primary/20 p-2">
-          <BanknotesIcon className="h-5 w-5 text-primary" />
-          <div className="h-6 border-r-2 border-primary/60" />
+        <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 py-3 pl-5 pr-4">
+          <BanknotesIcon className="h-6 w-6 text-primary" />
+          <div className="h-8 border-r-2 border-primary/60" />
           <div className="flex w-full justify-between text-sm font-medium capitalize text-primary 2xl:text-base">
             <p>{selectedService}</p>
           </div>
+          <Button
+            variant="light"
+            className={''}
+            onPress={() => setSelectedService(null)}
+          >
+            <PencilSquareIcon className="h-4 w-4" />
+            Change
+          </Button>
         </div>
       ) : (
         <CustomRadioGroup
@@ -113,7 +119,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
           options={
             // MUST BE AN ARRAY
             PAYMENT_SERVICE?.map((item, index) => (
-              <div key={index} className="flex flex-1 ">
+              <div key={index} className="flex flex-1 capitalize">
                 <span>{item}</span>
               </div>
             ))
@@ -121,28 +127,18 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
         />
       )}
 
-      <Input
-        label={'Batch Name'}
-        value={paymentAction?.batch_name}
-        onChange={(e) => {
-          updatePaymentFields({ batch_name: e.target.value })
-        }}
-      />
-      {error?.status && (
-        <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
-          <StatusMessage error={error.status} message={error.message} />
-        </div>
-      )}
-      <div className="mt-4 flex h-1/6 w-full items-end justify-end gap-4">
+      <div className="flex items-end gap-4">
+        <Input
+          label={'Batch Name'}
+          className="w-full max-w-full"
+          containerClasses="w-full max-w-full"
+          value={paymentAction?.batch_name}
+          onChange={(e) => {
+            updatePaymentFields({ batch_name: e.target.value })
+          }}
+        />
         <Button
-          className={'font-medium text-primary'}
-          variant="outline"
-          onClick={handleBackwardsNavigation}
-          isDisabled={loading}
-        >
-          Back
-        </Button>
-        <Button
+          className={'w-full max-w-xs'}
           isDisabled={loading}
           isLoading={loading}
           onClick={handleProceed}
@@ -150,8 +146,25 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
           Validate Batch
         </Button>
       </div>
+
+      {error?.status && (
+        <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
+          <StatusMessage error={error.status} message={error.message} />
+        </div>
+      )}
     </div>
   )
+}
+
+{
+  /* <Button
+          className={'font-medium text-primary'}
+          variant="outline"
+          onClick={handleBackwardsNavigation}
+          isDisabled={loading}
+        >
+          Back
+        </Button> */
 }
 
 export default PaymentDetails
