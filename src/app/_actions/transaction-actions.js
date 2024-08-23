@@ -114,12 +114,8 @@ export async function reviewBatch(batchID, reviewDetails) {
     console.error(error)
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.data?.error ||
-        error?.response?.statusText ||
-        'Operation Failed!',
-      data: error?.response,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     }
@@ -128,7 +124,6 @@ export async function reviewBatch(batchID, reviewDetails) {
 
 export async function initializeBulkTransaction(workspaceID, transactionData) {
   // const { batch_name, url } = transactionData
-  console.log(transactionData)
 
   try {
     const res = await authenticatedService({
@@ -149,22 +144,16 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
 
     return {
       success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      message: res?.data?.error || 'Operation Failed!',
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.error(error)
-    console.log(error)
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.data?.error ||
-        error?.response?.statusText ||
-        'Operation Failed!',
-      data: error?.response,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     }
