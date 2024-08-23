@@ -81,7 +81,7 @@ function BulkPaymentAction({ service }) {
   useEffect(() => {
     setCurrentStep(STEPS[currentTabIndex])
 
-    // CLEAR DATA WHEN THE THE COMPONENT IS UNMOUNTED
+    //TODO: => CLEAR DATA WHEN THE THE COMPONENT IS UNMOUNTED
     // return () => {
     //   resetPaymentData()
     // }

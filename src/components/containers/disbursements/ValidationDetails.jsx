@@ -7,15 +7,15 @@ import { StatusCard } from '@/components/base'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import Spinner from '@/components/ui/Spinner'
 
-const ValidationDetails = ({
-  changeScreen,
-  updatePaymentFields,
-  navigateBackwards,
-  paymentAction,
-}) => {
+const ValidationDetails = ({ navigateBackwards }) => {
   const queryClient = useQueryClient()
-  const { loading, setLoading, openRecordsModal, closeRecordsModal } =
-    usePaymentsStore()
+  const {
+    loading,
+    setLoading,
+    openRecordsModal,
+    closeRecordsModal,
+    batchDetails,
+  } = usePaymentsStore()
 
   if (loading) {
     // TODO: REMOVE AFTER SERVER CONNECTION
@@ -36,13 +36,13 @@ const ValidationDetails = ({
       <div className="flex h-full w-full flex-col justify-between ">
         <StatusCard
           totalTitle={'Total Records'}
-          totalText={'2,120'}
+          totalText={batchDetails?.number_of_records}
           totalInfo={'View All Records'}
           validTitle={'Valid Records'}
-          validText={'2,000'}
+          validText={batchDetails?.number_of_valid_records}
           validInfo={'View Valid Records'}
           invalidTitle={'Invalid Records'}
-          invalidText={'120'}
+          invalidText={batchDetails?.number_of_invalid_records}
           invalidInfo={'View Invalid Records'}
           tooltipText={'All records must be valid to proceed'}
           Icon={QuestionMarkCircleIcon}

@@ -13,6 +13,7 @@ function RecordDetailsViewer() {
     openValidRecordsModal,
     openInvalidRecordsModal,
     closeRecordsModal,
+    batchDetails,
   } = usePaymentsStore()
 
   return (
@@ -38,9 +39,20 @@ function RecordDetailsViewer() {
       }
       width={1680}
     >
-      {openAllRecordsModal && <AllRecords />}
-      {openValidRecordsModal && <ValidRecords />}
-      {openInvalidRecordsModal && <InvalidRecords />}
+      {/* IF MODAL OPENED AND TOTAL RECORDS ARRAY IS NOT EMPTY */}
+      {openAllRecordsModal && batchDetails?.total && (
+        <AllRecords records={batchDetails?.total} />
+      )}
+
+      {/* IF MODAL OPENED AND TOTAL VALID RECORDS ARRAY IS NOT EMPTY */}
+      {openValidRecordsModal && batchDetails?.valid && (
+        <ValidRecords records={batchDetails?.valid} />
+      )}
+
+      {/* IF MODAL OPENED AND TOTAL INVALID RECORDS ARRAY IS NOT EMPTY */}
+      {openInvalidRecordsModal && batchDetails?.invalid && (
+        <InvalidRecords records={batchDetails?.invalid} />
+      )}
     </Modal>
   )
 }
