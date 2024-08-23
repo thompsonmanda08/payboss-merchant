@@ -1,16 +1,17 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Input } from '@/components/ui/InputField'
 import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
 import { BanknotesIcon } from '@heroicons/react/24/outline'
 import { useSearchParams } from 'next/navigation'
-import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
+import { PAYMENT_SERVICE, PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 import useDashboard from '@/hooks/useDashboard'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { initializeBulkTransaction } from '@/app/_actions/transaction-actions'
 import { StatusMessage } from '@/components/base'
+import CustomRadioGroup from '@/components/ui/CustomRadioGroup'
 
 const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   const {
@@ -20,6 +21,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
     setError,
     error,
     paymentAction,
+    setBatchDetails,
   } = usePaymentsStore()
   const { workspaceUserRole } = useDashboard()
   const { workspaceID } = useWorkspaces()
@@ -28,6 +30,8 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   const service = urlParams.get('service')
 
   const selectedActionType = PAYMENT_SERVICE_TYPES[0]
+
+  const [selectedService, setSelectedService] = useState(service)
 
   async function handleProceed() {
     setLoading(true)
@@ -49,13 +53,14 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
 
       if (response.success) {
         notify('success', 'Payment Batch Created!')
+        setBatchDetails(response.data) // SET VALIDATION DATA INTO STATE
         navigateForward() // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
         setLoading(false)
         return
       }
 
       notify('error', 'Failed to create payment batch!')
-      setError({ status: true, message: response.message })
+      // setError({ status: true, message: response.message })
       notify('error', response.message)
       setLoading(false)
       return
@@ -70,12 +75,19 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   function handleBackwardsNavigation() {
     // Set the file to null so that the user can upload again
     updatePaymentFields({ file: null })
+    setError({ status: false, message: '' })
     navigateBackwards()
   }
 
   useEffect(() => {
     setError({ status: false, message: '' })
-  }, [paymentAction, navigateBackwards])
+    setLoading(false)
+  }, [paymentAction])
+
+  function selectServiceType(option) {
+    setSelectedService(PAYMENT_SERVICE[option])
+    updatePaymentFields({ type: selectedIDOption })
+  }
 
   return (
     <div className="flex h-full w-full flex-col justify-between gap-4">
@@ -86,13 +98,28 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
           <p>{selectedActionType?.name}</p>
         </div>
       </div>
-      <div className="flex w-full items-center gap-3 rounded-md bg-primary/20 p-2">
-        <BanknotesIcon className="h-5 w-5 text-primary" />
-        <div className="h-6 border-r-2 border-primary/60" />
-        <div className="flex w-full justify-between text-sm font-medium capitalize text-primary 2xl:text-base">
-          <p>{service}</p>
+      {selectedService ? (
+        <div className="flex w-full items-center gap-3 rounded-md bg-primary/20 p-2">
+          <BanknotesIcon className="h-5 w-5 text-primary" />
+          <div className="h-6 border-r-2 border-primary/60" />
+          <div className="flex w-full justify-between text-sm font-medium capitalize text-primary 2xl:text-base">
+            <p>{selectedService}</p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <CustomRadioGroup
+          onChange={(option) => selectServiceType(option)}
+          labelText="Service"
+          options={
+            // MUST BE AN ARRAY
+            PAYMENT_SERVICE?.map((item, index) => (
+              <div key={index} className="flex flex-1 ">
+                <span>{item}</span>
+              </div>
+            ))
+          }
+        />
+      )}
 
       <Input
         label={'Batch Name'}
