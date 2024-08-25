@@ -34,8 +34,8 @@ function PromptModal({
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
-            <ModalBody>{children}</ModalBody>
+            <ModalHeader className="tracking-tight">{title}</ModalHeader>
+            <ModalBody className="gap-0">{children}</ModalBody>
             <ModalFooter>
               <Button color="danger" onPress={onClose}>
                 {cancelText}
