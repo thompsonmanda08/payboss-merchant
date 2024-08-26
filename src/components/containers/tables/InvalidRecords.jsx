@@ -9,8 +9,7 @@ import { useDisclosure } from '@nextui-org/react'
 import { EditBatchRecordForm } from '@/components/forms'
 
 export default function InvalidRecords({ records }) {
-  const { setSelectedRecord, selectedRecord, updateSelectedRecord } =
-    usePaymentsStore()
+  const { setSelectedRecord, selectedRecord } = usePaymentsStore()
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
@@ -57,12 +56,14 @@ export default function InvalidRecords({ records }) {
   )
 
   return (
-    <div className="overflow-clip">
-      <SummaryTable
-        columns={validationColumns}
-        data={records}
-        actions={renderActions}
-      />
+    <>
+      <Drawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        title="Edit Entry"
+      >
+        <EditBatchRecordForm onClose={closeEditDrawer} />
+      </Drawer>
 
       {/* MODALS */}
       <PromptModal
@@ -74,7 +75,7 @@ export default function InvalidRecords({ records }) {
         }}
         title="Delete Entry"
         onConfirm={handleDeleteEntry}
-        confirmText="Deactivate"
+        confirmText="Delete"
         isDisabled={deleteLoading}
         isLoading={deleteLoading}
         isDismissable={false}
@@ -95,13 +96,13 @@ export default function InvalidRecords({ records }) {
         </p>
       </PromptModal>
 
-      <Drawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        title="Edit Entry"
-      >
-        <EditBatchRecordForm onClose={closeEditDrawer} />
-      </Drawer>
-    </div>
+      <div className="overflow-clip">
+        <SummaryTable
+          columns={validationColumns}
+          data={records}
+          actions={renderActions}
+        />
+      </div>
+    </>
   )
 }

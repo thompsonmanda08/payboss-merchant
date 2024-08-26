@@ -1,5 +1,7 @@
+import { cn } from '@/lib/utils'
+import { Tooltip } from '@nextui-org/react'
 import React from 'react'
-import { Tooltip } from '.'
+// import { Tooltip } from '.'
 
 function StatusCard({
   totalTitle,
@@ -19,7 +21,7 @@ function StatusCard({
   IconColor = '#4c5cf7',
 }) {
   return (
-    <div className="flex w-full min-w-[300px] flex-1 flex-col overflow-clip rounded-md border border-primary/30 bg-card p-5 shadow-xl shadow-slate-200/10">
+    <div className="relative mb-2 flex w-full min-w-[300px] flex-1 flex-col overflow-clip rounded-md border border-primary/30 bg-card p-5 py-8 shadow-xl shadow-slate-200/10">
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
           <p className="text-sm text-foreground/60 md:text-base lg:text-lg ">
@@ -66,12 +68,19 @@ function StatusCard({
           </p>
         </div>
       </div>
-      <div className="mt-4 flex items-center justify-end">
+      <div className="absolute right-2 top-2 flex items-center justify-end">
         {Icon && (
-          <Tooltip className={'text-red-500'} content={tooltipText || ''}>
+          <Tooltip
+            classNames={{ content: '' }}
+            color="primary"
+            content={tooltipText || ''}
+          >
             <Icon
-              color={IconColor}
-              className="my-auto ml-4 aspect-square h-6 w-6"
+              // color={IconColor}
+              className={cn(
+                'my-auto ml-4 aspect-square h-6 w-6',
+                `text-${IconColor}`,
+              )}
             />
           </Tooltip>
         )}

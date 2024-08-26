@@ -33,6 +33,7 @@ function Modal({
   removeCallToAction,
   isDismissible = true,
   className,
+  classNames,
 }) {
   const [isOpen, setIsOpen] = useState(show || false)
   const [noCallToAction, setNoCallToAction] = useState(
@@ -55,6 +56,8 @@ function Modal({
     }
   }
 
+  const { overlay, base, card } = classNames || ''
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -65,7 +68,10 @@ function Modal({
           variants={overlayVariants}
           transition={{ duration: 0.25 }}
           onClick={dismissModal}
-          className="absolute inset-0 z-50 flex h-screen w-full items-center justify-center bg-slate-800/50"
+          className={cn(
+            'absolute inset-0 z-50 flex h-screen w-full items-center justify-center bg-slate-800/50',
+            overlay,
+          )}
         >
           <motion.div
             initial="hidden"
@@ -79,8 +85,10 @@ function Modal({
             }}
             onClick={(e) => e.stopPropagation()}
             className={cn(
-              'z-10 flex w-full flex-col items-center justify-between gap-1 rounded-lg bg-white p-4',
+              'z-50 flex w-full flex-col items-center justify-between gap-1 rounded-lg bg-white p-4',
               className,
+              base,
+              card,
             )}
           >
             <CardHeader

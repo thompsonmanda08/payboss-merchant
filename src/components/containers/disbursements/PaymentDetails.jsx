@@ -54,6 +54,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
         notify('success', 'Payment Batch Created!')
         setBatchDetails(response.data) // SET VALIDATION DATA INTO STATE
         navigateForward() // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
+        setLoading(false)
         return
       }
 

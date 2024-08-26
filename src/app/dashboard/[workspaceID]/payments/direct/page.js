@@ -5,26 +5,30 @@ import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
 import React, { Suspense, useState } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import { SAMPLE_BATCHES } from '../../data/sampleData'
-import TransactionStatusTag from '@/components/base/TransactionStatusTag'
 import Search from '@/components/ui/Search'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 import { SelectPaymentType } from '@/components/containers'
 import useTransactions from '@/hooks/useTransactions'
 import CustomTable from '@/components/containers/tables/Table'
 import { PlusIcon } from '@heroicons/react/24/outline'
+import { useDisclosure } from '@nextui-org/react'
+import BatchDetailsPage from '../../../../../components/containers/disbursements/ViewBatchDetails'
 
 const transactionColumns = [
   { name: 'NAME', uid: 'batch_name' },
   { name: 'TOTAL RECORDS', uid: 'number_of_records' },
   { name: 'TOTAL AMOUNT', uid: 'total_amount' },
   { name: 'STATUS', uid: 'status' },
+  { name: 'LINK', uid: 'link' },
 ]
 
 export default function Payments() {
   const [searchQuery, setSearchQuery] = useState('')
-  const { openPaymentsModal, setOpenPaymentsModal } = usePaymentsStore()
+  const { openPaymentsModal, setOpenPaymentsModal, openBatchDetailsModal } =
+    usePaymentsStore()
   const { directBulkTransactions } = useTransactions()
+  const { onClose } = useDisclosure()
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set(['']))
 
   const bulkRows = directBulkTransactions?.filter((item) => {
     return (
@@ -34,14 +38,29 @@ export default function Payments() {
   })
 
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
-    <CustomTable columns={transactionColumns} rows={bulkRows} />,
+    <CustomTable
+      columns={transactionColumns}
+      rows={bulkRows}
+      selectedKeys={selectedKeys}
+      setSelectedKeys={setSelectedKeys}
+    />,
   ])
 
   return (
     <Suspense fallback={<LoadingPage />}>
       <>
-        {/* MODAL */}
+        {/* MODALS && OVERLAYS */}
         {openPaymentsModal && <SelectPaymentType service={'direct'} />}
+
+        {openBatchDetailsModal && (
+          <BatchDetailsPage
+            isOpen={openBatchDetailsModal}
+            onClose={onClose}
+            service={'direct'}
+          />
+        )}
+
+        {/************************************************************************/}
         <Card className={'mb-8 w-full'}>
           <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
             <div>

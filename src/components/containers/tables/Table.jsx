@@ -7,15 +7,23 @@ import {
   TableRow,
   TableCell,
   Pagination,
-  getKeyValue,
+  LinkIcon,
 } from '@nextui-org/react'
 import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/Button'
+import usePaymentsStore from '@/context/paymentsStore'
 
-export default function CustomTable({ columns, rows }) {
-  const rowsPerPage = 10
+export default function CustomTable({
+  columns,
+  rows,
+  selectedKeys,
+  setSelectedKeys,
+}) {
+  const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore()
+  const rowsPerPage = 8
   const [page, setPage] = React.useState(1)
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set(['']))
+
   const pages = Math.ceil(rows.length / rowsPerPage)
 
   const items = React.useMemo(() => {
@@ -30,13 +38,31 @@ export default function CustomTable({ columns, rows }) {
       case 'status':
         return (
           <span
+            // onClick={() => {
+            //   setSelectedBatch(row)
+            //   handleRowPress()
+            // }}
             className={cn(
-              'my-2 cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white',
+              'my-2 ml-auto cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white',
               TRANSACTION_STATUS_COLOR_MAP[row.status],
             )}
           >
             {cellValue}
           </span>
+        )
+      case 'link':
+        return (
+          <Button
+            variant="light"
+            className={'max-w-fit p-2'}
+            isIconOnly
+            onPress={() => {
+              setSelectedBatch(row)
+              setOpenBatchDetailsModal(true)
+            }}
+          >
+            <LinkIcon />
+          </Button>
         )
 
       default:
@@ -44,13 +70,16 @@ export default function CustomTable({ columns, rows }) {
     }
   }, [])
 
+  // console.log(selectedKeys?.anchorKey)
+
   return (
     <Table
       aria-label="Example table with custom cells"
-      className="max-h-[500px]"
+      className="max-h-[580px]"
       // classNames={}
       // showSelectionCheckboxes
-      selectionMode="multiple"
+      // selectionMode="multiple"
+      selectionMode="single"
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}
       isStriped

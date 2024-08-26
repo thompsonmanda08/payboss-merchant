@@ -84,12 +84,14 @@ function SummaryTable({ columns, data, actions }) {
 
   return useMemo(
     () => (
-      <div className="overflow-x-auto">
-        <table className="min-h-80 min-w-full">
+      <div className="flex h-full flex-col overflow-x-auto pb-4">
+        <table className="w-full" align="top">
           <thead>
             <tr>{renderColumns}</tr>
           </thead>
-          <tbody className="">{renderRows}</tbody>
+          <tbody className="" align="top">
+            {renderRows}
+          </tbody>
         </table>
         <Pagination
           currentPage={currentPage}
