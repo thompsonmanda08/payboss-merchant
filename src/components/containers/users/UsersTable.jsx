@@ -174,30 +174,28 @@ export default function UsersTable({ users = [] }) {
         </TableBody>
       </Table>
       {/* MODALS */}
-      {isOpen && (
-        <PromptModal
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={() => {
-            onClose()
-            setSelectedUser(null)
-          }}
-          title="Remove Workspace User"
-          onConfirm={handleDeleteUser}
-          confirmText="Remove"
-          isDisabled={isLoading}
-          isLoading={isLoading}
-          isDismissable={false}
-        >
-          <p className="-mt-4 text-sm leading-6 text-slate-700">
-            Are you sure you want to remove{' '}
-            <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
-              {`${selectedUser?.first_name} ${selectedUser?.last_name}`}
-            </code>{' '}
-            from this {isUsersRoute ? 'account' : 'workspace'}.
-          </p>
-        </PromptModal>
-      )}
+      <PromptModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={() => {
+          onClose()
+          setSelectedUser(null)
+        }}
+        title="Remove Workspace User"
+        onConfirm={handleDeleteUser}
+        confirmText="Remove"
+        isDisabled={isLoading}
+        isLoading={isLoading}
+        isDismissable={false}
+      >
+        <p className="-mt-4 text-sm leading-6 text-slate-700">
+          Are you sure you want to remove{' '}
+          <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
+            {`${selectedUser?.first_name} ${selectedUser?.last_name}`}
+          </code>{' '}
+          from this {isUsersRoute ? 'account' : 'workspace'}.
+        </p>
+      </PromptModal>
     </>
   )
 }
