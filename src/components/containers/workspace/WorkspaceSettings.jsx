@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/Button'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Tabs } from '@/components/base'
 import UsersTable from '../users/UsersTable'
@@ -16,6 +16,7 @@ import useNavigation from '@/hooks/useNavigation'
 import Wallet from './Wallet'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 import { useWorkspaceMembers } from '@/hooks/useQueryHooks'
+import useWorkspaceStore from '@/context/workspaceStore'
 
 const TABS = [
   { name: 'General', index: 0 },
@@ -26,15 +27,13 @@ const TABS = [
 
 function WorkspaceSettings({ workspaceID }) {
   const { back } = useRouter()
-  const [searchQuery, setSearchQuery] = useState('')
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  // const { user } = useAccountProfile()
-  const { isUserInWorkspace } = useNavigation()
-  const { isOwner, isAccountAdmin } = useAccountProfile()
-  // const { allUsers } = useAllUsersAndRoles()
-
   const { allWorkspaces } = useWorkspaces()
+  const { isUserInWorkspace } = useNavigation()
+  const [searchQuery, setSearchQuery] = useState('')
+  const { isOwner, isAccountAdmin } = useAccountProfile()
+  const { isEditingRole, selectedUser } = useWorkspaceStore()
   const { data: members } = useWorkspaceMembers(workspaceID)
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
   const workspaceUsers = members?.data?.users || []
 
@@ -44,8 +43,9 @@ function WorkspaceSettings({ workspaceID }) {
 
   const userSearchResults = workspaceUsers?.filter((user) => {
     return (
-      user?.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user?.name.toLowerCase().includes(searchQuery.toLowerCase())
+      user?.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user?.first_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user?.last_name?.toLowerCase().includes(searchQuery.toLowerCase())
     )
   })
 
@@ -85,8 +85,6 @@ function WorkspaceSettings({ workspaceID }) {
           color="light"
           className={'text-primary sm:w-auto sm:max-w-fit'}
           onClick={() => back()}
-          // as={Link}
-          // href={'/manage-account/workspaces'}
         >
           <ArrowUturnLeftIcon className="h-5 w-5" /> Return to Workspaces
         </Button>
@@ -129,9 +127,11 @@ function WorkspaceSettings({ workspaceID }) {
         </div>
 
         {/* MODALS */}
-        {isOpen && (
-          <CreateNewUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
-        )}
+        <CreateNewUserModal
+          onClose={onClose}
+          isOpen={isEditingRole || isOpen}
+          onOpenChange={onOpenChange}
+        />
       </div>
     </>
   )

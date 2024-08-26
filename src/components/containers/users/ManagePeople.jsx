@@ -16,6 +16,7 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import useNavigation from '@/hooks/useNavigation'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
+import { League_Spartan } from 'next/font/google'
 
 export const ROLES = [
   {
@@ -80,16 +81,18 @@ function ManagePeople({ classNames }) {
 
   // ***** COMPONENT RENDERER ************** //
 
-  const TABS = !isAccountLevelSettingsRoute
-    ? [
-        { name: 'Workspace Members', index: 0 },
-        { name: 'Workspace Guests', index: 1 },
-      ]
-    : [
-        { name: 'All Users', index: 0 },
-        { name: 'Workspace Members', index: 1 },
-        { name: 'Guests', index: 2 },
-      ]
+  // const  TABS = !isAccountLevelSettingsRoute
+  //   ? [
+  //       { name: 'Workspace Members', index: 0 },
+  //       { name: 'Workspace Guests', index: 1 },
+  //     ]
+  //   : [
+  //       { name: 'All Users', index: 0 },
+  //       { name: 'Workspace Members', index: 1 },
+  //       { name: 'Guests', index: 2 },
+  //     ]
+
+  const TABS = [{ name: 'All Users', index: 0 }]
 
   const COMPONENT_RENDERER = !isAccountLevelSettingsRoute
     ? [
@@ -102,8 +105,9 @@ function ManagePeople({ classNames }) {
         <UsersTable key={'guests'} users={userSearchResults} />,
       ]
 
-  const { activeTab, navigateTo, currentTabIndex } =
-    useCustomTabsHook(COMPONENT_RENDERER)
+  const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
+    <UsersTable key={'all-users'} users={userSearchResults} />,
+  ])
 
   const allowUserCreation = (isOwner || isAccountAdmin) && !isUserInWorkspace
 
@@ -116,10 +120,10 @@ function ManagePeople({ classNames }) {
         Streamline the management of user accounts and their workspaces.
       </p>
 
-      <SearchOrInviteUsers
+      {/* <SearchOrInviteUsers
         setSearchQuery={setSearchQuery}
         resolveAddToWorkspace={resolveAddToWorkspace}
-      />
+      /> */}
 
       <div className="flex items-center justify-between gap-8 ">
         <Tabs

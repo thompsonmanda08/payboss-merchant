@@ -45,8 +45,10 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
   const [isVisible, setIsVisible] = useState(workspace?.isVisible)
 
   const noChangesToSave =
-    newWorkspace.workspace == workspace?.workspace &&
-    newWorkspace.description == workspace?.description
+    !workspace ||
+    isSandbox ||
+    (newWorkspace.workspace == workspace?.workspace &&
+      newWorkspace.description == workspace?.description)
 
   function editWorkspaceField(fields) {
     setNewWorkspace((prev) => {
@@ -184,7 +186,7 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
             {!isSandbox && (
               <Button
                 type="submit"
-                isDisabled={loading || isSandbox || noChangesToSave}
+                isDisabled={loading || noChangesToSave}
                 isLoading={loading}
                 loadingText={'Saving...'}
               >
@@ -252,50 +254,45 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
       </div>
 
       {/* MODALS */}
-      {isOpen && (
-        <PromptModal
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-          title="Delete/Deactivate Workspace"
-          onConfirm={handleDeleteWorkspace}
-          confirmText="Deactivate"
+      <PromptModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        title="Delete/Deactivate Workspace"
+        onConfirm={handleDeleteWorkspace}
+        confirmText="Deactivate"
+        isDisabled={deleteLoading}
+        isLoading={deleteLoading}
+        isDismissable={false}
+      >
+        <p className="leading-2 m-0">
+          <strong>Are you sure you want to perform this action?</strong>
+        </p>
+        <p className="text-sm text-slate-700">
+          This action cannot be undone. Please type{' '}
+          <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
+            {workspace?.workspace}
+          </code>{' '}
+          to confirm your choice to proceed.
+        </p>
+
+        <Input
+          label="Confirm Delete"
           isDisabled={deleteLoading}
-          isLoading={deleteLoading}
-          isDismissable={false}
-        >
-          <p className="leading-2 m-0">
-            <strong>Are you sure you want to perform this action?</strong>
-          </p>
-          <p className="text-sm text-slate-700">
-            This action cannot be undone. Please type{' '}
-            <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
-              {workspace?.workspace}
-            </code>{' '}
-            to confirm your choice to proceed.
-          </p>
-
-          <Input
-            label="Confirm Delete"
-            isDisabled={deleteLoading}
-            onError={deleteError.status}
-            errorText={deleteError.message}
-            onChange={(e) => setDeleteWorkspaceName(e.target.value)}
-          />
-        </PromptModal>
-      )}
-
-      {/* MODALS */}
-      {openAdd && (
-        <AddUserToWorkspace
-          isOpen={openAdd}
-          onOpen={onOpenAdd}
-          onClose={onCloseAdd}
-          workspaceID={workspaceID}
-          workspaceName={workspaceName}
-          navigateTo={navigateTo}
+          onError={deleteError.status}
+          errorText={deleteError.message}
+          onChange={(e) => setDeleteWorkspaceName(e.target.value)}
         />
-      )}
+      </PromptModal>
+
+      <AddUserToWorkspace
+        isOpen={openAdd}
+        onOpen={onOpenAdd}
+        onClose={onCloseAdd}
+        workspaceID={workspaceID}
+        workspaceName={workspaceName}
+        navigateTo={navigateTo}
+      />
     </>
   )
 }
