@@ -6,20 +6,19 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  User,
   Chip,
   Tooltip,
   Avatar,
+  useDisclosure,
 } from '@nextui-org/react'
 import {
-  EyeIcon,
-  EyeSlashIcon,
   PencilSquareIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline'
-import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { cn, getUserInitials } from '@/lib/utils'
+import useWorkspaceStore from '@/context/workspaceStore'
+import PromptModal from '@/components/base/Prompt'
 
 const roleColorMap = {
   owner: 'success',
@@ -40,6 +39,17 @@ const columns = [
 
 //! NOTE: ONLY THE OWNER WILL BE ABLE TO SEE ALL THE USERS
 export default function UsersTable({ users = [] }) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isLoading,
+    isEditingRole,
+    setIsEditingRole,
+    setSelectedUser,
+    selectedUser,
+    handleDeleteFromWorkspace,
+  } = useWorkspaceStore()
+
+  // TABLE CELL RENDERER
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey]
 
@@ -87,22 +97,39 @@ export default function UsersTable({ users = [] }) {
       case 'actions':
         return (
           <div className="relative flex items-center justify-center gap-2">
-            <Tooltip content="View user">
-              <span className="cursor-pointer text-lg text-secondary active:opacity-50">
+            {/* <Tooltip content="View user">
+              <span
+                onClick={() => setIsViewingUser(true)}
+                className="cursor-pointer text-lg text-secondary active:opacity-50"
+              >
                 <EyeIcon className="h-5 w-5" />
               </span>
-            </Tooltip>
-            <Tooltip color="primary" content="Edit user">
-              <span className="cursor-pointer text-lg text-primary active:opacity-50">
-                <PencilSquareIcon className="h-5 w-5" />
-              </span>
-            </Tooltip>
+            </Tooltip> */}
+            <>
+              <Tooltip color="primary" content="Edit user">
+                <span
+                  onClick={() => {
+                    setSelectedUser(user)
+                    setIsEditingRole(true)
+                  }}
+                  className="cursor-pointer text-lg text-primary active:opacity-50"
+                >
+                  <PencilSquareIcon className="h-5 w-5" />
+                </span>
+              </Tooltip>
 
-            <Tooltip color="danger" content="Delete user">
-              <span className="cursor-pointer text-lg text-danger active:opacity-50">
-                <TrashIcon className="h-5 w-5" />
-              </span>
-            </Tooltip>
+              <Tooltip color="danger" content="Delete user">
+                <span
+                  onClick={() => {
+                    setSelectedUser(user)
+                    onOpen()
+                  }}
+                  className="cursor-pointer text-lg text-danger active:opacity-50"
+                >
+                  <TrashIcon className="h-5 w-5" />
+                </span>
+              </Tooltip>
+            </>
           </div>
         )
       default:
@@ -111,32 +138,59 @@ export default function UsersTable({ users = [] }) {
   }, [])
 
   return (
-    <Table
-      aria-label="Example table with custom cells"
-      className="max-h-[700px]"
-      isStriped
-      isHeaderSticky
-    >
-      <TableHeader columns={columns} className="fixed">
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === 'actions' ? 'center' : 'start'}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={users}>
-        {(item) => (
-          <TableRow key={item?.ID}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <Table
+        aria-label="Example table with custom cells"
+        className="max-h-[700px]"
+        isStriped
+        isHeaderSticky
+      >
+        <TableHeader columns={columns} className="fixed">
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === 'actions' ? 'center' : 'start'}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={users}>
+          {(item) => (
+            <TableRow key={item?.ID}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      {/* MODALS */}
+      {isOpen && (
+        <PromptModal
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={() => {
+            onClose()
+            setSelectedUser(null)
+          }}
+          title="Remove Workspace User"
+          onConfirm={handleDeleteFromWorkspace}
+          confirmText="Remove"
+          isDisabled={isLoading}
+          isLoading={isLoading}
+          isDismissable={false}
+        >
+          <p className="-mt-4 text-sm leading-6 text-slate-700">
+            Are you sure you want to remove{' '}
+            <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
+              {`${selectedUser?.first_name} ${selectedUser?.last_name}`}
+            </code>{' '}
+            from this workspace.
+          </p>
+        </PromptModal>
+      )}
+    </>
   )
 }
 
