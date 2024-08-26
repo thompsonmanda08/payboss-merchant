@@ -2,21 +2,18 @@
 import { Tabs } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import React, { useState } from 'react'
-
 import Search from '@/components/ui/Search'
 import { Input } from '@/components/ui/InputField'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import { Button } from '@/components/ui/Button'
-import { USERS } from '@/app/dashboard/[workspaceID]/data/sampleData'
 import UsersTable from './UsersTable'
 import CreateNewUserModal from './CreateNewUserModal'
 import { cn } from '@/lib/utils'
 import { useDisclosure } from '@nextui-org/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import useNavigation from '@/hooks/useNavigation'
-import useAccountProfile from '@/hooks/useProfileDetails'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
-import { League_Spartan } from 'next/font/google'
+import useWorkspaceStore from '@/context/workspaceStore'
 
 export const ROLES = [
   {
@@ -59,12 +56,11 @@ export const SYSTEM_ROLES = [
 ]
 
 function ManagePeople({ classNames }) {
-  const { accountRoles, workspaceRoles, allUsers } = useAllUsersAndRoles()
-  const [openCreateUserModal, setOpenCreateUserModal] = useState(false)
   const { wrapper } = classNames || ''
+  const { isEditingRole } = useWorkspaceStore()
   const [searchQuery, setSearchQuery] = useState('')
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const { isOwner, isAccountAdmin } = useAccountProfile()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { canCreateUsers, allUsers } = useAllUsersAndRoles()
   const { isAccountLevelSettingsRoute, isUserInWorkspace } = useNavigation()
 
   const userSearchResults = allUsers?.filter((user) => {
@@ -109,7 +105,7 @@ function ManagePeople({ classNames }) {
     <UsersTable key={'all-users'} users={userSearchResults} />,
   ])
 
-  const allowUserCreation = (isOwner || isAccountAdmin) && !isUserInWorkspace
+  const allowUserCreation = canCreateUsers && !isUserInWorkspace
 
   return (
     <div className={cn('mx-auto flex w-full max-w-7xl flex-col', wrapper)}>
@@ -144,9 +140,11 @@ function ManagePeople({ classNames }) {
       {activeTab}
 
       {/* MODALS */}
-      {isOpen && (
-        <CreateNewUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
-      )}
+      <CreateNewUserModal
+        isOpen={isEditingRole || isOpen}
+        onClose={onClose}
+        // onOpenChange={onOpenChange}
+      />
     </div>
   )
 }

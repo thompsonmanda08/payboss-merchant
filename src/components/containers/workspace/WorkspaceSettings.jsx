@@ -30,8 +30,8 @@ function WorkspaceSettings({ workspaceID }) {
   const { allWorkspaces } = useWorkspaces()
   const { isUserInWorkspace } = useNavigation()
   const [searchQuery, setSearchQuery] = useState('')
-  const { isOwner, isAccountAdmin } = useAccountProfile()
-  const { isEditingRole, selectedUser } = useWorkspaceStore()
+  const { canCreateUsers } = useAllUsersAndRoles()
+  const { isEditingRole } = useWorkspaceStore()
   const { data: members } = useWorkspaceMembers(workspaceID)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
@@ -75,7 +75,7 @@ function WorkspaceSettings({ workspaceID }) {
   }
 
   const allowUserCreation =
-    currentTabIndex == 1 && (isOwner || isAccountAdmin) && !isUserInWorkspace
+    currentTabIndex == 1 && canCreateUsers && !isUserInWorkspace
 
   return (
     <>
@@ -128,8 +128,8 @@ function WorkspaceSettings({ workspaceID }) {
 
         {/* MODALS */}
         <CreateNewUserModal
-          onClose={onClose}
           isOpen={isEditingRole || isOpen}
+          onClose={onClose}
           onOpenChange={onOpenChange}
         />
       </div>

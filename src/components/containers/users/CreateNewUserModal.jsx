@@ -22,7 +22,7 @@ import useWorkspaceStore from '@/context/workspaceStore'
 import { changeUserRoleInWorkspace } from '@/app/_actions/workspace-actions'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 
-function CreateNewUserModal({ isOpen, onOpenChange, onClose }) {
+function CreateNewUserModal({ isOpen, onClose }) {
   const { isEditingRole, selectedUser, setSelectedUser, setIsEditingRole } =
     useWorkspaceStore()
   const queryClient = useQueryClient()
@@ -34,16 +34,16 @@ function CreateNewUserModal({ isOpen, onOpenChange, onClose }) {
     password: 'PB0484G@#$%Szm',
   })
   const [error, setError] = useState({ status: false, message: '' })
-  const { accountRoles, workspaceRoles } = useAllUsersAndRoles()
+  const { workspaceRoles } = useAllUsersAndRoles()
 
-  const [selectedKeys, setSelectedKeys] = useState(
-    new Set([ROLES.map((role) => role.label)[0]]),
-  )
+  // const [selectedKeys, setSelectedKeys] = useState(
+  //   new Set([ROLES.map((role) => role.label)[0]]),
+  // )
 
-  const selectedValue = useMemo(
-    () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
-    [selectedKeys],
-  )
+  // const selectedValue = useMemo(
+  //   () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
+  //   [selectedKeys],
+  // )
 
   // ON CREATE => NO IDS are needed for now... only the role name
   const USER_ROLES = isAccountLevelSettingsRoute ? SYSTEM_ROLES : ROLES
@@ -72,7 +72,7 @@ function CreateNewUserModal({ isOpen, onOpenChange, onClose }) {
     if (response.success) {
       notify('success', 'User created successfully!')
       setError({ status: false, message: '' })
-      onOpenChange()
+      onClose()
       queryClient.invalidateQueries([USERS])
       setLoading(false)
       return
@@ -120,17 +120,7 @@ function CreateNewUserModal({ isOpen, onOpenChange, onClose }) {
     if (isEditingRole && Object.keys(selectedUser).length > 0) {
       setNewUser(selectedUser)
     }
-
-    // COMMENT THIS OUT IN DEV MODE
-    return () => {
-      setIsEditingRole(false)
-      setSelectedUser(null)
-    }
-  }, [isEditingRole])
-
-  console.log(selectedUser)
-  console.log(newUser)
-  console.log(workspaceRoles)
+  }, [selectedUser])
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} placement="center">

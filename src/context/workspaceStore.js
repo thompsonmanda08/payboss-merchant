@@ -132,9 +132,11 @@ const useWorkspaceStore = create((set, get) => ({
 
     if (response.success) {
       notify('success', `You Removed ${user?.first_name}!`)
+      return response
     }
 
     notify('error', response.message)
+    return response
   },
 
   handleClearAllSelected: () => {

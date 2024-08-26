@@ -38,10 +38,10 @@ function SelectField({
         className={`group relative flex w-full flex-col items-start justify-start gap-1`}
       >
         <Select
-          className={cn('font-medium ', className)}
+          className={cn('font-medium', className)}
           classNames={{
             base: 'text-lg shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground ',
-            value: 'font-semibold text-neutral-700',
+            value: 'font-semibold text-slate-700 capitalize',
             trigger:
               'focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1  focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70',
             listbox: 'font-medium',

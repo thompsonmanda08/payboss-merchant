@@ -11,14 +11,12 @@ import {
   Avatar,
   useDisclosure,
 } from '@nextui-org/react'
-import {
-  PencilSquareIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline'
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 
 import { cn, getUserInitials } from '@/lib/utils'
 import useWorkspaceStore from '@/context/workspaceStore'
 import PromptModal from '@/components/base/Prompt'
+import useNavigation from '@/hooks/useNavigation'
 
 const roleColorMap = {
   owner: 'success',
@@ -40,9 +38,9 @@ const columns = [
 //! NOTE: ONLY THE OWNER WILL BE ABLE TO SEE ALL THE USERS
 export default function UsersTable({ users = [] }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isUsersRoute } = useNavigation()
   const {
     isLoading,
-    isEditingRole,
     setIsEditingRole,
     setSelectedUser,
     selectedUser,
@@ -137,6 +135,16 @@ export default function UsersTable({ users = [] }) {
     }
   }, [])
 
+  function handleDeleteUser() {
+    // if (isUsersRoute) {
+    //   // TODO: Handle delete from account
+    //   handleDeleteUserFromAccount()
+    // }
+
+    const response = handleDeleteFromWorkspace()
+    if (response.success) onClose()
+  }
+
   return (
     <>
       <Table
@@ -175,7 +183,7 @@ export default function UsersTable({ users = [] }) {
             setSelectedUser(null)
           }}
           title="Remove Workspace User"
-          onConfirm={handleDeleteFromWorkspace}
+          onConfirm={handleDeleteUser}
           confirmText="Remove"
           isDisabled={isLoading}
           isLoading={isLoading}
@@ -186,7 +194,7 @@ export default function UsersTable({ users = [] }) {
             <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
               {`${selectedUser?.first_name} ${selectedUser?.last_name}`}
             </code>{' '}
-            from this workspace.
+            from this {isUsersRoute ? 'account' : 'workspace'}.
           </p>
         </PromptModal>
       )}
