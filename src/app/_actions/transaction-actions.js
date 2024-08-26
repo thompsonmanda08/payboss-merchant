@@ -159,17 +159,17 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
   }
 }
 
-export async function updateInvalidDirectBulkTransactionDetail(
+export async function updateInvalidDirectBulkTransactionDetails(
   transactionID,
   transactionData,
 ) {
-  // const { batch_name, url } = transactionData
+  const { batchID, destination, amount } = transactionData
 
   try {
     const res = await authenticatedService({
       url: `transaction/direct/payments/bulk/${transactionID}`,
       method: 'PATCH',
-      data: transactionData,
+      data: { batchID, destination, amount },
     })
 
     if (res.status == 200) {
@@ -200,14 +200,10 @@ export async function updateInvalidDirectBulkTransactionDetail(
   }
 }
 
-export async function submitBatchForReview(transactionID, transactionData) {
-  // const { batch_name, url } = transactionData
-
+export async function getBatchDetails(batchID) {
   try {
     const res = await authenticatedService({
-      url: `transaction/direct/payments/bulk/review-submission/${batchID}`,
-      method: 'POST',
-      data: batch,
+      url: `transaction/direct/payments/bulk/batch/details/${batchID}`,
     })
 
     if (res.status == 200) {
@@ -228,6 +224,42 @@ export async function submitBatchForReview(transactionID, transactionData) {
       statusText: res?.statusText,
     }
   } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}
+
+export async function submitBatchForApproval(batchID) {
+  // At this point mew records would have been sent to the BE server so we just need to fetch the updated batch
+  try {
+    const res = await authenticatedService({
+      url: `transaction/direct/payments/bulk/review-submission/${batchID}`,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+        statusText: res.statusText,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    console.log(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
