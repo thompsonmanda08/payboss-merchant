@@ -16,7 +16,7 @@ import PromptModal from '@/components/base/Prompt'
 
 const ApproverAction = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient()
-  const { selectedBatch, closeRecordsModal } = usePaymentsStore()
+  const { selectedBatch, closeRecordsModal, batchDetails } = usePaymentsStore()
   const { workspaceWalletBalance } = useWorkspaces()
   const { canCreateUsers: isApprover } = useAllUsersAndRoles()
   const { isOpen, onClose, onOpen } = useDisclosure()
@@ -38,6 +38,12 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     if (selectedBatch?.total_amount < workspaceWalletBalance) {
       setIsLoading(false)
       notify('error', 'Insufficient funds in workspace wallet')
+      return
+    }
+
+    if (!approve.review) {
+      setIsLoading(false)
+      notify('error', 'Review reason is required!')
       return
     }
 
@@ -78,15 +84,16 @@ const ApproverAction = ({ navigateForward, batchID }) => {
         isLoading={isLoading}
         isDismissable={false}
       >
-        <p className="-mt-4 text-sm leading-6 text-slate-700">
+        <p className="-mt-4 mb-2 text-sm leading-6 text-slate-700">
           Are you sure you want to approve the batch transaction{' '}
           <code className="rounded-md bg-primary/10 p-1 px-2 font-semibold text-primary-700">
-            {`${selectedBatch?.batch_name} - (${formatCurrency(selectedBatch?.total_amount)})`}
+            {`${selectedBatch?.batch_name || batchDetails?.batch_name} - (${formatCurrency(selectedBatch?.total_amount || batchDetails?.total_amount)})`}
           </code>{' '}
           to run against your PayBoss Wallet balance.
         </p>
         <Input
           label="Review"
+          placeholder="Enter a review remark"
           isDisabled={isLoading}
           onChange={(e) =>
             setApprove((prev) => ({ ...prev, review: e.target.value }))
