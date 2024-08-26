@@ -1,3 +1,4 @@
+import { updateInvalidDirectBulkTransactionDetails } from '@/app/_actions/transaction-actions'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 import { notify } from '@/lib/utils'
 import { create } from 'zustand'
@@ -22,8 +23,10 @@ const INITIAL_STATE = {
   openValidRecordsModal: false,
   openInvalidRecordsModal: false,
   openAddOrEditModal: false,
+  openBatchDetailsModal: false,
   loading: false,
   selectedRecord: null,
+  selectedBatch: null,
 }
 
 const usePaymentsStore = create((set, get) => ({
@@ -39,9 +42,11 @@ const usePaymentsStore = create((set, get) => ({
   setOpenValidRecordsModal: (open) => set({ openValidRecordsModal: open }),
   setOpenInvalidRecordsModal: (open) => set({ openInvalidRecordsModal: open }),
   setOpenAddOrEditModal: (open) => set({ openAddOrEditModal: open }),
+  setOpenBatchDetailsModal: (open) => set({ openBatchDetailsModal: open }),
   setLoading: (loading) => set({ loading }),
   setSelectedService: (service) => set({ selectedService: service }),
   setSelectedRecord: (record) => set({ selectedRecord: record }),
+  setSelectedBatch: (record) => set({ selectedBatch: record }),
   setSelectedActionType: (type) => set({ selectedActionType: type }),
 
   // UPDATE FIELDS ON THE SELECTED INVALID RECORD
@@ -58,11 +63,26 @@ const usePaymentsStore = create((set, get) => ({
 
   // OPEN VALIDATION AND RECORD MODALS
   openRecordsModal: (type) => {
-    if (type === 'all') set({ openAllRecordsModal: true })
+    if (type === 'all')
+      set({
+        openAllRecordsModal: true,
+        openValidRecordsModal: false,
+        openInvalidRecordsModal: false,
+      })
 
-    if (type === 'valid') set({ openValidRecordsModal: true })
+    if (type === 'valid')
+      set({
+        openValidRecordsModal: true,
+        openAllRecordsModal: false,
+        openInvalidRecordsModal: false,
+      })
 
-    if (type === 'invalid') set({ openInvalidRecordsModal: true })
+    if (type === 'invalid')
+      set({
+        openInvalidRecordsModal: true,
+        openAllRecordsModal: false,
+        openValidRecordsModal: false,
+      })
   },
 
   // CLOSE ALL VALIDATION AND RECORD MODALS
@@ -71,6 +91,7 @@ const usePaymentsStore = create((set, get) => ({
       openAllRecordsModal: false,
       openValidRecordsModal: false,
       openInvalidRecordsModal: false,
+      // openBatchDetailsModal: false,
     })
   },
 
@@ -81,7 +102,7 @@ const usePaymentsStore = create((set, get) => ({
     }))
   },
 
-  saveSelectedRecord: () => {
+  saveSelectedRecord: async () => {
     const { selectedRecord, batchDetails, updateSelectedRecord } = get()
 
     // find selected record in invalid records
@@ -89,27 +110,52 @@ const usePaymentsStore = create((set, get) => ({
 
     // find selected record in invalid records using selectedRecordID and replace it with the updated record in state
     const invalidRecords = batchDetails.invalid
-    const updatedInvalidRecords = invalidRecords.map((record) => {
-      // if record ID matches selectedRecordID, return the updated record
-      if (record.ID === selectedRecordID) {
-        return selectedRecord
-      }
-      // otherwise return the original record
-      return record
-    })
 
-    // Now that we have updated the invalid record array, we can either send  it back to the server for validation or update our current BatchDetails
+    const payload = {
+      batchID: selectedRecord?.batchID,
+      destination: selectedRecord?.destination,
+      amount: selectedRecord?.amount,
+    }
 
-    // Update our current BatchDetails
-    set((state) => ({
+    const response = await updateInvalidDirectBulkTransactionDetails(
+      selectedRecordID,
+      payload,
+    )
+
+    if (response.success) {
+      const updatedInvalidRecords = invalidRecords?.map((record) => {
+        // if record ID matches selectedRecordID, return the updated record
+        if (record.ID === selectedRecordID) {
+          return selectedRecord
+        }
+        // otherwise return the original record
+        return record
+      })
+
+      // Now that we have updated the invalid record array, we can either send  it back to the server for validation or update our current BatchDetails
+
+      // Update our current BatchDetails
+      set((state) => ({
+        loading: false,
+        batchDetails: {
+          ...state.batchDetails,
+          invalid: updatedInvalidRecords,
+        },
+      }))
+      notify('success', 'Record updated!')
+      return response
+    }
+
+    // If the update fails, set the error message and loading status
+    set({
       loading: false,
-      batchDetails: {
-        ...state.batchDetails,
-        invalid: updatedInvalidRecords,
+      error: {
+        status: true,
+        message: response.message,
       },
-    }))
-    notify('success', 'Changes Saved!')
-
+    })
+    notify('error', 'Record update failed!')
+    return response
     // Send updated invalid records back to the server for validation
     // const response = await submitInvalidRecords(updatedInvalidRecords)
   },

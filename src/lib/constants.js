@@ -27,6 +27,7 @@ const WORKSPACE_ROLES_QUERY_KEY = 'workspace-role-query-data'
 const WORKSPACE_DASHBOARD_QUERY_KEY = 'dashboard-query-data'
 const WORKSPACE_MEMBERS_QUERY_KEY = 'members-query-data'
 const DIRECT_BULK_TRANSACTIONS_QUERY_KEY = 'direct-bulk-query-data'
+const BATCH_DETAILS_QUERY_KEY = 'batch-details-query-data'
 
 // ANIMATION_VARIANTS
 const staggerContainerVariants = {
@@ -80,13 +81,13 @@ const TASK_ICON_BG_COLOR_MAP = {
 }
 
 const TRANSACTION_STATUS_COLOR_MAP = {
-  submitted: 'from-primary-300 to-primary-600 ',
-  pending: 'from-secondary to-orange-700',
-  failed: 'from-red-500 to-red-700',
-  canceled: 'from-red-500 to-red-700',
-  rejected: 'from-red-500 to-red-700',
-  succeeded: 'from-[#58FF5F]/20 to-green-700',
-  approved: 'from-[#58FF5F]/20 to-green-700',
+  submitted: 'from-primary/10 to-primary-700/10 text-primary-700',
+  review: 'from-secondary/10 to-orange-600/10 text-orange-700',
+  failed: 'from-red-500/10 to-red-600/10 text-red-700',
+  canceled: 'from-red-500/10 to-red-600/10 text-red-700',
+  rejected: 'from-red-500/10 to-red-600/10 text-red-700',
+  succeeded: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
+  approved: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
 }
 
 const TASK_TYPE = {
@@ -118,7 +119,7 @@ const TASK_TYPE = {
   Deposit: {
     icon: <WalletIcon className="h-5 w-5" />,
     color: 'green-800',
-    label: 'Wallet Pre-fund',
+    label: 'Deposit',
   },
 }
 
@@ -158,4 +159,5 @@ export {
   WORKSPACE_DASHBOARD_QUERY_KEY,
   WORKSPACE_MEMBERS_QUERY_KEY,
   DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
+  BATCH_DETAILS_QUERY_KEY,
 }

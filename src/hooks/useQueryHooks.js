@@ -6,7 +6,10 @@ import {
   getUserSetupConfigs,
   getWorkspaceRoles,
 } from '@/app/_actions/config-actions'
-import { getAllDirectBulkTransactions } from '@/app/_actions/transaction-actions'
+import {
+  getAllDirectBulkTransactions,
+  getBatchDetails,
+} from '@/app/_actions/transaction-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
 import {
   getWorkspaceMembers,
@@ -21,6 +24,7 @@ import {
   WORKSPACE_DASHBOARD_QUERY_KEY,
   WORKSPACE_MEMBERS_QUERY_KEY,
   DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
+  BATCH_DETAILS_QUERY_KEY,
   USERS,
 } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
@@ -101,4 +105,12 @@ export const useDirectBulkTransactions = (workspaceID) =>
     queryKey: [DIRECT_BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
     queryFn: async () => await getAllDirectBulkTransactions(workspaceID),
     refetchOnMount: true,
+  })
+
+export const useBatchDetails = (batchID) =>
+  useQuery({
+    queryKey: [BATCH_DETAILS_QUERY_KEY, batchID],
+    queryFn: async () => await getBatchDetails(batchID),
+    refetchOnMount: true,
+    staleTime: Infinity,
   })

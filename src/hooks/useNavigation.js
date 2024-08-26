@@ -26,7 +26,7 @@ const useNavigation = () => {
       pathArr?.[3]?.replaceAll('-', ' ').toLowerCase() === 'settings')
 
   const isSettingsPage = pathname.split('/')[3]?.toLowerCase() == 'settings'
-  const isUsersRoute = pathname == '/manage-account/users'  
+  const isUsersRoute = pathname == '/manage-account/users'
 
   return {
     pathname,

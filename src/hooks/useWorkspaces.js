@@ -74,6 +74,7 @@ const useWorkspaces = () => {
     allWorkspaces,
     workspaces,
     workspaceID: activeWorkspace?.ID,
+    workspaceWalletBalance: activeWorkspace?.balance,
     sandbox,
     isSandboxVisible,
     setIsSandboxVisible,

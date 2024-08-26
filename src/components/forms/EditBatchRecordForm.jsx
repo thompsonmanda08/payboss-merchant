@@ -3,6 +3,9 @@ import { Input } from '@/components/ui/InputField'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Button } from '../ui/Button'
 import { useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { BATCH_DETAILS_QUERY_KEY } from '@/lib/constants'
+import { StatusMessage } from '../base'
 
 export default function EditBatchRecordForm({ onClose }) {
   const {
@@ -11,15 +14,29 @@ export default function EditBatchRecordForm({ onClose }) {
     loading,
     setLoading,
     saveSelectedRecord,
+    error,
+    setError,
   } = usePaymentsStore()
+  const queryClient = useQueryClient()
 
   async function onSubmit(e) {
     e.preventDefault()
     updateSelectedRecord({ remarks: 'Record Modified', edited: true })
     setLoading(true)
-    await saveSelectedRecord()
-    onClose()
+    const response = await saveSelectedRecord()
+
+    if (response.success) {
+      // TODO: CHECK THAT ARRAY IS BEING CHANGED AND A NEW ARRAY IS ADDED
+      queryClient.invalidateQueries({
+        queryKey: [BATCH_DETAILS_QUERY_KEY, selectedRecord?.batchID],
+      })
+      onClose()
+    }
   }
+
+  useEffect(() => {
+    setError({ status: false, message: '' })
+  }, [selectedRecord])
 
   return (
     <form action="#" onSubmit={onSubmit} className="flex flex-col gap-2">
@@ -73,17 +90,6 @@ export default function EditBatchRecordForm({ onClose }) {
           value={selectedRecord?.nrc}
           required
         />
-        {/* <Input
-          label="Account Type"
-          name="account_type"
-          type="text"
-          autoComplete="account-type"
-          value={selectedRecord?.account_type}
-          required
-          onChange={(e) =>
-            updateSelectedRecord({ account_type: e.target.value })
-          }
-        /> */}
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row">
         <Input
@@ -103,21 +109,18 @@ export default function EditBatchRecordForm({ onClose }) {
           type="text"
           autoComplete="amount"
           value={selectedRecord?.amount}
+          isDisabled
           required
           onChange={(e) => updateSelectedRecord({ amount: e.target.value })}
         />
       </div>
-      {/* <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
-        <Input
-          label="Bank Code"
-          name="bank_code"
-          type="text"
-          autoComplete="bank_code"
-          value={selectedRecord?.bank_code}
-          required
-          onChange={(e) => updateSelectedRecord({ bank_code: e.target.value })}
-        />
-      </div> */}
+
+      {error?.status && (
+        <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
+          <StatusMessage error={error.status} message={error.message} />
+        </div>
+      )}
+
       <div className="mt-4 flex w-full flex-col gap-4 md:justify-end">
         <Button
           aria-label="save"
