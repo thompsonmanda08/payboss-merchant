@@ -8,6 +8,7 @@ import PaymentDetails from './PaymentDetails'
 import ValidationDetails from './ValidationDetails'
 import RecordDetailsViewer from './RecordDetailsViewer'
 import { useSearchParams } from 'next/navigation'
+import ApproverAction from './ApproverAction'
 
 export const STEPS = [
   {
@@ -25,6 +26,11 @@ export const STEPS = [
     infoText:
       'The validation will make sure all record entries do not cause internal errors',
     step: 'Validation',
+  },
+  {
+    title: 'Create a payment - Approval Status',
+    infoText: 'Approvals can only be done by account admins',
+    step: 'Approval',
   },
 ]
 
@@ -67,6 +73,11 @@ function BulkPaymentAction({}) {
       key={'step-4'}
       navigateForward={goForward}
       navigateBackwards={goBack}
+    />,
+    <ApproverAction
+      key={'step-5'}
+      // navigateForward={goForward}
+      // navigateBackwards={goBack}
     />,
   ])
 
