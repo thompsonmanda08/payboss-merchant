@@ -20,7 +20,6 @@ const DocumentsViewer = () => {
     }
   })
 
-
   return (
     <>
       <CardHeader
@@ -69,7 +68,7 @@ const DocumentsViewer = () => {
               variant="light"
               className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border border-primary-100 bg-slate-100 p-4 transition-all duration-300 ease-in-out"
               onClick={() => {
-                setSelectedDoc(document)
+                setSelectedDoc(signedContractDoc)
                 setIsOpen(true)
               }}
             >
@@ -96,7 +95,10 @@ const DocumentsViewer = () => {
 
       <Modal
         show={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={() => {
+          setIsOpen(false)
+          setSelectedDoc(null)
+        }}
         cancelText="Close"
         isDismissible={true}
         title={selectedDoc?.name}
