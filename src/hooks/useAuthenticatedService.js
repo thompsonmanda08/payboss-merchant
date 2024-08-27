@@ -1,9 +1,7 @@
 import { useEffect } from 'react'
 import useRefreshToken from './useRefreshToken'
 import useAuthStore from '@/context/authStore'
-import authenticatedService, {
-  setupInterceptors,
-} from '@/lib/authenticatedService'
+import { apiClient } from '@/lib/utils'
 
 const useAuthenticatedService = () => {
   const refresh = useRefreshToken()
@@ -13,15 +11,39 @@ const useAuthenticatedService = () => {
     console.log('Adding Token...')
     console.log('Refreshing Token...')
     // Set up the interceptors
-    const cleanupInterceptors = setupInterceptors(auth, refresh)
+    const requestIntercept = apiClient.interceptors.request.use(
+      (config) => {
+        if (!config.headers['Authorization']) {
+          config.headers['Authorization'] = `Bearer ${auth?.accessToken}`
+        }
+        return config
+      },
+      (error) => Promise.reject(error),
+    )
 
-    // Clean up interceptors when the component unmounts or when auth/refresh changes
+    // Response Interceptor
+    const responseIntercept = apiClient.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const prevRequest = error?.config
+        if (error?.response?.status === 403 && !prevRequest?.sent) {
+          prevRequest.sent = true
+          const newAccessToken = await refresh()
+          prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
+          return apiClient(prevRequest)
+        }
+        return Promise.reject(error)
+      },
+    )
+
+    // Return a cleanup function to remove interceptors if needed
     return () => {
-      cleanupInterceptors()
+      apiClient.interceptors.request.eject(requestIntercept)
+      apiClient.interceptors.response.eject(responseIntercept)
     }
   }, [auth, refresh])
 
-  return authenticatedService
+  return auth
 }
 
 export default useAuthenticatedService
