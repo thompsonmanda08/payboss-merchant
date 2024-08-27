@@ -15,6 +15,7 @@ function SelectField({
   defaultValue,
   className,
   wrapperClassName,
+  prefilled = false,
   ...props
 }) {
   return (
@@ -51,7 +52,7 @@ function SelectField({
           }}
           variant="bordered"
           placeholder={placeholder || 'Select'}
-          // selectedKeys={[value]}
+          selectedKeys={prefilled ? [value] : undefined}
           value={value}
           onChange={onChange}
           defaultValue={defaultValue}

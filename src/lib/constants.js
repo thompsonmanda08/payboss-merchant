@@ -7,8 +7,10 @@ import {
 } from '@heroicons/react/24/outline'
 
 const BASE_URL = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL
-const POCKET_BASE_URL =
-  process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL
+// const POCKET_BASE_URL =
+//   process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL
+
+const POCKET_BASE_URL = 'https://payboss-uat-backend.bgsgroup.co.zm'
 
 const AUTH_SESSION = 'pb-session'
 const USER_SESSION = 'pb-next-usr'

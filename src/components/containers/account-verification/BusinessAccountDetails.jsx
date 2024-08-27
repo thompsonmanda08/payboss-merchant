@@ -66,6 +66,7 @@ function BusinessAccountDetails({
                 label="Company Type"
                 name="companyTypeID"
                 listItemName={'type'}
+                prefilled={true}
                 value={businessDetails?.companyTypeID}
                 // required={true}
                 // onChange={(e) => {
@@ -199,6 +200,7 @@ function BusinessAccountDetails({
               name="bankID"
               value={businessDetails?.bankID}
               isDisabled
+              prefilled={true}
               listItemName={'bank_name'}
               required={true}
               onChange={(e) => {
@@ -234,6 +236,7 @@ function BusinessAccountDetails({
               label="Currency"
               name="currencyID"
               isDisabled
+              prefilled={true}
               value={businessDetails?.currencyID}
               listItemName={'currency'}
               required={true}
