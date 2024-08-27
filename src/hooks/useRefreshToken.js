@@ -7,14 +7,18 @@ const useRefreshToken = () => {
 
   const refresh = async () => {
     const response = await getRefreshToken()
-    let accessToken = response?.data?.accessToken
-    console.log('NEW TOKEN' + accessToken)
-    setAuth((prev) => {
-      console.log('OLD TOKEN' + JSON.stringify(prev))
-      return { ...prev, accessToken }
-    })
 
-    return accessToken
+    if (response.success) {
+      let accessToken = response?.data?.accessToken
+      console.log('NEW TOKEN' + accessToken)
+      setAuth((prev) => {
+        console.log('OLD TOKEN' + JSON.stringify(prev))
+        return { ...prev, accessToken }
+      })
+      return accessToken
+    }
+
+    return null
   }
   return refresh
 }
