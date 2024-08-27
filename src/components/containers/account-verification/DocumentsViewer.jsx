@@ -18,7 +18,7 @@ const DocumentsViewer = () => {
     if (businessDocs.length) {
       setSelectedDoc(businessDocs[0])
     }
-  })
+  }, [])
 
   return (
     <>
@@ -38,7 +38,7 @@ const DocumentsViewer = () => {
         <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-5">
           {businessDocs?.map((document, index) => (
             <Button
-              key={document?.type}
+              key={index}
               variant="light"
               className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border border-primary-100 bg-slate-100 p-4 transition-all duration-300 ease-in-out"
               onClick={() => {
