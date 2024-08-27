@@ -113,20 +113,17 @@ export async function assignUsersToWorkspace(users, workspaceID) {
 
     return {
       success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      message: res?.data?.error || 'Operation Failed!',
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.error(error)
+    console.log(error?.response)
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.statusText ||
-        'Operation Failed!',
-      data: error?.response,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     }

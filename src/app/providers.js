@@ -6,12 +6,28 @@ import { useNetwork } from '@/hooks/useNetwork'
 import { motion } from 'framer-motion'
 import FirstLogin from '@/components/base/FirstLogin'
 import useAccountProfile from '@/hooks/useProfileDetails'
+import { setupInterceptors } from '@/lib/authenticatedService'
+import { useEffect } from 'react'
+import useAuthStore from '@/context/authStore'
+import useRefreshToken from '@/hooks/useRefreshToken'
 // import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
 const queryClient = new QueryClient()
 
 function Providers({ session, children }) {
   const { online } = useNetwork()
+  const refresh = useRefreshToken()
+  const auth = useAuthStore((state) => state.auth)
+
+   useEffect(() => {
+     // Set up the interceptors
+     const cleanupInterceptors = setupInterceptors(auth, refresh)
+
+     // Clean up interceptors when the component unmounts or when auth/refresh changes
+     return () => {
+       cleanupInterceptors()
+     }
+   }, [auth, refresh])
 
   return (
     <QueryClientProvider client={queryClient}>
