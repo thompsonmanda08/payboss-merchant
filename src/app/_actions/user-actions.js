@@ -11,7 +11,7 @@ export async function createNewUser(newUser) {
   try {
     const res = await authenticatedService({
       method: 'POST',
-      url: `merchant/${merchantID}/user/new`,
+      url: `merchant/${merchantID}/user/other/new`,
       data: newUser,
     })
 
@@ -21,25 +21,23 @@ export async function createNewUser(newUser) {
         message: res.message,
         data: res.data,
         status: res.status,
+        statusText: res.statusText,
       }
     }
 
     return {
       success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      message: res?.data?.error || 'Operation Failed!',
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.error(error)
+    console.log(error?.response)
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.statusText ||
-        'Operation Failed!',
-      data: error?.response,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     }
