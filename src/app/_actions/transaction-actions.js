@@ -23,26 +23,23 @@ export async function getAllDirectBulkTransactions(workspaceID) {
 
     return {
       success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      message: res?.data?.error || 'Operation Failed!',
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.error(error)
+    console.log(error?.response)
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.data?.error ||
-        error?.response?.statusText ||
-        'Operation Failed!',
-      data: error?.response,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     }
   }
 }
+
 
 export async function getDirectBulkTransactionDetails(batchID) {
   try {
@@ -62,26 +59,23 @@ export async function getDirectBulkTransactionDetails(batchID) {
 
     return {
       success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      message: res?.data?.error || 'Operation Failed!',
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.error(error)
+    console.log(error?.response)
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.data?.error ||
-        error?.response?.statusText ||
-        'Operation Failed!',
-      data: error?.response,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     }
   }
 }
+
 
 export async function reviewBatch(batchID, reviewDetails) {
   // const { action, review } = reviewDetails
@@ -104,13 +98,13 @@ export async function reviewBatch(batchID, reviewDetails) {
 
     return {
       success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      message: res?.data?.error || 'Operation Failed!',
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.error(error)
+    console.log(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
@@ -120,6 +114,7 @@ export async function reviewBatch(batchID, reviewDetails) {
     }
   }
 }
+
 
 export async function initializeBulkTransaction(workspaceID, transactionData) {
   // const { batch_name, url } = transactionData
@@ -140,7 +135,6 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
         statusText: res.statusText,
       }
     }
-
     return {
       success: false,
       message: res?.data?.error || 'Operation Failed!',
@@ -149,6 +143,7 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
       statusText: res?.statusText,
     }
   } catch (error) {
+    console.log(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
@@ -158,6 +153,7 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
     }
   }
 }
+
 
 export async function updateInvalidDirectBulkTransactionDetails(
   transactionID,
