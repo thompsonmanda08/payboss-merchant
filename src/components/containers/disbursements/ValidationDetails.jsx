@@ -8,8 +8,10 @@ import Spinner from '@/components/ui/Spinner'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
 import { submitBatchForApproval } from '@/app/_actions/transaction-actions'
 import { notify } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
 
 const ValidationDetails = ({ navigateForward, batchID }) => {
+  const queryClient = useQueryClient()
   const {
     openRecordsModal,
     // TODO: => THERE IS A BETTER WAY TO HANDLE THIS RUBBISH I HAVE DONE HERE ==> USE MUTATION
@@ -51,6 +53,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
       return
     }
 
+    queryClient.invalidateQueries()
     notify('success', 'Records submitted successfully!')
     navigateForward()
     setLoading(false)
@@ -68,7 +71,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
   }, [batchID, selectedBatch?.ID, queryID])
 
   return isLoading || loading || !queryID || !batchDetails ? (
-    <div className="grid flex-1 flex-grow place-items-center py-8">
+    <div className="grid min-h-80 flex-1 flex-grow place-items-center py-8">
       <div className="flex w-fit flex-col items-center justify-center gap-4">
         <Spinner size={50} />
       </div>

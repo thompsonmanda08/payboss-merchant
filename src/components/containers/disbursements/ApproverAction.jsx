@@ -13,14 +13,29 @@ import useWorkspaces from '@/hooks/useWorkspaces'
 import { useQueryClient } from '@tanstack/react-query'
 import { BATCH_DETAILS_QUERY_KEY } from '@/lib/constants'
 import PromptModal from '@/components/base/Prompt'
+import { useBatchDetails } from '@/hooks/useQueryHooks'
 
 const ApproverAction = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient()
-  const { selectedBatch, closeRecordsModal, batchDetails } = usePaymentsStore()
+  const {
+    selectedBatch,
+    closeRecordsModal,
+    // batchDetails,
+    setOpenBatchDetailsModal,
+  } = usePaymentsStore()
+
+  const [queryID, setQueryID] = useState(
+    batchID || selectedBatch?.ID || batchState?.ID,
+  )
+
+  const { data: batchResponse } = useBatchDetails(queryID)
+  const batchDetails = batchResponse?.data
+
   const { workspaceWalletBalance } = useWorkspaces()
   const { canCreateUsers: isApprover } = useAllUsersAndRoles()
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [isLoading, setIsLoading] = React.useState(false)
+  const [isApproval, setIsApproval] = React.useState(true)
   const [approve, setApprove] = React.useState({
     action: 'approve', //approve or reject
     review: '',
@@ -35,7 +50,13 @@ const ApproverAction = ({ navigateForward, batchID }) => {
       return
     }
 
-    if (selectedBatch?.total_amount < workspaceWalletBalance) {
+    if (
+      isApproval &&
+      (parseFloat(selectedBatch?.total_amount) >
+        parseFloat(workspaceWalletBalance) ||
+        parseFloat(batchDetails?.total_amount) >
+          parseFloat(workspaceWalletBalance))
+    ) {
       setIsLoading(false)
       notify('error', 'Insufficient funds in workspace wallet')
       return
@@ -56,27 +77,43 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     }
 
     setIsLoading(false)
-    notify('success', 'Bulk transaction approved!')
-    queryClient.invalidateQueries({
-      queryKey: [BATCH_DETAILS_QUERY_KEY, batchID],
-    })
+    let action = isApproval ? 'approved' : 'rejected'
+    notify('success', `Bulk transaction ${action}!`)
+
+    queryClient.invalidateQueries()
     closeRecordsModal()
+    setOpenBatchDetailsModal(false)
     onClose()
   }
 
-  function handleRevert() {
-    closeRecordsModal()
+  function handleReject() {
+    setApprove((prev) => ({ ...prev, action: 'reject' }))
+    setIsApproval(false)
+    onOpen()
+  }
+
+  function handleClosePrompt() {
+    setApprove((prev) => ({
+      action: 'approve', //approve or reject
+      review: '',
+    }))
+    setIsApproval(true)
+    setIsLoading(false)
     onClose()
   }
 
-  console.log(workspaceWalletBalance)
-
-  return (
+  return !batchDetails ? (
+    <div className="grid min-h-80 flex-1 flex-grow place-items-center py-8">
+      <div className="flex w-fit flex-col items-center justify-center gap-4">
+        <Spinner size={50} />
+      </div>
+    </div>
+  ) : (
     <>
       <PromptModal
         isOpen={isOpen}
         onOpen={onOpen}
-        onClose={onClose}
+        onClose={handleClosePrompt}
         title="Approve Bulk Transaction"
         onConfirm={handleApproval}
         confirmText="Confirm"
@@ -85,11 +122,11 @@ const ApproverAction = ({ navigateForward, batchID }) => {
         isDismissable={false}
       >
         <p className="-mt-4 mb-2 text-sm leading-6 text-slate-700">
-          Are you sure you want to approve the batch transaction{' '}
+          Are you sure you want to {approve.action} the batch transaction{' '}
           <code className="rounded-md bg-primary/10 p-1 px-2 font-semibold text-primary-700">
             {`${selectedBatch?.batch_name || batchDetails?.batch_name} - (${formatCurrency(selectedBatch?.total_amount || batchDetails?.total_amount)})`}
           </code>{' '}
-          to run against your PayBoss Wallet balance.
+          {isApproval ? 'to run against your PayBoss Wallet balance.' : ''}
         </p>
         <Input
           label="Review"
@@ -128,27 +165,29 @@ const ApproverAction = ({ navigateForward, batchID }) => {
           </div>
         </div>
 
-        {isApprover && (
-          <div className="mb-4 ml-auto flex w-full max-w-xs items-end justify-end gap-4">
-            <Button
-              className={'flex-1 bg-red-500/10'}
-              color="danger"
-              variant="light"
-              // isDisabled={isLoading}
-              onClick={handleRevert}
-            >
-              Revert
-            </Button>
-            <Button
-              className={'flex-1'}
-              isLoading={isLoading}
-              isDisabled={isLoading}
-              onClick={onOpen}
-            >
-              Approve
-            </Button>
-          </div>
-        )}
+        {isApprover &&
+          (selectedBatch?.status == 'review' ||
+            batchDetails?.status == 'review') && (
+            <div className="mb-4 ml-auto flex w-full max-w-xs items-end justify-end gap-4">
+              <Button
+                className={'flex-1 bg-red-500/10'}
+                color="danger"
+                variant="light"
+                // isDisabled={isLoading}
+                onClick={handleReject}
+              >
+                Reject
+              </Button>
+              <Button
+                className={'flex-1'}
+                isLoading={isLoading}
+                isDisabled={isLoading}
+                onClick={onOpen}
+              >
+                Approve
+              </Button>
+            </div>
+          )}
       </div>
     </>
   )

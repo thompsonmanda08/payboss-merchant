@@ -87,7 +87,7 @@ export async function reviewBatch(batchID, reviewDetails) {
   // const { action, review } = reviewDetails
   try {
     const res = await authenticatedService({
-      url: `transaction/direct/payments/bulk/${batchID}`,
+      url: `transaction/direct/payments/bulk/review-submission/${batchID}`,
       method: 'POST',
       data: reviewDetails,
     })
