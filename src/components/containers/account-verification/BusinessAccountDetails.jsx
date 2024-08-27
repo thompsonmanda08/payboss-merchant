@@ -30,7 +30,7 @@ function BusinessAccountDetails({
     !isValidZambianMobileNumber(businessDetails?.contact) &&
     businessDetails?.contact?.length > 1
 
-  console.log(businessDetails)
+
 
   //TODO => FETCH ALL KYC DATA - INPUT FIELDS TO BE DISABLED
   return (
@@ -69,7 +69,7 @@ function BusinessAccountDetails({
                 name="companyTypeID"
                 listItemName={'type'}
                 prefilled={true}
-                value={businessDetails?.companyTypeID}
+                value={businessDetails?.companytypeID}
                 // required={true}
                 // onChange={(e) => {
                 //   updateDetails(STEPS[0], { companyTypeID: e.target.value })
