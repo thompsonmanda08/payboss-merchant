@@ -19,8 +19,8 @@ function DashboardHome() {
       <div className="flex w-full flex-col gap-4 md:gap-6">
         <InfoBanner
           buttonText="Verify Account"
-          infoText="You have not verified your account yet. Please verify your account to access all the features of the app."
-          href={'settings/account-verification'}
+          infoText="Just one more step, please submit your business documents to aid us with the approval process"
+          href={'manage-account/account-verification'}
         />
         <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-4 ">
           <SimpleStats

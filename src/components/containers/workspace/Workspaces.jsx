@@ -81,7 +81,7 @@ function Workspaces() {
       {/* ACCOUNT VERIFICATION PROMPTING BANNER */}
       <InfoBanner
         buttonText="Verify Account"
-        infoText="You have not verified your account yet. Please verify your account to access all the features of the app."
+        infoText="Just one more step, please submit your business documents to aid us with the approval process"
         href={'manage-account/account-verification'}
       />
 
