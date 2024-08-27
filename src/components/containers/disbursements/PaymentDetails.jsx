@@ -44,7 +44,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
     }
 
     // Create payment batch here if user is create access
-    if (workspaceUserRole.create) {
+    if (workspaceUserRole?.create) {
       const response = await initializeBulkTransaction(
         workspaceID,
         paymentAction,
@@ -71,12 +71,12 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
     return
   }
 
-  // function handleBackwardsNavigation() {
-  //   // Set the file to null so that the user can upload again
-  //   updatePaymentFields({ file: null })
-  //   setError({ status: false, message: '' })
-  //   navigateBackwards()
-  // }
+  function handleBackwardsNavigation() {
+    // Set the file to null so that the user can upload again
+    updatePaymentFields({ file: null })
+    setError({ status: false, message: '' })
+    navigateBackwards()
+  }
 
   useEffect(() => {
     setError({ status: false, message: '' })
@@ -145,6 +145,16 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
           onClick={handleProceed}
         >
           Validate Batch
+        </Button>
+
+        <Button
+          className={'font-medium text-primary bg-primary/10'}
+          color={'primary'}
+          variant="light"
+          onClick={handleBackwardsNavigation}
+          isDisabled={loading}
+        >
+          Go Back
         </Button>
       </div>
 

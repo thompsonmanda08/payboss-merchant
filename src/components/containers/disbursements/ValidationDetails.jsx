@@ -9,6 +9,11 @@ import { useBatchDetails } from '@/hooks/useQueryHooks'
 import { submitBatchForApproval } from '@/app/_actions/transaction-actions'
 import { notify } from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
+import {
+  BATCH_DETAILS_QUERY_KEY,
+  DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
+} from '@/lib/constants'
+import useWorkspaces from '@/hooks/useWorkspaces'
 
 const ValidationDetails = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient()
@@ -20,7 +25,10 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     loading,
     setLoading,
     selectedBatch,
+    openBatchDetailsModal,
   } = usePaymentsStore()
+
+  const { workspaceID } = useWorkspaces()
 
   const [queryID, setQueryID] = useState(
     batchID || selectedBatch?.ID || batchState?.ID,
@@ -53,7 +61,16 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
       return
     }
 
-    queryClient.invalidateQueries()
+    // PERFORM QUERY INVALIDATION TO UPDATE THE STATE OF THE UI
+    if (openBatchDetailsModal) {
+      queryClient.invalidateQueries({
+        queryKey: [DIRECT_BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
+      })
+    } else {
+      queryClient.invalidateQueries({
+        queryKey: [BATCH_DETAILS_QUERY_KEY, queryID],
+      })
+    }
     notify('success', 'Records submitted successfully!')
     navigateForward()
     setLoading(false)

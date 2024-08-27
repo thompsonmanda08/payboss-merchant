@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { formatCurrency, notify } from '@/lib/utils'
 import approvalIllustration from '@/images/illustrations/approval.svg'
@@ -11,17 +11,19 @@ import { useDisclosure } from '@nextui-org/react'
 import { Input } from '@/components/ui/InputField'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { useQueryClient } from '@tanstack/react-query'
-import { BATCH_DETAILS_QUERY_KEY } from '@/lib/constants'
+import { BATCH_DETAILS_QUERY_KEY, DIRECT_BULK_TRANSACTIONS_QUERY_KEY } from '@/lib/constants'
 import PromptModal from '@/components/base/Prompt'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
+import Spinner from '@/components/ui/Spinner'
 
 const ApproverAction = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient()
   const {
     selectedBatch,
     closeRecordsModal,
-    // batchDetails,
+    batchDetails: batchState,
     setOpenBatchDetailsModal,
+    openBatchDetailsModal,
   } = usePaymentsStore()
 
   const [queryID, setQueryID] = useState(
@@ -31,7 +33,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
   const { data: batchResponse } = useBatchDetails(queryID)
   const batchDetails = batchResponse?.data
 
-  const { workspaceWalletBalance } = useWorkspaces()
+  const { workspaceWalletBalance, workspaceID } = useWorkspaces()
   const { canCreateUsers: isApprover } = useAllUsersAndRoles()
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [isLoading, setIsLoading] = React.useState(false)
@@ -80,7 +82,16 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     let action = isApproval ? 'approved' : 'rejected'
     notify('success', `Bulk transaction ${action}!`)
 
-    queryClient.invalidateQueries()
+    // PERFORM QUERY INVALIDATION TO UPDATE THE STATE OF THE UI
+    if (openBatchDetailsModal) {
+      queryClient.invalidateQueries({
+        queryKey: [DIRECT_BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
+      })
+    } else {
+      queryClient.invalidateQueries({
+        queryKey: [BATCH_DETAILS_QUERY_KEY, queryID],
+      })
+    }
     closeRecordsModal()
     setOpenBatchDetailsModal(false)
     onClose()
