@@ -176,9 +176,6 @@ export async function getUser(userID) {
 }
 
 export async function changeUserPassword(password) {
-  // const session = await getUserSession()
-  // const merchantID = session?.user?.merchantID
-
   cookies().delete(USER_SESSION)
 
   try {
@@ -199,20 +196,17 @@ export async function changeUserPassword(password) {
 
     return {
       success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      message: res?.data?.error || 'Operation Failed!',
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.error(error)
+    console.log(error?.response)
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.statusText ||
-        'Operation Failed!',
-      data: error?.response,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     }
