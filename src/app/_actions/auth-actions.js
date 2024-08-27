@@ -292,10 +292,18 @@ export async function getRefreshToken() {
     })
 
     if (res.status == 200) {
+      const response = res.data
+
+      const accessToken = response?.token
+      const refreshToken = response?.refreshToken
+      const expiresIn = response?.expires_in
+
+      await createAuthSession(accessToken, expiresIn, refreshToken)
+
       return {
         success: true,
         message: res.message,
-        data: res.data,
+        data: { accessToken },
         status: res.status,
         statusText: res.statusText,
       }

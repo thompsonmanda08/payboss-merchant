@@ -1,8 +1,7 @@
-import { authenticatedService } from '@/lib/utils'
 import { useEffect } from 'react'
 import useRefreshToken from './useRefreshToken'
 import useAuthStore from '@/context/authStore'
-import { getServerSideSession } from '@/app/_actions/auth-actions'
+import authenticatedService from '@/lib/authenticatedService'
 
 const useAuthenticatedService = () => {
   const refresh = useRefreshToken()
@@ -10,7 +9,7 @@ const useAuthenticatedService = () => {
 
   useEffect(async () => {
     console.log('Adding Token...')
-    // console.log('Refreshing Token...') // TODO IN THE FUTURE
+    console.log('Refreshing Token...')
 
     const requestIntercept = authenticatedService.interceptors.request.use(
       (config) => {
