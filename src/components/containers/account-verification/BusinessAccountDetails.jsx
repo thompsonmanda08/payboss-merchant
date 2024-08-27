@@ -30,6 +30,8 @@ function BusinessAccountDetails({
     !isValidZambianMobileNumber(businessDetails?.contact) &&
     businessDetails?.contact?.length > 1
 
+  console.log(businessDetails)
+
   //TODO => FETCH ALL KYC DATA - INPUT FIELDS TO BE DISABLED
   return (
     <div className="mr-auto flex flex-col gap-y-10">

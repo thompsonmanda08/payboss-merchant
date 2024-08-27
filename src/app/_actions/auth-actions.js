@@ -163,15 +163,11 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
   const session = await getUserSession()
   const merchantID = session?.user?.merchantID
   try {
-    const res = await apiClient.post(
-      `merchant/onboard/documents/${merchantID}`,
-      payloadUrls,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
+    const res = await authenticatedService({
+      url: `merchant/onboard/documents/${merchantID}`,
+      method: 'POST',
+      data: payloadUrls,
+    })
 
     console.log(res)
 
@@ -208,16 +204,11 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
   const session = await getUserSession()
   const merchantID = session?.user?.merchantID
   try {
-    const res = await apiClient.patch(
-      `merchant/onboard/update/documents/${merchantID}`,
-      payloadUrls,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-    console.log(res)
+    const res = await authenticatedService({
+      url: `merchant/onboard/update/documents/${merchantID}`,
+      method: 'PATCH',
+      data: payloadUrls,
+    })
 
     if (res.status == 200) {
       return {
@@ -293,7 +284,6 @@ export async function authenticateUser(loginCredentials) {
     }
   }
 }
-
 
 export async function getRefreshToken() {
   try {
