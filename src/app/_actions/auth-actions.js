@@ -1,5 +1,6 @@
 'use server'
 import useAuthStore from '@/context/authStore'
+import authenticatedService from '@/lib/authenticatedService'
 import {
   createAuthSession,
   deleteSession,
@@ -289,6 +290,42 @@ export async function authenticateUser(loginCredentials) {
         error?.response?.data?.error || 'Oops! Login Failed, Try Again!.',
       data: null,
       status: error?.response?.status || error.status,
+    }
+  }
+}
+
+
+export async function getRefreshToken() {
+  try {
+    const res = await authenticatedService({
+      url: `/merchant/user/refresh/token`,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+        statusText: res.statusText,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     }
   }
 }
