@@ -11,10 +11,14 @@ import { useDisclosure } from '@nextui-org/react'
 import { Input } from '@/components/ui/InputField'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { useQueryClient } from '@tanstack/react-query'
-import { BATCH_DETAILS_QUERY_KEY, DIRECT_BULK_TRANSACTIONS_QUERY_KEY } from '@/lib/constants'
+import {
+  BATCH_DETAILS_QUERY_KEY,
+  DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
+} from '@/lib/constants'
 import PromptModal from '@/components/base/Prompt'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
 import Spinner from '@/components/ui/Spinner'
+import useDashboard from '@/hooks/useDashboard'
 
 const ApproverAction = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient()
@@ -34,7 +38,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
   const batchDetails = batchResponse?.data
 
   const { workspaceWalletBalance, workspaceID } = useWorkspaces()
-  const { canCreateUsers: isApprover } = useAllUsersAndRoles()
+  const { workspaceUserRole: role } = useDashboard()
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [isLoading, setIsLoading] = React.useState(false)
   const [isApproval, setIsApproval] = React.useState(true)
@@ -46,7 +50,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
   async function handleApproval() {
     setIsLoading(true)
 
-    if (!isApprover) {
+    if (!role?.can_approve) {
       setIsLoading(false)
       notify('error', 'Unauthorized!')
       return
@@ -161,7 +165,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
               Batch payout requires approval
             </h3>
 
-            {isApprover ? (
+            {role?.can_approve ? (
               <p className="text-center text-[15px] text-slate-500">
                 Batch payouts have been validated and awaiting approval, after
                 which the transactions will run against your PayBoss wallet.
@@ -176,7 +180,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
           </div>
         </div>
 
-        {isApprover &&
+        {role?.can_approve &&
           (selectedBatch?.status == 'review' ||
             batchDetails?.status == 'review') && (
             <div className="mb-4 ml-auto flex w-full max-w-xs items-end justify-end gap-4">

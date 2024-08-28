@@ -1,13 +1,12 @@
 'use server'
-import useAuthStore from '@/context/authStore'
 import authenticatedService from '@/lib/authenticatedService'
 import {
   createAuthSession,
   deleteSession,
-  getServerSession,
   getUserSession,
   verifySession,
 } from '@/lib/session'
+
 import { apiClient } from '@/lib/utils'
 
 export async function validateTPIN(tpin) {
