@@ -134,8 +134,8 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
           >
             Back
           </Button> */}
-          {(batchState?.status.toLowerCase() == 'submitted' ||
-            selectedBatch?.status.toLowerCase() == 'submitted') && (
+          {(batchState?.status?.toLowerCase() == 'submitted' ||
+            selectedBatch?.status?.toLowerCase() == 'submitted') && (
             <Button onClick={handleSubmitForApproval}>
               Submit For Approval
             </Button>

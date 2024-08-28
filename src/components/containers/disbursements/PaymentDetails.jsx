@@ -43,6 +43,13 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
       return
     }
 
+    // Check if the selected service is not available yet
+    if (selectedService.toLowerCase() == 'voucher') {
+      setLoading(false)
+      notify('error', 'Service Not available yet!')
+      return
+    }
+
     // Create payment batch here if user is create access
     if (workspaceUserRole?.create) {
       const response = await initializeBulkTransaction(
@@ -88,6 +95,8 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
     updatePaymentFields({ type: PAYMENT_SERVICE[option] })
   }
 
+  // console.log(selectedService)
+
   return (
     <div className="flex h-full w-full flex-col  gap-4">
       <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 p-4 ">
@@ -117,11 +126,12 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
         <CustomRadioGroup
           onChange={(option) => selectServiceType(option)}
           labelText="Service"
+          defaultValue={service}
           options={
             // MUST BE AN ARRAY
             PAYMENT_SERVICE?.map((item, index) => (
               <div key={index} className="flex flex-1 capitalize">
-                <span>{item}</span>
+                <span className="font-medium">{item}</span>
               </div>
             ))
           }

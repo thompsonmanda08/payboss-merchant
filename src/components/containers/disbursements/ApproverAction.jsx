@@ -74,7 +74,9 @@ const ApproverAction = ({ navigateForward, batchID }) => {
       return
     }
 
-    const response = await reviewBatch(batchID, approve)
+    // console.log(batchID)
+    // console.log(queryID)
+    const response = await reviewBatch(queryID, approve)
 
     if (!response.success) {
       setIsLoading(false)

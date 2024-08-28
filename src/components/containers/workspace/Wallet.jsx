@@ -102,6 +102,8 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
     return
   }
 
+  console.log(balance)
+
   return (
     <>
       <section role="wallet-section" className="grid w-full place-items-center">
@@ -120,7 +122,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
           >
             <Balance
               title={`${workspaceName} Wallet`}
-              amount={formatCurrency(balance)}
+              amount={balance}
               isLandscape
             />
             <div
