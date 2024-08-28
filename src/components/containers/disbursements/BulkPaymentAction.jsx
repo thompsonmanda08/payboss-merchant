@@ -113,7 +113,7 @@ function BulkPaymentAction({}) {
     <>
       {/************************* COMPONENT RENDERER *************************/}
 
-      <Card className={'max-w-4xl rounded-2xl'}>
+      <Card className={'flex-[2] rounded-2xl'}>
         <CardHeader
           title={
             <>

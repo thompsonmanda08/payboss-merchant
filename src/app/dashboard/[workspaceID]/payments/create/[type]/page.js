@@ -1,21 +1,25 @@
+import { getUserDetails } from '@/app/_actions/config-actions'
 import LoadingPage from '@/app/loading'
 import NotFound from '@/app/not-found'
-import { Balance } from '@/components/base'
 import { BulkPaymentAction } from '@/components/containers'
+import InitiatorsLog from '@/components/containers/disbursements/InitiatorsLog'
+
 import React, { Suspense } from 'react'
 
-function CreatePayment({ params }) {
+async function CreatePayment({ params }) {
   const { type } = params // BULK OR SINGLE
+
+  const session = await getUserDetails()
+  const user = session?.user
+
+  console.log(session)
 
   if (type === 'bulk') {
     return (
       <Suspense fallback={<LoadingPage />}>
         <div className="flex w-full gap-5">
           <BulkPaymentAction />
-          <div className="flex flex-col gap-4">
-            <Balance title={'PayBoss Wallet'} amount={'K10, 500'} />
-            <Balance title={'Bank'} amount={'K10, 500'} />
-          </div>
+          {session && <InitiatorsLog user={user} />}
         </div>
       </Suspense>
     )

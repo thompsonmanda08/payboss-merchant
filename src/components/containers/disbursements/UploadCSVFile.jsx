@@ -1,5 +1,5 @@
 'use client'
-import { FileDropZone } from '@/components/base'
+import { CardHeader, FileDropZone } from '@/components/base'
 import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
 import usePaymentsStore from '@/context/paymentsStore'
@@ -45,7 +45,7 @@ const UploadCSVFile = ({ navigateForward }) => {
 
   return (
     <>
-      <div className="flex h-full w-full flex-col justify-between">
+      <div className="flex h-full w-full flex-col gap-5">
         <div className="flex flex-col">
           <FileDropZone
             otherAcceptedFiles={{
@@ -69,9 +69,30 @@ const UploadCSVFile = ({ navigateForward }) => {
             </Link>
           </p>
         </div>
+        <div>
+          <ul className="list-disc rounded-lg bg-primary-50 p-2 px-10 text-sm text-slate-600">
+            <li>
+              Download the provided template to ensure your XLSX file is in the
+              correct format.
+            </li>
+            <li>
+              Upload the completed XLSX file with the correct data format.
+            </li>
+            <li>Enter a batch name to label the batch process.</li>
+            <li>
+              Review and validate the uploaded file; address any errors found
+              during validation.
+            </li>
+            <li>
+              If you have the necessary permissions, approve the batch process
+              to proceed.
+            </li>
+          </ul>
+        </div>
 
-        <div className="flex h-1/6 w-full items-end justify-end gap-4">
+        <div className="mt-auto flex w-full items-end justify-end gap-4">
           <Button
+            size="lg"
             isLoading={isLoading}
             isDisabled={isLoading}
             onClick={handleProceed}
@@ -85,11 +106,3 @@ const UploadCSVFile = ({ navigateForward }) => {
 }
 
 export default UploadCSVFile
-
-/* ***************** FILE MIME ****************
-'application/vnd.ms-excel': [],
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [], 
-
-
-
-*/

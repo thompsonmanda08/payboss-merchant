@@ -27,7 +27,7 @@ const POP_INIT = {
   url: '',
 }
 
-function Wallet({ workspaceID, workspaceName, balance }) {
+function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
   const [isLoading, setIsLoading] = React.useState(false)
   const { isOpen, onClose, onOpenChange, onOpen } = useDisclosure()
   const [formData, setFormData] = React.useState(POP_INIT)
@@ -106,7 +106,11 @@ function Wallet({ workspaceID, workspaceName, balance }) {
     <>
       <section role="wallet-section" className="">
         <Card className="container flex w-full flex-col items-start justify-center gap-8 md:flex-row">
-          <div className="flex w-full max-w-md flex-1 flex-col gap-4">
+          <div
+            className={cn('flex w-full max-w-md flex-1 flex-col gap-4', {
+              'mr-auto': hideHistory,
+            })}
+          >
             <Balance
               title={`${workspaceName} Wallet`}
               amount={formatCurrency(balance)}
@@ -115,6 +119,9 @@ function Wallet({ workspaceID, workspaceName, balance }) {
             <div
               className={cn(
                 'flex w-full flex-col gap-y-4 p-[25px] lg:border lg:border-y-0 lg:border-l-0 lg:border-border',
+                {
+                  'lg:border-r-0': hideHistory,
+                },
               )}
             >
               <div role="pre-fund-wallet" className="flex  flex-col gap-4">
@@ -192,10 +199,12 @@ function Wallet({ workspaceID, workspaceName, balance }) {
               </div>
             </div>
           </div>
-          <ScrollArea className="flex h-full max-h-[600px] flex-[2] flex-grow flex-col items-start gap-8 ">
-            <CardHeader title="Wallet Transaction History" />
-            <PreFundHistory />
-          </ScrollArea>
+          {!hideHistory && (
+            <ScrollArea className="flex h-full max-h-[600px] flex-[2] flex-grow flex-col items-start gap-8 ">
+              <CardHeader title="Wallet Transaction History" />
+              <PreFundHistory />
+            </ScrollArea>
+          )}
         </Card>
 
         <PromptModal
