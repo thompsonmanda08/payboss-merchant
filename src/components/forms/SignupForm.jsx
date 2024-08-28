@@ -124,28 +124,28 @@ export default function SignUpForm() {
       !isValidTPIN
     ) {
       // POST AND PATCH
-      let payload
+      let response
       if (!businessInfoSent) {
-        payload = await createNewMerchant(businessInfo)
+        response = await createNewMerchant(businessInfo)
 
-        let merchantID = payload?.data?.merchantID
+        let merchantID = response?.data?.merchantID
 
         if (merchantID) {
           setMerchantID(merchantID)
           setBusinessInfoSent(true)
         }
       } else if (businessInfoSent && merchantID) {
-        payload = await updateMerchantDetails(businessInfo, merchantID)
+        response = await updateMerchantDetails(businessInfo, merchantID)
       }
 
-      if (payload.success && (payload?.data?.merchantID || merchantID)) {
+      if (response.success && (response?.data?.merchantID || merchantID)) {
         notify('success', 'Details Submitted For Approval')
         navigateForward()
         setIsLoading(false)
         return
       } else {
         notify('error', 'Error Submitting Business Details')
-        updateErrorStatus({ status: true, message: payload.message })
+        updateErrorStatus({ status: true, message: response.message })
         setIsLoading(false)
         return
       }
@@ -163,16 +163,16 @@ export default function SignUpForm() {
         return
       }
 
-      let payload = await createMerchantAdminUser(newAdminUser, merchantID)
+      let response = await createMerchantAdminUser(newAdminUser, merchantID)
 
-      if (payload.success) {
+      if (response.success) {
         notify('success', 'Account Created Successfully')
         setAccountCreated(true)
         setIsLoading(false)
         return
       } else {
         notify('error', 'Error Creating Account!')
-        updateErrorStatus({ status: true, message: payload.message })
+        updateErrorStatus({ status: true, message: response.message })
         setIsLoading(false)
         return
       }
@@ -211,6 +211,12 @@ export default function SignUpForm() {
             </motion.div>
           </AnimatePresence>
 
+          {error?.status && (
+            <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center">
+              <StatusMessage error={error.status} message={error.message} />
+            </div>
+          )}
+
           <div className="mt-5 flex w-full items-end justify-center gap-4 md:justify-end">
             {!isFirstStep && (
               <Button
@@ -247,12 +253,6 @@ export default function SignUpForm() {
           </div>
         </form>
       </div>
-
-      {error && error.status && (
-        <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center gap-4">
-          <StatusMessage error={error.status} message={error.message} />
-        </div>
-      )}
     </Card>
   )
 }
