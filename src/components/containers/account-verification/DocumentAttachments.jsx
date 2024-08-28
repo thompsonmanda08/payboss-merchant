@@ -121,6 +121,7 @@ export default function DocumentAttachments({ navigateToPage }) {
         <div className="flex w-full flex-1 flex-col gap-2">
           <UploadField
             label={'Business Incorporation Certificate'}
+            isLoading={isLoading}
             handleFile={async (file) =>
               updateDocs({
                 CERTIFICATE_INC: await handleFileUpload(
@@ -132,6 +133,7 @@ export default function DocumentAttachments({ navigateToPage }) {
           />
           <UploadField
             label={'Articles of Association'}
+            isLoading={isLoading}
             handleFile={async (file) =>
               updateDocs({
                 ARTICLES_ASSOCIATION: await handleFileUpload(
@@ -143,6 +145,7 @@ export default function DocumentAttachments({ navigateToPage }) {
           />
           <UploadField
             label={'Shareholders Agreement'}
+            isLoading={isLoading}
             handleFile={async (file) =>
               updateDocs({
                 SHAREHOLDER_AGREEMENT: await handleFileUpload(
@@ -157,6 +160,7 @@ export default function DocumentAttachments({ navigateToPage }) {
         <div className="flex w-full flex-1 flex-col gap-2">
           <UploadField
             label={'Tax Clearance Certificate'}
+            isLoading={isLoading}
             handleFile={async (file) =>
               updateDocs({
                 TAX_CLEARANCE: await handleFileUpload(
@@ -169,6 +173,7 @@ export default function DocumentAttachments({ navigateToPage }) {
 
           <UploadField
             label={'Company Profile'}
+            isLoading={isLoading}
             handleFile={async (file) =>
               updateDocs({
                 COMPANY_PROFILE: await handleFileUpload(
@@ -217,7 +222,7 @@ export default function DocumentAttachments({ navigateToPage }) {
   )
 }
 
-export function UploadField({ label, handleFile, acceptedFiles }) {
+export function UploadField({ label, isLoading, handleFile, acceptedFiles }) {
   return (
     <motion.div
       key={'step-2-1'}
@@ -230,6 +235,7 @@ export function UploadField({ label, handleFile, acceptedFiles }) {
       <FileDropZone
         isLandscape
         className={' min-h-8 px-2'}
+        isLoading={isLoading}
         otherAcceptedFiles={{
           'application/pdf': [],
           ...acceptedFiles,

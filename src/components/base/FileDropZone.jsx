@@ -10,6 +10,7 @@ import { useDropzone } from 'react-dropzone'
 import { twMerge } from 'tailwind-merge'
 import { Button } from '../ui/Button'
 import { cn } from '@/lib/utils'
+import { Progress } from '@nextui-org/react'
 
 const variants = {
   base: cn(
@@ -52,6 +53,7 @@ const SingleFileDropzone = React.forwardRef(
       otherAcceptedFiles,
       isMultipleFiles = false,
       isLandscape,
+      isLoading = false,
     },
     ref,
   ) => {
@@ -148,15 +150,21 @@ const SingleFileDropzone = React.forwardRef(
           {/* Main File Input */}
           <input ref={ref} {...getInputProps()} />
 
-          {imageUrl ? (
+          {isLoading ? (
             // Image Preview
-            <img
-              className="h-full w-full rounded-md object-cover"
-              src={imageUrl}
-              alt={acceptedFiles[0]?.name}
+            <Progress
+              // size="sm"
+              isIndeterminate
+              aria-label="Loading..."
+              className="w-full max-w-md"
             />
-          ) : acceptedFiles[0] ? (
-            // File Preview
+          ) : // <img
+          //   className="h-full w-full rounded-md object-cover"
+          //   src={imageUrl}
+          //   alt={acceptedFiles[0]?.name}
+          // />
+          acceptedFiles[0] ? (
+            // ********************* FILE UPLOAD PREVIEW ******************* //
             <div
               className={cn(
                 'bg-red-60 relative flex flex-col items-center gap-4 py-2',
@@ -181,7 +189,7 @@ const SingleFileDropzone = React.forwardRef(
                 {!isLandscape && (
                   // ONLY SHOWS ON THE UPRIGHT COMPONENT
                   <p className="py-2 font-medium">
-                    Your file is ready to upload
+                    Your file is ready
                   </p>
                 )}
                 <span className="font-bold text-primary">
@@ -199,7 +207,7 @@ const SingleFileDropzone = React.forwardRef(
               </div>
             </div>
           ) : (
-            // Upload Icon
+            // ********************* FILE UPLOAD ICON ******************* //
             <div
               className={cn(
                 'flex flex-col items-center justify-center text-xs text-gray-400',

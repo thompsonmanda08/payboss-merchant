@@ -48,6 +48,7 @@ const UploadCSVFile = ({ navigateForward }) => {
       <div className="flex h-full w-full flex-col gap-5">
         <div className="flex flex-col">
           <FileDropZone
+            isLoading={isLoading}
             otherAcceptedFiles={{
               'application/vnd.ms-excel': [],
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
