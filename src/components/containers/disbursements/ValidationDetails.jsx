@@ -87,6 +87,10 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     }
   }, [batchID, selectedBatch?.ID, queryID])
 
+  // console.log(batchID)
+  // console.log(selectedBatch)
+  // console.log(batchState)
+
   return isLoading || loading || !queryID || !batchDetails ? (
     <div className="grid min-h-80 flex-1 flex-grow place-items-center py-8">
       <div className="flex w-fit flex-col items-center justify-center gap-4">
@@ -130,7 +134,8 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
           >
             Back
           </Button> */}
-          {selectedBatch.status.toLowerCase() == 'submitted' && (
+          {(batchState?.status.toLowerCase() == 'submitted' ||
+            selectedBatch?.status.toLowerCase() == 'submitted') && (
             <Button onClick={handleSubmitForApproval}>
               Submit For Approval
             </Button>

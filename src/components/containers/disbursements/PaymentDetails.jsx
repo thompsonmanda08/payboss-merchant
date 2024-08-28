@@ -89,7 +89,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col justify-between gap-4">
+    <div className="flex h-full w-full flex-col  gap-4">
       <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 p-4 ">
         <selectedActionType.Icon className="h-6 w-6 text-primary" />
         <div className="h-8 border-r-2 border-primary/60" />
@@ -148,7 +148,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
         </Button>
 
         <Button
-          className={'font-medium text-primary bg-primary/10'}
+          className={'bg-primary/10 font-medium text-primary'}
           color={'primary'}
           variant="light"
           onClick={handleBackwardsNavigation}

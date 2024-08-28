@@ -12,12 +12,10 @@ async function CreatePayment({ params }) {
   const session = await getUserDetails()
   const user = session?.user
 
-  console.log(session)
-
   if (type === 'bulk') {
     return (
       <Suspense fallback={<LoadingPage />}>
-        <div className="flex w-full gap-5">
+        <div className="flex w-full flex-col gap-5 md:flex-row">
           <BulkPaymentAction />
           {session && <InitiatorsLog user={user} />}
         </div>

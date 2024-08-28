@@ -155,7 +155,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
       <div className="flex h-full w-full flex-col justify-between gap-8">
         <div className="flex w-full select-none flex-col items-center gap-9 rounded-2xl bg-primary-50/70 p-9">
           <Image
-            className="aspect-square max-w-96 object-contain"
+            className="aspect-square max-h-80 object-contain"
             src={approvalIllustration}
             width={200}
             height={200}
