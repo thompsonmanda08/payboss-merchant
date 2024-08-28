@@ -144,16 +144,19 @@ export async function createMerchantAdminUser(newUser, merchantID) {
 
     return {
       success: false,
-      message: res?.data?.error || res?.message,
-      data: null,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
       status: res.status,
+      statusText: res?.statusText,
     }
   } catch (error) {
+    console.log(error?.response)
     return {
       success: false,
-      message: error?.response?.data?.error || 'Oops! Error Occurred.',
+      message: error?.response?.data?.error || 'Operation Failed!',
       data: null,
-      status: error?.response?.status || error.status,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     }
   }
 }
