@@ -1,15 +1,14 @@
 'use client'
 import React from 'react'
 import { Card } from '.'
-import {
-  BuildingLibraryIcon,
-  BuildingStorefrontIcon,
-} from '@heroicons/react/24/solid'
+
 import SoftBoxIcon from './SoftBoxIcon'
 import { WalletIcon } from '@heroicons/react/24/outline'
-import { cn } from '@/lib/utils'
+import { cn, formatCurrency } from '@/lib/utils'
+import useWorkspaces from '@/hooks/useWorkspaces'
 
 function Balance({ title, amount, isLandscape }) {
+  const { workspaceWalletBalance } = useWorkspaces()
   return (
     <Card
       className={cn(
@@ -27,7 +26,7 @@ function Balance({ title, amount, isLandscape }) {
         })}
       >
         <h2 className="text-nowrap text-xs font-semibold text-gray-500 md:text-sm">
-          {title || 'Title'}
+          {title || 'Wallet Balance'}
         </h2>
 
         <div
@@ -38,7 +37,7 @@ function Balance({ title, amount, isLandscape }) {
         />
 
         <span className="text-nowrap text-lg font-bold text-gray-800 md:text-xl">
-          {amount || 'Amount'}
+          {formatCurrency(workspaceWalletBalance) || formatCurrency(amount)}
         </span>
       </div>
     </Card>
