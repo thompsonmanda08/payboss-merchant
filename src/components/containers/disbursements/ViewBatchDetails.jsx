@@ -6,7 +6,7 @@ import ApproverAction from '@/components/containers/disbursements/ApproverAction
 import RecordDetailsViewer from '@/components/containers/disbursements/RecordDetailsViewer'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Modal, ModalContent, ModalBody, ModalHeader } from '@nextui-org/react'
-import { CardHeader } from '@/components/base'
+import { CardHeader, Tabs } from '@/components/base'
 import { useQueryClient } from '@tanstack/react-query'
 
 export const BATCH_DETAILS_STEPS = [
@@ -40,17 +40,25 @@ export default function BatchDetailsPage({ isOpen, onClose, service }) {
 
   const batchID = selectedBatch?.ID
 
-  const COMPONENT_LIST_RENDERER =
-    selectedBatch.status.toLowerCase() != 'submitted'
-      ? [<ApproverAction batchID={batchID} key={'step-5'} />]
-      : [
-          <ValidationDetails
-            key={'step-4'}
-            batchID={batchID}
-            navigateForward={goForward}
-          />,
-          <ApproverAction batchID={batchID} key={'step-5'} />,
-        ]
+  const COMPONENT_LIST_RENDERER = [
+    <ValidationDetails
+      key={'step-4'}
+      batchID={batchID}
+      navigateForward={goForward}
+    />,
+    <ApproverAction batchID={batchID} key={'step-5'} />,
+  ]
+
+  const TABS = [
+    {
+      name: 'Batch Details',
+      index: 0,
+    },
+    {
+      name: 'Approval Status',
+      index: 1,
+    },
+  ]
 
   const {
     activeTab,
@@ -70,8 +78,20 @@ export default function BatchDetailsPage({ isOpen, onClose, service }) {
   }
 
   useEffect(() => {
-    setCurrentStep(BATCH_DETAILS_STEPS[currentTabIndex])
+    setCurrentStep(
+      BATCH_DETAILS_STEPS[
+        selectedBatch.status.toLowerCase() != 'submitted'
+          ? COMPONENT_LIST_RENDERER.length - 1
+          : currentTabIndex
+      ],
+    )
   }, [currentTabIndex])
+
+  useEffect(() => {
+    if (selectedBatch.status.toLowerCase() != 'submitted') {
+      navigateTo(COMPONENT_LIST_RENDERER.length - 1)
+    }
+  }, [])
 
   useEffect(() => {
     if (service) {
@@ -116,7 +136,14 @@ export default function BatchDetailsPage({ isOpen, onClose, service }) {
                 }
                 infoText={currentStep.infoText}
               />
+              <Tabs
+                className={'mr-8 w-fit'}
+                tabs={TABS}
+                currentTab={currentTabIndex}
+                navigateTo={navigateTo}
+              />
             </ModalHeader>
+
             <ModalBody>{activeTab}</ModalBody>
           </>
         </ModalContent>

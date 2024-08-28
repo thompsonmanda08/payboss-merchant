@@ -117,7 +117,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     onClose()
   }
 
-  return !batchDetails ? (
+  return !batchDetails || (batchID && !selectedBatch?.status) ? (
     <div className="grid min-h-80 flex-1 flex-grow place-items-center py-8">
       <div className="flex w-fit flex-col items-center justify-center gap-4">
         <Spinner size={50} />
