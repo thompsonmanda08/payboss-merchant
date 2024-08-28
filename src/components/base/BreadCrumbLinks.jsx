@@ -5,31 +5,26 @@ import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import useWorkspaces from '@/hooks/useWorkspaces'
+import useNavigation from '@/hooks/useNavigation'
 
-export default function BreadCrumbLinks({ baseUrl = '/', isProfile }) {
+export default function BreadCrumbLinks() {
   const router = useRouter()
-  const pathname = usePathname()
-  const { workspaces } = useWorkspaces()
+  const { pathname, pathArr, isProfile } = useNavigation()
+  const { workspaces, workspaceID } = useWorkspaces()
 
-  const [path, setPath] = useState([baseUrl])
-  const [href, setHref] = useState([])
-  let newPathArr = pathname.split('/')
-  const workspaceID = pathname.startsWith('/dashboard') ? newPathArr[2] : ''
+  const [path, setPath] = useState([''])
 
   useEffect(() => {
     /********************* WORKSPACE NAME ********************** */
-    if (newPathArr.length > 2 && pathname?.startsWith('/dashboard')) {
+    if (pathArr.length > 2 && pathname?.startsWith('/dashboard')) {
       let workspace = workspaces?.find(
         (item) => item?.ID == workspaceID,
       )?.workspace
-      newPathArr[2] = workspace
-
-      // SET A NEW HREF ARRAY
-      setHref((prev) => [...prev, 'dashboard', workspaceID])
+      pathArr[2] = workspace
     }
-
     /***************************************************************** */
-    setPath([...newPathArr.filter((path) => path !== '')])
+
+    setPath([...pathArr.filter((path) => path !== '')])
   }, [pathname, workspaceID])
 
   return (
@@ -38,12 +33,7 @@ export default function BreadCrumbLinks({ baseUrl = '/', isProfile }) {
         {path &&
           path.map((segment, idx) => (
             <div key={idx} className="flex items-center gap-1">
-              <Link
-                onClick={() => handleBreadCrumbClick(idx)}
-                href={`${baseUrl}/${href.slice(0, idx + 1).join('/')}`.replace(
-                  '//',
-                  '/',
-                )}
+              <div
                 className={cn(
                   ` cursor-pointer px-2 font-medium capitalize text-slate-400`,
                   {
@@ -53,7 +43,7 @@ export default function BreadCrumbLinks({ baseUrl = '/', isProfile }) {
                 )}
               >
                 {segment?.replace(/-|%20/g, ' ')}
-              </Link>
+              </div>
               {idx < path.length - 1 && (
                 <ChevronRightIcon
                   className={cn('h-3 w-3 text-slate-500 hover:text-primary', {
