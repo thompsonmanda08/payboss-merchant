@@ -10,7 +10,7 @@ import useWorkspaces from '@/hooks/useWorkspaces'
 const InitiatorsLog = ({ user }) => {
   const { activeWorkspace, workspaceID } = useWorkspaces()
   return (
-    <div className="min-w-md flex flex-1 flex-col gap-4">
+    <div className="min-w-md flex flex-1 flex-grow flex-col gap-4">
       <Wallet
         workspaceName={activeWorkspace?.workspace}
         workspaceID={workspaceID}

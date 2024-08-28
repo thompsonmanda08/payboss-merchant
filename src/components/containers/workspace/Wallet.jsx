@@ -104,11 +104,18 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
 
   return (
     <>
-      <section role="wallet-section" className="">
-        <Card className="container flex w-full flex-col items-start justify-center gap-8 md:flex-row">
+      <section role="wallet-section" className="grid w-full place-items-center">
+        <Card
+          className={cn(
+            'container flex w-full flex-col items-start justify-center gap-8 md:flex-row',
+            {
+              'items-center justify-center gap-x-0': hideHistory,
+            },
+          )}
+        >
           <div
             className={cn('flex w-full max-w-md flex-1 flex-col gap-4', {
-              'mr-auto': hideHistory,
+              'mx-auto': hideHistory,
             })}
           >
             <Balance
@@ -146,7 +153,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                 />
                 <DateSelectField
                   label={'Date of Deposit'}
-                  className="max-w-sm"
+                  className="max-w-md"
                   description={'Date the funds were deposited'}
                   defaultValue={formData?.date_of_deposit}
                   value={
