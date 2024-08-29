@@ -190,55 +190,6 @@ export async function getUser(userID) {
   }
 }
 
-export async function getWalletPrefundHistory(workspaceID) {
-  if (!workspaceID) {
-    return {
-      success: false,
-      message: 'Workspace ID is required!',
-      data: null,
-      status: 400,
-      statusText: 'Bad Request',
-    }
-  }
-
-  try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/wallet/prefund/${workspaceID}/history`,
-    })
-
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      }
-    }
-
-    return {
-      success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
-      data: res?.data || res,
-      status: res.status,
-      statusText: res?.statusText,
-    }
-  } catch (error) {
-    console.error(error)
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.data?.error ||
-        error?.response?.statusText ||
-        'Operation Failed!',
-      data: error?.response,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    }
-  }
-}
-
 export async function deleteUserFromWorkspace(recordID) {
   try {
     const res = await authenticatedService({
