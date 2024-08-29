@@ -15,7 +15,7 @@ function ProgressStageTracker() {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split('T')[0])
   const date = formatDate(fullDate).replaceAll('-', ' ')
   const time = fullDate.toLocaleTimeString()
-  const { KYCStageID, KYCApprovalStatus } = useAccountProfile()
+  const { KYCStageID } = useAccountProfile()
 
   const STAGES = [
     {
@@ -54,6 +54,7 @@ function ProgressStageTracker() {
       time,
     },
   ]
+
   return (
     <Card className={'w-full gap-5 pb-5'}>
       <CardHeader

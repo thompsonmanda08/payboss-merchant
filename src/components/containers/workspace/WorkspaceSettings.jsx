@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/Button'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Tabs } from '@/components/base'
+import { CardHeader, Tabs } from '@/components/base'
 import UsersTable from '../users/UsersTable'
 import WorkspaceDetails from './WorkspaceDetails'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
@@ -17,6 +17,7 @@ import Wallet from './Wallet'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 import { useWorkspaceMembers } from '@/hooks/useQueryHooks'
 import useWorkspaceStore from '@/context/workspaceStore'
+import LoadingPage from '@/app/loading'
 
 const TABS = [
   { name: 'General', index: 0 },
@@ -77,7 +78,9 @@ function WorkspaceSettings({ workspaceID }) {
   const allowUserCreation =
     currentTabIndex == 1 && canCreateUsers && !isUserInWorkspace
 
-  return (
+  return !selectedWorkspace ? (
+    <LoadingPage />
+  ) : (
     <>
       <div className="relative lg:-left-5">
         <Button
@@ -91,14 +94,18 @@ function WorkspaceSettings({ workspaceID }) {
       </div>
       {/* HEADER */}
       <div className="mb-5">
-        <h2 className="heading-3  !font-bold tracking-tight text-gray-900">
-          {selectedWorkspace?.workspace || 'Workspace Settings'}
+        <h2 className="heading-4 !font-bold uppercase tracking-tight text-gray-900">
+          {selectedWorkspace?.workspace} Workspace Settings
         </h2>
         <p className=" text-sm text-slate-600">
-          {selectedWorkspace?.description ||
-            'Workspaces provide a structured way to group and manage services, users, and transactions effectively.'}
+          Workspaces provide a structured way to group and manage services,
+          users, and transactions effectively.
         </p>
       </div>
+      {/* <CardHeader
+        title={selectedWorkspace?.workspace}
+        infoText={selectedWorkspace?.description}
+      /> */}
 
       {/* CONTENT */}
       <div className="flex flex-col gap-4 px-4 lg:p-0">
@@ -109,6 +116,7 @@ function WorkspaceSettings({ workspaceID }) {
             navigateTo={navigateTo}
             currentTab={currentTabIndex}
           />
+
           {allowUserCreation && (
             <Button className={'absolute right-0'} onClick={onOpen}>
               Create New User

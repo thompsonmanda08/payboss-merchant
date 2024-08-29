@@ -27,8 +27,8 @@ export function formatCurrency(amount) {
 export const formatActivityData = (activityLog) => {
   const groupedData = {}
 
-  activityLog.forEach((activity) => {
-    activity.data.forEach((item) => {
+  activityLog?.forEach((activity) => {
+    activity.data?.forEach((item) => {
       const createdAt = new Date(item.createdAt).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',

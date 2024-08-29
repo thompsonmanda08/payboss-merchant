@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { useGetWorkspaces, useSetupConfig } from './useQueryHooks'
 
-const useWorkspaces = () => {
+const useWorkspaces = (query) => {
   const pathname = usePathname()
   const [userInSandbox, setUserInSandbox] = useState(false)
   const [activeWorkspace, setActiveWorkspace] = useState({})
@@ -35,11 +35,18 @@ const useWorkspaces = () => {
   const isUserInWorkspace =
     pathname.split('/')[1] == 'dashboard' && pathname.split('/').length >= 3
 
-  const workspaceID = isUserInWorkspace ? pathname.split('/')[2] : ''
+  const workspaceID = isUserInWorkspace
+    ? pathname.split('/')[2]
+    : query?.workspaceID || ''
 
   const sandbox = workspaces?.find(
     (item) => item?.workspace?.toLowerCase() === 'sandbox',
   )
+
+  const workspaceWalletBalance =
+    activeWorkspace?.balance ||
+    workspaces?.find((workspace) => workspace?.ID == query?.workspaceID)
+      ?.balance
 
   useEffect(() => {
     // CHECK IF THE USER IS IN A WORKSPACE
@@ -65,8 +72,6 @@ const useWorkspaces = () => {
     }
   }, [])
 
-  // console.log(workspaces)
-
   return {
     isFetching,
     isLoading,
@@ -74,7 +79,7 @@ const useWorkspaces = () => {
     allWorkspaces,
     workspaces,
     workspaceID: activeWorkspace?.ID,
-    workspaceWalletBalance: activeWorkspace?.balance,
+    workspaceWalletBalance,
     sandbox,
     isSandboxVisible,
     setIsSandboxVisible,

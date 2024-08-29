@@ -9,7 +9,7 @@ import { STEPS } from '../SignupForm'
 import { CardHeader, SoftBoxIcon } from '@/components/base'
 import useAuthStore from '@/context/authStore'
 import { Button } from '@/components/ui/Button'
-import { Avatar, Checkbox } from '@nextui-org/react'
+import { Checkbox } from '@nextui-org/react'
 import { validateTPIN } from '@/app/_actions/auth-actions'
 import { BriefcaseIcon } from '@heroicons/react/24/outline'
 

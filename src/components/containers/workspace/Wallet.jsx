@@ -1,24 +1,26 @@
-import { Balance, Card, CardHeader, StatusMessage } from '@/components/base'
+import {
+  Balance,
+  Card,
+  CardHeader,
+  EmptyLogs,
+  StatusMessage,
+} from '@/components/base'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/InputField'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { UploadField } from '../account-verification/DocumentAttachments'
-import { cn, formatCurrency, formatDate, notify } from '@/lib/utils'
-import { sampleActivityLogs } from './ActivityLog'
-import { TASK_ICON_BG_COLOR_MAP, TASK_TYPE } from '@/lib/constants'
+import { capitalize, cn, formatCurrency, formatDate, notify } from '@/lib/utils'
+import { TASK_TYPE } from '@/lib/constants'
 import { formatActivityData } from '@/lib/utils'
-import { formatDistance } from 'date-fns'
 import PromptModal from '@/components/base/Prompt'
-import { useDisclosure } from '@nextui-org/react'
+import { Chip, Tooltip, useDisclosure } from '@nextui-org/react'
 import { uploadPOPDocument } from '@/app/_actions/pocketbase-actions'
 import { submitPOP } from '@/app/_actions/workspace-actions'
 import DateSelectField from '@/components/ui/DateSelectField'
 import { getLocalTimeZone, today } from '@internationalized/date'
-
-const activityLogStore = {
-  activityLogs: sampleActivityLogs,
-}
+import useTransactions from '@/hooks/useTransactions'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const POP_INIT = {
   amount: 0,
@@ -30,6 +32,7 @@ const POP_INIT = {
 function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
   const [isLoading, setIsLoading] = React.useState(false)
   const { isOpen, onClose, onOpenChange, onOpen } = useDisclosure()
+
   const [formData, setFormData] = React.useState(POP_INIT)
 
   const [error, setError] = React.useState({
@@ -101,8 +104,6 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
     setIsLoading(false)
     return
   }
-
-  console.log(balance)
 
   return (
     <>
@@ -210,8 +211,13 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
           </div>
           {!hideHistory && (
             <ScrollArea className="flex h-full max-h-[600px] flex-[2] flex-grow flex-col items-start gap-8 ">
-              <CardHeader title="Wallet Transaction History" />
-              <PreFundHistory />
+              <CardHeader
+                title="Wallet Transaction History"
+                infoText={
+                  'Transaction history logs for every prefunding activity on the wallet'
+                }
+              />
+              <PreFundHistory workspaceID={workspaceID} />
             </ScrollArea>
           )}
         </Card>
@@ -240,71 +246,139 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
   )
 }
 
-function renderTaskType(taskName) {
-  const taskType = TASK_TYPE[taskName]
+export function PreFundHistory({ workspaceID }) {
+  const { isLoading, walletHistory } = useTransactions({
+    workspaceID,
+  })
+  const data = [
+    {
+      title: 'Wallet Prefund',
+      data: walletHistory,
+    },
+  ]
+
+  const formattedActivityData = formatActivityData(data)
+
+  return isLoading ? (
+    <div className="flex w-full flex-col gap-4">
+      <Skeleton className="mt-6 h-8 max-w-xs" />
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div className="flex justify-between">
+          <div className="flex w-full gap-4">
+            <Skeleton className="h-8 w-24" />
+            <div className="flex w-full flex-col gap-2 pr-8">
+              <Skeleton className="h-8 w-full max-w-60" />
+              <Skeleton className="h-4 w-full max-w-lg" />
+            </div>
+          </div>
+          <div className="flex w-fit max-w-xs flex-col items-end gap-2 ">
+            <Skeleton className="h-8 w-40" />
+            <Skeleton className="h-4 w-20" />
+          </div>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div
+      className={cn('my-auto flex min-h-96 flex-col py-4', {
+        'my-0': formattedActivityData.length > 0,
+      })}
+    >
+      {formattedActivityData.length > 0 ? (
+        formattedActivityData.map((items, index) => (
+          <div key={index} className="pr-6">
+            {/* TODO => FIX DATA TIMESTAMP */}
+            <p className="text-lg text-[#161518]">{items.title}</p>
+
+            {items?.data?.map((item, itemIndex) => (
+              <div className="flex flex-col gap-y-4 py-2" key={itemIndex}>
+                <div className="flex items-center space-x-4">
+                  <LogTaskType type={item.type} />
+
+                  <div className="w-full">
+                    <div className="flex w-full justify-between">
+                      <p className="mb-[4px] text-[14px] font-medium leading-6">
+                        {item.created_by}
+                      </p>
+                      <div>
+                        <Tooltip
+                          placement="left"
+                          classNames={{
+                            content: cn(
+                              'text-nowrap bg-secondary/10 text-secondary',
+                              {
+                                'bg-success/10 text-green-600':
+                                  item?.isPrefunded,
+                              },
+                            ),
+                          }}
+                          content={capitalize(item?.status)}
+                        >
+                          <Chip
+                            classNames={{
+                              base: 'p-2 py-4 cursor-pointer',
+                              content: cn(
+                                'text-secondary text-base font-bold',
+                                { 'text-green-500': item?.isPrefunded },
+                              ),
+                            }}
+                            variant="light"
+                            color={item?.isPrefunded ? 'success' : 'secondary'}
+                          >
+                            {formatCurrency(item?.amount)}
+                          </Chip>
+                        </Tooltip>
+                        <p className="text-[12px] font-normal leading-4 text-slate-500">
+                          {/* TODO => FIX DATA TIMESTAMP */}
+                          {/* {formatDistance(new Date(item.created_at), new Date())} */}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-slate-700">{item.content}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <hr className="my-4 h-px border-0 bg-slate-100"></hr>
+          </div>
+        ))
+      ) : (
+        <div className="flex flex-1 items-center rounded-lg bg-slate-50 text-sm font-semibold text-slate-600">
+          <EmptyLogs
+            className={'my-auto'}
+            title={'No Wallet Prefund Logs Recorded'}
+            subTitle={
+              'Make a deposit and submit a Proof of Payment (POP) to prefund your wallet'
+            }
+          />
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function LogTaskType({ type }) {
+  const taskType = TASK_TYPE[type]
 
   if (taskType) {
     return (
       <div
-        className={`inline-flex h-8 w-fit items-center justify-center gap-2 text-nowrap rounded-[4px] bg-green-500/20 px-2 py-1.5`}
+        className={cn(
+          `inline-flex h-8 w-fit items-center justify-center gap-2 text-nowrap rounded-[4px] bg-${taskType.color}/50 px-2 py-1.5`,
+        )}
       >
-        <span className={`text-green-600`}>{taskType.icon}</span>
-        <p className={`text-[12px] font-medium leading-[16px] text-green-700`}>
+        <span className={cn(`text-${taskType.color}`)}>{taskType.icon}</span>
+        <p
+          className={cn(
+            `text-[12px] font-medium leading-[16px] text-${taskType.color}`,
+          )}
+        >
           {taskType.label}
         </p>
       </div>
     )
   }
   return null
-}
-
-function PreFundHistory() {
-  const formattedActivityData = formatActivityData(
-    activityLogStore.activityLogs,
-  )
-
-  return (
-    <div className="flex flex-col py-4">
-      {formattedActivityData.length > 0 ? (
-        formattedActivityData.map((items, index) => (
-          <div key={index} className="pr-6">
-            <p className="text-lg text-[#161518]">{items.title}</p>
-
-            {items.data.map((item, itemIndex) => (
-              <div className="flex flex-col gap-y-4 py-2" key={itemIndex}>
-                <div className="flex items-center space-x-4">
-                  {renderTaskType(item.type)}
-
-                  <div className="w-full">
-                    <div className="flex w-full justify-between">
-                      <p className="mb-[4px] text-[14px] font-medium leading-6">
-                        {item.created_by.user_name}
-                      </p>
-                      <p className="leading-4] text-[12px] font-normal text-[#898989]">
-                        {formatDistance(new Date(item.createdAt), new Date())}
-                      </p>
-                    </div>
-                    <p className="text-[12px] text-[#656971]">
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html: item.content,
-                        }}
-                      ></p>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-            <hr className="my-4 h-px border-0 bg-[#ECEDF0]"></hr>
-          </div>
-        ))
-      ) : (
-        <div className="grid min-h-[200px] place-items-center rounded-lg bg-slate-50 text-sm font-semibold text-slate-500 xl:text-base">
-          No deposit logs recorded
-        </div>
-      )}
-    </div>
-  )
 }
 
 export default Wallet

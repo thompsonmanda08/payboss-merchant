@@ -30,6 +30,7 @@ const WORKSPACE_DASHBOARD_QUERY_KEY = 'dashboard-query-data'
 const WORKSPACE_MEMBERS_QUERY_KEY = 'members-query-data'
 const DIRECT_BULK_TRANSACTIONS_QUERY_KEY = 'direct-bulk-query-data'
 const BATCH_DETAILS_QUERY_KEY = 'batch-details-query-data'
+const WALLET_HISTORY_QUERY_KEY = 'wallet-history-details-query-data'
 
 // ANIMATION_VARIANTS
 const staggerContainerVariants = {
@@ -60,13 +61,11 @@ const PAYMENT_SERVICE_TYPES = [
   {
     name: 'Bulk Payments',
     Icon: CircleStackIcon,
-    // href: '/dashboard/payments/create/bulk',
     index: 0,
   },
   {
     name: 'Single Payments',
     Icon: ArrowRightCircleIcon,
-    // href: '/dashboard/payments/create/single',
     index: 1,
   },
 ]
@@ -120,7 +119,7 @@ const TASK_TYPE = {
   // },
   Deposit: {
     icon: <WalletIcon className="h-5 w-5" />,
-    color: 'green-800',
+    color: 'green-700',
     label: 'Deposit',
   },
 }
@@ -162,4 +161,5 @@ export {
   WORKSPACE_MEMBERS_QUERY_KEY,
   DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
   BATCH_DETAILS_QUERY_KEY,
+  WALLET_HISTORY_QUERY_KEY,
 }

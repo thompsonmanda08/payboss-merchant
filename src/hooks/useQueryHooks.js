@@ -9,6 +9,7 @@ import {
 import {
   getAllDirectBulkTransactions,
   getBatchDetails,
+  getWalletPrefundHistory,
 } from '@/app/_actions/transaction-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
 import {
@@ -26,6 +27,7 @@ import {
   DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
   BATCH_DETAILS_QUERY_KEY,
   USERS,
+  WALLET_HISTORY_QUERY_KEY,
 } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
 
@@ -111,6 +113,14 @@ export const useBatchDetails = (batchID) =>
   useQuery({
     queryKey: [BATCH_DETAILS_QUERY_KEY, batchID],
     queryFn: async () => await getBatchDetails(batchID),
+    refetchOnMount: true,
+    staleTime: Infinity,
+  })
+
+export const useWalletPrefundHistory = (workspaceID) =>
+  useQuery({
+    queryKey: [WALLET_HISTORY_QUERY_KEY, workspaceID],
+    queryFn: async () => await getWalletPrefundHistory(workspaceID),
     refetchOnMount: true,
     staleTime: Infinity,
   })
