@@ -32,7 +32,8 @@ function SelectField({
             'opacity-50': props?.isDisabled,
           })}
         >
-          {label}
+          {label}{' '}
+          {props?.required && <span className="font-bold text-red-500">*</span>}
         </label>
       )}
       <div
@@ -58,6 +59,7 @@ function SelectField({
           defaultValue={defaultValue}
           name={name}
           id={name}
+          isRequired={props?.required}
           {...props}
         >
           {/* OPTIONS ARRAY MUST BE AN ARRAY OF OBJECTS WITH ID, NAME AND VALUE PROPERTIES. */}

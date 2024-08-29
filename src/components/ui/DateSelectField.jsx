@@ -42,6 +42,7 @@ function DateSelectField({
       }}
       description={description}
       labelPlacement={labelPlacement || 'outside'}
+      isRequired={props?.required}
       {...props}
     />
   )

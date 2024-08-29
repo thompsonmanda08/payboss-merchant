@@ -1,6 +1,6 @@
 //BUSINESS REGISTRATION STATUS
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Input } from '@/components/ui/InputField'
 import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
@@ -52,6 +52,11 @@ export default function Step1_TPIN({ updateDetails }) {
       return
     }
   }
+
+  // Clean out TPIN from state at first rendering
+  useEffect(() => {
+    updateDetails(STEPS[0], { tpin: '' })
+  }, [])
 
   return (
     <>

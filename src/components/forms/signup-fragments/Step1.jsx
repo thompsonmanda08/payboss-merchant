@@ -74,7 +74,8 @@ export default function Step1({ updateDetails }) {
               name="companyTypeID"
               listItemName={'type'}
               value={step?.companyTypeID}
-              // required={true}
+              prefilled={true}
+              required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { companyTypeID: e.target.value })
               }}
@@ -87,6 +88,7 @@ export default function Step1({ updateDetails }) {
               value={step?.tpin}
               onError={TPINError}
               errorText="Invalid TPIN"
+              required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { tpin: e.target.value })
               }}
@@ -101,7 +103,7 @@ export default function Step1({ updateDetails }) {
               label="Company Email"
               name="company_email"
               value={step?.company_email}
-              // required={true}
+              required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { company_email: e.target.value })
               }}
@@ -123,6 +125,7 @@ export default function Step1({ updateDetails }) {
               }
               maxValue={today(getLocalTimeZone())}
               labelPlacement={'outside'}
+              required={true}
               onChange={(date) => {
                 updateDetails(STEPS[0], {
                   date_of_incorporation: formatDate(date, 'YYYY-MM-DD'),
@@ -144,7 +147,8 @@ export default function Step1({ updateDetails }) {
               defaultValue={provinces[0]?.ID}
               listItemName={'province'}
               value={step?.provinceID}
-              // required={true}
+              prefilled={true}
+              required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { provinceID: e.target.value })
               }}
@@ -161,7 +165,8 @@ export default function Step1({ updateDetails }) {
               listItemName={'city'}
               defaultValue={cities[0]?.ID}
               value={step?.cityID}
-              // required={true}
+              prefilled={true}
+              required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { cityID: e.target.value })
               }}
@@ -175,7 +180,7 @@ export default function Step1({ updateDetails }) {
               label="Physical Address"
               name="physical_address"
               value={step?.physical_address}
-              // required={true}
+              required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { physical_address: e.target.value })
               }}
@@ -194,7 +199,7 @@ export default function Step1({ updateDetails }) {
               value={step?.contact}
               onError={phoneNoError}
               errorText="Invalid Mobile Number"
-              // required={true}
+              required={true}
               pattern="[0-9]{12}"
               onChange={(e) => {
                 updateDetails(STEPS[0], { contact: e.target.value })
@@ -205,7 +210,10 @@ export default function Step1({ updateDetails }) {
               label="Website"
               name="website"
               value={step?.website}
-              // pattern="https?://.+"
+              prefilled={true}
+              required={true}
+              pattern="https?://.+"
+              title="http://www.domain-name.com"
               onChange={(e) => {
                 updateDetails(STEPS[0], { website: e.target.value })
               }}

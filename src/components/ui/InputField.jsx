@@ -16,6 +16,7 @@ const Input = React.forwardRef(
       max,
       min,
       isDisabled,
+
       errorText = '',
       ...props
     },
@@ -34,7 +35,10 @@ const Input = React.forwardRef(
               'text-red-500': onError,
             })}
           >
-            {label}
+            {label}{' '}
+            {props?.required && (
+              <span className="font-bold text-red-500"> *</span>
+            )}
           </label>
         )}
         <input

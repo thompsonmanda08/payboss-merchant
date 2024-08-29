@@ -72,6 +72,7 @@ export default function Step2({ updateDetails }) {
               label="Bank"
               name="bankID"
               value={step?.bankID}
+              prefilled={true}
               listItemName={'bank_name'}
               required={true}
               onChange={(e) => {
@@ -123,6 +124,7 @@ export default function Step2({ updateDetails }) {
               value={step?.currencyID}
               listItemName={'currency'}
               required={true}
+              prefilled={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { currencyID: e.target.value })
               }}
