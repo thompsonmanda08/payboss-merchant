@@ -166,8 +166,6 @@ export async function getUser(userID) {
       }
     }
 
-    const response = res?.data || res
-
     return {
       success: false,
       message: res?.data?.error || res?.statusText || 'Operation Failed!',

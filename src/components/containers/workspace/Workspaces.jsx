@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/Button'
-import Spinner from '@/components/ui/Spinner'
 import { cn, notify } from '@/lib/utils'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import React, { useState } from 'react'
@@ -8,13 +7,14 @@ import { useDisclosure } from '@nextui-org/react'
 import { createNewWorkspace } from '@/app/_actions/config-actions'
 import { useQueryClient } from '@tanstack/react-query'
 import { SETUP_QUERY_KEY, WORKSPACES_QUERY_KEY } from '@/lib/constants'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import useWorkspace from '@/hooks/useWorkspaces'
 import WorkspaceItem from './WorkspaceItem'
 import OverlayLoader from '@/components/ui/OverlayLoader'
 import { InfoBanner } from '@/components/base'
 import CreateNewWorkspaceModal from './CreateNewWorkspace'
+import Loader from '@/components/ui/Loader'
 
 function Workspaces() {
   const pathname = usePathname()
@@ -93,14 +93,7 @@ function Workspaces() {
           )}
         >
           {isLoading ? (
-            <div className="flex h-full min-h-[400px] flex-1 flex-col items-center justify-center p-10 text-center">
-              <div>
-                <Spinner size={48} color="#1B64CE" />
-                <p className="mt-4 max-w-sm break-words font-bold text-slate-800">
-                  Loading Workspaces...
-                </p>
-              </div>
-            </div>
+            <Loader size={60} loadingText={'Loading Workspaces...'} />
           ) : (
             <div
               className={cn('grid w-full place-items-center gap-4 rounded-lg', {

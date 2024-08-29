@@ -2,7 +2,6 @@ import { cn, formatCurrency } from '@/lib/utils'
 import { Chip, CircularProgress, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Card } from '.'
-// import { Tooltip } from '.'
 
 function StatusCard({
   totalTitle,
