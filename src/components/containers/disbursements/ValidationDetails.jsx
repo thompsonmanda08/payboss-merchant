@@ -89,7 +89,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
 
   // console.log(batchID)
   // console.log(selectedBatch)
-  // console.log(batchState)
+  console.log(batchState)
 
   return isLoading || loading || !queryID || !batchDetails ? (
     <div className="grid min-h-80 flex-1 flex-grow place-items-center py-8">
@@ -99,16 +99,17 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     </div>
   ) : (
     <>
-      <div className="flex h-full w-full flex-col justify-between ">
+      <div className="flex h-full w-full flex-col justify-between">
         <StatusCard
+          totalValue={batchDetails?.number_of_records || '0'}
+          validValue={batchDetails?.number_of_valid_records || '0'}
+          invalidValue={batchDetails?.number_of_invalid_records || '0'}
+          validAmount={batchDetails?.valid_amount || '0'}
           totalTitle={'Total Records'}
-          totalText={batchDetails?.number_of_records}
-          totalInfo={'View All Records'}
           validTitle={'Valid Records'}
-          validText={batchDetails?.number_of_valid_records}
-          validInfo={'View Valid Records'}
           invalidTitle={'Invalid Records'}
-          invalidText={batchDetails?.number_of_invalid_records || '0'}
+          totalInfo={'Records in total'}
+          validInfo={'View Valid Records'}
           invalidInfo={'View Invalid Records'}
           tooltipText={'All records must be valid to proceed'}
           Icon={QuestionMarkCircleIcon}
@@ -126,21 +127,14 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
           }
         />
 
-        <div className="my-4 flex h-1/6 w-full items-end justify-end gap-4">
-          {/* <Button
-            className={'font-medium text-primary'}
-            variant="outline"
-            onClick={navigateBackwards}
-          >
-            Back
-          </Button> */}
-          {(batchState?.status?.toLowerCase() == 'submitted' ||
-            selectedBatch?.status?.toLowerCase() == 'submitted') && (
+        {(batchState?.status?.toLowerCase() == 'submitted' ||
+          selectedBatch?.status?.toLowerCase() == 'submitted') && (
+          <div className="my-4 flex h-1/6 w-full items-end justify-end gap-4">
             <Button onClick={handleSubmitForApproval}>
               Submit For Approval
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </>
   )
