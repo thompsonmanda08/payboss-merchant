@@ -19,6 +19,7 @@ import PromptModal from '@/components/base/Prompt'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
 import Spinner from '@/components/ui/Spinner'
 import useDashboard from '@/hooks/useDashboard'
+import Loader from '@/components/ui/Loader'
 
 const ApproverAction = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient()
@@ -74,8 +75,6 @@ const ApproverAction = ({ navigateForward, batchID }) => {
       return
     }
 
-    // console.log(batchID)
-    // console.log(queryID)
     const response = await reviewBatch(queryID, approve)
 
     if (!response.success) {
@@ -119,12 +118,14 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     onClose()
   }
 
+  const isApprovedOrRejected =
+    selectedBatch?.status?.toLowerCase() == 'approved' ||
+    batchDetails?.status?.toLowerCase() == 'approved' ||
+    selectedBatch?.status?.toLowerCase() == 'rejected' ||
+    batchDetails?.status?.toLowerCase() == 'rejected'
+
   return !batchDetails || (batchID && !selectedBatch?.status) ? (
-    <div className="grid min-h-80 flex-1 flex-grow place-items-center py-8">
-      <div className="flex w-fit flex-col items-center justify-center gap-4">
-        <Spinner size={50} />
-      </div>
-    </div>
+    <Loader />
   ) : (
     <>
       <PromptModal
@@ -163,11 +164,17 @@ const ApproverAction = ({ navigateForward, batchID }) => {
             height={200}
           />
           <div className="flex max-w-lg flex-col items-center justify-center gap-2">
-            <h3 className="leading-0 up m-0 text-[clamp(1rem,1rem+1vw,1.25rem)] font-bold uppercase">
-              Batch payout requires approval
+            <h3 className="leading-0 m-0 text-[clamp(1rem,1rem+1vw,1.25rem)] font-bold uppercase tracking-tight">
+              {isApprovedOrRejected
+                ? `Batch ${selectedBatch?.status || batchDetails?.status}`
+                : 'Batch payout requires approval'}
             </h3>
 
-            {role?.can_approve ? (
+            {isApprovedOrRejected ? (
+              <p className="text-center text-[15px] text-slate-500">
+                Check the status and batch details for more information.
+              </p>
+            ) : role?.can_approve ? (
               <p className="text-center text-[15px] text-slate-500">
                 Batch payouts have been validated and awaiting approval, after
                 which the transactions will run against your PayBoss wallet.
