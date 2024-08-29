@@ -1,4 +1,4 @@
-import React,  from 'react'
+import React from 'react'
 import Image from 'next/image'
 import approvalIllustration from '@/images/illustrations/approval.svg'
 import { Card, CardHeader, TimelineItem } from '@/components/base'
