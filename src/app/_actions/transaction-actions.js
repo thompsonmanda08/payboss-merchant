@@ -5,6 +5,15 @@ import authenticatedService from '@/lib/authenticatedService'
 export async function getAllDirectBulkTransactions(workspaceID) {
   // const session = await getUserSession()
   // const merchantID = session?.user?.merchantID
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: 'Workspace ID is required',
+      data: [],
+      status: 400,
+      statusText: 'BAD_REQUEST',
+    }
+  }
 
   try {
     const res = await authenticatedService({
@@ -40,8 +49,17 @@ export async function getAllDirectBulkTransactions(workspaceID) {
   }
 }
 
-
 export async function getDirectBulkTransactionDetails(batchID) {
+  if (!batchID) {
+    return {
+      success: false,
+      message: 'batch ID is required',
+      data: [],
+      status: 400,
+      statusText: 'BAD_REQUEST',
+    }
+  }
+
   try {
     const res = await authenticatedService({
       url: `transaction/direct/payments/bulk/batch/details/${batchID}`,
@@ -76,9 +94,17 @@ export async function getDirectBulkTransactionDetails(batchID) {
   }
 }
 
-
 export async function reviewBatch(batchID, reviewDetails) {
   // const { action, review } = reviewDetails
+  if (!batchID) {
+    return {
+      success: false,
+      message: 'batch ID is required',
+      data: [],
+      status: 400,
+      statusText: 'BAD_REQUEST',
+    }
+  }
   try {
     const res = await authenticatedService({
       url: `transaction/direct/payments/bulk/review-submission/${batchID}`,
@@ -115,9 +141,17 @@ export async function reviewBatch(batchID, reviewDetails) {
   }
 }
 
-
 export async function initializeBulkTransaction(workspaceID, transactionData) {
   // const { batch_name, url } = transactionData
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: 'Workspace ID is required',
+      data: [],
+      status: 400,
+      statusText: 'BAD_REQUEST',
+    }
+  }
 
   try {
     const res = await authenticatedService({
@@ -153,7 +187,6 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
     }
   }
 }
-
 
 export async function updateInvalidDirectBulkTransactionDetails(
   transactionID,
@@ -197,6 +230,15 @@ export async function updateInvalidDirectBulkTransactionDetails(
 }
 
 export async function getBatchDetails(batchID) {
+  if (!batchID) {
+    return {
+      success: false,
+      message: 'batch ID is required',
+      data: [],
+      status: 400,
+      statusText: 'BAD_REQUEST',
+    }
+  }
   try {
     const res = await authenticatedService({
       url: `transaction/direct/payments/bulk/batch/details/${batchID}`,
@@ -232,9 +274,64 @@ export async function getBatchDetails(batchID) {
 
 export async function submitBatchForApproval(batchID) {
   // At this point mew records would have been sent to the BE server so we just need to fetch the updated batch
+  if (!batchID) {
+    return {
+      success: false,
+      message: 'batch ID is required',
+      data: [],
+      status: 400,
+      statusText: 'BAD_REQUEST',
+    }
+  }
+
   try {
     const res = await authenticatedService({
       url: `transaction/direct/payments/bulk/review-submission/${batchID}`,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+        statusText: res.statusText,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    console.log(error?.response)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}
+
+export async function getWalletPrefundHistory(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: 'Workspace ID is required',
+      data: [],
+      status: 400,
+      statusText: 'BAD_REQUEST',
+    }
+  }
+
+  try {
+    const res = await authenticatedService({
+      url: `merchant/workspace/wallet/prefund/${workspaceID}/history`,
     })
 
     if (res.status == 200) {
