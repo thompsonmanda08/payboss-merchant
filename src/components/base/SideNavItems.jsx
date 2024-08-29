@@ -8,9 +8,10 @@ import { logUserOut } from '@/app/_actions/auth-actions'
 import { SIDE_BAR_OPTIONS } from './SideNavBar'
 import NavItemIcon from './NavItemIcon'
 import useAuthStore from '@/context/authStore'
+import useNavigation from '@/hooks/useNavigation'
 
 export default function SideNavItems({
-  pathname,
+  // pathname,
   expandedSection,
   handleExpand,
   handleMainLinkClick,
@@ -18,22 +19,20 @@ export default function SideNavItems({
   navBarItems,
 }) {
   const { handleUserLogOut } = useAuthStore((state) => state)
+  const { pathname, pathArr } = useNavigation((state) => state)
+
+  console.log(pathArr)
 
   return (
     <>
       <ul className="mb-auto flex w-full flex-col divide-y divide-slate-100/50 ">
-        {navBarItems.map(({ name, href, Icon, subMenuItems }, index) => {
+        {navBarItems.map(({ ID, name, href, Icon, subMenuItems }, index) => {
           const isExpanded = expandedSection === index
 
           const currentPage =
-            subMenuItems != undefined && subMenuItems.length > 0
-              ? subMenuItems.href
-              : href
+            subMenuItems && subMenuItems.length > 0 ? subMenuItems.href : href
           const isSelected = pathname === currentPage
-
-          const activeLayer = pathname
-            .split('/')
-            .includes(name.toLocaleLowerCase())
+          const activeLayer = pathArr.includes(ID.toLowerCase())
 
           return (
             <li key={index} className="flex flex-col">
@@ -44,13 +43,11 @@ export default function SideNavItems({
                     `group flex items-center gap-3 rounded-sm bg-transparent p-3
                         text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out`,
                     {
-                      '  font-bold text-primary shadow-none shadow-slate-700/10':
+                      'text-primary shadow-none shadow-slate-700/10':
                         isExpanded,
 
-                      'rounded-lg bg-primary/10 font-bold text-primary shadow-none shadow-slate-400/10':
+                      'font-bold text-primary':
                         activeLayer,
-
-                      'rounded-b-none': activeLayer && isExpanded,
                     },
                   )}
                 >

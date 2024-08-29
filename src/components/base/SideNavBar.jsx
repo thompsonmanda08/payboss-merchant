@@ -24,6 +24,8 @@ import {
   TicketIcon,
   WrenchScrewdriverIcon,
   ShoppingCartIcon,
+  ShoppingBagIcon,
+  SwatchIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { Logo, SettingsSideBar } from '.'
@@ -45,11 +47,15 @@ function SideNavBar() {
   const SIDE_BAR_OPTIONS = [
     {
       name: 'Dashboard',
+      ID: 'dashboard',
       href: dashboardRoute,
       Icon: HomeIcon,
     },
+    // ****************************************************** //
 
+    // *************** DISBURSEMENTS AND PAYOUTS ************ //
     {
+      ID: 'payments',
       name: 'Make Payments',
       Icon: BanknotesIcon,
       subMenuItems: [
@@ -65,7 +71,11 @@ function SideNavBar() {
         },
       ],
     },
+    // ****************************************************** //
+
+    // *************** COLLECTIONS AND INCOME *************** //
     {
+      ID: 'collections',
       name: 'Manage Income',
       Icon: InboxArrowDownIcon,
       subMenuItems: [
@@ -92,11 +102,11 @@ function SideNavBar() {
           Icon: CreditCardIcon,
         },
 
-        {
-          name: 'Online Store',
-          href: `${dashboardRoute}/collections/store`,
-          Icon: BuildingStorefrontIcon,
-        },
+        // {
+        //   name: 'Online Store',
+        //   href: `${dashboardRoute}/collections/store`,
+        //   Icon: BuildingStorefrontIcon,
+        // },
         {
           name: 'Till Payments',
           href: `${dashboardRoute}/collections/store`,
@@ -109,59 +119,83 @@ function SideNavBar() {
         },
       ],
     },
+    // ****************************************************** //
+
+    // *************** EXPENSES & BILLS ********************* //
     {
+      ID: 'expenses',
       name: 'Manage Expenses',
       Icon: ReceiptPercentIcon,
       subMenuItems: [
         {
           name: 'ZESCO',
-          href: `${dashboardRoute}/payments/zesco`,
+          href: `${dashboardRoute}/expenses/zesco`,
           Icon: ReceiptPercentIcon,
         },
         {
           name: 'DSTV',
-          href: `${dashboardRoute}/payments/dstv`,
+          href: `${dashboardRoute}/expenses/dstv`,
           Icon: ReceiptPercentIcon,
         },
         {
           name: 'Airtime',
-          href: `${dashboardRoute}/payments/airtime`,
+          href: `${dashboardRoute}/expenses/airtime`,
           Icon: PhoneArrowDownLeftIcon,
         },
         {
           name: 'Data Bundles',
-          href: `${dashboardRoute}/payments/data-bundles`,
+          href: `${dashboardRoute}/expenses/data-bundles`,
           Icon: ReceiptPercentIcon,
         },
         {
           name: 'Expense Cards',
-          href: `${dashboardRoute}/payments/data-bundles`,
+          href: `${dashboardRoute}/expenses/cards`,
           Icon: ReceiptPercentIcon,
         },
       ],
     },
+    // ****************************************************** //
+
+    // *************** REPORTS AND ANALYSIS ***************** //
     {
+      ID: 'reports',
       name: 'Reports & Analytics',
       href: `${dashboardRoute}/reports`,
       Icon: DocumentChartBarIcon,
-    },
-    {
-      name: 'Manage Account ',
-      href: `${dashboardRoute}/settings`,
-      Icon: WrenchScrewdriverIcon,
       subMenuItems: [
         {
-          name: 'Products',
-          href: `${dashboardRoute}/products`,
+          name: 'Summary',
+          href: `${dashboardRoute}/reports/summary`,
           Icon: ShoppingCartIcon,
         },
         {
-          name: 'Online Store',
-          href: `${dashboardRoute}/products`,
+          name: 'Transactions & Statement',
+          href: `${dashboardRoute}/reports/transactions`,
           Icon: ShoppingCartIcon,
         },
       ],
     },
+    // ****************************************************** //
+
+    // *************** ONLINE E-COMMERCE ******************** //
+    {
+      ID: 'ecommerce',
+      name: 'E-Commerce',
+      Icon: BuildingStorefrontIcon,
+      subMenuItems: [
+        {
+          name: 'Products',
+          href: `${dashboardRoute}/ecommerce/products`,
+          Icon: SwatchIcon,
+        },
+        {
+          name: 'Online Store',
+          href: `${dashboardRoute}/ecommerce/stores`,
+          Icon: ShoppingCartIcon,
+        },
+      ],
+    },
+    // ****************************************************** //
   ]
 
   function handleExpand(index) {
@@ -258,7 +292,7 @@ function SideNavBar() {
           <Skeleton className="h-10 w-[250px]" key={index} />
         ))}
       </div>
-      <Skeleton className="mt-auto h-[50px] w-[250px] rounded-xl" />
+      <Skeleton className="mt-auto h-[50px] w-[280px] rounded-xl" />
     </div>
   )
 }
