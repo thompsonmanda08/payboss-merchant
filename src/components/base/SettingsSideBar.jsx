@@ -132,7 +132,7 @@ function SettingsSideBar({
       )}
       <motion.nav
         className={cn(
-          `sticky -left-[110%] z-50 hidden h-full min-h-screen w-[280px] rounded-r-3xl bg-popover px-2 py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
+          `sticky -left-[110%] z-50 hidden h-full min-h-screen w-[380px] rounded-r-3xl bg-popover px-2 py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
           { 'absolute left-0 z-[100] block': openSettingsSideBar },
         )}
       >

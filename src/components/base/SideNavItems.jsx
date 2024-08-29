@@ -21,8 +21,6 @@ export default function SideNavItems({
   const { handleUserLogOut } = useAuthStore((state) => state)
   const { pathname, pathArr } = useNavigation((state) => state)
 
-  console.log(pathArr)
-
   return (
     <>
       <ul className="mb-auto flex w-full flex-col divide-y divide-slate-100/50 ">
@@ -46,8 +44,7 @@ export default function SideNavItems({
                       'text-primary shadow-none shadow-slate-700/10':
                         isExpanded,
 
-                      'font-bold text-primary':
-                        activeLayer,
+                      'font-bold text-primary': activeLayer,
                     },
                   )}
                 >

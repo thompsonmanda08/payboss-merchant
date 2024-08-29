@@ -22,9 +22,7 @@ import {
   LinkIcon,
   CalculatorIcon,
   TicketIcon,
-  WrenchScrewdriverIcon,
   ShoppingCartIcon,
-  ShoppingBagIcon,
   SwatchIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
@@ -240,7 +238,7 @@ function SideNavBar() {
   // SETTINGS PAGE NEEDS A DIFFERENT SIDE BAR
   if (workspaceID) {
     return (
-      <div className="h-full max-w-[320px] lg:w-full">
+      <div className="h-full w-[380px]">
         <Button
           size="sm"
           // isIconOnly
@@ -285,14 +283,14 @@ function SideNavBar() {
 
   // LOADING SKELETON
   return (
-    <div className="flex h-full max-w-[320px] flex-col space-y-6 p-5 lg:w-full lg:min-w-[220px]">
-      <Skeleton className="h-[50px] w-[250px] rounded-xl" />
-      <div className="space-y-4">
+    <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
+      <Skeleton className="mb-4 h-16 w-full rounded-xl" />
+      <div className="h-full space-y-4">
         {Array.from({ length: 9 }).map((_, index) => (
-          <Skeleton className="h-10 w-[250px]" key={index} />
+          <Skeleton className="h-10 w-full rounded-lg" key={index} />
         ))}
       </div>
-      <Skeleton className="mt-auto h-[50px] w-[280px] rounded-xl" />
+      <Skeleton className="mt-auto h-[50px] w-full rounded-xl" />
     </div>
   )
 }
