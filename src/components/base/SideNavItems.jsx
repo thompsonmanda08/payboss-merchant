@@ -38,8 +38,8 @@ export default function SideNavItems({
                 <div
                   onClick={() => handleExpand(index)}
                   className={cn(
-                    `group flex items-center gap-3 rounded-sm bg-transparent p-3
-                        text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out`,
+                    `group flex cursor-pointer items-center gap-3 rounded-sm bg-transparent
+                        p-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out`,
                     {
                       'text-primary shadow-none shadow-slate-700/10':
                         isExpanded,
@@ -75,7 +75,7 @@ export default function SideNavItems({
                 <Link
                   href={href}
                   className={cn(
-                    `group flex items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium text-slate-600 transition-all duration-200 ease-in-out `,
+                    `group flex cursor-pointer items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium text-slate-600 transition-all duration-200 ease-in-out `,
                     {
                       'rounded-lg bg-primary/10 font-medium text-primary shadow-none shadow-slate-400/10':
                         isSelected,

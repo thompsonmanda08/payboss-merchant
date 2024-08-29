@@ -1,11 +1,11 @@
 import LoadingPage from '@/app/loading'
 import React, { Suspense } from 'react'
-import Disbursements from './Disbursements'
+import Transactions from './Transactions'
 
-export default async function DisbursementsPage() {
+export default async function TransactionsPage() {
   return (
     <Suspense fallback={<LoadingPage />}>
-      <Disbursements />
+      <Transactions />
     </Suspense>
   )
 }

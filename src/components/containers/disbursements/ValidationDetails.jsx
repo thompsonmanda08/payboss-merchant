@@ -14,6 +14,7 @@ import {
   DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
 } from '@/lib/constants'
 import useWorkspaces from '@/hooks/useWorkspaces'
+import Loader from '@/components/ui/Loader'
 
 const ValidationDetails = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient()
@@ -88,11 +89,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
   }, [batchID, selectedBatch?.ID, queryID])
 
   return isLoading || loading || !queryID || !batchDetails ? (
-    <div className="grid min-h-80 flex-1 flex-grow place-items-center py-8">
-      <div className="flex w-fit flex-col items-center justify-center gap-4">
-        <Spinner size={50} />
-      </div>
-    </div>
+    <Loader />
   ) : (
     <>
       <div className="flex h-full w-full flex-col justify-between">

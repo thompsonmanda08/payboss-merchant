@@ -13,12 +13,15 @@ import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
+import Loader from '@/components/ui/Loader'
+import { EyeIcon } from '@heroicons/react/24/outline'
 
 export default function CustomTable({
   columns,
   rows,
   selectedKeys,
   setSelectedKeys,
+  isLoading,
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore()
   const rowsPerPage = 8
@@ -37,18 +40,20 @@ export default function CustomTable({
     switch (columnKey) {
       case 'status':
         return (
-          <span
-            // onClick={() => {
-            //   setSelectedBatch(row)
-            //   handleRowPress()
-            // }}
+          <Button
+            size="sm"
+            variant="light"
+            onPress={() => {
+              setSelectedBatch(row)
+              setOpenBatchDetailsModal(true)
+            }}
             className={cn(
-              'my-2 ml-auto cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white',
+              'h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white',
               TRANSACTION_STATUS_COLOR_MAP[row.status],
             )}
           >
             {cellValue}
-          </span>
+          </Button>
         )
       case 'link':
         return (
@@ -61,7 +66,7 @@ export default function CustomTable({
               setOpenBatchDetailsModal(true)
             }}
           >
-            <LinkIcon />
+            <EyeIcon className="h-6 w-5" />
           </Button>
         )
 
@@ -76,6 +81,12 @@ export default function CustomTable({
     <Table
       aria-label="Example table with custom cells"
       className="max-h-[580px]"
+      classNames={{
+        table: cn('align-top items-start justify-start', {
+          'min-h-[500px]': isLoading || !rows,
+        }),
+        wrapper: cn('min-h-[500px]', { 'min-h-max': pages <= 1 }),
+      }}
       // classNames={}
       // showSelectionCheckboxes
       // selectionMode="multiple"
@@ -101,9 +112,6 @@ export default function CustomTable({
           </div>
         )
       }
-      classNames={{
-        wrapper: cn('min-h-[500px]', { 'min-h-max': pages <= 1 }),
-      }}
     >
       <TableHeader columns={columns} className="fixed">
         {(column) => (
@@ -115,11 +123,18 @@ export default function CustomTable({
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={items}>
+      <TableBody
+        items={items}
+        isLoading={isLoading}
+        loadingContent={<Loader loadingText="Loading..." />}
+        emptyContent={'No Data to display.'}
+        align="top"
+      >
         {(item) => (
           <TableRow
             key={item?.ID || item?.key || item}
             // className="hover:bg-primary-50"
+            align="top"
           >
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>

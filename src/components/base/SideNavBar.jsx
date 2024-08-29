@@ -24,6 +24,8 @@ import {
   TicketIcon,
   ShoppingCartIcon,
   SwatchIcon,
+  PresentationChartLineIcon,
+  NumberedListIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { Logo, SettingsSideBar } from '.'
@@ -163,13 +165,18 @@ function SideNavBar() {
       subMenuItems: [
         {
           name: 'Summary',
-          href: `${dashboardRoute}/reports/summary`,
-          Icon: ShoppingCartIcon,
+          href: `${dashboardRoute}/reports`,
+          Icon: PresentationChartLineIcon,
         },
         {
-          name: 'Transactions & Statement',
+          name: 'Transactions History',
           href: `${dashboardRoute}/reports/transactions`,
-          Icon: ShoppingCartIcon,
+          Icon: NumberedListIcon,
+        },
+        {
+          name: 'Statement',
+          href: `${dashboardRoute}/reports/statements`,
+          Icon: ClipboardDocumentIcon,
         },
       ],
     },
