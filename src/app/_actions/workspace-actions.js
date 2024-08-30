@@ -227,7 +227,7 @@ export async function changeUserRoleInWorkspace(mapping, recordID) {
   try {
     const res = await authenticatedService({
       url: `merchant/workspace/user/role/${recordID}`,
-      method: 'POST',
+      method: 'PATCH',
       data: mapping,
     })
 
@@ -249,6 +249,8 @@ export async function changeUserRoleInWorkspace(mapping, recordID) {
       statusText: res?.statusText,
     }
   } catch (error) {
+    console.log(error?.response)
+
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
