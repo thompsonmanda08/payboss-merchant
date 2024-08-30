@@ -26,7 +26,6 @@ export default function EditBatchRecordForm({ onClose }) {
     const response = await saveSelectedRecord()
 
     if (response.success) {
-      // TODO: CHECK THAT ARRAY IS BEING CHANGED AND A NEW ARRAY IS ADDED
       queryClient.invalidateQueries({
         queryKey: [BATCH_DETAILS_QUERY_KEY, selectedRecord?.batchID],
       })

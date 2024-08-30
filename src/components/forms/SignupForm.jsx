@@ -16,8 +16,6 @@ import Step3 from './signup-fragments/Step3'
 import {
   createMerchantAdminUser,
   createNewMerchant,
-  sendBusinessDocumentRefs,
-  updateBusinessDocumentRefs,
   updateMerchantDetails,
 } from '@/app/_actions/auth-actions'
 import { Card } from '@nextui-org/react'
@@ -108,10 +106,6 @@ export default function SignUpForm() {
     updateErrorStatus({ status: false, message: '' })
 
     if (businessInfo.registration == 'CONTINUE' && !isValidTPIN) {
-      // notify('error', 'Not Available Yet')
-      // TODO: => SET SENT BUSINESS INFO TO TRUE
-      // TODO: => SET MERCHANT ID IN STATE
-      // TODO: => ALLOW MERCHANT TO EDIT THEIR DETAILS
       navigateForward()
       setIsLoading(false)
       return

@@ -13,7 +13,17 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs))
 }
 
-export const notify = (type, message) => toast[type](message)
+export const notify = (type, message, isLoading) => {
+  // WARNING ALERT
+  if (type == 'warning') {
+    return toast(message, {
+      icon: '⚠️',
+    })
+  }
+
+  // DEFAULT
+  return toast[type](message)
+}
 
 export function formatCurrency(amount) {
   const currencyFormat = new Intl.NumberFormat('en-US', {

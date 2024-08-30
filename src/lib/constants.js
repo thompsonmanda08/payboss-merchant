@@ -51,9 +51,15 @@ const staggerContainerItemVariants = {
 }
 
 // REGEX
-const MTN_NO = /^(?:\+?26|26)?(096|076)\d{7}$/
-const AIRTEL_NO = /^(?:\+?26|26)?(097|077)\d{7}$/
-const ZAMTEL_NO = /^(?:\+?26|26)?(095|075)\d{7}$/
+const MTN_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/
+const AIRTEL_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/
+const ZAMTEL_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/
+// const NRC_PASSPORT = /^(ZN[0-9]{6}|[0-9]{6}/[0-9]{2}/[1]{1})$/
+
+// const MTN_NO = /^(?:\+?26|26)?(096|076)\d{7}$/
+// const AIRTEL_NO = /^(?:\+?26|26)?(097|077)\d{7}$/
+// const ZAMTEL_NO = /^(?:\+?26|26)?(095|075)\d{7}$/
+
 const PASSWORD_PATTERN =
   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/
 

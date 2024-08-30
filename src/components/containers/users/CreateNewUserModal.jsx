@@ -91,13 +91,14 @@ function CreateNewUserModal({ isOpen, onClose }) {
     const mapping = {
       userID: newUser?.userID,
       roleID: newUser?.role,
+      recordID,
     }
 
     let response = await changeUserRoleInWorkspace(mapping, recordID)
 
     if (response.success) {
-      notify('success', 'User updated successfully!')
       queryClient.invalidateQueries([USERS])
+      notify('success', 'User updated successfully!')
       setError({ status: false, message: '' })
       setLoading(false)
       handleClose()

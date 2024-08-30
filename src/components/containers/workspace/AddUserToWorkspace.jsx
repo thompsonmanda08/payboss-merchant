@@ -21,7 +21,7 @@ import { notify } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { UserAvatarComponent } from '../users/UsersTable'
+import { UserAvatarComponent } from '../tables/UsersTable'
 import { assignUsersToWorkspace } from '@/app/_actions/user-actions'
 import { ScrollArea } from '../../ui/scroll-area'
 import { CardHeader, EmptyState, StatusMessage } from '@/components/base'
@@ -31,6 +31,9 @@ import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import { ROLES } from '../users/ManagePeople'
 import SelectField from '@/components/ui/SelectField'
 import useWorkspaceStore from '@/context/workspaceStore'
+import useWorkspaces from '@/hooks/useWorkspaces'
+import { useWorkspaceMembers } from '@/hooks/useQueryHooks'
+import { WORKSPACE_MEMBERS_QUERY_KEY } from '@/lib/constants'
 
 export const roleColorMap = {
   owner: 'success',
@@ -59,7 +62,6 @@ function AddUserToWorkspace({
 }) {
   const queryClient = useQueryClient()
   const { allUsers, workspaceRoles } = useAllUsersAndRoles()
-  const router = useRouter()
 
   const {
     addedUsers,
@@ -73,6 +75,10 @@ function AddUserToWorkspace({
     handleUserRoleChange,
     handleSubmitAddedUsers,
   } = useWorkspaceStore((state) => state)
+
+  // const { data: members } = useWorkspaceMembers(workspaceID)
+
+  // const workspaceUsers = members?.data?.users || []
 
   const renderCell = useCallback((user, columnKey) => {
     const cellValue = user[columnKey]
@@ -128,7 +134,7 @@ function AddUserToWorkspace({
           </Chip>
         )
 
-      case 'workspace_role': // TODO => DROPDOWN
+      case 'workspace_role':
         return (
           <>
             <SelectField
@@ -152,6 +158,7 @@ function AddUserToWorkspace({
             color="primary"
             size="sm"
             className="relative"
+            isDisabled={user?.role == 'owner'}
             onPress={() => handleAddToWorkspace(user)}
           >
             <Tooltip color="primary" content="Remove User">
@@ -169,6 +176,7 @@ function AddUserToWorkspace({
             color="danger"
             size="sm"
             className="relative"
+            isDisabled={user?.role == 'owner'}
             onPress={() => handleRemoveFromWorkspace(user)}
           >
             <Tooltip color="danger" content="Remove User">
@@ -186,10 +194,10 @@ function AddUserToWorkspace({
   async function submitAddedUsers() {
     const response = await handleSubmitAddedUsers(workspaceID)
 
-    if (!response.success) {
+    if (!response?.success) {
       setError({
         status: true,
-        message: response?.message || response?.statusText,
+        message: response?.message,
       })
       notify('error', response?.message)
       setIsLoading(false)
@@ -200,19 +208,22 @@ function AddUserToWorkspace({
     navigateTo(1)
     onClose()
     handleClearAllSelected()
-    queryClient.invalidateQueries()
+    queryClient.invalidateQueries({
+      queryKey: [WORKSPACE_MEMBERS_QUERY_KEY, workspaceID],
+    })
     return
   }
 
   useEffect(() => {
-    // IN CASE I NEED TO DO SOMETHING IN HERE
-
-    //
     return () => {
       // queryClient.cancelQueries()
       handleClearAllSelected()
     }
   }, [])
+
+  useEffect(() => {
+    setError({ status: false, message: '' })
+  }, [addedUsers])
 
   return (
     <Modal

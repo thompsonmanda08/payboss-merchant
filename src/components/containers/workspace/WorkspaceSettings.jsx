@@ -1,9 +1,9 @@
 'use client'
 import { Button } from '@/components/ui/Button'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Tabs } from '@/components/base'
-import UsersTable from '../users/UsersTable'
+import { Card, Tabs } from '@/components/base'
+import UsersTable from '../tables/UsersTable'
 import WorkspaceDetails from './WorkspaceDetails'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { SearchOrInviteUsers } from '../users/ManagePeople'
@@ -21,19 +21,18 @@ import LoadingPage from '@/app/loading'
 const TABS = [
   { name: 'General', index: 0 },
   { name: 'Members', index: 1 },
-  { name: 'Wallet', index: 2 }, // TODO: shows the wallet details and balances
-  // { name: 'Services', index: 2 },
+  { name: 'Wallet', index: 2 },
 ]
 
 function WorkspaceSettings({ workspaceID }) {
   const { back } = useRouter()
-  const { allWorkspaces } = useWorkspaces()
+  const { allWorkspaces, activeWorkspace } = useWorkspaces()
   const { isUserInWorkspace } = useNavigation()
   const [searchQuery, setSearchQuery] = useState('')
   const { canCreateUsers } = useAllUsersAndRoles()
-  const { isEditingRole } = useWorkspaceStore()
-  const { data: members } = useWorkspaceMembers(workspaceID)
+  const { isEditingRole, setExistingUsers, existingUsers } = useWorkspaceStore()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
+  const { data: members } = useWorkspaceMembers(workspaceID)
 
   const workspaceUsers = members?.data?.users || []
 
@@ -74,37 +73,42 @@ function WorkspaceSettings({ workspaceID }) {
     navigateTo(index)
   }
 
+  useEffect(() => {
+    // UPDATE EXISITING USERS LIST
+    if (workspaceUsers && !existingUsers.length) {
+      setExistingUsers(workspaceUsers)
+    }
+  }, [])
+
   const allowUserCreation =
     currentTabIndex == 1 && canCreateUsers && !isUserInWorkspace
 
-  return !selectedWorkspace ? (
+  return (!selectedWorkspace && !isUserInWorkspace) || !activeWorkspace ? (
     <LoadingPage />
   ) : (
     <>
-      <div className="relative lg:-left-5">
-        <Button
-          aria-label="back"
-          color="light"
-          className={'text-primary sm:w-auto sm:max-w-fit'}
-          onClick={() => back()}
-        >
-          <ArrowUturnLeftIcon className="h-5 w-5" /> Return to Workspaces
-        </Button>
-      </div>
+      {!isUserInWorkspace && (
+        <div className="relative lg:-left-5">
+          <Button
+            aria-label="back"
+            color="light"
+            className={'text-primary sm:w-auto sm:max-w-fit'}
+            onClick={() => back()}
+          >
+            <ArrowUturnLeftIcon className="h-5 w-5" /> Return to Workspaces
+          </Button>
+        </div>
+      )}
       {/* HEADER */}
-      <div className="mb-5">
+      <div className="mb-2">
         <h2 className="heading-4 !font-bold uppercase tracking-tight text-gray-900">
-          {selectedWorkspace?.workspace} Workspace Settings
+          {selectedWorkspace?.workspace} Settings
         </h2>
         <p className=" text-sm text-slate-600">
           Workspaces provide a structured way to group and manage services,
           users, and transactions effectively.
         </p>
       </div>
-      {/* <CardHeader
-        title={selectedWorkspace?.workspace}
-        infoText={selectedWorkspace?.description}
-      /> */}
 
       {/* CONTENT */}
       <div className="flex flex-col gap-4 px-4 lg:p-0">
@@ -128,7 +132,6 @@ function WorkspaceSettings({ workspaceID }) {
             <SearchOrInviteUsers setSearchQuery={setSearchQuery} />
           )}
         </div>
-
         <div className="flex w-full flex-grow flex-col justify-start">
           {activeTab}
         </div>

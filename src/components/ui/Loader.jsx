@@ -14,7 +14,7 @@ function Loader({
   return (
     <div
       className={cn(
-        'grid min-h-80 flex-1 flex-grow place-items-center rounded-xl bg-slate-50 py-8',
+        'bg-slate-5/10 grid min-h-80 flex-1 flex-grow place-items-center rounded-xl py-8',
         wrapper,
       )}
     >

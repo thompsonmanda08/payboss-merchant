@@ -206,7 +206,6 @@ export default function Step1({ updateDetails }) {
               }}
             />
             <Input
-              // TODO: REGEX FOR WEBSITE TEST
               label="Website"
               name="website"
               value={step?.website}

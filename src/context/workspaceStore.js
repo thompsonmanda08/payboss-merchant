@@ -6,6 +6,7 @@ import { persist } from 'zustand/middleware'
 
 const INITIAL_STATE = {
   addedUsers: [],
+  existingUsers: [],
   error: {
     status: false,
     message: '',
@@ -20,6 +21,7 @@ const useWorkspaceStore = create((set, get) => ({
 
   //SETTERS
   setAddedUsers: (users) => set({ addedUsers: users }),
+  setExistingUsers: (users) => set({ existingUsers: users }),
   setIsLoading: (status) => set({ isLoading: status }),
   setIsEditingRole: (status) => set({ isEditingRole: status }),
   setError: (error) => set({ error }),
@@ -29,16 +31,26 @@ const useWorkspaceStore = create((set, get) => ({
 
   handleAddToWorkspace: (user) => {
     // Filter out the user with the matching email, if exists then don't add
-    const userExists = get().addedUsers.find((u) => u.ID === user.ID)
+    const { addedUsers, existingUsers } = get()
+    const aldreadyAdded = addedUsers.find((u) => u.ID === user.ID)
+    const userExists = existingUsers.find((u) => u.userID === user.ID)
+
+    if (aldreadyAdded) {
+      notify('warning', `${aldreadyAdded?.first_name} is already added!`)
+      return
+    }
 
     if (userExists) {
-      notify('error', 'User is already Added!')
+      notify(
+        'warning',
+        `${userExists?.first_name} already exists in workspace!`,
+      )
       return
     }
 
     // Filter out the user with role == "owner", if exists then don't add
     if (user?.role?.toLowerCase() == 'owner') {
-      notify('error', 'Owner is already part of the workspace!')
+      notify('warning', 'Owner is already part of the workspace!')
       return
     }
 
@@ -69,13 +81,7 @@ const useWorkspaceStore = create((set, get) => ({
   },
 
   handleUserRoleChange: (user, roleID) => {
-    console.log(roleID)
-    console.log(user)
-    // console.log(addedUsers)
-
     // Map through the users and add the property workspaceRole = roleID to the user with the matching ID and return the other as they are
-
-    // console.log(updatedUsers)
     set((state) => {
       return {
         addedUsers: state.addedUsers.map((u) => {
@@ -98,30 +104,28 @@ const useWorkspaceStore = create((set, get) => ({
 
     // check if the addedUsers list is empty
     if (addedUsers.length === 0) {
-      notify('error', 'Please select at least one user')
       set({
         isLoading: false,
       })
-      return
+      return { status: true, message: 'Please select at least one user' }
     }
 
     // Check is all users in the addedUSers list have a role assigned
     const userHasNoRole = !addedUsers?.every((user) => user.workspaceRole)
 
     if (userHasNoRole) {
-      notify('error', 'Please assign a role to all users')
       set({
         isLoading: false,
       })
-      return
+      return { status: true, message: 'Please assign a role to all users' }
     }
 
-    const usersPayload = addedUsers.map((user) => ({
+    const users = addedUsers.map((user) => ({
       userID: user.ID,
       roleID: user.workspaceRole,
     }))
 
-    return await assignUsersToWorkspace(usersPayload, workspaceID)
+    return await assignUsersToWorkspace(users, workspaceID)
   },
 
   handleDeleteFromWorkspace: async (workspaceID) => {
@@ -131,12 +135,13 @@ const useWorkspaceStore = create((set, get) => ({
     const response = await deleteUserFromWorkspace(selectedUser?.ID)
 
     if (response.success) {
-      notify('success', `You Removed ${user?.first_name}!`)
-      return response
+      notify('success', `You Removed ${selectedUser?.first_name}!`)
+
+      return response.success
     }
 
     notify('error', response.message)
-    return response
+    return response.success
   },
 
   handleClearAllSelected: () => {
