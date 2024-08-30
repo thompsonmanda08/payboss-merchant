@@ -19,10 +19,12 @@ import useAuthStore from '@/context/authStore'
 import { Skeleton } from '../ui/skeleton'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import useNavigation from '@/hooks/useNavigation'
+import useWorkspaces from '@/hooks/useWorkspaces'
 
 export default function TopNavBar({}) {
   const { user } = useAccountProfile()
-  const { settingsPathname, isProfile, currentPath } = useNavigation()
+  const { workspaceID } = useWorkspaces()
+  const { settingsPathname, isProfile, currentPath, pathname } = useNavigation()
 
   return (
     <nav
@@ -32,29 +34,33 @@ export default function TopNavBar({}) {
       )}
     >
       <div className="flex w-full items-center">
-        <div
-          className={cn(
-            'relative left-16 hidden transition-all duration-300 ease-in-out lg:left-0 lg:block',
-            { 'pl-5': isProfile },
-          )}
-        >
-          <BreadCrumbLinks isProfile={isProfile} />
-          <h2
+        {user && (
+          <div
             className={cn(
-              'pl-2 text-lg font-bold uppercase leading-8 text-slate-800',
-              { ' text-white': isProfile },
+              'relative left-16 hidden transition-all duration-300 ease-in-out lg:left-0 lg:block',
+              { 'pl-5': isProfile },
             )}
           >
-            {currentPath}
-          </h2>
-        </div>
+            <BreadCrumbLinks isProfile={isProfile} />
+            {workspaceID && (
+              <h2
+                className={cn(
+                  'pl-2 text-lg font-bold uppercase leading-8 text-slate-800',
+                  { 'text-white': isProfile },
+                )}
+              >
+                {currentPath}
+              </h2>
+            )}
+          </div>
+        )}
         <div className="relative z-50 ml-auto flex  items-center justify-center rounded-full">
           <div
             className={cn('flex items-center gap-4 text-gray-400', {
               'text-white': isProfile,
             })}
           >
-            {user ? (
+            {user && pathname ? (
               <>
                 <Link
                   href={settingsPathname}

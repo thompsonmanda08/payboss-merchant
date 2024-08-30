@@ -77,21 +77,21 @@ function SettingsSideBar({
       Icon: UserCircleIcon,
       href: settingsPathname,
     },
+    // {
+    //   name: 'People',
+    //   Icon: UserGroupIcon,
+    //   href: `${settingsPathname}/users`,
+    // },
     {
-      name: 'People',
-      Icon: UserGroupIcon,
-      href: `${settingsPathname}/users`,
-    },
-    {
-      name: 'Workspaces',
+      name: 'Workspace',
       Icon: BriefcaseIcon,
-      href: `${settingsPathname}/workspaces`,
+      href: `${settingsPathname}/workspace`,
     },
-    {
-      name: 'Security & Permissions',
-      Icon: LockClosedIcon,
-      href: `${settingsPathname}/security`,
-    },
+    // {
+    //   name: 'Security & Permissions',
+    //   Icon: LockClosedIcon,
+    //   href: `${settingsPathname}/security`,
+    // },
   ]
 
   // SETTINGS OPTIONS
@@ -161,7 +161,7 @@ function SettingsSideBar({
             className="p- flex flex-col justify-start p-2"
           >
             <p className="m-2 text-xs font-medium uppercase tracking-wide text-slate-600">
-              {settingsPathname ? title : 'ACCOUNT SETTINGS'}
+              {!isAccountLevelSettingsRoute ? title : 'ACCOUNT SETTINGS'}
             </p>
 
             {SETTINGS_LINKS?.map(({ href, Icon, name }, index) => {
