@@ -7,11 +7,11 @@ import useTransactions from '@/hooks/useTransactions'
 import CustomTable from '@/components/containers/tables/Table'
 
 const transactionColumns = [
-  { name: 'NAME', uid: 'batch_name' },
-  { name: 'TOTAL RECORDS', uid: 'number_of_records' },
-  { name: 'TOTAL AMOUNT', uid: 'total_amount' },
-  { name: 'STATUS', uid: 'status' },
-  { name: 'LINK', uid: 'link' },
+  { name: 'DATE', uid: 'batch_name' },
+  { name: 'DETAILS', uid: 'number_of_records' },
+  { name: 'SERVICE', uid: 'status' },
+  { name: 'DESTINATION ACCOUNT TYPE', uid: 'status' },
+  { name: 'AMOUNT', uid: 'amount' },
 ]
 
 const SERVICE_TYPES = [
@@ -32,7 +32,7 @@ const SERVICE_TYPES = [
 export default function Transactions() {
   const [searchQuery, setSearchQuery] = useState('')
 
-  const { directBulkTransactions } = useTransactions()
+  const { directBulkTransactions, isLoading } = useTransactions()
   // const [selectedKeys, setSelectedKeys] = React.useState(new Set(['']))
 
   const transactionRows = directBulkTransactions?.filter((item) => {
@@ -46,6 +46,7 @@ export default function Transactions() {
     <CustomTable
       columns={transactionColumns}
       rows={transactionRows}
+      isLoading={isLoading}
       // selectedKeys={selectedKeys}
       // setSelectedKeys={setSelectedKeys}
     />,

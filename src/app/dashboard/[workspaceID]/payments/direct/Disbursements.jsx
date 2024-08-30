@@ -26,7 +26,7 @@ export default function Disbursements() {
   const [searchQuery, setSearchQuery] = useState('')
   const { openPaymentsModal, setOpenPaymentsModal, openBatchDetailsModal } =
     usePaymentsStore()
-  const { directBulkTransactions } = useTransactions()
+  const { directBulkTransactions, isLoading } = useTransactions()
   const { onClose } = useDisclosure()
   const [selectedKeys, setSelectedKeys] = React.useState(new Set(['']))
 
@@ -41,6 +41,7 @@ export default function Disbursements() {
     <CustomTable
       columns={transactionColumns}
       rows={bulkRows}
+      isLoading={isLoading}
       selectedKeys={selectedKeys}
       setSelectedKeys={setSelectedKeys}
     />,

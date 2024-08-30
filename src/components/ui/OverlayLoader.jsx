@@ -17,7 +17,7 @@ const overlayVariants = {
   exit: { opacity: 0 },
 }
 
-function OverlayLoader({ show, className }) {
+function OverlayLoader({ show, className, classNames }) {
   const [isOpen, setIsOpen] = useState(show || false)
 
   useEffect(() => {
@@ -28,6 +28,8 @@ function OverlayLoader({ show, className }) {
     }
   }, [show])
 
+  const { wrapper, conatiner, spinner } = classNames || ''
+
   return (
     isOpen && (
       <AnimatePresence>
@@ -37,7 +39,10 @@ function OverlayLoader({ show, className }) {
           exit="exit"
           variants={overlayVariants}
           transition={{ duration: 0.25 }}
-          className="absolute inset-0 z-[999] flex h-screen w-full items-center justify-center bg-slate-900/60"
+          className={cn(
+            'absolute inset-0 z-[999] flex h-screen w-full items-center justify-center bg-slate-900/60',
+            wrapper,
+          )}
         >
           <motion.div
             initial="hidden"
@@ -49,9 +54,10 @@ function OverlayLoader({ show, className }) {
             className={cn(
               'grid h-full w-full place-content-center place-items-center',
               className,
+              conatiner,
             )}
           >
-            <Spinner size={120} color="#ffffff" />
+            <Spinner size={120} color="#ffffff" className={spinner} />
           </motion.div>
         </motion.div>
       </AnimatePresence>

@@ -29,7 +29,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     openBatchDetailsModal,
   } = usePaymentsStore()
 
-  const { workspaceID } = useWorkspaces()
+  const { workspaceID, workspaceWalletBalance } = useWorkspaces()
 
   const [queryID, setQueryID] = useState(
     batchID || selectedBatch?.ID || batchState?.ID,
@@ -50,6 +50,15 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
       batchDetails.number_of_records != batchDetails.number_of_valid_records
     ) {
       notify('error', 'Some records are still invalid!')
+      setLoading(false)
+      return
+    }
+
+    if (
+      parseFloat(batchDetails?.valid_amount) <
+      parseFloat(workspaceWalletBalance)
+    ) {
+      notify('error', 'Insufficient funds in the wallet!')
       setLoading(false)
       return
     }

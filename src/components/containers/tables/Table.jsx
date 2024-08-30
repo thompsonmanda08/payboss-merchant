@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
 import Loader from '@/components/ui/Loader'
 import { EyeIcon } from '@heroicons/react/24/outline'
+import OverlayLoader from '@/components/ui/OverlayLoader'
 
 export default function CustomTable({
   columns,
@@ -126,7 +127,12 @@ export default function CustomTable({
       <TableBody
         items={items}
         isLoading={isLoading}
-        loadingContent={<Loader loadingText="Loading..." />}
+        loadingContent={
+          <Loader
+            color={'#ffffff'}
+            classNames={{ wrapper: 'bg-slate-900/20 h-full rounded-xl' }}
+          />
+        }
         emptyContent={'No Data to display.'}
         align="top"
       >
