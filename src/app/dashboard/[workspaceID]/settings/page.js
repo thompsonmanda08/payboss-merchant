@@ -31,9 +31,6 @@ export default function ProfilePage() {
           <ProfileDetails />
           <AccountPreferences />
         </div>
-        {/* <div className="flex w-full flex-col gap-4 xl:flex-row">
-          <ProfileSecuritySettings />
-        </div> */}
       </section>
     </Suspense>
   )

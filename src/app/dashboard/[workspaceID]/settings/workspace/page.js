@@ -1,16 +1,16 @@
 import LoadingPage from '@/app/loading'
 import WorkspaceSettings from '@/components/containers/workspace/WorkspaceSettings'
-import Spinner from '@/components/ui/Spinner'
+
 import React, { Suspense } from 'react'
 
-function WorkSpaceIDPage({ params }) {
+function WorkspaceSettingsPage({ params }) {
   return (
     <Suspense fallback={<LoadingPage />}>
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4">
-        <WorkspaceSettings WorkSpaceID={params.ID} />
+      <div className="mx-auto flex w-full  flex-col gap-8 px-8 md:px-10 ">
+        <WorkspaceSettings workspaceID={params?.workspaceID} />
       </div>
     </Suspense>
   )
 }
 
-export default WorkSpaceIDPage
+export default WorkspaceSettingsPage
