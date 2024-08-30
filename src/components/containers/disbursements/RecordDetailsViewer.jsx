@@ -1,34 +1,22 @@
 'use client'
 import React from 'react'
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-} from '@nextui-org/modal'
-import AllRecords from '../tables/AllRecords'
-import ValidRecords from '../tables/ValidRecords'
-import InvalidRecords from '../tables/InvalidRecords'
-import usePaymentsStore from '@/context/paymentsStore'
-import { useQueryClient } from '@tanstack/react-query'
+import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal'
+import usePaymentsStore, { validationColumns } from '@/context/paymentsStore'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
-import { BATCH_DETAILS_QUERY_KEY } from '@/lib/constants'
 import { CardHeader } from '@/components/base'
+import SummaryTable from '../tables/SummaryTable'
 
 function RecordDetailsViewer({ batchID }) {
-  const queryClient = useQueryClient()
   const {
     openAllRecordsModal,
     openValidRecordsModal,
     openInvalidRecordsModal,
     closeRecordsModal,
     batchDetails: batchState,
-    setBatchDetails,
   } = usePaymentsStore()
 
   const { data: batch } = useBatchDetails(batchState?.ID || batchID)
   const batchDetails = batch?.data
-
 
   // Determine which modal view to open
   const openModalView =
@@ -70,32 +58,28 @@ function RecordDetailsViewer({ batchID }) {
             <ModalBody className="gap-0">
               {/* IF MODAL OPENED AND TOTAL RECORDS ARRAY IS NOT EMPTY */}
               {openAllRecordsModal && batchDetails?.total && (
-                <AllRecords records={batchDetails?.total} />
+                <SummaryTable
+                  columns={validationColumns}
+                  data={batchDetails?.total}
+                />
               )}
 
               {/* IF MODAL OPENED AND TOTAL VALID RECORDS ARRAY IS NOT EMPTY */}
               {openValidRecordsModal && batchDetails?.valid && (
-                <ValidRecords records={batchDetails?.valid} />
+                <SummaryTable
+                  columns={validationColumns}
+                  data={batchDetails?.valid}
+                />
               )}
 
               {/* IF MODAL OPENED AND TOTAL INVALID RECORDS ARRAY IS NOT EMPTY */}
               {openInvalidRecordsModal && batchDetails?.invalid?.length && (
-                <InvalidRecords records={batchDetails?.invalid} />
+                <SummaryTable
+                  columns={validationColumns}
+                  data={batchDetails?.invalid}
+                />
               )}
             </ModalBody>
-            {/* <ModalFooter>
-              <Button color="danger" onPress={onClose}>
-                {cancelText}
-              </Button>
-              <Button
-                color="primary"
-                isDisabled={isDisabled}
-                isLoading={isLoading}
-                onPress={onConfirm}
-              >
-                {confirmText}
-              </Button>
-            </ModalFooter> */}
           </>
         )}
       </ModalContent>

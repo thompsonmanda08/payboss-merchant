@@ -2,7 +2,7 @@
 import { Balance, Card, CardHeader } from '@/components/base'
 import React from 'react'
 import useAccountProfile from '@/hooks/useProfileDetails'
-import { UserAvatarComponent } from '../users/UsersTable'
+import { UserAvatarComponent } from '../tables/UsersTable'
 import { cn } from '@/lib/utils'
 import Wallet from '../workspace/Wallet'
 import useWorkspaces from '@/hooks/useWorkspaces'
