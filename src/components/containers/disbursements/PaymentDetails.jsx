@@ -95,8 +95,6 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
     updatePaymentFields({ type: PAYMENT_SERVICE[option] })
   }
 
-  // console.log(selectedService)
-
   return (
     <div className="flex h-full w-full flex-col  gap-4">
       <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 p-4 ">

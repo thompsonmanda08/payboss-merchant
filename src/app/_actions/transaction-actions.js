@@ -38,7 +38,7 @@ export async function getAllDirectBulkTransactions(workspaceID) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
@@ -83,7 +83,7 @@ export async function getDirectBulkTransactionDetails(batchID) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
@@ -130,7 +130,7 @@ export async function reviewBatch(batchID, reviewDetails) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
@@ -177,7 +177,7 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
@@ -307,7 +307,7 @@ export async function submitBatchForApproval(batchID) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
@@ -352,7 +352,7 @@ export async function getWalletPrefundHistory(workspaceID) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',

@@ -249,7 +249,7 @@ export async function changeUserRoleInWorkspace(mapping, recordID) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response)
 
     return {
       success: false,

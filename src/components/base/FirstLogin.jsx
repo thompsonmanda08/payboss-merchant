@@ -32,7 +32,6 @@ export default function FirstLogin({ open }) {
 
   async function handlePasswordChange() {
     setIsLoading(true)
-    console.log(PASSWORD_PATTERN.test(password.newPassword))
 
     if (
       password.confirmPassword.length < 8 ||

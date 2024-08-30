@@ -19,7 +19,7 @@ function Providers({ session, children }) {
   const { online } = useNetwork()
   const auth = useAuthenticatedService()
 
-  console.log('AUTH STATE', auth)
+  // console.log('AUTH STATE', auth)
 
   return (
     <QueryClientProvider client={queryClient}>

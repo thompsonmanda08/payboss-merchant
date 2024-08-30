@@ -86,7 +86,7 @@ export default function DocumentAttachments({ navigateToPage }) {
       }
     }
 
-    console.log(response)
+  
     setError({ message: response.message, status: true })
     notify('error', 'Error Submitting Documents')
 

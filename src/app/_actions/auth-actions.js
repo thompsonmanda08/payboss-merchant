@@ -150,7 +150,7 @@ export async function createMerchantAdminUser(newUser, merchantID) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response?.data)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
@@ -171,8 +171,6 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
       data: payloadUrls,
     })
 
-    console.log(res)
-
     if (res.status == 201) {
       return {
         success: true,
@@ -189,7 +187,7 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
       status: res.status,
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation failed!',
@@ -228,7 +226,7 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
       status: res.status,
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
 
     return {
       success: false,
@@ -274,8 +272,7 @@ export async function authenticateUser(loginCredentials) {
       status: res.status,
     }
   } catch (error) {
-    console.error(error)
-    console.log(error)
+    console.error(error?.response?.data)
 
     return {
       success: false,

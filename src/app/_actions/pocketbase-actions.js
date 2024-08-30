@@ -55,7 +55,6 @@ export async function uploadPaymentBatchFile(file, fileRecordId) {
     }
   } catch (error) {
     console.error(error)
-    console.log(error)
 
     return {
       success: false,
@@ -118,7 +117,6 @@ export async function uploadPOPDocument(file, fileRecordId) {
     }
   } catch (error) {
     console.error(error)
-    console.log(error)
 
     return {
       success: false,

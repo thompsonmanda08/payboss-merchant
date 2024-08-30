@@ -7,7 +7,6 @@ import {
   TableRow,
   TableCell,
   Pagination,
-  LinkIcon,
 } from '@nextui-org/react'
 import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -15,7 +14,6 @@ import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
 import Loader from '@/components/ui/Loader'
 import { EyeIcon } from '@heroicons/react/24/outline'
-import OverlayLoader from '@/components/ui/OverlayLoader'
 
 export default function CustomTable({
   columns,
@@ -75,8 +73,6 @@ export default function CustomTable({
         return cellValue
     }
   }, [])
-
-  // console.log(selectedKeys?.anchorKey)
 
   return (
     <Table

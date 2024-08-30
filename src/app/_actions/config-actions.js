@@ -121,9 +121,6 @@ export async function getUserAccountRoles() {
 export async function getWorkspaceRoles() {
   const session = await getUserSession()
   const merchantID = session?.user?.merchantID
-
-  console.log(merchantID)
-
   try {
     const res = await authenticatedService({
       url: `merchant/workspace/roles/${merchantID}`,

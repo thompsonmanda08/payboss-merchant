@@ -33,7 +33,7 @@ export async function createNewUser(newUser) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
@@ -119,7 +119,7 @@ export async function assignUsersToWorkspace(users, workspaceID) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
@@ -199,7 +199,7 @@ export async function changeUserPassword(password) {
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.log(error?.response)
+    console.error(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',
