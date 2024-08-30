@@ -119,7 +119,7 @@ const TASK_TYPE = {
   // },
   Deposit: {
     icon: <WalletIcon className="h-5 w-5" />,
-    color: 'green-700',
+    color: 'green-600',
     label: 'Deposit',
   },
 }

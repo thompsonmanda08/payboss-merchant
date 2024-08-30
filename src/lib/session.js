@@ -50,7 +50,7 @@ export async function createAuthSession(
 }
 
 export async function createUserSession(user, merchantID) {
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000) // AFTER 1 HOUR
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24) // AFTER 1 DAY
   const session = await encrypt({
     user,
     merchantID,

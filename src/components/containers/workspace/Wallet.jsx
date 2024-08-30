@@ -11,7 +11,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import React from 'react'
 import { UploadField } from '../account-verification/DocumentAttachments'
 import { capitalize, cn, formatCurrency, formatDate, notify } from '@/lib/utils'
-import { TASK_TYPE } from '@/lib/constants'
+import { TASK_TYPE, WALLET_HISTORY_QUERY_KEY } from '@/lib/constants'
 import { formatActivityData } from '@/lib/utils'
 import PromptModal from '@/components/base/Prompt'
 import { Chip, Tooltip, useDisclosure } from '@nextui-org/react'
@@ -21,6 +21,7 @@ import DateSelectField from '@/components/ui/DateSelectField'
 import { getLocalTimeZone, today } from '@internationalized/date'
 import useTransactions from '@/hooks/useTransactions'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useQueryClient } from '@tanstack/react-query'
 
 const POP_INIT = {
   amount: 0,
@@ -30,6 +31,7 @@ const POP_INIT = {
 }
 
 function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
+  const queryClient = useQueryClient()
   const [isLoading, setIsLoading] = React.useState(false)
   const { isOpen, onClose, onOpenChange, onOpen } = useDisclosure()
 
@@ -88,6 +90,9 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
     const response = await submitPOP(formData, workspaceID)
 
     if (response.success) {
+      queryClient.invalidateQueries({
+        queryKey: [WALLET_HISTORY_QUERY_KEY, workspaceID],
+      })
       notify('success', 'POP Completed successfully!')
       setIsLoading(false)
       setFormData(POP_INIT)
@@ -175,6 +180,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
 
                 <UploadField
                   label="Proof of Payment"
+                  isLoading={isLoading}
                   handleFile={async (file) => {
                     const file_record = await handleFileUpload(
                       file,
@@ -292,12 +298,15 @@ export function PreFundHistory({ workspaceID }) {
 
             {items?.data?.map((item, itemIndex) => (
               <div className="flex flex-col gap-y-4 py-2" key={itemIndex}>
-                <div className="flex items-center space-x-4">
-                  <LogTaskType type={item.type} />
+                <div className="flex items-start space-x-4">
+                  <LogTaskType
+                    type={item.type}
+                    classNames={{ wrapper: 'mt-1' }}
+                  />
 
                   <div className="w-full">
                     <div className="flex w-full justify-between">
-                      <p className="mb-[4px] text-[14px] font-medium leading-6">
+                      <p className="text-sm font-medium leading-6">
                         {item.created_by}
                       </p>
                       <div>
@@ -316,13 +325,15 @@ export function PreFundHistory({ workspaceID }) {
                         >
                           <Chip
                             classNames={{
-                              base: 'p-2 py-4 cursor-pointer',
+                              base: cn('p-2 py-4 cursor-pointer', {
+                                'bg-green-600/10': item?.isPrefunded,
+                              }),
                               content: cn(
                                 'text-secondary text-base font-bold',
-                                { 'text-green-500': item?.isPrefunded },
+                                { 'text-green-600': item?.isPrefunded },
                               ),
                             }}
-                            variant="light"
+                            variant="flat"
                             color={item?.isPrefunded ? 'success' : 'secondary'}
                           >
                             {formatCurrency(item?.amount)}
@@ -334,7 +345,9 @@ export function PreFundHistory({ workspaceID }) {
                         </p>
                       </div>
                     </div>
-                    <p className="text-sm text-slate-700">{item.content}</p>
+                    <p className="-mt-1 text-sm text-slate-700">
+                      {item.content}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -357,20 +370,29 @@ export function PreFundHistory({ workspaceID }) {
   )
 }
 
-export function LogTaskType({ type }) {
+export function LogTaskType({ type, classNames }) {
   const taskType = TASK_TYPE[type]
+
+  const { wrapper, icon, text } = classNames || ''
 
   if (taskType) {
     return (
       <div
         className={cn(
-          `inline-flex h-8 w-fit items-center justify-center gap-2 text-nowrap rounded-[4px] bg-${taskType.color}/50 px-2 py-1.5`,
+          `inline-flex h-8 w-fit items-center justify-center gap-2 text-nowrap rounded-[4px]  px-2 py-1.5`,
+          `cursor-pointer px-4`,
+          `bg-${taskType.color}/10`,
+          wrapper,
         )}
       >
-        <span className={cn(`text-${taskType.color}`)}>{taskType.icon}</span>
+        <span className={cn(`text-${taskType.color}`, icon)}>
+          {taskType.icon}
+        </span>
         <p
           className={cn(
-            `text-[12px] font-medium leading-[16px] text-${taskType.color}`,
+            `text-sm font-medium leading-6`,
+            `text-${taskType.color}`,
+            text,
           )}
         >
           {taskType.label}
