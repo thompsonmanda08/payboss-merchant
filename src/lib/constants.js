@@ -76,7 +76,7 @@ const PAYMENT_SERVICE_TYPES = [
   },
 ]
 
-const PAYMENT_SERVICE = ['direct', 'voucher']
+const PAYMENT_PROTOCOL = ['direct', 'voucher']
 
 const TASK_ICON_BG_COLOR_MAP = {
   Call: 'bg-[#F7F6FF]',
@@ -140,7 +140,6 @@ export {
   USER_SESSION,
   WORKSPACE_SESSION,
   PAYMENT_SERVICE_TYPES,
-  PAYMENT_SERVICE,
   DefaultCover,
   MTN_NO,
   AIRTEL_NO,
@@ -150,6 +149,7 @@ export {
   TASK_ICON_BG_COLOR_MAP,
   TASK_TYPE,
   TRANSACTION_STATUS_COLOR_MAP,
+  PAYMENT_PROTOCOL,
 
   // ANIMATIONS
   staggerContainerItemVariants,

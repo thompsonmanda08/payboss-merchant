@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
 import { BanknotesIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { useSearchParams } from 'next/navigation'
-import { PAYMENT_SERVICE, PAYMENT_SERVICE_TYPES } from '@/lib/constants'
+import { PAYMENT_PROTOCOL } from '@/lib/constants'
 import useDashboard from '@/hooks/useDashboard'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { initializeBulkTransaction } from '@/app/_actions/transaction-actions'
@@ -27,13 +27,24 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   const { workspaceID } = useWorkspaces()
 
   const urlParams = useSearchParams()
-  const service = urlParams.get('service')
+  const protocol = urlParams.get('protocol')
 
-  const { selectedService, setSelectedService, selectedActionType } =
+  const { selectedProtocol, setSelectedProtocol, selectedActionType } =
     usePaymentsStore()
 
   async function handleProceed() {
+    console.log(paymentAction)
     setLoading(true)
+
+    if (!paymentAction?.protocol) {
+      notify('error', 'Select a service protocol')
+      setError({
+        status: true,
+        message: 'Select a service protocol (Direct or Voucher)',
+      })
+      return
+    }
+
     if (
       paymentAction?.batch_name == '' &&
       paymentAction?.batch_name?.length < 3
@@ -43,15 +54,9 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
       return
     }
 
-    // Check if the selected service is not available yet
-    if (selectedService.toLowerCase() == 'voucher') {
-      setLoading(false)
-      notify('error', 'Service Not available yet!')
-      return
-    }
-
     // Create payment batch here if user is create access
-    if (workspaceUserRole?.create) {
+    if (workspaceUserRole?.create || workspaceUserRole?.can_initiate) {
+      /*  */
       const response = await initializeBulkTransaction(
         workspaceID,
         paymentAction,
@@ -90,10 +95,19 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
     setLoading(false)
   }, [paymentAction])
 
-  function selectServiceType(option) {
-    setSelectedService(PAYMENT_SERVICE[option])
-    updatePaymentFields({ type: PAYMENT_SERVICE[option] })
+  function handleProtocolSelection(option) {
+    setSelectedProtocol(PAYMENT_PROTOCOL[option])
+    updatePaymentFields({ protocol: PAYMENT_PROTOCOL[option] })
   }
+
+  useEffect(() => {
+    if (protocol) {
+      setSelectedProtocol(protocol)
+      updatePaymentFields({ protocol })
+    } else {
+      setSelectedProtocol(null)
+    }
+  }, [protocol])
 
   return (
     <div className="flex h-full w-full flex-col  gap-4">
@@ -104,17 +118,17 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
           <p>{selectedActionType?.name}</p>
         </div>
       </div>
-      {selectedService ? (
+      {selectedProtocol ? (
         <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 py-3 pl-5 pr-4">
           <BanknotesIcon className="h-6 w-6 text-primary" />
           <div className="h-8 border-r-2 border-primary/60" />
           <div className="flex w-full justify-between text-sm font-medium capitalize text-primary 2xl:text-base">
-            <p>{selectedService}</p>
+            <p>{selectedProtocol}</p>
           </div>
           <Button
             variant="light"
             className={''}
-            onPress={() => setSelectedService(null)}
+            onPress={() => setSelectedProtocol(null)}
           >
             <PencilSquareIcon className="h-4 w-4" />
             Change
@@ -122,17 +136,14 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
         </div>
       ) : (
         <CustomRadioGroup
-          onChange={(option) => selectServiceType(option)}
-          labelText="Service"
-          defaultValue={service}
-          options={
-            // MUST BE AN ARRAY
-            PAYMENT_SERVICE?.map((item, index) => (
-              <div key={index} className="flex flex-1 capitalize">
-                <span className="font-medium">{item}</span>
-              </div>
-            ))
-          }
+          onChange={(option) => handleProtocolSelection(option)}
+          labelText="Protocol"
+          defaultValue={protocol}
+          options={PAYMENT_PROTOCOL?.map((item, index) => (
+            <div key={index} className="flex flex-1 capitalize">
+              <span className="font-medium">{item}</span>
+            </div>
+          ))}
         />
       )}
 
@@ -173,17 +184,6 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
       )}
     </div>
   )
-}
-
-{
-  /* <Button
-          className={'font-medium text-primary'}
-          variant="outline"
-          onClick={handleBackwardsNavigation}
-          isDisabled={loading}
-        >
-          Back
-        </Button> */
 }
 
 export default PaymentDetails

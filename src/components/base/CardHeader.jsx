@@ -1,7 +1,6 @@
 'use client'
 import { cn } from '@/lib/utils'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { useSearchParams } from 'next/navigation'
 import React from 'react'
 
 function CardHeader({ title, infoText, handleClose, className, classNames }) {

@@ -12,7 +12,7 @@ import useTransactions from '@/hooks/useTransactions'
 import CustomTable from '@/components/containers/tables/Table'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { useDisclosure } from '@nextui-org/react'
-import BatchDetailsPage from '../../../../../components/containers/disbursements/ViewBatchDetails'
+import BatchDetailsPage from '../../../../components/containers/disbursements/ViewBatchDetails'
 
 const transactionColumns = [
   { name: 'NAME', uid: 'batch_name' },
@@ -50,13 +50,13 @@ export default function Disbursements() {
   return (
     <>
       {/* MODALS && OVERLAYS */}
-      {openPaymentsModal && <SelectPaymentType service={'direct'} />}
+      {openPaymentsModal && <SelectPaymentType protocol={'direct'} />}
 
       {openBatchDetailsModal && (
         <BatchDetailsPage
           isOpen={openBatchDetailsModal}
           onClose={onClose}
-          service={'direct'}
+          protocol={'direct'}
         />
       )}
 
@@ -76,7 +76,7 @@ export default function Disbursements() {
             }}
             startContent={<PlusIcon className="h-5 w-5" />}
           >
-            Create Payment
+            Create Transfer
           </Button>
         </div>
 

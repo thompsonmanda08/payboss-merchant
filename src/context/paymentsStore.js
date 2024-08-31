@@ -4,7 +4,7 @@ import { notify } from '@/lib/utils'
 import { create } from 'zustand'
 
 const INITIAL_STATE = {
-  selectedService: '', // DIRECT OR VOUCHER
+  selectedProtocol: '', // DIRECT OR VOUCHER
   selectedActionType: PAYMENT_SERVICE_TYPES[0],
   paymentAction: {
     type: '',
@@ -44,7 +44,7 @@ const usePaymentsStore = create((set, get) => ({
   setOpenAddOrEditModal: (open) => set({ openAddOrEditModal: open }),
   setOpenBatchDetailsModal: (open) => set({ openBatchDetailsModal: open }),
   setLoading: (loading) => set({ loading }),
-  setSelectedService: (service) => set({ selectedService: service }),
+  setSelectedProtocol: (protocol) => set({ selectedProtocol: protocol }),
   setSelectedRecord: (record) => set({ selectedRecord: record }),
   setSelectedBatch: (record) => set({ selectedBatch: record }),
   setSelectedActionType: (type) => set({ selectedActionType: type }),

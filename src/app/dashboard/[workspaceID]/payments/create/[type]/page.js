@@ -1,10 +1,9 @@
+import React, { Suspense } from 'react'
 import { getUserDetails } from '@/app/_actions/config-actions'
 import LoadingPage from '@/app/loading'
 import NotFound from '@/app/not-found'
-import { BulkPaymentAction } from '@/components/containers'
 import InitiatorsLog from '@/components/containers/disbursements/InitiatorsLog'
-
-import React, { Suspense } from 'react'
+import BulkPaymentAction from '../../BulkPaymentAction'
 
 async function CreatePayment({ params }) {
   const { type } = params // BULK OR SINGLE

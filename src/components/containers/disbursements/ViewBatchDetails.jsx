@@ -22,7 +22,7 @@ export const BATCH_DETAILS_STEPS = [
   },
 ]
 
-export default function BatchDetailsPage({ isOpen, onClose, service }) {
+export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
   const [currentStep, setCurrentStep] = useState(BATCH_DETAILS_STEPS[0])
   const queryClient = useQueryClient()
 
@@ -31,8 +31,8 @@ export default function BatchDetailsPage({ isOpen, onClose, service }) {
     openAllRecordsModal,
     openValidRecordsModal,
     openInvalidRecordsModal,
-    selectedService,
-    setSelectedService,
+    selectedProtocol,
+    setSelectedProtocol,
     selectedBatch,
     setSelectedBatch,
     setOpenBatchDetailsModal,
@@ -94,14 +94,14 @@ export default function BatchDetailsPage({ isOpen, onClose, service }) {
   }, [])
 
   useEffect(() => {
-    if (service) {
-      setSelectedService(service)
+    if (protocol) {
+      setSelectedProtocol(protocol)
     }
 
     return () => {
       queryClient.invalidateQueries()
     }
-  }, [service])
+  }, [protocol])
 
   return (
     <>
@@ -125,10 +125,10 @@ export default function BatchDetailsPage({ isOpen, onClose, service }) {
                   <>
                     {currentStep.title}
                     {
-                      selectedService && selectedBatch && (
+                      selectedProtocol && selectedBatch && (
                         <span className="capitalize">
                           {' '}
-                          ({selectedService} - {selectedBatch?.batch_name}){' '}
+                          ({selectedProtocol} - {selectedBatch?.batch_name}){' '}
                         </span>
                       ) //ONLY FOR THE CREATE PAYMENTS PAGE
                     }

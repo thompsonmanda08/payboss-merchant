@@ -60,14 +60,23 @@ const UploadCSVFile = ({ navigateForward }) => {
           />
 
           <p className="mt-2 text-xs font-medium text-gray-500 lg:text-[13px]">
-            Having trouble with the validation and file uploads?
+            Having trouble with the validation and file uploads? Download
             <Link
               href={'/batch_record_template.xlsx'}
               download={'batch_record_template.xlsx'}
+              className="ml-1 font-bold text-primary hover:underline hover:underline-offset-2"
+            >
+              Direct Transfer
+            </Link>{' '}
+            or
+            <Link
+              href={'/batch_record_template.xlsx'}
+              download={'batch_record_template_voucher.xlsx'}
               className="ml-1 font-bold text-primary"
             >
-              Download a template here
-            </Link>
+              Voucher Transfer
+            </Link>{' '}
+            template here
           </p>
         </div>
         <div>

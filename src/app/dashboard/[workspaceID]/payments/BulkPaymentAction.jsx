@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react'
 import { Card, CardHeader, ProgressStep } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import usePaymentsStore from '@/context/paymentsStore'
-import UploadCSVFile from './UploadCSVFile'
-import PaymentDetails from './PaymentDetails'
-import ValidationDetails from './ValidationDetails'
-import RecordDetailsViewer from './RecordDetailsViewer'
+import UploadCSVFile from '../../../../components/containers/disbursements/UploadCSVFile'
+import PaymentDetails from '../../../../components/containers/disbursements/PaymentDetails'
+import ValidationDetails from '../../../../components/containers/disbursements/ValidationDetails'
+import RecordDetailsViewer from '../../../../components/containers/disbursements/RecordDetailsViewer'
 import { useSearchParams } from 'next/navigation'
-import ApproverAction from './ApproverAction'
+import ApproverAction from '../../../../components/containers/disbursements/ApproverAction'
 
 export const STEPS = [
   {
@@ -38,7 +38,7 @@ function BulkPaymentAction({}) {
   // ** INITIALIZES STEPS **//
   const [currentStep, setCurrentStep] = useState(STEPS[0])
   const urlParams = useSearchParams()
-  const service = urlParams.get('service')
+  const protocol = urlParams.get('protocol')
 
   // ** INITIALIZEs PAYMENT STATE **//
   const {
@@ -47,8 +47,8 @@ function BulkPaymentAction({}) {
     openAllRecordsModal,
     openValidRecordsModal,
     openInvalidRecordsModal,
-    selectedService,
-    setSelectedService,
+    selectedProtocol,
+    setSelectedProtocol,
   } = usePaymentsStore()
 
   //************ STEPS TO CREATE A TASK FOR A STUDY PLAN *****************/
@@ -104,10 +104,10 @@ function BulkPaymentAction({}) {
   }, [currentTabIndex])
 
   useEffect(() => {
-    if (service) {
-      setSelectedService(service)
+    if (protocol) {
+      setSelectedProtocol(protocol)
     }
-  }, [service])
+  }, [protocol])
 
   return (
     <>
@@ -119,8 +119,8 @@ function BulkPaymentAction({}) {
             <>
               {currentStep.title}
               {
-                selectedService && (
-                  <span className="capitalize"> ({selectedService})</span>
+                selectedProtocol && (
+                  <span className="capitalize"> ({selectedProtocol})</span>
                 ) //ONLY FOR THE CREATE PAYMENTS PAGE
               }
             </>
