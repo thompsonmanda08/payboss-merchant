@@ -17,7 +17,7 @@ export async function getAllDirectBulkTransactions(workspaceID) {
 
   try {
     const res = await authenticatedService({
-      url: `transaction/direct/payments/bulk/batches/${workspaceID}`,
+      url: `transaction/payments/bulk/batches/${workspaceID}`,
     })
 
     if (res.status == 200) {
@@ -62,7 +62,7 @@ export async function getDirectBulkTransactionDetails(batchID) {
 
   try {
     const res = await authenticatedService({
-      url: `transaction/direct/payments/bulk/batch/details/${batchID}`,
+      url: `transaction/payments/bulk/batch/details/${batchID}`,
     })
 
     if (res.status == 200) {
@@ -107,7 +107,7 @@ export async function reviewBatch(batchID, reviewDetails) {
   }
   try {
     const res = await authenticatedService({
-      url: `transaction/direct/payments/bulk/review-submission/${batchID}`,
+      url: `transaction/payments/bulk/review-submission/${batchID}`,
       method: 'POST',
       data: reviewDetails,
     })
@@ -142,7 +142,7 @@ export async function reviewBatch(batchID, reviewDetails) {
 }
 
 export async function initializeBulkTransaction(workspaceID, transactionData) {
-  // const { batch_name, url } = transactionData
+  const { batch_name, url, protocol } = transactionData
   if (!workspaceID) {
     return {
       success: false,
@@ -155,7 +155,7 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
 
   try {
     const res = await authenticatedService({
-      url: `transaction/direct/payments/bulk/${workspaceID}`,
+      url: `transaction/${protocol}/payments/bulk/${workspaceID}`,
       method: 'POST',
       data: transactionData,
     })
@@ -188,6 +188,7 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
   }
 }
 
+// TODO: WILL BE REMOVED
 export async function updateInvalidDirectBulkTransactionDetails(
   transactionID,
   transactionData,
@@ -241,7 +242,7 @@ export async function getBatchDetails(batchID) {
   }
   try {
     const res = await authenticatedService({
-      url: `transaction/direct/payments/bulk/batch/details/${batchID}`,
+      url: `transaction/payments/bulk/batch/details/${batchID}`,
     })
 
     if (res.status == 200) {
@@ -286,7 +287,7 @@ export async function submitBatchForApproval(batchID) {
 
   try {
     const res = await authenticatedService({
-      url: `transaction/direct/payments/bulk/review-submission/${batchID}`,
+      url: `transaction/payments/bulk/review-submission/${batchID}`,
     })
 
     if (res.status == 200) {
