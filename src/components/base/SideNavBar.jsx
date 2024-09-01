@@ -36,11 +36,11 @@ import { Skeleton } from '../ui/skeleton'
 import WorkspaceSelection from '../containers/workspace/WorkspaceSelection'
 import useNavigation from '@/hooks/useNavigation'
 
-function SideNavBar() {
+function SideNavBar({ params }) {
   const pathname = usePathname()
   const [expandedSection, setExpandedSection] = useState(null)
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore()
-  const { activeWorkspace, workspaceID } = useWorkspaces()
+  const { activeWorkspace, workspaceID, isUserInWorkspace } = useWorkspaces()
   const { dashboardRoute, settingsPathname, isProfile, isSettingsPage } =
     useNavigation()
 
@@ -251,6 +251,23 @@ function SideNavBar() {
     })
   }, [pathname])
 
+  const currentWorkspaceID = pathname.split('')[2] || workspaceID
+
+  if (!currentWorkspaceID) {
+    // LOADING SKELETON
+    return (
+      <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
+        <Skeleton className="mb-4 h-16 w-full rounded-xl" />
+        <div className="h-full space-y-4">
+          {Array.from({ length: 9 }).map((_, index) => (
+            <Skeleton className="h-10 w-full rounded-lg" key={index} />
+          ))}
+        </div>
+        <Skeleton className="mt-auto h-[50px] w-full rounded-xl" />
+      </div>
+    )
+  }
+
   // SETTINGS PAGE NEEDS A DIFFERENT SIDE BAR
   if (isSettingsPage) {
     return (
@@ -263,62 +280,46 @@ function SideNavBar() {
     )
   }
 
-  // SETTINGS PAGE NEEDS A DIFFERENT SIDE BAR
-  if (workspaceID) {
-    return (
-      <div className="h-full w-[380px]">
-        <Button
-          size="sm"
-          // isIconOnly
-          className="absolute left-6 top-3 z-[99] h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
-          onClick={toggleMobileMenu}
-        >
-          <Bars3BottomLeftIcon className="h-7 w-7  text-slate-700" />
-        </Button>
-        <nav
-          className={cn(
-            `z-20 hidden h-full w-full flex-col rounded-r-3xl bg-white p-5 transition-all duration-500 ease-in-out lg:flex`,
-          )}
-        >
-          <Logo href={dashboardRoute} />
-          <div className="relative py-2">
-            <WorkspaceSelection />
-          </div>
-          <SideNavItems
-            navBarItems={SIDE_BAR_OPTIONS}
-            pathname={pathname}
-            expandedSection={expandedSection}
-            handleExpand={handleExpand}
-            handleMainLinkClick={handleMainLinkClick}
-            isMobileMenuOpen={openMobileMenu}
-            toggleMobileMenu={toggleMobileMenu}
-          />
-        </nav>
-
-        {/* MOBILE NAVIGATION */}
-        <MobileNavBar
-          isMobileMenuOpen={openMobileMenu}
-          toggleMobileMenu={toggleMobileMenu}
+  return (
+    <div className="h-full w-[380px]">
+      <Button
+        size="sm"
+        // isIconOnly
+        className="absolute left-6 top-3 z-[99] h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
+        onClick={toggleMobileMenu}
+      >
+        <Bars3BottomLeftIcon className="h-7 w-7  text-slate-700" />
+      </Button>
+      <nav
+        className={cn(
+          `z-20 hidden h-full w-full flex-col rounded-r-3xl bg-white p-5 transition-all duration-500 ease-in-out lg:flex`,
+        )}
+      >
+        <Logo href={dashboardRoute} />
+        <div className="relative py-2">
+          <WorkspaceSelection />
+        </div>
+        <SideNavItems
+          navBarItems={SIDE_BAR_OPTIONS}
           pathname={pathname}
           expandedSection={expandedSection}
           handleExpand={handleExpand}
           handleMainLinkClick={handleMainLinkClick}
-          navBarItems={SIDE_BAR_OPTIONS}
+          isMobileMenuOpen={openMobileMenu}
+          toggleMobileMenu={toggleMobileMenu}
         />
-      </div>
-    )
-  }
+      </nav>
 
-  // LOADING SKELETON
-  return (
-    <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
-      <Skeleton className="mb-4 h-16 w-full rounded-xl" />
-      <div className="h-full space-y-4">
-        {Array.from({ length: 9 }).map((_, index) => (
-          <Skeleton className="h-10 w-full rounded-lg" key={index} />
-        ))}
-      </div>
-      <Skeleton className="mt-auto h-[50px] w-full rounded-xl" />
+      {/* MOBILE NAVIGATION */}
+      <MobileNavBar
+        isMobileMenuOpen={openMobileMenu}
+        toggleMobileMenu={toggleMobileMenu}
+        pathname={pathname}
+        expandedSection={expandedSection}
+        handleExpand={handleExpand}
+        handleMainLinkClick={handleMainLinkClick}
+        navBarItems={SIDE_BAR_OPTIONS}
+      />
     </div>
   )
 }
