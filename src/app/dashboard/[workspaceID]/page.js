@@ -10,6 +10,7 @@ import LoadingPage from '../../loading'
 import Batches from '@/components/batch'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import InfoBanner from '@/components/base/InfoBanner'
+import { formatCurrency } from '@/lib/utils'
 
 function DashboardHome() {
   const { chart, items } = reportsBarChartData
@@ -26,8 +27,11 @@ function DashboardHome() {
           <SimpleStats
             title={'Todays Transactions'}
             figure={'10, 500'}
-            figurePercentage={'75%'}
-            isGood={true}
+            smallFigure={`(${formatCurrency('1000000')})`}
+            classNames={{
+              smallFigureClasses: 'md:text-base font-semibold',
+            }}
+            // isGood={true}
           />
           <SimpleStats
             title={"Yesterday's Transactions"}
@@ -46,25 +50,29 @@ function DashboardHome() {
             // figurePercentage={'14%'}
           />
         </div>
+        <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-4 ">
+          <SimpleStats
+            title={'Total Collections'}
+            figure={'10, 500'}
+            smallFigure={`(${formatCurrency('1000000')})`}
+            classNames={{
+              smallFigureClasses: 'md:text-base font-semibold',
+            }}
+            isGood={true}
+          />
+          <SimpleStats
+            title={'Total Disbursements'}
+            figure={'10, 500'}
+            smallFigure={`(${formatCurrency('1000000')})`}
+            classNames={{
+              smallFigureClasses: 'md:text-base font-semibold',
+            }}
+            isGood={true}
+          />
+          <Balance isLandscape amount={'K10, 500'} />
+        </div>
 
         <div className="flex w-full gap-4">
-          <PaymentMethods />
-          <div className="flex flex-col gap-4">
-            <Balance title={'PayBoss Wallet'} amount={'K10, 500'} />
-            <Balance title={'Bank'} amount={'K10, 500'} />
-          </div>
-          <ReportsBarChart
-            title="transactions"
-            description={
-              <>
-                (<strong>+23%</strong>) than last week
-              </>
-            }
-            chart={chart}
-            items={items}
-          />
-        </div>
-        <div className="flex gap-6">
           <GradientLineChart
             title="Transactions Overview"
             description={
@@ -80,35 +88,23 @@ function DashboardHome() {
             height="20.25rem"
             chart={gradientLineChartData}
           />
-          <RecentTransactions />
+          <ReportsBarChart
+            title="transactions"
+            description={
+              <>
+                (<strong>+23%</strong>) than last week
+              </>
+            }
+            chart={chart}
+            items={items}
+          />
         </div>
-        <div className="flex w-full gap-6">
+
+        <div className="flex w-full">
           <Batches />
         </div>
       </div>
     </Suspense>
-  )
-}
-
-function RecentTransactions() {
-  return (
-    <Card>
-      <div className="min-h-2/3 mt-8 flex w-full flex-col">
-        <div className="flex w-full items-end justify-between">
-          <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold text-foreground">
-              Recent Transactions
-            </h2>
-            <p>Some of your recent transactions are shown below</p>
-          </div>
-          <div className="flex gap-2 text-sm text-gray-500">
-            <p>View all Transactions</p>
-            <ChevronRightIcon className="h-6 w-6" />
-          </div>
-        </div>
-        {/* <TransactionsTable limit={5} /> */}
-      </div>
-    </Card>
   )
 }
 

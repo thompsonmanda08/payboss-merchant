@@ -8,7 +8,7 @@ import { cn, formatCurrency } from '@/lib/utils'
 import useWorkspaces from '@/hooks/useWorkspaces'
 
 function Balance({ title, amount, isLandscape }) {
-  const { workspaceWalletBalance } = useWorkspaces()
+  const { workspaceWalletBalance, activeWorkspace } = useWorkspaces()
   return (
     <Card
       className={cn(
@@ -22,16 +22,16 @@ function Balance({ title, amount, isLandscape }) {
 
       <div
         className={cn('pt-2 text-center', {
-          'flex w-full flex-col items-start px-2': isLandscape,
+          'flex w-full flex-col items-start px-2 pt-1': isLandscape,
         })}
       >
         <h2 className="text-nowrap text-xs font-semibold text-gray-500 md:text-sm">
-          {title || 'Wallet Balance'}
+          {title || `${activeWorkspace.workspace} Wallet Balance`}
         </h2>
 
         <div
           className={cn(
-            'my-4 h-px w-full bg-gradient-to-l from-transparent via-gray-200 to-transparent',
+            'my-2 h-px w-full bg-gradient-to-l from-transparent via-gray-200 to-transparent',
             { 'my-1 max-w-[160px] from-transparent to-white': isLandscape },
           )}
         />

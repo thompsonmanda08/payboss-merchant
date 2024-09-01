@@ -23,7 +23,7 @@ function Batches() {
           </div>
         </div>
         <div className="text-text px-2">
-          <Menu as="div" className="relative">
+          <Menu as="div" className="relative z-50">
             {({ open }) => (
               <>
                 <MenuButton className="cursor-pointer font-bold">
@@ -76,7 +76,7 @@ function Batches() {
           </Menu>
         </div>
       </div>
-      <div className="border-t border-gray-200">
+      <div className="">
         <Table columns={columns} rows={rows} />
       </div>
     </Card>
