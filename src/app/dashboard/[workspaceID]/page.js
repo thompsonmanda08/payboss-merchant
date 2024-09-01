@@ -50,6 +50,7 @@ function DashboardHome() {
             // figurePercentage={'14%'}
           />
         </div>
+
         <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-4 ">
           <SimpleStats
             title={'Total Collections'}
@@ -72,7 +73,7 @@ function DashboardHome() {
           <Balance isLandscape amount={'K10, 500'} />
         </div>
 
-        <div className="flex w-full gap-4">
+        <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-3">
           <GradientLineChart
             title="Transactions Overview"
             description={
@@ -98,9 +99,25 @@ function DashboardHome() {
             chart={chart}
             items={items}
           />
+          <GradientLineChart
+            title="Transactions Overview"
+            description={
+              <div className="flex items-center">
+                <div className="mb-1 mr-1 text-lg leading-none text-green-500">
+                  <ArrowUpIcon className="h-5 w-5 font-bold" />
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  4% more <span className="font-normal">in 2021</span>
+                </span>
+              </div>
+            }
+            height="20.25rem"
+            chart={gradientLineChartData}
+          />
         </div>
 
-        <div className="flex w-full">
+        <div className="flex w-full gap-4">
+          <Batches />
           <Batches />
         </div>
       </div>

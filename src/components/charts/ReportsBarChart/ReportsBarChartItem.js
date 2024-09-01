@@ -1,31 +1,32 @@
-import Progress from '@/components/progress';
-import React from 'react';
+import Progress from '@/components/progress'
+import React from 'react'
 
-function ReportsBarChartItem({icon, label, progress }) {
+function ReportsBarChartItem({ icon, label, progress }) {
   return (
-    <div className="w-full">
-      <div className="flex items-center mb-2">
+    <div className="flex w-full flex-col gap-2">
+      <div className="flex items-center gap-2">
         <div
-          className={`bg-${icon.color} w-5 h-5 rounded-sm text-white text-xs flex justify-center items-center shadow-md mr-1`}
+          className={`bg-${icon.color} mr-1 flex items-center justify-center rounded-sm p-2 text-xs text-white shadow-md`}
         >
           <span>{icon.component}</span>
         </div>
-        <span className="text-caption capitalize font-medium text-gray-800">
+        <span className="text-caption font-medium capitalize text-gray-800">
           {label}
         </span>
       </div>
-      <div className="mt-1">
-        <h4 className='font-bold text-black'>
+      <div className="">
+        <span className="text-base font-bold text-primary-900">
           {progress.content}
-        </h4>
-        <div className="w-3/4 mt-1">
-          
-            <Progress value={progress.percentage} color='black from-black to-black/80'/>
-          
+        </span>
+        <div className="mt-1 w-3/4">
+          <Progress
+            value={progress.percentage}
+            color="primary from-primary-300 to-primary"
+          />
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default ReportsBarChartItem;
+export default ReportsBarChartItem

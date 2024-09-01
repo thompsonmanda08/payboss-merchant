@@ -1,9 +1,38 @@
 'use client'
 import { useMemo } from 'react'
 import { Bar } from 'react-chartjs-2'
-import ReportsBarChartItem from './ReportsBarChartItem'
+// import ReportsBarChartItem from './ReportsBarChartItem'
 import configs from './configs'
 import { Card } from '@/components/base'
+import { Progress } from '@nextui-org/react'
+
+function ReportsBarChartItem({ icon, label, progress }) {
+  return (
+    <div className="flex w-full flex-col gap-2">
+      <div className="flex items-center gap-2">
+        <div
+          className={`bg-${icon.color} mr-1 flex items-center justify-center rounded-sm p-2 text-xs text-white shadow-md`}
+        >
+          <span>{icon.component}</span>
+        </div>
+        <span className="text-caption font-medium capitalize text-slate-800">
+          {label}
+        </span>
+      </div>
+      <div className="">
+        <span className="text-sm font-medium text-primary-900">
+          {progress.content}
+        </span>
+        <div className="mt-1 w-3/4">
+          <Progress
+            value={progress.percentage}
+            color="primary from-primary-300 to-primary"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function ReportsBarChart({ color, title, description, chart, items }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {})
@@ -23,30 +52,27 @@ function ReportsBarChart({ color, title, description, chart, items }) {
   ))
 
   return (
-  
-      <Card>
-        {useMemo(
-          () => (
-            <div
-              className={`bg-gradient-to-r from-black to-black/90 mb-3  rounded-lg py-2 pr-1 h-48`}
-            >
-              <Bar data={data} options={options} />
-            </div>
-          ),
-          [chart, color],
-        )}
-        <div className="px-2">
-          <div className="mb-2">
-            <h6 className="text-lg font-medium capitalize">{title}</h6>
-            <div className="text-sm font-normal text-gray-600">
-              {description}
-            </div>
+    <Card>
+      {useMemo(
+        () => (
+          <div
+            className={`mb-3 h-48 rounded-lg bg-gradient-to-b  from-primary-800 to-primary-900 py-2 pr-1`}
+          >
+            <Bar data={data} options={options} />
           </div>
-          <div className="px-1 py-1">
-            <div className="-mx-2 flex flex-wrap">{renderItems}</div>
-          </div>
+        ),
+        [chart, color],
+      )}
+      <div className="px-2">
+        <div className="mb-2">
+          <h6 className="text-lg font-medium capitalize">{title}</h6>
+          <div className="text-sm font-normal text-gray-600">{description}</div>
         </div>
-      </Card>
+        <div className="px-1 py-1">
+          <div className="-mx-2 flex flex-wrap">{renderItems}</div>
+        </div>
+      </div>
+    </Card>
   )
 }
 

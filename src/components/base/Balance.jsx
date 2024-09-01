@@ -26,7 +26,9 @@ function Balance({ title, amount, isLandscape }) {
         })}
       >
         <h2 className="text-nowrap text-xs font-semibold text-gray-500 md:text-sm">
-          {title || `${activeWorkspace.workspace} Wallet Balance`}
+          {title || activeWorkspace
+            ? `${activeWorkspace?.workspace} Wallet Balance`
+            : 'Wallet Balance'}
         </h2>
 
         <div
