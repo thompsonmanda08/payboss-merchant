@@ -264,6 +264,7 @@ export function PreFundHistory({ workspaceID }) {
   ]
 
   const formattedActivityData = formatActivityData(data)
+  // console.log(formatActivityData)
 
   return isLoading ? (
     <div className="flex w-full flex-col gap-4">
@@ -336,7 +337,9 @@ export function PreFundHistory({ workspaceID }) {
                             variant="flat"
                             color={item?.isPrefunded ? 'success' : 'secondary'}
                           >
-                            {formatCurrency(item?.amount)}
+                            {item?.isPrefunded && item?.amount
+                              ? formatCurrency(item?.amount)
+                              : 'Pending'}
                           </Chip>
                         </Tooltip>
                         <p className="text-[12px] font-normal leading-4 text-slate-500">

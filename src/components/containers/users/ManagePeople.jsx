@@ -184,7 +184,10 @@ export function SearchOrInviteUsers({ setSearchQuery, resolveAddToWorkspace }) {
         <SingleSelectionDropdown
           className={'max-w-[280px]'}
           classNames={{
-            trigger: 'rounded-none',
+            chevronIcon: 'text-slate-500',
+            dropdownItem: 'w-[260px]',
+            trigger:
+              'rounded-none border-px h-auto border border-input bg-transparent p-2 px-3 min-w-[110px]',
           }}
           dropdownItems={ROLES}
           selectedKeys={selectedKeys}

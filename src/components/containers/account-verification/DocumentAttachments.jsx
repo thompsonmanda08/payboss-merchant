@@ -23,6 +23,7 @@ export default function DocumentAttachments({ navigateToPage }) {
     useAccountProfile()
   const { isKYCSent, setIsKYCSent } = useAuthStore((state) => state)
   const [docFiles, setDocFiles] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState({ status: false, message: null })
 
@@ -31,7 +32,7 @@ export default function DocumentAttachments({ navigateToPage }) {
   }
 
   async function submitKYCDocuments() {
-    setIsLoading(true)
+    setIsSubmitting(true)
     setError({ message: '', status: '' })
 
     const documentUrls = {
@@ -48,7 +49,7 @@ export default function DocumentAttachments({ navigateToPage }) {
         message: 'Checkbox is unmarked. Agree to the statement below.',
         status: true,
       })
-      setIsLoading(false)
+      setIsSubmitting(false)
       return
     }
 
@@ -58,7 +59,7 @@ export default function DocumentAttachments({ navigateToPage }) {
         message: 'Provide all required files!',
         status: true,
       })
-      setIsLoading(false)
+      setIsSubmitting(false)
       return
     }
 
@@ -71,7 +72,7 @@ export default function DocumentAttachments({ navigateToPage }) {
         notify('success', 'Documents Updated Successfully!')
         queryClient.invalidateQueries()
         // window.location.reload()
-        setIsLoading(false)
+        setIsSubmitting(false)
         return
       }
     } else {
@@ -81,26 +82,28 @@ export default function DocumentAttachments({ navigateToPage }) {
         notify('success', 'Documents Submitted For Approval!')
         queryClient.invalidateQueries()
         // navigateToPage(2)
-        setIsLoading(false)
+        setIsSubmitting(false)
         return
       }
     }
 
-  
     setError({ message: response.message, status: true })
     notify('error', 'Error Submitting Documents')
 
-    setIsLoading(false)
+    setIsSubmitting(false)
   }
 
   async function handleFileUpload(file, recordID) {
+    setIsLoading(true)
     setError({ message: '', status: '' })
     let response = await uploadBusinessFile(file, merchantID, recordID)
     if (response.success) {
       notify('success', response?.message)
+      setIsLoading(false)
       return response?.data
     }
     notify('error', response.message)
+    setIsLoading(false)
   }
 
   return (
@@ -209,9 +212,10 @@ export default function DocumentAttachments({ navigateToPage }) {
           </Checkbox>
           {
             <Button
-              isLoading={isLoading}
+              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
               loadingText={'Submitting...'}
-              onPress={async () => await submitKYCDocuments()}
+              onPress={submitKYCDocuments}
             >
               Submit for Approval
             </Button>

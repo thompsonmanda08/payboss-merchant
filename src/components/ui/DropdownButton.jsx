@@ -143,47 +143,63 @@ export function SingleSelectionDropdown({
   selectedKeys,
   setSelectedKeys,
   selectedValue,
+  name,
+  selectionMode = 'single',
+  disallowEmptySelection = false,
   className,
   classNames,
+  buttonVariant = 'bordered',
+  listItemName,
+  ...props
 }) {
-  const { trigger, innerWrapper, dropdownItem } = classNames || ''
+  const { trigger, innerWrapper, dropdownItem, chevronIcon } = classNames || ''
   return (
-    <Dropdown className={cn('', className)}>
+    <Dropdown className={cn('min-w-max', className)}>
       <DropdownTrigger>
         <Button
-          variant="bordered"
+          variant={buttonVariant}
           className={cn(
-            'border-px h-auto min-w-[110px] items-center justify-between gap-2 rounded-lg border border-input  bg-transparent p-2 px-3 font-medium capitalize text-primary shadow-sm',
+            'items-center justify-between gap-2 font-medium capitalize text-primary shadow-sm',
             trigger,
           )}
           endContent={
-            <ChevronDownIcon className="h-4 w-4 text-slate-500 focus-within:rotate-180 focus:rotate-180 " />
+            <ChevronDownIcon
+              className={cn(
+                'h-4 w-4  focus-within:rotate-180 focus:rotate-180 ',
+                chevronIcon,
+              )}
+            />
           }
         >
-          {`${selectedValue}`}
+          {`${name || selectedValue}`}
         </Button>
       </DropdownTrigger>
       <DropdownMenu
         aria-label="Single selection example"
         variant="flat"
-        disallowEmptySelection
-        selectionMode="single"
+        disallowEmptySelection={disallowEmptySelection}
+        selectionMode={selectionMode}
         selectedKeys={selectedKeys}
         onSelectionChange={setSelectedKeys}
         items={dropdownItems}
         className={innerWrapper}
+        {...props}
       >
         {dropdownItems.map((item, index) => {
+          let ItemLabel =
+            item?.name || item?.label || item?.[listItemName] || item
           return (
             <DropdownItem
-              key={item.key}
+              key={index}
               description={item?.description}
               className={cn(
-                'group w-[260px] focus-within:bg-primary-100 hover:bg-primary-100 focus:bg-primary-100 data-[hover=true]:border-primary-200 data-[focus=true]:bg-primary-100 data-[hover=true]:bg-primary-100 data-[hover=true]:text-primary',
+                '!focus-within:bg-primary-100 !hover:bg-primary-100 !focus:bg-primary-100 !data-[hover=true]:border-primary-200 !data-[selectable=true]:focus:bg-primary-100 !data-[focus=true]:bg-primary-100 !data-[hover=true]:bg-primary-100 !data-[hover=true]:text-primary !data-[selected=true]:text-primary group min-w-max capitalize',
+
                 dropdownItem,
               )}
+              classNames={{ wrapper: 'bg-red-500' }}
             >
-              {item?.label}
+              {ItemLabel}
             </DropdownItem>
           )
         })}
