@@ -70,7 +70,7 @@ const UploadCSVFile = ({ navigateForward }) => {
             </Link>{' '}
             or
             <Link
-              href={'/batch_record_template.xlsx'}
+              href={'/batch_record_template_voucher.xlsx'}
               download={'batch_record_template_voucher.xlsx'}
               className="ml-1 font-bold text-primary"
             >

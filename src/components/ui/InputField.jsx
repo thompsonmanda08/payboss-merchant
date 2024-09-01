@@ -16,7 +16,6 @@ const Input = React.forwardRef(
       max,
       min,
       isDisabled,
-
       errorText = '',
       ...props
     },
