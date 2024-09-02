@@ -6,6 +6,7 @@ import {
   getUserSetupConfigs,
   getWorkspaceRoles,
 } from '@/app/_actions/config-actions'
+import { getDashboardAnalytics } from '@/app/_actions/dashboard-actions'
 import {
   getAllDirectBulkTransactions,
   getBatchDetails,
@@ -28,6 +29,7 @@ import {
   BATCH_DETAILS_QUERY_KEY,
   USERS,
   WALLET_HISTORY_QUERY_KEY,
+  DASHBOARD_ANALYTICS_QUERY_KEY,
 } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
 
@@ -123,4 +125,12 @@ export const useWalletPrefundHistory = (workspaceID) =>
     queryFn: async () => await getWalletPrefundHistory(workspaceID),
     refetchOnMount: true,
     staleTime: Infinity,
+  })
+
+export const useDashboardAnalytics = (workspaceID) =>
+  useQuery({
+    queryKey: [DASHBOARD_ANALYTICS_QUERY_KEY, workspaceID],
+    queryFn: async () => await getDashboardAnalytics(workspaceID),
+    refetchOnMount: true,
+    staleTime: 0,
   })

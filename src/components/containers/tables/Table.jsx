@@ -20,10 +20,11 @@ export default function CustomTable({
   rows,
   selectedKeys,
   setSelectedKeys,
+  rowsPerPage = 8,
   isLoading,
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore()
-  const rowsPerPage = 8
+
   const [page, setPage] = React.useState(1)
 
   const pages = Math.ceil(rows.length / rowsPerPage)

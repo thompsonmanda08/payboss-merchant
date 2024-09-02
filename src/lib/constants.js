@@ -31,6 +31,7 @@ const WORKSPACE_MEMBERS_QUERY_KEY = 'members-query-data'
 const DIRECT_BULK_TRANSACTIONS_QUERY_KEY = 'direct-bulk-query-data'
 const BATCH_DETAILS_QUERY_KEY = 'batch-details-query-data'
 const WALLET_HISTORY_QUERY_KEY = 'wallet-history-details-query-data'
+const DASHBOARD_ANALYTICS_QUERY_KEY = 'dasboard-analytics-query-data'
 
 // ANIMATION_VARIANTS
 const staggerContainerVariants = {
@@ -168,4 +169,5 @@ export {
   DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
   BATCH_DETAILS_QUERY_KEY,
   WALLET_HISTORY_QUERY_KEY,
+  DASHBOARD_ANALYTICS_QUERY_KEY,
 }

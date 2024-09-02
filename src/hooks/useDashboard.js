@@ -1,24 +1,36 @@
 'use client'
-import { usePathname } from 'next/navigation'
-import React, { useState, useEffect } from 'react'
-import {
-  useGetWorkspaces,
-  useSetupConfig,
-  useWorkspaceInit,
-} from './useQueryHooks'
+
+import { useDashboardAnalytics, useWorkspaceInit } from './useQueryHooks'
 import useWorkspaces from './useWorkspaces'
 
 const useDashboard = () => {
-  const pathname = usePathname()
+  const {
+    userInSandbox,
+    activeWorkspace,
+    workspaceID,
+    isLoading: workspaceLoading,
+  } = useWorkspaces()
 
-  const { userInSandbox, activeWorkspace, workspaceID, isFetching, isLoading } =
-    useWorkspaces()
+  const { data: workspaceResponse, isLoading: initLoading } =
+    useWorkspaceInit(workspaceID)
+  const workspaceUserRole = workspaceResponse?.data
 
-  const { data: workspaceData } = useWorkspaceInit(workspaceID)
+  const { data: analyticsResponse, isLoading: analyticsLoading } =
+    useDashboardAnalytics(workspaceID)
 
-  const workspaceUserRole = workspaceData?.data
+  const dashboardAnalytics = analyticsResponse?.data
 
-  return { workspaceData, workspaceUserRole }
+  const isLoading = workspaceLoading || analyticsLoading || initLoading
+
+  console.log(dashboardAnalytics)
+
+  return {
+    workspaceUserRole,
+    isLoading,
+    dashboardAnalytics,
+    userInSandbox,
+    activeWorkspace,
+  }
 }
 
 export default useDashboard
