@@ -23,6 +23,7 @@ const SelectPaymentType = () => {
     setOpenPaymentsModal,
     setSelectedProtocol,
     selectedProtocol,
+    setSelectedActionType,
   } = usePaymentsStore()
 
   const { dashboardRoute } = useNavigation()
@@ -44,11 +45,10 @@ const SelectPaymentType = () => {
 
   function handleSelectServiceType(type) {
     updatePaymentFields({ type: type?.name })
+    setSelectedActionType(type)
     setTimeout(() => {
-      const isDisabled = type?.name === 'Single Payment'
-      if (isDisabled) {
-        notify('error', 'Not Available, Try again later')
-        setOpenPaymentsModal(false)
+      if (type?.name === '') {
+        notify('warning', 'Selected Service Type')
         return
       }
 

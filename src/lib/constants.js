@@ -19,19 +19,21 @@ const WORKSPACE_SESSION = 'pb-next-workspace'
 const placeHolderImage = IMG
 
 // QUERY KEYS
-const USER_DATA_KEY = 'user-query-data'
-const CONFIGS_QUERY_KEY = 'configs-query-data'
-const USER_ROLES_QUERY_KEY = 'user-roles-query-data'
-const USERS = 'users-query-data'
-const SETUP_QUERY_KEY = 'setup-query-data'
-const WORKSPACES_QUERY_KEY = 'workspaces-query-data'
-const WORKSPACE_ROLES_QUERY_KEY = 'workspace-role-query-data'
-const WORKSPACE_DASHBOARD_QUERY_KEY = 'dashboard-query-data'
-const WORKSPACE_MEMBERS_QUERY_KEY = 'members-query-data'
-const DIRECT_BULK_TRANSACTIONS_QUERY_KEY = 'direct-bulk-query-data'
-const BATCH_DETAILS_QUERY_KEY = 'batch-details-query-data'
-const WALLET_HISTORY_QUERY_KEY = 'wallet-history-details-query-data'
-const DASHBOARD_ANALYTICS_QUERY_KEY = 'dasboard-analytics-query-data'
+const USER_DATA_KEY = 'user'
+const CONFIGS_QUERY_KEY = 'configs'
+const USER_ROLES_QUERY_KEY = 'user-roles'
+const USERS = 'workspace-users'
+const SETUP_QUERY_KEY = 'setup'
+const WORKSPACES_QUERY_KEY = 'workspaces'
+const WORKSPACE_ROLES_QUERY_KEY = 'workspace-role'
+const WORKSPACE_DASHBOARD_QUERY_KEY = 'dashboard'
+const WORKSPACE_MEMBERS_QUERY_KEY = 'members'
+const BULK_TRANSACTIONS_QUERY_KEY = 'bulk-transactions'
+const SINGLE_TRANSACTIONS_QUERY_KEY = 'single-transactions'
+const BATCH_DETAILS_QUERY_KEY = 'batch-details'
+const WALLET_HISTORY_QUERY_KEY = 'wallet-history-details'
+const DASHBOARD_ANALYTICS_QUERY_KEY = 'dasboard-analytics'
+const WORKSPACE_TRANSACTIONS_QUERY_KEY = 'all-workspace-transactions'
 
 // ANIMATION_VARIANTS
 const staggerContainerVariants = {
@@ -49,6 +51,25 @@ const staggerContainerItemVariants = {
   hidden: { opacity: 0, y: -60 },
   show: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 60 },
+}
+
+const slideDownInView = {
+  hidden: {
+    opacity: 0,
+    y: -100,
+    transition: {
+      duration: 0.5,
+      ease: 'easeInOut',
+    },
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+      ease: 'easeInOut',
+    },
+  },
 }
 
 // REGEX
@@ -155,6 +176,7 @@ export {
   // ANIMATIONS
   staggerContainerItemVariants,
   staggerContainerVariants,
+  slideDownInView,
 
   // REACT QUERY KEYS
   USER_DATA_KEY,
@@ -166,7 +188,9 @@ export {
   WORKSPACE_ROLES_QUERY_KEY,
   WORKSPACE_DASHBOARD_QUERY_KEY,
   WORKSPACE_MEMBERS_QUERY_KEY,
-  DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
+  SINGLE_TRANSACTIONS_QUERY_KEY,
+  BULK_TRANSACTIONS_QUERY_KEY,
+  WORKSPACE_TRANSACTIONS_QUERY_KEY,
   BATCH_DETAILS_QUERY_KEY,
   WALLET_HISTORY_QUERY_KEY,
   DASHBOARD_ANALYTICS_QUERY_KEY,

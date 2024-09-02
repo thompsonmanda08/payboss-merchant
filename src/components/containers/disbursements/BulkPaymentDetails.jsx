@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Input } from '@/components/ui/InputField'
 import { Button } from '@/components/ui/Button'
@@ -29,8 +29,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   const urlParams = useSearchParams()
   const protocol = urlParams.get('protocol')
 
-  const { selectedProtocol, setSelectedProtocol, selectedActionType } =
-    usePaymentsStore()
+  const { setSelectedProtocol } = usePaymentsStore()
 
   async function handleProceed() {
     console.log(paymentAction)
@@ -95,11 +94,6 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
     setLoading(false)
   }, [paymentAction])
 
-  function handleProtocolSelection(option) {
-    setSelectedProtocol(PAYMENT_PROTOCOL[option])
-    updatePaymentFields({ protocol: PAYMENT_PROTOCOL[option] })
-  }
-
   useEffect(() => {
     if (protocol) {
       setSelectedProtocol(protocol)
@@ -111,41 +105,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
 
   return (
     <div className="flex h-full w-full flex-col  gap-4">
-      <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 p-4 ">
-        <selectedActionType.Icon className="h-6 w-6 text-primary" />
-        <div className="h-8 border-r-2 border-primary/60" />
-        <div className="flex w-full justify-between text-sm font-medium text-primary 2xl:text-base">
-          <p>{selectedActionType?.name}</p>
-        </div>
-      </div>
-      {selectedProtocol ? (
-        <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 py-3 pl-5 pr-4">
-          <BanknotesIcon className="h-6 w-6 text-primary" />
-          <div className="h-8 border-r-2 border-primary/60" />
-          <div className="flex w-full justify-between text-sm font-medium capitalize text-primary 2xl:text-base">
-            <p>{selectedProtocol}</p>
-          </div>
-          <Button
-            variant="light"
-            className={''}
-            onPress={() => setSelectedProtocol(null)}
-          >
-            <PencilSquareIcon className="h-4 w-4" />
-            Change
-          </Button>
-        </div>
-      ) : (
-        <CustomRadioGroup
-          onChange={(option) => handleProtocolSelection(option)}
-          labelText="Protocol"
-          defaultValue={protocol}
-          options={PAYMENT_PROTOCOL?.map((item, index) => (
-            <div key={index} className="flex flex-1 capitalize">
-              <span className="font-medium">{item}</span>
-            </div>
-          ))}
-        />
-      )}
+      <ServiceConfig protocol={protocol} />
 
       <div className="flex items-end gap-4">
         <Input
@@ -183,6 +143,61 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
         </div>
       )}
     </div>
+  )
+}
+
+export function ServiceConfig({ protocol }) {
+  const {
+    selectedProtocol,
+    setSelectedProtocol,
+    selectedActionType,
+    updatePaymentFields,
+  } = usePaymentsStore()
+
+  function handleProtocolSelection(option) {
+    setSelectedProtocol(PAYMENT_PROTOCOL[option])
+    updatePaymentFields({ protocol: PAYMENT_PROTOCOL[option] })
+  }
+  return (
+    <>
+      {selectedActionType?.name && (
+        <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 p-4 ">
+          <selectedActionType.Icon className="h-6 w-6 text-primary" />
+          <div className="h-8 border-r-2 border-primary/60" />
+          <div className="flex w-full justify-between text-sm font-medium text-primary 2xl:text-base">
+            <p>{selectedActionType?.name}</p>
+          </div>
+        </div>
+      )}
+      {selectedProtocol ? (
+        <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 py-3 pl-5 pr-4">
+          <BanknotesIcon className="h-6 w-6 text-primary" />
+          <div className="h-8 border-r-2 border-primary/60" />
+          <div className="flex w-full justify-between text-sm font-medium capitalize text-primary 2xl:text-base">
+            <p>{selectedProtocol}</p>
+          </div>
+          <Button
+            variant="light"
+            className={''}
+            onPress={() => setSelectedProtocol(null)}
+          >
+            <PencilSquareIcon className="h-4 w-4" />
+            Change
+          </Button>
+        </div>
+      ) : (
+        <CustomRadioGroup
+          onChange={(option) => handleProtocolSelection(option)}
+          labelText="Service Protocol"
+          defaultValue={protocol}
+          options={PAYMENT_PROTOCOL?.map((item, index) => (
+            <div key={index} className="flex flex-1 capitalize">
+              <span className="font-medium">{item}</span>
+            </div>
+          ))}
+        />
+      )}
+    </>
   )
 }
 

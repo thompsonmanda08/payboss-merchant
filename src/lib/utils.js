@@ -143,16 +143,31 @@ export function getFormattedZambianMobileNumber(mobileNumber) {
 
 export function isValidNRCNo(input) {
   // REMOVE ALL NON-DIGITS
-  const formattedID = input.trim().replaceAll(/\D/g, '')
+  const formattedID = input?.trim()?.replaceAll(/\D/g, '')
 
   if (
-    formattedID.charAt(formattedID.length - 1) === '1' &&
-    formattedID.length === 9
+    formattedID?.charAt(formattedID.length - 1) === '1' &&
+    formattedID?.length === 9
   ) {
     return true
   }
 
-  notify('error', 'Enter a Valid NRC Number')
-
   return false
+}
+
+export function formatNRCNumber(input) {
+  // REMOVE ALL NON-DIGITS
+  let cleanedInput = input?.trim().replaceAll(/\D/g, '')
+
+  // Insert slashes at the correct positions
+  if (cleanedInput?.length > 6) {
+    cleanedInput = `${cleanedInput.slice(0, 6)}/${cleanedInput.slice(6)}`
+  }
+
+  if (cleanedInput?.length > 9) {
+    cleanedInput = `${cleanedInput.slice(0, 9)}/${cleanedInput.slice(9, 10)}`
+  }
+
+  // Update the state with the formatted value
+  return cleanedInput
 }

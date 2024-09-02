@@ -19,7 +19,7 @@ export default function Step1({ updateDetails }) {
 
   const TPINError = step?.tpin?.length > 10
   const phoneNoError =
-    !isValidZambianMobileNumber(step?.contact) && step?.contact?.length > 1
+    !isValidZambianMobileNumber(step?.contact) && step?.contact?.length > 9
 
   const cities = useMemo(() => {
     if (step?.provinceID) {

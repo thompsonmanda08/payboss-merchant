@@ -1,10 +1,7 @@
 'use client'
-import { usePathname } from 'next/navigation'
-import { useState, useEffect } from 'react'
 import {
-  useDirectBulkTransactions,
-  useGetWorkspaces,
-  useSetupConfig,
+  useBulkTransactions,
+  useSingleTransactions,
   useWalletPrefundHistory,
 } from './useQueryHooks'
 import useWorkspaces from './useWorkspaces'
@@ -13,10 +10,16 @@ const useTransactions = (query) => {
   const { workspaceID } = useWorkspaces()
 
   const {
-    data: directBulkResponse,
-    isFetching: bulkDirectFetching,
-    isLoading: bulkDirectLoading,
-  } = useDirectBulkTransactions(workspaceID || query?.workspaceID)
+    data: bulkTransactionsResponse,
+    isFetching: bulkFetching,
+    isLoading: bulkLoading,
+  } = useBulkTransactions(workspaceID || query?.workspaceID)
+
+  const {
+    data: transactionsResponse,
+    isLoading: singleLoading,
+    isFetching: singleFetching,
+  } = useSingleTransactions(workspaceID || query?.workspaceID)
 
   const {
     data: walletHistoryResponse,
@@ -24,16 +27,20 @@ const useTransactions = (query) => {
     isLoading: walletHistoryLoading,
   } = useWalletPrefundHistory(workspaceID || query?.workspaceID)
 
-  const directBulkTransactions = directBulkResponse?.data?.batches || []
   const walletHistory = walletHistoryResponse?.data?.data || []
 
-  const isLoading = bulkDirectLoading || bulkDirectFetching
-  const isFetching = walletHistoryLoading || walletHistoryFetching
+  const isLoading = bulkLoading || bulkFetching || singleLoading
+  const isFetching =
+    walletHistoryLoading || walletHistoryFetching || singleFetching
+
+  const bulkTransactions = bulkTransactionsResponse?.data?.batches || []
+  const singleTransactions = transactionsResponse?.data?.data
 
   return {
     isFetching,
     isLoading,
-    directBulkTransactions,
+    bulkTransactions,
+    singleTransactions,
     walletHistory,
   }
 }

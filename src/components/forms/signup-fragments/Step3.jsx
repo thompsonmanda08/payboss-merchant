@@ -7,7 +7,6 @@ import { CardHeader } from '@/components/base'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import useAuthStore from '@/context/authStore'
 import { STEPS } from '../SignupForm'
-import SelectField from '@/components/ui/SelectField'
 import IMG from '@/images/auth-img.png'
 import Image from 'next/image'
 

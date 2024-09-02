@@ -50,7 +50,7 @@ function RecordDetailsViewer({ batchID }) {
           <>
             <ModalHeader className="tracking-tight">
               <CardHeader
-                className={'mt-12'}
+                className={'mt-10'}
                 title={title}
                 infoText={infoText}
               />

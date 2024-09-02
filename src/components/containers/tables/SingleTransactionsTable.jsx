@@ -6,10 +6,12 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Chip,
   Pagination,
+  Tooltip,
 } from '@nextui-org/react'
 import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
-import { cn, formatDate } from '@/lib/utils'
+import { cn, formatCurrency, formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
 import Loader from '@/components/ui/Loader'
@@ -21,33 +23,34 @@ import { EmptyLogs } from '@/components/base'
 
 const columns = [
   { name: 'DATE CREATED', uid: 'created_at', sortable: true },
-  { name: 'NAME', uid: 'batch_name', sortable: true },
-  { name: 'TOTAL RECORDS', uid: 'number_of_records', sortable: true },
-  { name: 'TOTAL AMOUNT', uid: 'total_amount', sortable: true },
-  { name: 'SERVICE', uid: 'service', sortable: true },
+  { name: 'FIRST NAME', uid: 'first_name', sortable: true },
+  { name: 'LAST NAME', uid: 'last_name', sortable: true },
+  { name: 'SERVICE', uid: 'service' },
+  { name: 'SERVICE PROVIDER', uid: 'service_provider' },
+  { name: 'DESTINATION ACCOUNT', uid: 'destination', sortable: true },
   { name: 'LAST MODIFIED', uid: 'updated_at', sortable: true },
+  { name: 'AMOUNT', uid: 'amount', sortable: true },
   { name: 'STATUS', uid: 'status', sortable: true },
   { name: 'ACTIONS', uid: 'actions' },
 ]
 
 const SERVICE_FILTERS = [
   {
-    name: 'direct bulk disbursement',
-    uid: 'direct_bulk_disbursement',
+    name: 'direct single disbursement',
+    uid: 'direct_single_disbursement',
   },
   {
-    name: 'voucher bulk disbursement',
-    uid: 'voucher_bulk_disbursement',
+    name: 'voucher single disbursement',
+    uid: 'voucher_single_disbursement',
   },
 ]
 
-export default function BulkTransactionsTable({
-  rows,
-
-  isLoading,
-}) {
-  const { setSelectedBatch, setOpenBatchDetailsModal, setOpenPaymentsModal } =
-    usePaymentsStore()
+export default function SingleTransactionsTable({ rows, isLoading }) {
+  const {
+    setTransactionDetails,
+    setOpenTransactionDetailsModal,
+    setOpenPaymentsModal,
+  } = usePaymentsStore()
 
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid)
 
@@ -142,16 +145,23 @@ export default function BulkTransactionsTable({
             {cellValue}
           </span>
         )
+      case 'amount':
+        return (
+          <span className={cn('text-nowrap font-medium capitalize')}>
+            {formatCurrency(cellValue)}
+          </span>
+        )
       case 'service':
         return <span className={cn('text-nowrap capitalize')}>{cellValue}</span>
+
       case 'status':
         return (
           <Button
             size="sm"
             variant="light"
             onPress={() => {
-              setSelectedBatch(row)
-              setOpenBatchDetailsModal(true)
+              setTransactionDetails(row)
+              setOpenTransactionDetailsModal(true)
             }}
             className={cn(
               'h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white',
@@ -161,6 +171,31 @@ export default function BulkTransactionsTable({
             {cellValue}
           </Button>
         )
+      case 'service_provider':
+        return (
+          <Tooltip
+            color="primary"
+            placement="top"
+            classNames={{
+              content: 'text-nowrap bg-primary/10 text-primary-600',
+            }}
+            content={row?.remarks}
+            delay={1000}
+            closeDelay={1000}
+            showArrow={true}
+          >
+            <Chip
+              color="primary"
+              classNames={{
+                base: 'border-1 border-primary/30 mt-4 cursor-pointer',
+                content: 'text-primary text-small font-semibold',
+              }}
+              variant="flat"
+            >
+              {cellValue}
+            </Chip>
+          </Tooltip>
+        )
       case 'actions':
         return (
           <Button
@@ -168,8 +203,8 @@ export default function BulkTransactionsTable({
             className={'max-w-fit p-2'}
             isIconOnly
             onPress={() => {
-              setSelectedBatch(row)
-              setOpenBatchDetailsModal(true)
+              setTransactionDetails(row)
+              setOpenTransactionDetailsModal(true)
             }}
           >
             <EyeIcon className="h-6 w-5" />

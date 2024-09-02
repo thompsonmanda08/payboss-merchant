@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { notify } from '@/lib/utils'
 import { Input } from '../ui/InputField'
 import { Button } from '../ui/Button'
-import { PASSWORD_PATTERN } from '@/lib/constants'
+import { PASSWORD_PATTERN, slideDownInView } from '@/lib/constants'
 
 function ChangePasswordField({ updatePassword, setUpdatePassword }) {
   const [isValidPassword, setIsValidPassword] = useState(false)
@@ -75,24 +75,7 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
     updatePassword && (
       <AnimatePresence mode="wait">
         <motion.div
-          variants={{
-            hidden: {
-              opacity: 0,
-              y: -100,
-              transition: {
-                duration: 0.5,
-                ease: 'easeInOut',
-              },
-            },
-            visible: {
-              y: 0,
-              opacity: 1,
-              transition: {
-                duration: 0.3,
-                ease: 'easeInOut',
-              },
-            },
-          }}
+          variants={slideDownInView}
           initial={'hidden'}
           animate={'visible'}
           exit={'hidden'}

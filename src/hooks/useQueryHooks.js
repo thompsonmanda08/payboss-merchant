@@ -8,8 +8,11 @@ import {
 } from '@/app/_actions/config-actions'
 import { getDashboardAnalytics } from '@/app/_actions/dashboard-actions'
 import {
-  getAllDirectBulkTransactions,
+  getAllBulkTransactions,
+  getAllSingleTransactions,
+  getAllTransactions,
   getBatchDetails,
+  getDirectBulkTransactionDetails,
   getWalletPrefundHistory,
 } from '@/app/_actions/transaction-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
@@ -25,11 +28,13 @@ import {
   WORKSPACES_QUERY_KEY,
   WORKSPACE_DASHBOARD_QUERY_KEY,
   WORKSPACE_MEMBERS_QUERY_KEY,
-  DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
+  BULK_TRANSACTIONS_QUERY_KEY,
+  SINGLE_TRANSACTIONS_QUERY_KEY,
   BATCH_DETAILS_QUERY_KEY,
   USERS,
   WALLET_HISTORY_QUERY_KEY,
   DASHBOARD_ANALYTICS_QUERY_KEY,
+  WORKSPACE_TRANSACTIONS_QUERY_KEY,
 } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
 
@@ -104,17 +109,31 @@ export const useWorkspaceMembers = (workspaceID) =>
     refetchOnMount: true,
   })
 
-export const useDirectBulkTransactions = (workspaceID) =>
+export const useWorkspaceTransactions = (workspaceID) =>
   useQuery({
-    queryKey: [DIRECT_BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
-    queryFn: async () => await getAllDirectBulkTransactions(workspaceID),
+    queryKey: [WORKSPACE_TRANSACTIONS_QUERY_KEY, workspaceID],
+    queryFn: async () => await getAllTransactions(workspaceID),
+    refetchOnMount: true,
+  })
+
+export const useBulkTransactions = (workspaceID) =>
+  useQuery({
+    queryKey: [BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
+    queryFn: async () => await getAllBulkTransactions(workspaceID),
+    refetchOnMount: true,
+  })
+
+export const useSingleTransactions = (workspaceID) =>
+  useQuery({
+    queryKey: [SINGLE_TRANSACTIONS_QUERY_KEY, workspaceID],
+    queryFn: async () => await getAllSingleTransactions(workspaceID),
     refetchOnMount: true,
   })
 
 export const useBatchDetails = (batchID) =>
   useQuery({
     queryKey: [BATCH_DETAILS_QUERY_KEY, batchID],
-    queryFn: async () => await getBatchDetails(batchID),
+    queryFn: async () => await getDirectBulkTransactionDetails(batchID),
     refetchOnMount: true,
     staleTime: Infinity,
   })

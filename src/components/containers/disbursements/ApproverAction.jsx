@@ -1,11 +1,14 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { formatCurrency, notify } from '@/lib/utils'
 import approvalIllustration from '@/images/illustrations/approval.svg'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 import Image from 'next/image'
-import { reviewBatch } from '@/app/_actions/transaction-actions'
+import {
+  reviewBatch,
+  reviewSingleTransaction,
+} from '@/app/_actions/transaction-actions'
 import usePaymentsStore from '@/context/paymentsStore'
 import { useDisclosure } from '@nextui-org/react'
 import { Input } from '@/components/ui/InputField'
@@ -13,7 +16,8 @@ import useWorkspaces from '@/hooks/useWorkspaces'
 import { useQueryClient } from '@tanstack/react-query'
 import {
   BATCH_DETAILS_QUERY_KEY,
-  DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
+  BULK_TRANSACTIONS_QUERY_KEY,
+  PAYMENT_SERVICE_TYPES,
 } from '@/lib/constants'
 import PromptModal from '@/components/base/Prompt'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
@@ -29,10 +33,12 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     batchDetails: batchState,
     setOpenBatchDetailsModal,
     openBatchDetailsModal,
+    selectedActionType,
+    transactionDetails,
   } = usePaymentsStore()
 
   const [queryID, setQueryID] = useState(
-    batchID || selectedBatch?.ID || batchState?.ID,
+    batchID || selectedBatch?.ID || batchState?.ID || transactionDetails?.ID,
   )
 
   const { data: batchResponse } = useBatchDetails(queryID)
@@ -75,7 +81,10 @@ const ApproverAction = ({ navigateForward, batchID }) => {
       return
     }
 
-    const response = await reviewBatch(queryID, approve)
+    const response =
+      selectedActionType.name == PAYMENT_SERVICE_TYPES[0].name
+        ? await reviewBatch(queryID, approve)
+        : await reviewSingleTransaction(queryID, approve)
 
     if (!response.success) {
       setIsLoading(false)
@@ -90,7 +99,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     // PERFORM QUERY INVALIDATION TO UPDATE THE STATE OF THE UI
     if (openBatchDetailsModal) {
       queryClient.invalidateQueries({
-        queryKey: [DIRECT_BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
+        queryKey: [BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
       })
     } else {
       queryClient.invalidateQueries({
@@ -122,7 +131,73 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     selectedBatch?.status?.toLowerCase() == 'approved' ||
     batchDetails?.status?.toLowerCase() == 'approved' ||
     selectedBatch?.status?.toLowerCase() == 'rejected' ||
+    transactionDetails?.status.toLowerCase() == 'approved' ||
+    transactionDetails?.status?.toLowerCase() == 'rejected' ||
     batchDetails?.status?.toLowerCase() == 'rejected'
+
+  const isInReview =
+    selectedBatch?.status == 'review' ||
+    batchDetails?.status == 'review' ||
+    transactionDetails?.status == 'submitted'
+  transactionDetails?.status == 'review'
+
+  const renderBatchApproval = useMemo(() => {
+    return (
+      <div className="flex max-w-lg flex-col items-center justify-center gap-2">
+        <h3 className="leading-0 m-0 text-[clamp(1rem,1rem+1vw,1.25rem)] font-bold uppercase tracking-tight">
+          {isApprovedOrRejected
+            ? `Batch ${selectedBatch?.status || batchDetails?.status}`
+            : 'Batch payout requires approval'}
+        </h3>
+
+        {isApprovedOrRejected ? (
+          <p className="text-center text-[15px] text-slate-500">
+            Check the status and batch details for more information.
+          </p>
+        ) : role?.can_approve ? (
+          <p className="text-center text-[15px] text-slate-500">
+            Batch payouts have been validated and awaiting approval, after which
+            the transactions will run against your PayBoss wallet.
+          </p>
+        ) : (
+          <p className="text-center text-[15px] text-slate-500">
+            Batch payouts have been completed and submitted for approval. You
+            need to review and approve the changes. If any changes are needed,
+            please contact an administrator.
+          </p>
+        )}
+      </div>
+    )
+  }, [isApprovedOrRejected, role?.can_approve])
+
+  const renderApproval = useMemo(() => {
+    return (
+      <div className="flex max-w-lg flex-col items-center justify-center gap-2">
+        <h3 className="leading-0 m-0 text-[clamp(1rem,1rem+1vw,1.25rem)] font-bold uppercase tracking-tight">
+          {isApprovedOrRejected
+            ? `Transaction ${transactionDetails?.status}`
+            : 'This Transaction requires approval'}
+        </h3>
+
+        {isApprovedOrRejected ? (
+          <p className="text-center text-[15px] text-slate-500">
+            Check the status and transaction details for more information.
+          </p>
+        ) : role?.can_approve ? (
+          <p className="text-center text-[15px] text-slate-500">
+            Transaction has been validated and awaiting approval, after which
+            the transaction will run against your PayBoss wallet.
+          </p>
+        ) : (
+          <p className="text-center text-[15px] text-slate-500">
+            Transaction payout have been completed and submitted for approval.
+            You need to review and approve the changes. If any changes are
+            needed, please contact an administrator.
+          </p>
+        )}
+      </div>
+    )
+  }, [isApprovedOrRejected, role?.can_approve])
 
   return !batchDetails || (batchID && !selectedBatch?.status) ? (
     <Loader />
@@ -163,55 +238,32 @@ const ApproverAction = ({ navigateForward, batchID }) => {
             width={200}
             height={200}
           />
-          <div className="flex max-w-lg flex-col items-center justify-center gap-2">
-            <h3 className="leading-0 m-0 text-[clamp(1rem,1rem+1vw,1.25rem)] font-bold uppercase tracking-tight">
-              {isApprovedOrRejected
-                ? `Batch ${selectedBatch?.status || batchDetails?.status}`
-                : 'Batch payout requires approval'}
-            </h3>
-
-            {isApprovedOrRejected ? (
-              <p className="text-center text-[15px] text-slate-500">
-                Check the status and batch details for more information.
-              </p>
-            ) : role?.can_approve ? (
-              <p className="text-center text-[15px] text-slate-500">
-                Batch payouts have been validated and awaiting approval, after
-                which the transactions will run against your PayBoss wallet.
-              </p>
-            ) : (
-              <p className="text-center text-[15px] text-slate-500">
-                Batch payouts have been completed and submitted for approval.
-                You need to review and approve the changes. If any changes are
-                needed, please contact your administrator.
-              </p>
-            )}
-          </div>
+          {selectedActionType?.name == PAYMENT_SERVICE_TYPES[0].name
+            ? renderBatchApproval
+            : renderApproval}
         </div>
 
-        {role?.can_approve &&
-          (selectedBatch?.status == 'review' ||
-            batchDetails?.status == 'review') && (
-            <div className="mb-4 ml-auto flex w-full max-w-xs items-end justify-end gap-4">
-              <Button
-                className={'flex-1 bg-red-500/10'}
-                color="danger"
-                variant="light"
-                // isDisabled={isLoading}
-                onClick={handleReject}
-              >
-                Reject
-              </Button>
-              <Button
-                className={'flex-1'}
-                isLoading={isLoading}
-                isDisabled={isLoading}
-                onClick={onOpen}
-              >
-                Approve
-              </Button>
-            </div>
-          )}
+        {role?.can_approve && isInReview && (
+          <div className="mb-4 ml-auto flex w-full max-w-xs items-end justify-end gap-4">
+            <Button
+              className={'flex-1 bg-red-500/10'}
+              color="danger"
+              variant="light"
+              // isDisabled={isLoading}
+              onClick={handleReject}
+            >
+              Reject
+            </Button>
+            <Button
+              className={'flex-1'}
+              isLoading={isLoading}
+              isDisabled={isLoading}
+              onClick={onOpen}
+            >
+              Approve
+            </Button>
+          </div>
+        )}
       </div>
     </>
   )

@@ -5,7 +5,7 @@ import { create } from 'zustand'
 
 const INITIAL_STATE = {
   selectedProtocol: '', // DIRECT OR VOUCHER
-  selectedActionType: PAYMENT_SERVICE_TYPES[0],
+  selectedActionType: {},
   paymentAction: {
     type: '',
     url: '',
@@ -18,12 +18,14 @@ const INITIAL_STATE = {
 
   bulkPayments: [],
   batchDetails: {},
+  transactionDetails: {},
   openPaymentsModal: false,
   openAllRecordsModal: false,
   openValidRecordsModal: false,
   openInvalidRecordsModal: false,
   openAddOrEditModal: false,
   openBatchDetailsModal: false,
+  openTransactionDetailsModal: false,
   loading: false,
   selectedRecord: null,
   selectedBatch: null,
@@ -48,6 +50,9 @@ const usePaymentsStore = create((set, get) => ({
   setSelectedRecord: (record) => set({ selectedRecord: record }),
   setSelectedBatch: (record) => set({ selectedBatch: record }),
   setSelectedActionType: (type) => set({ selectedActionType: type }),
+  setTransactionDetails: (details) => set({ transactionDetails: details }),
+  setOpenTransactionDetailsModal: (open) =>
+    set({ openTransactionDetailsModal: open }),
 
   // UPDATE FIELDS ON THE SELECTED INVALID RECORD
   updateSelectedRecord: (fields) => {

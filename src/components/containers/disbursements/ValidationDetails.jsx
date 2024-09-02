@@ -11,7 +11,7 @@ import { notify } from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import {
   BATCH_DETAILS_QUERY_KEY,
-  DIRECT_BULK_TRANSACTIONS_QUERY_KEY,
+  BULK_TRANSACTIONS_QUERY_KEY,
 } from '@/lib/constants'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import Loader from '@/components/ui/Loader'
@@ -55,7 +55,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     }
 
     if (
-      parseFloat(batchDetails?.valid_amount) <
+      parseFloat(batchDetails?.valid_amount) >
       parseFloat(workspaceWalletBalance)
     ) {
       notify('error', 'Insufficient funds in the wallet!')
@@ -74,7 +74,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     // PERFORM QUERY INVALIDATION TO UPDATE THE STATE OF THE UI
     if (openBatchDetailsModal) {
       queryClient.invalidateQueries({
-        queryKey: [DIRECT_BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
+        queryKey: [BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
       })
     } else {
       queryClient.invalidateQueries({

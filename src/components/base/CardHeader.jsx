@@ -23,12 +23,7 @@ function CardHeader({ title, infoText, handleClose, className, classNames }) {
             {title}
           </h3>
           {infoText && (
-            <p
-              className={cn(
-                'mb-2 text-xs text-gray-500 sm:text-sm',
-                infoClasses,
-              )}
-            >
+            <p className={cn('text-xs text-gray-500 sm:text-sm', infoClasses)}>
               {infoText}
             </p>
           )}
