@@ -274,12 +274,7 @@ export default function SingleTransactionsTable({ rows, isLoading }) {
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="flex items-center justify-between px-2 py-2">
-        {/* <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === 'all'
-            ? 'All items selected'
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
-        </span> */}
+      <div className="flex items-center justify-center px-2 py-2">
         {pages > 1 && (
           <Pagination
             isCompact
@@ -291,24 +286,6 @@ export default function SingleTransactionsTable({ rows, isLoading }) {
             onChange={(page) => setPage(page)}
           />
         )}
-        {/* <div className="hidden w-[30%] justify-end gap-2 sm:flex">
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onPreviousPage}
-          >
-            Previous
-          </Button>
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onNextPage}
-          >
-            Next
-          </Button>
-        </div> */}
       </div>
     )
   }, [rows, pages])
@@ -361,7 +338,7 @@ export default function SingleTransactionsTable({ rows, isLoading }) {
               endContent={<PlusIcon className="h-5 w-5" />}
               onPress={() => setOpenPaymentsModal(true)}
             >
-              Create New Batch
+              Create New
             </Button>
           </div>
         </div>
@@ -392,9 +369,6 @@ export default function SingleTransactionsTable({ rows, isLoading }) {
     hasSearchFilter,
   ])
 
-  console.log(rows)
-  console.log(items)
-  console.log(filteredItems)
   return (
     <Table
       aria-label="Transactions table with custom cells"
@@ -406,11 +380,6 @@ export default function SingleTransactionsTable({ rows, isLoading }) {
         }),
         // wrapper: cn('min-h-max', { 'min-h-max': pages <= 1 }),
       }}
-      // classNames={}
-      // showSelectionCheckboxes
-      // selectionMode="multiple"
-      // topContentPlacement="outside"
-      // bottomContentPlacement="outside"
       sortDescriptor={sortDescriptor}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}

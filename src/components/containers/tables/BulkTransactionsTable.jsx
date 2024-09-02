@@ -239,12 +239,7 @@ export default function BulkTransactionsTable({
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="flex items-center justify-between px-2 py-2">
-        {/* <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === 'all'
-            ? 'All items selected'
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
-        </span> */}
+      <div className="flex items-center justify-center px-2 py-2">
         {pages > 1 && (
           <Pagination
             isCompact
@@ -256,24 +251,6 @@ export default function BulkTransactionsTable({
             onChange={(page) => setPage(page)}
           />
         )}
-        {/* <div className="hidden w-[30%] justify-end gap-2 sm:flex">
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onPreviousPage}
-          >
-            Previous
-          </Button>
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onNextPage}
-          >
-            Next
-          </Button>
-        </div> */}
       </div>
     )
   }, [rows, pages])
@@ -326,7 +303,7 @@ export default function BulkTransactionsTable({
               endContent={<PlusIcon className="h-5 w-5" />}
               onPress={() => setOpenPaymentsModal(true)}
             >
-              Create New Batch
+              Create New
             </Button>
           </div>
         </div>
