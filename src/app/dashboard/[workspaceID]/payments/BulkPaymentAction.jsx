@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 import { Card, CardHeader, ProgressStep } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import usePaymentsStore from '@/context/paymentsStore'
-import UploadCSVFile from '../../../../components/containers/disbursements/UploadCSVFile'
-import PaymentDetails from '../../../../components/containers/disbursements/PaymentDetails'
-import ValidationDetails from '../../../../components/containers/disbursements/ValidationDetails'
-import RecordDetailsViewer from '../../../../components/containers/disbursements/RecordDetailsViewer'
+import UploadCSVFile from '@/components/containers/disbursements/UploadCSVFile'
+import PaymentDetails from '@/components/containers/disbursements/BulkPaymentDetails'
+import ValidationDetails from '@/components/containers/disbursements/ValidationDetails'
+import RecordDetailsViewer from '@/components/containers/disbursements/RecordDetailsViewer'
 import { useSearchParams } from 'next/navigation'
-import ApproverAction from '../../../../components/containers/disbursements/ApproverAction'
+import ApproverAction from '@/components/containers/disbursements/ApproverAction'
+import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 
 export const STEPS = [
   {
@@ -49,6 +50,7 @@ function BulkPaymentAction({}) {
     openInvalidRecordsModal,
     selectedProtocol,
     setSelectedProtocol,
+    setSelectedActionType,
   } = usePaymentsStore()
 
   //************ STEPS TO CREATE A TASK FOR A STUDY PLAN *****************/
@@ -96,6 +98,7 @@ function BulkPaymentAction({}) {
 
   useEffect(() => {
     setCurrentStep(STEPS[currentTabIndex])
+    setSelectedActionType(PAYMENT_SERVICE_TYPES[0])
 
     //TODO: => CLEAR DATA WHEN THE THE COMPONENT IS UNMOUNTED
     // return () => {
