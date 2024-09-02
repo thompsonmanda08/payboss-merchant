@@ -1,10 +1,11 @@
 'use client'
 import { useState } from 'react'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import Table from '../containers/tables/Table'
+import Table from './Table'
 import data from '@/app/dashboard/[workspaceID]/data/tableData'
-import { Card } from '../base'
+import { Card } from '../../base'
 import { CheckIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid'
+import CustomTable from './Table'
 
 function Batches() {
   const { columns, rows } = data()
@@ -76,9 +77,7 @@ function Batches() {
           </Menu>
         </div>
       </div>
-      <div className="">
-        <Table columns={columns} rows={rows} />
-      </div>
+      <CustomTable columns={columns} rows={rows} />
     </Card>
   )
 }

@@ -1,5 +1,5 @@
-import { Chart as ChartJS, registerables } from 'chart.js';
-ChartJS.register(...registerables);
+import { Chart as ChartJS, registerables } from 'chart.js'
+ChartJS.register(...registerables)
 
 function configs(labels, datasets) {
   return {
@@ -12,9 +12,9 @@ function configs(labels, datasets) {
           borderWidth: 0,
           borderRadius: 4,
           borderSkipped: false,
-          backgroundColor: "#fff",
+          backgroundColor: '#fff',
           data: datasets.data,
-          maxBarThickness: 6,
+          maxBarThickness: 8,
         },
       ],
     },
@@ -25,11 +25,12 @@ function configs(labels, datasets) {
       plugins: {
         legend: {
           display: false,
+          position: 'bottom',
         },
       },
       interaction: {
         intersect: false,
-        mode: "index",
+        mode: 'index',
       },
       scales: {
         y: {
@@ -46,11 +47,11 @@ function configs(labels, datasets) {
             padding: 15,
             font: {
               size: 14,
-              family: "Roboto",
-              style: "normal",
+              family: 'Roboto',
+              style: 'normal',
               lineHeight: 2,
             },
-            color: "#fff",
+            color: '#fff',
           },
         },
         x: {
@@ -66,7 +67,7 @@ function configs(labels, datasets) {
         },
       },
     },
-  };
+  }
 }
 
-export default configs;
+export default configs

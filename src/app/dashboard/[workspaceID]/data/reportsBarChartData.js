@@ -10,42 +10,42 @@ const reportsBarChartData = {
   chart: {
     labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: {
-      label: 'Sales',
-      data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
+      label: 'Transactions',
+      data: [320, 200, 100, 220, 500, 100, 400, 230, 500],
     },
   },
   items: [
     {
       icon: {
         color: 'primary',
-        component: <BanknotesIcon className="h-4 w-4" />,
-      },
-      label: 'Paid',
-      progress: { content: '36K', percentage: 30 },
-    },
-    {
-      icon: {
-        color: 'primary',
-        component: <AdjustmentsVerticalIcon className="h-4 w-4" />,
-      },
-      label: 'api',
-      progress: { content: '2M', percentage: 90 },
-    },
-    {
-      icon: {
-        color: 'primary',
         component: <CurrencyDollarIcon className="h-4 w-4" />,
       },
-      label: 'sales',
-      progress: { content: '$435', percentage: 30 },
+      label: 'Overall',
+      progress: { content: 'ZMW 435M', percentage: 85 },
     },
     {
+      label: 'Income',
       icon: {
-        color: 'primary',
-        component: <InboxStackIcon className="h-4 w-4" />,
+        color: 'success',
+        component: <BanknotesIcon className="h-4 w-4" />,
       },
-      label: 'items',
-      progress: { content: '43', percentage: 50 },
+      progress: { content: '36K', percentage: 45 },
+    },
+    {
+      label: 'Payments',
+      icon: {
+        color: 'secondary',
+        component: <AdjustmentsVerticalIcon className="h-4 w-4" />,
+      },
+      progress: { content: '2M', percentage: 60 },
+    },
+    {
+      label: 'Expenses',
+      icon: {
+        color: 'danger',
+        component: <AdjustmentsVerticalIcon className="h-4 w-4" />,
+      },
+      progress: { content: '2M', percentage: 60 },
     },
   ],
 }

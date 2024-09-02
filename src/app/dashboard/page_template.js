@@ -1,13 +1,13 @@
 import { Balance, Card, PaymentMethods, SimpleStats } from '@/components/base'
-import ReportsBarChart from '@/components/charts/ReportsBarChart'
+import ReportsBarChart from '@/components/charts/ReportsBarChart/ReportsBarChart'
 import { TransactionsTable } from '@/components/containers'
 import React, { Suspense } from 'react'
 import reportsBarChartData from './[workspaceID]/data/reportsBarChartData'
 import { ArrowUpIcon } from '@heroicons/react/24/outline'
-import GradientLineChart from '@/components/charts/LineCharts/GradientLineChart'
+import GradientLineChart from '@/components/charts/GradientLineChart/GradientLineChart'
 import gradientLineChartData from './[workspaceID]/data/gradientLineChartData'
 import LoadingPage from '../loading'
-import Batches from '@/components/batch'
+import Batches from '@/components/containers/tables/BatchSummaryTable'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 
 function DashboardHome() {
