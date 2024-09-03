@@ -89,7 +89,8 @@ export default function SingleTransactionsTable({ rows, isLoading }) {
     if (hasSearchFilter) {
       filteredrows = filteredrows.filter(
         (row) =>
-          row?.batch_name.toLowerCase().includes(filterValue.toLowerCase()) ||
+          row?.first_name.toLowerCase().includes(filterValue.toLowerCase()) ||
+          row?.last_name.toLowerCase().includes(filterValue.toLowerCase()) ||
           row?.amount.toLowerCase().includes(filterValue.toLowerCase()),
       )
     }
