@@ -1,11 +1,11 @@
 import LoadingPage from '@/app/loading'
 import React, { Suspense } from 'react'
-import APIIntegration from './API'
+import TillPaymentCollections from './TillPaymentCollections'
 
-export default async function APIIntergrationCollectionsPage() {
+export default async function TillPaymentCollectionsPage() {
   return (
     <Suspense fallback={<LoadingPage />}>
-      <APIIntegration />
+      <TillPaymentCollections />
     </Suspense>
   )
 }
