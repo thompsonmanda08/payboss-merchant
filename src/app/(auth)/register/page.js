@@ -83,13 +83,11 @@ export function AccountCreatedSuccess() {
           Account Created Successfully!
         </h2>
         <p className="py-4 pb-6 text-center text-sm leading-6 tracking-tight text-neutral-600 md:text-base ">
-          <strong>Your account was created successfully!</strong> An email will
-          be sent to you to verify your account. Approval takes{' '}
-          <strong>
-            up to <span className="font-semibold">24 hours</span>
-          </strong>
-          . You have access to your account with limited features until approval
-          is completed.
+          <strong>Your account was created successfully!</strong> You will need
+          to login and upload a few verification documents to verify your
+          account. Approval takes up to{' '}
+          <span className="font-bold">24 hours</span>, however you have limited
+          access to your account until approval is completed.
         </p>
 
         <div className="grid w-full ">
