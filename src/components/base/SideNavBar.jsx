@@ -65,31 +65,31 @@ function SideNavBar({ params }) {
           href: `${dashboardRoute}/payments`,
           Icon: ArrowsRightLeftIcon,
         },
-        {
-          name: 'ZESCO',
-          href: `${dashboardRoute}/payments/zesco`,
-          Icon: ReceiptPercentIcon,
-        },
-        {
-          name: 'DSTV',
-          href: `${dashboardRoute}paymentsexpenses/dstv`,
-          Icon: ReceiptPercentIcon,
-        },
-        {
-          name: 'Airtime',
-          href: `${dashboardRoute}/payments/airtime`,
-          Icon: PhoneArrowDownLeftIcon,
-        },
-        {
-          name: 'Data Bundles',
-          href: `${dashboardRoute}/payments/data-bundles`,
-          Icon: ReceiptPercentIcon,
-        },
-        {
-          name: 'Expense Cards',
-          href: `${dashboardRoute}/payments/cards`,
-          Icon: ReceiptPercentIcon,
-        },
+        // {
+        //   name: 'ZESCO',
+        //   href: `${dashboardRoute}/payments/zesco`,
+        //   Icon: ReceiptPercentIcon,
+        // },
+        // {
+        //   name: 'DSTV',
+        //   href: `${dashboardRoute}paymentsexpenses/dstv`,
+        //   Icon: ReceiptPercentIcon,
+        // },
+        // {
+        //   name: 'Airtime',
+        //   href: `${dashboardRoute}/payments/airtime`,
+        //   Icon: PhoneArrowDownLeftIcon,
+        // },
+        // {
+        //   name: 'Data Bundles',
+        //   href: `${dashboardRoute}/payments/data-bundles`,
+        //   Icon: ReceiptPercentIcon,
+        // },
+        // {
+        //   name: 'Expense Cards',
+        //   href: `${dashboardRoute}/payments/cards`,
+        //   Icon: ReceiptPercentIcon,
+        // },
       ],
     },
     // ****************************************************** //
@@ -100,28 +100,28 @@ function SideNavBar({ params }) {
       name: 'Manage Income',
       Icon: InboxArrowDownIcon,
       subMenuItems: [
-        {
-          name: 'Invoicing',
-          href: `${dashboardRoute}/collections/invoicing`,
-          Icon: NewspaperIcon,
-        },
+        // {
+        //   name: 'Invoicing',
+        //   href: `${dashboardRoute}/collections/invoicing`,
+        //   Icon: NewspaperIcon,
+        // },
 
-        {
-          name: 'Payment Forms',
-          href: `${dashboardRoute}/collections/payment-forms`,
-          Icon: ClipboardDocumentIcon,
-        },
-        {
-          name: 'Payment Links',
-          href: `${dashboardRoute}/collections/payment-links`,
-          Icon: LinkIcon,
-        },
+        // {
+        //   name: 'Payment Forms',
+        //   href: `${dashboardRoute}/collections/payment-forms`,
+        //   Icon: ClipboardDocumentIcon,
+        // },
+        // {
+        //   name: 'Payment Links',
+        //   href: `${dashboardRoute}/collections/payment-links`,
+        //   Icon: LinkIcon,
+        // },
 
-        {
-          name: 'Subscriptions',
-          href: `${dashboardRoute}/collections/subscriptions`,
-          Icon: CreditCardIcon,
-        },
+        // {
+        //   name: 'Subscriptions',
+        //   href: `${dashboardRoute}/collections/subscriptions`,
+        //   Icon: CreditCardIcon,
+        // },
 
         // {
         //   name: 'Online Store',
@@ -140,41 +140,7 @@ function SideNavBar({ params }) {
         },
       ],
     },
-    // ****************************************************** //
 
-    // *************** EXPENSES & BILLS ********************* //
-    // {
-    //   ID: 'expenses',
-    //   name: 'Manage Expenses',
-    //   Icon: ReceiptPercentIcon,
-    //   subMenuItems: [
-    //     {
-    //       name: 'ZESCO',
-    //       href: `${dashboardRoute}/expenses/zesco`,
-    //       Icon: ReceiptPercentIcon,
-    //     },
-    //     {
-    //       name: 'DSTV',
-    //       href: `${dashboardRoute}/expenses/dstv`,
-    //       Icon: ReceiptPercentIcon,
-    //     },
-    //     {
-    //       name: 'Airtime',
-    //       href: `${dashboardRoute}/expenses/airtime`,
-    //       Icon: PhoneArrowDownLeftIcon,
-    //     },
-    //     {
-    //       name: 'Data Bundles',
-    //       href: `${dashboardRoute}/expenses/data-bundles`,
-    //       Icon: ReceiptPercentIcon,
-    //     },
-    //     {
-    //       name: 'Expense Cards',
-    //       href: `${dashboardRoute}/expenses/cards`,
-    //       Icon: ReceiptPercentIcon,
-    //     },
-    //   ],
-    // },
     // ****************************************************** //
 
     // *************** REPORTS AND ANALYSIS ***************** //
@@ -204,23 +170,23 @@ function SideNavBar({ params }) {
     // ****************************************************** //
 
     // *************** ONLINE E-COMMERCE ******************** //
-    {
-      ID: 'ecommerce',
-      name: 'E-Commerce',
-      Icon: BuildingStorefrontIcon,
-      subMenuItems: [
-        {
-          name: 'Products',
-          href: `${dashboardRoute}/ecommerce/products`,
-          Icon: SwatchIcon,
-        },
-        {
-          name: 'Online Store',
-          href: `${dashboardRoute}/ecommerce/stores`,
-          Icon: ShoppingCartIcon,
-        },
-      ],
-    },
+    // {
+    //   ID: 'ecommerce',
+    //   name: 'E-Commerce',
+    //   Icon: BuildingStorefrontIcon,
+    //   subMenuItems: [
+    //     {
+    //       name: 'Products',
+    //       href: `${dashboardRoute}/ecommerce/products`,
+    //       Icon: SwatchIcon,
+    //     },
+    //     {
+    //       name: 'Online Store',
+    //       href: `${dashboardRoute}/ecommerce/stores`,
+    //       Icon: ShoppingCartIcon,
+    //     },
+    //   ],
+    // },
     // ****************************************************** //
   ]
 
