@@ -3,11 +3,18 @@ import {
   useBulkTransactions,
   useSingleTransactions,
   useWalletPrefundHistory,
+  useWorkspaceTransactions,
 } from './useQueryHooks'
 import useWorkspaces from './useWorkspaces'
 
 const useTransactions = (query) => {
   const { workspaceID } = useWorkspaces()
+
+  const {
+    data: workspaceTransactionsResponse,
+    isFetching: workspaceTransactionsFetching,
+    isLoading: workspaceTransactionsoading,
+  } = useWorkspaceTransactions(workspaceID || query?.workspaceID)
 
   const {
     data: bulkTransactionsResponse,
@@ -34,13 +41,15 @@ const useTransactions = (query) => {
     walletHistoryLoading || walletHistoryFetching || singleFetching
 
   const bulkTransactions = bulkTransactionsResponse?.data?.batches || []
-  const singleTransactions = transactionsResponse?.data?.data
+  const singleTransactions = transactionsResponse?.data?.data || []
+  const workspaceTransactions = workspaceTransactionsResponse?.data || []
 
   return {
     isFetching,
     isLoading,
     bulkTransactions,
     singleTransactions,
+    workspaceTransactions,
     walletHistory,
   }
 }

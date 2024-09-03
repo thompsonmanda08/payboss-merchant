@@ -11,7 +11,6 @@ import {
   getAllBulkTransactions,
   getAllSingleTransactions,
   getAllTransactions,
-  getBatchDetails,
   getDirectBulkTransactionDetails,
   getWalletPrefundHistory,
 } from '@/app/_actions/transaction-actions'

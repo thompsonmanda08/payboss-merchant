@@ -32,10 +32,10 @@ const SERVICE_TYPES = [
 export default function Transactions() {
   const [searchQuery, setSearchQuery] = useState('')
 
-  const { directBulkTransactions, isLoading } = useTransactions()
+  const { bulkTransactions, isLoading } = useTransactions()
   // const [selectedKeys, setSelectedKeys] = React.useState(new Set(['']))
 
-  const transactionRows = directBulkTransactions?.filter((item) => {
+  const transactionRows = bulkTransactions?.filter((item) => {
     return (
       item?.batch_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item?.amount?.toString().toLowerCase().includes(searchQuery.toLowerCase())
