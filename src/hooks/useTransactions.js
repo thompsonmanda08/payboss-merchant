@@ -1,5 +1,7 @@
 'use client'
 import {
+  useAllCollectionsTransactions,
+  useAllPaymentTransactions,
   useBulkTransactions,
   useSingleTransactions,
   useWalletPrefundHistory,
@@ -11,10 +13,16 @@ const useTransactions = (query) => {
   const { workspaceID } = useWorkspaces()
 
   const {
-    data: workspaceTransactionsResponse,
+    data: paymentTransactionsResponse,
     isFetching: workspaceTransactionsFetching,
     isLoading: workspaceTransactionsoading,
-  } = useWorkspaceTransactions(workspaceID || query?.workspaceID)
+  } = useAllPaymentTransactions(workspaceID || query?.workspaceID)
+
+  const {
+    data: collectionsTransactionsResponse,
+    isFetching: collectionsTransactionsFetching,
+    isLoading: collectionsTransactionsoading,
+  } = useAllCollectionsTransactions(workspaceID || query?.workspaceID)
 
   const {
     data: bulkTransactionsResponse,
@@ -42,14 +50,20 @@ const useTransactions = (query) => {
 
   const bulkTransactions = bulkTransactionsResponse?.data?.batches || []
   const singleTransactions = transactionsResponse?.data?.data || []
-  const workspaceTransactions = workspaceTransactionsResponse?.data || []
+  const allPaymentTransactions = paymentTransactionsResponse?.data?.data || []
+  const allCollectionsTransactions =
+    collectionsTransactionsResponse?.data?.data || []
+
+  // console.log(allPaymentTransactions)
+  // console.log(allCollectionsTransactions)
 
   return {
     isFetching,
     isLoading,
     bulkTransactions,
     singleTransactions,
-    workspaceTransactions,
+    allPaymentTransactions,
+    allCollectionsTransactions,
     walletHistory,
   }
 }

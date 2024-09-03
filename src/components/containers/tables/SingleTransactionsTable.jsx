@@ -21,7 +21,7 @@ import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import SelectField from '@/components/ui/SelectField'
 import { EmptyLogs } from '@/components/base'
 
-const columns = [
+export const SingleTransactionColumns = [
   { name: 'DATE CREATED', uid: 'created_at', sortable: true },
   { name: 'FIRST NAME', uid: 'first_name', sortable: true },
   { name: 'LAST NAME', uid: 'last_name', sortable: true },
@@ -46,6 +46,7 @@ const SERVICE_FILTERS = [
 ]
 
 export default function SingleTransactionsTable({ rows, isLoading }) {
+  const columns = SingleTransactionColumns
   const {
     setTransactionDetails,
     setOpenTransactionDetailsModal,

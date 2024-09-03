@@ -6,8 +6,8 @@ import authenticatedService from '@/lib/authenticatedService'
 // ****************** BULK TRANSACTION API ENDPOINTS ************************** //
 // ****************** ******************************** ************************** //
 
-// ********************** GET ALL WORKSPACE TRANSACTIONS (PAYMENTS) ******************** //
-export async function getAllTransactions(workspaceID) {
+// ********************** GET ALL TRANSACTIONS (PAYMENTS) ******************** //
+export async function getAllPaymentTransactions(workspaceID) {
   // const session = await getUserSession()
   // const merchantID = session?.user?.merchantID
   if (!workspaceID) {
@@ -20,10 +20,55 @@ export async function getAllTransactions(workspaceID) {
     }
   }
 
-  // TODO: change payments in the url ==> payment/income
   try {
     const res = await authenticatedService({
-      url: `transaction/${'payments'}/workspace/${workspaceID}`,
+      url: `transaction/merchant/payment/transactions/${workspaceID}`,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+        statusText: res.statusText,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    console.error(error?.response)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}
+
+// ********************** GET ALL TRANSACTIONS (COLLECTIONS) ******************** //
+export async function getAllCollectionTransactions(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: 'Workspace ID is required',
+      data: [],
+      status: 400,
+      statusText: 'BAD_REQUEST',
+    }
+  }
+
+  try {
+    const res = await authenticatedService({
+      url: `transaction/merchant/collection/transactions/${workspaceID}`,
     })
 
     if (res.status == 200) {

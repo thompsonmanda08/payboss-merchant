@@ -5,6 +5,7 @@ import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import Search from '@/components/ui/Search'
 import useTransactions from '@/hooks/useTransactions'
 import CustomTable from '@/components/containers/tables/Table'
+import { SingleTransactionColumns } from '@/components/containers/tables/SingleTransactionsTable'
 
 const transactionColumns = [
   { name: 'DATE', uid: 'batch_name' },
@@ -32,21 +33,23 @@ const SERVICE_TYPES = [
 export default function Transactions() {
   const [searchQuery, setSearchQuery] = useState('')
 
-  const { bulkTransactions, isLoading } = useTransactions()
+  const { allPaymentTransactions, isLoading } = useTransactions()
   // const [selectedKeys, setSelectedKeys] = React.useState(new Set(['']))
 
-  const transactionRows = bulkTransactions?.filter((item) => {
+  const transactionRows = allPaymentTransactions?.filter((item) => {
     return (
-      item?.batch_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item?.first_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item?.last_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item?.amount?.toString().toLowerCase().includes(searchQuery.toLowerCase())
     )
   })
 
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
-      columns={transactionColumns}
+      columns={SingleTransactionColumns}
       rows={transactionRows}
       isLoading={isLoading}
+      rowsPerPage={10}
       // selectedKeys={selectedKeys}
       // setSelectedKeys={setSelectedKeys}
     />,

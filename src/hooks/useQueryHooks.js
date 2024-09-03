@@ -10,9 +10,10 @@ import { getDashboardAnalytics } from '@/app/_actions/dashboard-actions'
 import {
   getAllBulkTransactions,
   getAllSingleTransactions,
-  getAllTransactions,
+  getAllPaymentTransactions,
   getDirectBulkTransactionDetails,
   getWalletPrefundHistory,
+  getAllCollectionTransactions,
 } from '@/app/_actions/transaction-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
 import {
@@ -33,7 +34,8 @@ import {
   USERS,
   WALLET_HISTORY_QUERY_KEY,
   DASHBOARD_ANALYTICS_QUERY_KEY,
-  WORKSPACE_TRANSACTIONS_QUERY_KEY,
+  PAYMENT_TRANSACTIONS_QUERY_KEY,
+  COLLECTION_TRANSACTIONS_QUERY_KEY,
 } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
 
@@ -108,10 +110,17 @@ export const useWorkspaceMembers = (workspaceID) =>
     refetchOnMount: true,
   })
 
-export const useWorkspaceTransactions = (workspaceID) =>
+export const useAllPaymentTransactions = (workspaceID) =>
   useQuery({
-    queryKey: [WORKSPACE_TRANSACTIONS_QUERY_KEY, workspaceID],
-    queryFn: async () => await getAllTransactions(workspaceID),
+    queryKey: [PAYMENT_TRANSACTIONS_QUERY_KEY, workspaceID],
+    queryFn: async () => await getAllPaymentTransactions(workspaceID),
+    refetchOnMount: true,
+  })
+
+export const useAllCollectionsTransactions = (workspaceID) =>
+  useQuery({
+    queryKey: [COLLECTION_TRANSACTIONS_QUERY_KEY, workspaceID],
+    queryFn: async () => await getAllCollectionTransactions(workspaceID),
     refetchOnMount: true,
   })
 
