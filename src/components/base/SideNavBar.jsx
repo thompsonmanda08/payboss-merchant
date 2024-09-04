@@ -130,7 +130,7 @@ function SideNavBar({ params }) {
         // },
         {
           name: 'Till Payments',
-          href: `${dashboardRoute}/collections/store`,
+          href: `${dashboardRoute}/collections/till-collections`,
           Icon: CalculatorIcon,
         },
         {
