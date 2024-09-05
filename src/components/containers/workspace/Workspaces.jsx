@@ -118,8 +118,8 @@ function Workspaces({ user }) {
                   )
                 })}
 
-              {(user.role?.toLowerCase() == 'admin' ||
-                user.role?.toLowerCase() == 'owner') && (
+              {(user?.role?.toLowerCase() == 'admin' ||
+                user?.role?.toLowerCase() == 'owner') && (
                 <Button
                   onPress={onOpen}
                   className={cn(

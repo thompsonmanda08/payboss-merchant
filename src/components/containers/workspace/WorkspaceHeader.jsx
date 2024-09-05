@@ -13,8 +13,8 @@ function WorkspaceHeader({ user }) {
     <>
       <Logo isWhite className="absolute left-5 top-5 z-30 md:left-10 " />
       <div className="absolute right-5 top-5 flex gap-4 md:right-10">
-        {(user.role?.toLowerCase() == 'admin' ||
-          user.role?.toLowerCase() == 'owner') && (
+        {(user?.role?.toLowerCase() == 'admin' ||
+          user?.role?.toLowerCase() == 'owner') && (
           <Button
             as={Link}
             href={'/manage-account'}
