@@ -131,7 +131,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     selectedBatch?.status?.toLowerCase() == 'approved' ||
     batchDetails?.status?.toLowerCase() == 'approved' ||
     selectedBatch?.status?.toLowerCase() == 'rejected' ||
-    transactionDetails?.status.toLowerCase() == 'approved' ||
+    transactionDetails?.status?.toLowerCase() == 'approved' ||
     transactionDetails?.status?.toLowerCase() == 'rejected' ||
     batchDetails?.status?.toLowerCase() == 'rejected'
 
