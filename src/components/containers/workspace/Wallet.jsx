@@ -128,7 +128,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
             })}
           >
             <Balance
-              title={`${workspaceName} Wallet`}
+              title={`${workspaceName} Wallet Balance`}
               amount={balance}
               isLandscape
             />
@@ -154,7 +154,8 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                   name="amount"
                 /> */}
                 <Input
-                placeholder="Bank Reference No. "
+                  placeholder="Bank Reference No. "
+                  required
                   label="Reference Number"
                   value={formData.bank_rrn}
                   onChange={(e) => updateFormData({ bank_rrn: e.target.value })}
@@ -163,6 +164,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                 <DateSelectField
                   label={'Date of Deposit'}
                   className="max-w-md"
+                  required
                   description={'Date the funds were deposited'}
                   defaultValue={formData?.date_of_deposit}
                   value={
@@ -182,6 +184,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                 <UploadField
                   label="Proof of Payment"
                   isLoading={isLoading}
+                  required
                   handleFile={async (file) => {
                     const file_record = await handleFileUpload(
                       file,
