@@ -154,7 +154,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                   name="amount"
                 /> */}
                 <Input
-                  placeholder="Bank Receipt No. "
+                  placeholder="Bank Reference No. "
                   label="Reference Number"
                   value={formData.bank_rrn}
                   onChange={(e) => updateFormData({ bank_rrn: e.target.value })}

@@ -37,7 +37,7 @@ function PromptModal({
             <ModalHeader className="tracking-tight">{title}</ModalHeader>
             <ModalBody className="gap-0">{children}</ModalBody>
             <ModalFooter>
-              <Button color="danger" onPress={onClose}>
+              <Button color="danger" isDisabled={isDisabled} onPress={onClose}>
                 {cancelText}
               </Button>
               <Button
