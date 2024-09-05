@@ -22,6 +22,7 @@ import { getLocalTimeZone, today } from '@internationalized/date'
 import useTransactions from '@/hooks/useTransactions'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useQueryClient } from '@tanstack/react-query'
+import { formatDistance } from 'date-fns'
 
 const POP_INIT = {
   amount: 0,
@@ -252,7 +253,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
   )
 }
 
-export function PreFundHistory({ workspaceID }) {
+export function PreFundHistory({ workspaceID, limit }) {
   const { isLoading, walletHistory } = useTransactions({
     workspaceID,
   })
@@ -263,13 +264,15 @@ export function PreFundHistory({ workspaceID }) {
     },
   ]
 
-  const formattedActivityData = formatActivityData(data)
-  // console.log(formatActivityData)
+  const formattedActivityData = formatActivityData(
+    limit ? data.slice(0, limit) : data,
+  )
+  console.log(formattedActivityData)
 
   return isLoading ? (
     <div className="flex w-full flex-col gap-4">
       <Skeleton className="mt-6 h-8 max-w-xs" />
-      {Array.from({ length: 6 }).map((_, index) => (
+      {Array.from({ length: 4 }).map((_, index) => (
         <div className="flex justify-between">
           <div className="flex w-full gap-4">
             <Skeleton className="h-8 w-24" />
@@ -294,9 +297,7 @@ export function PreFundHistory({ workspaceID }) {
       {formattedActivityData.length > 0 ? (
         formattedActivityData.map((items, index) => (
           <div key={index} className="pr-6">
-            {/* TODO => FIX DATA TIMESTAMP */}
-            <p className="text-lg text-[#161518]">{items.title}</p>
-
+            <p className="text-lg font-medium text-[#161518]">{items.title}</p>
             {items?.data?.map((item, itemIndex) => (
               <div className="flex flex-col gap-y-4 py-2" key={itemIndex}>
                 <div className="flex items-start space-x-4">
@@ -342,15 +343,15 @@ export function PreFundHistory({ workspaceID }) {
                               : 'Pending'}
                           </Chip>
                         </Tooltip>
-                        <p className="text-[12px] font-normal leading-4 text-slate-500">
-                          {/* TODO => FIX DATA TIMESTAMP */}
-                          {/* {formatDistance(new Date(item.created_at), new Date())} */}
-                        </p>
                       </div>
                     </div>
-                    <p className="-mt-1 text-sm text-slate-700">
+                    <div className="-mt-1 flex items-center justify-between text-xs text-slate-700">
                       {item.content}
-                    </p>
+                      <span className="mt-2 self-end  font-medium leading-4 text-slate-500">
+                        {formatDistance(new Date(item.created_at), new Date())}{' '}
+                        ago
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

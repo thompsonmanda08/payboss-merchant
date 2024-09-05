@@ -18,7 +18,7 @@ import {
 
 import {
   staggerContainerItemVariants,
-  staggerContainerVariants,
+  containerVariants,
 } from '@/lib/constants'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { Tabs } from '@/components/base'
@@ -154,7 +154,7 @@ function Collections() {
     <motion.ul
       role="list"
       className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-      variants={staggerContainerVariants}
+      variants={containerVariants}
       initial="hidden"
       animate="show"
       exit="hidden"
@@ -202,7 +202,7 @@ function Spending() {
     <motion.ul
       role="list"
       className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-      variants={staggerContainerVariants}
+      variants={containerVariants}
       initial="hidden"
       animate="show"
       exit="hidden"

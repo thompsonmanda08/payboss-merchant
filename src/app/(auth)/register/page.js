@@ -86,8 +86,8 @@ export function AccountCreatedSuccess() {
           <strong>Your account was created successfully!</strong> You will need
           to login and upload a few verification documents to verify your
           account. Approval takes up to{' '}
-          <span className="font-bold">24 hours</span>, however you have limited
-          access to your account until approval is completed.
+          <span className="font-bold">2 working days</span>, however you have
+          limited access to your account until approval is completed.
         </p>
 
         <div className="grid w-full ">

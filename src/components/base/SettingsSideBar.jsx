@@ -44,7 +44,7 @@ function SettingsSideBar({
 
   const ACCOUNT_SETTINGS = [
     {
-      name: 'Account Settings',
+      name: 'Profile Settings',
       Icon: UserCircleIcon,
       href: '/manage-account',
     },

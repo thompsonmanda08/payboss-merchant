@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { Balance, SimpleStats } from '@/components/base'
+import { Balance, Card, CardHeader, SimpleStats } from '@/components/base'
 import ReportsBarChart from '@/components/charts/ReportsBarChart/ReportsBarChart'
 import {
   ArrowsPointingInIcon,
@@ -19,11 +19,13 @@ import gradientLineChartData from '@/app/dashboard/[workspaceID]/data/gradientLi
 import useDashboard from '@/hooks/useDashboard'
 import OverlayLoader from '@/components/ui/OverlayLoader'
 import useWorkspaces from '@/hooks/useWorkspaces'
+import { PreFundHistory } from '../workspace/Wallet'
 
 function DashboardAnalytics() {
   const { chart, items } = reportsBarChartData
   const { dashboardAnalytics, isLoading } = useDashboard()
-  const { workspaceWalletBalance, activeWorkspace } = useWorkspaces()
+  const { workspaceWalletBalance, activeWorkspace, workspaceID } =
+    useWorkspaces()
 
   const {
     today,
@@ -156,6 +158,17 @@ function DashboardAnalytics() {
             height="20.25rem"
             chart={gradientLineChartData}
           />
+
+          <Card>
+            <CardHeader
+              title={'Wallet Statement Summary'}
+              infoText={'Brief overview of your latest statement transactions'}
+            />
+            <PreFundHistory workspaceID={workspaceID} limit={4} />
+          </Card>
+        </div>
+
+        <div className="flex w-full flex-col gap-4 md:flex-row">
           <ReportsBarChart
             title="transactions"
             description={
@@ -166,24 +179,6 @@ function DashboardAnalytics() {
             chart={chart}
             items={items}
           />
-          {/* <GradientLineChart
-            title="Transactions Overview"
-            description={
-              <div className="flex items-center">
-                <div className="mb-1 mr-1 text-lg leading-none text-green-500">
-                  <ArrowUpIcon className="h-5 w-5 font-bold" />
-                </div>
-                <span className="text-sm font-medium text-gray-700">
-                  4% more <span className="font-normal">in 2021</span>
-                </span>
-              </div>
-            }
-            height="20.25rem"
-            chart={gradientLineChartData}
-          /> */}
-        </div>
-
-        <div className="flex w-full gap-4">
           <Batches />
         </div>
       </div>

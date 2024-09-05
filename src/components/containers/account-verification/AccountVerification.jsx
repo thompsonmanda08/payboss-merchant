@@ -33,7 +33,7 @@ function AccountVerification() {
         { name: 'Documentation', href: '#', index: 2 },
       ]
 
-  const KYC_COMPLETE = [
+  const RENDER_COMPONENTS = [
     <ProgressStageTracker key={'verification-status'} />,
     <BusinessAccountDetails
       key={'business-details'}
@@ -50,26 +50,6 @@ function AccountVerification() {
       navigateToPage={navigateToPage}
     />,
   ]
-
-  const KYC_INCOMPLETE = [
-    <BusinessAccountDetails
-      key={'business-details'}
-      user={user}
-      businessDetails={businessDetails}
-      companyTypes={companyTypes}
-      banks={banks}
-      currencies={currencies}
-      navigateToPage={navigateToPage}
-    />,
-    <DocumentAttachments
-      key={'documents'}
-      businessDocs={businessDocs}
-      navigateToPage={navigateToPage}
-    />,
-    <ProgressStageTracker key={'verification-status'} />,
-  ]
-
-  const RENDER_COMPONENTS = allowUserToSubmitKYC ? KYC_INCOMPLETE : KYC_COMPLETE
 
   // ************* COMPONENT RENDERER ************** //
   const { activeTab, navigateTo, currentTabIndex } =

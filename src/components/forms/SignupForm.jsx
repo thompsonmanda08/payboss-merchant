@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { StatusMessage } from '../base'
 import { Button } from '../ui/Button'
-import { staggerContainerVariants } from '@/lib/constants'
+import { containerVariants } from '@/lib/constants'
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
 import { notify } from '@/lib/utils'
 import useAuthStore from '@/context/authStore'
@@ -194,7 +194,7 @@ export default function SignUpForm() {
           <AnimatePresence mode="wait">
             <motion.div
               key={currentTabIndex}
-              variants={staggerContainerVariants}
+              variants={containerVariants}
               initial={'hidden'}
               animate={'show'}
               exit={'exit'}

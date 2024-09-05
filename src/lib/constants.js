@@ -37,12 +37,23 @@ const PAYMENT_TRANSACTIONS_QUERY_KEY = 'payment-transactions'
 const COLLECTION_TRANSACTIONS_QUERY_KEY = 'collections-transactions'
 
 // ANIMATION_VARIANTS
+const containerVariants = {
+  hidden: { opacity: 1 },
+  show: {
+    opacity: 1,
+    transition: {
+      // staggerChildren: 0.25,
+    },
+  },
+  exit: { opacity: 0 },
+}
+
 const staggerContainerVariants = {
   hidden: { opacity: 1 },
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.25,
+      // staggerChildren: 0.25,
     },
   },
   exit: { opacity: 0 },
@@ -177,6 +188,7 @@ export {
   // ANIMATIONS
   staggerContainerItemVariants,
   staggerContainerVariants,
+  containerVariants,
   slideDownInView,
 
   // REACT QUERY KEYS

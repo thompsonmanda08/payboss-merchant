@@ -4,28 +4,27 @@ import { Button } from '../ui/Button'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import useAccountProfile from '@/hooks/useProfileDetails'
-import useDashboard from '@/hooks/useDashboard'
 
 function InfoBanner({
   buttonText,
   infoText,
   onButtonPress,
   href,
+  session,
   classNames,
   className,
   children,
 }) {
   const { infoTextClasses, buttonClasses } = classNames || ''
-
-  const { isCompleteKYC, allowUserToSubmitKYC } = useAccountProfile()
-  const { workspaceData } = useDashboard()
+  const { allowUserToSubmitKYC } = useAccountProfile()
+  const { isCompleteKYC } = session || ''
 
   return (
     !isCompleteKYC &&
-    allowUserToSubmitKYC && (
+    !allowUserToSubmitKYC && (
       <div
         className={cn(
-          'flex max-h-16 flex-1 items-center justify-between rounded-lg bg-primary/10 p-2 pl-5',
+          'mb-4 flex max-h-16 flex-1 items-center justify-between rounded-lg bg-secondary/10 p-2 pl-5 text-orange-600',
           className,
         )}
       >
@@ -36,11 +35,11 @@ function InfoBanner({
           <>
             <p
               className={cn(
-                'select-none text-xs font-semibold tracking-tight text-primary md:text-sm',
+                'select-none text-xs font-semibold tracking-tight text-orange-600 md:text-sm',
                 infoTextClasses,
               )}
             >
-              {infoText}
+              <span>⚠️ </span> {infoText}
             </p>
             {!href ? (
               <Button
@@ -55,7 +54,7 @@ function InfoBanner({
                 as={Link}
                 href={href}
                 size="sm"
-                className={cn('text-xs', buttonClasses)}
+                className={cn('bg-secondary text-xs text-white', buttonClasses)}
               >
                 {buttonText}
               </Button>

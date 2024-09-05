@@ -22,8 +22,6 @@ const useDashboard = () => {
 
   const isLoading = workspaceLoading || analyticsLoading || initLoading
 
-  console.log(dashboardAnalytics)
-
   return {
     workspaceUserRole,
     isLoading,

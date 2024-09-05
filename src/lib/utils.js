@@ -39,16 +39,16 @@ export const formatActivityData = (activityLog) => {
 
   activityLog?.forEach((activity) => {
     activity.data?.forEach((item) => {
-      const createdAt = new Date(item.createdAt).toLocaleDateString('en-US', {
+      const created_at = new Date(item.created_at).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       })
-      if (!groupedData[createdAt]) {
-        groupedData[createdAt] = []
+      if (!groupedData[created_at]) {
+        groupedData[created_at] = []
       }
 
-      groupedData[createdAt].push(item)
+      groupedData[created_at].push(item)
     })
   })
 
