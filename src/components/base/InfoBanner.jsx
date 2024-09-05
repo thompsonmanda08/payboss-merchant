@@ -33,14 +33,14 @@ function InfoBanner({
           <>{children}</>
         ) : (
           <>
-            <p
+            <div
               className={cn(
-                'select-none text-xs font-semibold tracking-tight text-orange-600 md:text-sm',
+                'flex select-none items-center text-xs font-semibold tracking-tight text-orange-600 md:text-sm',
                 infoTextClasses,
               )}
             >
-              <span>⚠️ </span> {infoText}
-            </p>
+              <span className="-mt-1 mr-2 text-2xl">⚠️ </span> {infoText}
+            </div>
             {!href ? (
               <Button
                 size="sm"
