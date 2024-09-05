@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  CheckCircleIcon,
   CloudArrowUpIcon,
   DocumentArrowUpIcon,
   XMarkIcon,
@@ -189,10 +190,14 @@ const SingleFileDropzone = React.forwardRef(
                 {!isLandscape && (
                   // ONLY SHOWS ON THE UPRIGHT COMPONENT
                   <p className="py-2 font-medium">
+                    <CheckCircleIcon className="mr-4 h-7 w-7 font-bold text-green-500" />
                     Your file is ready
                   </p>
                 )}
-                <span className="font-bold text-primary">
+                <span className="flex gap-2 font-bold text-primary">
+                  {isLandscape && (
+                    <CheckCircleIcon className="h-6 w-6 font-bold text-green-500" />
+                  )}{' '}
                   {acceptedFiles[0]?.name}
                 </span>
                 {/* // ONLY SHOWS ON THE UPRIGHT COMPONENT */}

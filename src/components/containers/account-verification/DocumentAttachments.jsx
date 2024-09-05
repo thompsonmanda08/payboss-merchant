@@ -226,7 +226,13 @@ export default function DocumentAttachments({ navigateToPage }) {
   )
 }
 
-export function UploadField({ label, isLoading, handleFile, acceptedFiles }) {
+export function UploadField({
+  label,
+  isLoading,
+  handleFile,
+  acceptedFiles,
+  ...props
+}) {
   return (
     <motion.div
       key={'step-2-1'}
@@ -234,12 +240,14 @@ export function UploadField({ label, isLoading, handleFile, acceptedFiles }) {
       variants={staggerContainerItemVariants}
     >
       <label className="mb-2 text-xs font-medium capitalize text-gray-500 lg:text-[13px]">
-        {label}
+        {label}{' '}
+        {props?.required && <span className="font-bold text-red-500"> *</span>}
       </label>
       <FileDropZone
         isLandscape
         className={' min-h-8 px-2'}
         isLoading={isLoading}
+        disabled={isLoading}
         otherAcceptedFiles={{
           'application/pdf': [],
           ...acceptedFiles,
