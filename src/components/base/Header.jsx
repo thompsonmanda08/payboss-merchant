@@ -137,7 +137,7 @@ export function Header({ session }) {
                   <span>Sign in</span>
                 </NavLink>
                 <Button as={Link} href="/register" className={''}>
-                  Get Started
+                  Register
                 </Button>
               </div>
             )}
