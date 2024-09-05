@@ -6,8 +6,9 @@ import { SoftBoxIcon } from '../../base'
 import { ArrowRightIcon, BriefcaseIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { Description } from '@headlessui/react'
 
-function WorkspaceItem({ name, href, isVisible, onClick }) {
+function WorkspaceItem({ name, description, href, isVisible, onClick }) {
   return (
     <Button
       as={Link}
@@ -29,9 +30,13 @@ function WorkspaceItem({ name, href, isVisible, onClick }) {
       }
     >
       <div className="flex flex-col items-start gap-2">
-        <h3 className="heading-5 mb-1 capitalize text-primary-600">{name}</h3>
-        <div className="flex justify-between gap-2">
-          {/* <AvatarGroup
+        <h3 className="heading-4 mb-1 capitalize text-primary-600">{name}</h3>
+        {description && (
+          <div className="flex max-w-[260px] justify-between gap-2">
+            <p className=" truncate text-sm font-medium text-slate-600">
+              {description}
+            </p>
+            {/* <AvatarGroup
             className={'-translate-x-3 scale-80'}
             max={3}
             isBordered
@@ -55,7 +60,8 @@ function WorkspaceItem({ name, href, isVisible, onClick }) {
               src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
             />
           </AvatarGroup> */}
-        </div>
+          </div>
+        )}
       </div>
     </Button>
   )

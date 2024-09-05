@@ -16,7 +16,7 @@ import { InfoBanner } from '@/components/base'
 import CreateNewWorkspaceModal from './CreateNewWorkspace'
 import Loader from '@/components/ui/Loader'
 
-function Workspaces() {
+function Workspaces({ user }) {
   const pathname = usePathname()
   const queryClient = useQueryClient()
   const { workspaces, allWorkspaces, isLoading } = useWorkspace()
@@ -107,6 +107,7 @@ function Workspaces() {
                     <WorkspaceItem
                       onClick={() => setLoading(true)}
                       name={item?.workspace}
+                      // description={item?.description}
                       isVisible={item?.isVisible}
                       href={
                         !isWorkspaceSettings
@@ -117,16 +118,19 @@ function Workspaces() {
                   )
                 })}
 
-              <Button
-                onPress={onOpen}
-                className={cn(
-                  'h-24 w-full flex-col border border-primary-100 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50',
-                  { 'col-span-full': workspaces?.length < 0 },
-                )}
-              >
-                <PlusIcon className=" h-6 w-6" />
-                Create Workspace
-              </Button>
+              {(user.role.toLowerCase() == 'admin' ||
+                user.role.toLowerCase() == 'owner') && (
+                <Button
+                  onPress={onOpen}
+                  className={cn(
+                    'h-24 w-full flex-col border border-primary-100 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50',
+                    { 'col-span-full': workspaces?.length < 0 },
+                  )}
+                >
+                  <PlusIcon className=" h-6 w-6" />
+                  Create Workspace
+                </Button>
+              )}
             </div>
           )}
         </ScrollArea>

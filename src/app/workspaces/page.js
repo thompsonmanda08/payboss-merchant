@@ -5,8 +5,11 @@ import { Workspaces } from '@/components/containers'
 import Image from 'next/image'
 import { DefaultCover } from '@/lib/constants'
 import WorkspaceHeader from '@/components/containers/workspace/WorkspaceHeader'
+import { getUserDetails } from '../_actions/config-actions'
 
-function WorkSpacesPage() {
+async function WorkSpacesPage() {
+  const session = await getUserDetails()
+
   return (
     <main className="flex h-full min-h-screen items-start justify-start overflow-hidden bg-background text-foreground">
       <div className="flex h-full max-h-screen w-full flex-col">
@@ -41,7 +44,7 @@ function WorkSpacesPage() {
               </div>
             </div>
 
-            <Workspaces />
+            <Workspaces user={session} />
           </Card>
         </section>
       </div>
