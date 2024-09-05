@@ -17,24 +17,30 @@ import useWorkspaceStore from '@/context/workspaceStore'
 
 export const ROLES = [
   {
-    id: 'member',
-    key: 'member',
-    label: 'Member',
-    description: 'Access to workspaces, documents and dashboards',
-  },
-  {
-    id: 'guest',
-    key: 'guest',
-    label: 'Guest',
-    description:
-      'Can not be added to other workspaces by admin. View-only access is granted',
-  },
-  {
     key: 'admin',
     id: 'admin',
     label: 'Admin',
     description:
       'Manage people, payments, billing and other workspace settings.',
+  },
+  {
+    key: 'approver',
+    id: 'approver',
+    label: 'Approver',
+    description: 'Track and approve transactions a workspace.',
+  },
+  {
+    id: 'initiator',
+    key: 'initiator',
+    label: 'Initiator',
+    description: 'Initate transactions in a workspace',
+  },
+
+  {
+    id: 'viewer',
+    key: 'viewer',
+    label: 'Viewer',
+    description: 'View-only access is granted',
   },
 ]
 
@@ -47,11 +53,10 @@ export const SYSTEM_ROLES = [
       'Manage people, payments, billing and other workspace settings.',
   },
   {
-    id: 'guest',
-    key: 'guest',
-    label: 'Guest',
-    description:
-      'Can not be added to other workspaces by admin. View-only access is granted',
+    id: 'viewer',
+    key: 'viewer',
+    label: 'Viewer',
+    description: 'View-only access is granted',
   },
 ]
 
@@ -80,12 +85,12 @@ function ManagePeople({ classNames }) {
   // const  TABS = !isAccountLevelSettingsRoute
   //   ? [
   //       { name: 'Workspace Members', index: 0 },
-  //       { name: 'Workspace Guests', index: 1 },
+  //       { name: 'Workspace viewers', index: 1 },
   //     ]
   //   : [
   //       { name: 'All Users', index: 0 },
   //       { name: 'Workspace Members', index: 1 },
-  //       { name: 'Guests', index: 2 },
+  //       { name: 'viewers', index: 2 },
   //     ]
 
   const TABS = [{ name: 'All Users', index: 0 }]
@@ -93,12 +98,12 @@ function ManagePeople({ classNames }) {
   const COMPONENT_RENDERER = !isAccountLevelSettingsRoute
     ? [
         <UsersTable key={'members'} users={userSearchResults} />,
-        <UsersTable key={'internal-guests'} users={userSearchResults} />,
+        <UsersTable key={'internal-viewers'} users={userSearchResults} />,
       ]
     : [
         <UsersTable key={'all-users'} users={userSearchResults} />,
         <UsersTable key={'members'} users={userSearchResults} />,
-        <UsersTable key={'guests'} users={userSearchResults} />,
+        <UsersTable key={'viewers'} users={userSearchResults} />,
       ]
 
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
@@ -143,7 +148,6 @@ function ManagePeople({ classNames }) {
       <CreateNewUserModal
         isOpen={isEditingRole || isOpen}
         onClose={onClose}
-        // onOpenChange={onOpenChange}
       />
     </div>
   )

@@ -196,11 +196,11 @@ export default function Step1({ updateDetails }) {
               label="Mobile Number"
               name="contact"
               maxLength={12}
-              value={step?.contact}
+              pattern="[0-9]{12}"
               onError={phoneNoError}
               errorText="Invalid Mobile Number"
+              value={step?.contact}
               required={true}
-              pattern="[0-9]{12}"
               onChange={(e) => {
                 updateDetails(STEPS[0], { contact: e.target.value })
               }}

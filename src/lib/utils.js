@@ -113,6 +113,8 @@ export function isValidZambianMobileNumber(mobileNumber) {
     return false
   }
 
+  if (number?.length == 11) return false
+
   if (MTN_NO.test(number) || AIRTEL_NO.test(number) || ZAMTEL_NO.test(number))
     return true // Valid Zambian mobile number
 

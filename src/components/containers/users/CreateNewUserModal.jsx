@@ -1,7 +1,7 @@
 'use client'
 import { Input } from '@/components/ui/InputField'
 import SelectField from '@/components/ui/SelectField'
-import { notify } from '@/lib/utils'
+import { isValidZambianMobileNumber, notify } from '@/lib/utils'
 import {
   Modal,
   ModalContent,
@@ -29,7 +29,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
   const { isAccountLevelSettingsRoute } = useNavigation()
   const [loading, setLoading] = useState(false)
   const [newUser, setNewUser] = useState({
-    role: 'guest',
+    role: '',
     changePassword: true,
     password: 'PB0484G@#$%Szm',
   })
@@ -66,6 +66,11 @@ function CreateNewUserModal({ isOpen, onClose }) {
 
   async function handleCreateUser() {
     setLoading(true)
+    if (!isValidData()) {
+      notify('error', 'Error: Invalid Details')
+      setLoading(false)
+      return
+    }
 
     let response = await createNewUser(newUser)
 
@@ -123,6 +128,73 @@ function CreateNewUserModal({ isOpen, onClose }) {
     }
   }, [selectedUser])
 
+  const phoneNoError =
+    !isValidZambianMobileNumber(newUser?.phone_number) &&
+    newUser?.phone_number?.length > 3
+
+  function isValidData() {
+    let valid = true
+    if (!isValidZambianMobileNumber(newUser?.phone_number)) {
+      valid = false
+      setError((prev) => ({
+        ...prev,
+        onMobileNo: true,
+        message: 'Invalid Mobile Number',
+      }))
+    }
+
+    if (!newUser?.first_name || newUser?.first_name?.length < 3) {
+      valid = false
+      setError((prev) => ({
+        ...prev,
+        onFName: true,
+        message: 'Invalid First Name',
+      }))
+    }
+
+    if (!newUser?.last_name || newUser?.last_name?.length < 3) {
+      valid = false
+      setError((prev) => ({
+        ...prev,
+        onLName: true,
+        message: 'Invalid Last Name',
+      }))
+    }
+
+    if (!newUser?.role) {
+      valid = false
+      setError((prev) => ({
+        ...prev,
+        onRole: true,
+        message: 'User must have a system a role',
+      }))
+    }
+
+    if (!newUser?.username) {
+      valid = false
+      setError((prev) => ({
+        ...prev,
+        onUsername: true,
+        message: 'User must have a username',
+      }))
+    }
+
+    if (
+      !newUser?.email ||
+      !newUser?.email?.includes('@') ||
+      !newUser?.email?.includes('.')
+    ) {
+      valid = false
+      setError((prev) => ({
+        ...prev,
+        onEmail: true,
+        message: 'Invalid Email',
+      }))
+    }
+
+    return valid
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={handleClose} placement="center">
       <ModalContent>
@@ -133,13 +205,15 @@ function CreateNewUserModal({ isOpen, onClose }) {
             </ModalHeader>
             <ModalBody>
               <SelectField
-                label="User Role"
+                label="System Role"
+                required
+                onError={error?.onRole}
+                value={newUser?.role}
                 options={isEditingRole ? workspaceRoles : USER_ROLES}
                 placeholder={isEditingRole ? newUser?.role : 'Choose a role'}
                 listItemName={'role'}
                 className="mt-px"
-                defaultValue={'guest'}
-                value={newUser?.role}
+                defaultValue={USER_ROLES[USER_ROLES.length - 1]?.id}
                 onChange={(e) => {
                   updateDetails({ role: e.target.value })
                 }}
@@ -150,7 +224,9 @@ function CreateNewUserModal({ isOpen, onClose }) {
                   autoFocus
                   label="First Name"
                   value={newUser?.first_name}
-                  required={true}
+                  required={!isEditingRole}
+                  onError={error?.onFName}
+                  errorText="Invalid First Name"
                   isDisabled={isEditingRole}
                   onChange={(e) => {
                     updateDetails({ first_name: e.target.value })
@@ -159,8 +235,10 @@ function CreateNewUserModal({ isOpen, onClose }) {
                 <Input
                   label="Last Name"
                   value={newUser?.last_name}
-                  required={true}
+                  required={!isEditingRole}
                   isDisabled={isEditingRole}
+                  onError={error?.onLName}
+                  errorText="Invalid Last Name"
                   onChange={(e) => {
                     updateDetails({ last_name: e.target.value })
                   }}
@@ -169,17 +247,23 @@ function CreateNewUserModal({ isOpen, onClose }) {
               <Input
                 label="Username"
                 value={newUser?.username}
-                required={true}
+                required={!isEditingRole}
                 isDisabled={isEditingRole}
+                onError={error?.onUsername}
+                errorText="Username is required"
                 onChange={(e) => {
                   updateDetails({ username: e.target.value })
                 }}
               />
               <Input
                 label="Mobile Number"
-                type="tel"
+                type="number"
+                maxLength={12}
+                pattern="[0-9]{12}"
+                onError={phoneNoError || error?.onMobileNo}
+                errorText="Invalid Mobile Number"
                 value={newUser?.phone_number}
-                required={true}
+                required={!isEditingRole}
                 isDisabled={isEditingRole}
                 onChange={(e) => {
                   updateDetails({ phone_number: e.target.value })
@@ -188,8 +272,10 @@ function CreateNewUserModal({ isOpen, onClose }) {
               <Input
                 label="Email Address"
                 type="email"
+                onError={error?.onEmail}
+                errorText="Invalid Email Address"
                 value={newUser?.email}
-                required={true}
+                required={!isEditingRole}
                 isDisabled={isEditingRole}
                 onChange={(e) => {
                   updateDetails({ email: e.target.value })
@@ -217,7 +303,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
               )}
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" onPress={handleClose}>
+              <Button color="danger" onPress={handleClose} isDisabled={loading}>
                 Cancel
               </Button>
               {

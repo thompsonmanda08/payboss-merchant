@@ -15,6 +15,8 @@ function SelectField({
   defaultValue,
   className,
   wrapperClassName,
+
+  onError,
   prefilled = false,
   ...props
 }) {
@@ -44,8 +46,13 @@ function SelectField({
           classNames={{
             base: 'text-lg shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground ',
             value: 'font-semibold text-slate-700 capitalize',
-            trigger:
+            trigger: cn(
               'focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1  focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70',
+              // {
+              //   'border-red-500 focus:border-red-500/70 focus-visible:ring-red-500/30':
+              //     onError,
+              // },
+            ),
             listbox: 'font-medium',
             popoverContent:
               'font-medium rounded-md text-neutral-7000 font-medium',
@@ -60,6 +67,7 @@ function SelectField({
           name={name}
           id={name}
           isRequired={props?.required}
+          isInvalid={onError}
           {...props}
         >
           {/* OPTIONS ARRAY MUST BE AN ARRAY OF OBJECTS WITH ID, NAME AND VALUE PROPERTIES. */}
