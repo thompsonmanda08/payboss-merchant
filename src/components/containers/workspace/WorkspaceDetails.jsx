@@ -211,47 +211,51 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
         </div>
       </div>
 
-      <hr className="my-6 h-px bg-slate-900/5" />
-      <div className="flex flex-col gap-4 md:flex-row md:justify-between">
-        <div className="flex max-w-4xl flex-col gap-4">
-          <h2 className="text-base font-semibold leading-3 text-foreground">
-            Add Users to Workspace
-          </h2>
-          <p className="text-sm leading-6 text-gray-400">
-            Add users to this workspace to allow them to interact with the
-            PayBoss platform.
-          </p>
-        </div>
+      {!isSandbox && (
+        <>
+          <hr className="my-6 h-px bg-slate-900/5" />
+          <div className="flex flex-col gap-4 md:flex-row md:justify-between">
+            <div className="flex max-w-4xl flex-col gap-4">
+              <h2 className="text-base font-semibold leading-3 text-foreground">
+                Add Users to Workspace
+              </h2>
+              <p className="text-sm leading-6 text-gray-400">
+                Add users to this workspace to allow them to interact with the
+                PayBoss platform.
+              </p>
+            </div>
 
-        <Button
-          onClick={onOpenAdd}
-          className="self-end rounded-md px-3 py-2 text-sm font-semibold  shadow-sm"
-        >
-          Add Workspace Members
-        </Button>
-      </div>
-      <hr className="my-6 h-px bg-slate-900/5" />
-      <div className="flex flex-col gap-8 md:flex-row md:justify-between">
-        <div className="flex max-w-4xl flex-col gap-4">
-          <h2 className="text-base font-semibold leading-7 text-foreground">
-            Deactivate Workspace
-          </h2>
-          <p className="text-sm leading-6 text-gray-400">
-            If you wish to deactivate or delete your workspace. This action can
-            only be reversed by contacting our support team. Please note that
-            all information related to this workspace will be retained for audit
-            purposes in accordance with regulatory requirements.
-          </p>
-        </div>
+            <Button
+              onClick={onOpenAdd}
+              className="self-end rounded-md px-3 py-2 text-sm font-semibold  shadow-sm"
+            >
+              Add Workspace Members
+            </Button>
+          </div>
+          <hr className="my-6 h-px bg-slate-900/5" />
+          <div className="flex flex-col gap-8 md:flex-row md:justify-between">
+            <div className="flex max-w-4xl flex-col gap-4">
+              <h2 className="text-base font-semibold leading-7 text-foreground">
+                Deactivate Workspace
+              </h2>
+              <p className="text-sm leading-6 text-gray-400">
+                If you wish to deactivate or delete your workspace. This action
+                can only be reversed by contacting our support team. Please note
+                that all information related to this workspace will be retained
+                for audit purposes in accordance with regulatory requirements.
+              </p>
+            </div>
 
-        <Button
-          color="danger"
-          onClick={onOpen}
-          className="self-end rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400"
-        >
-          Yes, deactivate my workspace
-        </Button>
-      </div>
+            <Button
+              color="danger"
+              onClick={onOpen}
+              className="self-end rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400"
+            >
+              Yes, deactivate my workspace
+            </Button>
+          </div>
+        </>
+      )}
 
       {/* MODALS */}
       <PromptModal

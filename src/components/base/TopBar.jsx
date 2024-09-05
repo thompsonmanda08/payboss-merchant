@@ -155,39 +155,24 @@ export function AvatarDropdown({ user, settingsPathname, isProfile }) {
             isReadOnly
             key="profile"
             href={settingsPathname}
-            className="h-14 gap-2"
+            className="h-12 gap-2 px-1"
           >
-            <User
-              name={user?.first_name}
-              description={user?.email}
-              classNames={{
-                name: 'text-default-600',
-                description: 'text-default-500',
-              }}
-              avatarProps={{
-                size: 'sm',
-                src:
-                  user?.image ||
-                  'https://avatars.githubusercontent.com/u/30373425?v=4',
-              }}
+            <Avatar
+              firstName={user?.first_name}
+              lastName={user?.last_name}
+              email={user?.email}
+              showUserInfo
             />
           </DropdownItem>
-          <DropdownItem key="Home" href="/workspaces">
-            Go to Workspaces
+          {/* <DropdownItem key="Home" href="/workspaces">
+            Exit to Workspaces
           </DropdownItem>
           <DropdownItem key="settings" href={settingsPathname + '/workspaces'}>
             Settings
-          </DropdownItem>
-          {/* <DropdownItem
-            key="new_workspace"
-            endContent={<PlusIcon className="aspect-square h-5 w-5" />}
-            //TODO => BUTTON TO OPEN A 
-          >
-            New Workspace
           </DropdownItem> */}
         </DropdownSection>
 
-        <DropdownSection aria-label="Preferences" showDivider>
+        {/* <DropdownSection aria-label="Preferences" showDivider>
           <DropdownItem key="quick_search" shortcut="⌘K">
             Quick search
           </DropdownItem>
@@ -208,9 +193,12 @@ export function AvatarDropdown({ user, settingsPathname, isProfile }) {
               />
             </div>
           </DropdownItem>
-        </DropdownSection>
+        </DropdownSection> */}
 
         <DropdownSection aria-label="Help & Feedback">
+          <DropdownItem key="Home" href="/workspaces">
+            Exit to Workspaces
+          </DropdownItem>
           <DropdownItem key="help_and_feedback" href="/support">
             Help & Feedback
           </DropdownItem>

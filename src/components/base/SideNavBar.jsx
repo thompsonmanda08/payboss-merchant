@@ -26,6 +26,10 @@ import {
   SwatchIcon,
   PresentationChartLineIcon,
   NumberedListIcon,
+  WrenchScrewdriverIcon,
+  WalletIcon,
+  UsersIcon,
+  Cog6ToothIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { Logo, SettingsSideBar } from '.'
@@ -188,6 +192,29 @@ function SideNavBar({ params }) {
     //   ],
     // },
     // ****************************************************** //
+    // *************** WORKPACE ******************** //
+    {
+      ID: 'workspace',
+      name: 'Manage Workspace',
+      Icon: WrenchScrewdriverIcon,
+      subMenuItems: [
+        {
+          name: 'General Settings',
+          href: `${dashboardRoute}/workspace/`,
+          Icon: Cog6ToothIcon,
+        },
+        {
+          name: 'Wallet',
+          href: `${dashboardRoute}/workspace/wallet`,
+          Icon: WalletIcon,
+        },
+        {
+          name: 'Members',
+          href: `${dashboardRoute}/workspace/members`,
+          Icon: UsersIcon,
+        },
+      ],
+    },
   ]
 
   function handleExpand(index) {
