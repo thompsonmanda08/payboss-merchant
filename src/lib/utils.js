@@ -148,7 +148,9 @@ export function isValidNRCNo(input) {
   const formattedID = input?.trim()?.replaceAll(/\D/g, '')
 
   if (
-    formattedID?.charAt(formattedID.length - 1) === '1' &&
+    (formattedID?.charAt(formattedID.length - 1) === '1' ||
+      formattedID?.charAt(formattedID.length - 1) === '2' ||
+      formattedID?.charAt(formattedID.length - 1) === '3') &&
     formattedID?.length === 9
   ) {
     return true
