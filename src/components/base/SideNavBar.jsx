@@ -37,7 +37,7 @@ import { Button } from '../ui/Button'
 import SideNavItems from './SideNavItems'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { Skeleton } from '../ui/skeleton'
-import WorkspaceSelection from '../containers/workspace/WorkspaceSelection'
+import WorkspaceSelection from '../containers/workspace/WorkspaceOptions'
 import useNavigation from '@/hooks/useNavigation'
 
 function SideNavBar({ params }) {
@@ -197,23 +197,24 @@ function SideNavBar({ params }) {
       ID: 'workspace',
       name: 'Manage Workspace',
       Icon: WrenchScrewdriverIcon,
-      subMenuItems: [
-        {
-          name: 'General Settings',
-          href: `${dashboardRoute}/workspace/`,
-          Icon: Cog6ToothIcon,
-        },
-        {
-          name: 'Wallet',
-          href: `${dashboardRoute}/workspace/wallet`,
-          Icon: WalletIcon,
-        },
-        {
-          name: 'Members',
-          href: `${dashboardRoute}/workspace/members`,
-          Icon: UsersIcon,
-        },
-      ],
+      href: `${dashboardRoute}/workspace-settings`,
+      // subMenuItems: [
+      //   {
+      //     name: 'General Settings',
+      //     href: `${dashboardRoute}/workspace`,
+      //     Icon: Cog6ToothIcon,
+      //   },
+      //   {
+      //     name: 'Wallet',
+      //     href: `${dashboardRoute}/workspace/wallet`,
+      //     Icon: WalletIcon,
+      //   },
+      //   {
+      //     name: 'Members',
+      //     href: `${dashboardRoute}/workspace/members`,
+      //     Icon: UsersIcon,
+      //   },
+      // ],
     },
   ]
 
@@ -258,18 +259,6 @@ function SideNavBar({ params }) {
         </div>
         <Skeleton className="mt-auto h-[50px] w-full rounded-xl" />
       </div>
-    )
-  }
-
-  // SETTINGS PAGE NEEDS A DIFFERENT SIDE BAR
-  if (isSettingsPage) {
-    return (
-      <SettingsSideBar
-        backButtonText="Dashboard Home"
-        title={activeWorkspace?.workspace}
-        isProfile={isProfile}
-        settingsPathname={settingsPathname}
-      />
     )
   }
 

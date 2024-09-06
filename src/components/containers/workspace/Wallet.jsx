@@ -114,10 +114,10 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
 
   return (
     <>
-      <section role="wallet-section" className="grid w-full place-items-center">
+      <section role="wallet-section" className="flex w-full items-center">
         <Card
           className={cn(
-            'container flex w-full flex-col items-start justify-center gap-8 md:flex-row',
+            'flex w-full flex-col items-start justify-center gap-8 md:flex-row',
             {
               'items-center justify-center gap-x-0': hideHistory,
             },

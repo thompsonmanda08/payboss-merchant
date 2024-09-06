@@ -8,14 +8,16 @@ import {
   UserGroupIcon,
   BriefcaseIcon,
   ChevronRightIcon,
+  WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline'
 import DropdownButton from '@/components/ui/DropdownButton'
 import Spinner from '@/components/ui/Spinner'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { SoftBoxIcon } from '@/components/base'
+import useNavigation from '@/hooks/useNavigation'
 
 export default function WorkspaceSelection({ isSelected }) {
-  const { activeWorkspace, workspaces } = useWorkspaces()
+  const { dashboardRoute, activeWorkspace, workspaces } = useNavigation()
 
   const workspaceOptions = [
     {
@@ -52,29 +54,29 @@ export default function WorkspaceSelection({ isSelected }) {
     {
       key: 'settings',
       name: 'Workspace Settings',
-      href: '/dashboard/settings/workspaces',
+      href: dashboardRoute + '/workspace-settings',
       shortcut: '⌘S',
       description: 'Workspace preferences',
-      Icon: Cog8ToothIcon,
+      Icon: WrenchScrewdriverIcon,
     },
-    {
-      key: 'users',
-      name: 'Manage Members',
-      href: '/dashboard/settings/users',
-      shortcut: '⌘M',
-      description: 'Manage workspace members',
-      Icon: UserGroupIcon,
-      showDivider: true,
-    },
-    // TODO: => ONLY THE OWNER CAN SEE THIS OPTION
-    {
-      key: 'new',
-      name: 'New Workspace',
-      onClick: '/workspaces/new',
-      shortcut: '⌘N',
-      description: 'Create a new workspaces',
-      Icon: PlusIcon,
-    },
+    // {
+    //   key: 'users',
+    //   name: 'Manage Members',
+    //   href: '/dashboard/settings/users',
+    //   shortcut: '⌘M',
+    //   description: 'Manage workspace members',
+    //   Icon: UserGroupIcon,
+    //   showDivider: true,
+    // },
+
+    // {
+    //   key: 'new',
+    //   name: 'New Workspace',
+    //   onClick: '/workspaces/new',
+    //   shortcut: '⌘N',
+    //   description: 'Create a new workspaces',
+    //   Icon: PlusIcon,
+    // },
   ]
 
   return (

@@ -17,6 +17,7 @@ import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 import { useWorkspaceMembers } from '@/hooks/useQueryHooks'
 import useWorkspaceStore from '@/context/workspaceStore'
 import LoadingPage from '@/app/loading'
+import { cn } from '@/lib/utils'
 
 const TABS = [
   { name: 'General', index: 0 },
@@ -86,7 +87,7 @@ function WorkspaceSettings({ workspaceID }) {
   return (!selectedWorkspace && !isUserInWorkspace) || !activeWorkspace ? (
     <LoadingPage />
   ) : (
-    <>
+    <div className={cn('px-2', { 'px-3': isUserInWorkspace })}>
       {!isUserInWorkspace && (
         <div className="relative lg:-left-5">
           <Button
@@ -100,9 +101,9 @@ function WorkspaceSettings({ workspaceID }) {
         </div>
       )}
       {/* HEADER */}
-      <div className="mb-2">
-        <h2 className="heading-4 !font-bold uppercase tracking-tight text-gray-900">
-          {selectedWorkspace?.workspace} Settings
+      <div className={cn('mb-2', { 'mb-10': isUserInWorkspace })}>
+        <h2 className="heading-5 !font-bold uppercase tracking-tight text-gray-900">
+          {selectedWorkspace?.workspace}
         </h2>
         <p className=" text-sm text-slate-600">
           Workspaces provide a structured way to group and manage services,
@@ -127,7 +128,7 @@ function WorkspaceSettings({ workspaceID }) {
           )}
         </div>
 
-        <div className="mb-4">
+        <div className="">
           {currentTabIndex == 1 && (
             <SearchOrInviteUsers setSearchQuery={setSearchQuery} />
           )}
@@ -143,7 +144,7 @@ function WorkspaceSettings({ workspaceID }) {
           onOpenChange={onOpenChange}
         />
       </div>
-    </>
+    </div>
   )
 }
 

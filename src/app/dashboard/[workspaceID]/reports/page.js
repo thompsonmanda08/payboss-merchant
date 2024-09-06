@@ -1,8 +1,12 @@
-import React from 'react'
+import LoadingPage from '@/app/loading'
+import React, { Suspense } from 'react'
+import Transactions from './Transactions'
 
-function ReportSummaryPage() {
+async function ReportSummaryPage() {
   return (
-    <div>ReportSummaryPage</div>
+    <Suspense fallback={<LoadingPage />}>
+      <div>ReportSummaryPage</div>
+    </Suspense>
   )
 }
 

@@ -15,6 +15,6 @@ export { default as ManagePeople } from './users/ManagePeople'
 export { default as SelectPaymentType } from './disbursements/SelectPaymentType'
 
 /* *********************** WORKSPACES *************************** */
-export { default as Workspaces } from './workspace/Workspaces'
+export { default as Workspaces } from './workspace/WorkspacesList'
 
 /* *********************** TABLES *************************** */

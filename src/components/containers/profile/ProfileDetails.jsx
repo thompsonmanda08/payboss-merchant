@@ -7,6 +7,7 @@ import CardLoader from '@/components/base/CardLoader'
 import { Input } from '@/components/ui/InputField'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import useAccountProfile from '@/hooks/useProfileDetails'
+import { Button } from '@/components/ui/Button'
 
 function ProfileDetails() {
   const { user } = useAccountProfile()
@@ -47,14 +48,14 @@ function ProfileDetails() {
                 Personal information and account details
               </p>
             </div>
-            <button
+            <Button
               type="button"
-              // USER CHANGES THE PAYMENT PHONE NUMBER TO GENERATE NEW QR CODE
+              variant="light"
               onClick={handleToggleModal}
               className="font-semibold text-primary hover:text-primary/85"
             >
               {openEditModal ? 'Save Changes' : 'Update'}
-            </button>
+            </Button>
           </div>
 
           <div className="mt-4 space-y-4 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
@@ -74,9 +75,26 @@ function ProfileDetails() {
                     }}
                   />
                 ) : (
-                  <p className="text-gray-900">
-                    {`${user?.first_name} ${user?.last_name}`}
-                  </p>
+                  <p className="text-gray-900">{`${user?.first_name} `}</p>
+                )}
+              </span>
+            </div>
+            <div className="items-center pt-6 sm:flex">
+              <span className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+                Last Name
+              </span>
+              <span className="mt-1 flex justify-between gap-x-4 sm:mt-0 sm:flex-auto">
+                {openEditModal ? (
+                  <Input
+                    defaultValue={user?.last_name}
+                    value={newUserDetails.last_name}
+                    className="mt-px"
+                    onChange={(e) => {
+                      editUserField({ last_name: e.target.value })
+                    }}
+                  />
+                ) : (
+                  <p className="text-gray-900">{`${user?.last_name}`}</p>
                 )}
               </span>
             </div>

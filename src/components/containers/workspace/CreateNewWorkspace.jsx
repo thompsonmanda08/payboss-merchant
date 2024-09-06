@@ -46,7 +46,11 @@ export default function CreateNewWorkspaceModal({
               />
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" onPress={() => handleClose(onClose)}>
+              <Button
+                color="danger"
+                isDisabled={loading}
+                onPress={() => handleClose(onClose)}
+              >
                 Cancel
               </Button>
               <Button

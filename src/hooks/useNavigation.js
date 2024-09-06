@@ -5,7 +5,7 @@ import useWorkspaces from './useWorkspaces'
 
 const useNavigation = () => {
   const pathname = usePathname()
-  const { workspaceID, activeWorkspace } = useWorkspaces()
+  const { workspaceID, activeWorkspace, workspaces } = useWorkspaces()
 
   const dashboardRoute = `/dashboard/${workspaceID}`
   const settingsPathname = `${dashboardRoute}/settings`
@@ -23,7 +23,8 @@ const useNavigation = () => {
   const isProfile =
     settingsPathname == pathname ||
     (pathArr?.length == 4 &&
-      pathArr?.[3]?.replaceAll('-', ' ').toLowerCase() === 'settings')
+      pathArr?.[3]?.replaceAll('-', ' ').toLowerCase() === 'settings') ||
+    pathArr?.[3]?.replaceAll('-', ' ').toLowerCase() === 'profile'
 
   const isSettingsPage = pathname.split('/')[3]?.toLowerCase() == 'settings'
   const isUsersRoute = pathname == '/manage-account/users'
@@ -39,6 +40,9 @@ const useNavigation = () => {
     settingsPathname,
     isAccountLevelSettingsRoute,
     isUserInWorkspace,
+    workspaceID,
+    activeWorkspace,
+    workspaces,
   }
 }
 

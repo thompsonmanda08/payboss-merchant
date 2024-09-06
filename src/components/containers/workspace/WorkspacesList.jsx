@@ -23,9 +23,13 @@ function Workspaces({ user }) {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
+  const canCreateWorkspace =
+    user?.role?.toLowerCase() == 'admin' || user?.role?.toLowerCase() == 'owner'
+
   const isWorkspaceSettings =
     pathname.split('/').length > 2 &&
     (pathname.split('/')[2] == 'workspaces' ||
+      pathname.split('/')[2] == 'workspace-settings' ||
       pathname.split('/')[4] == 'workspaces')
 
   const RENDER_WORKSPACES =
@@ -88,7 +92,7 @@ function Workspaces({ user }) {
       <div className="flex w-full flex-col items-center justify-center">
         <ScrollArea
           className={cn(
-            'flex w-full min-w-[400px] flex-col lg:max-h-[400px] lg:px-2',
+            'flex w-full min-w-[400px] flex-col lg:max-h-[500px] lg:px-2',
             { 'max-h-auto lg:max-h-max ': isWorkspaceSettings },
           )}
         >
@@ -118,8 +122,7 @@ function Workspaces({ user }) {
                   )
                 })}
 
-              {(user?.role?.toLowerCase() == 'admin' ||
-                user?.role?.toLowerCase() == 'owner') && (
+              {canCreateWorkspace && (
                 <Button
                   onPress={onOpen}
                   className={cn(
@@ -137,7 +140,7 @@ function Workspaces({ user }) {
       </div>
 
       {/* OVERLAYS AND MODALS  */}
-      {loading && <OverlayLoader show={loading} />}
+      {<OverlayLoader show={loading} />}
       <CreateNewWorkspaceModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}

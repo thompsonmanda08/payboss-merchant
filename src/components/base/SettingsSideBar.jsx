@@ -42,62 +42,36 @@ function SettingsSideBar({
   const dashboardHome = settingsPathname?.split('/')?.slice(0, 3)?.join('/')
   const homeRoute = dashboardHome || '/workspaces'
 
-  const ACCOUNT_SETTINGS = [
+  // SETTINGS OPTIONS
+  const SETTINGS_LINKS = [
     {
-      name: 'Profile Settings',
-      Icon: UserCircleIcon,
-      href: '/manage-account',
+      name: 'Workspaces',
+      Icon: BriefcaseIcon,
+      href: '/manage-account/',
     },
-
     {
       name: 'People',
       Icon: UserGroupIcon,
       href: '/manage-account/users',
     },
-    {
-      name: 'Workspaces',
-      Icon: BriefcaseIcon,
-      href: '/manage-account/workspaces',
-    },
+
     {
       name: 'Security & Permissions',
       Icon: LockClosedIcon,
       href: '/manage-account/security',
     },
     {
+      name: 'Profile Settings',
+      Icon: UserCircleIcon,
+      href: '/manage-account/profile',
+    },
+
+    {
       name: 'Account Verification',
       Icon: CheckBadgeIcon,
       href: '/manage-account/account-verification',
     },
   ]
-
-  const WORKSPACE_SETTINGS = [
-    {
-      name: 'My Settings',
-      Icon: UserCircleIcon,
-      href: settingsPathname,
-    },
-    // {
-    //   name: 'People',
-    //   Icon: UserGroupIcon,
-    //   href: `${settingsPathname}/users`,
-    // },
-    {
-      name: 'Workspace',
-      Icon: BriefcaseIcon,
-      href: `${settingsPathname}/workspace`,
-    },
-    // {
-    //   name: 'Security & Permissions',
-    //   Icon: LockClosedIcon,
-    //   href: `${settingsPathname}/security`,
-    // },
-  ]
-
-  // SETTINGS OPTIONS
-  const SETTINGS_LINKS = isAccountLevelSettingsRoute
-    ? ACCOUNT_SETTINGS
-    : WORKSPACE_SETTINGS
 
   return (
     <>
