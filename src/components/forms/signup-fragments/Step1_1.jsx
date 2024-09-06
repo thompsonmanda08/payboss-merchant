@@ -26,7 +26,7 @@ export default function Step1_TPIN({ updateDetails }) {
   const [loading, setLoading] = React.useState(false)
 
   const [merchant, setMerchant] = React.useState(null)
-  const TPINError = step?.tpin?.length < 3 || step?.tpin?.length > 10
+  const TPINError = step?.tpin?.length > 10
 
   async function handleTPINValidation() {
     setLoading(true)
@@ -35,10 +35,20 @@ export default function Step1_TPIN({ updateDetails }) {
     setIsValidTPIN(false)
     const tpin = step?.tpin
 
+    if (!tpin || tpin?.length > 10) {
+      updateErrorStatus({ onTPIN: true, message: 'Invalid TPIN' })
+      setLoading(false)
+      return
+    }
+
     const response = await validateTPIN(tpin)
 
     if (!response.success) {
-      updateErrorStatus({ status: true, message: response.message })
+      updateErrorStatus({
+        status: true,
+        onTPIN: true,
+        message: response.message,
+      })
       setLoading(false)
       return
     }
@@ -82,7 +92,7 @@ export default function Step1_TPIN({ updateDetails }) {
               maxLength={10}
               isDisabled={loading}
               value={step?.tpin}
-              onError={TPINError || error?.status}
+              onError={TPINError || error?.onTPIN}
               errorText="Invalid TPIN"
               onChange={(e) => {
                 updateDetails(STEPS[0], { tpin: e.target.value })
@@ -91,7 +101,7 @@ export default function Step1_TPIN({ updateDetails }) {
             <Button
               onPress={handleTPINValidation}
               className={cn('flex-[1]', { 'mb-4': TPINError || error?.status })}
-              isDisabled={TPINError}
+              isDisabled={TPINError || loading || step?.tpin?.length < 10}
               isLoading={loading}
               loadingText={'Validating...'}
             >

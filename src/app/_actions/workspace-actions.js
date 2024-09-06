@@ -100,6 +100,7 @@ export async function submitPOP(popDetails, workspaceID) {
     }
   }
 }
+
 export async function getWorkspaceMembers(workspaceID) {
   if (!workspaceID) {
     return {
@@ -123,46 +124,6 @@ export async function getWorkspaceMembers(workspaceID) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
-    }
-
-    return {
-      success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
-      data: res?.data || res,
-      status: res.status,
-      statusText: res?.statusText,
-    }
-  } catch (error) {
-    console.error(error)
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.statusText ||
-        'Operation Failed!',
-      data: error?.response,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    }
-  }
-}
-
-export async function getUser(userID) {
-  const session = await getUserSession()
-  const merchantID = session?.user?.merchantID
-
-  try {
-    const res = await authenticatedService({
-      url: `merchant/user/${userID}`,
-    })
-
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
       }
     }
 
