@@ -36,17 +36,9 @@ const useTransactions = (query) => {
     isFetching: singleFetching,
   } = useSingleTransactions(workspaceID || query?.workspaceID)
 
-  const {
-    data: walletHistoryResponse,
-    isFetching: walletHistoryFetching,
-    isLoading: walletHistoryLoading,
-  } = useWalletPrefundHistory(workspaceID || query?.workspaceID)
-
-  const walletHistory = walletHistoryResponse?.data?.data || []
 
   const isLoading = bulkLoading || bulkFetching || singleLoading
-  const isFetching =
-    walletHistoryLoading || walletHistoryFetching || singleFetching
+  const isFetching = singleFetching
 
   const bulkTransactions = bulkTransactionsResponse?.data?.batches || []
   const singleTransactions = transactionsResponse?.data?.data || []
@@ -54,8 +46,6 @@ const useTransactions = (query) => {
   const allCollectionsTransactions =
     collectionsTransactionsResponse?.data?.data || []
 
-  // console.log(allPaymentTransactions)
-  // console.log(allCollectionsTransactions)
 
   return {
     isFetching,
@@ -64,7 +54,6 @@ const useTransactions = (query) => {
     singleTransactions,
     allPaymentTransactions,
     allCollectionsTransactions,
-    walletHistory,
   }
 }
 

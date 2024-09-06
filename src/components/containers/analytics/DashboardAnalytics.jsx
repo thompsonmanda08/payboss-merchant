@@ -19,7 +19,7 @@ import gradientLineChartData from '@/app/dashboard/[workspaceID]/data/gradientLi
 import useDashboard from '@/hooks/useDashboard'
 import OverlayLoader from '@/components/ui/OverlayLoader'
 import useWorkspaces from '@/hooks/useWorkspaces'
-import { PreFundHistory } from '../workspace/Wallet'
+import { WalletTransactionHistory } from '../workspace/Wallet'
 
 function DashboardAnalytics() {
   const { chart, items } = reportsBarChartData
@@ -164,7 +164,7 @@ function DashboardAnalytics() {
               title={'Wallet Statement Summary'}
               infoText={'Brief overview of your latest statement transactions'}
             />
-            <PreFundHistory workspaceID={workspaceID} limit={4} />
+            <WalletTransactionHistory workspaceID={workspaceID} limit={4} />
           </Card>
         </div>
 

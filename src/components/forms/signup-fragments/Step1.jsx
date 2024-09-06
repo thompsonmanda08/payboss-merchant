@@ -212,7 +212,7 @@ export default function Step1({ updateDetails }) {
               prefilled={true}
               required={true}
               pattern="https?://.+"
-              title="http://www.domain-name.com"
+              title="https://www.domain-name.com"
               onChange={(e) => {
                 updateDetails(STEPS[0], { website: e.target.value })
               }}

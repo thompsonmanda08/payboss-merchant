@@ -23,6 +23,7 @@ import useTransactions from '@/hooks/useTransactions'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useQueryClient } from '@tanstack/react-query'
 import { formatDistance } from 'date-fns'
+import { useWalletPrefundHistory } from '@/hooks/useQueryHooks'
 
 const POP_INIT = {
   amount: 0,
@@ -214,7 +215,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                   type="button"
                   onClick={onOpen}
                 >
-                  Pre-Fund Wallet
+                  Fund Wallet
                 </Button>
               </div>
             </div>
@@ -227,7 +228,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                   'Transaction history logs for every prefunding activity on the wallet'
                 }
               />
-              <PreFundHistory workspaceID={workspaceID} />
+              <WalletTransactionHistory workspaceID={workspaceID} />
             </ScrollArea>
           )}
         </Card>
@@ -256,10 +257,12 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
   )
 }
 
-export function PreFundHistory({ workspaceID, limit }) {
-  const { isLoading, walletHistory } = useTransactions({
-    workspaceID,
-  })
+export function WalletTransactionHistory({ workspaceID, limit }) {
+  const { data: walletHistoryResponse, isLoading } =
+    useWalletPrefundHistory(workspaceID)
+
+  const walletHistory = walletHistoryResponse?.data?.data || []
+
   const data = [
     {
       title: 'Wallet Prefund',
@@ -270,12 +273,11 @@ export function PreFundHistory({ workspaceID, limit }) {
   const formattedActivityData = formatActivityData(
     limit ? data.slice(0, limit) : data,
   )
-  console.log(formattedActivityData)
 
   return isLoading ? (
     <div className="flex w-full flex-col gap-4">
       <Skeleton className="mt-6 h-8 max-w-xs" />
-      {Array.from({ length: 4 }).map((_, index) => (
+      {Array.from({ length: limit || 5 }).map((_, index) => (
         <div className="flex justify-between">
           <div className="flex w-full gap-4">
             <Skeleton className="h-8 w-24" />
@@ -300,7 +302,9 @@ export function PreFundHistory({ workspaceID, limit }) {
       {formattedActivityData.length > 0 ? (
         formattedActivityData.map((items, index) => (
           <div key={index} className="pr-6">
-            <p className="text-lg font-medium text-[#161518]">{items.title}</p>
+            <p className="text-base font-semibold text-slate-600">
+              {items.title}
+            </p>
             {items?.data?.map((item, itemIndex) => (
               <div className="flex flex-col gap-y-4 py-2" key={itemIndex}>
                 <div className="flex items-start space-x-4">
@@ -348,10 +352,14 @@ export function PreFundHistory({ workspaceID, limit }) {
                         </Tooltip>
                       </div>
                     </div>
-                    <div className="-mt-1 flex items-center justify-between text-xs text-slate-700">
+                    <div className="-mt-1 flex items-center text-xs text-slate-700">
                       {item.content}
-                      <span className="mt-2 self-end  font-medium leading-4 text-slate-500">
-                        {formatDistance(new Date(item.created_at), new Date())}{' '}
+                      <span className="ml-2 font-normal leading-4 text-slate-400">
+                        ...
+                        {formatDistance(
+                          new Date(item.created_at),
+                          new Date(),
+                        )}{' '}
                         ago
                       </span>
                     </div>
@@ -359,7 +367,9 @@ export function PreFundHistory({ workspaceID, limit }) {
                 </div>
               </div>
             ))}
-            <hr className="my-4 h-px border-0 bg-slate-100"></hr>
+            {index != formattedActivityData.length - 1 && (
+              <hr className="my-4 h-px border-0 bg-slate-100"></hr>
+            )}
           </div>
         ))
       ) : (

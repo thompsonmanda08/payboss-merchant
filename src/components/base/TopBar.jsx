@@ -2,7 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { BellIcon, Cog6ToothIcon } from '@heroicons/react/24/solid'
-import { cn } from '@/lib/utils'
+import { cn, formatCurrency } from '@/lib/utils'
 import Avatar from '../ui/Avatar'
 import BreadCrumbLinks from './BreadCrumbLinks'
 import {
@@ -20,10 +20,11 @@ import { Skeleton } from '../ui/skeleton'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import useNavigation from '@/hooks/useNavigation'
 import useWorkspaces from '@/hooks/useWorkspaces'
+import { WalletIcon } from '@heroicons/react/24/outline'
 
 export default function TopNavBar({}) {
   const { user } = useAccountProfile()
-  const { workspaceID } = useWorkspaces()
+  const { workspaceID, workspaceWalletBalance } = useWorkspaces()
   const { settingsPathname, isProfile, currentPath, pathname } = useNavigation()
 
   return (
@@ -62,14 +63,23 @@ export default function TopNavBar({}) {
           >
             {user && pathname ? (
               <>
-                <Link
-                  href={settingsPathname}
-                  className="flex cursor-pointer items-center gap-2 text-sm"
-                >
-                  <Cog6ToothIcon className="h-5 w-6 " />
-                </Link>
+                {workspaceWalletBalance && (
+                  <Link
+                  href={"/"}
+                    className="flex cursor-pointer items-start gap-3 text-primary mr-2">
+                    <WalletIcon className="h-5 w-5" />{' '}
+                    <div className="flex flex-col items-start">
+                      <span className="text-xs font-medium text-slate-600">
+                        Wallet Balance
+                      </span>
+                      <span className="-mt-1 text-base font-bold">
+                        {formatCurrency(workspaceWalletBalance)}
+                      </span>
+                    </div>
+                  </Link>
+                )}
                 <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:right-1 after:top-0 after:h-2 after:w-2 after:rounded-full after:bg-primary-500 after:content-['']">
-                  <BellIcon className="top-0 h-5 w-6 " />
+                  <BellIcon className="top-0 h-6 w-6 " />
                 </div>
                 <AvatarDropdown
                   user={user}
