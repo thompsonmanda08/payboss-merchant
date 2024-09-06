@@ -28,6 +28,7 @@ const useDashboard = () => {
     dashboardAnalytics,
     userInSandbox,
     activeWorkspace,
+    workspaceID,
   }
 }
 

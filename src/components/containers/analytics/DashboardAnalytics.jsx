@@ -65,8 +65,8 @@ const pendingApprovals = [
 
 function DashboardAnalytics() {
   const { chart, items } = reportsBarChartData
-  const { dashboardAnalytics, isLoading, workspaceUserRole } = useDashboard()
-  useWorkspaces()
+  const { dashboardAnalytics, isLoading, workspaceUserRole, workspaceID } =
+    useDashboard()
 
   const { today, yesterday, collectionsToday, disbursementsToday } =
     dashboardAnalytics || {}
@@ -202,7 +202,19 @@ function DashboardAnalytics() {
             chart={chart}
             items={items}
           />
-          <Batches />
+          {workspaceUserRole?.can_approve ? (
+            <Card className={'w-full'}>
+              <CardHeader
+                title={'Wallet Statement Summary'}
+                infoText={
+                  'Brief overview of your latest statement transactions'
+                }
+              />
+              <WalletTransactionHistory workspaceID={workspaceID} limit={4} />
+            </Card>
+          ) : (
+            <Batches />
+          )}
         </div>
       </div>
     </>

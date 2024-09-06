@@ -266,13 +266,11 @@ export function WalletTransactionHistory({ workspaceID, limit }) {
   const data = [
     {
       title: 'Wallet Prefund',
-      data: walletHistory,
+      data: limit ? walletHistory.slice(0, limit) : walletHistory,
     },
   ]
 
-  const formattedActivityData = formatActivityData(
-    limit ? data.slice(0, limit) : data,
-  )
+  const formattedActivityData = formatActivityData(data)
 
   return isLoading ? (
     <div className="flex w-full flex-col gap-4">
