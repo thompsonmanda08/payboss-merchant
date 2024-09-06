@@ -9,7 +9,8 @@ import { uploadPaymentBatchFile } from '@/app/_actions/pocketbase-actions'
 import useAccountProfile from '@/hooks/useProfileDetails'
 
 const UploadCSVFile = ({ navigateForward }) => {
-  const { paymentAction, updatePaymentFields } = usePaymentsStore()
+  const { paymentAction, updatePaymentFields, selectedProtocol } =
+    usePaymentsStore()
   const [isLoading, setIsLoading] = React.useState(false)
   const { merchantID } = useAccountProfile()
 
@@ -61,21 +62,23 @@ const UploadCSVFile = ({ navigateForward }) => {
 
           <p className="mt-2 text-xs font-medium text-gray-500 lg:text-[13px]">
             Having trouble with the validation and file uploads? Download
-            <Link
-              href={'/batch_record_template.xlsx'}
-              download={'batch_record_template.xlsx'}
-              className="ml-1 font-bold text-primary hover:underline hover:underline-offset-2"
-            >
-              Direct Transfer
-            </Link>{' '}
-            or
-            <Link
-              href={'/batch_record_template_voucher.xlsx'}
-              download={'batch_record_template_voucher.xlsx'}
-              className="ml-1 font-bold text-primary"
-            >
-              Voucher Transfer
-            </Link>{' '}
+            {selectedProtocol == 'direct' ? (
+              <Link
+                href={'/batch_record_template.xlsx'}
+                download={'batch_record_template.xlsx'}
+                className="ml-1 font-bold text-primary hover:underline hover:underline-offset-2"
+              >
+                Direct Transfer{' '}
+              </Link>
+            ) : (
+              <Link
+                href={'/batch_record_template_voucher.xlsx'}
+                download={'batch_record_template_voucher.xlsx'}
+                className="ml-1 font-bold text-primary"
+              >
+                Voucher Transfer{' '}
+              </Link>
+            )}
             template here
           </p>
         </div>
