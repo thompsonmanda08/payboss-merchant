@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Table,
   TableHeader,
@@ -11,7 +11,11 @@ import {
   Avatar,
   useDisclosure,
 } from '@nextui-org/react'
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowPathIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline'
 
 import { cn, getUserInitials } from '@/lib/utils'
 import useWorkspaceStore from '@/context/workspaceStore'
@@ -19,6 +23,7 @@ import PromptModal from '@/components/base/Prompt'
 import useNavigation from '@/hooks/useNavigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { WORKSPACE_MEMBERS_QUERY_KEY } from '@/lib/constants'
+import { adminResetUserPassword } from '@/app/_actions/user-actions'
 
 const roleColorMap = {
   owner: 'success',
@@ -26,8 +31,6 @@ const roleColorMap = {
   member: 'primary',
   guest: 'warning',
 }
-
-// TODO => title ITEM SHOULD BE A DROPDOWN MENU TO CHANGE titleS - IF IN EDIT MODE?
 
 const columns = [
   { name: 'NAME', uid: 'first_name' },
@@ -40,6 +43,7 @@ const columns = [
 //! NOTE: ONLY THE OWNER WILL BE ABLE TO SEE ALL THE USERS
 export default function UsersTable({ users = [], workspaceID }) {
   const queryClient = useQueryClient()
+  const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isUsersRoute } = useNavigation()
   const {
@@ -49,6 +53,7 @@ export default function UsersTable({ users = [], workspaceID }) {
     setSelectedUser,
     selectedUser,
     handleDeleteFromWorkspace,
+    handleResetUserPassword,
   } = useWorkspaceStore()
 
   // TABLE CELL RENDERER
@@ -98,7 +103,7 @@ export default function UsersTable({ users = [], workspaceID }) {
         )
       case 'actions':
         return (
-          <div className="relative flex items-center justify-center gap-2">
+          <div className="relative flex items-center justify-center gap-4">
             {/* <Tooltip content="View user">
               <span
                 onClick={() => setIsViewingUser(true)}
@@ -108,7 +113,7 @@ export default function UsersTable({ users = [], workspaceID }) {
               </span>
             </Tooltip> */}
             <>
-              <Tooltip color="primary" content="Edit user">
+              <Tooltip color="default" content="Edit user">
                 <span
                   onClick={() => {
                     setSelectedUser(user)
@@ -117,6 +122,24 @@ export default function UsersTable({ users = [], workspaceID }) {
                   className="cursor-pointer text-lg text-primary active:opacity-50"
                 >
                   <PencilSquareIcon className="h-5 w-5" />
+                </span>
+              </Tooltip>
+              <Tooltip
+                color="secondary"
+                content="Reset User Password"
+                classNames={{
+                  base: 'text-white',
+                  content: 'bg-secondary text-white',
+                }}
+              >
+                <span
+                  onClick={() => {
+                    setSelectedUser(user)
+                    setOpenResetPasswordPrompt(true)
+                  }}
+                  className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
+                >
+                  <ArrowPathIcon className="h-5 w-5" />
                 </span>
               </Tooltip>
 
@@ -139,7 +162,18 @@ export default function UsersTable({ users = [], workspaceID }) {
     }
   }, [])
 
-  async function handleDeleteUser() {
+  async function _handleResetUserPassword() {
+    const response = await handleResetUserPassword()
+    if (response) {
+      onClose()
+      setOpenResetPasswordPrompt(false)
+      setIsLoading(false)
+    }
+
+    setIsLoading(false)
+  }
+
+  async function _handleDeleteFromWorkspace() {
     const response = await handleDeleteFromWorkspace()
     if (response) {
       queryClient.invalidateQueries({
@@ -187,7 +221,7 @@ export default function UsersTable({ users = [], workspaceID }) {
           setSelectedUser(null)
         }}
         title="Remove Workspace User"
-        onConfirm={handleDeleteUser}
+        onConfirm={_handleDeleteFromWorkspace}
         confirmText="Remove"
         isDisabled={isLoading}
         isLoading={isLoading}
@@ -199,6 +233,28 @@ export default function UsersTable({ users = [], workspaceID }) {
             {`${selectedUser?.first_name} ${selectedUser?.last_name}`}
           </code>{' '}
           from this {isUsersRoute ? 'account' : 'workspace'}.
+        </p>
+      </PromptModal>
+      <PromptModal
+        isOpen={openResetPasswordPrompt}
+        onOpen={onOpen}
+        onClose={() => {
+          onClose()
+          setOpenResetPasswordPrompt(false)
+        }}
+        title="Reset User Password"
+        onConfirm={_handleResetUserPassword}
+        confirmText="Reset"
+        isDisabled={isLoading}
+        isLoading={isLoading}
+        isDismissable={false}
+      >
+        <p className="-mt-4 text-sm leading-5 text-slate-700">
+          Are you sure you want to reset{' '}
+          <code className="rounded-md bg-primary/10 p-0.5 px-2 font-medium text-primary-700">
+            {`${selectedUser?.first_name} ${selectedUser?.last_name}`}&apos;s
+          </code>{' '}
+          password? <br /> An email will be sent with the new default password.
         </p>
       </PromptModal>
     </>

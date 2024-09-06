@@ -1,4 +1,7 @@
-import { assignUsersToWorkspace } from '@/app/_actions/user-actions'
+import {
+  adminResetUserPassword,
+  assignUsersToWorkspace,
+} from '@/app/_actions/user-actions'
 import { deleteUserFromWorkspace } from '@/app/_actions/workspace-actions'
 import { notify } from '@/lib/utils'
 import { create } from 'zustand'
@@ -126,6 +129,30 @@ const useWorkspaceStore = create((set, get) => ({
     }))
 
     return await assignUsersToWorkspace(users, workspaceID)
+  },
+
+  handleResetUserPassword: async (workspaceID) => {
+    set({ isLoading: true })
+    const { selectedUser } = get()
+
+    // TODO: Generate random string
+    const passwordInfo = {
+      changePassword: true,
+      password: 'PB0484G@#$%Szm',
+    }
+
+    const response = await adminResetUserPassword(
+      selectedUser?.ID,
+      passwordInfo,
+    )
+
+    if (response.success) {
+      notify('success', `You Reset ${selectedUser?.first_name}'s Password!`)
+      return response.success
+    }
+
+    notify('error', response.message)
+    return response.success
   },
 
   handleDeleteFromWorkspace: async (workspaceID) => {

@@ -80,37 +80,17 @@ function ManagePeople({ classNames }) {
     if (onAdd) return onAdd()
   }
 
-  // ***** COMPONENT RENDERER ************** //
-
-  // const  TABS = !isAccountLevelSettingsRoute
-  //   ? [
-  //       { name: 'Workspace Members', index: 0 },
-  //       { name: 'Workspace viewers', index: 1 },
-  //     ]
-  //   : [
-  //       { name: 'All Users', index: 0 },
-  //       { name: 'Workspace Members', index: 1 },
-  //       { name: 'viewers', index: 2 },
-  //     ]
+  const allowUserCreation = canCreateUsers && !isUserInWorkspace
 
   const TABS = [{ name: 'All Users', index: 0 }]
 
-  const COMPONENT_RENDERER = !isAccountLevelSettingsRoute
-    ? [
-        <UsersTable key={'members'} users={userSearchResults} />,
-        <UsersTable key={'internal-viewers'} users={userSearchResults} />,
-      ]
-    : [
-        <UsersTable key={'all-users'} users={userSearchResults} />,
-        <UsersTable key={'members'} users={userSearchResults} />,
-        <UsersTable key={'viewers'} users={userSearchResults} />,
-      ]
-
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
-    <UsersTable key={'all-users'} users={userSearchResults} />,
+    <UsersTable
+      key={'all-users'}
+      users={userSearchResults}
+      isOwner={allowUserCreation}
+    />,
   ])
-
-  const allowUserCreation = canCreateUsers && !isUserInWorkspace
 
   return (
     <div className={cn('mx-auto flex w-full max-w-7xl flex-col', wrapper)}>
@@ -134,10 +114,10 @@ function ManagePeople({ classNames }) {
         />
         {allowUserCreation && (
           <Button
-            startContent={<PlusIcon className=" h-6 w-6" />}
+            endContent={<PlusIcon className=" h-5 w-5" />}
             onPress={onOpen}
           >
-            Create New User
+            New User
           </Button>
         )}
       </div>
@@ -145,10 +125,7 @@ function ManagePeople({ classNames }) {
       {activeTab}
 
       {/* MODALS */}
-      <CreateNewUserModal
-        isOpen={isEditingRole || isOpen}
-        onClose={onClose}
-      />
+      <CreateNewUserModal isOpen={isEditingRole || isOpen} onClose={onClose} />
     </div>
   )
 }

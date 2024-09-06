@@ -210,13 +210,10 @@ export async function changeUserPassword(password) {
   }
 }
 
-export async function adminResetUserPassword(newPasswordData) {
-  const session = await getUserSession()
-  const merchantID = session?.user?.merchantID
-
+export async function adminResetUserPassword(userID, newPasswordData) {
   try {
     const res = await authenticatedService({
-      url: `merchant/user/${userID}`,
+      url: `merchant/user/reset/password/${userID}`,
       method: 'PATCH',
       data: newPasswordData,
     })
@@ -227,25 +224,23 @@ export async function adminResetUserPassword(newPasswordData) {
         message: res.message,
         data: res.data,
         status: res.status,
+        statusText: res.statusText,
       }
     }
 
     return {
       success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      message: res?.data?.error || 'Operation Failed!',
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
     }
   } catch (error) {
-    console.error(error)
+    console.error(error?.response)
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.statusText ||
-        'Operation Failed!',
-      data: error?.response,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     }
