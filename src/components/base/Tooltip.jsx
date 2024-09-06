@@ -19,12 +19,12 @@ const Tooltip = ({ children, content }) => {
         {showTooltip && (
           <motion.div
             ref={tooltipRef}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, y: -68 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="whitespace-no-wrap absolute z-10 min-w-[250px] overflow-hidden rounded bg-gray-800 p-2 text-xs text-white shadow-lg"
-            style={{ top: '15', right: '0', transform: 'translateX(-50%)' }}
+            className="whitespace-no-wrap absolute z-10 min-w-[250px] overflow-hidden rounded-lg bg-primary p-2 text-xs text-white shadow-lg"
+            style={{ top: '-20', right: '100%', transform: 'translateX(-50%)' }}
           >
             {content}
           </motion.div>

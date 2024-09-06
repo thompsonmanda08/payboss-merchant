@@ -119,11 +119,11 @@ export async function getUserAccountRoles() {
 }
 
 export async function getWorkspaceRoles() {
-  const session = await getUserSession()
-  const merchantID = session?.user?.merchantID
+  // const session = await getUserSession()
+  // const merchantID = session?.user?.merchantID
   try {
     const res = await authenticatedService({
-      url: `merchant/workspace/roles/${merchantID}`,
+      url: `merchant/workspace/roles`,
     })
 
     if (res.status == 200) {

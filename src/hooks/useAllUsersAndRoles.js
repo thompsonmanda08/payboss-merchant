@@ -25,6 +25,7 @@ const useAllUsersAndRoles = () => {
     accountRoles,
     workspaceRoles,
     canCreateUsers,
+    canManageUsers: canCreateUsers,
   }
 }
 

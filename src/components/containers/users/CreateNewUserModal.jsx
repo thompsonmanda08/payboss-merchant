@@ -26,7 +26,8 @@ function CreateNewUserModal({ isOpen, onClose }) {
   const { isEditingRole, selectedUser, setSelectedUser, setIsEditingRole } =
     useWorkspaceStore()
   const queryClient = useQueryClient()
-  const { isAccountLevelSettingsRoute } = useNavigation()
+  const { isAccountLevelSettingsRoute, isUsersRoute } = useNavigation()
+
   const [loading, setLoading] = useState(false)
   const [newUser, setNewUser] = useState({
     role: '',
@@ -201,11 +202,19 @@ function CreateNewUserModal({ isOpen, onClose }) {
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {isEditingRole ? 'Update User' : 'Create New User'}
+              {isEditingRole && !isUsersRoute
+                ? 'Update Workspace User'
+                : isEditingRole && isUsersRoute
+                  ? 'Update System User'
+                  : 'Create New User'}
             </ModalHeader>
             <ModalBody>
               <SelectField
-                label="System Role"
+                label={
+                  isEditingRole && !isUsersRoute
+                    ? 'Workspace Role'
+                    : 'System Role'
+                }
                 required
                 onError={error?.onRole}
                 value={newUser?.role}

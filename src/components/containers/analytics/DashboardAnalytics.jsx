@@ -3,11 +3,17 @@ import React from 'react'
 import { Balance, Card, CardHeader, SimpleStats } from '@/components/base'
 import ReportsBarChart from '@/components/charts/ReportsBarChart/ReportsBarChart'
 import {
+  ArrowRightStartOnRectangleIcon,
   ArrowsPointingInIcon,
   ArrowsPointingOutIcon,
+  ArrowsRightLeftIcon,
   ArrowTrendingDownIcon,
   ArrowTrendingUpIcon,
   ArrowUpIcon,
+  ArrowUpOnSquareIcon,
+  ArrowUpOnSquareStackIcon,
+  BanknotesIcon,
+  QrCodeIcon,
   QueueListIcon,
   WalletIcon,
 } from '@heroicons/react/24/outline'
@@ -20,30 +26,54 @@ import useDashboard from '@/hooks/useDashboard'
 import OverlayLoader from '@/components/ui/OverlayLoader'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { WalletTransactionHistory } from '../workspace/Wallet'
+import PendingApprovals from './PendingAnalytics'
+
+const pendingApprovals = [
+  {
+    label: 'Bulk Direct Transfers',
+    total: 85,
+    icon: {
+      color: 'primary',
+      component: <ArrowUpOnSquareStackIcon className="h-6 w-6 rotate-90" />,
+    },
+  },
+  {
+    label: 'Bulk Voucher Transfers',
+    total: 32,
+    icon: {
+      color: 'success',
+      component: <BanknotesIcon className="h-6 w-6" />,
+    },
+  },
+  {
+    label: 'Sinlge Direct Transfers',
+    total: 51,
+    icon: {
+      color: 'secondary',
+      component: <ArrowsRightLeftIcon className="h-6 w-6" />,
+    },
+  },
+  {
+    label: 'Single Voucher Transfers',
+    total: 44,
+    icon: {
+      color: 'danger',
+      component: <QrCodeIcon className="h-6 w-6 rotate-90" />,
+    },
+  },
+]
 
 function DashboardAnalytics() {
   const { chart, items } = reportsBarChartData
-  const { dashboardAnalytics, isLoading } = useDashboard()
-  const { workspaceWalletBalance, activeWorkspace, workspaceID } =
-    useWorkspaces()
+  const { dashboardAnalytics, isLoading, workspaceUserRole } = useDashboard()
+  useWorkspaces()
 
-  const {
-    today,
-    yesterday,
-    collectionsToday,
-    disbursementsToday,
-    allCollections,
-    allDisbursements,
-  } = dashboardAnalytics || {}
+  const { today, yesterday, collectionsToday, disbursementsToday } =
+    dashboardAnalytics || {}
   return (
     <>
       {isLoading && <OverlayLoader show={isLoading} />}
       <div className="flex w-full flex-col gap-4 md:gap-6">
-        {/* <InfoBanner
-          buttonText="Verify Account"
-          infoText="Just one more step, please submit your business documents to aid us with the approval process"
-          href={'manage-account/account-verification'}
-        /> */}
         <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-4 ">
           <SimpleStats
             title={'Todays Transactions'}
@@ -98,7 +128,110 @@ function DashboardAnalytics() {
           />
         </div>
 
-        <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-4 ">
+        {workspaceUserRole?.can_approve ? (
+          <ComponentsWithApprovalStats />
+        ) : (
+          <ComponentsForViewOnly />
+        )}
+
+        {/* <div className="place-items- flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-4 md:place-items-start ">
+          <div className="flex w-1/2 flex-col gap-4">
+            <div className="flex gap-4">
+              <SimpleStats
+                title={'Overall Collections'}
+                figure={allCollections?.count || 0}
+                smallFigure={
+                  allCollections?.value
+                    ? `(${formatCurrency(allCollections?.value)})`
+                    : `(ZMW 0.00)`
+                }
+                classNames={{
+                  smallFigureClasses: 'md:text-base font-bold',
+                }}
+                isGood={true}
+                Icon={ArrowTrendingUpIcon}
+              />
+              <SimpleStats
+                title={'Overall Disbursements'}
+                figure={allDisbursements?.count || 0}
+                smallFigure={
+                  allDisbursements?.value
+                    ? `(${formatCurrency(allDisbursements?.value)})`
+                    : `(ZMW 0.00)`
+                }
+                classNames={{
+                  smallFigureClasses: 'md:text-base font-bold',
+                }}
+                isBad={true}
+                Icon={ArrowTrendingDownIcon}
+              />
+            </div>
+            <GradientLineChart
+              title="Transactions Overview"
+              description={
+                <span className="flex items-center">
+                  <span className="mb-1 mr-1 text-lg leading-none text-green-500">
+                    <ArrowUpIcon className="h-5 w-5 font-bold" />
+                  </span>
+                  <span className="text-sm font-medium text-gray-700">
+                    4% more <span className="font-normal">in 2021</span>
+                  </span>
+                </span>
+              }
+              height="20.25rem"
+              chart={gradientLineChartData}
+            />
+          </div>
+          <Card className={'w-1/2'}>
+            <CardHeader
+              title={'Wallet Statement Summary'}
+              infoText={'Brief overview of your latest statement transactions'}
+            />
+            <WalletTransactionHistory workspaceID={workspaceID} limit={4} />
+          </Card>
+        </div> */}
+
+        <div className="flex w-full flex-col gap-4 md:flex-row">
+          <ReportsBarChart
+            title="transactions"
+            description={
+              <>
+                (<strong>+23%</strong>) than last week
+              </>
+            }
+            chart={chart}
+            items={items}
+          />
+          <Batches />
+        </div>
+      </div>
+    </>
+  )
+}
+
+function ComponentsForViewOnly() {
+  const { dashboardAnalytics } = useDashboard()
+  const { workspaceID } = useWorkspaces()
+  const { allCollections, allDisbursements } = dashboardAnalytics || {}
+  return (
+    <div className="place-items- flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-4 md:place-items-start">
+      <div className="flex w-1/2 flex-col gap-6">
+        <GradientLineChart
+          title="Transactions Overview"
+          description={
+            <span className="flex items-center">
+              <span className="mb-1 mr-1 text-lg leading-none text-green-500">
+                <ArrowUpIcon className="h-5 w-5 font-bold" />
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                4% more <span className="font-normal">in 2021</span>
+              </span>
+            </span>
+          }
+          height="20.25rem"
+          chart={gradientLineChartData}
+        />
+        <div className="flex gap-4">
           <SimpleStats
             title={'Overall Collections'}
             figure={allCollections?.count || 0}
@@ -127,62 +260,56 @@ function DashboardAnalytics() {
             isBad={true}
             Icon={ArrowTrendingDownIcon}
           />
-          <SimpleStats
-            title={
-              activeWorkspace?.workspace
-                ? `${activeWorkspace?.workspace} Wallet Balance`
-                : 'Wallet Balance'
-            }
-            figure={
-              workspaceWalletBalance
-                ? formatCurrency(workspaceWalletBalance)
-                : `(ZMW 0.00)`
-            }
-            Icon={WalletIcon}
-          />
-        </div>
-
-        <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
-          <GradientLineChart
-            title="Transactions Overview"
-            description={
-              <span className="flex items-center">
-                <span className="mb-1 mr-1 text-lg leading-none text-green-500">
-                  <ArrowUpIcon className="h-5 w-5 font-bold" />
-                </span>
-                <span className="text-sm font-medium text-gray-700">
-                  4% more <span className="font-normal">in 2021</span>
-                </span>
-              </span>
-            }
-            height="20.25rem"
-            chart={gradientLineChartData}
-          />
-
-          <Card>
-            <CardHeader
-              title={'Wallet Statement Summary'}
-              infoText={'Brief overview of your latest statement transactions'}
-            />
-            <WalletTransactionHistory workspaceID={workspaceID} limit={4} />
-          </Card>
-        </div>
-
-        <div className="flex w-full flex-col gap-4 md:flex-row">
-          <ReportsBarChart
-            title="transactions"
-            description={
-              <>
-                (<strong>+23%</strong>) than last week
-              </>
-            }
-            chart={chart}
-            items={items}
-          />
-          <Batches />
         </div>
       </div>
-    </>
+      <Card className={'w-1/2'}>
+        <CardHeader
+          title={'Wallet Statement Summary'}
+          infoText={'Brief overview of your latest statement transactions'}
+        />
+        <WalletTransactionHistory workspaceID={workspaceID} limit={6} />
+      </Card>
+    </div>
+  )
+}
+
+function ComponentsWithApprovalStats() {
+  const { dashboardAnalytics } = useDashboard()
+  const { allCollections, allDisbursements } = dashboardAnalytics || {}
+  return (
+    <div className="flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-4 ">
+      <PendingApprovals data={pendingApprovals} />
+      <div className="flex w-1/3 max-w-lg flex-col gap-4">
+        <SimpleStats
+          title={'Overall Collections'}
+          figure={allCollections?.count || 0}
+          smallFigure={
+            allCollections?.value
+              ? `(${formatCurrency(allCollections?.value)})`
+              : `(ZMW 0.00)`
+          }
+          classNames={{
+            smallFigureClasses: 'md:text-base font-bold',
+          }}
+          isGood={true}
+          Icon={ArrowTrendingUpIcon}
+        />
+        <SimpleStats
+          title={'Overall Disbursements'}
+          figure={allDisbursements?.count || 0}
+          smallFigure={
+            allDisbursements?.value
+              ? `(${formatCurrency(allDisbursements?.value)})`
+              : `(ZMW 0.00)`
+          }
+          classNames={{
+            smallFigureClasses: 'md:text-base font-bold',
+          }}
+          isBad={true}
+          Icon={ArrowTrendingDownIcon}
+        />
+      </div>
+    </div>
   )
 }
 

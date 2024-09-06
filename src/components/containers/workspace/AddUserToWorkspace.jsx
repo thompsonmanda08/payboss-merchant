@@ -21,7 +21,7 @@ import { notify } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { UserAvatarComponent } from '../tables/UsersTable'
+import { roleColorMap, UserAvatarComponent } from '../tables/UsersTable'
 import { assignUsersToWorkspace } from '@/app/_actions/user-actions'
 import { ScrollArea } from '../../ui/scroll-area'
 import { CardHeader, EmptyState, StatusMessage } from '@/components/base'
@@ -35,12 +35,7 @@ import useWorkspaces from '@/hooks/useWorkspaces'
 import { useWorkspaceMembers } from '@/hooks/useQueryHooks'
 import { WORKSPACE_MEMBERS_QUERY_KEY } from '@/lib/constants'
 
-export const roleColorMap = {
-  owner: 'success',
-  admin: 'success',
-  member: 'primary',
-  guest: 'warning',
-}
+
 
 const columns = [
   { name: 'NAME', uid: 'name' },
@@ -125,7 +120,7 @@ function AddUserToWorkspace({
         return (
           <Chip
             key={cellValue}
-            color={roleColorMap[user.role]}
+            color={roleColorMap[user?.role?.toLowerCase()]}
             className="capitalize"
             size="sm"
             variant="flat"
@@ -136,18 +131,16 @@ function AddUserToWorkspace({
 
       case 'workspace_role':
         return (
-          <>
-            <SelectField
-              key={user?.ID}
-              className={'max-w-[200px]'}
-              options={workspaceRoles}
-              listItemName={'role'}
-              placeholder={'Select Role'}
-              name="role"
-              value={user?.workspaceRole}
-              onChange={(e) => handleUserRoleChange(user, e.target.value)}
-            />
-          </>
+          <SelectField
+            key={user?.ID}
+            className={'max-w-[200px]'}
+            options={workspaceRoles}
+            listItemName={'role'}
+            placeholder={'Select Role'}
+            name="role"
+            value={user?.workspaceRole}
+            onChange={(e) => handleUserRoleChange(user, e.target.value)}
+          />
         )
 
       case 'action_add':

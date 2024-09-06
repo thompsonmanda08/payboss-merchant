@@ -24,18 +24,22 @@ import useNavigation from '@/hooks/useNavigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { WORKSPACE_MEMBERS_QUERY_KEY } from '@/lib/constants'
 import { adminResetUserPassword } from '@/app/_actions/user-actions'
+import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
+import { useWorkspaceInit } from '@/hooks/useQueryHooks'
+import useDashboard from '@/hooks/useDashboard'
 
-const roleColorMap = {
+export const roleColorMap = {
   owner: 'success',
-  admin: 'success',
-  member: 'primary',
-  guest: 'warning',
+  admin: 'primary',
+  approver: 'secondary',
+  initiator: 'warning',
+  viewer: 'danger',
 }
 
 const columns = [
   { name: 'NAME', uid: 'first_name' },
   { name: 'USERNAME/MOBILE NO.', uid: 'username' },
-  { name: 'WORKSPACES', uid: 'workspace' },
+  // { name: 'WORKSPACE', uid: 'workspace' },
   { name: 'ROLE', uid: 'role' },
   { name: 'ACTIONS', uid: 'actions' },
 ]
@@ -46,6 +50,8 @@ export default function UsersTable({ users = [], workspaceID }) {
   const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isUsersRoute } = useNavigation()
+  const { canManageUsers } = useAllUsersAndRoles()
+  const { workspaceUserRole } = useDashboard()
   const {
     isLoading,
     setIsLoading,
@@ -56,55 +62,61 @@ export default function UsersTable({ users = [], workspaceID }) {
     handleResetUserPassword,
   } = useWorkspaceStore()
 
-  // TABLE CELL RENDERER
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey]
+  const canManageWorkspaceUser =
+    workspaceUserRole?.role.toLowerCase() == 'admin' && !isUsersRoute
 
-    switch (columnKey) {
-      case 'first_name':
-        return (
-          <UserAvatarComponent
-            key={cellValue}
-            firstName={user?.first_name}
-            lastName={user?.last_name}
-            email={user?.email}
-            size="sm"
-            className="rounded-md"
-            src={user?.image}
-            isBordered
-            radius="md"
-          />
-        )
-      case 'username':
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm !lowercase">{cellValue}</p>
-            <code className="text-bold text-sm text-slate-600">
-              {user?.phone_number}
-            </code>
-          </div>
-        )
-      case 'workspace':
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{cellValue}</p>
-          </div>
-        )
-      case 'role':
-        return (
-          <Chip
-            className="capitalize"
-            color={roleColorMap[user.role]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        )
-      case 'actions':
-        return (
-          <div className="relative flex items-center justify-center gap-4">
-            {/* <Tooltip content="View user">
+  console.log(canManageWorkspaceUser)
+
+  // TABLE CELL RENDERER
+  const renderCell = React.useCallback(
+    (user, columnKey) => {
+      const cellValue = user[columnKey]
+
+      switch (columnKey) {
+        case 'first_name':
+          return (
+            <UserAvatarComponent
+              key={cellValue}
+              firstName={user?.first_name}
+              lastName={user?.last_name}
+              email={user?.email}
+              size="sm"
+              className="rounded-md"
+              src={user?.image}
+              isBordered
+              radius="md"
+            />
+          )
+        case 'username':
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm !lowercase">{cellValue}</p>
+              <code className="text-bold text-sm text-slate-600">
+                {user?.phone_number}
+              </code>
+            </div>
+          )
+        case 'workspace':
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm capitalize">{cellValue}</p>
+            </div>
+          )
+        case 'role':
+          return (
+            <Chip
+              className="capitalize"
+              color={roleColorMap[user?.role.toLowerCase()]}
+              size="sm"
+              variant="flat"
+            >
+              {cellValue}
+            </Chip>
+          )
+        case 'actions':
+          return canManageUsers && isUsersRoute ? (
+            <div className="relative flex items-center justify-center gap-4">
+              {/* <Tooltip content="View user">
               <span
                 onClick={() => setIsViewingUser(true)}
                 className="cursor-pointer text-lg text-secondary active:opacity-50"
@@ -112,7 +124,53 @@ export default function UsersTable({ users = [], workspaceID }) {
                 <EyeIcon className="h-5 w-5" />
               </span>
             </Tooltip> */}
-            <>
+              <>
+                <Tooltip color="default" content="Edit user">
+                  <span
+                    onClick={() => {
+                      setSelectedUser(user)
+                      setIsEditingRole(true)
+                    }}
+                    className="cursor-pointer text-lg text-primary active:opacity-50"
+                  >
+                    <PencilSquareIcon className="h-5 w-5" />
+                  </span>
+                </Tooltip>
+                <Tooltip
+                  color="secondary"
+                  content="Reset User Password"
+                  classNames={{
+                    base: 'text-white',
+                    content: 'bg-secondary text-white',
+                  }}
+                >
+                  <span
+                    onClick={() => {
+                      setSelectedUser(user)
+                      setOpenResetPasswordPrompt(true)
+                    }}
+                    className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
+                  >
+                    <ArrowPathIcon className="h-5 w-5" />
+                  </span>
+                </Tooltip>
+
+                <Tooltip color="danger" content="Delete user">
+                  <span
+                    onClick={() => {
+                      setSelectedUser(user)
+                      onOpen()
+                    }}
+                    className="cursor-pointer text-lg text-danger active:opacity-50"
+                  >
+                    <TrashIcon className="h-5 w-5" />
+                  </span>
+                </Tooltip>
+              </>
+            </div>
+          ) : canManageWorkspaceUser ? (
+            //  FOR ADMIN USER IN WORKSPACE
+            <div className="relative flex items-center justify-center gap-4">
               <Tooltip color="default" content="Edit user">
                 <span
                   onClick={() => {
@@ -122,24 +180,6 @@ export default function UsersTable({ users = [], workspaceID }) {
                   className="cursor-pointer text-lg text-primary active:opacity-50"
                 >
                   <PencilSquareIcon className="h-5 w-5" />
-                </span>
-              </Tooltip>
-              <Tooltip
-                color="secondary"
-                content="Reset User Password"
-                classNames={{
-                  base: 'text-white',
-                  content: 'bg-secondary text-white',
-                }}
-              >
-                <span
-                  onClick={() => {
-                    setSelectedUser(user)
-                    setOpenResetPasswordPrompt(true)
-                  }}
-                  className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
-                >
-                  <ArrowPathIcon className="h-5 w-5" />
                 </span>
               </Tooltip>
 
@@ -154,13 +194,17 @@ export default function UsersTable({ users = [], workspaceID }) {
                   <TrashIcon className="h-5 w-5" />
                 </span>
               </Tooltip>
-            </>
-          </div>
-        )
-      default:
-        return cellValue
-    }
-  }, [])
+            </div>
+          ) : (
+            'N/A'
+          )
+
+        default:
+          return cellValue
+      }
+    },
+    [canManageWorkspaceUser],
+  )
 
   async function _handleResetUserPassword() {
     const response = await handleResetUserPassword()
