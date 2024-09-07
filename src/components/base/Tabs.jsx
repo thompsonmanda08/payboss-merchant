@@ -57,7 +57,7 @@ export default function Tabs({
               )}
               aria-current={tab?.index == currentTab ? 'active' : undefined}
             >
-              {tab?.name}
+              {tab?.name || tab?.title || tab?.label}
             </Button>
           ))}
         </nav>

@@ -221,3 +221,138 @@ export async function changeUserRoleInWorkspace(mapping, recordID) {
     }
   }
 }
+
+export async function setupWorkspaceAPIKey(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: 'Workspace ID is required!',
+      data: null,
+      status: 400,
+      statusText: 'Bad Request',
+    }
+  }
+
+  try {
+    const res = await authenticatedService({
+      url: `transaction/collection/create/api-key/${workspaceID}`,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+        statusText: res.statusText,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    console.error(error?.response)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}
+
+export async function refreshWorkspaceAPIKey(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: 'Workspace ID is required!',
+      data: null,
+      status: 400,
+      statusText: 'Bad Request',
+    }
+  }
+
+  try {
+    const res = await authenticatedService({
+      url: `transaction/collection/generate/api-key/${workspaceID}`,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+        statusText: res.statusText,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    console.error(error?.response)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}
+
+export async function getWorkspaceAPIKey(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: 'Workspace ID is required!',
+      data: null,
+      status: 400,
+      statusText: 'Bad Request',
+    }
+  }
+
+  try {
+    const res = await authenticatedService({
+      url: `transaction/collection/api-key/${workspaceID}`,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+        statusText: res.statusText,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: [],
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    console.error(error?.response)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: [],
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}

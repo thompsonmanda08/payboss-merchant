@@ -152,3 +152,22 @@
 .paragraph {
   @apply text-sm leading-6 text-slate-700;
 }
+
+/* CODE JOSN SNIPPETS */
+
+.string {
+  color: rgb(0, 55, 173);
+}
+.number {
+  color: darkorange;
+}
+.boolean {
+  color: blue;
+}
+.null {
+  color: magenta;
+}
+.key {
+  color: red;
+}
+/* ************************** */

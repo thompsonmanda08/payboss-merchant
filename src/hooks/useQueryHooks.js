@@ -7,6 +7,7 @@ import {
   getWorkspaceRoles,
 } from '@/app/_actions/config-actions'
 import { getDashboardAnalytics } from '@/app/_actions/dashboard-actions'
+import { useQuery } from '@tanstack/react-query'
 import {
   getAllBulkTransactions,
   getAllSingleTransactions,
@@ -17,6 +18,7 @@ import {
 } from '@/app/_actions/transaction-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
 import {
+  getWorkspaceAPIKey,
   getWorkspaceMembers,
   initializeWorkspace,
 } from '@/app/_actions/workspace-actions'
@@ -36,8 +38,8 @@ import {
   DASHBOARD_ANALYTICS_QUERY_KEY,
   PAYMENT_TRANSACTIONS_QUERY_KEY,
   COLLECTION_TRANSACTIONS_QUERY_KEY,
+  WORKSPACE_API_KEY_QUERY_KEY,
 } from '@/lib/constants'
-import { useQuery } from '@tanstack/react-query'
 
 export const useGeneralConfigOptions = () =>
   useQuery({
@@ -160,4 +162,11 @@ export const useDashboardAnalytics = (workspaceID) =>
     queryFn: async () => await getDashboardAnalytics(workspaceID),
     refetchOnMount: true,
     staleTime: 0,
+  })
+
+export const useWorkspaceAPIKey = (workspaceID) =>
+  useQuery({
+    queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
+    queryFn: async () => await getWorkspaceAPIKey(workspaceID),
+    staleTime: Infinity,
   })
