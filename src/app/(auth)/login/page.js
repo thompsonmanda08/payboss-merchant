@@ -6,7 +6,7 @@ import React from 'react'
 function LoginPage() {
   return (
     <div className="relative -mt-[320px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none">
-      <div className="mb-10 flex flex-col items-center rounded-t-2xl border-b-0 p-6 pb-0">
+      <div className="mb-10 flex flex-col items-center rounded-t-2xl border-b-0 p-6 pb-0 ">
         <Logo isWhite containerClasses={'scale-[1.5] mb-4'} />
         <h2
           className={
@@ -15,7 +15,7 @@ function LoginPage() {
         >
           Welcome Back!
         </h2>
-        <p className="mb-0 text-center text-slate-100">
+        <p className="text-shadow-sm mb-0 text-center text-slate-100">
           Enter your email and password to sign in
         </p>
       </div>
