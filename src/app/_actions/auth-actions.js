@@ -4,6 +4,7 @@ import {
   createAuthSession,
   deleteSession,
   getUserSession,
+  updateAuthSession,
   verifySession,
 } from '@/lib/session'
 
@@ -369,6 +370,14 @@ export async function logUserOut() {
   if (isLoggedIn) {
     deleteSession()
     localStorage.removeItem('pb-config-store')
+    return true
+  }
+  return false
+}
+export async function lockScrenOnUserIdle(state) {
+  const isLoggedIn = await verifySession()
+  if (isLoggedIn) {
+    await updateAuthSession({ screenLocked: state })
     return true
   }
   return false

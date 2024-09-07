@@ -42,11 +42,32 @@ export async function createAuthSession(
   cookies().set(AUTH_SESSION, session, {
     httpOnly: true,
     secure: true,
-    expires: !expiresIn ? expiresAt : undefined,
-    maxAge: expiresIn ? expiresIn : undefined,
+    maxAge: expiresIn,
     sameSite: 'lax',
     path: '/',
   })
+}
+
+export async function updateAuthSession(fields) {
+  const expiresAt = new Date(Date.now() + 60 * 15 * 1000)
+  const isLoggedIn = await verifySession()
+  const cookie = cookies().get(AUTH_SESSION)?.value
+  const oldSession = await decrypt(cookie)
+
+  if (isLoggedIn && oldSession) {
+    const session = await encrypt({
+      ...oldSession,
+      ...fields,
+    })
+
+    cookies().set(AUTH_SESSION, session, {
+      httpOnly: true,
+      secure: true,
+      expires: expiresAt,
+      sameSite: 'lax',
+      path: '/',
+    })
+  }
 }
 
 export async function createUserSession(user, merchantID) {
@@ -84,7 +105,7 @@ export async function verifySession() {
   const cookie = cookies().get(AUTH_SESSION)?.value
   const session = await decrypt(cookie)
 
-  if (session?.accessToken || session?.user) return true
+  if (session?.accessToken) return true
 
   // redirect('/login')
   return false
@@ -120,7 +141,7 @@ export async function getWorkspaceIDs() {
 
 export function deleteSession() {
   cookies().delete(AUTH_SESSION)
-  cookies().delete(USER_SESSION)
-  cookies().delete(WORKSPACE_SESSION)
+  // cookies().delete(USER_SESSION)
+  // cookies().delete(WORKSPACE_SESSION)
   redirect('/login')
 }

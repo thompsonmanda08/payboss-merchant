@@ -11,15 +11,13 @@ import { useEffect } from 'react'
 import useAuthStore from '@/context/authStore'
 import useRefreshToken from '@/hooks/useRefreshToken'
 import useAuthenticatedService from '@/hooks/useAuthenticatedService'
+import ScreenLock, { IdleTimerContainer } from '@/components/base/ScreenLock'
 // import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
 const queryClient = new QueryClient()
 
-function Providers({ session, children }) {
+function Providers({ session, authSession, children }) {
   const { online } = useNetwork()
-  const auth = useAuthenticatedService()
-
-  // console.log('AUTH STATE', auth)
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -50,8 +48,12 @@ function Providers({ session, children }) {
             NETWORK ERROR: Check your internet connection and try again!
           </motion.div>
         )}
+        <IdleTimerContainer authSession={authSession} />
         {children}
         {session?.user?.changePassword && <FirstLogin />}
+        {authSession?.screenLocked && (
+          <ScreenLock open={authSession?.screenLocked} />
+        )}
       </NextUIProvider>
       {/* </NextThemesProvider> */}
 

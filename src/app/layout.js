@@ -4,7 +4,7 @@ import '@/styles/tailwind.css'
 import { Toaster } from 'react-hot-toast'
 import { cn } from '@/lib/utils'
 import Providers from './providers'
-import { getUserDetails } from './_actions/config-actions'
+import { getAuthSession, getUserDetails } from './_actions/config-actions'
 
 export const metadata = {
   title: {
@@ -29,6 +29,9 @@ const lexend = Lexend({
 
 export default async function RootLayout({ children }) {
   const session = await getUserDetails()
+  const authSession = await getAuthSession()
+
+  
 
   return (
     <html
@@ -64,7 +67,7 @@ export default async function RootLayout({ children }) {
           inter.className,
         )}
       >
-        <Providers session={session}>
+        <Providers session={session} authSession={authSession}>
           {children}
           <Toaster
             toastOptions={{
