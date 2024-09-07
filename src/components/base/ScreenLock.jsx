@@ -104,7 +104,7 @@ function ScreenLock({ open, session }) {
                     }
                   />
                 </CardBody>
-                <CardFooter className="items-center justify-center pt-0">
+                <CardFooter className="flex-col items-center justify-center gap-4 pt-0">
                   <Chip
                     classNames={{
                       base: 'border-1 border-white/30',
@@ -114,19 +114,19 @@ function ScreenLock({ open, session }) {
                   >
                     Seconds
                   </Chip>
+
+                  <p className="text-center text-sm font-medium  leading-6 tracking-tight text-slate-200">
+                    You have been idle for some time now, verify that your
+                    session is still active otherwise you will be logged out.
+                  </p>
                 </CardFooter>
               </Card>
-              <p className="text-center text-[15px] font-medium  leading-6 tracking-tight text-slate-800">
-                You have been idle for some time now, verify that your session
-                is still active otherwise you will be logged out.
-              </p>
             </ModalBody>
             <ModalFooter>
               <Button
                 color="danger"
                 variant="light"
                 isDisabled={isLoading}
-                className="mt-4"
                 onPress={handleUserLogOut}
               >
                 Log out
@@ -136,7 +136,6 @@ function ScreenLock({ open, session }) {
                 isLoading={isLoading}
                 isDisabled={isLoading}
                 onPress={handleRefreshAuthToken}
-                className="mt-4"
               >
                 Am still here
               </Button>
