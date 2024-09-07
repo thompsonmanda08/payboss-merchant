@@ -48,8 +48,6 @@ export async function validateTPIN(tpin) {
 }
 
 export async function createNewMerchant(businessInfo) {
-  // delete businessInfo.registration // THIS IS BAD...
-
   try {
     const res = await apiClient.post(`merchant/onboard/new`, businessInfo, {
       headers: {
@@ -74,6 +72,45 @@ export async function createNewMerchant(businessInfo) {
     }
   } catch (error) {
     console.error(error?.response?.data)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Oops! Error Occurred!',
+      data: null,
+      status: error?.response?.status || error.status,
+    }
+  }
+}
+
+export async function submitMerchantBankDetails(data, merchantID) {
+  try {
+    const res = await apiClient.post(
+      `merchant/onboard/bank-details/${merchantID}`,
+      data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    if (res.status == 201 || res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res?.data,
+        status: res.status,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || res?.message,
+      data: null,
+      status: res.status,
+    }
+  } catch (error) {
+    console.error(error?.response?.data)
+    console.error(error?.response)
     return {
       success: false,
       message: error?.response?.data?.error || 'Oops! Error Occurred!',

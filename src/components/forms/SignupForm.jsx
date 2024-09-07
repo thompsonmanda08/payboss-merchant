@@ -16,6 +16,7 @@ import Step3 from './signup-fragments/Step3'
 import {
   createMerchantAdminUser,
   createNewMerchant,
+  submitMerchantBankDetails,
   updateMerchantDetails,
 } from '@/app/_actions/auth-actions'
 import { Card } from '@nextui-org/react'
@@ -25,7 +26,7 @@ export const STEPS = [
   'business-registration',
   'business-information',
   'business-bank-details',
-  'personal-information',
+  'user-information',
 ]
 
 export default function SignUpForm() {
@@ -34,32 +35,54 @@ export default function SignUpForm() {
   const {
     businessInfo,
     newAdminUser,
-    businessDocs,
     error,
     updateErrorStatus,
     setBusinessInfo,
     setNewAdminUser,
-    setBusinessDocs,
     isLoading,
     setIsLoading,
-    businessInfoSent,
-    setBusinessInfoSent,
     setAccountCreated,
     merchantID,
     setMerchantID,
     setError,
     isValidTPIN,
+    resetAuthData,
   } = useAuthStore()
 
   const NEW_REGISTRATION = [
-    <Step1 key={STEPS[1]} updateDetails={updateAccountDetails} />, // BUSINESS INFO
-    <Step2 key={STEPS[2]} updateDetails={updateAccountDetails} />, // BANK DETAILS
-    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />, // BUSINESS ADMIN USER
+    <Step1
+      key={STEPS[1]}
+      updateDetails={updateAccountDetails}
+      backToStart={handleGotoStart}
+    />, // BUSINESS INFO
+    <Step2
+      key={STEPS[2]}
+      updateDetails={updateAccountDetails}
+      backToStart={handleGotoStart}
+    />, // BANK DETAILS
+    <Step3
+      key={STEPS[3]}
+      updateDetails={updateAccountDetails}
+      backToStart={handleGotoStart}
+    />, // BUSINESS ADMIN USER
   ]
 
   const CONTINUE_REGISTRATION = [
-    <Step1_TPIN key={STEPS[1]} updateDetails={updateAccountDetails} />,
-    <Step3 key={STEPS[3]} updateDetails={updateAccountDetails} />,
+    <Step1_TPIN
+      key={STEPS[1]}
+      updateDetails={updateAccountDetails}
+      navigateTo={goTo}
+    />, // GET ACCOUNT DETAILS BY TPIN
+    <Step2
+      key={STEPS[2]}
+      updateDetails={updateAccountDetails}
+      backToStart={handleGotoStart}
+    />, // BANK DETAILS
+    <Step3
+      key={STEPS[3]}
+      updateDetails={updateAccountDetails}
+      backToStart={handleGotoStart}
+    />,
   ]
 
   const RENDERED_COMPONENTS =
@@ -83,15 +106,19 @@ export default function SignUpForm() {
   const isLastStep = currentTabIndex === lastTab
   const isFirstStep = currentTabIndex === firstTab
 
+  function handleGotoStart() {
+    resetAuthData()
+    navigateTo(0)
+  }
+  function goTo(i) {
+    navigateTo(i)
+  }
+
   function updateAccountDetails(step, fields) {
     // BUSINESS INFO
     if (STEPS[0] == step) {
       setBusinessInfo({ ...businessInfo, ...fields })
-    }
-
-    // BUSINESS DOCS
-    if (STEPS[3] == step) {
-      setBusinessDocs({ ...businessDocs, ...fields })
+      return
     }
 
     // NEW ADMIN USER
@@ -105,31 +132,42 @@ export default function SignUpForm() {
     setIsLoading(true)
     updateErrorStatus({ status: false, message: '' })
 
+    // ******** STEP: 0 ==>  USER CHOOSES TO EITHER CONTINUE OR START A NEW REGISTRATION ********** //
     if (businessInfo.registration == 'CONTINUE' && !isValidTPIN) {
       navigateForward()
       setIsLoading(false)
       return
     }
+    // ******************************************************************************************** //
 
-    // CREATE NEW MERCHANT ACCOUNT & BANK DETAILS
+    // ************** STEP: 1 ==>  CONTINUE NEW MERCHANT ACCOUNT CREATION ************************* //
+    // IF USER IS CONTINUING REGISTRATION AND HAS PROVIDED A VALID TPIN
+    // THEN NAVIGATE THEM TO CORRECT STAGE
     if (
-      currentTabIndex === 2 &&
-      STEPS[currentTabIndex] === STEPS[2] &&
+      businessInfo.registration == 'CONTINUE' &&
+      currentTabIndex === 1 &&
+      isValidTPIN &&
+      businessInfo?.stage // EXPECTED TO BE EITHER 2 OR 3
+    ) {
+      navigateTo(Number(businessInfo?.stage + currentTabIndex)) // INDEX START FROM ZERO
+      setIsLoading(false)
+      return
+    }
+
+    // ******************************************************************************************** //
+
+    // ************** STEP: 1 ==>  CREATE NEW MERCHANT ACCOUNT *********************************** //
+    if (
+      currentTabIndex === 1 &&
+      STEPS[currentTabIndex] === STEPS[1] &&
       !isValidTPIN
     ) {
-      // POST AND PATCH
-      let response
-      if (!businessInfoSent) {
-        response = await createNewMerchant(businessInfo)
+      const response = await createNewMerchant(businessInfo)
 
-        let merchantID = response?.data?.merchantID
+      let merchantID = response?.data?.merchantID
 
-        if (merchantID) {
-          setMerchantID(merchantID)
-          setBusinessInfoSent(true)
-        }
-      } else if (businessInfoSent && merchantID) {
-        response = await updateMerchantDetails(businessInfo, merchantID)
+      if (merchantID) {
+        setMerchantID(merchantID)
       }
 
       if (response.success && (response?.data?.merchantID || merchantID)) {
@@ -144,8 +182,31 @@ export default function SignUpForm() {
         return
       }
     }
+    // ******************************************************************************************** //
 
-    // CREATE ADMIN USER - LAST STEP
+    // ************** STEP: 2 ==>  APPEND MERCHANT ACCOUNT BANK DETAILS *************************** //
+    if (
+      currentTabIndex === 2 &&
+      STEPS[currentTabIndex] === STEPS[2] &&
+      !isValidTPIN
+    ) {
+      const response = await submitMerchantBankDetails(businessInfo, merchantID)
+
+      if (response.success) {
+        notify('success', 'Bank information Submitted!')
+        navigateForward()
+        setIsLoading(false)
+        return
+      } else {
+        notify('error', 'Error Submitting Bank information!')
+        updateErrorStatus({ status: true, message: response.message })
+        setIsLoading(false)
+        return
+      }
+    }
+    // ******************************************************************************************** //
+
+    // ******************** STEP: 3 ==>  CREATE ADMIN USER - LAST STEP *************************** //
     if (isLastStep && STEPS[currentTabIndex] === STEPS[lastTab]) {
       // Passwords Validation
       if (newAdminUser?.password !== newAdminUser?.confirmPassword) {
@@ -171,6 +232,7 @@ export default function SignUpForm() {
         return
       }
     }
+    // ******************************************************************************************** //
 
     if (!isLastStep) {
       navigateForward()
@@ -183,6 +245,8 @@ export default function SignUpForm() {
     // Clean out any errors if the user makes any changes to the form
     setError({})
   }, [newAdminUser, businessInfo])
+
+  // FOR REGISTRATION
 
   return (
     <Card className="mx-auto w-full max-w-sm flex-auto p-6 sm:max-w-[790px]">
@@ -212,7 +276,7 @@ export default function SignUpForm() {
           )}
 
           <div className="mt-5 flex w-full items-end justify-center gap-4 md:justify-end">
-            {!isFirstStep && (
+            {/* {!isFirstStep && (
               <Button
                 aria-label="back"
                 color="light"
@@ -224,7 +288,7 @@ export default function SignUpForm() {
               >
                 <ArrowUturnLeftIcon className="h-5 w-5" /> Back
               </Button>
-            )}
+            )} */}
             <Button
               type={'submit'}
               size="lg"

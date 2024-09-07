@@ -19,8 +19,7 @@ import { useQueryClient } from '@tanstack/react-query'
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function DocumentAttachments({ navigateToPage }) {
   const queryClient = useQueryClient()
-  const { merchantID, businessDocs, allowUserToSubmitKYC, refDocsExist } =
-    useAccountProfile()
+  const { merchantID, allowUserToSubmitKYC, refDocsExist } = useAccountProfile()
   const { isKYCSent, setIsKYCSent } = useAuthStore((state) => state)
   const [docFiles, setDocFiles] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)

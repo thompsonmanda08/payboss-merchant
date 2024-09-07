@@ -12,7 +12,7 @@ import SelectField from '@/components/ui/SelectField'
 import useConfigOptions from '@/hooks/useConfigOptions'
 
 // BUSINESS BANKING DETAILS
-export default function Step2({ updateDetails }) {
+export default function Step2({ updateDetails, backToStart }) {
   const { banks, currencies } = useConfigOptions()
   const step = useAuthStore((state) => state.businessInfo)
   const branchCodeError =
@@ -23,15 +23,11 @@ export default function Step2({ updateDetails }) {
   return (
     <>
       <CardHeader
-        className={'py-0'}
-        classNames={{
-          infoClasses: 'mb-0',
-          innerWrapper: 'gap-0',
-        }}
         title="Banking Details"
         infoText={
           'Please provide your banking details to receive your payments.'
         }
+        handleClose={() => backToStart()}
       />
       <div className="flex w-full flex-col items-start justify-start gap-6 md:flex-row">
         <div className="flex w-full flex-1 flex-col gap-2">

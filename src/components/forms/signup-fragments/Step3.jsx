@@ -11,7 +11,7 @@ import IMG from '@/images/auth-img.png'
 import Image from 'next/image'
 
 // CREATE NEW ADMIN USER
-export default function Step4({ updateDetails }) {
+export default function Step4({ updateDetails, backToStart }) {
   const { newAdminUser, error, setError } = useAuthStore()
 
   useEffect(() => {
@@ -21,11 +21,7 @@ export default function Step4({ updateDetails }) {
   return (
     <>
       <CardHeader
-        className={'py-0'}
-        classNames={{
-          infoClasses: 'mb-0',
-          innerWrapper: 'gap-0',
-        }}
+        handleClose={() => backToStart()}
         title="Create New Admin User"
         infoText={'Create a new admin user to manage your business on PayBoss.'}
       />
@@ -55,19 +51,6 @@ export default function Step4({ updateDetails }) {
           </motion.div>
         </div>
         <div className="flex w-full flex-1 flex-col gap-y-2">
-          {/* <motion.div
-            className="w-full"
-            variants={staggerContainerItemVariants}
-          >
-            <SelectField
-              placeholder={'SUPER ADMIN'}
-              name="user_role"
-              label="User Role"
-              isDisabled={true}
-              value={'owner'}
-              defaultValue={'owner'}
-            />
-          </motion.div> */}
           <motion.div
             className="flex w-full gap-2"
             variants={staggerContainerItemVariants}
@@ -76,6 +59,7 @@ export default function Step4({ updateDetails }) {
               type="text"
               label="First Name"
               name="firstName"
+              autoFocus
               value={newAdminUser?.first_name}
               required={true}
               onChange={(e) => {
@@ -101,7 +85,7 @@ export default function Step4({ updateDetails }) {
             <Input
               type="text"
               label="Email"
-              name="email"
+              name="new-email"
               required={true}
               value={newAdminUser?.email}
               onChange={(e) => {
@@ -141,7 +125,7 @@ export default function Step4({ updateDetails }) {
             <Input
               label="Password"
               type="password"
-              name="password"
+              name="new-password"
               value={newAdminUser?.password}
               onError={error?.onPassword}
               error={error}

@@ -13,7 +13,7 @@ import { getLocalTimeZone, today } from '@internationalized/date'
 import SelectField from '@/components/ui/SelectField'
 import useConfigOptions from '@/hooks/useConfigOptions'
 
-export default function Step1({ updateDetails }) {
+export default function Step1({ updateDetails, backToStart }) {
   const { companyTypes, provinces } = useConfigOptions()
   const step = useAuthStore((state) => state.businessInfo)
 
@@ -34,15 +34,12 @@ export default function Step1({ updateDetails }) {
   return (
     <>
       <CardHeader
-        className={'py-0'}
-        classNames={{
-          infoClasses: 'mb-0',
-          innerWrapper: 'gap-0',
-        }}
+      
         title="Business Details"
         infoText={
           'Information about your business to help us verify your identity.'
         }
+        handleClose={() => backToStart()}
       />
       <div className="flex w-full flex-col items-center justify-center gap-6 lg:flex-row">
         <div className="flex w-full flex-1 flex-col gap-2">

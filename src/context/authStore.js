@@ -3,8 +3,6 @@ import { create } from 'zustand'
 
 const INITIAL_STATE = {
   isLoading: false,
-  businessInfoSent: false,
-  documentsInfoSent: false,
   auth: {},
   password: {
     newPassword: '',
@@ -16,9 +14,7 @@ const INITIAL_STATE = {
   isValidTPIN: false,
   isKYCSent: false,
   accountCreated: false,
-
   businessInfo: {},
-  businessDocs: {},
   newAdminUser: {},
   loginDetails: {},
 }
@@ -30,12 +26,8 @@ const useAuthStore = create((set, get) => ({
   setError: (error) => set({ error }),
   setAuth: (auth) => set({ auth }), // TODO => TO HANDLE REFRESH TOKENS
   setIsLoading: (isLoading) => set({ isLoading }),
-
   setBusinessInfo: (businessInfo) => set({ businessInfo }),
   setMerchantID: (merchantID) => set({ merchantID }),
-  setBusinessDocs: (businessDocs) => set({ businessDocs }),
-  setBusinessInfoSent: (businessInfoSent) => set({ businessInfoSent }),
-  setDocumentsInfoSent: (documentsInfoSent) => set({ documentsInfoSent }),
   setNewAdminUser: (newAdminUser) => set({ newAdminUser }),
   setIsValidTPIN: (isValidTPIN) => set({ isValidTPIN }),
   setAccountCreated: (accountCreated) => set({ accountCreated }),

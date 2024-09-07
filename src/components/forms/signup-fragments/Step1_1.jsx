@@ -13,11 +13,11 @@ import { Checkbox } from '@nextui-org/react'
 import { validateTPIN } from '@/app/_actions/auth-actions'
 import { BriefcaseIcon } from '@heroicons/react/24/outline'
 
-export default function Step1_TPIN({ updateDetails }) {
+export default function Step1_TPIN({ updateDetails, backToStart }) {
   const {
     businessInfo: step,
     setMerchantID,
-    setBusinessInfoSent,
+    setBusinessInfo,
   } = useAuthStore((state) => state)
   const isValidTPIN = useAuthStore((state) => state.isValidTPIN)
   const setIsValidTPIN = useAuthStore((state) => state.setIsValidTPIN)
@@ -55,8 +55,8 @@ export default function Step1_TPIN({ updateDetails }) {
 
     if (response.success) {
       setMerchant(response.data)
+      setBusinessInfo({ ...step, ...response?.data })
       setMerchantID(response.data.ID)
-      setBusinessInfoSent(response.success)
       setIsValidTPIN(response.success)
       setLoading(false)
       return
@@ -71,11 +71,7 @@ export default function Step1_TPIN({ updateDetails }) {
   return (
     <>
       <CardHeader
-        className={'py-0'}
-        classNames={{
-          infoClasses: 'mb-0',
-          innerWrapper: 'gap-0',
-        }}
+        handleClose={() => backToStart()}
         title="Verify your identity"
         infoText={'Enter your TPIN to retrieve your business information.'}
       />
