@@ -8,8 +8,8 @@ const useAuthenticatedService = () => {
   const auth = useAuthStore((state) => state.auth)
 
   useEffect(() => {
-    console.log('Adding Token...')
-    console.log('Refreshing Token...')
+    // console.log('Adding Token...')
+    // console.log('Refreshing Token...')
     // Set up the interceptors
     const requestIntercept = apiClient.interceptors.request.use(
       (config) => {

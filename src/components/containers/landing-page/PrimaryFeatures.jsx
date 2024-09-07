@@ -6,38 +6,41 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import clsx from 'clsx'
 
 import { Container } from '@/components/base/Container'
-import { placeHolderImage } from '@/lib/constants'
 import backgroundImage from '@/images/background-features.jpg'
-// import screenshotExpenses from '@/images/screenshots/expenses.png'
+import Image1 from '@/images/screenshots/home.png'
+import Image2 from '@/images/screenshots/payments-empty.png'
+import Image3 from '@/images/screenshots/payments-validation.png'
+import Image4 from '@/images/screenshots/api.png'
+// import { placeHolderImage } from '@/lib/constants'
 // import screenshotPayroll from '@/images/screenshots/payroll.png'
 // import screenshotReporting from '@/images/screenshots/reporting.png'
 // import screenshotVatReturns from '@/images/screenshots/vat-returns.png'
-import dashboardScreenShot from '@/images/screenshots/home.png'
+// import dashboardScreenShot from '@/images/screenshots/home.png'
 
 const features = [
   {
     title: 'Comprehensive Financial Management',
     description:
       ' From invoicing to expense tracking, PayBoss covers all aspects of your financial needs.',
-    image: dashboardScreenShot,
+    image: Image1,
   },
   {
     title: 'User-Friendly Interface',
     description:
       'Our platform is designed to be intuitive and easy to use, even for those with limited technical expertise.',
-    image: placeHolderImage,
+    image: Image2,
   },
   {
     title: 'Secure and Reliable',
     description:
       'We prioritize the security of your financial data with robust encryption and security protocols.',
-    image: placeHolderImage,
+    image: Image3,
   },
   {
     title: 'Customizable Solutions',
     description:
       'Tailor PayBoss features to fit your daily unique business requirements.',
-    image: placeHolderImage,
+    image: Image4,
   },
 ]
 
@@ -141,8 +144,9 @@ export function PrimaryFeatures() {
                       <Image
                         className="w-full"
                         src={feature.image}
+                        unoptimized
+                        loading="lazy"
                         alt=""
-                        priority
                         sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
                       />
                     </div>

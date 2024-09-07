@@ -32,7 +32,6 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   const { setSelectedProtocol } = usePaymentsStore()
 
   async function handleProceed() {
-    console.log(paymentAction)
     setLoading(true)
 
     if (!paymentAction?.protocol) {

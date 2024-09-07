@@ -65,8 +65,6 @@ export default function UsersTable({ users = [], workspaceID }) {
   const canManageWorkspaceUser =
     workspaceUserRole?.role.toLowerCase() == 'admin' && !isUsersRoute
 
-  console.log(canManageWorkspaceUser)
-
   // TABLE CELL RENDERER
   const renderCell = React.useCallback(
     (user, columnKey) => {

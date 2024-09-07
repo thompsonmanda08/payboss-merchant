@@ -10,9 +10,9 @@ const useRefreshToken = () => {
 
     if (response.success) {
       let accessToken = response?.data?.accessToken
-      console.log('NEW TOKEN' + accessToken)
+      // console.log('NEW TOKEN' + accessToken)
       setAuth((prev) => {
-        console.log('OLD TOKEN' + JSON.stringify(prev))
+        // console.log('OLD TOKEN' + JSON.stringify(prev))
         return { ...prev, accessToken }
       })
       return accessToken

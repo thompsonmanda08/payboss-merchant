@@ -6,9 +6,9 @@ export function NavLink({ href, children, active, Icon }) {
     <Link
       href={href}
       className={cn(
-        'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium tracking-tight text-gray-500 transition-all duration-300 ease-in-out hover:text-primary sm:text-base',
+        'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium tracking-tight text-slate-700 transition-all duration-300 ease-in-out hover:text-primary sm:text-base',
         {
-          'text-primary': active,
+          'font-bold text-primary': active,
         },
       )}
     >

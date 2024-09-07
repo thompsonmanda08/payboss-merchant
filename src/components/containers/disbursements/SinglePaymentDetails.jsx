@@ -46,7 +46,6 @@ const SinglePaymentDetails = ({ navigateForward }) => {
 
   async function handleProceed(e) {
     e?.preventDefault()
-    console.log(paymentAction)
     setLoading(true)
 
     // *********************** FORM VALIDATION ************************ //

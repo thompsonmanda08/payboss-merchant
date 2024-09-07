@@ -525,9 +525,6 @@ export async function initializeSingleTransaction(
 ) {
   const { protocol } = transactionData
 
-  console.log(transactionData)
-  console.log(workspaceID)
-
   if (!workspaceID) {
     return {
       success: false,
@@ -544,7 +541,6 @@ export async function initializeSingleTransaction(
       method: 'POST',
       data: transactionData,
     })
-    console.log(res)
 
     if (res.status == 200 || res.status == 201) {
       return {
@@ -564,7 +560,6 @@ export async function initializeSingleTransaction(
     }
   } catch (error) {
     console.error(error?.response)
-    console.log(error)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation Failed!',

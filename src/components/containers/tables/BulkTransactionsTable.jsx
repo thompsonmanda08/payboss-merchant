@@ -334,9 +334,6 @@ export default function BulkTransactionsTable({
     hasSearchFilter,
   ])
 
-  console.log(rows)
-  console.log(items)
-  console.log(filteredItems)
   return (
     <Table
       aria-label="Transactions table with custom cells"
