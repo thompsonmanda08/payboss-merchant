@@ -25,22 +25,20 @@ import { useIdleTimer } from 'react-idle-timer/legacy'
 
 function ScreenLock({ open, session }) {
   const queryClient = useQueryClient()
-  const { lockScreen, setLockScreen, handleUserLogOut } = useAuthStore()
+  const { handleUserLogOut } = useAuthStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setIsLoading] = useState(false)
   const [seconds, setSeconds] = useState(90)
 
   async function handleRefreshAuthToken() {
-    await lockScrenOnUserIdle(false)
     setIsLoading(true)
+    await lockScrenOnUserIdle(false)
 
-    // Send New password details to the backend
+    // TODO: IMPLEMENT REFRESH TOKEN IN THE ACTIVE FUNCTION WITH SET INTERVAL
     const res = await getRefreshToken()
 
-    // If password change success - invalidate query caches - close modals and notify user
     if (res.success) {
       onClose()
-      // queryClient.invalidateQueries()
       setIsLoading(false)
       return
     }

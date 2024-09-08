@@ -48,7 +48,7 @@ function PendingApprovals({ data }) {
   return (
     <Card className={'w-2/3'}>
       <CardHeader
-        title={'Pending Approval'}
+        title={'Approvals'}
         infoText={'Transactions that require you attention are displayed below'}
       />
       <div className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-8">

@@ -30,6 +30,9 @@ import {
   WalletIcon,
   UsersIcon,
   Cog6ToothIcon,
+  CircleStackIcon,
+  ArrowRightCircleIcon,
+  ArrowDownOnSquareStackIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { Logo, SettingsSideBar } from '.'
@@ -160,7 +163,22 @@ function SideNavBar({ params }) {
           Icon: PresentationChartLineIcon,
         },
         {
-          name: 'Transactions History',
+          name: 'Bulk Payments',
+          href: `${dashboardRoute}/reports/bulk-payments`,
+          Icon: CircleStackIcon,
+        },
+        {
+          name: 'Single Payments',
+          href: `${dashboardRoute}/reports/single-payments`,
+          Icon: ArrowRightCircleIcon,
+        },
+        {
+          name: 'Collections History',
+          href: `${dashboardRoute}/reports/collections`,
+          Icon: ArrowDownOnSquareStackIcon,
+        },
+        {
+          name: 'All Transactions History',
           href: `${dashboardRoute}/reports/transactions`,
           Icon: NumberedListIcon,
         },
