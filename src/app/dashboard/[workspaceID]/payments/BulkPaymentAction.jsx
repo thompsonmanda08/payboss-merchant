@@ -7,7 +7,7 @@ import UploadCSVFile from '@/components/containers/disbursements/UploadCSVFile'
 import PaymentDetails from '@/components/containers/disbursements/BulkPaymentDetails'
 import ValidationDetails from '@/components/containers/disbursements/ValidationDetails'
 import RecordDetailsViewer from '@/components/containers/disbursements/RecordDetailsViewer'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import ApproverAction from '@/components/containers/disbursements/ApproverAction'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 
@@ -40,6 +40,7 @@ function BulkPaymentAction({}) {
   const [currentStep, setCurrentStep] = useState(STEPS[0])
   const urlParams = useSearchParams()
   const protocol = urlParams.get('protocol')
+  const router = useRouter()
 
   // ** INITIALIZEs PAYMENT STATE **//
   const {
@@ -129,6 +130,7 @@ function BulkPaymentAction({}) {
             </>
           }
           infoText={currentStep.infoText}
+          handleClose={() => router.back()}
         />
         <ProgressStep STEPS={STEPS} currentTabIndex={currentTabIndex} />
         {activeTab}
