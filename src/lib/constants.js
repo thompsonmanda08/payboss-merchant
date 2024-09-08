@@ -134,6 +134,13 @@ const TRANSACTION_STATUS_COLOR_MAP = {
   approved: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
 }
 
+const SERVICE_PROVIDER_COLOR_MAP = {
+  airtel: 'bg-red-500 text-white  ',
+  mtn: 'bg-yellow-600 text-white',
+  zamtel: 'bg-green-600 text-white',
+  bank: 'bg-primary text-white',
+}
+
 const TASK_TYPE = {
   // Call: {
   //   icon: <DevicePhoneMobileIcon className="h-5 w-5" />,
@@ -187,6 +194,7 @@ export {
   TASK_TYPE,
   TRANSACTION_STATUS_COLOR_MAP,
   PAYMENT_PROTOCOL,
+  SERVICE_PROVIDER_COLOR_MAP,
 
   // ANIMATIONS
   staggerContainerItemVariants,

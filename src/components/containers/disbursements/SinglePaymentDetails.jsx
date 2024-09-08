@@ -122,6 +122,11 @@ const SinglePaymentDetails = ({ navigateForward }) => {
     // If the user cannot create then they are unauthorized
     setLoading(false)
     notify('error', 'Unauthorized!')
+    setError({
+      status: true,
+      message:
+        'It appears you are not authorized to perform this action. Contact an admin for initiator permissions',
+    })
     return
   }
 
@@ -251,7 +256,7 @@ const SinglePaymentDetails = ({ navigateForward }) => {
           )}
 
           {error?.status && (
-            <div className="mx-auto flex w-full flex-col items-center justify-center gap-4 capitalize">
+            <div className="mx-auto flex w-full flex-col items-center justify-center gap-4 ">
               <StatusMessage error={error.status} message={error.message} />
             </div>
           )}

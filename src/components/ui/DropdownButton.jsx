@@ -5,10 +5,10 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Button,
   Card,
+  Button,
 } from '@nextui-org/react'
-import { cn } from '@/lib/utils'
+import { capitalize, cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import {
   ChevronDownIcon,
@@ -16,6 +16,9 @@ import {
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+
+const buttonClasses =
+  'items-center justify-between gap-2 rounded-lg font-medium capitalize text-primary shadow-sm'
 
 export default function DropdownButton({
   className,
@@ -158,10 +161,7 @@ export function SingleSelectionDropdown({
       <DropdownTrigger>
         <Button
           variant={buttonVariant}
-          className={cn(
-            'items-center justify-between gap-2 font-medium capitalize text-primary shadow-sm',
-            trigger,
-          )}
+          className={cn(buttonClasses, trigger)}
           endContent={
             <ChevronDownIcon
               className={cn(
@@ -186,23 +186,89 @@ export function SingleSelectionDropdown({
         {...props}
       >
         {dropdownItems.map((item, index) => {
-          let ItemLabel =
-            item?.name || item?.label || item?.[listItemName] || item
+          let ItemLabel = capitalize(
+            item.name || item.label || item?.[listItemName] || item,
+          )
+          let itemValue =
+            item.value || item?.uid || item?.ID || item?.id || item?.key || item
           return (
             <DropdownItem
-              key={index}
+              key={itemValue}
               description={item?.description}
               className={cn(
                 '!focus-within:bg-primary-100 !hover:bg-primary-100 !focus:bg-primary-100 !data-[hover=true]:border-primary-200 !data-[selectable=true]:focus:bg-primary-100 !data-[focus=true]:bg-primary-100 !data-[hover=true]:bg-primary-100 !data-[hover=true]:text-primary !data-[selected=true]:text-primary group min-w-max capitalize',
 
                 dropdownItem,
               )}
-              classNames={{ wrapper: 'bg-red-500' }}
             >
               {ItemLabel}
             </DropdownItem>
           )
         })}
+      </DropdownMenu>
+    </Dropdown>
+  )
+}
+
+export function SimpleDropdown({
+  dropdownItems,
+  selectedKeys,
+  setSelectedKeys,
+  name,
+  selectionMode,
+  disallowEmptySelection = false,
+  className,
+  classNames,
+  variant = 'flat',
+  color = 'primary',
+
+  listItemName,
+  ...props
+}) {
+  const { trigger, innerWrapper, dropdownItem, chevronIcon } = classNames || ''
+  return (
+    <Dropdown className={cn('relative min-w-max', className)}>
+      <DropdownTrigger className="hidden sm:flex">
+        <Button
+          color={color}
+          variant={variant}
+          endContent={
+            <ChevronDownIcon
+              className={cn(
+                'h-4 w-4 focus-within:rotate-180 focus:rotate-180 ',
+                chevronIcon,
+              )}
+            />
+          }
+          className={cn(buttonClasses, trigger)}
+        >
+          {name}
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu
+        disallowEmptySelection={disallowEmptySelection}
+        aria-label={'Simple Dropdown - ' + name}
+        closeOnSelect={false}
+        selectedKeys={selectedKeys}
+        selectionMode={selectionMode}
+        onSelectionChange={setSelectedKeys}
+        className={innerWrapper}
+        {...props}
+      >
+        {dropdownItems.map((item) => (
+          <DropdownItem
+            key={item?.uid || item?.ID || item?.id || item?.key || item}
+            className={cn(
+              '!focus-within:bg-primary-100 !hover:bg-primary-100 !focus:bg-primary-100 !data-[hover=true]:border-primary-200 !data-[selectable=true]:focus:bg-primary-100 !data-[focus=true]:bg-primary-100 !data-[hover=true]:bg-primary-100 !data-[hover=true]:text-primary !data-[selected=true]:text-primary group min-w-max capitalize',
+
+              dropdownItem,
+            )}
+          >
+            {capitalize(
+              item.name || item.label || item?.[listItemName] || item,
+            )}
+          </DropdownItem>
+        ))}
       </DropdownMenu>
     </Dropdown>
   )

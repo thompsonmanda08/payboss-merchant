@@ -3,7 +3,6 @@ import { Card, CardHeader, Tabs } from '@/components/base'
 import React, { useState } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import Search from '@/components/ui/Search'
-import useTransactions from '@/hooks/useTransactions'
 import CustomTable from '@/components/containers/tables/Table'
 import { FunnelIcon, ListBulletIcon } from '@heroicons/react/24/outline'
 import { Tooltip } from '@nextui-org/react'
@@ -69,7 +68,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
       columns={directTransactionsColumns}
       rows={transactionRows}
       isLoading={isLoading}
-      rowsPerPage={10}
+
       // selectedKeys={selectedKeys}
       // setSelectedKeys={setSelectedKeys}
     />,

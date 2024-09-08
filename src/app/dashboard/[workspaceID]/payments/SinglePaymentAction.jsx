@@ -115,9 +115,9 @@ function SinglePaymentAction({}) {
       </Card>
 
       {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
-      {(openAllRecordsModal ||
+      {/* {(openAllRecordsModal ||
         openValidRecordsModal ||
-        openInvalidRecordsModal) && <RecordDetailsViewer />}
+        openInvalidRecordsModal) && <RecordDetailsViewer />} */}
       {/************************************************************************/}
     </>
   )

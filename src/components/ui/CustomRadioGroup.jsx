@@ -1,23 +1,32 @@
+import { cn } from '@/lib/utils'
 import React, { useState } from 'react'
 
 const Option = (props) => {
   const isSelected = props.index === props.selectedIndex
+
   return (
     <div
-      className={`mx-1 flex w-full min-w-fit flex-1 cursor-pointer  items-center gap-2 rounded-md p-2  py-3 text-xs font-bold text-slate-600 transition duration-300 hover:shadow-md lg:text-sm lg:font-normal ${
-        isSelected && 'bg-sky-100/20'
-      }`}
+      className={cn(
+        `mx-1 flex w-full min-w-fit flex-1 cursor-pointer  items-center gap-2 rounded-md p-2  py-3 text-xs font-bold text-slate-600 transition duration-300 hover:shadow-md lg:text-sm lg:font-normal `,
+        props.className,
+        { 'bg-sky-100/20': isSelected },
+        `${isSelected && props?.selected}`,
+      )}
       onClick={() => props.onSelect(props.index)}
     >
+      {/* OUTLINE CIRCLE */}
       <div
-        className={`flex h-6 w-6 items-center justify-center rounded-full border transition ${
-          isSelected && 'border-2 border-primary '
-        } `}
+        className={cn(
+          `flex h-6 w-6 items-center justify-center rounded-full border transition`,
+          { 'border-2 border-primary': isSelected },
+        )}
       >
+        {/* SOLID CIRCLE */}
         <div
-          className={`aspect-square h-[80%] w-[80%] rounded-full border transition ${
-            isSelected && 'bg-primary'
-          } `}
+          className={cn(
+            `aspect-square h-[80%] w-[80%] rounded-full border transition`,
+            { 'bg-primary': isSelected },
+          )}
         />
       </div>
       {props.children}
@@ -25,7 +34,14 @@ const Option = (props) => {
   )
 }
 
-function CustomRadioGroup({ options, onChange, value = 0, labelText }) {
+function CustomRadioGroup({
+  options,
+  onChange,
+  value = 0,
+  labelText,
+  className,
+  classNames,
+}) {
   const [selectedIndex, setSelectedIndex] = useState(value)
 
   function onSelect(index) {
@@ -33,16 +49,30 @@ function CustomRadioGroup({ options, onChange, value = 0, labelText }) {
     onChange && onChange(index)
   }
 
+  const { base, wrapper, label, selected } = classNames || ''
+
   return (
-    <div className="flex w-full flex-col gap-y-2">
+    <div className={cn('flex w-full flex-col gap-y-1', wrapper)}>
       {labelText && (
-        <label className="text-sm font-medium leading-[1.125rem] tracking-wide text-slate-500">
+        <label
+          className={cn(
+            '-mb-1 ml-1.5 text-sm font-medium tracking-wide text-slate-500',
+            label,
+          )}
+        >
           {labelText}
         </label>
       )}
-      <div className="flex min-w-full flex-1 flex-row justify-between">
+      <div
+        className={cn(
+          'flex min-w-full flex-1 flex-row justify-between py-2',
+          base,
+        )}
+      >
         {options.map((el, index) => (
           <Option
+            className={className}
+            selected={selected}
             key={index}
             index={index}
             selectedIndex={selectedIndex}

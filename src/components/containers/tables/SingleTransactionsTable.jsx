@@ -10,7 +10,10 @@ import {
   Pagination,
   Tooltip,
 } from '@nextui-org/react'
-import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
+import {
+  SERVICE_PROVIDER_COLOR_MAP,
+  TRANSACTION_STATUS_COLOR_MAP,
+} from '@/lib/constants'
 import { cn, formatCurrency, formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
@@ -20,6 +23,7 @@ import Search from '@/components/ui/Search'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import SelectField from '@/components/ui/SelectField'
 import { EmptyLogs } from '@/components/base'
+import { useSingleTransactions } from '@/hooks/useQueryHooks'
 
 export const SingleTransactionColumns = [
   { name: 'DATE CREATED', uid: 'created_at', sortable: true },
@@ -34,19 +38,26 @@ export const SingleTransactionColumns = [
   { name: 'ACTIONS', uid: 'actions' },
 ]
 
+// DEFINE FILTERABLE SERVICES
 const SERVICE_FILTERS = [
   {
     name: 'direct single disbursement',
-    uid: 'direct_single_disbursement',
+    uid: 'direct single disbursement',
   },
   {
     name: 'voucher single disbursement',
-    uid: 'voucher_single_disbursement',
+    uid: 'voucher single disbursement',
   },
 ]
 
-export default function SingleTransactionsTable({ rows, isLoading }) {
+export default function SingleTransactionsTable({ workspaceID }) {
+  const { data: transactionsResponse, isLoading } =
+    useSingleTransactions(workspaceID)
+
+  // DEFINE FILTERABLE ROWS AND COLUMNS
   const columns = SingleTransactionColumns
+  const rows = transactionsResponse?.data?.data || []
+
   const {
     setTransactionDetails,
     setOpenTransactionDetailsModal,
@@ -141,12 +152,7 @@ export default function SingleTransactionsTable({ rows, isLoading }) {
             {formatDate(cellValue).replaceAll('-', ' ')}
           </span>
         )
-      case 'batch_name':
-        return (
-          <span className={cn('text-nowrap font-medium capitalize')}>
-            {cellValue}
-          </span>
-        )
+
       case 'amount':
         return (
           <span className={cn('text-nowrap font-medium capitalize')}>
@@ -176,21 +182,21 @@ export default function SingleTransactionsTable({ rows, isLoading }) {
       case 'service_provider':
         return (
           <Tooltip
-            color="primary"
-            placement="top"
-            classNames={{
-              content: 'text-nowrap bg-primary/10 text-primary-600',
-            }}
+            color="default"
+            placement="right"
             content={row?.remarks}
-            delay={1000}
-            closeDelay={1000}
+            delay={500}
+            closeDelay={500}
             showArrow={true}
           >
             <Chip
               color="primary"
+              className={cn(
+                'mx-auto self-center capitalize',
+                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider.toLowerCase()],
+              )}
               classNames={{
-                base: 'border-1 border-primary/30 mt-4 cursor-pointer',
-                content: 'text-primary text-small font-semibold',
+                content: 'font-semibold',
               }}
               variant="flat"
             >

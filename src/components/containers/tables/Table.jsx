@@ -20,7 +20,8 @@ export default function CustomTable({
   rows,
   selectedKeys,
   setSelectedKeys,
-  rowsPerPage = 8,
+  rowsPerPage = 9,
+  selectionBehavior,
   isLoading,
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore()
@@ -78,12 +79,12 @@ export default function CustomTable({
   return (
     <Table
       aria-label="Example table with custom cells"
-      className="max-h-[580px]"
+      className="max-h-[500px]"
       classNames={{
         table: cn('align-top items-start justify-start', {
-          'min-h-[500px]': isLoading || !rows,
+          'min-h-[400px]': isLoading || !rows,
         }),
-        wrapper: cn('min-h-[500px]', { 'min-h-max': pages <= 1 }),
+        wrapper: cn('min-h-[200px]', { 'min-h-max': pages <= 1 }),
       }}
       // classNames={}
       // showSelectionCheckboxes
@@ -91,8 +92,10 @@ export default function CustomTable({
       selectionMode="single"
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}
+      selectionBehavior={selectionBehavior}
       isStriped
       isHeaderSticky
+      onRowAction={(key) => alert(`Row item ${key}...`)}
       bottomContent={
         pages > 1 && (
           <div className="flex w-full justify-center">

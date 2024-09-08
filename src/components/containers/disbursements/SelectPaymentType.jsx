@@ -90,8 +90,14 @@ const SelectPaymentType = () => {
         <div className="flex h-full w-full flex-col justify-between">
           <div className="my-4">
             <CustomRadioGroup
+              className={'bg-slate-50/20 py-5 text-base'}
+              classNames={{
+                // wrapper: 'bg-red-400',
+                selected:
+                  'bg-primary/10 border border-primary/30 hover:shadow-primary/20',
+              }}
               onChange={(option) => handleProtocolSelection(option)}
-              labelText="Service Protocol"
+              labelText="Select a service protocol"
               defaultValue={selectedProtocol}
               options={PAYMENT_PROTOCOL?.map((item, index) => (
                 <div key={index} className="flex flex-1 capitalize">

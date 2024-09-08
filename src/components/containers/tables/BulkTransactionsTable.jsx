@@ -8,7 +8,10 @@ import {
   TableCell,
   Pagination,
 } from '@nextui-org/react'
-import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
+import {
+  PAYMENT_SERVICE_TYPES,
+  TRANSACTION_STATUS_COLOR_MAP,
+} from '@/lib/constants'
 import { cn, formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
@@ -18,8 +21,9 @@ import Search from '@/components/ui/Search'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import SelectField from '@/components/ui/SelectField'
 import { EmptyLogs } from '@/components/base'
+import { useBulkTransactions } from '@/hooks/useQueryHooks'
 
-const columns = [
+const bulkTransactionColumns = [
   { name: 'DATE CREATED', uid: 'created_at', sortable: true },
   { name: 'NAME', uid: 'batch_name', sortable: true },
   { name: 'TOTAL RECORDS', uid: 'number_of_records', sortable: true },
@@ -30,30 +34,35 @@ const columns = [
   { name: 'ACTIONS', uid: 'actions' },
 ]
 
+// DEFINE FILTERABLE SERVICES
 const SERVICE_FILTERS = [
   {
     name: 'direct bulk disbursement',
-    uid: 'direct_bulk_disbursement',
+    uid: 'direct bulk disbursement',
   },
+
   {
     name: 'voucher bulk disbursement',
-    uid: 'voucher_bulk_disbursement',
+    uid: 'voucher bulk disbursement',
   },
 ]
 
-export default function BulkTransactionsTable({
-  rows,
+export default function BulkTransactionsTable({ workspaceID, key }) {
+  // DATA FETCHING
+  const { data: bulkTransactionsResponse, isLoading } =
+    useBulkTransactions(workspaceID)
 
-  isLoading,
-}) {
+  // DEFINE FILTERABLE ROWS AND COLUMNS
+  const rows = bulkTransactionsResponse?.data?.batches || []
+  const columns = bulkTransactionColumns
   const { setSelectedBatch, setOpenBatchDetailsModal, setOpenPaymentsModal } =
     usePaymentsStore()
 
+  // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid)
 
   const [filterValue, setFilterValue] = React.useState('')
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]))
-
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS),
   )
@@ -94,8 +103,11 @@ export default function BulkTransactionsTable({
       serviceProtocolFilter !== 'all' &&
       Array.from(serviceProtocolFilter).length !== SERVICE_FILTERS.length
     ) {
+      let filters = Array.from(serviceProtocolFilter)
+      console.log(filters)
+
       filteredrows = filteredrows.filter((row) =>
-        Array.from(serviceProtocolFilter).includes(row?.service),
+        filters.includes(row?.service),
       )
     }
 
