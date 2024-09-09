@@ -47,7 +47,11 @@ function CreateNewUserModal({ isOpen, onClose }) {
   // )
 
   // ON CREATE => NO IDS are needed for now... only the role name
-  const USER_ROLES = isAccountLevelSettingsRoute ? SYSTEM_ROLES : ROLES
+  const USER_ROLES = getUserRoles()
+
+  const phoneNoError =
+    !isValidZambianMobileNumber(newUser?.phone_number) &&
+    newUser?.phone_number?.length > 3
 
   function updateDetails(fields) {
     setNewUser((prev) => ({ ...prev, ...fields }))
@@ -94,13 +98,13 @@ function CreateNewUserModal({ isOpen, onClose }) {
 
     const recordID = selectedUser?.ID
 
-    const mapping = {
+    const userMapping = {
       userID: newUser?.userID,
       roleID: newUser?.role,
       recordID,
     }
 
-    let response = await changeUserRoleInWorkspace(mapping, recordID)
+    let response = await changeUserRoleInWorkspace(userMapping, recordID)
 
     if (response.success) {
       queryClient.invalidateQueries([USERS])
@@ -116,22 +120,17 @@ function CreateNewUserModal({ isOpen, onClose }) {
     setLoading(false)
   }
 
-  // CLEAR OUT ALL ERRORS WHEN THE INPUT FIELDS CHANGE
-  useEffect(() => {
-    setError({})
-    setLoading(false)
-  }, [newUser])
-
-  useEffect(() => {
-    // If a user has already provided, prefill the fields
-    if (isEditingRole && Object.keys(selectedUser).length > 0) {
-      setNewUser(selectedUser)
+  function getUserRoles() {
+    // MANAGE ACCOUNT AND NEW USER TO SYSTEM
+    if (isAccountLevelSettingsRoute && isUsersRoute) {
+      return SYSTEM_ROLES
     }
-  }, [selectedUser])
 
-  const phoneNoError =
-    !isValidZambianMobileNumber(newUser?.phone_number) &&
-    newUser?.phone_number?.length > 3
+    // WORKSPACE MEMBER USER ROLE LIST
+    if (!isUsersRoute) {
+      return workspaceRoles
+    }
+  }
 
   function isValidData() {
     let valid = true
@@ -196,6 +195,19 @@ function CreateNewUserModal({ isOpen, onClose }) {
     return valid
   }
 
+  // CLEAR OUT ALL ERRORS WHEN THE INPUT FIELDS CHANGE
+  useEffect(() => {
+    setError({})
+    setLoading(false)
+  }, [newUser])
+
+  useEffect(() => {
+    // If a user has already provided, prefill the fields
+    if (isEditingRole && Object.keys(selectedUser).length > 0) {
+      setNewUser(selectedUser)
+    }
+  }, [selectedUser])
+
   return (
     <Modal isOpen={isOpen} onClose={handleClose} placement="center">
       <ModalContent>
@@ -218,7 +230,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
                 required
                 onError={error?.onRole}
                 value={newUser?.role}
-                options={isEditingRole ? workspaceRoles : USER_ROLES}
+                options={USER_ROLES}
                 placeholder={isEditingRole ? newUser?.role : 'Choose a role'}
                 listItemName={'role'}
                 className="mt-px"
