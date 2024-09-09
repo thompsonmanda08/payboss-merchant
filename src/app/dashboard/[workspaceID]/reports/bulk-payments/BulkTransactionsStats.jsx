@@ -5,13 +5,11 @@ import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import Search from '@/components/ui/Search'
 import CustomTable from '@/components/containers/tables/Table'
 import {
-  ChartPieIcon,
   EyeSlashIcon,
   FunnelIcon,
   ListBulletIcon,
   PresentationChartBarIcon,
 } from '@heroicons/react/24/outline'
-import { Tooltip } from '@nextui-org/react'
 import { Button } from '@/components/ui/Button'
 import { cn, formatCurrency } from '@/lib/utils'
 
@@ -55,7 +53,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [dateRange, setDateRange] = useState({})
   const [isExpanded, setIsExpanded] = useState(true)
-  const [openReportsModal, setOpenReportsModal] = useState(true)
+  const [openReportsModal, setOpenReportsModal] = useState(false)
   const [selectedBatch, setSelectedBatch] = useState(null) // ON ROW SELECTED
 
   // HANDLE FET BULK REPORT DATA
@@ -84,6 +82,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
       rows={directBatches}
       isLoading={mutation.isPending}
       isError={mutation.isError}
+      removeWrapper
     />,
     <CustomTable
       columns={bulkReportsColumns}
@@ -97,60 +96,26 @@ export default function BulkTransactionsStats({ workspaceID }) {
     <>
       {/************************************************************************/}
       <Card className={'mb-8 w-full'}>
-        <CardHeader
-          title={'Bulk Transactions History'}
-          infoText={
-            'Transactions logs to keep track of your workspace activity'
-          }
-        />
-
-        <div className="mt-4 flex w-full items-center justify-between gap-8 ">
-          <Tabs
-            className={'my-2 mr-auto max-w-md'}
-            tabs={SERVICE_TYPES}
-            currentTab={currentTabIndex}
-            navigateTo={navigateTo}
+        <div className="flex items-end justify-between">
+          <CardHeader
+            title={'Bulk Transactions History'}
+            infoText={
+              'Transactions logs to keep track of your workspace activity'
+            }
           />
-          <div className="flex w-full max-w-3xl gap-5 ">
-            <Search
-              // className={'mt-auto'}
-              placeholder={'Search by name, or type...'}
-              classNames={{ input: 'h-10' }}
-              onChange={(e) => {
-                setSearchQuery(e.target.value)
-              }}
-            />
-            <div className="flex items-start gap-2">
-              <DateRangePickerField
-                // description={'Transaction date range'}
-                autoFocus
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-                // className={'-mt-5 '}s
-                // onChange={(e) => {
-                //   setSearchQuery(e.target.value)
-                // }}
-              />{' '}
-              <Button
-                onPress={getBulkReportData}
-                endContent={<FunnelIcon className="h-5 w-5" />}
-              >
-                Apply
-              </Button>
-              <Button
-                color={'primary'}
-                variant="flat"
-                onPress={() => setIsExpanded(!isExpanded)}
-              >
-                {isExpanded ? (
-                  <EyeSlashIcon className="h-5 w-5" />
-                ) : (
-                  <PresentationChartBarIcon className="h-5 w-5" />
-                )}
-              </Button>
-            </div>
-          </div>
+          <Button
+            color={'primary'}
+            variant="flat"
+            onPress={() => setIsExpanded(!isExpanded)}
+          >
+            {isExpanded ? (
+              <EyeSlashIcon className="h-5 w-5" />
+            ) : (
+              <PresentationChartBarIcon className="h-5 w-5" />
+            )}
+          </Button>
         </div>
+
         {report && Object.keys(report).length > 0 && (
           <AnimatePresence>
             <motion.div
@@ -272,7 +237,45 @@ export default function BulkTransactionsStats({ workspaceID }) {
         )}
       </Card>
       {/*  CURRENTLY ACTIVE TABLE */}
-      {activeTab}
+      <Card className={'mb-8 w-full'}>
+        <div className="mb-4 flex w-full items-center justify-between gap-8 ">
+          <Tabs
+            className={'my-2 mr-auto max-w-md'}
+            tabs={SERVICE_TYPES}
+            currentTab={currentTabIndex}
+            navigateTo={navigateTo}
+          />
+          <div className="flex w-full max-w-3xl gap-5 ">
+            <Search
+              // className={'mt-auto'}
+              placeholder={'Search by name, or type...'}
+              classNames={{ input: 'h-10' }}
+              onChange={(e) => {
+                setSearchQuery(e.target.value)
+              }}
+            />
+            <div className="flex items-start gap-2">
+              <DateRangePickerField
+                // description={'Transaction date range'}
+                autoFocus
+                dateRange={dateRange}
+                setDateRange={setDateRange}
+                // className={'-mt-5 '}s
+                // onChange={(e) => {
+                //   setSearchQuery(e.target.value)
+                // }}
+              />{' '}
+              <Button
+                onPress={getBulkReportData}
+                endContent={<FunnelIcon className="h-5 w-5" />}
+              >
+                Apply
+              </Button>
+            </div>
+          </div>
+        </div>
+        {activeTab}
+      </Card>
       {/*  CURRENTLY ACTIVE TABLE */}
       {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
       {openReportsModal && (

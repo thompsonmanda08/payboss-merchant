@@ -23,6 +23,7 @@ export default function CustomTable({
   rowsPerPage = 9,
   selectionBehavior,
   isLoading,
+  removeWrapper,
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore()
 
@@ -80,6 +81,7 @@ export default function CustomTable({
     <Table
       aria-label="Example table with custom cells"
       className="max-h-[500px]"
+      removeWrapper={removeWrapper}
       classNames={{
         table: cn('align-top items-start justify-start', {
           'min-h-[400px]': isLoading || !rows,
