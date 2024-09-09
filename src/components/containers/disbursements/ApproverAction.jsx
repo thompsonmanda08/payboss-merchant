@@ -35,6 +35,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     openBatchDetailsModal,
     selectedActionType,
     transactionDetails,
+    setError,
   } = usePaymentsStore()
 
   const [queryID, setQueryID] = useState(
@@ -58,8 +59,12 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     setIsLoading(true)
 
     if (!role?.can_approve) {
-      setIsLoading(false)
       notify('error', 'Unauthorized!')
+      setError({
+        status: true,
+        message: 'You do not have permissions to perfom this action',
+      })
+      setIsLoading(false)
       return
     }
 

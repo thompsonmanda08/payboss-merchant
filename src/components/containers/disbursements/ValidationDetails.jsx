@@ -15,6 +15,7 @@ import {
 } from '@/lib/constants'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import Loader from '@/components/ui/Loader'
+import useDashboard from '@/hooks/useDashboard'
 
 const ValidationDetails = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient()
@@ -27,6 +28,8 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     setLoading,
     selectedBatch,
     openBatchDetailsModal,
+    error,
+    setError,
   } = usePaymentsStore()
 
   const { workspaceID, workspaceWalletBalance } = useWorkspaces()
@@ -41,6 +44,9 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     isFetched,
     isSuccess,
   } = useBatchDetails(queryID)
+  const { workspaceUserRole: role } = useDashboard()
+
+  console.log(role)
 
   const batchDetails = batchResponse?.data
 
@@ -59,6 +65,16 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
       parseFloat(workspaceWalletBalance)
     ) {
       notify('error', 'Insufficient funds in the wallet!')
+      setLoading(false)
+      return
+    }
+
+    if (role.can_initiate) {
+      notify('error', 'Unauthorized!')
+      setError({
+        status: true,
+        message: 'You do not have permissions to perfom this action',
+      })
       setLoading(false)
       return
     }

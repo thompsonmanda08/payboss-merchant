@@ -1,37 +1,33 @@
 'use client'
 import React from 'react'
-import { Balance, Card, CardHeader, SimpleStats } from '@/components/base'
+import { Card, CardHeader, SimpleStats } from '@/components/base'
 import ReportsBarChart from '@/components/charts/ReportsBarChart/ReportsBarChart'
 import {
-  ArrowRightStartOnRectangleIcon,
   ArrowsPointingInIcon,
   ArrowsPointingOutIcon,
   ArrowsRightLeftIcon,
   ArrowTrendingDownIcon,
   ArrowTrendingUpIcon,
   ArrowUpIcon,
-  ArrowUpOnSquareIcon,
   ArrowUpOnSquareStackIcon,
   BanknotesIcon,
   QrCodeIcon,
   QueueListIcon,
-  WalletIcon,
 } from '@heroicons/react/24/outline'
 import GradientLineChart from '@/components/charts/GradientLineChart/GradientLineChart'
 import Batches from '@/components/containers/tables/BatchSummaryTable'
 import { formatCurrency } from '@/lib/utils'
 import reportsBarChartData from '@/app/dashboard/[workspaceID]/data/reportsBarChartData'
 import gradientLineChartData from '@/app/dashboard/[workspaceID]/data/gradientLineChartData'
-import useDashboard from '@/hooks/useDashboard'
 import OverlayLoader from '@/components/ui/OverlayLoader'
-import useWorkspaces from '@/hooks/useWorkspaces'
 import { WalletTransactionHistory } from '../workspace/Wallet'
 import PendingApprovals from './PendingAnalytics'
+import { useDashboardAnalytics, useWorkspaceInit } from '@/hooks/useQueryHooks'
 
 const pendingApprovals = [
   {
     label: 'Bulk Direct Transfers',
-    total: 85,
+    total: 0,
     icon: {
       color: 'primary',
       component: <ArrowUpOnSquareStackIcon className="h-6 w-6 rotate-90" />,
@@ -39,7 +35,7 @@ const pendingApprovals = [
   },
   {
     label: 'Bulk Voucher Transfers',
-    total: 32,
+    total: 0,
     icon: {
       color: 'success',
       component: <BanknotesIcon className="h-6 w-6" />,
@@ -47,7 +43,7 @@ const pendingApprovals = [
   },
   {
     label: 'Sinlge Direct Transfers',
-    total: 51,
+    total: 0,
     icon: {
       color: 'secondary',
       component: <ArrowsRightLeftIcon className="h-6 w-6" />,
@@ -55,7 +51,7 @@ const pendingApprovals = [
   },
   {
     label: 'Single Voucher Transfers',
-    total: 44,
+    total: 0,
     icon: {
       color: 'danger',
       component: <QrCodeIcon className="h-6 w-6 rotate-90" />,
@@ -63,10 +59,13 @@ const pendingApprovals = [
   },
 ]
 
-function DashboardAnalytics() {
+function DashboardAnalytics({ workspaceID }) {
   const { chart, items } = reportsBarChartData
-  const { dashboardAnalytics, isLoading, workspaceUserRole, workspaceID } =
-    useDashboard()
+  const { data: initialization, isLoading } = useWorkspaceInit(workspaceID)
+  const { data: analytics, isFetching } = useDashboardAnalytics(workspaceID)
+
+  const dashboardAnalytics = analytics?.data
+  const role = initialization?.data
 
   const { today, yesterday, collectionsToday, disbursementsToday } =
     dashboardAnalytics || {}
@@ -128,10 +127,16 @@ function DashboardAnalytics() {
           />
         </div>
 
-        {workspaceUserRole?.can_approve ? (
-          <ComponentsWithApprovalStats />
+        {role?.can_approve ? (
+          <ComponentsWithApprovalStats
+            workspaceID={workspaceID}
+            dashboardAnalytics={dashboardAnalytics}
+          />
         ) : (
-          <ComponentsForViewOnly />
+          <ComponentsForViewOnly
+            workspaceID={workspaceID}
+            dashboardAnalytics={dashboardAnalytics}
+          />
         )}
 
         {/* <div className="place-items- flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-4 md:place-items-start ">
@@ -202,7 +207,7 @@ function DashboardAnalytics() {
             chart={chart}
             items={items}
           />
-          {workspaceUserRole?.can_approve ? (
+          {role?.can_approve ? (
             <Card className={'w-full'}>
               <CardHeader
                 title={'Wallet Statement Summary'}
@@ -221,9 +226,7 @@ function DashboardAnalytics() {
   )
 }
 
-function ComponentsForViewOnly() {
-  const { dashboardAnalytics } = useDashboard()
-  const { workspaceID } = useWorkspaces()
+function ComponentsForViewOnly({ workspaceID, dashboardAnalytics }) {
   const { allCollections, allDisbursements } = dashboardAnalytics || {}
   return (
     <div className="place-items- flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-4 md:place-items-start">
@@ -285,8 +288,7 @@ function ComponentsForViewOnly() {
   )
 }
 
-function ComponentsWithApprovalStats() {
-  const { dashboardAnalytics } = useDashboard()
+function ComponentsWithApprovalStats({ dashboardAnalytics }) {
   const { allCollections, allDisbursements } = dashboardAnalytics || {}
   return (
     <div className="flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-4 ">

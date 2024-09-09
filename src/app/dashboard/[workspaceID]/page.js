@@ -6,9 +6,10 @@ import DashboardAnalytics from '@/components/containers/analytics/DashboardAnaly
 import { getAuthSession, getUserDetails } from '@/app/_actions/config-actions'
 import { redirect } from 'next/navigation'
 
-async function DashboardHome() {
+async function DashboardHome({ params }) {
   const session = await getUserDetails()
   const auth = await getAuthSession()
+  const { workspaceID } = params
 
   if (!session && !auth) {
     redirect('/login')
@@ -18,12 +19,11 @@ async function DashboardHome() {
     <Suspense fallback={<LoadingPage />}>
       <InfoBanner
         session={session}
-      
         buttonText="Submit Documents"
         infoText="Just one more step, please submit your business documents to aid us with the approval process"
         href={'manage-account/account-verification'}
       />
-      <DashboardAnalytics />
+      <DashboardAnalytics workspaceID={workspaceID} />
     </Suspense>
   )
 }

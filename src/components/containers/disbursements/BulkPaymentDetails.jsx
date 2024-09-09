@@ -23,7 +23,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
     paymentAction,
     setBatchDetails,
   } = usePaymentsStore()
-  const { workspaceUserRole } = useDashboard()
+  const { workspaceUserRole: role } = useDashboard()
   const { workspaceID } = useWorkspaces()
 
   const urlParams = useSearchParams()
@@ -52,32 +52,31 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
       return
     }
 
-    // Create payment batch here if user is create access
-    if (workspaceUserRole?.create || workspaceUserRole?.can_initiate) {
-      /*  */
-      const response = await initializeBulkTransaction(
-        workspaceID,
-        paymentAction,
-      )
-
-      if (response.success) {
-        notify('success', 'Payment Batch Created!')
-        setBatchDetails(response.data) // SET VALIDATION DATA INTO STATE
-        navigateForward() // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
-        setLoading(false)
-        return
-      }
-
-      notify('error', 'Failed to create payment batch!')
-      setError({ status: true, message: response.message })
-      notify('error', response.message)
+    if (!role?.can_initiate) {
+      notify('error', 'Unauthorized!')
+      setError({
+        status: true,
+        message: 'You do not have permissions to perfom this action',
+      })
       setLoading(false)
       return
     }
 
-    // If the user cannot create then they are unauthorized
+    // Create payment batch here if user is create access
+    const response = await initializeBulkTransaction(workspaceID, paymentAction)
+
+    if (response.success) {
+      notify('success', 'Payment Batch Created!')
+      setBatchDetails(response.data) // SET VALIDATION DATA INTO STATE
+      navigateForward() // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
+      setLoading(false)
+      return
+    }
+
+    notify('error', 'Failed to create payment batch!')
+    setError({ status: true, message: response.message })
+    notify('error', response.message)
     setLoading(false)
-    notify('error', 'Unauthorized!')
     return
   }
 

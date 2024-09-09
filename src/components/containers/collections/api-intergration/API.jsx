@@ -59,9 +59,14 @@ const APIIntegration = ({ workspaceID }) => {
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false)
   const [openViewConfig, setOpenViewConfig] = useState(false)
 
-  const authPayload = useMemo(() => {
+  console.log(apiKeyResponse?.data)
+
+  const API = useMemo(() => {
     if (!apiKeyResponse?.success) return []
-    return apiKeyResponse?.data?.authPayload
+    return {
+      apiKey: apiKeyResponse?.data?.apiKey,
+      username: apiKeyResponse?.data?.username,
+    }
   }, [apiKeyResponse])
 
   const copyToClipboard = (key) => {
@@ -119,7 +124,7 @@ const APIIntegration = ({ workspaceID }) => {
       queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
     })
     setApiKeyData(response?.data)
-    setApiKey(response?.data?.authPayload)
+    setApiKey(response?.data?.API)
     notify('success', 'API key has been generated!')
     setIsLoading(false)
     setIsNew(false)
@@ -128,11 +133,11 @@ const APIIntegration = ({ workspaceID }) => {
   }
 
   useEffect(() => {
-    if (authPayload) {
+    if (API) {
       setApiKeyData(apiKeyResponse?.data)
-      setApiKey(authPayload)
+      setApiKey(API)
     }
-  }, [authPayload])
+  }, [API])
 
   useEffect(() => {
     let timeoutId
