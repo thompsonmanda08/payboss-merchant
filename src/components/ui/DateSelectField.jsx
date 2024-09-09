@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils'
+import { cn, formatDate } from '@/lib/utils'
 import { DatePicker, DateRangePicker } from '@nextui-org/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   parseDate,
   today,
@@ -64,12 +64,34 @@ export function DateRangePickerField({
   visibleMonths = 2,
   ...props
 }) {
+  const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
+  const thirtyDaysAgoDate = new Date()
+  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
+  const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
+
   const [value, setValue] = React.useState({
-    start: parseDate('2024-04-01'),
-    end: parseDate('2024-04-08'),
+    start_date: parseDate(thirtyDaysAgo),
+    end_date: parseDate(thisMonth),
   })
 
   let formatter = useDateFormatter({ dateStyle: 'long' })
+
+  useEffect(() => {
+    setDateRange({
+      start_date: formatDate(
+        value?.start_date.toDate(getLocalTimeZone()),
+        'YYYY-MM-DD',
+      ),
+      end_date: formatDate(
+        value?.end_date.toDate(getLocalTimeZone()),
+        'YYYY-MM-DD',
+      ),
+      range: formatter.formatRange(
+        value?.start_date.toDate(getLocalTimeZone()),
+        value?.end_date.toDate(getLocalTimeZone()),
+      ),
+    })
+  }, [value])
 
   return (
     <div className="flex w-full flex-col gap-y-2">
@@ -121,8 +143,8 @@ export function DateRangePickerField({
         Selected date:{' '}
         {value
           ? formatter.formatRange(
-              value.start.toDate(getLocalTimeZone()),
-              value.end.toDate(getLocalTimeZone()),
+              value?.start_date?.toDate(getLocalTimeZone()),
+              value?.end_date?.toDate(getLocalTimeZone()),
             )
           : '--'}
       </p> */}

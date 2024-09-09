@@ -36,6 +36,7 @@ const DASHBOARD_ANALYTICS_QUERY_KEY = 'dasboard-analytics'
 const PAYMENT_TRANSACTIONS_QUERY_KEY = 'payment-transactions'
 const COLLECTION_TRANSACTIONS_QUERY_KEY = 'collections-transactions'
 const WORKSPACE_API_KEY_QUERY_KEY = 'workspace-api-key'
+const BULK_REPORTS_QUERY_KEY = 'bulk-analytics-reports'
 
 // ANIMATION_VARIANTS
 const containerVariants = {
@@ -220,4 +221,5 @@ export {
   WALLET_HISTORY_QUERY_KEY,
   DASHBOARD_ANALYTICS_QUERY_KEY,
   WORKSPACE_API_KEY_QUERY_KEY,
+  BULK_REPORTS_QUERY_KEY,
 }

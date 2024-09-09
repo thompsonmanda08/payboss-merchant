@@ -12,9 +12,10 @@ import {
   getAllBulkTransactions,
   getAllSingleTransactions,
   getAllPaymentTransactions,
-  getDirectBulkTransactionDetails,
+  getBatchDetails,
   getWalletPrefundHistory,
   getAllCollectionTransactions,
+  getBulkAnalyticReports,
 } from '@/app/_actions/transaction-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
 import {
@@ -38,6 +39,7 @@ import {
   DASHBOARD_ANALYTICS_QUERY_KEY,
   PAYMENT_TRANSACTIONS_QUERY_KEY,
   COLLECTION_TRANSACTIONS_QUERY_KEY,
+  BULK_REPORTS_QUERY_KEY,
   WORKSPACE_API_KEY_QUERY_KEY,
 } from '@/lib/constants'
 
@@ -143,7 +145,7 @@ export const useSingleTransactions = (workspaceID) =>
 export const useBatchDetails = (batchID) =>
   useQuery({
     queryKey: [BATCH_DETAILS_QUERY_KEY, batchID],
-    queryFn: async () => await getDirectBulkTransactionDetails(batchID),
+    queryFn: async () => await getBatchDetails(batchID),
     refetchOnMount: true,
     staleTime: Infinity,
   })
@@ -168,5 +170,13 @@ export const useWorkspaceAPIKey = (workspaceID) =>
   useQuery({
     queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
     queryFn: async () => await getWorkspaceAPIKey(workspaceID),
+    staleTime: Infinity,
+  })
+
+export const useBulkAnalytics = (workspaceID) =>
+  useQuery({
+    queryKey: [BULK_REPORTS_QUERY_KEY, workspaceID],
+    queryFn: async () => await getBulkAnalyticReports(workspaceID),
+    refetchOnMount: true,
     staleTime: Infinity,
   })

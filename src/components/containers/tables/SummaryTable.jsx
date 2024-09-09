@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 function SummaryTable({ columns, data, actions }) {
   const [currentPage, setCurrentPage] = useState(1)
   const rowsPerPage = 10
-  const totalPages = Math.ceil(data.length / rowsPerPage)
+  const totalPages = Math.ceil(data?.length / rowsPerPage)
 
   const { openInvalidRecordsModal, selectedRecord } = usePaymentsStore()
 
@@ -15,19 +15,19 @@ function SummaryTable({ columns, data, actions }) {
     setCurrentPage(page)
   }
 
-  const renderColumns = columns.map(({ header }) => {
+  const renderColumns = columns?.map(({ header }) => {
     return (
       <th
         key={header}
         className="border-light whitespace-no-wrap overflow-hidden truncate border-b px-4 py-2 text-left text-sm font-medium text-gray-900"
       >
-        {header.toUpperCase()}
+        {header?.toUpperCase()}
       </th>
     )
   })
 
   if (actions) {
-    renderColumns.push(
+    renderColumns?.push(
       <th
         key="actions"
         className="border-light border-b px-4 py-2 text-left text-sm font-medium text-gray-900"
@@ -37,13 +37,13 @@ function SummaryTable({ columns, data, actions }) {
     )
   }
 
-  const paginatedData = data.slice(
+  const paginatedData = data?.slice(
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage,
   )
 
-  const renderRows = paginatedData.map((row, rowIndex) => {
-    const tableRow = columns.map(({ accessor }) => {
+  const renderRows = paginatedData?.map((row, rowIndex) => {
+    const tableRow = columns?.map(({ accessor }) => {
       return (
         <td
           key={uuidv4()}
@@ -62,7 +62,7 @@ function SummaryTable({ columns, data, actions }) {
     })
 
     if (actions) {
-      tableRow.push(
+      tableRow?.push(
         <td
           key={uuidv4()}
           className="border-light border-b px-4 py-2 text-left text-sm text-gray-500 "
