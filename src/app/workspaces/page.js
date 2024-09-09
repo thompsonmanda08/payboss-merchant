@@ -33,22 +33,7 @@ async function WorkSpacesPage() {
             role="workspace-header"
             className="z-20 mx-auto -mt-40 w-full max-w-[1440px] px-5 md:px-10"
           >
-            <Card className="gap-6">
-              <div className="flex justify-between bg-red-500/0">
-                <div>
-                  <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
-                    Choose a Workspace
-                  </h2>
-                  <p className=" text-sm text-slate-600">
-                    Access your account through a workspace for the convenience
-                    of having all your tools and resources organized in one
-                    place.
-                  </p>
-                </div>
-              </div>
-
-              <Workspaces user={session?.user} />
-            </Card>
+            <Workspaces user={session?.user} showHeader />
           </section>
         </div>
       </main>

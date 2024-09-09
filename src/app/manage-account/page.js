@@ -16,7 +16,9 @@ async function AllWorkspacesPage() {
           </p>
         </div>
 
-        <Workspaces />
+        <Workspaces
+          className={'m-0 border-none bg-transparent p-0 shadow-none'}
+        />
       </div>
     </Suspense>
   )

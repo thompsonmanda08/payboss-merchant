@@ -47,7 +47,7 @@ function SettingsSideBar({
     {
       name: 'Workspaces',
       Icon: BriefcaseIcon,
-      href: '/manage-account/',
+      href: '/manage-account',
     },
     {
       name: 'People',

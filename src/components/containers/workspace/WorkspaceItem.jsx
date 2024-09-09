@@ -15,7 +15,7 @@ function WorkspaceItem({ name, description, href, isVisible, onClick }) {
       href={href}
       onPress={onClick}
       className={cn(
-        'flex h-auto w-full justify-start gap-4 border-[1px] border-primary-50 bg-transparent p-2 opacity-100 hover:border-primary-100 hover:bg-primary-50',
+        'flex h-auto w-full justify-start gap-4 border-[1px] border-primary-100 bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100',
         {
           'opacity-50 hover:opacity-90': !isVisible,
         },

@@ -12,11 +12,11 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import useWorkspace from '@/hooks/useWorkspaces'
 import WorkspaceItem from './WorkspaceItem'
 import OverlayLoader from '@/components/ui/OverlayLoader'
-import { InfoBanner } from '@/components/base'
+import { Card, InfoBanner } from '@/components/base'
 import CreateNewWorkspaceModal from './CreateNewWorkspace'
 import Loader from '@/components/ui/Loader'
 
-function Workspaces({ user }) {
+function Workspaces({ user, showHeader = false, className }) {
   const pathname = usePathname()
   const queryClient = useQueryClient()
   const { workspaces, allWorkspaces, isLoading } = useWorkspace()
@@ -25,15 +25,6 @@ function Workspaces({ user }) {
 
   const canCreateWorkspace =
     user?.role?.toLowerCase() == 'admin' || user?.role?.toLowerCase() == 'owner'
-
-  const isWorkspaceSettings =
-    pathname.split('/').length > 2 &&
-    (pathname.split('/')[2] == 'workspaces' ||
-      pathname.split('/')[2] == 'workspace-settings' ||
-      pathname.split('/')[4] == 'workspaces')
-
-  const RENDER_WORKSPACES =
-    pathname.split('/').length > 2 ? allWorkspaces : workspaces
 
   const [loading, setLoading] = useState(false)
   const [newWorkspace, setNewWorkspace] = useState({})
@@ -82,62 +73,49 @@ function Workspaces({ user }) {
 
   return (
     <>
-      {/* ACCOUNT VERIFICATION PROMPTING BANNER */}
-      <InfoBanner
-        buttonText="Submit Documents"
-        infoText="Just one more step, please submit your business documents to aid us with the approval process"
-        href={'manage-account/account-verification'}
-      />
-
-      <div className="flex w-full flex-col items-center justify-center">
-        <ScrollArea
-          className={cn(
-            'flex w-full min-w-[400px] flex-col lg:max-h-[500px] lg:px-2',
-            { 'max-h-auto lg:max-h-max ': isWorkspaceSettings },
-          )}
-        >
-          {isLoading ? (
-            <Loader size={60} loadingText={'Loading Workspaces...'} />
-          ) : (
-            <div
-              className={cn('grid w-full place-items-center gap-4 rounded-lg', {
-                'grid-cols-[repeat(auto-fill,minmax(400px,1fr))]':
-                  workspaces?.length > 0,
-              })}
-            >
-              {RENDER_WORKSPACES &&
-                RENDER_WORKSPACES?.map((item) => {
-                  return (
-                    <WorkspaceItem
-                      onClick={() => setLoading(true)}
-                      name={item?.workspace}
-                      // description={item?.description}
-                      isVisible={item?.isVisible}
-                      href={
-                        !isWorkspaceSettings
-                          ? `/dashboard/${item?.ID}`
-                          : pathname + `/${item?.ID}`
-                      }
-                    />
-                  )
-                })}
-
-              {canCreateWorkspace && (
-                <Button
-                  onPress={onOpen}
-                  className={cn(
-                    'h-24 w-full flex-col border border-primary-100 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50',
-                    { 'col-span-full': workspaces?.length < 0 },
-                  )}
-                >
-                  <PlusIcon className=" h-6 w-6" />
-                  Create Workspace
-                </Button>
-              )}
+      <Card className={cn('gap-6', className)}>
+        {showHeader && (
+          <div className="flex justify-between bg-red-500/0">
+            <div>
+              <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
+                Choose a Workspace
+              </h2>
+              <p className=" text-sm text-slate-600">
+                Access your account through a workspace for the convenience of
+                having all your tools and resources organized in one place.
+              </p>
             </div>
-          )}
-        </ScrollArea>
-      </div>
+            {!canCreateWorkspace && (
+              <Button
+                onPress={onOpen}
+                size="lg"
+                isDisabled={loading}
+                endContent={<PlusIcon className=" h-5 w-5" />}
+                variant="flat"
+                color="primary"
+                className={'mt-auto bg-primary-50 px-4'}
+              >
+                New
+              </Button>
+            )}
+          </div>
+        )}
+
+        {/* ACCOUNT VERIFICATION PROMPTING BANNER */}
+        <InfoBanner
+          buttonText="Submit Documents"
+          infoText="Just one more step, please submit your business documents to aid us with the approval process"
+          href={'manage-account/account-verification'}
+        />
+
+        <ListOfWorkspaces
+          pathname={pathname}
+          loading={loading}
+          setLoading={setLoading}
+          allowCreateWorkspaces={canCreateWorkspace}
+          openModal={onOpen}
+        />
+      </Card>
 
       {/* OVERLAYS AND MODALS  */}
       {<OverlayLoader show={loading} />}
@@ -150,6 +128,73 @@ function Workspaces({ user }) {
         loading={loading}
       />
     </>
+  )
+}
+
+export function ListOfWorkspaces({
+  loading,
+  setLoading,
+  allowCreateWorkspaces,
+  createFromList = false,
+  openModal,
+}) {
+  const { workspaces, allWorkspaces, isLoading } = useWorkspace()
+  const pathname = usePathname()
+  const RENDER_WORKSPACES =
+    pathname?.split('/')?.length > 2 ? allWorkspaces : workspaces
+
+  const isWorkspaceSettings = pathname.split('/').includes('manage-account')
+
+  return (
+    <div className="flex w-full flex-col items-center justify-center">
+      <ScrollArea
+        className={cn(
+          'flex w-full min-w-[400px] flex-col lg:max-h-[500px] lg:px-2',
+          { 'max-h-auto lg:max-h-max ': isWorkspaceSettings },
+        )}
+      >
+        {isLoading ? (
+          <Loader size={60} loadingText={'Loading Workspaces...'} />
+        ) : (
+          <div
+            className={cn('grid w-full place-items-center gap-4 rounded-lg', {
+              'grid-cols-[repeat(auto-fill,minmax(400px,1fr))]':
+                workspaces?.length > 0,
+            })}
+          >
+            {RENDER_WORKSPACES &&
+              RENDER_WORKSPACES?.map((item) => {
+                return (
+                  <WorkspaceItem
+                    onClick={() => setLoading(true)}
+                    name={item?.workspace}
+                    // description={item?.description}
+                    isVisible={item?.isVisible}
+                    href={
+                      !isWorkspaceSettings
+                        ? `/dashboard/${item?.ID}`
+                        : `manage-account/workspaces/${item?.ID}`
+                    }
+                  />
+                )
+              })}
+
+            {allowCreateWorkspaces && createFromList && (
+              <Button
+                onPress={openModal}
+                className={cn(
+                  'h-24 w-full flex-col border border-primary-100 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50',
+                  { 'col-span-full': workspaces?.length < 0 },
+                )}
+              >
+                <PlusIcon className=" h-6 w-6" />
+                Create Workspace
+              </Button>
+            )}
+          </div>
+        )}
+      </ScrollArea>
+    </div>
   )
 }
 
