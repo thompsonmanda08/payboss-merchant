@@ -2,7 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { BellIcon, Cog6ToothIcon } from '@heroicons/react/24/solid'
-import { cn, formatCurrency } from '@/lib/utils'
+import { capitalize, cn, formatCurrency } from '@/lib/utils'
 import Avatar from '../ui/Avatar'
 import BreadCrumbLinks from './BreadCrumbLinks'
 import {
@@ -28,7 +28,13 @@ export default function TopNavBar({}) {
   const { workspaceID, workspaceWalletBalance } = useWorkspaces()
   const { isProfile, currentPath, dashboardRoute } = useNavigation()
 
-  return user && workspaceWalletBalance ? (
+  // if () {
+  //   return
+  // }
+
+  return !user && !workspaceWalletBalance && !workspaceID ? (
+    <NavbarLoader isProfile />
+  ) : (
     <nav
       className={cn(
         `__TOPBAR rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center py-2 pr-10 shadow-sm transition-all md:pl-2 lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:pl-0 lg:shadow-none`,
@@ -43,16 +49,14 @@ export default function TopNavBar({}) {
           )}
         >
           <BreadCrumbLinks isProfile={isProfile} />
-          {workspaceID && (
-            <h2
-              className={cn(
-                'pl-2 text-lg font-bold uppercase leading-8 text-slate-800',
-                { 'text-white': isProfile },
-              )}
-            >
-              {currentPath}
-            </h2>
-          )}
+          <h2
+            className={cn(
+              'pl-2 text-lg font-bold uppercase leading-8 text-slate-800',
+              { 'text-white': isProfile },
+            )}
+          >
+            {currentPath}
+          </h2>
         </div>
         <div className="relative z-50 ml-auto flex  items-center justify-center rounded-full">
           <div
@@ -91,8 +95,6 @@ export default function TopNavBar({}) {
         </div>
       </div>
     </nav>
-  ) : (
-    <NavbarLoader isProfile />
   )
 }
 
@@ -152,7 +154,7 @@ export function AvatarDropdown({ user, isProfile }) {
             <Avatar
               firstName={user?.first_name}
               lastName={user?.last_name}
-              email={user?.email}
+              email={capitalize(user?.role)}
               showUserInfo
             />
           </DropdownItem>
@@ -206,15 +208,18 @@ export function AvatarDropdown({ user, isProfile }) {
 export function NavbarLoader({ isProfile }) {
   return (
     <div className="relative -top-5 flex w-full justify-between">
-      <div className="flex w-full flex-col gap-2">
+      <div className="w-full">
         <Skeleton
-          className={cn('aspect-square h-4 w-full max-w-xl rounded-lg', {
-            'bg-background/10 p-4 backdrop-blur-md': isProfile,
-          })}
+          className={cn(
+            'mb-2 aspect-square h-[8px] w-full max-w-xl rounded-lg',
+            {
+              'bg-slate-200 p-4 backdrop-blur-md': isProfile,
+            },
+          )}
         />
         <Skeleton
           className={cn('aspect-square h-5 w-full max-w-xs rounded-lg', {
-            'bg-background/10 p-4 backdrop-blur-md': isProfile,
+            'bg-slate-200 p-4 backdrop-blur-md': isProfile,
           })}
         />
       </div>
@@ -222,18 +227,18 @@ export function NavbarLoader({ isProfile }) {
         <div className=" flex space-x-2">
           <Skeleton
             className={cn('aspect-square h-8 rounded-full', {
-              'bg-background/10 p-4 backdrop-blur-md': isProfile,
+              'bg-slate-200 p-4 backdrop-blur-md': isProfile,
             })}
           />
           <Skeleton
             className={cn('aspect-square h-8 rounded-full', {
-              'bg-background/10 p-4 backdrop-blur-md': isProfile,
+              'bg-slate-200 p-4 backdrop-blur-md': isProfile,
             })}
           />
         </div>
         <Skeleton
           className={cn('aspect-square h-12 rounded-full', {
-            'bg-background/10 p-4 backdrop-blur-md': isProfile,
+            'bg-slate-200 p-4 backdrop-blur-md': isProfile,
           })}
           div
         />

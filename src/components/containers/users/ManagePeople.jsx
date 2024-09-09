@@ -65,7 +65,8 @@ function ManagePeople({ classNames }) {
   const { isEditingRole } = useWorkspaceStore()
   const [searchQuery, setSearchQuery] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { canCreateUsers, allUsers } = useAllUsersAndRoles()
+  const { canCreateUsers, allUsers, isAdminOrOwner, accountRoles } =
+    useAllUsersAndRoles()
   const { isAccountLevelSettingsRoute, isUserInWorkspace } = useNavigation()
 
   const userSearchResults = allUsers?.filter((user) => {
@@ -89,6 +90,8 @@ function ManagePeople({ classNames }) {
       key={'all-users'}
       users={userSearchResults}
       isOwner={allowUserCreation}
+      accountRoles={accountRoles}
+      isAdminOrOwner={isAdminOrOwner}
     />,
   ])
 

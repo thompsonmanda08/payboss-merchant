@@ -172,6 +172,84 @@ export async function getUser(userID) {
   }
 }
 
+export async function updateProfileData(userID, userData) {
+  const session = await getUserSession()
+  const merchantID = session?.user?.merchantID
+
+  try {
+    const res = await authenticatedService({
+      url: `merchant/${merchantID}/user/${userID}`,
+      method: 'PATCH',
+      data: userData,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    console.error(error?.response)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}
+
+export async function updateSystemUserData(userID, userData) {
+  const session = await getUserSession()
+  const merchantID = session?.user?.merchantID
+
+  try {
+    const res = await authenticatedService({
+      url: `merchant/${merchantID}/user/${userID}`,
+      method: 'PATCH',
+      data: userData,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    console.error(error?.response)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}
+
 export async function changeUserPassword(password) {
   cookies().delete(USER_SESSION)
 

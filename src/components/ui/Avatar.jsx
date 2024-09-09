@@ -34,7 +34,7 @@ function Avatar({ firstName, lastName, src, email, showUserInfo, isProfile }) {
               })}
             >{`${firstName} ${lastName}`}</p>
             <p
-              className={cn('text-xs font-medium text-gray-500', {
+              className={cn('-mt-1 ml-0.5 text-sm font-medium text-gray-500', {
                 'text-white': isProfile,
               })}
             >

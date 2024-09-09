@@ -16,7 +16,10 @@ import { StatusMessage } from '@/components/base'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import { useQueryClient } from '@tanstack/react-query'
 import { USERS } from '@/lib/constants'
-import { createNewUser } from '@/app/_actions/user-actions'
+import {
+  createNewUser,
+  updateSystemUserData,
+} from '@/app/_actions/user-actions'
 import useNavigation from '@/hooks/useNavigation'
 import useWorkspaceStore from '@/context/workspaceStore'
 import { changeUserRoleInWorkspace } from '@/app/_actions/workspace-actions'
@@ -35,7 +38,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
     password: 'PB0484G@#$%Szm',
   })
   const [error, setError] = useState({ status: false, message: '' })
-  const { workspaceRoles } = useAllUsersAndRoles()
+  const { workspaceRoles, accountRoles } = useAllUsersAndRoles()
 
   // const [selectedKeys, setSelectedKeys] = useState(
   //   new Set([ROLES.map((role) => role.label)[0]]),
@@ -45,6 +48,8 @@ function CreateNewUserModal({ isOpen, onClose }) {
   //   () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
   //   [selectedKeys],
   // )
+
+  console.log(accountRoles)
 
   // ON CREATE => NO IDS are needed for now... only the role name
   const USER_ROLES = getUserRoles()
@@ -93,7 +98,36 @@ function CreateNewUserModal({ isOpen, onClose }) {
     setLoading(false)
   }
 
-  async function handleUpdateUserRole() {
+  async function handleUpdateSystemUser() {
+    setLoading(true)
+    console.log(newUser)
+
+    const recordID = selectedUser?.ID
+
+    const userMapping = {
+      ...newUser,
+      userID: newUser?.userID,
+      roleID: newUser?.role,
+      recordID,
+    }
+
+    let response = await updateSystemUserData(recordID, userMapping)
+
+    if (response.success) {
+      queryClient.invalidateQueries([USERS])
+      notify('success', 'User updated successfully!')
+      setError({ status: false, message: '' })
+      setLoading(false)
+      handleClose()
+      return
+    }
+
+    notify('error', 'Error updating user!')
+    setError({ status: true, message: response.message })
+    setLoading(false)
+  }
+  
+  async function handleUpdateWorkspaceUserRole() {
     setLoading(true)
 
     const recordID = selectedUser?.ID
@@ -123,7 +157,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
   function getUserRoles() {
     // MANAGE ACCOUNT AND NEW USER TO SYSTEM
     if (isAccountLevelSettingsRoute && isUsersRoute) {
-      return SYSTEM_ROLES
+      return accountRoles
     }
 
     // WORKSPACE MEMBER USER ROLE LIST
@@ -195,6 +229,20 @@ function CreateNewUserModal({ isOpen, onClose }) {
     return valid
   }
 
+  function onConfirmAction() {
+    if (isEditingRole && isUsersRoute) {
+      handleUpdateSystemUser()
+      return
+    }
+
+    if (isEditingRole && !isUsersRoute) {
+      handleUpdateWorkspaceUserRole()
+      return
+    }
+
+    handleCreateUser()
+  }
+
   // CLEAR OUT ALL ERRORS WHEN THE INPUT FIELDS CHANGE
   useEffect(() => {
     setError({})
@@ -234,9 +282,11 @@ function CreateNewUserModal({ isOpen, onClose }) {
                 placeholder={isEditingRole ? newUser?.role : 'Choose a role'}
                 listItemName={'role'}
                 className="mt-px"
-                defaultValue={USER_ROLES[USER_ROLES.length - 1]?.id}
                 onChange={(e) => {
-                  updateDetails({ role: e.target.value })
+                  updateDetails({
+                    role: e.target.value,
+                    roleID: e.target.value,
+                  })
                 }}
               />
 
@@ -304,14 +354,13 @@ function CreateNewUserModal({ isOpen, onClose }) {
               />
 
               {isEditingRole ? (
-                <p className="text-sm font-medium italic text-slate-700">
-                  You can only change the role of this user{' '}
-                  {isAccountLevelSettingsRoute
-                    ? 'for this account'
-                    : 'within this workspace.'}
+                <p className="mx-auto max-w-[88%] text-center text-xs font-medium italic text-slate-500">
+                  The user will be notified of the changes made to their account
+                  on PayBoss. If an action is required, the user will also
+                  receive an email with instructions.
                 </p>
               ) : (
-                <p className="text-sm font-medium italic text-slate-700">
+                <p className="mx-auto max-w-[88%] text-center text-xs font-medium italic text-slate-500">
                   The password will be sent to the provided email. The new user
                   must change it on first login.
                 </p>
@@ -332,11 +381,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
                   color="primary"
                   isLoading={loading}
                   isDisabled={loading}
-                  onPress={
-                    isEditingRole
-                      ? () => handleUpdateUserRole()
-                      : () => handleCreateUser()
-                  }
+                  onPress={onConfirmAction}
                 >
                   {isEditingRole ? 'Save' : 'Create User'}
                 </Button>

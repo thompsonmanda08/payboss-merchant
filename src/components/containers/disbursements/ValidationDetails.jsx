@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Button } from '@/components/ui/Button'
-import { StatusCard } from '@/components/base'
+import { StatusCard, StatusMessage } from '@/components/base'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import Spinner from '@/components/ui/Spinner'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
@@ -46,8 +46,6 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
   } = useBatchDetails(queryID)
   const { workspaceUserRole: role } = useDashboard()
 
-  console.log(role)
-
   const batchDetails = batchResponse?.data
 
   async function handleSubmitForApproval() {
@@ -69,7 +67,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
       return
     }
 
-    if (role.can_initiate) {
+    if (!role.can_initiate) {
       notify('error', 'Unauthorized!')
       setError({
         status: true,
@@ -111,6 +109,10 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     if (isFetched && isSuccess && batchResponse.success) {
       setBatchDetails(batchResponse?.data)
     }
+
+    return () => {
+      setError({})
+    }
   }, [batchID, selectedBatch?.ID, queryID])
 
   return isLoading || loading || !queryID || !batchDetails ? (
@@ -144,6 +146,11 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
               : undefined
           }
         />
+        {error?.status && (
+          <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
+            <StatusMessage error={error.status} message={error.message} />
+          </div>
+        )}
 
         {(batchState?.status?.toLowerCase() == 'submitted' ||
           selectedBatch?.status?.toLowerCase() == 'submitted') && (

@@ -45,12 +45,17 @@ const columns = [
 ]
 
 //! NOTE: ONLY THE OWNER WILL BE ABLE TO SEE ALL THE USERS
-export default function UsersTable({ users = [], workspaceID }) {
+export default function UsersTable({
+  users = [],
+  workspaceID,
+  isAdminOrOwner,
+  accountRoles,
+}) {
   const queryClient = useQueryClient()
   const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isUsersRoute } = useNavigation()
-  const { isAdminOrOwner } = useAllUsersAndRoles()
+  // const { isAdminOrOwner, accountRoles } = useAllUsersAndRoles()
   const { workspaceUserRole } = useDashboard()
   const {
     isLoading,
@@ -123,19 +128,17 @@ export default function UsersTable({ users = [], workspaceID }) {
               </span>
             </Tooltip> */}
               <>
-                {!isUsersRoute && (
-                  <Tooltip color="default" content="Edit user">
-                    <span
-                      onClick={() => {
-                        setSelectedUser(user)
-                        setIsEditingRole(true)
-                      }}
-                      className="cursor-pointer text-lg text-primary active:opacity-50"
-                    >
-                      <PencilSquareIcon className="h-5 w-5" />
-                    </span>
-                  </Tooltip>
-                )}
+                <Tooltip color="default" content="Edit user">
+                  <span
+                    onClick={() => {
+                      setSelectedUser(user)
+                      setIsEditingRole(true)
+                    }}
+                    className="cursor-pointer text-lg text-primary active:opacity-50"
+                  >
+                    <PencilSquareIcon className="h-5 w-5" />
+                  </span>
+                </Tooltip>
                 {isUsersRoute && (
                   <Tooltip
                     color="secondary"

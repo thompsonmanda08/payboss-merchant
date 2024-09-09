@@ -37,6 +37,7 @@ const useWorkspaceStore = create((set, get) => ({
     const { addedUsers, existingUsers } = get()
     const aldreadyAdded = addedUsers.find((u) => u.ID === user.ID)
     const userExists = existingUsers.find((u) => u.userID === user.ID)
+    console.log(userExists)
 
     if (aldreadyAdded) {
       notify('warning', `${aldreadyAdded?.first_name} is already added!`)
