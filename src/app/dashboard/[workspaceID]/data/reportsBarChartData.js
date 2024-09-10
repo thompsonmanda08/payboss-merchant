@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 import {
   AdjustmentsVerticalIcon,
   BanknotesIcon,
@@ -34,7 +35,7 @@ const reportsBarChartData = {
         component: <CurrencyDollarIcon className="h-4 w-4" />,
       },
       label: 'Overall',
-      progress: { content: 'ZMW 435M', percentage: 85 },
+      progress: { content: formatCurrency('0'), percentage: 10 },
     },
     {
       label: 'Income',
@@ -42,7 +43,7 @@ const reportsBarChartData = {
         color: 'success',
         component: <BanknotesIcon className="h-4 w-4" />,
       },
-      progress: { content: '36K', percentage: 45 },
+      progress: { content: '0', percentage: 10 },
     },
     {
       label: 'Payments',
@@ -50,7 +51,7 @@ const reportsBarChartData = {
         color: 'secondary',
         component: <AdjustmentsVerticalIcon className="h-4 w-4" />,
       },
-      progress: { content: '2M', percentage: 60 },
+      progress: { content: '0', percentage: 10 },
     },
     {
       label: 'Expenses',
@@ -58,7 +59,7 @@ const reportsBarChartData = {
         color: 'danger',
         component: <AdjustmentsVerticalIcon className="h-4 w-4" />,
       },
-      progress: { content: '2M', percentage: 60 },
+      progress: { content: '0', percentage: 10 },
     },
   ],
 }

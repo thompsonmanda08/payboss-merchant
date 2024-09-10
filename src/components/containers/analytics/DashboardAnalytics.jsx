@@ -239,7 +239,10 @@ function ComponentsForViewOnly({ workspaceID, dashboardAnalytics }) {
                 <ArrowUpIcon className="h-5 w-5 font-bold" />
               </span>
               <span className="text-sm font-medium text-gray-700">
-                4% more <span className="font-normal">in 2021</span>
+                0% more than{' '}
+                <span className="font-normal">
+                  {new Date()?.getFullYear() - 1}
+                </span>
               </span>
             </span>
           }

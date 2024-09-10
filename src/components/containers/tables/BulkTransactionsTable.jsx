@@ -8,10 +8,7 @@ import {
   TableCell,
   Pagination,
 } from '@nextui-org/react'
-import {
-  PAYMENT_SERVICE_TYPES,
-  TRANSACTION_STATUS_COLOR_MAP,
-} from '@/lib/constants'
+import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
 import { cn, formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
@@ -104,7 +101,6 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
       Array.from(serviceProtocolFilter).length !== SERVICE_FILTERS.length
     ) {
       let filters = Array.from(serviceProtocolFilter)
-      console.log(filters)
 
       filteredrows = filteredrows.filter((row) =>
         filters.includes(row?.service),
