@@ -18,6 +18,7 @@ import { useWorkspaceMembers } from '@/hooks/useQueryHooks'
 import useWorkspaceStore from '@/context/workspaceStore'
 import LoadingPage from '@/app/loading'
 import { cn } from '@/lib/utils'
+import useDashboard from '@/hooks/useDashboard'
 
 const TABS = [
   { name: 'General', index: 0 },
@@ -28,14 +29,24 @@ const TABS = [
 function WorkspaceSettings({ workspaceID }) {
   const { back } = useRouter()
   const { allWorkspaces, activeWorkspace } = useWorkspaces()
-  const { isUserInWorkspace } = useNavigation()
+  const { isUserInWorkspace, isUsersRoute } = useNavigation()
   const [searchQuery, setSearchQuery] = useState('')
-  const { canCreateUsers } = useAllUsersAndRoles()
+  const { canCreateUsers, isAdminOrOwner } = useAllUsersAndRoles()
   const { isEditingRole, setExistingUsers, existingUsers } = useWorkspaceStore()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const { data: members } = useWorkspaceMembers(workspaceID)
+  const { data: members, isLoading: usersLoading } =
+    useWorkspaceMembers(workspaceID)
+
+  const { workspaceUserRole, isLoading: initLoading } = useDashboard()
+  const canUpdate = workspaceUserRole?.role?.toLowerCase() == 'admin'
+  const isAdmin =
+    (isUsersRoute && isAdminOrOwner) || (!isUsersRoute && canUpdate)
+
+  console.log(workspaceUserRole)
+  console.log(isAdmin)
 
   const workspaceUsers = members?.data?.users || []
+  const tableLoading = initLoading || usersLoading
 
   const selectedWorkspace = allWorkspaces.find(
     (workspace) => workspace.ID === workspaceID,
@@ -61,6 +72,8 @@ function WorkspaceSettings({ workspaceID }) {
       key={'members'}
       users={userSearchResults}
       workspaceID={workspaceID}
+      isUserAdmin={isAdmin}
+      tableLoading={tableLoading}
     />,
     <Wallet
       key={'wallet-details'}

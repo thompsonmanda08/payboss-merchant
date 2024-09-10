@@ -8,7 +8,7 @@ import {
 import useAccountProfile from './useProfileDetails'
 
 const useAllUsersAndRoles = () => {
-  const { data: allUserData } = useAllUsers()
+  const { data: allUserData, isLoading: loadingUser } = useAllUsers()
   const { data: merchantRoles } = useAccountRoles()
   const { data: workspaceRoleData } = useWorkspaceRoles()
   const { isAccountAdmin, isOwner } = useAccountProfile()
@@ -19,6 +19,7 @@ const useAllUsersAndRoles = () => {
 
   // PERMISSIONS
   const canCreateUsers = isAccountAdmin || isOwner
+  const isLoading = loadingUser
 
   return {
     allUsers,
@@ -26,6 +27,7 @@ const useAllUsersAndRoles = () => {
     workspaceRoles,
     canCreateUsers,
     isAdminOrOwner: canCreateUsers,
+    isLoading,
   }
 }
 

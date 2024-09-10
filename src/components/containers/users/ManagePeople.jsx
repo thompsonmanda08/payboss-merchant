@@ -65,7 +65,7 @@ function ManagePeople({ classNames }) {
   const { isEditingRole } = useWorkspaceStore()
   const [searchQuery, setSearchQuery] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { canCreateUsers, allUsers, isAdminOrOwner, accountRoles } =
+  const { canCreateUsers, allUsers, isAdminOrOwner, accountRoles, isLoading } =
     useAllUsersAndRoles()
   const { isAccountLevelSettingsRoute, isUserInWorkspace } = useNavigation()
 
@@ -89,9 +89,9 @@ function ManagePeople({ classNames }) {
     <UsersTable
       key={'all-users'}
       users={userSearchResults}
-      isOwner={allowUserCreation}
       accountRoles={accountRoles}
-      isAdminOrOwner={isAdminOrOwner}
+      isUserAdmin={isAdminOrOwner}
+      tableLoading={isLoading}
     />,
   ])
 

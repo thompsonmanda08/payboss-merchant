@@ -27,6 +27,7 @@ import { adminResetUserPassword } from '@/app/_actions/user-actions'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 import { useWorkspaceInit } from '@/hooks/useQueryHooks'
 import useDashboard from '@/hooks/useDashboard'
+import Loader from '@/components/ui/Loader'
 
 export const roleColorMap = {
   owner: 'success',
@@ -50,13 +51,14 @@ export default function UsersTable({
   workspaceID,
   isAdminOrOwner,
   accountRoles,
+  isUserAdmin,
+  tableLoading,
 }) {
   const queryClient = useQueryClient()
   const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isUsersRoute } = useNavigation()
   // const { isAdminOrOwner, accountRoles } = useAllUsersAndRoles()
-  const { workspaceUserRole } = useDashboard()
   const {
     isLoading,
     setIsLoading,
@@ -67,15 +69,66 @@ export default function UsersTable({
     handleResetUserPassword,
   } = useWorkspaceStore()
 
-  // const canUpdate = workspaceUserRole?.update
-  const canUpdate =
-    (isUsersRoute && isAdminOrOwner) ||
-    (!isUsersRoute && workspaceUserRole?.update)
-
+  // const { workspaceUserRole } = useDashboard()
   // console.log(workspaceUserRole)
-  // console.log(!isUsersRoute && canUpdate)
-  // console.log(isUsersRoute && isAdminOrOwner)
-  console.log(canUpdate)
+  // const canUpdate = workspaceUserRole?.role?.toLowerCase() == 'admin'
+  // const isAdmin =
+  //   (isUsersRoute && isAdminOrOwner) || (!isUsersRoute && canUpdate)
+  console.log(isUserAdmin)
+
+  function ActionButtons({ user }) {
+    return isUserAdmin ? (
+      <div className="relative flex items-center justify-center gap-4">
+        {!isUsersRoute && (
+          <Tooltip color="default" content="Edit user">
+            <span
+              onClick={() => {
+                setSelectedUser(user)
+                setIsEditingRole(true)
+              }}
+              className="cursor-pointer text-lg text-primary active:opacity-50"
+            >
+              <PencilSquareIcon className="h-5 w-5" />
+            </span>
+          </Tooltip>
+        )}
+        {isUsersRoute && (
+          <Tooltip
+            color="secondary"
+            content="Reset User Password"
+            classNames={{
+              base: 'text-white',
+              content: 'bg-secondary text-white',
+            }}
+          >
+            <span
+              onClick={() => {
+                setSelectedUser(user)
+                setOpenResetPasswordPrompt(true)
+              }}
+              className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
+            >
+              <ArrowPathIcon className="h-5 w-5" />
+            </span>
+          </Tooltip>
+        )}
+
+        <Tooltip color="danger" content="Delete user">
+          <span
+            onClick={() => {
+              setSelectedUser(user)
+              onOpen()
+            }}
+            className="cursor-pointer text-lg text-danger active:opacity-50"
+          >
+            <TrashIcon className="h-5 w-5" />
+          </span>
+        </Tooltip>
+      </div>
+    ) : (
+      <>N/A</>
+    )
+  }
 
   // TABLE CELL RENDERER
   const renderCell = React.useCallback(
@@ -124,61 +177,13 @@ export default function UsersTable({
             </Chip>
           )
         case 'actions':
-          return !canUpdate ? (
-            <div className="relative flex items-center justify-center gap-4">
-              <Tooltip color="default" content="Edit user">
-                <span
-                  onClick={() => {
-                    setSelectedUser(user)
-                    setIsEditingRole(true)
-                  }}
-                  className="cursor-pointer text-lg text-primary active:opacity-50"
-                >
-                  <PencilSquareIcon className="h-5 w-5" />
-                </span>
-              </Tooltip>
-              {isUsersRoute && (
-                <Tooltip
-                  color="secondary"
-                  content="Reset User Password"
-                  classNames={{
-                    base: 'text-white',
-                    content: 'bg-secondary text-white',
-                  }}
-                >
-                  <span
-                    onClick={() => {
-                      setSelectedUser(user)
-                      setOpenResetPasswordPrompt(true)
-                    }}
-                    className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
-                  >
-                    <ArrowPathIcon className="h-5 w-5" />
-                  </span>
-                </Tooltip>
-              )}
-
-              <Tooltip color="danger" content="Delete user">
-                <span
-                  onClick={() => {
-                    setSelectedUser(user)
-                    onOpen()
-                  }}
-                  className="cursor-pointer text-lg text-danger active:opacity-50"
-                >
-                  <TrashIcon className="h-5 w-5" />
-                </span>
-              </Tooltip>
-            </div>
-          ) : (
-            <>N/A</>
-          )
+          return <ActionButtons user={user} />
 
         default:
           return cellValue
       }
     },
-    [canUpdate],
+    [isUsersRoute],
   )
 
   async function _handleResetUserPassword() {
@@ -221,7 +226,11 @@ export default function UsersTable({
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody items={users}>
+        <TableBody
+          loadingContent={<Loader />}
+          isLoading={tableLoading}
+          items={users}
+        >
           {(item) => (
             <TableRow key={item?.ID}>
               {(columnKey) => (

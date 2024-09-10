@@ -3,8 +3,9 @@ import useAccountProfile from '@/hooks/useProfileDetails'
 import { useSetupConfig } from '@/hooks/useQueryHooks'
 import { DefaultCover } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { Chip, Skeleton } from '@nextui-org/react'
+import { Chip } from '@nextui-org/react'
 import Image from 'next/image'
+import { roleColorMap } from '../containers/tables/UsersTable'
 
 export default function ProfileBanner({ className }) {
   const { user, merchant } = useAccountProfile()
@@ -48,9 +49,6 @@ export default function ProfileBanner({ className }) {
     </div>
   )
 }
-
-import React from 'react'
-import { roleColorMap } from '../containers/workspace/AddUserToWorkspace'
 
 function ProfileBannerLoader({ className }) {
   return (

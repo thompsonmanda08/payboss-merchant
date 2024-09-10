@@ -22,6 +22,7 @@ import useNavigation from '@/hooks/useNavigation'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { WalletIcon } from '@heroicons/react/24/outline'
 import { usePathname } from 'next/navigation'
+import useDashboard from '@/hooks/useDashboard'
 
 export default function TopNavBar({}) {
   const { user } = useAccountProfile()
@@ -101,6 +102,7 @@ export default function TopNavBar({}) {
 export function AvatarDropdown({ user, isProfile }) {
   const { handleUserLogOut } = useAuthStore((state) => state)
   const { dashboardRoute } = useNavigation()
+  const { workspaceUserRole: role } = useDashboard()
   return (
     <Dropdown
       // showArrow
@@ -154,7 +156,7 @@ export function AvatarDropdown({ user, isProfile }) {
             <Avatar
               firstName={user?.first_name}
               lastName={user?.last_name}
-              email={capitalize(user?.role)}
+              email={capitalize(role?.role || user?.role)}
               showUserInfo
             />
           </DropdownItem>
