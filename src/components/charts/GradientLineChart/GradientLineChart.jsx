@@ -7,17 +7,30 @@ import { Line } from 'react-chartjs-2'
 import { cn } from '@/lib/utils'
 
 const chart = {
-  labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  labels: [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ],
   datasets: [
     {
       label: 'Income',
       color: '#3172d4',
-      data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
     {
-      label: 'Spending',
+      label: 'Payments',
       color: '#eb7a2e',
-      data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
   ],
 }
@@ -37,10 +50,10 @@ function GradientLineChart({ title, description, height, chart_ }) {
       borderColor: dataset?.color,
       fill: true,
       maxBarThickness: 6,
-      backgroundColor: gradientChartLine(
-        chartRef.current?.children[0],
-        dataset?.color || '#00000000',
-      ),
+      // backgroundColor: gradientChartLine(
+      //   chartRef.current?.children[0],
+      //   dataset?.color || '#00000000',
+      // ),
     }))
   }, [chart.datasets])
 

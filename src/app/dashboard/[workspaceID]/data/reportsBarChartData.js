@@ -8,10 +8,23 @@ import {
 
 const reportsBarChartData = {
   chart: {
-    labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    labels: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
     datasets: {
       label: 'Transactions',
-      data: [320, 200, 100, 220, 500, 100, 400, 230, 500],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
   },
   items: [

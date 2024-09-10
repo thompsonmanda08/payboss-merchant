@@ -201,7 +201,7 @@ function DashboardAnalytics({ workspaceID }) {
             title="transactions"
             description={
               <>
-                (<strong>+23%</strong>) than last week
+                (<strong>+0%</strong>) than last week
               </>
             }
             chart={chart}

@@ -11,6 +11,8 @@ export default function data() {
     columns: [
       { name: 'BATCH NAME', uid: 'batch_name' },
       { name: 'DATE', uid: 'date' },
+      { name: 'TOTAL RECORDS', uid: 'amount' },
+      { name: 'TOTAL PROCCESSED', uid: 'amount' },
       { name: 'AMOUNT', uid: 'amount' },
       { name: 'STATUS', uid: 'status' },
     ],

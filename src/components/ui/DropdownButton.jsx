@@ -215,12 +215,14 @@ export function SimpleDropdown({
   selectedKeys,
   setSelectedKeys,
   name,
-  selectionMode,
+  selectionMode = 'single',
   disallowEmptySelection = false,
+  closeOnSelect = true,
   className,
   classNames,
   variant = 'flat',
   color = 'primary',
+  isIconOnly,
 
   listItemName,
   ...props
@@ -232,6 +234,7 @@ export function SimpleDropdown({
         <Button
           color={color}
           variant={variant}
+          isIconOnly={isIconOnly}
           endContent={
             <ChevronDownIcon
               className={cn(
@@ -248,7 +251,7 @@ export function SimpleDropdown({
       <DropdownMenu
         disallowEmptySelection={disallowEmptySelection}
         aria-label={'Simple Dropdown - ' + name}
-        closeOnSelect={false}
+        closeOnSelect={closeOnSelect}
         selectedKeys={selectedKeys}
         selectionMode={selectionMode}
         onSelectionChange={setSelectedKeys}

@@ -85,7 +85,7 @@ function Workspaces({ user, showHeader = false, className }) {
                 having all your tools and resources organized in one place.
               </p>
             </div>
-            {!canCreateWorkspace && (
+            {canCreateWorkspace && (
               <Button
                 onPress={onOpen}
                 size="lg"

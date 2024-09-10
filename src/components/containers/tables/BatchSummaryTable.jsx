@@ -3,9 +3,11 @@ import { useState } from 'react'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import Table from './Table'
 import data from '@/app/dashboard/[workspaceID]/data/tableData'
-import { Card } from '../../base'
+import { Card, CardHeader } from '../../base'
 import { CheckIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid'
 import CustomTable from './Table'
+import { ArrowUpOnSquareStackIcon } from '@heroicons/react/24/outline'
+import { SimpleDropdown } from '@/components/ui/DropdownButton'
 
 function Batches() {
   const { columns, rows } = data()
@@ -13,71 +15,39 @@ function Batches() {
 
   return (
     <Card>
-      <div className="flex items-center justify-between p-3">
-        <div>
-          <div className="text-xl font-semibold">Batches</div>
-          <div className="flex items-center">
-            <CheckIcon className="h-5 w-5 font-bold text-primary" />
-            <div className="ml-1 text-sm font-normal">
-              &nbsp;<strong>30 done</strong> this month
-            </div>
-          </div>
-        </div>
-        <div className="text-text px-2">
-          <Menu as="div" className="relative z-50">
-            {({ open }) => (
-              <>
-                <MenuButton className="cursor-pointer font-bold">
-                  <EllipsisVerticalIcon className="h-5 w-5 cursor-pointer hover:text-primary" />
-                </MenuButton>
+      <div className="mb-8 flex items-center justify-between">
+        <CardHeader
+          title={'Bulk Transactions'}
+          infoText={
+            <span className="flex items-center">
+              <ArrowUpOnSquareStackIcon className="mr-1 h-6 w-6 rotate-90 text-primary" />
+              <div className="ml-1 text-sm font-normal">
+                &nbsp;<strong>0 Proccessed</strong> this month
+              </div>
+            </span>
+          }
+        />
 
-                <MenuItems
-                  className={`${
-                    open ? 'block' : 'hidden'
-                  } absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg focus:outline-none`}
-                >
-                  <div className="py-1">
-                    <MenuItem>
-                      {({ active }) => (
-                        <button
-                          className={`${
-                            active ? 'bg-gray-100' : ''
-                          } group flex w-full items-center rounded-md px-4 py-2 text-sm text-gray-700`}
-                        >
-                          Action
-                        </button>
-                      )}
-                    </MenuItem>
-                    <MenuItem>
-                      {({ active }) => (
-                        <button
-                          className={`${
-                            active ? 'bg-gray-100' : ''
-                          } group flex w-full items-center rounded-md px-4 py-2 text-sm text-gray-700`}
-                        >
-                          Another action
-                        </button>
-                      )}
-                    </MenuItem>
-                    <MenuItem>
-                      {({ active }) => (
-                        <button
-                          className={`${
-                            active ? 'bg-gray-100' : ''
-                          } group flex w-full items-center rounded-md px-4 py-2 text-sm text-gray-700`}
-                        >
-                          Something else
-                        </button>
-                      )}
-                    </MenuItem>
-                  </div>
-                </MenuItems>
-              </>
-            )}
-          </Menu>
-        </div>
+        <SimpleDropdown
+          isIconOnly
+          classNames={{
+            trigger:
+              'bg-transparent-500 w-auto max-w-max shadow-none items-center justify-center',
+            // innerWrapper,
+            dropdownItem: 'py-2',
+            chevronIcon: 'hidden',
+          }}
+          name={
+            <EllipsisVerticalIcon className="h-5 w-5 cursor-pointer hover:text-primary" />
+          }
+          dropdownItems={[
+            '  View All Transactions',
+            '  View Bulk Collections',
+            'View Bulk Payments',
+          ]}
+        />
       </div>
-      <CustomTable columns={columns} rows={rows} />
+      <CustomTable removeWrapper columns={columns} rows={[]} />
     </Card>
   )
 }
