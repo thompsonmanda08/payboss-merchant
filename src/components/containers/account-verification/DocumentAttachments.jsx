@@ -4,7 +4,13 @@ import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import useAuthStore from '@/context/authStore'
 import { uploadBusinessFile } from '@/app/_actions/pocketbase-actions'
-import { CardHeader, FileDropZone, StatusMessage } from '@/components/base'
+import {
+  CardHeader,
+  EmptyLogs,
+  EmptyState,
+  FileDropZone,
+  StatusMessage,
+} from '@/components/base'
 import { notify } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@nextui-org/react'
@@ -19,7 +25,13 @@ import { useQueryClient } from '@tanstack/react-query'
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function DocumentAttachments({ navigateToPage }) {
   const queryClient = useQueryClient()
-  const { merchantID, allowUserToSubmitKYC, refDocsExist } = useAccountProfile()
+  const {
+    merchantID,
+    allowUserToSubmitKYC,
+    refDocsExist,
+    isOwner,
+    isAccountAdmin,
+  } = useAccountProfile()
   const { isKYCSent, setIsKYCSent } = useAuthStore((state) => state)
   const [docFiles, setDocFiles] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -105,7 +117,7 @@ export default function DocumentAttachments({ navigateToPage }) {
     setIsLoading(false)
   }
 
-  return (
+  return isOwner || isAccountAdmin ? (
     <>
       <CardHeader
         className={'py-0'}
@@ -220,6 +232,16 @@ export default function DocumentAttachments({ navigateToPage }) {
         }
       </div>
     </>
+  ) : (
+    <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
+      <EmptyLogs
+        className={'my-auto'}
+        title={'Oops! Looks like your are not an Admin'}
+        subTitle={
+          'Only the admin or account owner can submit company documentation.'
+        }
+      />
+    </div>
   )
 }
 

@@ -5,7 +5,11 @@ import { useRouter } from 'next/navigation'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { useDisclosure } from '@nextui-org/react'
 import useWorkspaces from '@/hooks/useWorkspaces'
-import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowRightStartOnRectangleIcon,
+  ArrowUturnLeftIcon,
+  ArrowUturnRightIcon,
+} from '@heroicons/react/24/outline'
 import useNavigation from '@/hooks/useNavigation'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 import { useWorkspaceMembers } from '@/hooks/useQueryHooks'
@@ -16,6 +20,8 @@ import UsersTable from '@/components/containers/tables/UsersTable'
 import WorkspaceDetails from '@/components/containers/workspace/WorkspaceDetails'
 import Wallet from '@/components/containers/workspace/Wallet'
 import { Balance } from '@/components/base'
+import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/20/solid'
+import Link from 'next/link'
 
 const TABS = [
   { name: 'General', index: 0 },
@@ -87,19 +93,30 @@ function WorkspaceInfo({ workspaceID }) {
   ) : (
     <div className={cn('px-2', { 'px-3': isUserInWorkspace })}>
       {!isUserInWorkspace && (
-        <div className="relative lg:-left-5">
+        <div className="relative flex w-full items-center justify-between lg:-left-5">
           <Button
             aria-label="back"
             color="light"
             className={'text-primary sm:w-auto sm:max-w-fit'}
             onClick={() => back()}
+            startContent={<ArrowUturnLeftIcon className="h-5 w-5" />}
           >
-            <ArrowUturnLeftIcon className="h-5 w-5" /> Return to Workspaces
+            Return to Workspaces
+          </Button>
+          <Button
+            as={Link}
+            href={`/dashboard/${workspaceID}`}
+            aria-label="back"
+            color="light"
+            className={'text-primary sm:w-auto sm:max-w-fit'}
+            endContent={<ArrowRightStartOnRectangleIcon className="h-5 w-5" />}
+          >
+            Go to Workspace Dashboard
           </Button>
         </div>
       )}
       {/* HEADER */}
-      <div className={cn('mt-8', )}>
+      <div className={cn('mt-8')}>
         <h2 className="heading-5 !font-bold uppercase tracking-tight text-gray-900">
           {selectedWorkspace?.workspace}
         </h2>
@@ -111,8 +128,6 @@ function WorkspaceInfo({ workspaceID }) {
 
       {/* CONTENT */}
       <div className="flex flex-col gap-4 px-4 lg:p-0">
-        
-
         <div className="flex w-full flex-grow flex-col justify-start">
           {activeTab}
         </div>

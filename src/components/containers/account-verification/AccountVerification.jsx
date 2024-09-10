@@ -27,6 +27,20 @@ function AccountVerification() {
     { name: 'Documentation', href: '#', index: 2 },
   ]
 
+  const DOCUMENT_COMPONENTS = allowUserToSubmitKYC ? (
+    <DocumentAttachments
+      key={'documents'}
+      businessDocs={businessDocs}
+      navigateToPage={navigateToPage}
+    />
+  ) : (
+    <DocumentsViewer
+      key={'documents'}
+      businessDocs={businessDocs}
+      navigateToPage={navigateToPage}
+    />
+  )
+
   const RENDER_COMPONENTS = [
     <ProgressStageTracker key={'verification-status'} />,
     <BusinessAccountDetails
@@ -38,19 +52,7 @@ function AccountVerification() {
       currencies={currencies}
       navigateToPage={navigateToPage}
     />,
-    allowUserToSubmitKYC ? (
-      <DocumentsViewer
-        key={'documents'}
-        businessDocs={businessDocs}
-        navigateToPage={navigateToPage}
-      />
-    ) : (
-      <DocumentAttachments
-        key={'documents'}
-        businessDocs={businessDocs}
-        navigateToPage={navigateToPage}
-      />
-    ),
+    DOCUMENT_COMPONENTS,
   ]
 
   // ************* COMPONENT RENDERER ************** //
