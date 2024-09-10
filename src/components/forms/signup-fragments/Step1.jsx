@@ -34,7 +34,6 @@ export default function Step1({ updateDetails, backToStart }) {
   return (
     <>
       <CardHeader
-      
         title="Business Details"
         infoText={
           'Information about your business to help us verify your identity.'
@@ -203,7 +202,7 @@ export default function Step1({ updateDetails, backToStart }) {
               }}
             />
             <Input
-              label="Website"
+              label="Website / Social Media"
               name="website"
               value={step?.website}
               prefilled={true}
