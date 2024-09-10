@@ -193,34 +193,32 @@ export default function DocumentAttachments({ navigateToPage }) {
         </div>
       )}
 
-      {allowUserToSubmitKYC && (
-        <div className="mt-4 flex w-full flex-col items-start gap-4">
-          <Checkbox
-            className="flex items-start"
-            classNames={{
-              label: 'flex flex-col items-start -mt-1',
-            }}
-            isSelected={isKYCSent}
-            onValueChange={setIsKYCSent}
+      <div className="mt-4 flex w-full flex-col items-start gap-4">
+        <Checkbox
+          className="flex items-start"
+          classNames={{
+            label: 'flex flex-col items-start -mt-1',
+          }}
+          isSelected={isKYCSent}
+          onValueChange={setIsKYCSent}
+        >
+          <span className="max-w-xl text-xs font-medium italic text-slate-700 md:text-sm">
+            Yes, I confirm that the details provided accurately represent my
+            business. I understand that any misrepresentation of my business may
+            result in the rejection of my application.
+          </span>
+        </Checkbox>
+        {
+          <Button
+            isLoading={isSubmitting}
+            isDisabled={isSubmitting}
+            loadingText={'Submitting...'}
+            onPress={submitKYCDocuments}
           >
-            <span className="max-w-xl text-xs font-medium italic text-slate-700 md:text-sm">
-              Yes, I confirm that the details provided accurately represent my
-              business. I understand that any misrepresentation of my business
-              may result in the rejection of my application.
-            </span>
-          </Checkbox>
-          {
-            <Button
-              isLoading={isSubmitting}
-              isDisabled={isSubmitting}
-              loadingText={'Submitting...'}
-              onPress={submitKYCDocuments}
-            >
-              Submit for Approval
-            </Button>
-          }
-        </div>
-      )}
+            Submit for Approval
+          </Button>
+        }
+      </div>
     </>
   )
 }

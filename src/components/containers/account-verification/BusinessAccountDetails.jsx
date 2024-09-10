@@ -30,8 +30,6 @@ function BusinessAccountDetails({
     !isValidZambianMobileNumber(businessDetails?.contact) &&
     businessDetails?.contact?.length > 1
 
-
-
   //TODO => FETCH ALL KYC DATA - INPUT FIELDS TO BE DISABLED
   return (
     <div className="mr-auto flex flex-col gap-y-10">
@@ -250,7 +248,7 @@ function BusinessAccountDetails({
         </div>
 
         {allowUserToSubmitKYC && (
-          <Button onPress={() => navigateToPage(1)}>Proceed</Button>
+          <Button onPress={() => navigateToPage(2)}>Proceed</Button>
         )}
       </div>
     </div>

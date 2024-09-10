@@ -38,11 +38,19 @@ function AccountVerification() {
       currencies={currencies}
       navigateToPage={navigateToPage}
     />,
-    <DocumentsViewer
-      key={'documents'}
-      businessDocs={businessDocs}
-      navigateToPage={navigateToPage}
-    />,
+    allowUserToSubmitKYC ? (
+      <DocumentsViewer
+        key={'documents'}
+        businessDocs={businessDocs}
+        navigateToPage={navigateToPage}
+      />
+    ) : (
+      <DocumentAttachments
+        key={'documents'}
+        businessDocs={businessDocs}
+        navigateToPage={navigateToPage}
+      />
+    ),
   ]
 
   // ************* COMPONENT RENDERER ************** //
