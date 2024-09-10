@@ -97,7 +97,7 @@ export default function CustomTable({
       selectionBehavior={selectionBehavior}
       isStriped
       isHeaderSticky
-      onRowAction={(key) => alert(`Row item ${key}...`)}
+      onRowAction={(key) => onRowAction(key)}
       bottomContent={
         pages > 1 && (
           <div className="flex w-full justify-center">

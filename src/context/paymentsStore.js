@@ -29,6 +29,7 @@ const INITIAL_STATE = {
   loading: false,
   selectedRecord: null,
   selectedBatch: null,
+  dateFilter: '',
 }
 
 const usePaymentsStore = create((set, get) => ({
@@ -53,6 +54,7 @@ const usePaymentsStore = create((set, get) => ({
   setTransactionDetails: (details) => set({ transactionDetails: details }),
   setOpenTransactionDetailsModal: (open) =>
     set({ openTransactionDetailsModal: open }),
+  updateDateFilter: (dateFilter) => set({ dateFilter }),
 
   // UPDATE FIELDS ON THE SELECTED INVALID RECORD
   updateSelectedRecord: (fields) => {
@@ -186,5 +188,19 @@ export const validationColumns = [
   { header: 'Mobile/Account No.', accessor: 'destination' },
   { header: 'Amount', accessor: 'amount' },
   { header: 'Service', accessor: 'service' },
+  { header: 'Remarks', accessor: 'remarks' },
+]
+
+export const singleReportsColumns = [
+  { header: 'First Name', accessor: 'first_name' },
+  { header: 'Last Name', accessor: 'last_name' },
+  { header: 'Email', accessor: 'email' },
+  { header: 'Mobile No.', accessor: 'contact' },
+  { header: 'NRC', accessor: 'nrc' },
+  // { header: 'Account Type', accessor: 'account' },
+  { header: 'Mobile/Account No.', accessor: 'destination' },
+  { header: 'Amount', accessor: 'amount' },
+  { header: 'Service', accessor: 'service' },
+  { header: 'Status', accessor: 'status' },
   { header: 'Remarks', accessor: 'remarks' },
 ]

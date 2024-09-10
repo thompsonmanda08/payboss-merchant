@@ -63,9 +63,7 @@ function DashboardAnalytics({ workspaceID }) {
   const { chart, items } = reportsBarChartData
   const { data: analytics, isFetching } = useDashboardAnalytics(workspaceID)
   const dashboardAnalytics = analytics?.data
-
-  console.log(dashboardAnalytics)
-
+  
   const { data: initialization, isLoading } = useWorkspaceInit(workspaceID)
   const role = initialization?.data
 
@@ -199,14 +197,29 @@ function DashboardAnalytics({ workspaceID }) {
         </div> */}
 
         <div className="flex w-full flex-col gap-4 md:flex-row">
-          <Batches />
-          <Card className={'w-full'}>
-            <CardHeader
-              title={'Wallet Statement Summary'}
-              infoText={'Brief overview of your latest statement transactions'}
-            />
-            <WalletTransactionHistory workspaceID={workspaceID} limit={4} />
-          </Card>
+          <ReportsBarChart
+            title="transactions"
+            description={
+              <>
+                (<strong>+0%</strong>) than last week
+              </>
+            }
+            chart={chart}
+            items={items}
+          />
+          {role?.can_approve ? (
+            <Card className={'w-full'}>
+              <CardHeader
+                title={'Wallet Statement Summary'}
+                infoText={
+                  'Brief overview of your latest statement transactions'
+                }
+              />
+              <WalletTransactionHistory workspaceID={workspaceID} limit={4} />
+            </Card>
+          ) : (
+            <Batches />
+          )}
         </div>
       </div>
     </>
@@ -216,35 +229,64 @@ function DashboardAnalytics({ workspaceID }) {
 function ComponentsForViewOnly({ workspaceID, dashboardAnalytics }) {
   const { allCollections, allDisbursements } = dashboardAnalytics || {}
   return (
-    <div className="place-items- flex w-full grid-cols-1 gap-4 md:grid-cols-2 md:place-items-start">
-      <SimpleStats
-        title={'Overall Collections'}
-        figure={allCollections?.count || 0}
-        smallFigure={
-          allCollections?.value
-            ? `(${formatCurrency(allCollections?.value)})`
-            : `(ZMW 0.00)`
-        }
-        classNames={{
-          smallFigureClasses: 'md:text-base font-bold',
-        }}
-        isGood={true}
-        Icon={ArrowTrendingUpIcon}
-      />
-      <SimpleStats
-        title={'Overall Disbursements'}
-        figure={allDisbursements?.count || 0}
-        smallFigure={
-          allDisbursements?.value
-            ? `(${formatCurrency(allDisbursements?.value)})`
-            : `(ZMW 0.00)`
-        }
-        classNames={{
-          smallFigureClasses: 'md:text-base font-bold',
-        }}
-        isBad={true}
-        Icon={ArrowTrendingDownIcon}
-      />
+    <div className="place-items- flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-4 md:place-items-start">
+      <div className="flex w-1/2 flex-col gap-6">
+        <GradientLineChart
+          title="Transactions Overview"
+          description={
+            <span className="flex items-center">
+              <span className="mb-1 mr-1 text-lg leading-none text-green-500">
+                <ArrowUpIcon className="h-5 w-5 font-bold" />
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                0% more than{' '}
+                <span className="font-normal">
+                  {new Date()?.getFullYear() - 1}
+                </span>
+              </span>
+            </span>
+          }
+          height="20.25rem"
+          chart={gradientLineChartData}
+        />
+        <div className="flex gap-4">
+          <SimpleStats
+            title={'Overall Collections'}
+            figure={allCollections?.count || 0}
+            smallFigure={
+              allCollections?.value
+                ? `(${formatCurrency(allCollections?.value)})`
+                : `(ZMW 0.00)`
+            }
+            classNames={{
+              smallFigureClasses: 'md:text-base font-bold',
+            }}
+            isGood={true}
+            Icon={ArrowTrendingUpIcon}
+          />
+          <SimpleStats
+            title={'Overall Disbursements'}
+            figure={allDisbursements?.count || 0}
+            smallFigure={
+              allDisbursements?.value
+                ? `(${formatCurrency(allDisbursements?.value)})`
+                : `(ZMW 0.00)`
+            }
+            classNames={{
+              smallFigureClasses: 'md:text-base font-bold',
+            }}
+            isBad={true}
+            Icon={ArrowTrendingDownIcon}
+          />
+        </div>
+      </div>
+      <Card className={'w-1/2'}>
+        <CardHeader
+          title={'Wallet Statement Summary'}
+          infoText={'Brief overview of your latest statement transactions'}
+        />
+        <WalletTransactionHistory workspaceID={workspaceID} limit={6} />
+      </Card>
     </div>
   )
 }

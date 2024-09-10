@@ -9,7 +9,7 @@ import {
 } from '@internationalized/date'
 import { useDateFormatter } from '@react-aria/i18n'
 
-const dateInputClassNames = {
+export const dateInputClassNames = {
   label: 'ml-1 text-sm font-medium text-slate-700 mb-0',
   base: 'gap-0',
   inputWrapper: cn(
@@ -18,7 +18,7 @@ const dateInputClassNames = {
   input: 'focus:border-none',
 }
 
-const datePickerClasses = {
+export const datePickerClasses = {
   calendar: 'rounded-md !text-primary',
   calendarContent: 'text-primary',
 }
@@ -59,39 +59,46 @@ export function DateRangePickerField({
   className,
   label,
   defaultValue,
+  setValue,
+  value,
   description,
   labelPlacement,
-  visibleMonths = 2,
+  visibleMonths = 1,
   ...props
 }) {
-  const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
-  const thirtyDaysAgoDate = new Date()
-  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
-  const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
+  // const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
+  // const thirtyDaysAgoDate = new Date()
+  // thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
+  // const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
 
-  const [value, setValue] = React.useState({
-    start_date: parseDate(thirtyDaysAgo),
-    end_date: parseDate(thisMonth),
-  })
+  // const [value, setValue] = React.useState({
+  //   start_date: parseDate(thirtyDaysAgo),
+  //   end_date: parseDate(thisMonth),
+  // })
 
-  let formatter = useDateFormatter({ dateStyle: 'long' })
+  // let formatter = useDateFormatter({ dateStyle: 'long' })
 
-  useEffect(() => {
-    setDateRange({
-      start_date: formatDate(
-        value?.start_date.toDate(getLocalTimeZone()),
-        'YYYY-MM-DD',
-      ),
-      end_date: formatDate(
-        value?.end_date.toDate(getLocalTimeZone()),
-        'YYYY-MM-DD',
-      ),
-      range: formatter.formatRange(
-        value?.start_date.toDate(getLocalTimeZone()),
-        value?.end_date.toDate(getLocalTimeZone()),
-      ),
-    })
-  }, [value])
+  // useEffect(() => {
+  //   if (value?.start_date && value?.end_date) {
+  //     setDateRange({
+  //       start_date: formatDate(
+  //         value?.start_date.toDate(getLocalTimeZone()),
+  //         'YYYY-MM-DD',
+  //       ),
+  //       end_date: formatDate(
+  //         value?.end_date.toDate(getLocalTimeZone()),
+  //         'YYYY-MM-DD',
+  //       ),
+  // range: formatter.formatRange(
+  //   value?.start_date.toDate(getLocalTimeZone()),
+  //   value?.end_date.toDate(getLocalTimeZone()),
+  // ),
+  //     })
+  //   }
+  // }, [value])
+
+  // console.log(dateRange)
+  // console.log(value)
 
   return (
     <div className="flex w-full flex-col gap-y-2">

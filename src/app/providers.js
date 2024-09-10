@@ -28,7 +28,7 @@ function Providers({ session, authSession, children }) {
         disableTransitionOnChange
       > */}
 
-      <NextUIProvider>
+      <NextUIProvider locale="en-GB">
         {!online && (
           <motion.div
             whileInView={{

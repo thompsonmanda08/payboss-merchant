@@ -55,11 +55,11 @@ function SettingsSideBar({
       href: '/manage-account/users',
     },
 
-    {
-      name: 'Security & Permissions',
-      Icon: LockClosedIcon,
-      href: '/manage-account/security',
-    },
+    // {
+    //   name: 'Security & Permissions',
+    //   Icon: LockClosedIcon,
+    //   href: '/manage-account/security',
+    // },
     {
       name: 'Profile Settings',
       Icon: UserCircleIcon,

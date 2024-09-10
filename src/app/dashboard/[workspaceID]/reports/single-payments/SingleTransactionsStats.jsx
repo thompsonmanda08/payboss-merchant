@@ -12,37 +12,30 @@ import {
   PresentationChartBarIcon,
 } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/Button'
-import { cn, downloadCSV, formatCurrency, formatDate } from '@/lib/utils'
+import { cn, downloadCSV, formatCurrency } from '@/lib/utils'
 
-import {
-  dateInputClassNames,
-  datePickerClasses,
-  DateRangePickerField,
-} from '@/components/ui/DateSelectField'
+import { DateRangePickerField } from '@/components/ui/DateSelectField'
 import { BULK_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
 import { getBulkAnalyticReports } from '@/app/_actions/transaction-actions'
 import { AnimatePresence, motion } from 'framer-motion'
 import ReportDetailsViewer from '@/components/containers/analytics/ReportDetailsViewer'
-import { parseDate, getLocalTimeZone } from '@internationalized/date'
+import { Tooltip } from '@nextui-org/react'
 import { singleReportsColumns } from '@/context/paymentsStore'
-
-import { useDateFormatter } from '@react-aria/i18n'
-import { DateRangePicker } from '@nextui-org/react'
 
 const bulkReportsColumns = [
   { name: 'DATE', uid: 'created_at', sortable: true },
-  { name: 'NAME', uid: 'batch_name', sortable: true },
+  { name: 'FIRST NAME', uid: 'first_name', sortable: true },
 
-  { name: 'TOTAL RECORDS', uid: 'allRecords', sortable: true },
-  { name: 'TOTAL AMOUNT', uid: 'allRecordsValue', sortable: true },
+  { name: 'LAST NAME', uid: 'last_name', sortable: true },
+  { name: 'NRC', uid: 'nrc', sortable: true },
+  { name: 'DESTINATION', uid: 'destination', sortable: true },
 
-  { name: 'TOTAL SUCCESSFUL', uid: 'successfulRecords', sortable: true },
-  { name: 'AMOUNT SUCCESSFUL', uid: 'successfulRecordsValue', sortable: true },
+  { name: 'AMOUNT', uid: 'amount', sortable: true },
+  { name: 'SERVICE PROVIDER', uid: 'service_provider', sortable: true },
 
-  { name: 'TOTAL FAILED', uid: 'failedRecords', sortable: true },
-  { name: 'AMOUNT FAILED', uid: 'failedRecordsValue', sortable: true },
-  { name: 'ACTION', uid: 'view' },
+  { name: 'STATUS', uid: 'status', sortable: true },
+  { name: 'REMARKS', uid: 'remarks', sortable: true },
 ]
 
 const SERVICE_TYPES = [
@@ -60,31 +53,12 @@ const SERVICE_TYPES = [
   // },
 ]
 
-export default function BulkTransactionsStats({ workspaceID }) {
+export default function SingleTransactionsStats({ workspaceID }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [dateRange, setDateRange] = useState({})
   const [isExpanded, setIsExpanded] = useState(true)
   const [openReportsModal, setOpenReportsModal] = useState(false)
   const [selectedBatch, setSelectedBatch] = useState(null) // ON ROW SELECTED
-
-  const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
-  const thirtyDaysAgoDate = new Date()
-  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
-  const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
-
-  const [date, setDate] = useState({
-    start: parseDate(thirtyDaysAgo),
-    end: parseDate(thisMonth),
-  })
-
-  const start_date = formatDate(
-    date?.start?.toDate(getLocalTimeZone()),
-    'YYYY-MM-DD',
-  )
-  const end_date = formatDate(
-    date?.end?.toDate(getLocalTimeZone()),
-    'YYYY-MM-DD',
-  )
 
   // HANDLE FET BULK REPORT DATA
   const mutation = useMutation({
@@ -96,88 +70,43 @@ export default function BulkTransactionsStats({ workspaceID }) {
   const directBatches = report?.directBatches || []
   const voucherBatches = report?.voucherBatches || []
 
-  console.log(report)
-  console.log(start_date)
-  console.log(end_date)
+  async function getBulkReportData() {
+    await mutation.mutateAsync(dateRange)
+  }
 
-  let formatter = useDateFormatter({ dateStyle: 'long' })
+  useEffect(() => {
+    if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
+      getBulkReportData()
+    }
+  }, [dateRange])
 
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
       columns={bulkReportsColumns}
-      rows={directBatches || ['1', '2', '3']}
+      rows={directBatches}
       isLoading={mutation.isPending}
       isError={mutation.isError}
       removeWrapper
-      onR
     />,
     <CustomTable
       columns={bulkReportsColumns}
       rows={voucherBatches}
       isLoading={mutation.isPending}
       isError={mutation.isError}
-      removeWrapper
     />,
   ])
 
-  async function applyDataFilter() {
-    const dateRange = {
-      start_date,
-      end_date,
-    }
-
-    const response = await getBulkReportData(dateRange)
-
-    return response
-  }
-
-  async function getBulkReportData(dateRange) {
-    const response = await mutation.mutateAsync(dateRange)
-
-    return response
-  }
   function handleFileExportToCSV() {
     // Implement CSV export functionality here
     if (currentTabIndex === 0) {
       const csvData = convertToCSV(directBatches)
-      downloadCSV(csvData, 'bulk_transactions')
+      downloadCSV(csvData, 'single_direct_transactions')
     }
     if (currentTabIndex === 1) {
       const csvData = convertToCSV(voucherBatches)
-      downloadCSV(csvData, 'bulk_voucher_transactions')
+      downloadCSV(csvData, 'single_voucher_transactions')
     }
   }
-
-  useEffect(() => {
-    const dateRange = {
-      start_date: thirtyDaysAgo,
-      end_date: thisMonth,
-    }
-    if (!mutation.data && date?.start && date?.end) {
-      getBulkReportData(dateRange)
-    }
-  }, [])
-
-  useEffect(() => {
-    // const dateRange = {
-    //   start_date: formatDate(
-    //     date?.start_date?.toDate(getLocalTimeZone()),
-    //     'YYYY-MM-DD',
-    //   ),
-    //   end_date: formatDate(
-    //     date?.end_date?.toDate(getLocalTimeZone()),
-    //     'YYYY-MM-DD',
-    //   ),
-    // }
-    // console.log(
-    //   date
-    //     ? formatter.formatRange(
-    //         date.start_date?.toDate(getLocalTimeZone()),
-    //         date.end_date?.toDate(getLocalTimeZone()),
-    //       )
-    //     : '--',
-    // )
-  }, [date])
 
   return (
     <>
@@ -186,13 +115,13 @@ export default function BulkTransactionsStats({ workspaceID }) {
           <DateRangePickerField
             label={'Reports Date Range'}
             description={'Dates to generate transactional reports'}
-            visibleMonths={2}
             autoFocus
-            value={date}
-            setValue={setDate}
+            dateRange={dateRange}
+            visibleMonths={2}
+            setDateRange={setDateRange}
           />{' '}
           <Button
-            onPress={applyDataFilter}
+            onPress={getBulkReportData}
             endContent={<FunnelIcon className="h-5 w-5" />}
           >
             Apply
@@ -203,22 +132,11 @@ export default function BulkTransactionsStats({ workspaceID }) {
       <Card className={'mb-8 w-full'}>
         <div className="flex items-end justify-between">
           <CardHeader
-            title={
-              'Bulk Transactions History' +
-              ` (${
-                date
-                  ? formatter.formatRange(
-                      date.start.toDate(getLocalTimeZone()),
-                      date.end.toDate(getLocalTimeZone()),
-                    )
-                  : '--'
-              })`
-            }
+            title={'Single Transactions History'}
             infoText={
               'Transactions logs to keep track of your workspace activity'
             }
           />
-
           <div className="flex gap-4">
             <Button
               color={'primary'}
@@ -245,7 +163,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
             >
               <Card className={'mt-4 shadow-none'}>
                 <TotalValueStat
-                  label={'Total Batches'}
+                  label={'Total Transaction'}
                   icon={{
                     component: <ListBulletIcon className="h-5 w-5" />,
                     color: 'primary',
@@ -256,7 +174,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
                 <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-12 ">
                   <div className="flex flex-col gap-4">
                     <TotalValueStat
-                      label={'Total Direct Batches'}
+                      label={'Total Direct Transaction'}
                       icon={{
                         component: <ListBulletIcon className="h-5 w-5" />,
                         color: 'primary-800',
@@ -278,7 +196,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
                   </div>
                   <div className="flex flex-col gap-4">
                     <TotalValueStat
-                      label={'Total Voucher Batches'}
+                      label={'Total Voucher Transaction'}
                       icon={{
                         component: <ListBulletIcon className="h-5 w-5" />,
                         color: 'secondary',
@@ -287,7 +205,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
                       value={formatCurrency(report?.voucher?.all?.value || 0)}
                     />
                     <TotalValueStat
-                      label={'Proccessed Voucher Batches'}
+                      label={'Proccessed Voucher Transaction'}
                       icon={{
                         component: <ListBulletIcon className="h-5 w-5" />,
                         color: 'secondary',
@@ -354,7 +272,6 @@ export default function BulkTransactionsStats({ workspaceID }) {
           </AnimatePresence>
         )}
       </Card>
-
       {/*  CURRENTLY ACTIVE TABLE */}
       <Card className={'mb-8 w-full'}>
         <div className="mb-4 flex w-full items-center justify-between gap-8 ">
@@ -384,16 +301,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
         </div>
         {activeTab}
       </Card>
-      {/*  CURRENTLY ACTIVE TABLE */}
-      {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
-      {openReportsModal && (
-        <ReportDetailsViewer
-          setOpenReportsModal={setOpenReportsModal}
-          openReportsModal={openReportsModal}
-          batchID={selectedBatch?.ID}
-          columns={singleReportsColumns}
-        />
-      )}
+
       {/************************************************************************/}
     </>
   )
@@ -439,19 +347,20 @@ export const convertToCSV = (objArray) => {
   const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray
   let str = ''
   const headers =
-    'Date,Name,Total Records,Total Amount,Total Successful,Total Failed, Amount Failed'
+    'Date,First Name,Last Name,NRC,Destination,Amount,Service Provider, Status, Remark,'
   str += headers + '\r\n'
 
   for (let i = 0; i < array.length; i++) {
     let line = ''
     line += `"${formatDate(array[i]?.created_at, 'DD-MM-YYYY') || ''}",`
-    line += `"${array[i]?.batch_name || ''}",`
-    line += `"${array[i]?.allRecords || ''}",`
-    line += `"${array[i]?.allRecordsValue || ''}",`
-    line += `"${array[i]?.successfulRecords || ''}",`
-    line += `"${array[i]?.successfulRecordsValue || ''}",`
-    line += `"${array[i]?.failedRecords || ''}",`
-    line += `"${array[i]?.failedRecordsValue || ''}",`
+    line += `"${array[i]?.first_name || ''}",`
+    line += `"${array[i]?.last_name || ''}",`
+    line += `"${array[i]?.nrc || ''}",`
+    line += `"${array[i]?.destination || ''}",`
+    line += `"${array[i]?.amount || ''}",`
+    line += `"${array[i]?.service_provider || ''}",`
+    line += `"${array[i]?.status || ''}",`
+    line += `"${array[i]?.remarks || ''}",`
 
     str += line + '\r\n'
   }

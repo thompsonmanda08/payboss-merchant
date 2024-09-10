@@ -102,51 +102,51 @@ function SideNavBar({ params }) {
     // ****************************************************** //
 
     // *************** COLLECTIONS AND INCOME *************** //
-    {
-      ID: 'collections',
-      name: 'Manage Income',
-      Icon: InboxArrowDownIcon,
-      subMenuItems: [
-        // {
-        //   name: 'Invoicing',
-        //   href: `${dashboardRoute}/collections/invoicing`,
-        //   Icon: NewspaperIcon,
-        // },
+    // {
+    //   ID: 'collections',
+    //   name: 'Manage Income',
+    //   Icon: InboxArrowDownIcon,
+    //   subMenuItems: [
+    // {
+    //   name: 'Invoicing',
+    //   href: `${dashboardRoute}/collections/invoicing`,
+    //   Icon: NewspaperIcon,
+    // },
 
-        // {
-        //   name: 'Payment Forms',
-        //   href: `${dashboardRoute}/collections/payment-forms`,
-        //   Icon: ClipboardDocumentIcon,
-        // },
-        // {
-        //   name: 'Payment Links',
-        //   href: `${dashboardRoute}/collections/payment-links`,
-        //   Icon: LinkIcon,
-        // },
+    // {
+    //   name: 'Payment Forms',
+    //   href: `${dashboardRoute}/collections/payment-forms`,
+    //   Icon: ClipboardDocumentIcon,
+    // },
+    // {
+    //   name: 'Payment Links',
+    //   href: `${dashboardRoute}/collections/payment-links`,
+    //   Icon: LinkIcon,
+    // },
 
-        // {
-        //   name: 'Subscriptions',
-        //   href: `${dashboardRoute}/collections/subscriptions`,
-        //   Icon: CreditCardIcon,
-        // },
+    // {
+    //   name: 'Subscriptions',
+    //   href: `${dashboardRoute}/collections/subscriptions`,
+    //   Icon: CreditCardIcon,
+    // },
 
-        // {
-        //   name: 'Online Store',
-        //   href: `${dashboardRoute}/collections/store`,
-        //   Icon: BuildingStorefrontIcon,
-        // },
-        {
-          name: 'Till Payments',
-          href: `${dashboardRoute}/collections/till-collections`,
-          Icon: CalculatorIcon,
-        },
-        {
-          name: 'API Integration',
-          href: `${dashboardRoute}/collections/api-integration`,
-          Icon: AdjustmentsVerticalIcon,
-        },
-      ],
-    },
+    // {
+    //   name: 'Online Store',
+    //   href: `${dashboardRoute}/collections/store`,
+    //   Icon: BuildingStorefrontIcon,
+    // },
+    // {
+    //   name: 'Till Payments',
+    //   href: `${dashboardRoute}/collections/till-collections`,
+    //   Icon: CalculatorIcon,
+    // },
+    //     {
+    //       name: 'API Integration',
+    //       href: `${dashboardRoute}/collections/api-integration`,
+    //       Icon: AdjustmentsVerticalIcon,
+    //     },
+    //   ],
+    // },
 
     // ****************************************************** //
 
@@ -157,11 +157,11 @@ function SideNavBar({ params }) {
       href: `${dashboardRoute}/reports`,
       Icon: DocumentChartBarIcon,
       subMenuItems: [
-        {
-          name: 'Summary',
-          href: `${dashboardRoute}/reports`,
-          Icon: PresentationChartLineIcon,
-        },
+        // {
+        //   name: 'Summary',
+        //   href: `${dashboardRoute}/reports`,
+        //   Icon: PresentationChartLineIcon,
+        // },
         {
           name: 'Bulk Payments',
           href: `${dashboardRoute}/reports/bulk-payments`,
@@ -172,19 +172,19 @@ function SideNavBar({ params }) {
           href: `${dashboardRoute}/reports/single-payments`,
           Icon: ArrowRightCircleIcon,
         },
-        {
-          name: 'Collections History',
-          href: `${dashboardRoute}/reports/collections`,
-          Icon: ArrowDownOnSquareStackIcon,
-        },
-        {
-          name: 'All Transactions History',
-          href: `${dashboardRoute}/reports/transactions`,
-          Icon: NumberedListIcon,
-        },
+        // {
+        //   name: 'Collections History',
+        //   href: `${dashboardRoute}/reports/collections`,
+        //   Icon: ArrowDownOnSquareStackIcon,
+        // },
+        // {
+        //   name: 'All Transactions History',
+        //   href: `${dashboardRoute}/reports/transactions`,
+        //   Icon: NumberedListIcon,
+        // },
         {
           name: 'Statement',
-          href: `${dashboardRoute}/reports/statements`,
+          href: `${dashboardRoute}/reports/statement`,
           Icon: ClipboardDocumentIcon,
         },
       ],

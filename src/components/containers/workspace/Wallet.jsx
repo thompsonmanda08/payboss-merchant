@@ -257,22 +257,31 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
   )
 }
 
-export function WalletTransactionHistory({ workspaceID, limit }) {
-  const { data: walletHistoryResponse, isLoading } =
+export function WalletTransactionHistory({
+  workspaceID,
+  limit,
+  transactionData,
+  isLoading,
+}) {
+  const { data: walletHistoryResponse, isLoading: loadingWalletHistory } =
     useWalletPrefundHistory(workspaceID)
 
-  const walletHistory = walletHistoryResponse?.data?.data || []
+  const walletHistory =
+    transactionData || walletHistoryResponse?.data?.data || []
+
+  console.log(walletHistory)
 
   const data = [
     {
-      title: 'Wallet Prefund',
+      title: 'Wallet Transaction History',
       data: limit ? walletHistory.slice(0, limit) : walletHistory,
     },
   ]
-
   const formattedActivityData = formatActivityData(data)
 
-  return isLoading ? (
+  const isFetching = isLoading || loadingWalletHistory
+
+  return isFetching ? (
     <div className="flex w-full flex-col gap-4">
       <Skeleton className="mt-6 h-8 max-w-xs" />
       {Array.from({ length: limit || 5 }).map((_, index) => (

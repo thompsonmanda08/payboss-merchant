@@ -61,27 +61,29 @@ export const formatActivityData = (activityLog) => {
 }
 
 export function formatDate(inputDate, dateStyle = '') {
-  if (dateStyle === 'YYYY-MM-DD') {
-    const date = new Date(inputDate)
-
-    // Get the year, month, and day components
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-indexed, pad single digits with a leading zero
-    const day = String(date.getDate()).padStart(2, '0') // Pad single digits with a leading zero
-
-    // Format the date as "YYYY-MM-DD"
-    return `${year}-${month}-${day}`
-  }
-
   const options = {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
   }
 
-  const formattedDate = new Date(inputDate).toLocaleDateString('en', options)
+  const date = new Date(inputDate)
+
+  const formattedDate = date.toLocaleDateString('en', options)
 
   const [month, day, year] = formattedDate.split(' ')
+
+  const YYYY = date.getFullYear()
+
+  const MM = String(date.getMonth() + 1).padStart(2, '0')
+
+  const DD = String(date.getDate()).padStart(2, '0')
+
+  // Format the date as "YYYY-MM-DD"
+  if (dateStyle === 'YYYY-MM-DD') return `${YYYY}-${MM}-${DD}`
+
+  // Format the date as "DD-MM-YYYY"
+  if (dateStyle === 'DD-MM-YYYY') return `${DD}-${MM}-${YYYY}`
 
   return `${parseInt(day)}-${month}-${year}`
 }
@@ -198,4 +200,15 @@ export function syntaxHighlight(json) {
       return '<span class="' + cls + '">' + match + '</span>'
     },
   )
+}
+
+export const downloadCSV = (data, fileName) => {
+  const csvData = new Blob([data], { type: 'text/csv' })
+  const csvURL = URL.createObjectURL(csvData)
+  const link = document.createElement('a')
+  link.href = csvURL
+  link.download = `${fileName}.csv`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }

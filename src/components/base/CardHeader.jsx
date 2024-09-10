@@ -16,7 +16,7 @@ function CardHeader({ title, infoText, handleClose, className, classNames }) {
         <div className={cn('flex flex-col', innerWrapper)}>
           <h3
             className={cn(
-              'text-sm font-semibold tracking-tight text-slate-800 xl:text-base',
+              'text-sm font-semibold tracking-tight text-slate-800 md:text-base',
               titleClasses,
             )}
           >
