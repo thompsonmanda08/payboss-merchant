@@ -67,7 +67,15 @@ export default function UsersTable({
     handleResetUserPassword,
   } = useWorkspaceStore()
 
-  const isWorkspaceAdmin = workspaceUserRole?.role.toLowerCase() == 'admin'
+  // const canUpdate = workspaceUserRole?.update
+  const canUpdate =
+    (isUsersRoute && isAdminOrOwner) ||
+    (!isUsersRoute && workspaceUserRole?.update)
+
+  // console.log(workspaceUserRole)
+  // console.log(!isUsersRoute && canUpdate)
+  // console.log(isUsersRoute && isAdminOrOwner)
+  console.log(canUpdate)
 
   // TABLE CELL RENDERER
   const renderCell = React.useCallback(
@@ -116,62 +124,51 @@ export default function UsersTable({
             </Chip>
           )
         case 'actions':
-          return (isUsersRoute && isAdminOrOwner) ||
-            (!isUsersRoute && isWorkspaceAdmin) ? (
+          return !canUpdate ? (
             <div className="relative flex items-center justify-center gap-4">
-              {/* <Tooltip content="View user">
-              <span
-                onClick={() => setIsViewingUser(true)}
-                className="cursor-pointer text-lg text-secondary active:opacity-50"
-              >
-                <EyeIcon className="h-5 w-5" />
-              </span>
-            </Tooltip> */}
-              <>
-                <Tooltip color="default" content="Edit user">
+              <Tooltip color="default" content="Edit user">
+                <span
+                  onClick={() => {
+                    setSelectedUser(user)
+                    setIsEditingRole(true)
+                  }}
+                  className="cursor-pointer text-lg text-primary active:opacity-50"
+                >
+                  <PencilSquareIcon className="h-5 w-5" />
+                </span>
+              </Tooltip>
+              {isUsersRoute && (
+                <Tooltip
+                  color="secondary"
+                  content="Reset User Password"
+                  classNames={{
+                    base: 'text-white',
+                    content: 'bg-secondary text-white',
+                  }}
+                >
                   <span
                     onClick={() => {
                       setSelectedUser(user)
-                      setIsEditingRole(true)
+                      setOpenResetPasswordPrompt(true)
                     }}
-                    className="cursor-pointer text-lg text-primary active:opacity-50"
+                    className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
                   >
-                    <PencilSquareIcon className="h-5 w-5" />
+                    <ArrowPathIcon className="h-5 w-5" />
                   </span>
                 </Tooltip>
-                {isUsersRoute && (
-                  <Tooltip
-                    color="secondary"
-                    content="Reset User Password"
-                    classNames={{
-                      base: 'text-white',
-                      content: 'bg-secondary text-white',
-                    }}
-                  >
-                    <span
-                      onClick={() => {
-                        setSelectedUser(user)
-                        setOpenResetPasswordPrompt(true)
-                      }}
-                      className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
-                    >
-                      <ArrowPathIcon className="h-5 w-5" />
-                    </span>
-                  </Tooltip>
-                )}
+              )}
 
-                <Tooltip color="danger" content="Delete user">
-                  <span
-                    onClick={() => {
-                      setSelectedUser(user)
-                      onOpen()
-                    }}
-                    className="cursor-pointer text-lg text-danger active:opacity-50"
-                  >
-                    <TrashIcon className="h-5 w-5" />
-                  </span>
-                </Tooltip>
-              </>
+              <Tooltip color="danger" content="Delete user">
+                <span
+                  onClick={() => {
+                    setSelectedUser(user)
+                    onOpen()
+                  }}
+                  className="cursor-pointer text-lg text-danger active:opacity-50"
+                >
+                  <TrashIcon className="h-5 w-5" />
+                </span>
+              </Tooltip>
             </div>
           ) : (
             <>N/A</>
@@ -181,7 +178,7 @@ export default function UsersTable({
           return cellValue
       }
     },
-    [isWorkspaceAdmin],
+    [canUpdate],
   )
 
   async function _handleResetUserPassword() {
