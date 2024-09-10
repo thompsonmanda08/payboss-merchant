@@ -18,7 +18,7 @@ import Search from '@/components/ui/Search'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import SelectField from '@/components/ui/SelectField'
 import { EmptyLogs } from '@/components/base'
-import { useBulkTransactions } from '@/hooks/useQueryHooks'
+import { useBulkTransactions, useWorkspaceInit } from '@/hooks/useQueryHooks'
 
 const bulkTransactionColumns = [
   { name: 'DATE CREATED', uid: 'created_at', sortable: true },
@@ -54,6 +54,9 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
   const columns = bulkTransactionColumns
   const { setSelectedBatch, setOpenBatchDetailsModal, setOpenPaymentsModal } =
     usePaymentsStore()
+
+  const { data: initialization } = useWorkspaceInit(workspaceID)
+  const role = initialization?.data
 
   // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid)
@@ -306,13 +309,15 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
               setSelectedKeys={setSelectedKeys}
             />
 
-            <Button
-              color="primary"
-              endContent={<PlusIcon className="h-5 w-5" />}
-              onPress={() => setOpenPaymentsModal(true)}
-            >
-              Create New
-            </Button>
+            {role?.can_initiate && (
+              <Button
+                color="primary"
+                endContent={<PlusIcon className="h-5 w-5" />}
+                onPress={() => setOpenPaymentsModal(true)}
+              >
+                Create New
+              </Button>
+            )}
           </div>
         </div>
         <div className="flex items-center justify-between">

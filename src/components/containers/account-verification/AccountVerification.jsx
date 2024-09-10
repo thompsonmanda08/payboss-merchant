@@ -21,17 +21,11 @@ function AccountVerification() {
   const { companyTypes, banks, currencies } = useConfigOptions()
 
   // ************* TABS RENDERER ************** //
-  const TABS = allowUserToSubmitKYC
-    ? [
-        { name: 'Business Details', href: '#', index: 0 },
-        { name: 'Attachments', href: '#', index: 1 },
-        { name: 'Verification Status', href: '#', index: 2 },
-      ]
-    : [
-        { name: 'Verification Status', href: '#', index: 0 },
-        { name: 'Business Details', href: '#', index: 1 },
-        { name: 'Documentation', href: '#', index: 2 },
-      ]
+  const TABS = [
+    { name: 'Verification Status', href: '#', index: 0 },
+    { name: 'Business Details', href: '#', index: 1 },
+    { name: 'Documentation', href: '#', index: 2 },
+  ]
 
   const RENDER_COMPONENTS = [
     <ProgressStageTracker key={'verification-status'} />,

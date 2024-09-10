@@ -153,13 +153,14 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
         )}
 
         {(batchState?.status?.toLowerCase() == 'submitted' ||
-          selectedBatch?.status?.toLowerCase() == 'submitted') && (
-          <div className="my-4 flex h-1/6 w-full items-end justify-end gap-4">
-            <Button onClick={handleSubmitForApproval}>
-              Submit For Approval
-            </Button>
-          </div>
-        )}
+          selectedBatch?.status?.toLowerCase() == 'submitted') &&
+          role?.can_initiate && (
+            <div className="my-4 flex h-1/6 w-full items-end justify-end gap-4">
+              <Button onClick={handleSubmitForApproval}>
+                Submit For Approval
+              </Button>
+            </div>
+          )}
       </div>
     </>
   )

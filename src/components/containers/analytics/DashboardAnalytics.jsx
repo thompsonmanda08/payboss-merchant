@@ -61,10 +61,10 @@ const pendingApprovals = [
 
 function DashboardAnalytics({ workspaceID }) {
   const { chart, items } = reportsBarChartData
-  const { data: initialization, isLoading } = useWorkspaceInit(workspaceID)
   const { data: analytics, isFetching } = useDashboardAnalytics(workspaceID)
-
   const dashboardAnalytics = analytics?.data
+  
+  const { data: initialization, isLoading } = useWorkspaceInit(workspaceID)
   const role = initialization?.data
 
   const { today, yesterday, collectionsToday, disbursementsToday } =

@@ -137,7 +137,7 @@ const TRANSACTION_STATUS_COLOR_MAP = {
 
 const SERVICE_PROVIDER_COLOR_MAP = {
   airtel: 'bg-red-500 text-white  ',
-  mtn: 'bg-yellow-600 text-white',
+  mtn: 'bg-yellow-400 text-black',
   zamtel: 'bg-green-600 text-white',
   bank: 'bg-primary text-white',
 }

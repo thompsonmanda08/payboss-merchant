@@ -23,7 +23,7 @@ import Search from '@/components/ui/Search'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import SelectField from '@/components/ui/SelectField'
 import { EmptyLogs } from '@/components/base'
-import { useSingleTransactions } from '@/hooks/useQueryHooks'
+import { useSingleTransactions, useWorkspaceInit } from '@/hooks/useQueryHooks'
 
 export const SingleTransactionColumns = [
   { name: 'DATE CREATED', uid: 'created_at', sortable: true },
@@ -63,6 +63,9 @@ export default function SingleTransactionsTable({ workspaceID }) {
     setOpenTransactionDetailsModal,
     setOpenPaymentsModal,
   } = usePaymentsStore()
+
+  const { data: initialization } = useWorkspaceInit(workspaceID)
+  const role = initialization?.data
 
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid)
 
@@ -341,13 +344,15 @@ export default function SingleTransactionsTable({ workspaceID }) {
               setSelectedKeys={setSelectedKeys}
             />
 
-            <Button
-              color="primary"
-              endContent={<PlusIcon className="h-5 w-5" />}
-              onPress={() => setOpenPaymentsModal(true)}
-            >
-              Create New
-            </Button>
+            {role?.can_initiate && (
+              <Button
+                color="primary"
+                endContent={<PlusIcon className="h-5 w-5" />}
+                onPress={() => setOpenPaymentsModal(true)}
+              >
+                Create New
+              </Button>
+            )}
           </div>
         </div>
         <div className="flex items-center justify-between">
