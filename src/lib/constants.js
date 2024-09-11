@@ -125,13 +125,18 @@ const TASK_ICON_BG_COLOR_MAP = {
 
 const TRANSACTION_STATUS_COLOR_MAP = {
   submitted: 'from-primary/10 to-primary-700/10 text-primary-700',
-  processed: 'from-primary/20 to-primary-700/20 text-primary-900',
+  ready: 'from-primary/10 to-primary-700/10 text-primary-700',
+
+  proccessing: 'from-secondary/10 to-orange-600/10 text-orange-700',
   review: 'from-secondary/10 to-orange-600/10 text-orange-700',
-  ready: 'from-secondary/10 to-orange-600/10 text-orange-700',
+
   failed: 'from-red-500/10 to-red-600/10 text-red-700',
   canceled: 'from-red-500/10 to-red-600/10 text-red-700',
   rejected: 'from-red-500/10 to-red-600/10 text-red-700',
+
   succeeded: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
+  processed: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
+  successful: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
   approved: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
 }
 

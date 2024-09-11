@@ -9,11 +9,9 @@ import {
   ModalBody,
   ModalFooter,
 } from '@nextui-org/react'
-import { useEffect, useMemo, useState } from 'react'
-import { ROLES, SYSTEM_ROLES } from './ManagePeople'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { StatusMessage } from '@/components/base'
-import useAccountProfile from '@/hooks/useProfileDetails'
 import { useQueryClient } from '@tanstack/react-query'
 import { USERS } from '@/lib/constants'
 import {
@@ -126,7 +124,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
     setError({ status: true, message: response.message })
     setLoading(false)
   }
-  
+
   async function handleUpdateWorkspaceUserRole() {
     setLoading(true)
 
@@ -157,7 +155,8 @@ function CreateNewUserModal({ isOpen, onClose }) {
   function getUserRoles() {
     // MANAGE ACCOUNT AND NEW USER TO SYSTEM
     if (isAccountLevelSettingsRoute && isUsersRoute) {
-      return accountRoles
+      // return accountRoles
+      return ['admin', 'viewer']
     }
 
     // WORKSPACE MEMBER USER ROLE LIST

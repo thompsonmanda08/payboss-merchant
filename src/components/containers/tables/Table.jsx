@@ -9,7 +9,7 @@ import {
   Pagination,
 } from '@nextui-org/react'
 import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
-import { cn } from '@/lib/utils'
+import { cn, formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
 import Loader from '@/components/ui/Loader'
@@ -47,15 +47,21 @@ export default function CustomTable({
             {cellValue}
           </span>
         )
+      case 'created_at':
+        return (
+          <span className={cn('text-nowrap capitalize')}>
+            {formatDate(cellValue).replaceAll('-', ' ')}
+          </span>
+        )
       case 'status':
         return (
           <Button
             size="sm"
             variant="light"
-            onPress={() => {
-              setSelectedBatch(row)
-              setOpenBatchDetailsModal(true)
-            }}
+            // onPress={() => {
+            //   setSelectedBatch(row)
+            //   setOpenBatchDetailsModal(true)
+            // }}
             className={cn(
               'h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white',
               TRANSACTION_STATUS_COLOR_MAP[row.status],
@@ -84,6 +90,26 @@ export default function CustomTable({
     }
   }, [])
 
+  const bottomContent = React.useMemo(() => {
+    return (
+      pages > 1 && (
+        <div className="flex w-full justify-center">
+          {
+            <Pagination
+              isCompact
+              showControls
+              showShadow
+              color="primary"
+              page={page}
+              total={pages}
+              onChange={(page) => setPage(page)}
+            />
+          }
+        </div>
+      )
+    )
+  }, [rows, pages])
+
   return (
     <Table
       aria-label="Example table with custom cells"
@@ -105,23 +131,7 @@ export default function CustomTable({
       isStriped
       isHeaderSticky
       onRowAction={(key) => onRowAction(key)}
-      bottomContent={
-        pages > 1 && (
-          <div className="flex w-full justify-center">
-            {
-              <Pagination
-                isCompact
-                showControls
-                showShadow
-                color="primary"
-                page={page}
-                total={pages}
-                onChange={(page) => setPage(page)}
-              />
-            }
-          </div>
-        )
-      }
+      bottomContent={bottomContent}
     >
       <TableHeader columns={columns} className="fixed">
         {(column) => (
@@ -139,7 +149,7 @@ export default function CustomTable({
         loadingContent={
           <Loader
             color={'#ffffff'}
-            classNames={{ wrapper: 'bg-slate-900/20 h-full rounded-xl' }}
+            classNames={{ wrapper: 'bg-slate-900/10 h-full rounded-xl' }}
           />
         }
         emptyContent={'No Data to display.'}

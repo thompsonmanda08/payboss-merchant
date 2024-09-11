@@ -1,30 +1,16 @@
 'use client'
-import { Card, CardHeader, Tabs } from '@/components/base'
-import React, { useEffect, useState } from 'react'
+import { Card, CardHeader } from '@/components/base'
+import React, { useState } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import Search from '@/components/ui/Search'
-import CustomTable from '@/components/containers/tables/Table'
-import {
-  ArrowDownTrayIcon,
-  EyeSlashIcon,
-  FunnelIcon,
-  ListBulletIcon,
-  PresentationChartBarIcon,
-} from '@heroicons/react/24/outline'
-import {
-  parseDate,
-  today,
-  now,
-  getLocalTimeZone,
-} from '@internationalized/date'
+import { ArrowDownTrayIcon, FunnelIcon } from '@heroicons/react/24/outline'
+import { parseDate, getLocalTimeZone } from '@internationalized/date'
 import { Button } from '@/components/ui/Button'
-import { cn, downloadCSV, formatCurrency, formatDate } from '@/lib/utils'
+import { downloadCSV, formatDate } from '@/lib/utils'
 
 import { DateRangePickerField } from '@/components/ui/DateSelectField'
 import { BULK_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
 import { getBulkAnalyticReports } from '@/app/_actions/transaction-actions'
-import { AnimatePresence, motion } from 'framer-motion'
 import ReportDetailsViewer from '@/components/containers/analytics/ReportDetailsViewer'
 import { WalletTransactionHistory } from '@/components/containers/workspace/Wallet'
 import { useWalletPrefundHistory } from '@/hooks/useQueryHooks'
@@ -37,17 +23,26 @@ export default function StatementReport({ workspaceID }) {
   const [openReportsModal, setOpenReportsModal] = useState(false)
   const [selectedBatch, setSelectedBatch] = useState(null) // ON ROW SELECTED
 
+  let formatter = useDateFormatter({ dateStyle: 'long' })
+
   const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
   const thirtyDaysAgoDate = new Date()
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
   const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
 
   const [date, setDate] = useState({
-    start_date: parseDate(thirtyDaysAgo),
-    end_date: parseDate(thisMonth),
+    start: parseDate(thirtyDaysAgo),
+    end: parseDate(thisMonth),
   })
 
-  let formatter = useDateFormatter({ dateStyle: 'long' })
+  const start_date = formatDate(
+    date?.start?.toDate(getLocalTimeZone()),
+    'YYYY-MM-DD',
+  )
+  const end_date = formatDate(
+    date?.end?.toDate(getLocalTimeZone()),
+    'YYYY-MM-DD',
+  )
 
   // HANDLE FET BULK REPORT DATA
   const mutation = useMutation({
@@ -85,7 +80,7 @@ export default function StatementReport({ workspaceID }) {
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <WalletTransactionHistory
       workspaceID={workspaceID}
-      transactionData={walletHistory}
+      transactionData={walletHistory.filter((item) => item?.isPrefunded)}
     />,
   ])
 
@@ -95,9 +90,6 @@ export default function StatementReport({ workspaceID }) {
   //     date?.end_date?.toDate(getLocalTimeZone()),
   //   )
   // )
-
-  const START_DATE = formatDate(date?.start_date?.toDate(getLocalTimeZone()))
-  const END_DATE = formatDate(date?.end_date?.toDate(getLocalTimeZone()))
 
   // const RANGE = formatter?.formatRange(START_DATE, END_DATE)
 
@@ -110,10 +102,11 @@ export default function StatementReport({ workspaceID }) {
           <DateRangePickerField
             label={'Reports Date Range'}
             description={'Dates to generate transactional reports'}
+            visibleMonths={2}
             autoFocus
             value={date}
             setValue={setDate}
-          />
+          />{' '}
           <Button
             onPress={getBulkReportData}
             endContent={<FunnelIcon className="h-5 w-5" />}
@@ -133,15 +126,15 @@ export default function StatementReport({ workspaceID }) {
               infoClasses: 'md:text-base',
             }}
             infoText={
-              date.start_date && (
-                <>
-                  Statement transactions: from
-                  <>
-                    <strong className="uppercase">{` ${START_DATE}`}</strong> to
-                    <strong className="uppercase">{` ${END_DATE}`}</strong>
-                  </>
-                </>
-              )
+              'Statement transactions:' +
+              ` (${
+                date
+                  ? formatter.formatRange(
+                      date.start.toDate(getLocalTimeZone()),
+                      date.end.toDate(getLocalTimeZone()),
+                    )
+                  : '--'
+              })`
             }
           />
           <Button

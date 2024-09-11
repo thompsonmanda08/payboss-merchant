@@ -229,7 +229,7 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
         <Loader
           color={'#ffffff'}
           size={100}
-          classNames={{ wrapper: 'bg-primary-900/10 rounded-xl mt-8 h-full' }}
+          classNames={{ wrapper: 'bg-primary-900/5 rounded-xl mt-8 h-full' }}
         />
       </div>
     )

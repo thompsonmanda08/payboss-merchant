@@ -14,11 +14,7 @@ import {
 import { Button } from '@/components/ui/Button'
 import { cn, downloadCSV, formatCurrency, formatDate } from '@/lib/utils'
 
-import {
-  dateInputClassNames,
-  datePickerClasses,
-  DateRangePickerField,
-} from '@/components/ui/DateSelectField'
+import { DateRangePickerField } from '@/components/ui/DateSelectField'
 import { useDateFormatter } from '@react-aria/i18n'
 import { BULK_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
@@ -40,6 +36,7 @@ const bulkReportsColumns = [
 
   { name: 'TOTAL FAILED', uid: 'failedRecords', sortable: true },
   { name: 'AMOUNT FAILED', uid: 'failedRecordsValue', sortable: true },
+  { name: 'STATUS', uid: 'status', sortable: true },
 ]
 
 const SERVICE_TYPES = [
@@ -108,9 +105,9 @@ export default function BulkTransactionsStats({ workspaceID }) {
       isError={mutation.isError}
       removeWrapper
       onRowAction={(key) => {
-        console.log(key)
+        // console.log(key)
         const batch = directBatches.find((row) => row.ID == key)
-        console.log(batch)
+        // console.log(batch)
 
         setSelectedBatch(batch)
         setOpenReportsModal(true)
