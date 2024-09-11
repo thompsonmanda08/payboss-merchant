@@ -56,7 +56,7 @@ function Modal({
     }
   }
 
-  const { overlay, base, card } = classNames || ''
+  const { overlay, base, card, container } = classNames || ''
 
   return (
     <AnimatePresence>
@@ -81,11 +81,12 @@ function Modal({
             transition={{ duration: 0.25 }}
             style={{
               maxWidth: width ? `${width}px` : '380px',
-              height: height ? `${height}px` : 'auto',
+              minHeight: height ? `${height}px` : '180px',
+              // height: height ? `${height}px` : 'auto',
             }}
             onClick={(e) => e.stopPropagation()}
             className={cn(
-              'z-50 flex w-full flex-col items-center justify-between gap-1 rounded-lg bg-white p-4',
+              'z-50 flex w-full flex-col items-center justify-start gap-1 rounded-lg bg-[#ffffff] p-4',
               className,
               base,
               card,
@@ -99,12 +100,15 @@ function Modal({
             {/* MODAL CONTENT */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="mb-2 flex h-[65%] w-full flex-col"
+              className={cn(
+                'mb-2 mt-5 flex h-full w-full flex-grow flex-col',
+                container,
+              )}
             >
               {children}
             </div>
             {!noCallToAction && (
-              <div className="flex w-full justify-end gap-3">
+              <div className="mt-auto flex w-full justify-end gap-3">
                 <Button onClick={handleClose} color="danger" className="">
                   {cancelText || 'Cancel'}
                 </Button>

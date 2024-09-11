@@ -161,14 +161,20 @@ const ApproverAction = ({ navigateForward, batchID }) => {
           </p>
         ) : role?.can_approve ? (
           <p className="text-center text-[15px] text-slate-500">
-            Batch payouts have been validated and awaiting approval, after which
-            the transactions will run against your PayBoss wallet.
+            Batch payouts have been validated and are awaiting your approval.
+            Once approved, they will process through your PayBoss wallet to
+            release the funds.
+          </p>
+        ) : role?.can_initiate ? (
+          <p className="text-center text-[15px] text-slate-500">
+            Batch Payouts have been validated and awaiting approval, however you
+            have no permissions to approve this transaction.
           </p>
         ) : (
           <p className="text-center text-[15px] text-slate-500">
-            Batch payouts have been completed and submitted for approval. You
-            need to review and approve the changes. If any changes are needed,
-            please contact an administrator.
+            Batch payouts have been submitted for approval. The total amount
+            will be reserved and blocked until the transaction is approved or
+            rejected.
           </p>
         )}
       </div>
@@ -190,19 +196,24 @@ const ApproverAction = ({ navigateForward, batchID }) => {
           </p>
         ) : role?.can_approve ? (
           <p className="text-center text-[15px] text-slate-500">
-            Transaction has been validated and awaiting approval, after which
-            the transaction will run against your PayBoss wallet.
+            The transaction has been validated and is awaiting your approval.
+            Once approved, it will process through your PayBoss wallet to
+            release the funds.
+          </p>
+        ) : role?.can_initiate ? (
+          <p className="text-center text-[15px] text-slate-500">
+            Transaction has been validated and awaiting approval, however you
+            have no permissions to approve this transaction.
           </p>
         ) : (
           <p className="text-center text-[15px] text-slate-500">
-            Transaction payout have been completed and submitted for approval.
-            You need to review and approve the changes. If any changes are
-            needed, please contact an administrator.
+            The payout has been submitted for approval. The total amount will be
+            reserved and blocked until the transaction is approved or rejected.
           </p>
         )}
       </div>
     )
-  }, [isApprovedOrRejected, role?.can_approve])
+  }, [isApprovedOrRejected, role])
 
   return !batchDetails || (batchID && !selectedBatch?.status) ? (
     <Loader />

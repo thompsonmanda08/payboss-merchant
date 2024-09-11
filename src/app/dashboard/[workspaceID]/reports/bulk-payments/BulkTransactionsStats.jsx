@@ -32,7 +32,7 @@ import { DateRangePicker } from '@nextui-org/react'
 
 const bulkReportsColumns = [
   { name: 'DATE', uid: 'created_at', sortable: true },
-  { name: 'NAME', uid: 'batch_name', sortable: true },
+  { name: 'NAME', uid: 'name', sortable: true },
 
   { name: 'TOTAL RECORDS', uid: 'allRecords', sortable: true },
   { name: 'TOTAL AMOUNT', uid: 'allRecordsValue', sortable: true },
@@ -42,7 +42,6 @@ const bulkReportsColumns = [
 
   { name: 'TOTAL FAILED', uid: 'failedRecords', sortable: true },
   { name: 'AMOUNT FAILED', uid: 'failedRecordsValue', sortable: true },
-  { name: 'ACTION', uid: 'view' },
 ]
 
 const SERVICE_TYPES = [
@@ -66,6 +65,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
   const [isExpanded, setIsExpanded] = useState(true)
   const [openReportsModal, setOpenReportsModal] = useState(false)
   const [selectedBatch, setSelectedBatch] = useState(null) // ON ROW SELECTED
+  // const [selectedBatchID, setSelectedBatchID] = useState(null) // ON ROW SELECTED
 
   const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
   const thirtyDaysAgoDate = new Date()
@@ -97,8 +97,8 @@ export default function BulkTransactionsStats({ workspaceID }) {
   const voucherBatches = report?.voucherBatches || []
 
   console.log(report)
-  console.log(start_date)
-  console.log(end_date)
+  console.log(voucherBatches)
+  console.log(directBatches)
 
   let formatter = useDateFormatter({ dateStyle: 'long' })
 
@@ -109,13 +109,24 @@ export default function BulkTransactionsStats({ workspaceID }) {
       isLoading={mutation.isPending}
       isError={mutation.isError}
       removeWrapper
-      onR
+      onRowAction={(key) => {
+        console.log(key)
+        const batch = directBatches.find((row) => row.ID == key)
+        console.log(batch)
+
+        setSelectedBatch(batch)
+        setOpenReportsModal(true)
+      }}
     />,
     <CustomTable
       columns={bulkReportsColumns}
       rows={voucherBatches}
       isLoading={mutation.isPending}
       isError={mutation.isError}
+      onRowAction={(key) => {
+        // setSelectedBatchID(key)
+        setOpenReportsModal(true)
+      }}
       removeWrapper
     />,
   ])
@@ -136,6 +147,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
 
     return response
   }
+
   function handleFileExportToCSV() {
     // Implement CSV export functionality here
     if (currentTabIndex === 0) {
@@ -157,6 +169,8 @@ export default function BulkTransactionsStats({ workspaceID }) {
       getBulkReportData(dateRange)
     }
   }, [])
+
+  console.log(selectedBatch)
 
   useEffect(() => {
     // const dateRange = {
@@ -390,7 +404,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
         <ReportDetailsViewer
           setOpenReportsModal={setOpenReportsModal}
           openReportsModal={openReportsModal}
-          batchID={selectedBatch?.ID}
+          batch={selectedBatch}
           columns={singleReportsColumns}
         />
       )}

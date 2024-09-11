@@ -16,6 +16,7 @@ export default function Disbursements({ workspaceID }) {
     openBatchDetailsModal,
     setSelectedActionType,
     selectedActionType,
+    resetPaymentData,
   } = usePaymentsStore()
   const { onClose } = useDisclosure()
 
@@ -27,11 +28,15 @@ export default function Disbursements({ workspaceID }) {
     <SingleTransactionsTable
       key={PAYMENT_SERVICE_TYPES[1]?.name}
       workspaceID={workspaceID}
+      onRowAction={(key) => {
+        console.log(key)
+      }}
     />,
   ])
 
   useEffect(() => {
     // setCurrentStep(PAYMENT_SERVICE_TYPES[currentTabIndex])
+    resetPaymentData()
     setSelectedActionType(PAYMENT_SERVICE_TYPES[currentTabIndex])
 
     //TODO: => CLEAR DATA WHEN THE THE COMPONENT IS UNMOUNTED

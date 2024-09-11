@@ -24,6 +24,7 @@ export default function CustomTable({
   selectionBehavior,
   isLoading,
   removeWrapper,
+  onRowAction,
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore()
 
@@ -40,6 +41,12 @@ export default function CustomTable({
   const renderCell = React.useCallback((row, columnKey) => {
     const cellValue = row[columnKey]
     switch (columnKey) {
+      case 'name':
+        return (
+          <span className={cn('text-nowrap font-medium capitalize')}>
+            {cellValue}
+          </span>
+        )
       case 'status':
         return (
           <Button
@@ -73,7 +80,7 @@ export default function CustomTable({
         )
 
       default:
-        return cellValue
+        return cellValue || '0'
     }
   }, [])
 

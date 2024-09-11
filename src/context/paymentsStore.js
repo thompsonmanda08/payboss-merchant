@@ -190,19 +190,21 @@ export const validationColumns = [
   { header: 'Service', accessor: 'service_provider' },
   { header: 'Narration', accessor: 'narration' },
   { header: 'Remarks', accessor: 'remarks' },
+  { header: 'Status', accessor: 'status' },
 ]
 
 export const singleReportsColumns = [
-  { header: 'First Name', accessor: 'first_name' },
-  { header: 'Last Name', accessor: 'last_name' },
-  { header: 'Email', accessor: 'email' },
-  { header: 'Mobile No.', accessor: 'contact' },
-  { header: 'NRC', accessor: 'nrc' },
-  // { header: 'Account Type', accessor: 'account' },
-  { header: 'Mobile/Account No.', accessor: 'destination' },
-  { header: 'Amount', accessor: 'amount' },
-  { header: 'Service', accessor: 'service_provider' },
-  { header: 'Status', accessor: 'status' },
-  { header: 'Narration', accessor: 'narration' },
-  { header: 'Remarks', accessor: 'remarks' },
+  { name: 'DATE CREATED', uid: 'created_at', sortable: true },
+  { name: 'FIRST NAME', uid: 'first_name', sortable: true },
+  { name: 'LAST NAME', uid: 'last_name', sortable: true },
+  // { name: 'NRC', uid: 'nrc', sortable: true },
+  // { name: 'PHONE', uid: 'contact', sortable: true },
+  { name: 'SERVICE PROVIDER', uid: 'service_provider' },
+  { name: 'DESTINATION ACCOUNT', uid: 'destination', sortable: true },
+  // { name: 'NARRATION', uid: 'narration', sortable: true },
+  { name: 'REMARKS', uid: 'remarks', sortable: true },
+  { name: 'AMOUNT', uid: 'amount', sortable: true },
+  { name: 'STATUS', uid: 'status', sortable: true },
+
+  // { name: 'ACTIONS', uid: 'actions' },
 ]

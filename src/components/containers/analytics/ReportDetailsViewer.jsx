@@ -1,51 +1,47 @@
 'use client'
 import React from 'react'
-import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal'
 import {
   singleReportsColumns,
   validationColumns,
 } from '@/context/paymentsStore'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
-import { CardHeader } from '@/components/base'
+import { CardHeader, Modal } from '@/components/base'
 import SummaryTable from '../tables/SummaryTable'
+import SingleTransactionsTable from '../tables/SingleTransactionsTable'
 
 function ReportDetailsViewer({
   columns,
-  batchID,
+  batch,
   openReportsModal,
   setOpenReportsModal,
+  isLoading,
 }) {
-  const { data: batch } = useBatchDetails(batchID)
-  const batchDetails = batch?.data
+  // const { data: batch } = useBatchDetails(batchID)
+  // const batchDetails = batch?.data
 
   return (
     <Modal
-      isOpen={openReportsModal}
+      show={openReportsModal}
       onClose={() => {
         setOpenReportsModal(false)
       }}
       // onConfirm={handleConfirmationClose}
-      classNames={{ overlay: 'z-[55]' }}
+      title={'Transaction Report Details'}
+      infoText={'Track each transactions status througout the payment proccess'}
+      classNames={{ overlay: 'z-[55]', container: 'px-2' }}
       isDismissible={false}
-      size={'full'}
+      disableAction={true}
+      removeCallToAction={true}
+      loading={isLoading}
+      width={1440}
+      height={400}
     >
-      <ModalContent>
-        {() => (
-          <>
-            <ModalHeader className="tracking-tight">
-              <CardHeader
-                className={'mt-10'}
-                title={'TransactionReport Details'}
-                // infoText={""}
-              />
-            </ModalHeader>
-            <ModalBody className="gap-0">
-              {/* IF MODAL OPENED AND TOTAL RECORDS ARRAY IS NOT EMPTY */}
-              <SummaryTable columns={columns} data={batchDetails?.invalid} />
-            </ModalBody>
-          </>
-        )}
-      </ModalContent>
+      <SingleTransactionsTable
+        columnData={singleReportsColumns}
+        rowData={batch?.transactions}
+        isLoading={isLoading}
+        removeWrapper
+      />
     </Modal>
   )
 }

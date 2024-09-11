@@ -21,7 +21,10 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
     setError,
     error,
     paymentAction,
+    setPaymentAction,
     setBatchDetails,
+    setTransactionDetails,
+    resetPaymentData,
   } = usePaymentsStore()
   const { workspaceUserRole: role } = useDashboard()
   const { workspaceID } = useWorkspaces()
@@ -67,9 +70,7 @@ const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
 
     if (response.success) {
       notify('success', 'Payment Batch Created!')
-
-      console.log(response?.data)
-
+      resetPaymentData()
       setBatchDetails(response.data) // SET VALIDATION DATA INTO STATE
       navigateForward() // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
       setLoading(false)

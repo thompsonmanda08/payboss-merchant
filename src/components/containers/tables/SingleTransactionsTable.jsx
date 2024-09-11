@@ -35,7 +35,7 @@ export const SingleTransactionColumns = [
   { name: 'LAST MODIFIED', uid: 'updated_at', sortable: true },
   { name: 'AMOUNT', uid: 'amount', sortable: true },
   { name: 'STATUS', uid: 'status', sortable: true },
-  { name: 'ACTIONS', uid: 'actions' },
+  // { name: 'ACTIONS', uid: 'actions' },
 ]
 
 // DEFINE FILTERABLE SERVICES
@@ -50,13 +50,19 @@ const SERVICE_FILTERS = [
   },
 ]
 
-export default function SingleTransactionsTable({ workspaceID }) {
+export default function SingleTransactionsTable({
+  workspaceID,
+  onRowAction,
+  rowData,
+  columnData,
+  removeWrapper,
+}) {
   const { data: transactionsResponse, isLoading } =
     useSingleTransactions(workspaceID)
 
   // DEFINE FILTERABLE ROWS AND COLUMNS
-  const columns = SingleTransactionColumns
-  const rows = transactionsResponse?.data?.data || []
+  const columns = columnData || SingleTransactionColumns
+  const rows = rowData || transactionsResponse?.data?.data || []
 
   const {
     setTransactionDetails,
@@ -207,20 +213,20 @@ export default function SingleTransactionsTable({ workspaceID }) {
             </Chip>
           </Tooltip>
         )
-      case 'actions':
-        return (
-          <Button
-            variant="light"
-            className={'max-w-fit p-2'}
-            isIconOnly
-            onPress={() => {
-              setTransactionDetails(row)
-              setOpenTransactionDetailsModal(true)
-            }}
-          >
-            <EyeIcon className="h-6 w-5" />
-          </Button>
-        )
+      // case 'actions':
+      //   return (
+      //     <Button
+      //       variant="light"
+      //       className={'max-w-fit p-2'}
+      //       isIconOnly
+      //       onPress={() => {
+      //         setTransactionDetails(row)
+      //         setOpenTransactionDetailsModal(true)
+      //       }}
+      //     >
+      //       <EyeIcon className="h-6 w-5" />
+      //     </Button>
+      //   )
 
       default:
         return cellValue
@@ -384,6 +390,7 @@ export default function SingleTransactionsTable({ workspaceID }) {
 
   return (
     <Table
+      removeWrapper={removeWrapper}
       aria-label="Transactions table with custom cells"
       className="h-[580px]"
       classNames={{
@@ -401,6 +408,9 @@ export default function SingleTransactionsTable({ workspaceID }) {
       topContent={topContent}
       bottomContent={bottomContent}
       onSortChange={setSortDescriptor}
+      onRowAction={
+        onRowAction ? (key, value) => onRowAction(key, value) : undefined
+      }
     >
       <TableHeader columns={headerColumns} className="fixed">
         {(column) => (

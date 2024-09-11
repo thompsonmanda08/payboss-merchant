@@ -1,5 +1,5 @@
 import { cn, formatDate } from '@/lib/utils'
-import { DatePicker, DateRangePicker } from '@nextui-org/react'
+import { DatePicker, DateRangePicker, NextUIProvider } from '@nextui-org/react'
 import React, { useEffect } from 'react'
 import {
   parseDate,
@@ -101,61 +101,52 @@ export function DateRangePickerField({
   // console.log(value)
 
   return (
-    <div className="flex w-full flex-col gap-y-2">
-      <DateRangePicker
-        label={label}
-        showMonthAndYearPickers
-        defaultValue={defaultValue}
-        visibleMonths={visibleMonths}
-        value={value}
-        radius="md"
-        description={description}
-        labelPlacement={labelPlacement || 'outside'}
-        isRequired={props?.required || props.isRequired}
-        maxValue={today(getLocalTimeZone())}
-        // minValue={today(getLocalTimeZone())} TODO: DATE ACCOUNT CREATED
-        onChange={setValue}
-        variant="bordered"
-        className={cn('max-w-sm ', className)}
-        classNames={{
-          ...datePickerClasses,
-          ...dateInputClassNames,
-        }}
-        calendarProps={{
-          classNames: {
-            base: 'bg-background',
-            headerWrapper: 'pt-4 bg-background',
-            prevButton: 'border-1 border-default-200 rounded-small',
-            nextButton: 'border-1 border-default-200 rounded-small',
-            gridHeader:
-              'bg-background shadow-none border-b-1 border-default-100',
-            cellButton: [
-              'data-[today=true]:bg-default-100 data-[selected=true]:bg-transparent rounded-small',
-              // start (pseudo)
-              'data-[range-start=true]:before:rounded-l-small',
-              'data-[selection-start=true]:before:rounded-l-small',
-              // end (pseudo)
-              'data-[range-end=true]:before:rounded-r-small',
-              'data-[selection-end=true]:before:rounded-r-small',
-              // start (selected)
-              'data-[selected=true]:data-[selection-start=true]:data-[range-selection=true]:rounded-small',
-              // end (selected)
-              'data-[selected=true]:data-[selection-end=true]:data-[range-selection=true]:rounded-small',
-            ],
-          },
-        }}
-        {...props}
-      />
-      {/* <p className="text-sm text-default-500">
-        Selected date:{' '}
-        {value
-          ? formatter.formatRange(
-              value?.start_date?.toDate(getLocalTimeZone()),
-              value?.end_date?.toDate(getLocalTimeZone()),
-            )
-          : '--'}
-      </p> */}
-    </div>
+    // <NextUIProvider locale="es-GB">
+    <DateRangePicker
+      label={label}
+      showMonthAndYearPickers
+      defaultValue={defaultValue}
+      visibleMonths={visibleMonths}
+      value={value}
+      radius="md"
+      description={description}
+      labelPlacement={labelPlacement || 'outside'}
+      isRequired={props?.required || props.isRequired}
+      maxValue={today(getLocalTimeZone())}
+      // minValue={today(getLocalTimeZone())} TODO: DATE ACCOUNT CREATED
+      onChange={setValue}
+      variant="bordered"
+      className={cn('max-w-sm ', className)}
+      classNames={{
+        ...datePickerClasses,
+        ...dateInputClassNames,
+      }}
+      calendarProps={{
+        classNames: {
+          base: 'bg-background',
+          headerWrapper: 'pt-4 bg-background',
+          prevButton: 'border-1 border-default-200 rounded-small',
+          nextButton: 'border-1 border-default-200 rounded-small',
+          gridHeader: 'bg-background shadow-none border-b-1 border-default-100',
+          cellButton: [
+            'data-[today=true]:bg-default-100 data-[selected=true]:bg-transparent rounded-small',
+            // start (pseudo)
+            'data-[range-start=true]:before:rounded-l-small',
+            'data-[selection-start=true]:before:rounded-l-small',
+            // end (pseudo)
+            'data-[range-end=true]:before:rounded-r-small',
+            'data-[selection-end=true]:before:rounded-r-small',
+            // start (selected)
+            'data-[selected=true]:data-[selection-start=true]:data-[range-selection=true]:rounded-small',
+            // end (selected)
+            'data-[selected=true]:data-[selection-end=true]:data-[range-selection=true]:rounded-small',
+          ],
+        },
+      }}
+      {...props}
+    />
+
+    // {/* </NextUIProvider> */}
   )
 }
 
