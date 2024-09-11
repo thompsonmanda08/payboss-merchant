@@ -187,7 +187,8 @@ export const validationColumns = [
   // { header: 'Account Type', accessor: 'account' },
   { header: 'Mobile/Account No.', accessor: 'destination' },
   { header: 'Amount', accessor: 'amount' },
-  { header: 'Service', accessor: 'service' },
+  { header: 'Service', accessor: 'service_provider' },
+  { header: 'Narration', accessor: 'narration' },
   { header: 'Remarks', accessor: 'remarks' },
 ]
 
@@ -200,7 +201,8 @@ export const singleReportsColumns = [
   // { header: 'Account Type', accessor: 'account' },
   { header: 'Mobile/Account No.', accessor: 'destination' },
   { header: 'Amount', accessor: 'amount' },
-  { header: 'Service', accessor: 'service' },
+  { header: 'Service', accessor: 'service_provider' },
   { header: 'Status', accessor: 'status' },
+  { header: 'Narration', accessor: 'narration' },
   { header: 'Remarks', accessor: 'remarks' },
 ]

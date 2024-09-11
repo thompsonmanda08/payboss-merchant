@@ -1,7 +1,7 @@
 'use client'
 import { Card, CardHeader, Tabs } from '@/components/base'
 import usePaymentsStore from '@/context/paymentsStore'
-import React from 'react'
+import React, { useEffect } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 import { SelectPaymentType } from '@/components/containers'
@@ -11,7 +11,12 @@ import BulkTransactionsTable from '@/components/containers/tables/BulkTransactio
 import SingleTransactionsTable from '@/components/containers/tables/SingleTransactionsTable'
 
 export default function Disbursements({ workspaceID }) {
-  const { openPaymentsModal, openBatchDetailsModal } = usePaymentsStore()
+  const {
+    openPaymentsModal,
+    openBatchDetailsModal,
+    setSelectedActionType,
+    selectedActionType,
+  } = usePaymentsStore()
   const { onClose } = useDisclosure()
 
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
@@ -24,6 +29,18 @@ export default function Disbursements({ workspaceID }) {
       workspaceID={workspaceID}
     />,
   ])
+
+  useEffect(() => {
+    // setCurrentStep(PAYMENT_SERVICE_TYPES[currentTabIndex])
+    setSelectedActionType(PAYMENT_SERVICE_TYPES[currentTabIndex])
+
+    //TODO: => CLEAR DATA WHEN THE THE COMPONENT IS UNMOUNTED
+    // return () => {
+    //   resetPaymentData()
+    // }
+  }, [currentTabIndex])
+
+  // console.log(selectedActionType)
 
   return (
     <>
