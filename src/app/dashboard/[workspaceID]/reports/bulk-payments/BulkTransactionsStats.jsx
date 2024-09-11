@@ -128,7 +128,8 @@ export default function BulkTransactionsStats({ workspaceID }) {
 
   async function applyDataFilter() {
     const dateRange = {
-      start_date,
+      start_date: start_date || parseDate(thirtyDaysAgo),
+      end_date: end_date || parseDate(thisMonth),
       end_date,
     }
 
