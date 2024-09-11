@@ -71,7 +71,7 @@ export default function SignUpForm() {
     <Step1_TPIN
       key={STEPS[1]}
       updateDetails={updateAccountDetails}
-      navigateTo={goTo}
+      backToStart={handleGotoStart}
     />, // GET ACCOUNT DETAILS BY TPIN
     <Step2
       key={STEPS[2]}
