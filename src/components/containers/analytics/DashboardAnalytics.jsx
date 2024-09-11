@@ -252,40 +252,75 @@ function ComponentsForViewOnly({ workspaceID, dashboardAnalytics }) {
 function ComponentsWithApprovalStats({ dashboardAnalytics }) {
   const { allCollections, allDisbursements } = dashboardAnalytics || {}
   return (
-    <div className="flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-4 ">
-      <PendingApprovals data={pendingApprovals} />
-      <div className="flex w-1/3 max-w-lg flex-col gap-4">
-        <SimpleStats
-          title={'Overall Collections'}
-          figure={allCollections?.count || 0}
-          smallFigure={
-            allCollections?.value
-              ? `(${formatCurrency(allCollections?.value)})`
-              : `(ZMW 0.00)`
-          }
-          classNames={{
-            smallFigureClasses: 'md:text-base font-bold',
-          }}
-          isGood={true}
-          Icon={ArrowTrendingUpIcon}
-        />
-        <SimpleStats
-          title={'Overall Disbursements'}
-          figure={allDisbursements?.count || 0}
-          smallFigure={
-            allDisbursements?.value
-              ? `(${formatCurrency(allDisbursements?.value)})`
-              : `(ZMW 0.00)`
-          }
-          classNames={{
-            smallFigureClasses: 'md:text-base font-bold',
-          }}
-          isBad={true}
-          Icon={ArrowTrendingDownIcon}
-        />
-      </div>
+    <div className="place-items- flex w-full grid-cols-1 gap-4 md:grid-cols-2 md:place-items-start">
+      <SimpleStats
+        title={'Overall Collections'}
+        figure={allCollections?.count || 0}
+        smallFigure={
+          allCollections?.value
+            ? `(${formatCurrency(allCollections?.value)})`
+            : `(ZMW 0.00)`
+        }
+        classNames={{
+          smallFigureClasses: 'md:text-base font-bold',
+        }}
+        isGood={true}
+        Icon={ArrowTrendingUpIcon}
+      />
+      <SimpleStats
+        title={'Overall Disbursements'}
+        figure={allDisbursements?.count || 0}
+        smallFigure={
+          allDisbursements?.value
+            ? `(${formatCurrency(allDisbursements?.value)})`
+            : `(ZMW 0.00)`
+        }
+        classNames={{
+          smallFigureClasses: 'md:text-base font-bold',
+        }}
+        isBad={true}
+        Icon={ArrowTrendingDownIcon}
+      />
     </div>
   )
 }
+// function ComponentsWithApprovalStats({ dashboardAnalytics }) {
+//   const { allCollections, allDisbursements } = dashboardAnalytics || {}
+//   return (
+//     <div className="flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-4 ">
+//       <PendingApprovals data={pendingApprovals} />
+//       <div className="flex w-1/3 max-w-lg flex-col gap-4">
+//         <SimpleStats
+//           title={'Overall Collections'}
+//           figure={allCollections?.count || 0}
+//           smallFigure={
+//             allCollections?.value
+//               ? `(${formatCurrency(allCollections?.value)})`
+//               : `(ZMW 0.00)`
+//           }
+//           classNames={{
+//             smallFigureClasses: 'md:text-base font-bold',
+//           }}
+//           isGood={true}
+//           Icon={ArrowTrendingUpIcon}
+//         />
+//         <SimpleStats
+//           title={'Overall Disbursements'}
+//           figure={allDisbursements?.count || 0}
+//           smallFigure={
+//             allDisbursements?.value
+//               ? `(${formatCurrency(allDisbursements?.value)})`
+//               : `(ZMW 0.00)`
+//           }
+//           classNames={{
+//             smallFigureClasses: 'md:text-base font-bold',
+//           }}
+//           isBad={true}
+//           Icon={ArrowTrendingDownIcon}
+//         />
+//       </div>
+//     </div>
+//   )
+// }
 
 export default DashboardAnalytics

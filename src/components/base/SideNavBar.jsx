@@ -167,11 +167,11 @@ function SideNavBar({ params }) {
           href: `${dashboardRoute}/reports/bulk-payments`,
           Icon: CircleStackIcon,
         },
-        {
-          name: 'Single Payments',
-          href: `${dashboardRoute}/reports/single-payments`,
-          Icon: ArrowRightCircleIcon,
-        },
+        // {
+        //   name: 'Single Payments',
+        //   href: `${dashboardRoute}/reports/single-payments`,
+        //   Icon: ArrowRightCircleIcon,
+        // },
         // {
         //   name: 'Collections History',
         //   href: `${dashboardRoute}/reports/collections`,

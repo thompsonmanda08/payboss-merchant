@@ -19,6 +19,7 @@ import {
   datePickerClasses,
   DateRangePickerField,
 } from '@/components/ui/DateSelectField'
+import { useDateFormatter } from '@react-aria/i18n'
 import { BULK_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
 import { getBulkAnalyticReports } from '@/app/_actions/transaction-actions'
@@ -26,9 +27,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import ReportDetailsViewer from '@/components/containers/analytics/ReportDetailsViewer'
 import { parseDate, getLocalTimeZone } from '@internationalized/date'
 import { singleReportsColumns } from '@/context/paymentsStore'
-
-import { useDateFormatter } from '@react-aria/i18n'
-import { DateRangePicker } from '@nextui-org/react'
 
 const bulkReportsColumns = [
   { name: 'DATE', uid: 'created_at', sortable: true },
@@ -172,27 +170,6 @@ export default function BulkTransactionsStats({ workspaceID }) {
 
   console.log(selectedBatch)
 
-  useEffect(() => {
-    // const dateRange = {
-    //   start_date: formatDate(
-    //     date?.start_date?.toDate(getLocalTimeZone()),
-    //     'YYYY-MM-DD',
-    //   ),
-    //   end_date: formatDate(
-    //     date?.end_date?.toDate(getLocalTimeZone()),
-    //     'YYYY-MM-DD',
-    //   ),
-    // }
-    // console.log(
-    //   date
-    //     ? formatter.formatRange(
-    //         date.start_date?.toDate(getLocalTimeZone()),
-    //         date.end_date?.toDate(getLocalTimeZone()),
-    //       )
-    //     : '--',
-    // )
-  }, [date])
-
   return (
     <>
       <div className="mb-4 flex w-full items-start justify-start pb-2">
@@ -248,6 +225,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
           </div>
         </div>
 
+        {/* TODO:  THIS CAN BE ONCE SINGLE COMPONENT */}
         {report && Object.keys(report).length > 0 && (
           <AnimatePresence>
             <motion.div

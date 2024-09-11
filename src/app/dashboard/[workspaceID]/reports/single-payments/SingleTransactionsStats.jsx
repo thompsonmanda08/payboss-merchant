@@ -12,7 +12,7 @@ import {
   PresentationChartBarIcon,
 } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/Button'
-import { cn, downloadCSV, formatCurrency } from '@/lib/utils'
+import { cn, downloadCSV, formatCurrency, formatDate } from '@/lib/utils'
 
 import { DateRangePickerField } from '@/components/ui/DateSelectField'
 import { BULK_REPORTS_QUERY_KEY } from '@/lib/constants'
@@ -22,6 +22,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import ReportDetailsViewer from '@/components/containers/analytics/ReportDetailsViewer'
 import { Tooltip } from '@nextui-org/react'
 import { singleReportsColumns } from '@/context/paymentsStore'
+import { parseDate, getLocalTimeZone } from '@internationalized/date'
+
+import { useDateFormatter } from '@react-aria/i18n'
 
 const bulkReportsColumns = [
   { name: 'DATE', uid: 'created_at', sortable: true },
@@ -59,6 +62,26 @@ export default function SingleTransactionsStats({ workspaceID }) {
   const [isExpanded, setIsExpanded] = useState(true)
   const [openReportsModal, setOpenReportsModal] = useState(false)
   const [selectedBatch, setSelectedBatch] = useState(null) // ON ROW SELECTED
+  let formatter = useDateFormatter({ dateStyle: 'long' })
+
+  const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
+  const thirtyDaysAgoDate = new Date()
+  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
+  const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
+
+  const [date, setDate] = useState({
+    start: parseDate(thirtyDaysAgo),
+    end: parseDate(thisMonth),
+  })
+
+  const start_date = formatDate(
+    date?.start?.toDate(getLocalTimeZone()),
+    'YYYY-MM-DD',
+  )
+  const end_date = formatDate(
+    date?.end?.toDate(getLocalTimeZone()),
+    'YYYY-MM-DD',
+  )
 
   // HANDLE FET BULK REPORT DATA
   const mutation = useMutation({
@@ -70,8 +93,21 @@ export default function SingleTransactionsStats({ workspaceID }) {
   const directBatches = report?.directBatches || []
   const voucherBatches = report?.voucherBatches || []
 
-  async function getBulkReportData() {
-    await mutation.mutateAsync(dateRange)
+  async function applyDataFilter() {
+    const dateRange = {
+      start_date,
+      end_date,
+    }
+
+    const response = await getBulkReportData(dateRange)
+
+    return response
+  }
+
+  async function getBulkReportData(dateRange) {
+    const response = await mutation.mutateAsync(dateRange)
+
+    return response
   }
 
   useEffect(() => {
@@ -83,16 +119,29 @@ export default function SingleTransactionsStats({ workspaceID }) {
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
       columns={bulkReportsColumns}
-      rows={directBatches}
+      rows={directBatches || ['1', '2', '3']}
       isLoading={mutation.isPending}
       isError={mutation.isError}
       removeWrapper
+      onRowAction={(key) => {
+        console.log(key)
+        const batch = directBatches.find((row) => row.ID == key)
+        console.log(batch)
+
+        setSelectedBatch(batch)
+        setOpenReportsModal(true)
+      }}
     />,
     <CustomTable
       columns={bulkReportsColumns}
       rows={voucherBatches}
       isLoading={mutation.isPending}
       isError={mutation.isError}
+      onRowAction={(key) => {
+        // setSelectedBatchID(key)
+        setOpenReportsModal(true)
+      }}
+      removeWrapper
     />,
   ])
 
@@ -108,6 +157,16 @@ export default function SingleTransactionsStats({ workspaceID }) {
     }
   }
 
+  useEffect(() => {
+    const dateRange = {
+      start_date: thirtyDaysAgo,
+      end_date: thisMonth,
+    }
+    if (!mutation.data && date?.start && date?.end) {
+      getBulkReportData(dateRange)
+    }
+  }, [])
+
   return (
     <>
       <div className="mb-4 flex w-full items-start justify-start pb-2">
@@ -115,13 +174,13 @@ export default function SingleTransactionsStats({ workspaceID }) {
           <DateRangePickerField
             label={'Reports Date Range'}
             description={'Dates to generate transactional reports'}
-            autoFocus
-            dateRange={dateRange}
             visibleMonths={2}
-            setDateRange={setDateRange}
+            autoFocus
+            value={date}
+            setValue={setDate}
           />{' '}
           <Button
-            onPress={getBulkReportData}
+            onPress={applyDataFilter}
             endContent={<FunnelIcon className="h-5 w-5" />}
           >
             Apply
@@ -132,7 +191,17 @@ export default function SingleTransactionsStats({ workspaceID }) {
       <Card className={'mb-8 w-full'}>
         <div className="flex items-end justify-between">
           <CardHeader
-            title={'Single Transactions History'}
+            title={
+              'Single Transactions History' +
+              ` (${
+                date
+                  ? formatter.formatRange(
+                      date.start.toDate(getLocalTimeZone()),
+                      date.end.toDate(getLocalTimeZone()),
+                    )
+                  : '--'
+              })`
+            }
             infoText={
               'Transactions logs to keep track of your workspace activity'
             }
@@ -152,6 +221,7 @@ export default function SingleTransactionsStats({ workspaceID }) {
           </div>
         </div>
 
+        {/* TODO:  THIS CAN BE ONCE SINGLE COMPONENT */}
         {report && Object.keys(report).length > 0 && (
           <AnimatePresence>
             <motion.div
