@@ -158,6 +158,15 @@ export function IdleTimerContainer({ authSession }) {
 
   const onActive = () => {
     setState('Active')
+
+    // REFRESH TOKEN IF THE USER IS ACTIVE WITHIN THE IDLE TIMEOUT
+    // IN INTERVALS
+    setInterval(
+      async () => {
+        await getRefreshToken()
+      },
+      1000 * 60 * 3,
+    )
   }
 
   const onAction = () => {
@@ -168,7 +177,7 @@ export function IdleTimerContainer({ authSession }) {
     onIdle,
     onActive,
     onAction,
-    timeout: 60 * 1000 * 3, // 3MINS
+    timeout: 60 * 1000 * 5, // 5MINS
     throttle: 500,
     disabled: !loggedIn,
   })
