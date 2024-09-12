@@ -23,6 +23,8 @@ import OverlayLoader from '@/components/ui/OverlayLoader'
 import { WalletTransactionHistory } from '../workspace/Wallet'
 import PendingApprovals from './PendingAnalytics'
 import { useDashboardAnalytics, useWorkspaceInit } from '@/hooks/useQueryHooks'
+import { Chip } from '@nextui-org/react'
+import useWorkspaces from '@/hooks/useWorkspaces'
 
 const pendingApprovals = [
   {
@@ -61,20 +63,77 @@ const pendingApprovals = [
 
 function DashboardAnalytics({ workspaceID }) {
   const { chart, items } = reportsBarChartData
+
   const { data: analytics, isFetching } = useDashboardAnalytics(workspaceID)
   const dashboardAnalytics = analytics?.data
-
-  console.log(dashboardAnalytics)
 
   const { data: initialization, isLoading } = useWorkspaceInit(workspaceID)
   const role = initialization?.data
 
-  const { today, yesterday, collectionsToday, disbursementsToday } =
-    dashboardAnalytics || {}
+  const { workspaceWalletBalance } = useWorkspaces()
+
+  const {
+    today,
+    yesterday,
+    collectionsToday,
+    disbursementsToday,
+    allCollections,
+    allDisbursements,
+  } = dashboardAnalytics || {}
+
+  const dataNotReady = isFetching || isLoading
   return (
     <>
-      {isLoading && <OverlayLoader show={isLoading} />}
+      {dataNotReady && <OverlayLoader show={dataNotReady} />}
+
       <div className="flex w-full flex-col gap-4 md:gap-6">
+        {/* TOP ROW - WALLET BALANCE && OVERALL VALUES */}
+        <div className="place-items- flex w-full grid-cols-1 gap-4 md:grid-cols-3 md:place-items-start">
+          <Card className="flex-1 gap-4 border-none bg-gradient-to-br from-primary to-primary-400">
+            <Chip
+              classNames={{
+                base: 'border-1 border-white/30',
+                content: 'text-white/90 text-small font-semibold',
+              }}
+              variant="bordered"
+            >
+              Available Wallet Balance
+            </Chip>
+            <p className="text-[2rem] font-black leading-7 tracking-tight text-white">
+              {`${formatCurrency(workspaceWalletBalance)}`}
+            </p>
+          </Card>
+          <SimpleStats
+            title={'Overall Collections'}
+            figure={allCollections?.count || 0}
+            smallFigure={
+              allCollections?.value
+                ? `(${formatCurrency(allCollections?.value)})`
+                : `(ZMW 0.00)`
+            }
+            classNames={{
+              smallFigureClasses: 'md:text-base font-bold',
+            }}
+            isGood={true}
+            Icon={ArrowTrendingUpIcon}
+          />
+          <SimpleStats
+            title={'Overall Disbursements'}
+            figure={allDisbursements?.count || 0}
+            smallFigure={
+              allDisbursements?.value
+                ? `(${formatCurrency(allDisbursements?.value)})`
+                : `(ZMW 0.00)`
+            }
+            classNames={{
+              smallFigureClasses: 'md:text-base font-bold',
+            }}
+            isBad={true}
+            Icon={ArrowTrendingDownIcon}
+          />
+        </div>
+
+        {/*  2ND ROW - DAILY FIGURES AND VALUES */}
         <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-4 ">
           <SimpleStats
             title={'Todays Transactions'}
