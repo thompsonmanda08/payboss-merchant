@@ -12,19 +12,17 @@ import {
   PresentationChartBarIcon,
 } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/Button'
-import { cn, downloadCSV, formatCurrency, formatDate } from '@/lib/utils'
+import { downloadCSV, formatCurrency, formatDate } from '@/lib/utils'
 
 import { DateRangePickerField } from '@/components/ui/DateSelectField'
 import { BULK_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
 import { getBulkAnalyticReports } from '@/app/_actions/transaction-actions'
 import { AnimatePresence, motion } from 'framer-motion'
-import ReportDetailsViewer from '@/components/containers/analytics/ReportDetailsViewer'
-import { Tooltip } from '@nextui-org/react'
-import { singleReportsColumns } from '@/context/paymentsStore'
 import { parseDate, getLocalTimeZone } from '@internationalized/date'
 
 import { useDateFormatter } from '@react-aria/i18n'
+import { TotalValueStat } from '../bulk-payments/BulkTransactionsStats'
 
 const bulkReportsColumns = [
   { name: 'DATE', uid: 'created_at', sortable: true },
@@ -377,42 +375,6 @@ export default function SingleTransactionsStats({ workspaceID }) {
   )
 }
 
-function TotalValueStat({ label, icon, count, value }) {
-  return (
-    <div className="relative flex w-full max-w-xs items-center justify-between">
-      <div className="flex items-center gap-1">
-        <div
-          className={`bg-${icon?.color} mr-1 flex items-center justify-center rounded-md p-3 text-sm text-white shadow-md`}
-        >
-          {icon?.component}
-        </div>
-        <div className="flex flex-col">
-          <span className="text-nowrap text-xs font-medium capitalize text-slate-600">
-            {label}
-          </span>
-          <span className="text-nowrap font-medium capitalize text-slate-800">
-            {count}
-          </span>
-        </div>
-      </div>
-      <Button
-        size="sm"
-        className={cn(
-          'h-max min-h-max max-w-max cursor-pointer rounded-lg bg-primary-50 p-2 text-[13px] font-semibold capitalize text-primary',
-
-          {
-            'bg-red-50 text-red-500': icon?.color === 'danger',
-            'bg-green-50 text-green-600': icon?.color === 'success',
-            'bg-secondary/10 text-orange-600': icon?.color === 'secondary',
-          },
-        )}
-      >
-        {value}
-      </Button>
-    </div>
-  )
-}
-
 export const convertToCSV = (objArray) => {
   const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray
   let str = ''
@@ -422,7 +384,8 @@ export const convertToCSV = (objArray) => {
 
   for (let i = 0; i < array.length; i++) {
     let line = ''
-    line += `"${formatDate(array[i]?.created_at, 'DD-MM-YYYY') || ''}",`
+    let date = formatDate(array[i]?.created_at).replaceAll('-', '_')
+    line += `"${date || ''}",`
     line += `"${array[i]?.first_name || ''}",`
     line += `"${array[i]?.last_name || ''}",`
     line += `"${array[i]?.nrc || ''}",`

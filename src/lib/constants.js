@@ -1,7 +1,9 @@
 import IMG from '@/images/placeholder-image.webp'
 import DefaultCover from '@/images/profile-cover.jpg'
 import {
+  ArrowLeftEndOnRectangleIcon,
   ArrowRightCircleIcon,
+  ArrowRightStartOnRectangleIcon,
   CircleStackIcon,
   WalletIcon,
 } from '@heroicons/react/24/outline'
@@ -125,19 +127,20 @@ const TASK_ICON_BG_COLOR_MAP = {
 
 const TRANSACTION_STATUS_COLOR_MAP = {
   submitted: 'from-primary/10 to-primary-700/10 text-primary-700',
-  ready: 'from-primary/10 to-primary-700/10 text-primary-700',
 
   proccessing: 'from-secondary/10 to-orange-600/10 text-orange-700',
   review: 'from-secondary/10 to-orange-600/10 text-orange-700',
+  ready: 'from-secondary to-orange-600 text-white',
 
   failed: 'from-red-500/10 to-red-600/10 text-red-700',
   canceled: 'from-red-500/10 to-red-600/10 text-red-700',
   rejected: 'from-red-500/10 to-red-600/10 text-red-700',
 
   succeeded: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
-  processed: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
   successful: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
   approved: 'from-[#58FF5F]/10 to-green-500/10 text-green-700',
+
+  processed: 'from-[#23C760] to-[#23C760] text-white',
 }
 
 const SERVICE_PROVIDER_COLOR_MAP = {
@@ -173,8 +176,18 @@ const TASK_TYPE = {
   //   color: 'black/60',
   //   label: 'Tag',
   // },
+  Debit: {
+    icon: <ArrowRightStartOnRectangleIcon className="h-5 w-5" />,
+    color: 'green-600',
+    label: 'Debit',
+  },
+  Credit: {
+    icon: <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />,
+    color: 'red-500',
+    label: 'Credit',
+  },
   Deposit: {
-    icon: <WalletIcon className="h-5 w-5" />,
+    icon: <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />,
     color: 'green-600',
     label: 'Deposit',
   },

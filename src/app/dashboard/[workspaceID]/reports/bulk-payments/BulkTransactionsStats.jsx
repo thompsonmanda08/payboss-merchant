@@ -389,7 +389,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
   )
 }
 
-function TotalValueStat({ label, icon, count, value }) {
+export function TotalValueStat({ label, icon, count, value }) {
   return (
     <div className="relative flex w-full max-w-xs items-center justify-between">
       <div className="flex items-center gap-1">
@@ -434,8 +434,9 @@ export const convertToCSV = (objArray) => {
 
   for (let i = 0; i < array.length; i++) {
     let line = ''
-    line += `"${formatDate(array[i]?.created_at, 'DD-MM-YYYY') || ''}",`
-    line += `"${array[i]?.batch_name || ''}",`
+    let date = formatDate(array[i]?.created_at).replaceAll('-', '_')
+    line += `"${date || ''}",`
+    line += `"${array[i]?.name || ''}",`
     line += `"${array[i]?.allRecords || ''}",`
     line += `"${array[i]?.allRecordsValue || ''}",`
     line += `"${array[i]?.successfulRecords || ''}",`

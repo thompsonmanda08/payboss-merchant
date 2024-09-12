@@ -76,6 +76,12 @@ export default function Step1({ updateDetails, backToStart }) {
                 updateDetails(STEPS[0], { companyTypeID: e.target.value })
               }}
             />
+          </motion.div>
+          <motion.div
+            key={'step-1-1'}
+            variants={staggerContainerItemVariants}
+            className="flex w-full gap-4"
+          >
             <Input
               type="number"
               label="TPIN"
@@ -90,6 +96,7 @@ export default function Step1({ updateDetails, backToStart }) {
               }}
             />
           </motion.div>
+
           <motion.div
             className="w-full"
             variants={staggerContainerItemVariants}
@@ -201,6 +208,11 @@ export default function Step1({ updateDetails, backToStart }) {
                 updateDetails(STEPS[0], { contact: e.target.value })
               }}
             />
+          </motion.div>
+          <motion.div
+            variants={staggerContainerItemVariants}
+            className="flex w-full gap-4"
+          >
             <Input
               label="Website / Social Media"
               name="website"

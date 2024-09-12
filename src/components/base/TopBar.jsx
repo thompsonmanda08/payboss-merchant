@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
-import { BellIcon, Cog6ToothIcon } from '@heroicons/react/24/solid'
+import { BellIcon } from '@heroicons/react/24/solid'
 import { capitalize, cn, formatCurrency } from '@/lib/utils'
 import Avatar from '../ui/Avatar'
 import BreadCrumbLinks from './BreadCrumbLinks'
@@ -12,28 +12,26 @@ import {
   DropdownSection,
   DropdownItem,
   Button,
-  User,
 } from '@nextui-org/react'
-import SelectField from '../ui/SelectField'
 import useAuthStore from '@/context/authStore'
 import { Skeleton } from '../ui/skeleton'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import useNavigation from '@/hooks/useNavigation'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { WalletIcon } from '@heroicons/react/24/outline'
-import { usePathname } from 'next/navigation'
 import useDashboard from '@/hooks/useDashboard'
+import { useWorkspaceInit } from '@/hooks/useQueryHooks'
 
 export default function TopNavBar({}) {
   const { user } = useAccountProfile()
   const { workspaceID, workspaceWalletBalance } = useWorkspaces()
   const { isProfile, currentPath, dashboardRoute } = useNavigation()
+  const { isLoading } = useWorkspaceInit(workspaceID)
 
-  // if () {
-  //   return
-  // }
+  const dataNotReady =
+    isLoading || !user || !workspaceWalletBalance || !workspaceID
 
-  return !user && !workspaceWalletBalance && !workspaceID ? (
+  return dataNotReady ? (
     <NavbarLoader isProfile />
   ) : (
     <nav

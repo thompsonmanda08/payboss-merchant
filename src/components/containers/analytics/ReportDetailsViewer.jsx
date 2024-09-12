@@ -1,12 +1,7 @@
 'use client'
 import React from 'react'
-import {
-  singleReportsColumns,
-  validationColumns,
-} from '@/context/paymentsStore'
-import { useBatchDetails } from '@/hooks/useQueryHooks'
-import { CardHeader, Modal } from '@/components/base'
-import SummaryTable from '../tables/SummaryTable'
+import { singleReportsColumns } from '@/context/paymentsStore'
+import { Modal } from '@/components/base'
 import SingleTransactionsTable from '../tables/SingleTransactionsTable'
 
 function ReportDetailsViewer({
@@ -18,6 +13,8 @@ function ReportDetailsViewer({
 }) {
   // const { data: batch } = useBatchDetails(batchID)
   // const batchDetails = batch?.data
+
+  // console.log(batch);
 
   return (
     <Modal
