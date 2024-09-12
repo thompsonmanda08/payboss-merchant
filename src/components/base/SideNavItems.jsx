@@ -22,8 +22,8 @@ export default function SideNavItems({
   const { pathname, pathArr } = useNavigation((state) => state)
 
   return (
-    <>
-      <ul className="mb-auto flex w-full flex-col divide-y divide-slate-100/50 ">
+    <div className="flex h-[88%] flex-1 flex-grow flex-col  p-1">
+      <ul className="mb-auto flex  w-full flex-col divide-y divide-slate-100/50 ">
         {navBarItems.map(({ ID, name, href, Icon, subMenuItems }, index) => {
           const isExpanded = expandedSection === index
 
@@ -149,6 +149,6 @@ export default function SideNavItems({
         />
         Log out
       </div>
-    </>
+    </div>
   )
 }

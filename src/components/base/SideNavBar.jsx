@@ -281,35 +281,40 @@ function SideNavBar({ params }) {
   }
 
   return (
-    <div className="h-full w-[380px]">
+    <>
       <Button
-        size="sm"
+        size="md"
         // isIconOnly
         className="absolute left-6 top-3 z-[99] h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
         onClick={toggleMobileMenu}
       >
         <Bars3BottomLeftIcon className="h-7 w-7  text-slate-700" />
       </Button>
-      <nav
-        className={cn(
-          `z-20 hidden h-full w-full flex-col rounded-r-3xl bg-white p-5 transition-all duration-500 ease-in-out lg:flex`,
-        )}
+      <div
+        className={cn('hidden h-full w-[380px] lg:flex', {
+          'flex-red-500': toggleMobileMenu,
+        })}
       >
-        <Logo href={dashboardRoute} />
-        <div className="relative py-2">
-          <WorkspaceSelection />
-        </div>
-        <SideNavItems
-          navBarItems={SIDE_BAR_OPTIONS}
-          pathname={pathname}
-          expandedSection={expandedSection}
-          handleExpand={handleExpand}
-          handleMainLinkClick={handleMainLinkClick}
-          isMobileMenuOpen={openMobileMenu}
-          toggleMobileMenu={toggleMobileMenu}
-        />
-      </nav>
-
+        <nav
+          className={cn(
+            `h-full w-full flex-col rounded-r-3xl bg-white p-5 transition-all duration-500 ease-in-out`,
+          )}
+        >
+          <Logo href={dashboardRoute} />
+          <div className="relative py-2">
+            <WorkspaceSelection />
+          </div>
+          <SideNavItems
+            navBarItems={SIDE_BAR_OPTIONS}
+            pathname={pathname}
+            expandedSection={expandedSection}
+            handleExpand={handleExpand}
+            handleMainLinkClick={handleMainLinkClick}
+            isMobileMenuOpen={openMobileMenu}
+            toggleMobileMenu={toggleMobileMenu}
+          />
+        </nav>
+      </div>
       {/* MOBILE NAVIGATION */}
       <MobileNavBar
         isMobileMenuOpen={openMobileMenu}
@@ -320,7 +325,7 @@ function SideNavBar({ params }) {
         handleMainLinkClick={handleMainLinkClick}
         navBarItems={SIDE_BAR_OPTIONS}
       />
-    </div>
+    </>
   )
 }
 

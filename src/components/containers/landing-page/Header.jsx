@@ -18,6 +18,7 @@ import { NavLink } from '@/components/base/NavLink'
 import { cn } from '@/lib/utils'
 import { Logo } from '../../base'
 import { UserIcon } from '@heroicons/react/24/solid'
+import useFloatingHeader from '@/hooks/useFloatingHeader'
 
 function MobileNavLink({ href, children }) {
   return (
@@ -97,18 +98,10 @@ function MobileNavigation({ session }) {
 }
 
 export function Header({ session }) {
-  const [isFloating, setIsFloating] = useState(false)
-
   const pathname = usePathname()
 
-  useEffect(() => {
-    const scrollYPos = window.addEventListener('scroll', () => {
-      window.scrollY > 50 ? setIsFloating(true) : setIsFloating(false)
-    })
+  const isFloating = useFloatingHeader(100)
 
-    // remove event
-    return () => window.removeEventListener('scroll', scrollYPos)
-  })
   return (
     <header
       className={cn(

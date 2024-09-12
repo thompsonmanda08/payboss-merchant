@@ -26,14 +26,14 @@ function MobileNavBar({
           whileInView={{ opacity: [0, 1], transition: { duration: 0.3 } }}
           onClick={toggleMobileMenu}
           className={cn(`absolute left-[-100%] z-[99] hidden bg-slate-900/80`, {
-            'inset-0 block': isMobileMenuOpen,
+            'inset-0 block lg:hidden': isMobileMenuOpen,
           })}
         />
       )}
       <nav
         className={cn(
           `fixed left-[-100%] top-0 z-[999] h-full w-[70%] min-w-[300px] max-w-[412px] flex-col bg-white p-5 transition-all duration-300 ease-in-out`,
-          { 'left-0 flex': isMobileMenuOpen },
+          { 'left-0 flex md:-left-[100%]': isMobileMenuOpen },
         )}
       >
         <button

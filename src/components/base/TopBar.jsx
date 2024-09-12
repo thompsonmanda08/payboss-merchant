@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { BellIcon } from '@heroicons/react/24/solid'
 import { capitalize, cn, formatCurrency } from '@/lib/utils'
@@ -21,6 +21,7 @@ import useWorkspaces from '@/hooks/useWorkspaces'
 import { WalletIcon } from '@heroicons/react/24/outline'
 import useDashboard from '@/hooks/useDashboard'
 import { useWorkspaceInit } from '@/hooks/useQueryHooks'
+import useFloatingHeader from '@/hooks/useFloatingHeader'
 
 export default function TopNavBar({}) {
   const { user } = useAccountProfile()
@@ -36,8 +37,12 @@ export default function TopNavBar({}) {
   ) : (
     <nav
       className={cn(
-        `__TOPBAR rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center py-2 pr-10 shadow-sm transition-all md:pl-2 lg:sticky lg:top-auto lg:flex-nowrap lg:justify-start lg:bg-transparent lg:pl-0 lg:shadow-none`,
-        { 'bg-transparent px-10 pl-20 text-white': isProfile },
+        `__TOPBAR rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center rounded-xl bg-white/90 py-3 pr-5 shadow-sm backdrop-blur-md transition-all md:pl-2 lg:sticky lg:top-0 lg:justify-start lg:shadow-none`,
+        {
+          'bg-transparent px-10 pl-20 pr-10 text-white backdrop-blur-none':
+            isProfile,
+        },
+        // { 'bg-red-600 ': isFloating },
       )}
     >
       <div className="flex w-full items-center">
@@ -82,7 +87,7 @@ export default function TopNavBar({}) {
                   Wallet Balance
                 </span>
                 <span className="-mt-1 text-base font-bold">
-                  {formatCurrency(workspaceWalletBalance)}
+                  {formatCurrency(workspaceWalletBalance || '0.00')}
                 </span>
               </div>
             </Link>

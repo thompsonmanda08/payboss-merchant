@@ -84,11 +84,11 @@ function DashboardAnalytics({ workspaceID }) {
   const dataNotReady = isFetching || isLoading
   return (
     <>
-      {dataNotReady && <OverlayLoader show={dataNotReady} />}
+      {/* {dataNotReady && <OverlayLoader show={dataNotReady} />} */}
 
       <div className="flex w-full flex-col gap-4 md:gap-6">
         {/* TOP ROW - WALLET BALANCE && OVERALL VALUES */}
-        <div className="place-items- flex w-full grid-cols-1 gap-4 md:grid-cols-3 md:place-items-start">
+        <div className="flex-cols flex w-full flex-wrap items-start gap-4 md:flex-row">
           <Card className="flex-1 gap-4 border-none bg-gradient-to-br from-primary to-primary-400">
             <Chip
               classNames={{
@@ -99,8 +99,10 @@ function DashboardAnalytics({ workspaceID }) {
             >
               Available Wallet Balance
             </Chip>
-            <p className="text-[2rem] font-black leading-7 tracking-tight text-white">
-              {`${formatCurrency(workspaceWalletBalance)}`}
+            <p className="text-[1.75rem] font-black leading-7 tracking-tight text-white">
+              {workspaceWalletBalance
+                ? `${formatCurrency(workspaceWalletBalance)}`
+                : `ZMW 0.00`}
             </p>
           </Card>
           <SimpleStats
@@ -132,9 +134,8 @@ function DashboardAnalytics({ workspaceID }) {
             Icon={ArrowTrendingDownIcon}
           />
         </div>
-
         {/*  2ND ROW - DAILY FIGURES AND VALUES */}
-        <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-4 ">
+        <div className="flex w-full flex-col flex-wrap items-center gap-4 md:flex-row ">
           <SimpleStats
             title={'Todays Transactions'}
             figure={today?.count || 0}
@@ -188,21 +189,11 @@ function DashboardAnalytics({ workspaceID }) {
           />
         </div>
 
-        {role?.can_approve ? (
-          <ComponentsWithApprovalStats
-            workspaceID={workspaceID}
-            dashboardAnalytics={dashboardAnalytics}
-          />
-        ) : (
-          <ComponentsForViewOnly
-            workspaceID={workspaceID}
-            dashboardAnalytics={dashboardAnalytics}
-          />
-        )}
-
-        {/* <div className="place-items- flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-4 md:place-items-start ">
-          <div className="flex w-1/2 flex-col gap-4">
-            <div className="flex gap-4">
+        {/* 3RD ROW -  */}
+        {role?.can_approve && (
+          <div className="flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-4 ">
+            <PendingApprovals data={pendingApprovals} />
+            <div className="flex w-1/3 max-w-lg flex-col gap-4">
               <SimpleStats
                 title={'Overall Collections'}
                 figure={allCollections?.count || 0}
@@ -232,34 +223,12 @@ function DashboardAnalytics({ workspaceID }) {
                 Icon={ArrowTrendingDownIcon}
               />
             </div>
-            <GradientLineChart
-              title="Transactions Overview"
-              description={
-                <span className="flex items-center">
-                  <span className="mb-1 mr-1 text-lg leading-none text-green-500">
-                    <ArrowUpIcon className="h-5 w-5 font-bold" />
-                  </span>
-                  <span className="text-sm font-medium text-gray-700">
-                    4% more <span className="font-normal">in 2021</span>
-                  </span>
-                </span>
-              }
-              height="20.25rem"
-              chart={gradientLineChartData}
-            />
           </div>
-          <Card className={'w-1/2'}>
-            <CardHeader
-              title={'Wallet Statement Summary'}
-              infoText={'Brief overview of your latest statement transactions'}
-            />
-            <WalletTransactionHistory workspaceID={workspaceID} limit={4} />
-          </Card>
-        </div> */}
+        )}
 
-        <div className="flex w-full flex-col gap-4 md:flex-row">
+        <div className="grid w-full grid-cols-1 gap-4 2xl:grid-cols-2">
           <Batches />
-          <Card className={'w-full'}>
+          <Card className={''}>
             <CardHeader
               title={'Wallet Statement Summary'}
               infoText={'Brief overview of your latest statement transactions'}
@@ -271,115 +240,5 @@ function DashboardAnalytics({ workspaceID }) {
     </>
   )
 }
-
-function ComponentsForViewOnly({ workspaceID, dashboardAnalytics }) {
-  const { allCollections, allDisbursements } = dashboardAnalytics || {}
-  return (
-    <div className="place-items- flex w-full grid-cols-1 gap-4 md:grid-cols-2 md:place-items-start">
-      <SimpleStats
-        title={'Overall Collections'}
-        figure={allCollections?.count || 0}
-        smallFigure={
-          allCollections?.value
-            ? `(${formatCurrency(allCollections?.value)})`
-            : `(ZMW 0.00)`
-        }
-        classNames={{
-          smallFigureClasses: 'md:text-base font-bold',
-        }}
-        isGood={true}
-        Icon={ArrowTrendingUpIcon}
-      />
-      <SimpleStats
-        title={'Overall Disbursements'}
-        figure={allDisbursements?.count || 0}
-        smallFigure={
-          allDisbursements?.value
-            ? `(${formatCurrency(allDisbursements?.value)})`
-            : `(ZMW 0.00)`
-        }
-        classNames={{
-          smallFigureClasses: 'md:text-base font-bold',
-        }}
-        isBad={true}
-        Icon={ArrowTrendingDownIcon}
-      />
-    </div>
-  )
-}
-
-function ComponentsWithApprovalStats({ dashboardAnalytics }) {
-  const { allCollections, allDisbursements } = dashboardAnalytics || {}
-  return (
-    <div className="place-items- flex w-full grid-cols-1 gap-4 md:grid-cols-2 md:place-items-start">
-      <SimpleStats
-        title={'Overall Collections'}
-        figure={allCollections?.count || 0}
-        smallFigure={
-          allCollections?.value
-            ? `(${formatCurrency(allCollections?.value)})`
-            : `(ZMW 0.00)`
-        }
-        classNames={{
-          smallFigureClasses: 'md:text-base font-bold',
-        }}
-        isGood={true}
-        Icon={ArrowTrendingUpIcon}
-      />
-      <SimpleStats
-        title={'Overall Disbursements'}
-        figure={allDisbursements?.count || 0}
-        smallFigure={
-          allDisbursements?.value
-            ? `(${formatCurrency(allDisbursements?.value)})`
-            : `(ZMW 0.00)`
-        }
-        classNames={{
-          smallFigureClasses: 'md:text-base font-bold',
-        }}
-        isBad={true}
-        Icon={ArrowTrendingDownIcon}
-      />
-    </div>
-  )
-}
-// function ComponentsWithApprovalStats({ dashboardAnalytics }) {
-//   const { allCollections, allDisbursements } = dashboardAnalytics || {}
-//   return (
-//     <div className="flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-4 ">
-//       <PendingApprovals data={pendingApprovals} />
-//       <div className="flex w-1/3 max-w-lg flex-col gap-4">
-//         <SimpleStats
-//           title={'Overall Collections'}
-//           figure={allCollections?.count || 0}
-//           smallFigure={
-//             allCollections?.value
-//               ? `(${formatCurrency(allCollections?.value)})`
-//               : `(ZMW 0.00)`
-//           }
-//           classNames={{
-//             smallFigureClasses: 'md:text-base font-bold',
-//           }}
-//           isGood={true}
-//           Icon={ArrowTrendingUpIcon}
-//         />
-//         <SimpleStats
-//           title={'Overall Disbursements'}
-//           figure={allDisbursements?.count || 0}
-//           smallFigure={
-//             allDisbursements?.value
-//               ? `(${formatCurrency(allDisbursements?.value)})`
-//               : `(ZMW 0.00)`
-//           }
-//           classNames={{
-//             smallFigureClasses: 'md:text-base font-bold',
-//           }}
-//           isBad={true}
-//           Icon={ArrowTrendingDownIcon}
-//         />
-//       </div>
-//     </div>
-//   )
-// }
 
 export default DashboardAnalytics

@@ -40,7 +40,7 @@ function OverlayLoader({ show, className, classNames }) {
           variants={overlayVariants}
           transition={{ duration: 0.25 }}
           className={cn(
-            'absolute inset-0 z-[999] flex h-screen w-full items-center justify-center bg-black/50 backdrop-blur-sm',
+            'absolute inset-0 z-[9999999] flex h-screen w-full items-center justify-center bg-black/50 backdrop-blur-sm',
             wrapper,
           )}
         >

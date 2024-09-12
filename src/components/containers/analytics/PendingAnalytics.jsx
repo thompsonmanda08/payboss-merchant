@@ -12,9 +12,9 @@ const PendingApprovalsItem = ({ label, icon, total }) => {
         >
           {icon?.component}
         </div>
-        <span className="text-nowrap text-xs font-medium capitalize text-slate-800">
+        <label className="text-nowrap text-xs font-medium capitalize text-slate-800">
           {label}
-        </span>
+        </label>
       </div>
       <Tooltip
         color={icon?.color}

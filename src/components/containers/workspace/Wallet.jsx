@@ -266,10 +266,11 @@ export function WalletTransactionHistory({
   const { data: walletHistoryResponse, isLoading: loadingWalletHistory } =
     useWalletPrefundHistory(workspaceID)
 
-  const walletHistory =
-    transactionData || walletHistoryResponse?.data?.data || []
-
-  console.log(walletHistory)
+  const walletHistory = (
+    transactionData ||
+    walletHistoryResponse?.data?.data ||
+    []
+  )?.toReversed()
 
   const data = [
     {

@@ -28,7 +28,7 @@ function SimpleStats({
         >
           {title}
         </h2>
-        <p
+        <div
           className={cn(
             'text-nowrap text-lg font-bold text-slate-800 md:text-xl lg:text-2xl',
             figureClasses,
@@ -49,7 +49,7 @@ function SimpleStats({
               {smallFigure}
             </span>
           )}
-        </p>
+        </div>
       </div>
 
       {Icon && (

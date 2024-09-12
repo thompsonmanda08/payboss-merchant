@@ -15,16 +15,19 @@ import OverlayLoader from '@/components/ui/OverlayLoader'
 import { Card, InfoBanner } from '@/components/base'
 import CreateNewWorkspaceModal from './CreateNewWorkspace'
 import Loader from '@/components/ui/Loader'
+import useAccountProfile from '@/hooks/useProfileDetails'
 
 function Workspaces({ user, showHeader = false, className }) {
   const pathname = usePathname()
   const queryClient = useQueryClient()
-  const { workspaces, allWorkspaces, isLoading } = useWorkspace()
+  const { KYCStageID } = useAccountProfile()
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const canCreateWorkspace =
-    user?.role?.toLowerCase() == 'admin' || user?.role?.toLowerCase() == 'owner'
+    user?.role?.toLowerCase() == 'admin' ||
+    user?.role?.toLowerCase() == 'owner' ||
+    KYCStageID == 4
 
   const [loading, setLoading] = useState(false)
   const [newWorkspace, setNewWorkspace] = useState({})
