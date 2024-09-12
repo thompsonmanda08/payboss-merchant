@@ -233,18 +233,20 @@ export default function BulkTransactionsStats({ workspaceID }) {
                 opacity: isExpanded ? 1 : 0,
               }}
             >
-              <Card className={'mt-4 shadow-none'}>
-                <TotalValueStat
-                  label={'Total Batches'}
-                  icon={{
-                    component: <ListBulletIcon className="h-5 w-5" />,
-                    color: 'primary',
-                  }}
-                  count={report?.batches?.count || 0}
-                  value={formatCurrency(report?.batches?.value || 0)}
-                />
-                <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-12 ">
-                  <div className="flex flex-col gap-4">
+              <Card className={'mt-4 gap-5 shadow-none'}>
+                <div className="flex flex-col flex-wrap sm:flex-row md:justify-between">
+                  <div className="flex flex-1 flex-col gap-4">
+                    <TotalValueStat
+                      label={'Total Batches'}
+                      icon={{
+                        component: <ListBulletIcon className="h-5 w-5" />,
+                        color: 'primary',
+                      }}
+                      count={report?.batches?.count || 0}
+                      value={formatCurrency(report?.batches?.value || 0)}
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col gap-4">
                     <TotalValueStat
                       label={'Total Direct Batches'}
                       icon={{
@@ -254,6 +256,21 @@ export default function BulkTransactionsStats({ workspaceID }) {
                       count={report?.direct?.all?.count || 0}
                       value={formatCurrency(report?.direct?.all?.value || 0)}
                     />
+                  </div>
+                  <div className="flex flex-1 flex-col gap-4">
+                    <TotalValueStat
+                      label={'Total Voucher Batches'}
+                      icon={{
+                        component: <ListBulletIcon className="h-5 w-5" />,
+                        color: 'secondary',
+                      }}
+                      count={report?.voucher?.all?.count || 0}
+                      value={formatCurrency(report?.voucher?.all?.value || 0)}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col flex-wrap sm:flex-row md:justify-evenly">
+                  <div className="flex flex-1 flex-col gap-4">
                     <TotalValueStat
                       label={'Proccessed Direct Batches'}
                       icon={{
@@ -264,17 +281,6 @@ export default function BulkTransactionsStats({ workspaceID }) {
                       value={formatCurrency(
                         report?.direct?.proccessed?.value || 0,
                       )}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    <TotalValueStat
-                      label={'Total Voucher Batches'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'secondary',
-                      }}
-                      count={report?.voucher?.all?.count || 0}
-                      value={formatCurrency(report?.voucher?.all?.value || 0)}
                     />
                     <TotalValueStat
                       label={'Proccessed Voucher Batches'}
@@ -288,7 +294,8 @@ export default function BulkTransactionsStats({ workspaceID }) {
                       )}
                     />
                   </div>
-                  <div className="flex flex-col gap-4">
+
+                  <div className="flex flex-1 flex-col gap-4">
                     <TotalValueStat
                       label={'Successful Direct Transaction'}
                       icon={{
@@ -312,7 +319,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
                       )}
                     />
                   </div>
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-1 flex-col gap-4">
                     <TotalValueStat
                       label={'Successful Voucher Transaction'}
                       icon={{
@@ -391,7 +398,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
 
 export function TotalValueStat({ label, icon, count, value }) {
   return (
-    <div className="relative flex w-full max-w-xs items-center justify-between">
+    <div className="relative flex w-full max-w-sm items-center justify-between">
       <div className="flex items-center gap-1">
         <div
           className={`bg-${icon?.color} mr-1 flex items-center justify-center rounded-md p-3 text-sm text-white shadow-md`}
