@@ -130,7 +130,6 @@ export default function BulkTransactionsStats({ workspaceID }) {
     const dateRange = {
       start_date: start_date || thirtyDaysAgo,
       end_date: end_date || thisMonth,
-      end_date,
     }
 
     const response = await getBulkReportData(dateRange)

@@ -102,51 +102,51 @@ function SideNavBar({ params }) {
     // ****************************************************** //
 
     // *************** COLLECTIONS AND INCOME *************** //
-    // {
-    //   ID: 'collections',
-    //   name: 'Manage Income',
-    //   Icon: InboxArrowDownIcon,
-    //   subMenuItems: [
-    // {
-    //   name: 'Invoicing',
-    //   href: `${dashboardRoute}/collections/invoicing`,
-    //   Icon: NewspaperIcon,
-    // },
+    {
+      ID: 'collections',
+      name: 'Manage Income',
+      Icon: InboxArrowDownIcon,
+      subMenuItems: [
+        // {
+        //   name: 'Invoicing',
+        //   href: `${dashboardRoute}/collections/invoicing`,
+        //   Icon: NewspaperIcon,
+        // },
 
-    // {
-    //   name: 'Payment Forms',
-    //   href: `${dashboardRoute}/collections/payment-forms`,
-    //   Icon: ClipboardDocumentIcon,
-    // },
-    // {
-    //   name: 'Payment Links',
-    //   href: `${dashboardRoute}/collections/payment-links`,
-    //   Icon: LinkIcon,
-    // },
+        // {
+        //   name: 'Payment Forms',
+        //   href: `${dashboardRoute}/collections/payment-forms`,
+        //   Icon: ClipboardDocumentIcon,
+        // },
+        // {
+        //   name: 'Payment Links',
+        //   href: `${dashboardRoute}/collections/payment-links`,
+        //   Icon: LinkIcon,
+        // },
 
-    // {
-    //   name: 'Subscriptions',
-    //   href: `${dashboardRoute}/collections/subscriptions`,
-    //   Icon: CreditCardIcon,
-    // },
+        // {
+        //   name: 'Subscriptions',
+        //   href: `${dashboardRoute}/collections/subscriptions`,
+        //   Icon: CreditCardIcon,
+        // },
 
-    // {
-    //   name: 'Online Store',
-    //   href: `${dashboardRoute}/collections/store`,
-    //   Icon: BuildingStorefrontIcon,
-    // },
-    // {
-    //   name: 'Till Payments',
-    //   href: `${dashboardRoute}/collections/till-collections`,
-    //   Icon: CalculatorIcon,
-    // },
-    //     {
-    //       name: 'API Integration',
-    //       href: `${dashboardRoute}/collections/api-integration`,
-    //       Icon: AdjustmentsVerticalIcon,
-    //     },
-    //   ],
-    // },
+        // {
+        //   name: 'Online Store',
+        //   href: `${dashboardRoute}/collections/store`,
+        //   Icon: BuildingStorefrontIcon,
+        // },
+        {
+          name: 'Till Payments',
+          href: `${dashboardRoute}/collections/till-collections`,
+          Icon: CalculatorIcon,
+        },
+        {
+          name: 'API Integration',
+          href: `${dashboardRoute}/collections/api-integration`,
+          Icon: AdjustmentsVerticalIcon,
+        },
+      ],
+    },
 
     // ****************************************************** //
 
@@ -216,23 +216,6 @@ function SideNavBar({ params }) {
       name: 'Manage Workspace',
       Icon: WrenchScrewdriverIcon,
       href: `${dashboardRoute}/workspace-settings`,
-      // subMenuItems: [
-      //   {
-      //     name: 'General Settings',
-      //     href: `${dashboardRoute}/workspace`,
-      //     Icon: Cog6ToothIcon,
-      //   },
-      //   {
-      //     name: 'Wallet',
-      //     href: `${dashboardRoute}/workspace/wallet`,
-      //     Icon: WalletIcon,
-      //   },
-      //   {
-      //     name: 'Members',
-      //     href: `${dashboardRoute}/workspace/members`,
-      //     Icon: UsersIcon,
-      //   },
-      // ],
     },
   ]
 

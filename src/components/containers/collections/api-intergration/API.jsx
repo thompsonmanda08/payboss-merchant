@@ -59,12 +59,10 @@ const APIIntegration = ({ workspaceID }) => {
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false)
   const [openViewConfig, setOpenViewConfig] = useState(false)
 
-  console.log(apiKeyResponse?.data)
-
   const API = useMemo(() => {
     if (!apiKeyResponse?.success) return []
     return {
-      apiKey: apiKeyResponse?.data?.apiKey,
+      key: apiKeyResponse?.data?.apiKey,
       username: apiKeyResponse?.data?.username,
     }
   }, [apiKeyResponse])
@@ -215,25 +213,25 @@ const APIIntegration = ({ workspaceID }) => {
               {apiKey && (
                 <TableRow key="1">
                   <TableCell>{apiKey?.username}</TableCell>
-                  <TableCell>
+                  <TableCell className="flex gap-1">
                     <span className="flex items-center gap-4 font-medium">
                       {unmaskAPIKey
-                        ? apiKey?.apikey
-                        : maskString(apiKey?.apikey)}
-                      <Button
-                        className={'h-max max-h-max max-w-max p-1'}
-                        color="default"
-                        variant="light"
-                        size="sm"
-                        onClick={() => setUnmaskAPIKey(!unmaskAPIKey)}
-                      >
-                        {unmaskAPIKey ? (
-                          <EyeSlashIcon className="h-5 w-5 cursor-pointer text-primary" />
-                        ) : (
-                          <EyeIcon className="h-5 w-5 cursor-pointer text-primary" />
-                        )}
-                      </Button>
+                        ? apiKey.key
+                        : maskString(apiKey.key, 0, 20)}
                     </span>
+                    <Button
+                      className={'h-max max-h-max max-w-max p-1'}
+                      color="default"
+                      variant="light"
+                      size="sm"
+                      onClick={() => setUnmaskAPIKey(!unmaskAPIKey)}
+                    >
+                      {unmaskAPIKey ? (
+                        <EyeSlashIcon className="h-5 w-5 cursor-pointer text-primary" />
+                      ) : (
+                        <EyeIcon className="h-5 w-5 cursor-pointer text-primary" />
+                      )}
+                    </Button>
                   </TableCell>
                   {/* FEATURE TO ENABLE AND DISBALE API KEY */}
                   {/* <TableCell>
