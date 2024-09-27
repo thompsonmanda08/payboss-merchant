@@ -76,13 +76,13 @@ const APIIntegration = ({ workspaceID }) => {
   async function handleUserAction() {
     setIsLoading(true)
     // THERE CAN ONLY BE ONE API KEY
-    if (apiKey != null && isNew) {
+    if (apiKey?.key && isNew) {
       notify('error', 'You already have an API key for this workspace!')
       return
     }
 
     // HIT THE BACKEND TO UPDATE THE API KEY
-    if (isRefresh && apiKey != null) {
+    if (isRefresh && apiKey?.key) {
       const response = await refreshWorkspaceAPIKey(workspaceID)
 
       if (!response.success) {
@@ -114,6 +114,7 @@ const APIIntegration = ({ workspaceID }) => {
 
     if (!response.success) {
       notify('error', 'Failed to generate API key!')
+      notify('error', response?.message)
       setIsLoading(false)
       return
     }
@@ -180,7 +181,7 @@ const APIIntegration = ({ workspaceID }) => {
               }}
             />
             <Button
-              isDisabled={apiKey != null}
+              isDisabled={Boolean(apiKey?.key)}
               endContent={<PlusIcon className="h-5 w-5" />}
               onClick={() => setIsNew(true)}
             >
@@ -204,34 +205,44 @@ const APIIntegration = ({ workspaceID }) => {
                   </span>
                 </div>
               }
-              emptyContent={
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50/50 py-3 text-xs  text-neutral-400 ">
-                  You have no API keys generated
-                </div>
-              }
+              // emptyContent={
+              //   <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50/50 py-3 text-xs  text-neutral-400 ">
+              //     You have no API keys generated
+              //   </div>
+              // }
             >
               {apiKey && (
                 <TableRow key="1">
                   <TableCell>{apiKey?.username}</TableCell>
                   <TableCell className="flex gap-1">
-                    <span className="flex items-center gap-4 font-medium">
-                      {unmaskAPIKey
-                        ? apiKey.key
-                        : maskString(apiKey.key, 0, 20)}
-                    </span>
-                    <Button
-                      className={'h-max max-h-max max-w-max p-1'}
-                      color="default"
-                      variant="light"
-                      size="sm"
-                      onClick={() => setUnmaskAPIKey(!unmaskAPIKey)}
-                    >
-                      {unmaskAPIKey ? (
-                        <EyeSlashIcon className="h-5 w-5 cursor-pointer text-primary" />
-                      ) : (
-                        <EyeIcon className="h-5 w-5 cursor-pointer text-primary" />
-                      )}
-                    </Button>
+                    {apiKey.key ? (
+                      <>
+                        <span className="flex items-center gap-4 font-medium">
+                          {unmaskAPIKey
+                            ? apiKey.key
+                            : maskString(apiKey.key, 0, 20)}
+                        </span>
+                        <Button
+                          className={'h-max max-h-max max-w-max p-1'}
+                          color="default"
+                          variant="light"
+                          size="sm"
+                          onClick={() => setUnmaskAPIKey(!unmaskAPIKey)}
+                        >
+                          {unmaskAPIKey ? (
+                            <EyeSlashIcon className="h-5 w-5 cursor-pointer text-primary" />
+                          ) : (
+                            <EyeIcon className="h-5 w-5 cursor-pointer text-primary" />
+                          )}
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <span className="relative -left-32 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50/0 py-3 text-xs  text-neutral-400 ">
+                          You have no API keys generated
+                        </span>
+                      </>
+                    )}
                   </TableCell>
                   {/* FEATURE TO ENABLE AND DISBALE API KEY */}
                   {/* <TableCell>
@@ -248,40 +259,44 @@ const APIIntegration = ({ workspaceID }) => {
                     />
                   </TableCell> */}
                   <TableCell>
-                    <div className="flex items-center gap-4">
-                      <Tooltip color="secondary" content="API Config">
-                        <Cog6ToothIcon
-                          onClick={() => setOpenViewConfig(true)}
-                          className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
-                        />
-                      </Tooltip>
-                      <Tooltip
-                        color="default"
-                        content="Copy API Key to clipboard"
-                      >
-                        <Square2StackIcon
-                          className={`h-6 w-6 cursor-pointer ${
-                            copiedKey === apiKey?.key
-                              ? 'text-primary'
-                              : 'text-gray-500'
-                          } hover:text-primary`}
-                          onClick={() => copyToClipboard(apiKey?.key)}
-                        />
-                      </Tooltip>
-                      <Tooltip color="primary" content="Refresh API Key">
-                        <ArrowPathIcon
-                          onClick={() => setIsRefresh(true)}
-                          className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300"
-                        />
-                      </Tooltip>
-                      {/*  FEATURE TO DELETE AN API KEY */}
-                      {/* <Tooltip color="danger" content="Delete API Key">
-                        <TrashIcon
-                          onClick={() => setIsDelete(true)}
-                          className="h-5 w-5 cursor-pointer text-red-500 hover:text-red-300"
-                        />
-                      </Tooltip> */}
-                    </div>
+                    {apiKey.key && (
+                      <>
+                        <div className="flex items-center gap-4">
+                          <Tooltip color="secondary" content="API Config">
+                            <Cog6ToothIcon
+                              onClick={() => setOpenViewConfig(true)}
+                              className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
+                            />
+                          </Tooltip>
+                          <Tooltip
+                            color="default"
+                            content="Copy API Key to clipboard"
+                          >
+                            <Square2StackIcon
+                              className={`h-6 w-6 cursor-pointer ${
+                                copiedKey === apiKey?.key
+                                  ? 'text-primary'
+                                  : 'text-gray-500'
+                              } hover:text-primary`}
+                              onClick={() => copyToClipboard(apiKey?.key)}
+                            />
+                          </Tooltip>
+                          <Tooltip color="primary" content="Refresh API Key">
+                            <ArrowPathIcon
+                              onClick={() => setIsRefresh(true)}
+                              className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300"
+                            />
+                          </Tooltip>
+                          {/*  FEATURE TO DELETE AN API KEY */}
+                          {/* <Tooltip color="danger" content="Delete API Key">
+                          <TrashIcon
+                            onClick={() => setIsDelete(true)}
+                            className="h-5 w-5 cursor-pointer text-red-500 hover:text-red-300"
+                          />
+                        </Tooltip> */}
+                        </div>
+                      </>
+                    )}
                   </TableCell>
                 </TableRow>
               )}

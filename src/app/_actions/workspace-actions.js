@@ -238,7 +238,7 @@ export async function setupWorkspaceAPIKey(workspaceID) {
       url: `transaction/collection/create/api-key/${workspaceID}`,
     })
 
-    if (res.status == 200) {
+    if (res.status == 200 || res.status == 201) {
       return {
         success: true,
         message: res.message,
