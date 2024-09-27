@@ -73,7 +73,7 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
 
     const response = await updateWorkspace({ ...newWorkspace, ID: workspaceID })
 
-    if (response.success) {
+    if (response?.success) {
       queryClient.invalidateQueries({ queryKey: [SETUP_QUERY_KEY] })
       queryClient.invalidateQueries({ queryKey: [WORKSPACES_QUERY_KEY] })
       setLoading(false)
@@ -101,7 +101,7 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
 
     const response = await deleteWorkspace(workspaceID)
 
-    if (response.success) {
+    if (response?.success) {
       queryClient.invalidateQueries({
         queryKey: [WORKSPACES_QUERY_KEY],
       })
@@ -123,7 +123,7 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
     setIsVisible(!isVisible)
     const response = await changeWorkspaceVisibility(workspaceID, !isVisible)
 
-    if (response.success) {
+    if (response?.success) {
       queryClient.invalidateQueries([SETUP_QUERY_KEY])
       notify('success', 'Visibility updated successfully')
       return

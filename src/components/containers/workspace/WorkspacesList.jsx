@@ -56,7 +56,7 @@ function Workspaces({ user, showHeader = false, className }) {
 
     const response = await createNewWorkspace(newWorkspace)
 
-    if (response.success) {
+    if (response?.success) {
       queryClient.invalidateQueries({
         queryKey: [SETUP_QUERY_KEY],
       })
@@ -68,7 +68,7 @@ function Workspaces({ user, showHeader = false, className }) {
     }
 
     notify('error', 'Failed to Create Workspace!')
-    notify('error', response.message)
+    notify('error', response?.message)
 
     setLoading(false)
     onOpenChange()

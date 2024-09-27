@@ -85,7 +85,7 @@ const APIIntegration = ({ workspaceID }) => {
     if (isRefresh && apiKey?.key) {
       const response = await refreshWorkspaceAPIKey(workspaceID)
 
-      if (!response.success) {
+      if (!response?.success) {
         notify('error', 'Failed to refresh API key!')
         setIsLoading(false)
         return
@@ -112,7 +112,7 @@ const APIIntegration = ({ workspaceID }) => {
 
     const response = await setupWorkspaceAPIKey(workspaceID)
 
-    if (!response.success) {
+    if (!response?.success) {
       notify('error', 'Failed to generate API key!')
       notify('error', response?.message)
       setIsLoading(false)

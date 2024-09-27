@@ -51,7 +51,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
   async function handleSubmitForApproval() {
     setLoading(true)
     if (
-      batchDetails.number_of_records != batchDetails.number_of_valid_records
+      batchDetails?.number_of_records != batchDetails?.number_of_valid_records
     ) {
       notify('error', 'Some records are still invalid!')
       setLoading(false)
@@ -79,8 +79,8 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
 
     const response = await submitBatchForApproval(batchState?.ID || batchID)
 
-    if (!response.success) {
-      notify('error', response.message)
+    if (!response?.success) {
+      notify('error', response?.message)
       setLoading(false)
       return
     }
@@ -106,7 +106,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
   // CANNOT HAVE ZUSTAND STATE AND AND REACT QUERY TO MANAGE STATE - NEEDS TO BE IN SYNC
   useEffect(() => {
     // IF FETCHED AND THERE ARE NO BATCH
-    if (isFetched && isSuccess && batchResponse.success) {
+    if (isFetched && isSuccess && batchResponse?.success) {
       setBatchDetails(batchResponse?.data)
     }
 
@@ -148,7 +148,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
         />
         {error?.status && (
           <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
-            <StatusMessage error={error.status} message={error.message} />
+            <StatusMessage error={error?.status} message={error?.message} />
           </div>
         )}
 

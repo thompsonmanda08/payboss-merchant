@@ -170,14 +170,14 @@ export default function SignUpForm() {
         setMerchantID(merchantID)
       }
 
-      if (response.success && (response?.data?.merchantID || merchantID)) {
+      if (response?.success && (response?.data?.merchantID || merchantID)) {
         notify('success', 'Details Submitted For Approval')
         navigateForward()
         setIsLoading(false)
         return
       } else {
         notify('error', 'Error Submitting Business Details')
-        updateErrorStatus({ status: true, message: response.message })
+        updateErrorStatus({ status: true, message: response?.message })
         setIsLoading(false)
         return
       }
@@ -192,14 +192,14 @@ export default function SignUpForm() {
     ) {
       const response = await submitMerchantBankDetails(businessInfo, merchantID)
 
-      if (response.success) {
+      if (response?.success) {
         notify('success', 'Bank information Submitted!')
         navigateForward()
         setIsLoading(false)
         return
       } else {
         notify('error', 'Error Submitting Bank information!')
-        updateErrorStatus({ status: true, message: response.message })
+        updateErrorStatus({ status: true, message: response?.message })
         setIsLoading(false)
         return
       }
@@ -220,14 +220,14 @@ export default function SignUpForm() {
 
       let response = await createMerchantAdminUser(newAdminUser, merchantID)
 
-      if (response.success) {
+      if (response?.success) {
         notify('success', 'Account Created Successfully')
         setAccountCreated(true)
         setIsLoading(false)
         return
       } else {
         notify('error', 'Error Creating Account!')
-        updateErrorStatus({ status: true, message: response.message })
+        updateErrorStatus({ status: true, message: response?.message })
         setIsLoading(false)
         return
       }

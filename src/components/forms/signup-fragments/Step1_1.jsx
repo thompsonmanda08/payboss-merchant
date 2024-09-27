@@ -43,21 +43,21 @@ export default function Step1_TPIN({ updateDetails, backToStart }) {
 
     const response = await validateTPIN(tpin)
 
-    if (!response.success) {
+    if (!response?.success) {
       updateErrorStatus({
         status: true,
         onTPIN: true,
-        message: response.message,
+        message: response?.message,
       })
       setLoading(false)
       return
     }
 
-    if (response.success) {
-      setMerchant(response.data)
+    if (response?.success) {
+      setMerchant(response?.data)
       setBusinessInfo({ ...step, ...response?.data })
-      setMerchantID(response.data.ID)
-      setIsValidTPIN(response.success)
+      setMerchantID(response?.data?.ID)
+      setIsValidTPIN(response?.success)
       setLoading(false)
       return
     }

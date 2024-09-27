@@ -28,7 +28,7 @@ const UploadCSVFile = ({ navigateForward }) => {
 
     let response = await uploadPaymentBatchFile(file, merchantID, recordID)
 
-    if (response.success) {
+    if (response?.success) {
       notify('success', 'File Added!')
       updatePaymentFields({
         url: response?.data?.file_url,
@@ -39,7 +39,7 @@ const UploadCSVFile = ({ navigateForward }) => {
     }
 
     notify('error', 'Failed to add file')
-    notify('error', response.message)
+    notify('error', response?.message)
     setIsLoading(false)
     return {}
   }

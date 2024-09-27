@@ -45,17 +45,17 @@ function LoginForm() {
     }
 
     const response = await authenticateUser(loginDetails)
-    if (response.success) {
+    if (response?.success) {
       queryClient.invalidateQueries()
       setAuth(response?.data)
       const loginUrl = urlParams.get('callbackUrl') || '/workspaces'
       push(loginUrl)
     }
 
-    if (!response.success) {
+    if (!response?.success) {
       updateErrorStatus({
-        status: response.status,
-        message: response.message,
+        status: response?.status,
+        message: response?.message,
       })
       setIsLoading(false)
       return
@@ -109,7 +109,7 @@ function LoginForm() {
           Sign in
         </Button>
       </form>
-      {error && error.status && (
+      {error && error?.status && (
         <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center gap-4">
           <StatusMessage error={error.status} message={error.message} />
         </div>

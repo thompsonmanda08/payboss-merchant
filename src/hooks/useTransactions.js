@@ -1,4 +1,6 @@
 'use client'
+
+// TODO: TO BE DELETED
 import {
   // useAllCollectionsTransactions,
   // useAllPaymentTransactions,

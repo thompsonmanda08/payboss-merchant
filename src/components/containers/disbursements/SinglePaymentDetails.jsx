@@ -104,17 +104,17 @@ const SinglePaymentDetails = ({ navigateForward }) => {
         paymentAction,
       )
 
-      if (response.success) {
+      if (response?.success) {
         notify('success', 'Payment Request Created!')
-        setTransactionDetails(response.data) // SET VALIDATION DATA INTO STATE
+        setTransactionDetails(response?.data) // SET VALIDATION DATA INTO STATE
         navigateForward() // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
         setLoading(false)
         return
       }
 
       notify('error', 'Failed to create payment request!')
-      setError({ status: true, message: response.message })
-      notify('error', response.message)
+      setError({ status: true, message: response?.message })
+      notify('error', response?.message)
       setLoading(false)
       return
     }

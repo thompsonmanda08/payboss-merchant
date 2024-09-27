@@ -147,13 +147,13 @@ const useWorkspaceStore = create((set, get) => ({
       passwordInfo,
     )
 
-    if (response.success) {
+    if (response?.success) {
       notify('success', `You Reset ${selectedUser?.first_name}'s Password!`)
-      return response.success
+      return response?.success
     }
 
-    notify('error', response.message)
-    return response.success
+    notify('error', response?.message)
+    return response?.success
   },
 
   handleDeleteFromWorkspace: async (workspaceID) => {
@@ -162,14 +162,14 @@ const useWorkspaceStore = create((set, get) => ({
 
     const response = await deleteUserFromWorkspace(selectedUser?.ID)
 
-    if (response.success) {
+    if (response?.success) {
       notify('success', `You Removed ${selectedUser?.first_name}!`)
 
-      return response.success
+      return response?.success
     }
 
-    notify('error', response.message)
-    return response.success
+    notify('error', response?.message)
+    return response?.success
   },
 
   handleClearAllSelected: () => {

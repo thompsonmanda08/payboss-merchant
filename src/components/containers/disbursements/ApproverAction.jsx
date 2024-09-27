@@ -91,9 +91,9 @@ const ApproverAction = ({ navigateForward, batchID }) => {
         ? await reviewBatch(queryID, approve)
         : await reviewSingleTransaction(queryID, approve)
 
-    if (!response.success) {
+    if (!response?.success) {
       setIsLoading(false)
-      notify('error', response.message)
+      notify('error', response?.message)
       return
     }
 

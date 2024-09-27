@@ -25,7 +25,7 @@ export default function EditBatchRecordForm({ onClose }) {
     setLoading(true)
     const response = await saveSelectedRecord()
 
-    if (response.success) {
+    if (response?.success) {
       queryClient.invalidateQueries({
         queryKey: [BATCH_DETAILS_QUERY_KEY, selectedRecord?.batchID],
       })

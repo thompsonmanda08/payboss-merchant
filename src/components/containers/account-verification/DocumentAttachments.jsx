@@ -98,7 +98,7 @@ export default function DocumentAttachments({ navigateToPage }) {
       }
     }
 
-    setError({ message: response.message, status: true })
+    setError({ message: response?.message, status: true })
     notify('error', 'Error Submitting Documents')
 
     setIsSubmitting(false)
@@ -108,12 +108,12 @@ export default function DocumentAttachments({ navigateToPage }) {
     setIsLoading(true)
     setError({ message: '', status: '' })
     let response = await uploadBusinessFile(file, merchantID, recordID)
-    if (response.success) {
+    if (response?.success) {
       notify('success', response?.message)
       setIsLoading(false)
       return response?.data
     }
-    notify('error', response.message)
+    notify('error', response?.message)
     setIsLoading(false)
   }
 

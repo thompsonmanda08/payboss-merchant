@@ -15,7 +15,7 @@ const DocumentsViewer = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    if (businessDocs.length) {
+    if (businessDocs?.length) {
       setSelectedDoc(businessDocs[0])
     }
   }, [])

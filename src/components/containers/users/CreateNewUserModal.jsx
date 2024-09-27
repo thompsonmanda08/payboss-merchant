@@ -82,7 +82,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
 
     let response = await createNewUser(newUser)
 
-    if (response.success) {
+    if (response?.success) {
       notify('success', 'User created successfully!')
       setError({ status: false, message: '' })
       onClose()
@@ -92,7 +92,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
     }
 
     notify('error', 'Error creating user!')
-    setError({ status: true, message: response.message })
+    setError({ status: true, message: response?.message })
     setLoading(false)
   }
 
@@ -111,7 +111,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
 
     let response = await updateSystemUserData(recordID, userMapping)
 
-    if (response.success) {
+    if (response?.success) {
       queryClient.invalidateQueries([USERS])
       notify('success', 'User updated successfully!')
       setError({ status: false, message: '' })
@@ -121,7 +121,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
     }
 
     notify('error', 'Error updating user!')
-    setError({ status: true, message: response.message })
+    setError({ status: true, message: response?.message })
     setLoading(false)
   }
 
@@ -138,7 +138,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
 
     let response = await changeUserRoleInWorkspace(userMapping, recordID)
 
-    if (response.success) {
+    if (response?.success) {
       queryClient.invalidateQueries([USERS])
       notify('success', 'User updated successfully!')
       setError({ status: false, message: '' })
@@ -148,7 +148,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
     }
 
     notify('error', 'Error updating user!')
-    setError({ status: true, message: response.message })
+    setError({ status: true, message: response?.message })
     setLoading(false)
   }
 
@@ -250,7 +250,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
 
   useEffect(() => {
     // If a user has already provided, prefill the fields
-    if (isEditingRole && Object.keys(selectedUser).length > 0) {
+    if (isEditingRole && Object.keys(selectedUser)?.length > 0) {
       setNewUser(selectedUser)
     }
   }, [selectedUser])

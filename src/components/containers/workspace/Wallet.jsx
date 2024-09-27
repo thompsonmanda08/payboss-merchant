@@ -64,14 +64,14 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
 
     let response = await uploadPOPDocument(file, recordID)
 
-    if (response.success) {
+    if (response?.success) {
       setIsLoading(false)
       notify('success', response?.message)
       return response?.data
     }
 
     setIsLoading(false)
-    notify('error', response.message)
+    notify('error', response?.message)
     return null
   }
 
@@ -91,7 +91,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
 
     const response = await submitPOP(formData, workspaceID)
 
-    if (response.success) {
+    if (response?.success) {
       queryClient.invalidateQueries({
         queryKey: [WALLET_HISTORY_QUERY_KEY, workspaceID],
       })
@@ -304,7 +304,7 @@ export function WalletTransactionHistory({
   ) : (
     <div
       className={cn('my-auto flex min-h-96 flex-col py-4', {
-        'my-0': formattedActivityData.length > 0,
+        'my-0': formattedActivityData?.length > 0,
       })}
     >
       {formattedActivityData.length > 0 ? (
@@ -317,14 +317,14 @@ export function WalletTransactionHistory({
               <div className="flex flex-col gap-y-4 py-2" key={itemIndex}>
                 <div className="flex items-start space-x-4">
                   <LogTaskType
-                    type={item.type}
+                    type={item?.type}
                     classNames={{ wrapper: 'mt-1' }}
                   />
 
                   <div className="w-full">
                     <div className="flex w-full justify-between">
                       <p className="text-sm font-medium leading-6">
-                        {item.created_by}
+                        {item?.created_by}
                       </p>
                       <div>
                         <Tooltip
@@ -361,11 +361,11 @@ export function WalletTransactionHistory({
                       </div>
                     </div>
                     <div className="-mt-1 flex items-center text-xs text-slate-700">
-                      {item.content}
+                      {item?.content}
                       <span className="ml-2 font-normal leading-4 text-slate-400">
                         ...
                         {formatDistance(
-                          new Date(item.created_at),
+                          new Date(item?.created_at),
                           new Date(),
                         )}{' '}
                         ago
@@ -375,7 +375,7 @@ export function WalletTransactionHistory({
                 </div>
               </div>
             ))}
-            {index != formattedActivityData.length - 1 && (
+            {index != formattedActivityData?.length - 1 && (
               <hr className="my-4 h-px border-0 bg-slate-100"></hr>
             )}
           </div>
@@ -406,21 +406,21 @@ export function LogTaskType({ type, classNames }) {
         className={cn(
           `inline-flex h-8 w-fit items-center justify-center gap-2 text-nowrap rounded-[4px]  px-2 py-1.5`,
           `cursor-pointer px-4`,
-          `bg-${taskType.color}/10`,
+          `bg-${taskType?.color}/10`,
           wrapper,
         )}
       >
-        <span className={cn(`text-${taskType.color}`, icon)}>
-          {taskType.icon}
+        <span className={cn(`text-${taskType?.color}`, icon)}>
+          {taskType?.icon}
         </span>
         <p
           className={cn(
             `text-sm font-medium leading-6`,
-            `text-${taskType.color}`,
+            `text-${taskType?.color}`,
             text,
           )}
         >
-          {taskType.label}
+          {taskType?.label}
         </p>
       </div>
     )

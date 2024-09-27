@@ -113,10 +113,10 @@ const usePaymentsStore = create((set, get) => ({
     const { selectedRecord, batchDetails, updateSelectedRecord } = get()
 
     // find selected record in invalid records
-    const selectedRecordID = selectedRecord.ID
+    const selectedRecordID = selectedRecord?.ID
 
     // find selected record in invalid records using selectedRecordID and replace it with the updated record in state
-    const invalidRecords = batchDetails.invalid
+    const invalidRecords = batchDetails?.invalid
 
     const payload = {
       batchID: selectedRecord?.batchID,
@@ -129,7 +129,7 @@ const usePaymentsStore = create((set, get) => ({
       payload,
     )
 
-    if (response.success) {
+    if (response?.success) {
       const updatedInvalidRecords = invalidRecords?.map((record) => {
         // if record ID matches selectedRecordID, return the updated record
         if (record.ID === selectedRecordID) {
@@ -158,7 +158,7 @@ const usePaymentsStore = create((set, get) => ({
       loading: false,
       error: {
         status: true,
-        message: response.message,
+        message: response?.message,
       },
     })
     notify('error', 'Record update failed!')
