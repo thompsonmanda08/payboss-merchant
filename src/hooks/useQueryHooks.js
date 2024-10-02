@@ -16,6 +16,7 @@ import {
   getWalletPrefundHistory,
   getAllCollectionTransactions,
   getBulkAnalyticReports,
+  getAPICollectionLatestTransactions,
 } from '@/app/_actions/transaction-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
 import {
@@ -170,13 +171,5 @@ export const useWorkspaceAPIKey = (workspaceID) =>
   useQuery({
     queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
     queryFn: async () => await getWorkspaceAPIKey(workspaceID),
-    staleTime: Infinity,
-  })
-
-export const useBulkAnalytics = (workspaceID) =>
-  useQuery({
-    queryKey: [BULK_REPORTS_QUERY_KEY, workspaceID],
-    queryFn: async () => await getBulkAnalyticReports(workspaceID),
-    refetchOnMount: true,
     staleTime: Infinity,
   })

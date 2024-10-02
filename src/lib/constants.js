@@ -39,6 +39,7 @@ const PAYMENT_TRANSACTIONS_QUERY_KEY = 'payment-transactions'
 const COLLECTION_TRANSACTIONS_QUERY_KEY = 'collections-transactions'
 const WORKSPACE_API_KEY_QUERY_KEY = 'workspace-api-key'
 const BULK_REPORTS_QUERY_KEY = 'bulk-analytics-reports'
+const API_COLLECTIONS_REPORTS_QUERY_KEY = 'api-collections-analytics-reports'
 
 // ANIMATION_VARIANTS
 const containerVariants = {
@@ -129,6 +130,7 @@ const TRANSACTION_STATUS_COLOR_MAP = {
   submitted: 'from-primary/10 to-primary-700/10 text-primary-700',
 
   proccessing: 'from-secondary/10 to-orange-600/10 text-orange-700',
+  pending: 'from-secondary/10 to-orange-600/10 text-orange-700',
   review: 'from-secondary/10 to-orange-600/10 text-orange-700',
   ready: 'from-secondary to-orange-600 text-white',
 
@@ -240,4 +242,5 @@ export {
   DASHBOARD_ANALYTICS_QUERY_KEY,
   WORKSPACE_API_KEY_QUERY_KEY,
   BULK_REPORTS_QUERY_KEY,
+  API_COLLECTIONS_REPORTS_QUERY_KEY,
 }

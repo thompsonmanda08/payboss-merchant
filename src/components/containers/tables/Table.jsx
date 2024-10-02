@@ -24,18 +24,19 @@ export default function CustomTable({
   selectionBehavior,
   isLoading,
   removeWrapper,
-  onRowAction,
+  onRowAction = () => {},
+  emptyCellValue,
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore()
 
   const [page, setPage] = React.useState(1)
 
-  const pages = Math.ceil(rows.length / rowsPerPage)
+  const pages = Math.ceil(rows?.length / rowsPerPage)
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage
     const end = start + rowsPerPage
-    return rows.slice(start, end)
+    return rows?.slice(start, end) || []
   }, [page, rows])
 
   const renderCell = React.useCallback((row, columnKey) => {
@@ -86,7 +87,7 @@ export default function CustomTable({
         )
 
       default:
-        return cellValue || '0'
+        return cellValue || emptyCellValue || 'N/A'
     }
   }, [])
 
@@ -120,6 +121,7 @@ export default function CustomTable({
           'min-h-[400px]': isLoading || !rows,
         }),
         wrapper: cn('min-h-[200px]', { 'min-h-max': pages <= 1 }),
+        td: 'bg-red-5',
       }}
       // classNames={}
       // showSelectionCheckboxes
@@ -130,6 +132,7 @@ export default function CustomTable({
       selectionBehavior={selectionBehavior}
       isStriped
       isHeaderSticky
+      // onRowAction={onRowAction ? (key) => onRowAction(key) : null}
       onRowAction={(key) => onRowAction(key)}
       bottomContent={bottomContent}
     >
@@ -156,11 +159,7 @@ export default function CustomTable({
         align="top"
       >
         {(item) => (
-          <TableRow
-            key={item?.ID || item?.key || item}
-            // className="hover:bg-primary-50"
-            align="top"
-          >
+          <TableRow key={item?.ID || item?.key || item} align="top">
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

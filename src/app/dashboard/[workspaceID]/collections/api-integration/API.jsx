@@ -10,7 +10,7 @@ import {
   Cog6ToothIcon,
 } from '@heroicons/react/24/outline'
 import { Spinner, Tooltip, useDisclosure } from '@nextui-org/react'
-import { maskString, notify } from '@/lib/utils'
+import { formatDate, maskString, notify } from '@/lib/utils'
 import { Card, CardHeader } from '@/components/base'
 import PromptModal from '@/components/base/Prompt'
 import {
@@ -27,17 +27,28 @@ import {
   refreshWorkspaceAPIKey,
   setupWorkspaceAPIKey,
 } from '@/app/_actions/workspace-actions'
-import { useQueryClient } from '@tanstack/react-query'
-import { WORKSPACE_API_KEY_QUERY_KEY } from '@/lib/constants'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  API_COLLECTIONS_REPORTS_QUERY_KEY,
+  WORKSPACE_API_KEY_QUERY_KEY,
+} from '@/lib/constants'
 import APIConfigViewModal from './APIConfigView'
+import { getAPICollectionLatestTransactions } from '@/app/_actions/transaction-actions'
+
+import { parseDate, getLocalTimeZone } from '@internationalized/date'
 
 export const API_KEY_TRANSACTION_COLUMNS = [
   { name: 'DATE', uid: 'created_at', sortable: true },
   { name: 'SERVICE', uid: 'service' },
+  { name: 'NARRATION', uid: 'narration' },
+  { name: 'TRANSACTION ID', uid: 'transactionID' },
   { name: 'SERVICE PROVIDER', uid: 'service_provider' },
+  { name: 'MNO REF.', uid: 'mno_ref' },
+  { name: 'MNO STATUS DESCRIPTION.', uid: 'mno_status_description' },
   { name: 'SOURCE ACCOUNT', uid: 'destination', sortable: true },
 
   { name: 'AMOUNT', uid: 'amount', sortable: true },
+  { name: 'REMARKS', uid: 'status_description' },
   { name: 'STATUS', uid: 'status', sortable: true },
 ]
 
@@ -58,6 +69,32 @@ const APIIntegration = ({ workspaceID }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false)
   const [openViewConfig, setOpenViewConfig] = useState(false)
+
+  const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
+  const thirtyDaysAgoDate = new Date()
+  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
+  const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
+
+  const [date, setDate] = useState({
+    start: parseDate(thirtyDaysAgo),
+    end: parseDate(thisMonth),
+  })
+
+  const start_date = formatDate(
+    date?.start?.toDate(getLocalTimeZone()),
+    'YYYY-MM-DD',
+  )
+  const end_date = formatDate(
+    date?.end?.toDate(getLocalTimeZone()),
+    'YYYY-MM-DD',
+  )
+
+  // HANDLE FET BULK REPORT DATA
+  const mutation = useMutation({
+    mutationKey: [API_COLLECTIONS_REPORTS_QUERY_KEY, workspaceID],
+    mutationFn: (dateRange) =>
+      getAPICollectionLatestTransactions(workspaceID, dateRange),
+  })
 
   const API = useMemo(() => {
     if (!apiKeyResponse?.success) return []
@@ -151,6 +188,18 @@ const APIIntegration = ({ workspaceID }) => {
       clearTimeout(timeoutId)
     }
   }, [unmaskAPIKey])
+
+  useEffect(() => {
+    if (!mutation.data) {
+      mutation.mutateAsync({ start_date, end_date })
+    }
+  }, [])
+
+  console.log(mutation.data)
+
+  const LATEST_TRANSACTIONS = mutation.data?.data?.data
+
+  console.log(LATEST_TRANSACTIONS)
 
   // return isFetching ? (
   //   <LoadingPage />
@@ -365,7 +414,12 @@ const APIIntegration = ({ workspaceID }) => {
           </PromptModal>
         </Card>
 
-        <CustomTable columns={API_KEY_TRANSACTION_COLUMNS} rows={[]} />
+        <CustomTable
+          columns={API_KEY_TRANSACTION_COLUMNS}
+          rows={LATEST_TRANSACTIONS}
+          rowsPerPage={10}
+          isLoading={mutation.isPending}
+        />
       </div>
     </>
   )

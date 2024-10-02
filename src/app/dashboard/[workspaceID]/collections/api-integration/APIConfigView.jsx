@@ -24,6 +24,11 @@ export const API_CONFIG_VIEWS = [
     infoText: 'Payment Collection JSON request and response payloads',
     step: 'collections',
   },
+  {
+    title: 'Transaction Status',
+    infoText: 'Payment Collection JSON response for a status callback',
+    step: 'status',
+  },
 ]
 
 export default function APIConfigViewModal({
@@ -43,7 +48,13 @@ export default function APIConfigViewModal({
       name: 'Collections',
       index: 1,
     },
+    {
+      name: 'Status Callback',
+      index: 2,
+    },
   ]
+
+  console.log(configData)
 
   const {
     activeTab,
@@ -54,7 +65,6 @@ export default function APIConfigViewModal({
   } = useCustomTabsHook([
     <API_Authentication
       key={currentStep.title}
-      navigateForward={goForward}
       config={{
         url: configData?.collectionAuthURL,
         authentication: configData?.authPayload,
@@ -64,11 +74,17 @@ export default function APIConfigViewModal({
 
     <CollectionResponses
       key={currentStep.title}
-      navigateForward={goForward}
       config={{
         url: configData?.collectionURL,
         collection: configData?.collectionPayload,
         response: configData?.collectionResponse,
+      }}
+    />,
+    <StatusResponses
+      key={currentStep.title}
+      config={{
+        url: configData?.collectionStatusURL,
+        response: configData?.collectionStatusResponse,
       }}
     />,
   ])
@@ -92,10 +108,11 @@ export default function APIConfigViewModal({
   return (
     <>
       <Modal
-        size={'lg'}
+        // size={'lg'}
         isOpen={isOpen}
         onClose={handleClose}
         isDismissable={false}
+        className="max-w-[768px]"
       >
         <ModalContent>
           <>
@@ -115,7 +132,7 @@ export default function APIConfigViewModal({
               {isLoading ? <Loader /> : activeTab}
             </ModalBody>
             <ModalFooter>
-              <p className="text-center text-sm font-medium italic text-slate-600">
+              <p className="mx-auto max-w-[600px] text-center text-sm font-medium italic text-primary/80">
                 Note: API Keys provide access to your account through 3rd party
                 application and allows for the collection of payments through
                 PayBoss.
@@ -137,10 +154,10 @@ export function API_Authentication({ config }) {
           Authentication URL
         </h4>
         <Snippet hideSymbol className="">
-          <p className="max-w-[412px] text-wrap">{url}</p>
+          <p className="text-wrap">POST ~ {url}</p>
         </Snippet>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex w-full flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
           Authentication Payload
         </h4>
@@ -178,7 +195,7 @@ export function CollectionResponses({ config }) {
       <div className="max-w-full">
         <h4 className="text-base font-bold text-slate-600">Collection URL</h4>
         <Snippet hideSymbol className="">
-          <p className="max-w-[412px] text-wrap">{url}</p>
+          <p className="text-wrap">POST ~ {url}</p>
         </Snippet>
       </div>
       <div className="flex flex-col gap-2">
@@ -197,6 +214,35 @@ export function CollectionResponses({ config }) {
       <div className="flex flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
           Collection Response
+        </h4>
+        <Snippet hideSymbol className="w-full">
+          <pre
+            dangerouslySetInnerHTML={{
+              __html: syntaxHighlight(JSON.stringify(response, undefined, 2)),
+            }}
+          ></pre>
+        </Snippet>
+      </div>
+    </div>
+  )
+}
+
+export function StatusResponses({ config }) {
+  const { response, url } = config
+  return (
+    <div className="flex w-full flex-col gap-8">
+      <div className="max-w-full">
+        <h4 className="text-base font-bold text-slate-600">
+          Status Callback URL
+        </h4>
+        <Snippet hideSymbol className="">
+          <p className="text-wrap">GET ~ {url}</p>
+        </Snippet>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <h4 className="text-base font-bold text-slate-600">
+          Transaction Status Response
         </h4>
         <Snippet hideSymbol className="w-full">
           <pre

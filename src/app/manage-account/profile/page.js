@@ -4,8 +4,8 @@ import LoadingPage from '@/app/loading'
 import { DefaultCover } from '@/lib/constants'
 
 import ProfileBanner from '@/components/base/ProfileBanner'
-import ProfileDetails from '@/components/containers/profile/ProfileDetails'
-import AccountPreferences from '@/components/containers/profile/AccountPreferences'
+import ProfileDetails from '@/app/dashboard/[workspaceID]/profile/ProfileDetails'
+import AccountPreferences from '@/app/dashboard/[workspaceID]/profile/AccountPreferences'
 
 function AccountSettings() {
   return (
