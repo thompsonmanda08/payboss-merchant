@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useState, useMemo } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
   Table,
   TableHeader,
@@ -20,22 +20,15 @@ import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 import { notify } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
 import { roleColorMap, UserAvatarComponent } from '../tables/UsersTable'
-import { assignUsersToWorkspace } from '@/app/_actions/user-actions'
-import { ScrollArea } from '../../ui/scroll-area'
-import { CardHeader, EmptyState, StatusMessage } from '@/components/base'
+import StatusMessage from '@/components/base/StatusMessage'
+import EmptyState from '@/components/elements/EmptyState'
+import CardHeader from '@/components/base/CardHeader'
 import Spinner from '../../ui/Spinner'
 import { UserPlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
-import { ROLES } from '../users/ManagePeople'
 import SelectField from '@/components/ui/SelectField'
 import useWorkspaceStore from '@/context/workspaceStore'
-import useWorkspaces from '@/hooks/useWorkspaces'
-import { useWorkspaceMembers } from '@/hooks/useQueryHooks'
 import { WORKSPACE_MEMBERS_QUERY_KEY } from '@/lib/constants'
-
-
 
 const columns = [
   { name: 'NAME', uid: 'name' },

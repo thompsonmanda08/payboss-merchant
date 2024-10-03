@@ -1,6 +1,6 @@
 'use client'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import Logo from './Logo'
+import Logo from '../base/Logo'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import SideNavItems from './SideNavItems'

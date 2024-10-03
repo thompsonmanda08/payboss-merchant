@@ -1,12 +1,10 @@
 'use client'
 import React, { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import { StatusMessage } from '../base'
+
 import { Button } from '../ui/Button'
 import { containerVariants } from '@/lib/constants'
-import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
 import { notify } from '@/lib/utils'
 import useAuthStore from '@/context/authStore'
 import Step0 from './signup-fragments/Step0'
@@ -17,10 +15,10 @@ import {
   createMerchantAdminUser,
   createNewMerchant,
   submitMerchantBankDetails,
-  updateMerchantDetails,
 } from '@/app/_actions/auth-actions'
 import { Card } from '@nextui-org/react'
 import Step1_TPIN from './signup-fragments/Step1_1'
+import StatusMessage from '../base/StatusMessage'
 
 export const STEPS = [
   'business-registration',
@@ -30,8 +28,6 @@ export const STEPS = [
 ]
 
 export default function SignUpForm() {
-  const { push } = useRouter()
-
   const {
     businessInfo,
     newAdminUser,

@@ -1,5 +1,5 @@
 'use client'
-import { Logo } from '@/components/base'
+import Logo from '@/components/base/Logo'
 import { Button } from '@/components/ui/Button'
 import useAuthStore from '@/context/authStore'
 import { Cog6ToothIcon, PowerIcon } from '@heroicons/react/24/outline'

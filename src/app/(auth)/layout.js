@@ -1,9 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
-import { Footer } from '@/components/containers'
 
 // import DefaultCover from '@/images/profile-cover.jpg'
 import DefaultCover from '@/images/colorful.jpg'
+import { Footer } from '@/components/containers/landing-page/Footer'
 
 async function AuthLayout({ children }) {
   return (

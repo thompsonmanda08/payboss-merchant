@@ -5,8 +5,9 @@ import { Button } from '../ui/Button'
 import useAuthStore from '@/context/authStore'
 import { authenticateUser } from '@/app/_actions/auth-actions'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Card, StatusMessage } from '../base'
 import { useQueryClient } from '@tanstack/react-query'
+import Card from '../base/Card'
+import StatusMessage from '../base/StatusMessage'
 
 function LoginForm() {
   const { push } = useRouter()

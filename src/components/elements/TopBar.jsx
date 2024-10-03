@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { BellIcon } from '@heroicons/react/24/solid'
 import { capitalize, cn, formatCurrency } from '@/lib/utils'
 import Avatar from '../ui/Avatar'
-import BreadCrumbLinks from './BreadCrumbLinks'
 import {
   Dropdown,
   DropdownTrigger,
@@ -22,6 +21,7 @@ import { WalletIcon } from '@heroicons/react/24/outline'
 import useDashboard from '@/hooks/useDashboard'
 import { useWorkspaceInit } from '@/hooks/useQueryHooks'
 import useFloatingHeader from '@/hooks/useFloatingHeader'
+import BreadCrumbLinks from '../base/BreadCrumbLinks'
 
 export default function TopNavBar({}) {
   const { user } = useAccountProfile()

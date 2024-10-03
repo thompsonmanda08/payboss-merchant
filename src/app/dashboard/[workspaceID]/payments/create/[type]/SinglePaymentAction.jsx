@@ -1,33 +1,24 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Card, CardHeader, ProgressStep } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import usePaymentsStore from '@/context/paymentsStore'
-import UploadCSVFile from '@/components/containers/disbursements/UploadCSVFile'
-import PaymentDetails from '@/components/containers/disbursements/BulkPaymentDetails'
-import ValidationDetails from '@/components/containers/disbursements/ValidationDetails'
-import RecordDetailsViewer from '@/components/containers/disbursements/RecordDetailsViewer'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { redirect, useSearchParams } from 'next/navigation'
 import ApproverAction from '@/components/containers/disbursements/ApproverAction'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
+import SinglePaymentDetails from '@/components/containers/disbursements/SinglePaymentDetails'
+import Card from '@/components/base/Card'
+import CardHeader from '@/components/base/CardHeader'
+import ProgressStep from '@/components/elements/ProgressStep'
+import InitiatorsLog from '@/components/containers/disbursements/InitiatorsLog'
+import { MissingConfigurationError } from '@/components/base/ErrorCard'
 
 export const STEPS = [
   {
-    title: 'Create a Bulk payment',
-    infoText: 'Upload a file with records of the recipient in `.csv` format',
-    step: 'Upload File',
+    title: 'Create a Single payment',
+    infoText: 'Provide recipient details for the payment action ',
+    step: 'Recipient Details',
   },
-  {
-    title: 'Create a Bulk payment',
-    infoText: 'Provide details for the payment action batch files',
-    step: 'Batch Details',
-  },
-  {
-    title: 'Create a payment - File Record Validation',
-    infoText:
-      'The validation will make sure all record entries do not cause internal errors',
-    step: 'Validation',
-  },
+
   {
     title: 'Create a payment - Approval Status',
     infoText: 'Approvals can only be done by account admins',
@@ -35,24 +26,18 @@ export const STEPS = [
   },
 ]
 
-function BulkPaymentAction({}) {
+function SinglePaymentAction({ workspaceID }) {
   // ** INITIALIZES STEPS **//
   const [currentStep, setCurrentStep] = useState(STEPS[0])
   const urlParams = useSearchParams()
   const protocol = urlParams.get('protocol')
-  const router = useRouter()
+
+  const { workspaceUserRole: role } = useDashboard()
+  const { dashboardRoute, router } = useNavigation()
 
   // ** INITIALIZEs PAYMENT STATE **//
-  const {
-    updatePaymentFields,
-    resetPaymentData,
-    openAllRecordsModal,
-    openValidRecordsModal,
-    openInvalidRecordsModal,
-    selectedProtocol,
-    setSelectedProtocol,
-    setSelectedActionType,
-  } = usePaymentsStore()
+  const { selectedProtocol, setSelectedProtocol, setSelectedActionType } =
+    usePaymentsStore()
 
   //************ STEPS TO CREATE A TASK FOR A STUDY PLAN *****************/
   const {
@@ -62,18 +47,8 @@ function BulkPaymentAction({}) {
     navigateForward,
     navigateBackwards,
   } = useCustomTabsHook([
-    <UploadCSVFile
-      key={'step-2'}
-      navigateForward={goForward}
-      navigateBackwards={goBack}
-    />,
-    <PaymentDetails
-      key={'step-3'}
-      navigateForward={goForward}
-      navigateBackwards={goBack}
-    />,
-    <ValidationDetails
-      key={'step-4'}
+    <SinglePaymentDetails
+      key={'form-details'}
       navigateForward={goForward}
       navigateBackwards={goBack}
     />,
@@ -83,11 +58,6 @@ function BulkPaymentAction({}) {
       // navigateBackwards={goBack}
     />,
   ])
-
-  // ** FUNCTIONS TO HANDLE THE SCREEN CHANGE **//
-  function handleScreenChange(step) {
-    return navigateTo(step)
-  }
 
   function goForward() {
     navigateForward()
@@ -99,7 +69,7 @@ function BulkPaymentAction({}) {
 
   useEffect(() => {
     setCurrentStep(STEPS[currentTabIndex])
-    setSelectedActionType(PAYMENT_SERVICE_TYPES[0])
+    setSelectedActionType(PAYMENT_SERVICE_TYPES[1])
 
     //TODO: => CLEAR DATA WHEN THE THE COMPONENT IS UNMOUNTED
     // return () => {
@@ -112,6 +82,12 @@ function BulkPaymentAction({}) {
       setSelectedProtocol(protocol)
     }
   }, [protocol])
+
+  //**************** USER ROLE CHECK *************************************** //
+  // if (!role?.can_initiate) return router.back()
+
+  // *************** CHECK FOR SERVICE PROTOCOL - REQUIRED *************** //
+  if (!selectedProtocol) return <MissingConfigurationError />
 
   return (
     <>
@@ -135,14 +111,9 @@ function BulkPaymentAction({}) {
         <ProgressStep STEPS={STEPS} currentTabIndex={currentTabIndex} />
         {activeTab}
       </Card>
-
-      {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
-      {(openAllRecordsModal ||
-        openValidRecordsModal ||
-        openInvalidRecordsModal) && <RecordDetailsViewer />}
-      {/************************************************************************/}
+      <InitiatorsLog />
     </>
   )
 }
 
-export default BulkPaymentAction
+export default SinglePaymentAction

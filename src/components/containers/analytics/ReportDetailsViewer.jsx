@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
 import { singleReportsColumns } from '@/context/paymentsStore'
-import { Modal } from '@/components/base'
 import SingleTransactionsTable from '../tables/SingleTransactionsTable'
+import Modal from '@/components/base/Modal'
 
 function ReportDetailsViewer({
   columns,
@@ -11,11 +11,6 @@ function ReportDetailsViewer({
   setOpenReportsModal,
   isLoading,
 }) {
-  // const { data: batch } = useBatchDetails(batchID)
-  // const batchDetails = batch?.data
-
-  // console.log(batch);
-
   return (
     <Modal
       show={openReportsModal}

@@ -1,18 +1,18 @@
 'use client'
 import React from 'react'
-import { Card } from '.'
 
 import SoftBoxIcon from './SoftBoxIcon'
 import { WalletIcon } from '@heroicons/react/24/outline'
 import { cn, formatCurrency } from '@/lib/utils'
 import useWorkspaces from '@/hooks/useWorkspaces'
+import Card from './Card'
 
 function Balance({ title, amount, isLandscape }) {
   const { workspaceWalletBalance, activeWorkspace } = useWorkspaces()
   return (
     <Card
       className={cn(
-        'w-fit min-w-[180px] max-w-xs items-center gap-4 rounded-2xl px-4',
+        'w-fit min-w-[180px] max-w-xs items-center gap-4 rounded-2xl px-4 shadow-none',
         { 'w-full max-w-full flex-row gap-5': isLandscape },
       )}
     >

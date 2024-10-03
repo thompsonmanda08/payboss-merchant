@@ -4,8 +4,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { NextUIProvider } from '@nextui-org/react'
 import { useNetwork } from '@/hooks/useNetwork'
 import { motion } from 'framer-motion'
-import FirstLogin from '@/components/base/FirstLogin'
-import ScreenLock, { IdleTimerContainer } from '@/components/base/ScreenLock'
+import ScreenLock, {
+  IdleTimerContainer,
+} from '@/components/elements/ScreenLock'
+import FirstLogin from '@/components/elements/FirstLogin'
 // import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
 const queryClient = new QueryClient()

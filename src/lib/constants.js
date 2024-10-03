@@ -178,14 +178,14 @@ const TASK_TYPE = {
   //   color: 'black/60',
   //   label: 'Tag',
   // },
-  Debit: {
+  debit: {
     icon: <ArrowRightStartOnRectangleIcon className="h-5 w-5" />,
-    color: 'green-600',
+    color: 'red-500',
     label: 'Debit',
   },
-  Credit: {
+  credit: {
     icon: <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />,
-    color: 'red-500',
+    color: 'green-600',
     label: 'Credit',
   },
   Deposit: {

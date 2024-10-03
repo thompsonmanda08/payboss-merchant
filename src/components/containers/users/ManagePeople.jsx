@@ -1,5 +1,5 @@
 'use client'
-import { Tabs } from '@/components/base'
+import Tabs from '@/components/elements/Tabs'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import React, { useState } from 'react'
 import Search from '@/components/ui/Search'

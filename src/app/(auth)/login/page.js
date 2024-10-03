@@ -1,5 +1,5 @@
-import { Logo } from '@/components/base'
-import { LoginForm } from '@/components/forms'
+import Logo from '@/components/base/Logo'
+import LoginForm from '@/components/forms/LoginForm'
 import Link from 'next/link'
 import React from 'react'
 

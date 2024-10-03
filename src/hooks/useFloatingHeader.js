@@ -10,7 +10,6 @@ const useFloatingHeader = (point) => {
 
     return () => window.removeEventListener('scroll', scrollYPos)
   })
-  console.log(isFloating)
 
   return isFloating
 }

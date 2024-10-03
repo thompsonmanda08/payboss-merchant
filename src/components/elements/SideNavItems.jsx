@@ -4,11 +4,10 @@ import Link from 'next/link'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { PowerIcon } from '@heroicons/react/24/solid'
-import { logUserOut } from '@/app/_actions/auth-actions'
-import { SIDE_BAR_OPTIONS } from './SideNavBar'
-import NavItemIcon from './NavItemIcon'
+
 import useAuthStore from '@/context/authStore'
 import useNavigation from '@/hooks/useNavigation'
+import NavItemIcon from '../base/NavItemIcon'
 
 export default function SideNavItems({
   // pathname,

@@ -1,5 +1,4 @@
 'use client'
-import { Card, CardHeader, Tabs } from '@/components/base'
 import React, { useEffect, useState } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import Search from '@/components/ui/Search'
@@ -12,61 +11,36 @@ import {
   PresentationChartBarIcon,
 } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/Button'
-import { downloadCSV, formatCurrency, formatDate } from '@/lib/utils'
+import { formatCurrency } from '@/lib/utils'
 
 import { DateRangePickerField } from '@/components/ui/DateSelectField'
 import { BULK_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
-import {
-  getAPICollectionAnalyticReports,
-  getBulkAnalyticReports,
-} from '@/app/_actions/transaction-actions'
+import { getAPICollectionAnalyticReports } from '@/app/_actions/transaction-actions'
 import { AnimatePresence, motion } from 'framer-motion'
-import { parseDate, getLocalTimeZone } from '@internationalized/date'
 
-import { useDateFormatter } from '@react-aria/i18n'
-import { TotalValueStat } from '../bulk-payments/BulkTransactionsStats'
 import { API_KEY_TRANSACTION_COLUMNS } from '../../collections/api-integration/API'
-import { Skeleton } from '@/components/ui/skeleton'
-import TotalStatsLoader from '@/components/base/TotalStatsLoader'
+import TotalStatsLoader from '@/components/elements/TotalStatsLoader'
+import Card from '@/components/base/Card'
+import CardHeader from '@/components/base/CardHeader'
+import Tabs from '@/components/elements/Tabs'
+import TotalValueStat from '@/components/elements/TotalStats'
 
 const SERVICE_TYPES = [
   {
     name: 'API Integration Collections',
     index: 0,
   },
-  {
-    name: 'Payment Links',
-    index: 1,
-  },
+  // {
+  //   name: 'Payment Links',
+  //   index: 1,
+  // },
 ]
 
 export default function APITransactionsStats({ workspaceID }) {
   const [dateRange, setDateRange] = useState({})
   const [isExpanded, setIsExpanded] = useState(true)
-  let formatter = useDateFormatter({ dateStyle: 'long' })
-
-  const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
-  const thirtyDaysAgoDate = new Date()
-  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
-  const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
-
-  const [date, setDate] = useState({
-    start: parseDate(thirtyDaysAgo),
-    end: parseDate(thisMonth),
-  })
-
-  const [searchQuery, setSearchQuery] = React.useState('')
-  const hasSearchFilter = Boolean(searchQuery)
-
-  const start_date = formatDate(
-    date?.start?.toDate(getLocalTimeZone()),
-    'YYYY-MM-DD',
-  )
-  const end_date = formatDate(
-    date?.end?.toDate(getLocalTimeZone()),
-    'YYYY-MM-DD',
-  )
+  const [searchQuery, setSearchQuery] = useState('')
 
   // HANDLE FETCH FILTERED TRANSACTION REPORT DATA
   const mutation = useMutation({
@@ -75,24 +49,14 @@ export default function APITransactionsStats({ workspaceID }) {
       getAPICollectionAnalyticReports(workspaceID, dateRange),
   })
 
-  async function getAPITransactionsData(dateRange) {
-    const response = await mutation.mutateAsync(dateRange)
-    return response
-  }
-
-  async function applyDataFilter() {
-    const dateRange = {
-      start_date,
-      end_date,
-    }
-
-    const response = await getAPITransactionsData(dateRange)
-
-    return response
+  async function getAPITransactionsData(range) {
+    return await mutation.mutateAsync(range)
   }
 
   const report = mutation?.data?.data?.summary || []
   const transactions = mutation?.data?.data?.data || []
+
+  const hasSearchFilter = Boolean(searchQuery)
 
   const filteredItems = React.useMemo(() => {
     let filteredrows = [...transactions]
@@ -113,22 +77,9 @@ export default function APITransactionsStats({ workspaceID }) {
 
   useEffect(() => {
     if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
-      getAPITransactionsData()
+      getAPITransactionsData(dateRange)
     }
-  }, [dateRange])
-
-  const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
-    <CustomTable
-      columns={API_KEY_TRANSACTION_COLUMNS}
-      rows={filteredItems || []}
-      isLoading={mutation.isPending}
-      isError={mutation.isError}
-      removeWrapper
-      onRowAction={(key) => {
-        console.log(key)
-      }}
-    />,
-  ])
+  }, [])
 
   function handleFileExportToCSV() {
     // Implement CSV export functionality here
@@ -142,15 +93,16 @@ export default function APITransactionsStats({ workspaceID }) {
     }
   }
 
-  useEffect(() => {
-    const dateRange = {
-      start_date: thirtyDaysAgo,
-      end_date: thisMonth,
-    }
-    if (!mutation.data && date?.start && date?.end) {
-      getAPITransactionsData(dateRange)
-    }
-  }, [])
+  const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
+    <CustomTable
+      columns={API_KEY_TRANSACTION_COLUMNS}
+      rows={filteredItems || []}
+      isLoading={mutation.isPending}
+      isError={mutation.isError}
+      removeWrapper
+      onRowAction={(key) => {}}
+    />,
+  ])
 
   return (
     <>
@@ -161,11 +113,11 @@ export default function APITransactionsStats({ workspaceID }) {
             description={'Dates to generate transactional reports'}
             visibleMonths={2}
             autoFocus
-            value={date}
-            setValue={setDate}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
           />{' '}
           <Button
-            onPress={applyDataFilter}
+            onPress={() => getAPITransactionsData(dateRange)}
             endContent={<FunnelIcon className="h-5 w-5" />}
           >
             Apply
@@ -176,17 +128,7 @@ export default function APITransactionsStats({ workspaceID }) {
       <Card className={'mb-8 w-full'}>
         <div className="flex items-end justify-between">
           <CardHeader
-            title={
-              'API Transactions History' +
-              ` (${
-                date
-                  ? formatter.formatRange(
-                      date.start.toDate(getLocalTimeZone()),
-                      date.end.toDate(getLocalTimeZone()),
-                    )
-                  : '--'
-              })`
-            }
+            title={`API Transactions History (${dateRange?.range || '--'})`}
             infoText={
               'Transactions logs to keep track of your workspace activity'
             }
@@ -219,34 +161,40 @@ export default function APITransactionsStats({ workspaceID }) {
               <Card className={'mt-4 shadow-none'}>
                 {Object.keys(report).length > 0 ? (
                   <div className="flex flex-col gap-4 md:flex-row md:justify-between">
-                    <TotalValueStat
-                      label={'Total Transactions'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'primary',
-                      }}
-                      count={transactions.length || 0}
-                      value={'N/A'}
-                    />
-                    <TotalValueStat
-                      label={'Successful Transactions'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'success',
-                      }}
-                      count={report?.successful_count || 0}
-                      value={formatCurrency(report?.successful_value || 0)}
-                    />
+                    <div className="flex-1">
+                      <TotalValueStat
+                        label={'Total Transactions'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'primary',
+                        }}
+                        count={transactions.length || 0}
+                        value={'N/A'}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <TotalValueStat
+                        label={'Successful Transactions'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'success',
+                        }}
+                        count={report?.successful_count || 0}
+                        value={formatCurrency(report?.successful_value || 0)}
+                      />
+                    </div>
 
-                    <TotalValueStat
-                      label={'Failed Transactions'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'danger',
-                      }}
-                      count={report?.failed_count || 0}
-                      value={formatCurrency(report?.failed_value || 0)}
-                    />
+                    <div className="flex-1">
+                      <TotalValueStat
+                        label={'Failed Transactions'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'danger',
+                        }}
+                        count={report?.failed_count || 0}
+                        value={formatCurrency(report?.failed_value || 0)}
+                      />
+                    </div>
                   </div>
                 ) : (
                   <TotalStatsLoader className={'justify-between'} />
@@ -289,30 +237,4 @@ export default function APITransactionsStats({ workspaceID }) {
       {/************************************************************************/}
     </>
   )
-}
-
-export const convertToCSV = (objArray) => {
-  const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray
-  let str = ''
-  const headers =
-    'Date,First Name,Last Name,NRC,Destination,Amount,Service Provider, Status, Remark,'
-  str += headers + '\r\n'
-
-  for (let i = 0; i < array.length; i++) {
-    let line = ''
-    let date = formatDate(array[i]?.created_at).replaceAll('-', '_')
-    line += `"${date || ''}",`
-    line += `"${array[i]?.first_name || ''}",`
-    line += `"${array[i]?.last_name || ''}",`
-    line += `"${array[i]?.nrc || ''}",`
-    line += `"${array[i]?.destination || ''}",`
-    line += `"${array[i]?.amount || ''}",`
-    line += `"${array[i]?.service_provider || ''}",`
-    line += `"${array[i]?.status || ''}",`
-    line += `"${array[i]?.remarks || ''}",`
-
-    str += line + '\r\n'
-  }
-
-  return str
 }

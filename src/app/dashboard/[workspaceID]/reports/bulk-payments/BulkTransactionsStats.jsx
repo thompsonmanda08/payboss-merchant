@@ -1,5 +1,4 @@
 'use client'
-import { Card, CardHeader, Tabs } from '@/components/base'
 import React, { useEffect, useState } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import Search from '@/components/ui/Search'
@@ -12,7 +11,7 @@ import {
   PresentationChartBarIcon,
 } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/Button'
-import { cn, downloadCSV, formatCurrency, formatDate } from '@/lib/utils'
+import { formatCurrency } from '@/lib/utils'
 
 import { DateRangePickerField } from '@/components/ui/DateSelectField'
 import { useDateFormatter } from '@react-aria/i18n'
@@ -21,8 +20,16 @@ import { useMutation } from '@tanstack/react-query'
 import { getBulkAnalyticReports } from '@/app/_actions/transaction-actions'
 import { AnimatePresence, motion } from 'framer-motion'
 import ReportDetailsViewer from '@/components/containers/analytics/ReportDetailsViewer'
-import { parseDate, getLocalTimeZone } from '@internationalized/date'
 import { singleReportsColumns } from '@/context/paymentsStore'
+import TotalStatsLoader from '@/components/elements/TotalStatsLoader'
+import {
+  convertBulkTransactionsReportToCSV,
+  downloadCSV,
+} from '@/app/_actions/file-converstion-actions'
+import Card from '@/components/base/Card'
+import CardHeader from '@/components/base/CardHeader'
+import Tabs from '@/components/elements/Tabs'
+import TotalValueStat from '@/components/elements/TotalStats'
 
 const bulkReportsColumns = [
   { name: 'DATE', uid: 'created_at', sortable: true },
@@ -41,15 +48,15 @@ const bulkReportsColumns = [
 
 const SERVICE_TYPES = [
   {
-    name: 'Direct Payments',
+    name: 'Bulk Direct Payments',
     index: 0,
   },
   {
-    name: 'Voucher Payments',
+    name: 'Bulk Voucher Payments',
     index: 1,
   },
   // {
-  //   name: 'Expenses',
+  //   name: 'Single Payments',
   //   index: 2,
   // },
 ]
@@ -60,26 +67,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
   const [isExpanded, setIsExpanded] = useState(true)
   const [openReportsModal, setOpenReportsModal] = useState(false)
   const [selectedBatch, setSelectedBatch] = useState(null) // ON ROW SELECTED
-  // const [selectedBatchID, setSelectedBatchID] = useState(null) // ON ROW SELECTED
-
-  const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
-  const thirtyDaysAgoDate = new Date()
-  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
-  const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
-
-  const [date, setDate] = useState({
-    start: parseDate(thirtyDaysAgo),
-    end: parseDate(thisMonth),
-  })
-
-  const start_date = formatDate(
-    date?.start?.toDate(getLocalTimeZone()),
-    'YYYY-MM-DD',
-  )
-  const end_date = formatDate(
-    date?.end?.toDate(getLocalTimeZone()),
-    'YYYY-MM-DD',
-  )
+  let formatter = useDateFormatter({ dateStyle: 'long' })
 
   // HANDLE FET BULK REPORT DATA
   const mutation = useMutation({
@@ -91,12 +79,6 @@ export default function BulkTransactionsStats({ workspaceID }) {
   const directBatches = report?.directBatches || []
   const voucherBatches = report?.voucherBatches || []
 
-  console.log(report)
-  console.log(voucherBatches)
-  console.log(directBatches)
-
-  let formatter = useDateFormatter({ dateStyle: 'long' })
-
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
       columns={bulkReportsColumns}
@@ -105,10 +87,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
       isError={mutation.isError}
       removeWrapper
       onRowAction={(key) => {
-        // console.log(key)
         const batch = directBatches.find((row) => row.ID == key)
-        // console.log(batch)
-
         setSelectedBatch(batch)
         setOpenReportsModal(true)
       }}
@@ -126,46 +105,28 @@ export default function BulkTransactionsStats({ workspaceID }) {
     />,
   ])
 
-  async function applyDataFilter() {
-    const dateRange = {
-      start_date: start_date || thirtyDaysAgo,
-      end_date: end_date || thisMonth,
-    }
-
-    const response = await getBulkReportData(dateRange)
-
-    return response
-  }
-
-  async function getBulkReportData(dateRange) {
-    const response = await mutation.mutateAsync(dateRange)
-
-    return response
+  async function getBulkReportData(range) {
+    return await mutation.mutateAsync(range)
   }
 
   function handleFileExportToCSV() {
     // Implement CSV export functionality here
+    let CSV_DATA
     if (currentTabIndex === 0) {
-      const csvData = convertToCSV(directBatches)
-      downloadCSV(csvData, 'bulk_transactions')
+      CSV_DATA = convertBulkTransactionsReportToCSV(directBatches)
+      downloadCSV(CSV_DATA, 'bulk_transactions')
     }
     if (currentTabIndex === 1) {
-      const csvData = convertToCSV(voucherBatches)
-      downloadCSV(csvData, 'bulk_voucher_transactions')
+      CSV_DATA = convertBulkTransactionsReportToCSV(voucherBatches)
+      downloadCSV(CSV_DATA, 'bulk_voucher_transactions')
     }
   }
 
   useEffect(() => {
-    const dateRange = {
-      start_date: thirtyDaysAgo,
-      end_date: thisMonth,
-    }
-    if (!mutation.data && date?.start && date?.end) {
+    if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
       getBulkReportData(dateRange)
     }
   }, [])
-
-  console.log(selectedBatch)
 
   return (
     <>
@@ -176,11 +137,11 @@ export default function BulkTransactionsStats({ workspaceID }) {
             description={'Dates to generate transactional reports'}
             visibleMonths={2}
             autoFocus
-            value={date}
-            setValue={setDate}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
           />{' '}
           <Button
-            onPress={applyDataFilter}
+            onPress={() => getBulkReportData(dateRange)}
             endContent={<FunnelIcon className="h-5 w-5" />}
           >
             Apply
@@ -191,17 +152,7 @@ export default function BulkTransactionsStats({ workspaceID }) {
       <Card className={'mb-8 w-full'}>
         <div className="flex items-end justify-between">
           <CardHeader
-            title={
-              'Bulk Transactions History' +
-              ` (${
-                date
-                  ? formatter.formatRange(
-                      date.start.toDate(getLocalTimeZone()),
-                      date.end.toDate(getLocalTimeZone()),
-                    )
-                  : '--'
-              })`
-            }
+            title={`Bulk Transactions History (${dateRange?.range || '--'})`}
             infoText={
               'Transactions logs to keep track of your workspace activity'
             }
@@ -222,133 +173,140 @@ export default function BulkTransactionsStats({ workspaceID }) {
           </div>
         </div>
 
-        {/* TODO:  THIS CAN BE ONCE SINGLE COMPONENT */}
-        {report && Object.keys(report).length > 0 && (
-          <AnimatePresence>
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{
-                height: isExpanded ? 'auto' : 0,
-                opacity: isExpanded ? 1 : 0,
-              }}
-            >
-              <Card className={'mt-4 gap-5 shadow-none'}>
-                <div className="flex flex-col flex-wrap sm:flex-row md:justify-between">
-                  <div className="flex flex-1 flex-col gap-4">
-                    <TotalValueStat
-                      label={'Total Batches'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'primary',
-                      }}
-                      count={report?.batches?.count || 0}
-                      value={formatCurrency(report?.batches?.value || 0)}
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col gap-4">
-                    <TotalValueStat
-                      label={'Total Direct Batches'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'primary-800',
-                      }}
-                      count={report?.direct?.all?.count || 0}
-                      value={formatCurrency(report?.direct?.all?.value || 0)}
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col gap-4">
-                    <TotalValueStat
-                      label={'Total Voucher Batches'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'secondary',
-                      }}
-                      count={report?.voucher?.all?.count || 0}
-                      value={formatCurrency(report?.voucher?.all?.value || 0)}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col flex-wrap sm:flex-row md:justify-evenly">
-                  <div className="flex flex-1 flex-col gap-4">
-                    <TotalValueStat
-                      label={'Proccessed Direct Batches'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'primary-800',
-                      }}
-                      count={report?.direct?.proccessed?.count || 0}
-                      value={formatCurrency(
-                        report?.direct?.proccessed?.value || 0,
-                      )}
-                    />
-                    <TotalValueStat
-                      label={'Proccessed Voucher Batches'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'secondary',
-                      }}
-                      count={report?.voucher?.proccessed?.count || 0}
-                      value={formatCurrency(
-                        report?.voucher?.proccessed?.value || 0,
-                      )}
-                    />
+        <AnimatePresence>
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{
+              height: isExpanded ? 'auto' : 0,
+              opacity: isExpanded ? 1 : 0,
+            }}
+          >
+            <Card className={'mt-4 gap-5 shadow-none'}>
+              {Object.keys(report).length > 0 ? (
+                <>
+                  <div className="flex flex-col flex-wrap sm:flex-row md:justify-between">
+                    <div className="flex flex-1 flex-col gap-4">
+                      <TotalValueStat
+                        label={'Total Batches'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'primary',
+                        }}
+                        count={report?.batches?.count || 0}
+                        value={formatCurrency(report?.batches?.value || 0)}
+                      />
+                    </div>
+                    <div className="flex flex-1 flex-col gap-4">
+                      <TotalValueStat
+                        label={'Total Direct Batches'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'primary-800',
+                        }}
+                        count={report?.direct?.all?.count || 0}
+                        value={formatCurrency(report?.direct?.all?.value || 0)}
+                      />
+                    </div>
+                    <div className="flex flex-1 flex-col gap-4">
+                      <TotalValueStat
+                        label={'Total Voucher Batches'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'secondary',
+                        }}
+                        count={report?.voucher?.all?.count || 0}
+                        value={formatCurrency(report?.voucher?.all?.value || 0)}
+                      />
+                    </div>
                   </div>
 
-                  <div className="flex flex-1 flex-col gap-4">
-                    <TotalValueStat
-                      label={'Successful Direct Transaction'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'success',
-                      }}
-                      count={report?.directTransactions?.successful?.count || 0}
-                      value={formatCurrency(
-                        report?.directTransactions?.successful?.value || 0,
-                      )}
-                    />
-                    <TotalValueStat
-                      label={'Failed Direct Transactions'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'danger',
-                      }}
-                      count={report?.directTransactions?.failed?.count || 0}
-                      value={formatCurrency(
-                        report?.directTransactions?.failed?.value || 0,
-                      )}
-                    />
+                  <div className="flex flex-col flex-wrap sm:flex-row md:justify-evenly">
+                    <div className="flex flex-1 flex-col gap-4">
+                      <TotalValueStat
+                        label={'Proccessed Direct Batches'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'primary-800',
+                        }}
+                        count={report?.direct?.proccessed?.count || 0}
+                        value={formatCurrency(
+                          report?.direct?.proccessed?.value || 0,
+                        )}
+                      />
+                      <TotalValueStat
+                        label={'Proccessed Voucher Batches'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'secondary',
+                        }}
+                        count={report?.voucher?.proccessed?.count || 0}
+                        value={formatCurrency(
+                          report?.voucher?.proccessed?.value || 0,
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex flex-1 flex-col gap-4">
+                      <TotalValueStat
+                        label={'Successful Direct Transaction'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'success',
+                        }}
+                        count={
+                          report?.directTransactions?.successful?.count || 0
+                        }
+                        value={formatCurrency(
+                          report?.directTransactions?.successful?.value || 0,
+                        )}
+                      />
+                      <TotalValueStat
+                        label={'Failed Direct Transactions'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'danger',
+                        }}
+                        count={report?.directTransactions?.failed?.count || 0}
+                        value={formatCurrency(
+                          report?.directTransactions?.failed?.value || 0,
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex flex-1 flex-col gap-4">
+                      <TotalValueStat
+                        label={'Successful Voucher Transaction'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'success',
+                        }}
+                        count={
+                          report?.voucherTransactions?.successful?.count || 0
+                        }
+                        value={formatCurrency(
+                          report?.voucherTransactions?.successful?.value || 0,
+                        )}
+                      />
+                      <TotalValueStat
+                        label={'Failed Voucher Transactions'}
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: 'danger',
+                        }}
+                        count={report?.voucherTransactions?.failed?.count || 0}
+                        value={formatCurrency(
+                          report?.voucherTransactions?.failed?.value || 0,
+                        )}
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-1 flex-col gap-4">
-                    <TotalValueStat
-                      label={'Successful Voucher Transaction'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'success',
-                      }}
-                      count={
-                        report?.voucherTransactions?.successful?.count || 0
-                      }
-                      value={formatCurrency(
-                        report?.voucherTransactions?.successful?.value || 0,
-                      )}
-                    />
-                    <TotalValueStat
-                      label={'Failed Voucher Transactions'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'danger',
-                      }}
-                      count={report?.voucherTransactions?.failed?.count || 0}
-                      value={formatCurrency(
-                        report?.voucherTransactions?.failed?.value || 0,
-                      )}
-                    />
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-          </AnimatePresence>
-        )}
+                </>
+              ) : (
+                <TotalStatsLoader length={8} className={'flex-wrap'} />
+              )}
+            </Card>
+          </motion.div>
+        </AnimatePresence>
       </Card>
 
       {/*  CURRENTLY ACTIVE TABLE */}
@@ -393,67 +351,4 @@ export default function BulkTransactionsStats({ workspaceID }) {
       {/************************************************************************/}
     </>
   )
-}
-
-export function TotalValueStat({ label, icon, count, value }) {
-  return (
-    <div className="relative flex w-full max-w-sm items-center justify-between">
-      <div className="flex items-center gap-1">
-        <div
-          className={`bg-${icon?.color} mr-1 flex items-center justify-center rounded-md p-3 text-sm text-white shadow-md`}
-        >
-          {icon?.component}
-        </div>
-        <div className="flex flex-col">
-          <span className="text-nowrap text-xs font-medium capitalize text-slate-600">
-            {label}
-          </span>
-          <span className="text-nowrap font-medium capitalize text-slate-800">
-            {count}
-          </span>
-        </div>
-      </div>
-      {value && (
-        <Button
-          size="sm"
-          className={cn(
-            'h-max min-h-max max-w-max cursor-pointer rounded-lg bg-primary-50 p-2 text-[13px] font-semibold capitalize text-primary',
-
-            {
-              'bg-red-50 text-red-500': icon?.color === 'danger',
-              'bg-green-50 text-green-600': icon?.color === 'success',
-              'bg-secondary/10 text-orange-600': icon?.color === 'secondary',
-            },
-          )}
-        >
-          {value}
-        </Button>
-      )}
-    </div>
-  )
-}
-
-export const convertToCSV = (objArray) => {
-  const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray
-  let str = ''
-  const headers =
-    'Date,Name,Total Records,Total Amount,Total Successful,Total Failed, Amount Failed'
-  str += headers + '\r\n'
-
-  for (let i = 0; i < array.length; i++) {
-    let line = ''
-    let date = formatDate(array[i]?.created_at).replaceAll('-', '_')
-    line += `"${date || ''}",`
-    line += `"${array[i]?.name || ''}",`
-    line += `"${array[i]?.allRecords || ''}",`
-    line += `"${array[i]?.allRecordsValue || ''}",`
-    line += `"${array[i]?.successfulRecords || ''}",`
-    line += `"${array[i]?.successfulRecordsValue || ''}",`
-    line += `"${array[i]?.failedRecords || ''}",`
-    line += `"${array[i]?.failedRecordsValue || ''}",`
-
-    str += line + '\r\n'
-  }
-
-  return str
 }

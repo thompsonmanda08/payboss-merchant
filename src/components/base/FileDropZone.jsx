@@ -1,17 +1,19 @@
 'use client'
 
+import * as React from 'react'
 import {
   CheckCircleIcon,
   CloudArrowUpIcon,
   DocumentArrowUpIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import * as React from 'react'
 import { useDropzone } from 'react-dropzone'
 import { twMerge } from 'tailwind-merge'
 import { Button } from '../ui/Button'
 import { cn } from '@/lib/utils'
 import { Progress } from '@nextui-org/react'
+import { motion } from 'framer-motion'
+import { staggerContainerItemVariants } from '@/lib/constants'
 
 const variants = {
   base: cn(
@@ -41,7 +43,7 @@ const ERROR_MESSAGES = {
   },
 }
 
-const SingleFileDropzone = React.forwardRef(
+export const SingleFileDropzone = React.forwardRef(
   (
     {
       dropzoneOptions,
@@ -285,4 +287,34 @@ function formatFileSize(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
 }
 
-export { SingleFileDropzone }
+export default function UploadField({
+  label,
+  isLoading,
+  handleFile,
+  acceptedFiles,
+  ...props
+}) {
+  return (
+    <motion.div
+      key={'step-2-1'}
+      className="w-full"
+      variants={staggerContainerItemVariants}
+    >
+      <label className="mb-2 text-xs font-medium capitalize text-gray-500 lg:text-[13px]">
+        {label}{' '}
+        {props?.required && <span className="font-bold text-red-500"> *</span>}
+      </label>
+      <SingleFileDropzone
+        isLandscape
+        className={' min-h-8 px-2'}
+        isLoading={isLoading}
+        disabled={isLoading}
+        otherAcceptedFiles={{
+          'application/pdf': [],
+          ...acceptedFiles,
+        }}
+        onChange={(file) => handleFile(file)}
+      />
+    </motion.div>
+  )
+}

@@ -1,6 +1,5 @@
 'use client'
 import { cn, notify } from '@/lib/utils'
-import { Modal } from '@/components/base'
 import usePaymentsStore from '@/context/paymentsStore'
 import { usePathname, useRouter } from 'next/navigation'
 import useNavigation from '@/hooks/useNavigation'
@@ -9,11 +8,12 @@ import {
   CircleStackIcon,
 } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/Button'
-import CustomRadioGroup from '@/components/ui/CustomRadioGroup'
 import { PAYMENT_PROTOCOL } from '@/lib/constants'
 import { useEffect } from 'react'
+import Modal from '@/components/base/Modal'
+import CustomRadioGroup from '@/components/ui/CustomRadioGroup'
 
-const SelectPaymentType = () => {
+const SelectPaymentType = ({ setCreatePaymentLoading }) => {
   const router = useRouter()
 
   const {
@@ -44,22 +44,22 @@ const SelectPaymentType = () => {
   ]
 
   function handleSelectServiceType(type) {
+    setCreatePaymentLoading(true)
     updatePaymentFields({ type: type?.name })
     setSelectedActionType(type)
-    setTimeout(() => {
-      if (type?.name === '') {
-        notify('warning', 'Selected Service Type')
-        return
-      }
 
-      if (!setSelectedProtocol) {
-        notify('warning', 'Please select a service protocol')
-        return
-      }
+    if (type?.name === '') {
+      notify('warning', 'Selected Service Type')
+      return
+    }
 
-      router.push(`${type.href}/?protocol=${selectedProtocol}`)
-      setOpenPaymentsModal(false)
-    }, 800)
+    if (!setSelectedProtocol) {
+      notify('warning', 'Please select a service protocol')
+      return
+    }
+
+    router.push(`${type.href}/?protocol=${selectedProtocol}`)
+    setOpenPaymentsModal(false)
   }
 
   function handleProtocolSelection(option) {
@@ -78,21 +78,22 @@ const SelectPaymentType = () => {
       {/************************* MAIN MODAL RENDERER *************************/}
       <Modal
         show={openPaymentsModal}
-        width={900}
+        width={500}
         title={'Create a payment'}
+        confirmText={'Proceed'}
         infoText={'Choose a payment you would like to initiate'}
-        disableAction={true}
-        removeCallToAction={true}
         onClose={() => {
           setOpenPaymentsModal(false)
         }}
+        onConfirm={() => {
+          handleSelectServiceType(PAYMENT_SERVICE_TYPES[0])
+        }}
       >
         <div className="flex h-full w-full flex-col justify-between">
-          <div className="my-4">
+          <div className="">
             <CustomRadioGroup
               className={'bg-slate-50/20 py-5 text-base'}
               classNames={{
-                // wrapper: 'bg-red-400',
                 selected:
                   'bg-primary/10 border border-primary/30 hover:shadow-primary/20',
               }}
@@ -106,7 +107,8 @@ const SelectPaymentType = () => {
               ))}
             />
           </div>
-          <div className="flex h-5/6 w-full items-center gap-2">
+
+          {/* <div className="flex h-5/6 w-full items-center gap-2">
             {PAYMENT_SERVICE_TYPES.map((type, index) => {
               return (
                 <PaymentTypeOption
@@ -119,7 +121,7 @@ const SelectPaymentType = () => {
                 />
               )
             })}
-          </div>
+          </div> */}
         </div>
       </Modal>
     </>

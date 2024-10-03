@@ -1,8 +1,8 @@
-import { Logo } from '@/components/base'
 import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
 import AuthLayout from './(auth)/layout'
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react'
+import Logo from '@/components/base/Logo'
 
 export default function NotFound() {
   return (
@@ -18,7 +18,7 @@ export default function NotFound() {
           <h1 className="text-lg font-semibold capitalize text-gray-900">
             Page not found
           </h1>
-          <p className="text-center text-sm text-slate-700 font-medium">
+          <p className="text-center text-sm font-medium text-slate-700">
             Sorry, we couldn’t find the page you’re looking for.
           </p>
         </CardBody>

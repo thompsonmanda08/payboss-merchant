@@ -1,13 +1,9 @@
 'use client'
-import { Balance, Card, CardHeader } from '@/components/base'
 import React from 'react'
-import useAccountProfile from '@/hooks/useProfileDetails'
-import { UserAvatarComponent } from '../tables/UsersTable'
-import { cn } from '@/lib/utils'
 import Wallet from '../workspace/Wallet'
 import useWorkspaces from '@/hooks/useWorkspaces'
 
-const InitiatorsLog = ({ user }) => {
+const InitiatorsLog = ({}) => {
   const { activeWorkspace, workspaceID } = useWorkspaces()
   return (
     <div className="min-w-md flex flex-1 flex-grow flex-col gap-4">

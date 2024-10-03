@@ -6,12 +6,12 @@ import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import { formatDate, isValidZambianMobileNumber } from '@/lib/utils'
 import { STEPS } from '../SignupForm'
-import { CardHeader } from '@/components/base'
 import DateSelectField from '@/components/ui/DateSelectField'
 import useAuthStore from '@/context/authStore'
 import { getLocalTimeZone, today } from '@internationalized/date'
 import SelectField from '@/components/ui/SelectField'
 import useConfigOptions from '@/hooks/useConfigOptions'
+import CardHeader from '@/components/base/CardHeader'
 
 export default function Step1({ updateDetails, backToStart }) {
   const { companyTypes, provinces } = useConfigOptions()

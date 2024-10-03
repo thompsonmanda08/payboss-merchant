@@ -2,8 +2,8 @@
 import { useMemo } from 'react'
 import { Bar } from 'react-chartjs-2'
 import configs from './configs'
-import { Card } from '@/components/base'
 import { Progress } from '@nextui-org/react'
+import Card from '@/components/base/Card'
 
 function ReportsBarChart({ color, title, description, chart, items }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {})

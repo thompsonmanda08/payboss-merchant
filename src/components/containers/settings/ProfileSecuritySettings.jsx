@@ -1,7 +1,7 @@
 'use client'
 import { Card } from '@/components/base'
 import { Switch } from '@nextui-org/switch'
-import ChangePasswordField from '@/components/base/ChangePassword'
+import ChangePasswordField from '@/components/elements/ChangePassword'
 import { useState } from 'react'
 
 function ProfileSecuritySettings() {

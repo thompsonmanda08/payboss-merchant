@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/Button'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, Tabs } from '@/components/base'
+import Tabs from '@/components/elements/Tabs'
 import UsersTable from '../tables/UsersTable'
 import WorkspaceDetails from './WorkspaceDetails'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
@@ -10,7 +10,12 @@ import { SearchOrInviteUsers } from '../users/ManagePeople'
 import CreateNewUserModal from '../users/CreateNewUserModal'
 import { useDisclosure } from '@nextui-org/react'
 import useWorkspaces from '@/hooks/useWorkspaces'
-import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowUturnLeftIcon,
+  UserGroupIcon,
+  WalletIcon,
+  WrenchScrewdriverIcon,
+} from '@heroicons/react/24/outline'
 import useNavigation from '@/hooks/useNavigation'
 import Wallet from './Wallet'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
@@ -21,9 +26,9 @@ import { cn } from '@/lib/utils'
 import useDashboard from '@/hooks/useDashboard'
 
 const TABS = [
-  { name: 'General', index: 0 },
-  { name: 'Members', index: 1 },
-  { name: 'Wallet', index: 2 },
+  { name: 'General', index: 0, icon: WrenchScrewdriverIcon },
+  { name: 'Members', index: 1, icon: UserGroupIcon },
+  { name: 'Wallet', index: 2, icon: WalletIcon },
 ]
 
 function WorkspaceSettings({ workspaceID }) {
@@ -42,9 +47,6 @@ function WorkspaceSettings({ workspaceID }) {
   const isAdmin =
     (isUsersRoute && isAdminOrOwner) || (!isUsersRoute && canUpdate)
 
-  console.log(workspaceUserRole)
-  console.log(isAdmin)
-
   const workspaceUsers = members?.data?.users || []
   const tableLoading = initLoading || usersLoading
 
@@ -60,7 +62,7 @@ function WorkspaceSettings({ workspaceID }) {
     )
   })
 
-  // ***** COMPONENT RENDERER ************** //
+  // ******************* COMPONENT RENDERER ************************** //
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
     <WorkspaceDetails
       key={'workspace-details'}

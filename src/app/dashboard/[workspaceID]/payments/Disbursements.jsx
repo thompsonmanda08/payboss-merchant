@@ -1,14 +1,18 @@
 'use client'
-import { Card, CardHeader, Tabs } from '@/components/base'
+
 import usePaymentsStore from '@/context/paymentsStore'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
-import { SelectPaymentType } from '@/components/containers'
 import { useDisclosure } from '@nextui-org/react'
 import BatchDetailsPage from '../../../../components/containers/disbursements/ViewBatchDetails'
 import BulkTransactionsTable from '@/components/containers/tables/BulkTransactionsTable'
 import SingleTransactionsTable from '@/components/containers/tables/SingleTransactionsTable'
+import Card from '@/components/base/Card'
+import CardHeader from '@/components/base/CardHeader'
+import Tabs from '@/components/elements/Tabs'
+import SelectPaymentType from '@/components/containers/disbursements/SelectPaymentType'
+import OverlayLoader from '@/components/ui/OverlayLoader'
 
 export default function Disbursements({ workspaceID }) {
   const {
@@ -19,6 +23,7 @@ export default function Disbursements({ workspaceID }) {
     resetPaymentData,
   } = usePaymentsStore()
   const { onClose } = useDisclosure()
+  const [createPaymentLoading, setCreatePaymentLoading] = useState(false)
 
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <BulkTransactionsTable
@@ -28,9 +33,7 @@ export default function Disbursements({ workspaceID }) {
     <SingleTransactionsTable
       key={PAYMENT_SERVICE_TYPES[1]?.name}
       workspaceID={workspaceID}
-      onRowAction={(key) => {
-        console.log(key)
-      }}
+      onRowAction={(key) => {}}
     />,
   ])
 
@@ -44,8 +47,6 @@ export default function Disbursements({ workspaceID }) {
     //   resetPaymentData()
     // }
   }, [currentTabIndex])
-
-  // console.log(selectedActionType)
 
   return (
     <>
@@ -77,7 +78,14 @@ export default function Disbursements({ workspaceID }) {
 
       {/************************************************************************/}
       {/* MODALS && OVERLAYS */}
-      {openPaymentsModal && <SelectPaymentType protocol={'direct'} />}
+      {openPaymentsModal && (
+        <SelectPaymentType
+          setCreatePaymentLoading={setCreatePaymentLoading}
+          protocol={'direct'}
+        />
+      )}
+
+      {createPaymentLoading && <OverlayLoader show={createPaymentLoading} />}
 
       {openBatchDetailsModal && (
         <BatchDetailsPage

@@ -64,7 +64,6 @@ function DashboardAnalytics({ workspaceID }) {
   const { data: analytics, isFetching } = useDashboardAnalytics(workspaceID)
   const dashboardAnalytics = analytics?.data
 
-  console.log(dashboardAnalytics)
 
   const { data: initialization, isLoading } = useWorkspaceInit(workspaceID)
   const role = initialization?.data

@@ -1,16 +1,8 @@
 'use client'
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { staggerContainerItemVariants } from '@/lib/constants'
 import useAuthStore from '@/context/authStore'
 import { uploadBusinessFile } from '@/app/_actions/pocketbase-actions'
-import {
-  CardHeader,
-  EmptyLogs,
-  EmptyState,
-  FileDropZone,
-  StatusMessage,
-} from '@/components/base'
+
 import { notify } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@nextui-org/react'
@@ -19,8 +11,11 @@ import {
   sendBusinessDocumentRefs,
   updateBusinessDocumentRefs,
 } from '@/app/_actions/auth-actions'
-import DocumentsViewer from './DocumentsViewer'
 import { useQueryClient } from '@tanstack/react-query'
+import CardHeader from '@/components/base/CardHeader'
+import StatusMessage from '@/components/base/StatusMessage'
+import EmptyLogs from '@/components/base/EmptyLogs'
+import UploadField from '@/components/base/FileDropZone'
 
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function DocumentAttachments({ navigateToPage }) {
@@ -242,37 +237,5 @@ export default function DocumentAttachments({ navigateToPage }) {
         }
       />
     </div>
-  )
-}
-
-export function UploadField({
-  label,
-  isLoading,
-  handleFile,
-  acceptedFiles,
-  ...props
-}) {
-  return (
-    <motion.div
-      key={'step-2-1'}
-      className="w-full"
-      variants={staggerContainerItemVariants}
-    >
-      <label className="mb-2 text-xs font-medium capitalize text-gray-500 lg:text-[13px]">
-        {label}{' '}
-        {props?.required && <span className="font-bold text-red-500"> *</span>}
-      </label>
-      <FileDropZone
-        isLandscape
-        className={' min-h-8 px-2'}
-        isLoading={isLoading}
-        disabled={isLoading}
-        otherAcceptedFiles={{
-          'application/pdf': [],
-          ...acceptedFiles,
-        }}
-        onChange={(file) => handleFile(file)}
-      />
-    </motion.div>
   )
 }

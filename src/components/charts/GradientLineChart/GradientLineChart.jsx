@@ -1,10 +1,10 @@
 'use client'
 import { useRef, useEffect, useState, useMemo } from 'react'
-import { Card } from '@/components/base'
 import configs from './configs'
 import gradientChartLine from '../functions/gradientChartLine'
 import { Line } from 'react-chartjs-2'
 import { cn } from '@/lib/utils'
+import Card from '@/components/base/Card'
 
 const chart = {
   labels: [

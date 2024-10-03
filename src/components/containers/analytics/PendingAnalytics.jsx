@@ -1,4 +1,6 @@
-import { Card, CardHeader, Tooltip } from '@/components/base'
+import Card from '@/components/base/Card'
+import CardHeader from '@/components/base/CardHeader'
+import Tooltip from '@/components/base/Tooltip'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import React from 'react'

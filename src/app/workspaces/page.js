@@ -1,12 +1,10 @@
-import { Card, InfoBanner } from '@/components/base'
 import React, { Suspense } from 'react'
-
-import { Workspaces } from '@/components/containers'
 import Image from 'next/image'
 import { DefaultCover } from '@/lib/constants'
 import WorkspaceHeader from '@/components/containers/workspace/WorkspaceListHeader'
 import { getUserDetails } from '../_actions/config-actions'
 import LoadingPage from '../loading'
+import Workspaces from '@/components/containers/workspace/WorkspacesList'
 
 async function WorkSpacesPage() {
   const session = await getUserDetails()

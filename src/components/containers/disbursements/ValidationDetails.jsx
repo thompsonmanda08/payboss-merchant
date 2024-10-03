@@ -2,9 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Button } from '@/components/ui/Button'
-import { StatusCard, StatusMessage } from '@/components/base'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
-import Spinner from '@/components/ui/Spinner'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
 import { submitBatchForApproval } from '@/app/_actions/transaction-actions'
 import { notify } from '@/lib/utils'
@@ -16,6 +14,8 @@ import {
 import useWorkspaces from '@/hooks/useWorkspaces'
 import Loader from '@/components/ui/Loader'
 import useDashboard from '@/hooks/useDashboard'
+import StatusCard from '@/components/elements/StatusCard'
+import StatusMessage from '@/components/base/StatusMessage'
 
 const ValidationDetails = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient()

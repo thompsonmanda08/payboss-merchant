@@ -3,12 +3,12 @@
 import React, { useEffect } from 'react'
 import { Input } from '@/components/ui/InputField'
 import { motion } from 'framer-motion'
-import { CardHeader } from '@/components/base'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import useAuthStore from '@/context/authStore'
 import { STEPS } from '../SignupForm'
 import IMG from '@/images/auth-img.png'
 import Image from 'next/image'
+import CardHeader from '@/components/base/CardHeader'
 
 // CREATE NEW ADMIN USER
 export default function Step4({ updateDetails, backToStart }) {

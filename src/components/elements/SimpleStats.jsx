@@ -1,7 +1,6 @@
 import React from 'react'
-import { Card } from '.'
-import { BuildingStorefrontIcon } from '@heroicons/react/24/solid'
 import { cn } from '@/lib/utils'
+import Card from '../base/Card'
 
 function SimpleStats({
   title,

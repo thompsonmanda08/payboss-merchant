@@ -8,100 +8,38 @@ import MobileNavBar from './MobileNavBar'
 import {
   HomeIcon,
   BanknotesIcon,
-  NewspaperIcon,
   ArrowsRightLeftIcon,
-  PhoneArrowDownLeftIcon,
   InboxArrowDownIcon,
   AdjustmentsVerticalIcon,
   ClipboardDocumentIcon,
-  BuildingStorefrontIcon,
-  CreditCardIcon,
-  ReceiptPercentIcon,
   Bars3BottomLeftIcon,
   DocumentChartBarIcon,
-  LinkIcon,
   CalculatorIcon,
-  TicketIcon,
-  ShoppingCartIcon,
-  SwatchIcon,
-  PresentationChartLineIcon,
-  NumberedListIcon,
   WrenchScrewdriverIcon,
-  WalletIcon,
-  UsersIcon,
-  Cog6ToothIcon,
   CircleStackIcon,
-  ArrowRightCircleIcon,
   ArrowDownOnSquareStackIcon,
+  ArrowRightCircleIcon,
+  ArrowUpOnSquareStackIcon,
+  WalletIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
-import { Logo, SettingsSideBar } from '.'
 import { Button } from '../ui/Button'
 import SideNavItems from './SideNavItems'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { Skeleton } from '../ui/skeleton'
 import WorkspaceSelection from '../containers/workspace/WorkspaceOptions'
 import useNavigation from '@/hooks/useNavigation'
+import Logo from '../base/Logo'
 
 function SideNavBar({ params }) {
   const pathname = usePathname()
   const [expandedSection, setExpandedSection] = useState(null)
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore()
-  const { activeWorkspace, workspaceID, isUserInWorkspace } = useWorkspaces()
-  const { dashboardRoute, settingsPathname, isProfile, isSettingsPage } =
-    useNavigation()
+  const { workspaceID, workspaceType } = useWorkspaces()
+  const { dashboardRoute } = useNavigation()
 
-  const SIDE_BAR_OPTIONS = [
-    {
-      name: 'Dashboard',
-      ID: 'dashboard',
-      href: dashboardRoute,
-      Icon: HomeIcon,
-    },
-    // ****************************************************** //
-
-    // *************** DISBURSEMENTS AND PAYOUTS ************ //
-    {
-      ID: 'payments',
-      name: 'Pay',
-      Icon: BanknotesIcon,
-      // href: `${dashboardRoute}/payments`,
-      subMenuItems: [
-        {
-          name: 'Transfers',
-          href: `${dashboardRoute}/payments`,
-          Icon: ArrowsRightLeftIcon,
-        },
-        // {
-        //   name: 'ZESCO',
-        //   href: `${dashboardRoute}/payments/zesco`,
-        //   Icon: ReceiptPercentIcon,
-        // },
-        // {
-        //   name: 'DSTV',
-        //   href: `${dashboardRoute}paymentsexpenses/dstv`,
-        //   Icon: ReceiptPercentIcon,
-        // },
-        // {
-        //   name: 'Airtime',
-        //   href: `${dashboardRoute}/payments/airtime`,
-        //   Icon: PhoneArrowDownLeftIcon,
-        // },
-        // {
-        //   name: 'Data Bundles',
-        //   href: `${dashboardRoute}/payments/data-bundles`,
-        //   Icon: ReceiptPercentIcon,
-        // },
-        // {
-        //   name: 'Expense Cards',
-        //   href: `${dashboardRoute}/payments/cards`,
-        //   Icon: ReceiptPercentIcon,
-        // },
-      ],
-    },
-    // ****************************************************** //
-
-    // *************** COLLECTIONS AND INCOME *************** //
+  // *************** COLLECTIONS AND INCOME *************** //
+  const COLLECTION_SERVICES = [
     {
       ID: 'collections',
       name: 'Get Paid',
@@ -147,51 +85,75 @@ function SideNavBar({ params }) {
         },
       ],
     },
+  ]
 
-    // ****************************************************** //
-
-    // *************** REPORTS AND ANALYSIS ***************** //
+  // *************** DISBURSEMENTS AND PAYOUTS ************ //
+  const DISBURSEMENT_SERVICES = [
     {
-      ID: 'reports',
-      name: 'Reports & Analytics',
-      href: `${dashboardRoute}/reports`,
-      Icon: DocumentChartBarIcon,
+      ID: 'payments',
+      name: 'Pay',
+      Icon: BanknotesIcon,
+      // href: `${dashboardRoute}/payments`,
       subMenuItems: [
-        // {
-        //   name: 'Summary',
-        //   href: `${dashboardRoute}/reports`,
-        //   Icon: PresentationChartLineIcon,
-        // },
         {
-          name: 'Payment Reports',
-          href: `${dashboardRoute}/reports/bulk-payments`,
-          Icon: CircleStackIcon,
+          name: 'Transfers',
+          href: `${dashboardRoute}/payments`,
+          Icon: ArrowsRightLeftIcon,
         },
         // {
-        //   name: 'Single Payments',
-        //   href: `${dashboardRoute}/reports/single-payments`,
-        //   Icon: ArrowRightCircleIcon,
+        //   name: 'ZESCO',
+        //   href: `${dashboardRoute}/payments/zesco`,
+        //   Icon: ReceiptPercentIcon,
         // },
-        {
-          name: 'Collection Reports',
-          href: `${dashboardRoute}/reports/collection`,
-          Icon: ArrowDownOnSquareStackIcon,
-        },
         // {
-        //   name: 'All Transactions History',
-        //   href: `${dashboardRoute}/reports/transactions`,
-        //   Icon: NumberedListIcon,
+        //   name: 'DSTV',
+        //   href: `${dashboardRoute}paymentsexpenses/dstv`,
+        //   Icon: ReceiptPercentIcon,
         // },
-        {
-          name: 'Wallet Statement',
-          href: `${dashboardRoute}/reports/statement`,
-          Icon: ClipboardDocumentIcon,
-        },
+        // {
+        //   name: 'Airtime',
+        //   href: `${dashboardRoute}/payments/airtime`,
+        //   Icon: PhoneArrowDownLeftIcon,
+        // },
+        // {
+        //   name: 'Data Bundles',
+        //   href: `${dashboardRoute}/payments/data-bundles`,
+        //   Icon: ReceiptPercentIcon,
+        // },
+        // {
+        //   name: 'Expense Cards',
+        //   href: `${dashboardRoute}/payments/cards`,
+        //   Icon: ReceiptPercentIcon,
+        // },
       ],
     },
-    // ****************************************************** //
+  ]
 
-    // *************** ONLINE E-COMMERCE ******************** //
+  // *************** DISBURSEMENTS REPORTS ************ //
+  const DISBURSEMENT_REPORTS = [
+    {
+      name: 'Disbursement Reports',
+      href: `${dashboardRoute}/reports/bulk-payments`,
+      Icon: ArrowUpOnSquareStackIcon,
+    },
+    // {
+    //   name: 'Single Payments',
+    //   href: `${dashboardRoute}/reports/single-payments`,
+    //   Icon: ArrowRightCircleIcon,
+    // },
+  ]
+
+  // *************** COLLECTION REPORTS **************** //
+  const COLLECTION_REPORTS = [
+    {
+      name: 'Collection Reports',
+      href: `${dashboardRoute}/reports/collection`,
+      Icon: ArrowDownOnSquareStackIcon,
+    },
+  ]
+
+  // *************** ONLINE E-COMMERCE ******************** //
+  const MISC_SERVICES = [
     // {
     //   ID: 'ecommerce',
     //   name: 'E-Commerce',
@@ -209,8 +171,51 @@ function SideNavBar({ params }) {
     //     },
     //   ],
     // },
+  ]
+
+  const SERVICES =
+    workspaceType == 'collections'
+      ? COLLECTION_SERVICES
+      : workspaceType == 'disbursement'
+        ? DISBURSEMENT_SERVICES
+        : [...DISBURSEMENT_SERVICES, ...COLLECTION_SERVICES]
+
+  const REPORTS =
+    workspaceType == 'collections'
+      ? COLLECTION_REPORTS
+      : workspaceType == 'disbursement'
+        ? DISBURSEMENT_REPORTS
+        : [...DISBURSEMENT_REPORTS, ...COLLECTION_REPORTS]
+
+  const SIDE_BAR_OPTIONS = [
+    {
+      name: 'Dashboard',
+      ID: 'dashboard',
+      href: dashboardRoute,
+      Icon: HomeIcon,
+    },
     // ****************************************************** //
-    // *************** WORKPACE ******************** //
+    ...SERVICES,
+    // ****************************************************** //
+
+    // *************** REPORTS AND ANALYSIS ***************** //
+    {
+      ID: 'reports',
+      name: 'Reports & Analytics',
+      href: `${dashboardRoute}/reports`,
+      Icon: DocumentChartBarIcon,
+      subMenuItems: [
+        {
+          name: 'Wallet Statement',
+          href: `${dashboardRoute}/reports/statement`,
+          Icon: WalletIcon,
+        },
+        ...REPORTS,
+      ],
+    },
+    // ****************************************************** //
+    ...MISC_SERVICES,
+    // ****************************************************** //
     {
       ID: 'workspace',
       name: 'Manage Workspace',

@@ -6,8 +6,10 @@ import ApproverAction from '@/components/containers/disbursements/ApproverAction
 import RecordDetailsViewer from '@/components/containers/disbursements/RecordDetailsViewer'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Modal, ModalContent, ModalBody, ModalHeader } from '@nextui-org/react'
-import { CardHeader, Tabs } from '@/components/base'
+
 import { useQueryClient } from '@tanstack/react-query'
+import CardHeader from '@/components/base/CardHeader'
+import Tabs from '@/components/elements/Tabs'
 
 export const BATCH_DETAILS_STEPS = [
   {

@@ -10,8 +10,8 @@ import { PAYMENT_PROTOCOL } from '@/lib/constants'
 import useDashboard from '@/hooks/useDashboard'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { initializeBulkTransaction } from '@/app/_actions/transaction-actions'
-import { StatusMessage } from '@/components/base'
 import CustomRadioGroup from '@/components/ui/CustomRadioGroup'
+import StatusMessage from '@/components/base/StatusMessage'
 
 const PaymentDetails = ({ navigateForward, navigateBackwards }) => {
   const {

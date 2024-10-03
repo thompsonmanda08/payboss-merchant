@@ -3,7 +3,6 @@ import React, { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { formatCurrency, notify } from '@/lib/utils'
 import approvalIllustration from '@/images/illustrations/approval.svg'
-import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 import Image from 'next/image'
 import {
   reviewBatch,
@@ -21,7 +20,6 @@ import {
 } from '@/lib/constants'
 import PromptModal from '@/components/base/Prompt'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
-import Spinner from '@/components/ui/Spinner'
 import useDashboard from '@/hooks/useDashboard'
 import Loader from '@/components/ui/Loader'
 

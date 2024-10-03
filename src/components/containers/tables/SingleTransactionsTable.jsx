@@ -18,12 +18,13 @@ import { cn, formatCurrency, formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
 import Loader from '@/components/ui/Loader'
-import { EyeIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { PlusIcon } from '@heroicons/react/24/outline'
 import Search from '@/components/ui/Search'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import SelectField from '@/components/ui/SelectField'
-import { EmptyLogs } from '@/components/base'
+
 import { useSingleTransactions, useWorkspaceInit } from '@/hooks/useQueryHooks'
+import EmptyLogs from '@/components/base/EmptyLogs'
 
 export const SingleTransactionColumns = [
   { name: 'DATE CREATED', uid: 'created_at', sortable: true },
@@ -268,9 +269,8 @@ export default function SingleTransactionsTable({
     return (
       <div className="mt-24 flex flex-1 items-center rounded-lg">
         <Loader
-          color={'#ffffff'}
           size={100}
-          classNames={{ wrapper: 'bg-primary-900/10 rounded-xl mt-8 h-full' }}
+          classNames={{ wrapper: 'bg-slate-200/50 rounded-xl mt-8 h-full' }}
         />
       </div>
     )
@@ -371,7 +371,7 @@ export default function SingleTransactionsTable({
               className="-mb-1 h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
               onChange={onRowsPerPageChange}
               placeholder={rowsPerPage.toString()}
-              options={['5', '8', '10']}
+              options={['5', '8', '10', '20']}
               defaultValue={8}
             />
           </label>
@@ -392,7 +392,7 @@ export default function SingleTransactionsTable({
     <Table
       removeWrapper={removeWrapper}
       aria-label="Transactions table with custom cells"
-      className="h-[580px]"
+      className="max-h-[780px]"
       classNames={{
         table: cn('align-top min-h-[300px] items-center justify-center', {
           'min-h-max': pages <= 1,

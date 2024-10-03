@@ -10,6 +10,21 @@ import {
 import { Input } from '@/components/ui/InputField'
 import { Button } from '@/components/ui/Button'
 
+const WORKSPACE_TYPES = [
+  {
+    ID: 'collection',
+    label: 'Collection',
+  },
+  {
+    ID: 'disbursement',
+    label: 'Disbursement',
+  },
+  {
+    ID: 'hybrid',
+    label: 'Hybrid',
+  },
+]
+
 export default function CreateNewWorkspaceModal({
   handleCreateWorkspace,
   isOpen,
@@ -32,10 +47,21 @@ export default function CreateNewWorkspaceModal({
                 label="Workspace Name"
                 placeholder="Commercial Team"
                 className="mt-px"
+                required={true}
                 onChange={(e) => {
                   editWorkspaceField({ workspace: e.target.value })
                 }}
               />
+              <SelectField
+                options={WORKSPACE_TYPES}
+                label="Workspace Type"
+                name="workspaceType"
+                required={true}
+                onChange={(e) => {
+                  editWorkspaceField({ workspaceType: e.target.value })
+                }}
+              />
+
               <Input
                 label="Description"
                 placeholder="Describe the workspace"

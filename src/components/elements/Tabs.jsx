@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/Button'
 import SelectField from '../ui/SelectField'
+import { WalletIcon } from '@heroicons/react/24/outline'
 
 export default function Tabs({
   tabs,
@@ -8,8 +9,9 @@ export default function Tabs({
   currentTab,
   className,
   classNames,
+  Icon,
 }) {
-  const { innerWrapper, button, nav } = classNames || ''
+  const { innerWrapper, button, nav, icon } = classNames || ''
   return (
     <div className={cn('w-full sm:w-auto', className)}>
       <div className="w-full sm:hidden sm:w-auto">
@@ -47,6 +49,19 @@ export default function Tabs({
               // href={tab.href}
               variant={'light'}
               onClick={() => navigateTo(index)}
+              startContent={
+                tab?.icon && (
+                  <tab.icon
+                    className={cn(
+                      'h-5 w-5 text-slate-600',
+                      {
+                        'bg-white text-primary': tab?.index == currentTab,
+                      },
+                      icon,
+                    )}
+                  />
+                )
+              }
               className={cn(
                 'whitespace-nowrap border-b-1 border-transparent px-4 text-sm  text-gray-500 hover:border-gray-300 hover:bg-white hover:text-primary data-[hover=true]:bg-white',
                 {

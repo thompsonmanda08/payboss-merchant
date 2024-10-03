@@ -59,46 +59,44 @@ export function DateRangePickerField({
   className,
   label,
   defaultValue,
-  setValue,
-  value,
   description,
   labelPlacement,
   visibleMonths = 1,
   ...props
 }) {
-  // const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
-  // const thirtyDaysAgoDate = new Date()
-  // thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
-  // const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
+  const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
+  const thirtyDaysAgoDate = new Date()
+  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
+  const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
 
-  // const [value, setValue] = React.useState({
-  //   start_date: parseDate(thirtyDaysAgo),
-  //   end_date: parseDate(thisMonth),
-  // })
+  const [value, setValue] = React.useState({
+    start: parseDate(thirtyDaysAgo),
+    end: parseDate(thisMonth),
+  })
 
-  // let formatter = useDateFormatter({ dateStyle: 'long' })
+  let formatter = useDateFormatter({ dateStyle: 'long' })
 
-  // useEffect(() => {
-  //   if (value?.start_date && value?.end_date) {
-  //     setDateRange({
-  //       start_date: formatDate(
-  //         value?.start_date.toDate(getLocalTimeZone()),
-  //         'YYYY-MM-DD',
-  //       ),
-  //       end_date: formatDate(
-  //         value?.end_date.toDate(getLocalTimeZone()),
-  //         'YYYY-MM-DD',
-  //       ),
-  // range: formatter.formatRange(
-  //   value?.start_date.toDate(getLocalTimeZone()),
-  //   value?.end_date.toDate(getLocalTimeZone()),
-  // ),
-  //     })
-  //   }
-  // }, [value])
+  useEffect(() => {
+    if (value?.start && value?.end) {
+      let start_date = formatDate(
+        value?.start.toDate(getLocalTimeZone()),
+        'YYYY-MM-DD',
+      )
 
-  // console.log(dateRange)
-  // console.log(value)
+      let end_date = formatDate(
+        value?.end.toDate(getLocalTimeZone()),
+        'YYYY-MM-DD',
+      )
+      setDateRange({
+        start_date,
+        end_date,
+        range: formatter.formatRange(
+          value?.start.toDate(getLocalTimeZone()),
+          value?.end.toDate(getLocalTimeZone()),
+        ),
+      })
+    }
+  }, [value])
 
   return (
     // <NextUIProvider locale="es-GB">
@@ -113,7 +111,6 @@ export function DateRangePickerField({
       labelPlacement={labelPlacement || 'outside'}
       isRequired={props?.required || props.isRequired}
       maxValue={today(getLocalTimeZone())}
-      // minValue={today(getLocalTimeZone())} TODO: DATE ACCOUNT CREATED
       onChange={setValue}
       variant="bordered"
       className={cn('max-w-sm ', className)}

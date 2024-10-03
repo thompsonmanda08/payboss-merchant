@@ -9,9 +9,10 @@ import {
   Snippet,
   ModalFooter,
 } from '@nextui-org/react'
-import { CardHeader, Tabs } from '@/components/base'
 import { syntaxHighlight } from '@/lib/utils'
 import Loader from '@/components/ui/Loader'
+import Tabs from '@/components/elements/Tabs'
+import CardHeader from '@/components/base/CardHeader'
 
 export const API_CONFIG_VIEWS = [
   {
@@ -54,7 +55,6 @@ export default function APIConfigViewModal({
     },
   ]
 
-  console.log(configData)
 
   const {
     activeTab,

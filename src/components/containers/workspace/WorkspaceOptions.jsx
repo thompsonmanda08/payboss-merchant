@@ -9,8 +9,8 @@ import {
 } from '@heroicons/react/24/outline'
 import DropdownButton from '@/components/ui/DropdownButton'
 import Spinner from '@/components/ui/Spinner'
-import { SoftBoxIcon } from '@/components/base'
 import useNavigation from '@/hooks/useNavigation'
+import SoftBoxIcon from '@/components/base/SoftBoxIcon'
 
 export default function WorkspaceSelection({ isSelected }) {
   const { dashboardRoute, activeWorkspace, workspaces } = useNavigation()

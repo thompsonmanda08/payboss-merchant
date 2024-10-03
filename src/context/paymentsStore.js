@@ -19,6 +19,7 @@ const INITIAL_STATE = {
   bulkPayments: [],
   batchDetails: {},
   transactionDetails: {},
+  createPaymentLoading: false,
   openPaymentsModal: false,
   openAllRecordsModal: false,
   openValidRecordsModal: false,
@@ -37,6 +38,8 @@ const usePaymentsStore = create((set, get) => ({
 
   // METHODS AND ACTIONS
   setOpenPaymentsModal: (open) => set({ openPaymentsModal: open }),
+  setCreatePaymentLoading: (open) => set({ openPaymentsModal: open }),
+
   setBulkPayments: (bulkPayments) => set({ bulkPayments }),
   setPaymentAction: (action) => set({ paymentAction: action }),
   setError: (error) => set({ error }),

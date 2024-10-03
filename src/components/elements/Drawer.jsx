@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CardHeader } from '.'
+import { CardHeader } from '../base'
 import { cn } from '@/lib/utils'
 
 const drawerVariants = {
@@ -44,9 +44,7 @@ const Drawer = ({ isOpen, onClose, title, infoText, className, children }) => {
                 handleClose={onClose}
               />
 
-              <div className="mt-4 w-full flex-1 sm:px-6">
-                {children}
-              </div>
+              <div className="mt-4 w-full flex-1 sm:px-6">{children}</div>
             </div>
           </motion.div>
         </>

@@ -11,12 +11,12 @@ import {
 
 import { Button } from '../ui/Button'
 import { Input } from '../ui/InputField'
-import { PASSWORD_PATTERN, SETUP_QUERY_KEY } from '@/lib/constants'
+import { PASSWORD_PATTERN } from '@/lib/constants'
 import { useQueryClient } from '@tanstack/react-query'
 import useAuthStore from '@/context/authStore'
-import { StatusMessage } from '.'
 import { changeUserPassword } from '@/app/_actions/user-actions'
 import { notify } from '@/lib/utils'
+import StatusMessage from '../base/StatusMessage'
 
 export default function FirstLogin({ open }) {
   const queryClient = useQueryClient()

@@ -5,7 +5,7 @@ import { Button } from '../ui/Button'
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { BATCH_DETAILS_QUERY_KEY } from '@/lib/constants'
-import { StatusMessage } from '../base'
+import StatusMessage from '../base/StatusMessage'
 
 export default function EditBatchRecordForm({ onClose }) {
   const {

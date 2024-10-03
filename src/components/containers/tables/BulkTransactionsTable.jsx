@@ -17,8 +17,8 @@ import { EyeIcon, PlusIcon } from '@heroicons/react/24/outline'
 import Search from '@/components/ui/Search'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import SelectField from '@/components/ui/SelectField'
-import { EmptyLogs } from '@/components/base'
 import { useBulkTransactions, useWorkspaceInit } from '@/hooks/useQueryHooks'
+import EmptyLogs from '@/components/base/EmptyLogs'
 
 const bulkTransactionColumns = [
   { name: 'DATE CREATED', uid: 'created_at', sortable: true },
@@ -70,7 +70,7 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
   const [serviceProtocolFilter, setServiceProtocolFilter] =
     React.useState('all')
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const [rowsPerPage, setRowsPerPage] = React.useState(8)
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: 'amount',
@@ -329,7 +329,7 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
               className="-mb-1 h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
               onChange={onRowsPerPageChange}
               placeholder={rowsPerPage.toString()}
-              options={['5', '8', '10']}
+              options={['5', '8', '10', '20']}
               defaultValue={8}
             />
           </label>
@@ -349,7 +349,7 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
   return (
     <Table
       aria-label="Transactions table with custom cells"
-      className="h-[580px]"
+      className="max-h-[980px] "
       classNames={{
         table: cn('align-top min-h-[300px] items-center justify-center', {
           'min-h-max': pages <= 1,

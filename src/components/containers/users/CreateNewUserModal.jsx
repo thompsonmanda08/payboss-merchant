@@ -11,7 +11,7 @@ import {
 } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { StatusMessage } from '@/components/base'
+import StatusMessage from '@/components/base/StatusMessage'
 import { useQueryClient } from '@tanstack/react-query'
 import { USERS } from '@/lib/constants'
 import {
@@ -47,7 +47,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
   //   [selectedKeys],
   // )
 
-  console.log(accountRoles)
+
 
   // ON CREATE => NO IDS are needed for now... only the role name
   const USER_ROLES = getUserRoles()
@@ -98,7 +98,6 @@ function CreateNewUserModal({ isOpen, onClose }) {
 
   async function handleUpdateSystemUser() {
     setLoading(true)
-    console.log(newUser)
 
     const recordID = selectedUser?.ID
 

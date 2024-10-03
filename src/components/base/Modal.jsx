@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '../ui/Button'
-import { CardHeader } from '.'
 import { cn } from '@/lib/utils'
+import CardHeader from './CardHeader'
 
 const modalVariants = {
   hidden: { opacity: 0, y: '-50%', scale: 0.8 },

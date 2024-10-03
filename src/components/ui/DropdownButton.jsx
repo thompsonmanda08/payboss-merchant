@@ -261,6 +261,7 @@ export function SimpleDropdown({
         {dropdownItems.map((item) => (
           <DropdownItem
             key={item?.uid || item?.ID || item?.id || item?.key || item}
+            href={item?.href || ''}
             className={cn(
               '!focus-within:bg-primary-100 !hover:bg-primary-100 !focus:bg-primary-100 !data-[hover=true]:border-primary-200 !data-[selectable=true]:focus:bg-primary-100 !data-[focus=true]:bg-primary-100 !data-[hover=true]:bg-primary-100 !data-[hover=true]:text-primary !data-[selected=true]:text-primary group min-w-max capitalize',
 

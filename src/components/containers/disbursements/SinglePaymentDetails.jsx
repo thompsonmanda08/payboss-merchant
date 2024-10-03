@@ -14,10 +14,12 @@ import { slideDownInView } from '@/lib/constants'
 import useDashboard from '@/hooks/useDashboard'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { initializeSingleTransaction } from '@/app/_actions/transaction-actions'
-import { Card, CardHeader, StatusMessage } from '@/components/base'
 import SelectField from '@/components/ui/SelectField'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ServiceConfig } from './BulkPaymentDetails'
+import Card from '@/components/base/Card'
+import CardHeader from '@/components/base/CardHeader'
+import StatusMessage from '@/components/base/StatusMessage'
 
 const SinglePaymentDetails = ({ navigateForward }) => {
   const {

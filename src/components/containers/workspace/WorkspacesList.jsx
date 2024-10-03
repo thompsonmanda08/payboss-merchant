@@ -12,10 +12,11 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import useWorkspace from '@/hooks/useWorkspaces'
 import WorkspaceItem from './WorkspaceItem'
 import OverlayLoader from '@/components/ui/OverlayLoader'
-import { Card, InfoBanner } from '@/components/base'
 import CreateNewWorkspaceModal from './CreateNewWorkspace'
 import Loader from '@/components/ui/Loader'
 import useAccountProfile from '@/hooks/useProfileDetails'
+import Card from '@/components/base/Card'
+import InfoBanner from '@/components/base/InfoBanner'
 
 function Workspaces({ user, showHeader = false, className }) {
   const pathname = usePathname()
@@ -30,7 +31,11 @@ function Workspaces({ user, showHeader = false, className }) {
     KYCStageID == 4
 
   const [loading, setLoading] = useState(false)
-  const [newWorkspace, setNewWorkspace] = useState({})
+  const [newWorkspace, setNewWorkspace] = useState({
+    workspace: '',
+    description: '',
+    workspaceType: 'collection',
+  })
 
   function editWorkspaceField(fields) {
     setNewWorkspace((prev) => {
@@ -147,6 +152,9 @@ export function ListOfWorkspaces({
     pathname?.split('/')?.length > 2 ? allWorkspaces : workspaces
 
   const isWorkspaceSettings = pathname.split('/').includes('manage-account')
+
+  console.log(workspaces)
+  console.log(allWorkspaces)
 
   return (
     <div className="flex w-full flex-col items-center justify-center">

@@ -4,8 +4,8 @@ import React, { useEffect } from 'react'
 import { RadioGroup } from '@nextui-org/react'
 import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
-import { CustomRadioButton } from '@/components/base'
 import { STEPS } from '../SignupForm'
+import CustomRadioButton from '@/components/ui/RadioButton'
 export default function Step0({ updateDetails }) {
   useEffect(() => {
     // Set Default  Registration STAGE

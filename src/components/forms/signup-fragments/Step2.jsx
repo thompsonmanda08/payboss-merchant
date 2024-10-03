@@ -4,12 +4,11 @@ import React from 'react'
 import { Input } from '@/components/ui/InputField'
 import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
-
-import { CardHeader } from '@/components/base'
 import { STEPS } from '../SignupForm'
 import useAuthStore from '@/context/authStore'
 import SelectField from '@/components/ui/SelectField'
 import useConfigOptions from '@/hooks/useConfigOptions'
+import CardHeader from '@/components/base/CardHeader'
 
 // BUSINESS BANKING DETAILS
 export default function Step2({ updateDetails, backToStart }) {

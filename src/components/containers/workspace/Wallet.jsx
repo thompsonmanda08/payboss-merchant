@@ -1,15 +1,7 @@
-import {
-  Balance,
-  Card,
-  CardHeader,
-  EmptyLogs,
-  StatusMessage,
-} from '@/components/base'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/InputField'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import React from 'react'
-import { UploadField } from '../account-verification/DocumentAttachments'
 import { capitalize, cn, formatCurrency, formatDate, notify } from '@/lib/utils'
 import { TASK_TYPE, WALLET_HISTORY_QUERY_KEY } from '@/lib/constants'
 import { formatActivityData } from '@/lib/utils'
@@ -19,11 +11,16 @@ import { uploadPOPDocument } from '@/app/_actions/pocketbase-actions'
 import { submitPOP } from '@/app/_actions/workspace-actions'
 import DateSelectField from '@/components/ui/DateSelectField'
 import { getLocalTimeZone, today } from '@internationalized/date'
-import useTransactions from '@/hooks/useTransactions'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useQueryClient } from '@tanstack/react-query'
 import { formatDistance } from 'date-fns'
 import { useWalletPrefundHistory } from '@/hooks/useQueryHooks'
+import Card from '@/components/base/Card'
+import Balance from '@/components/base/Balance'
+import StatusMessage from '@/components/base/StatusMessage'
+import CardHeader from '@/components/base/CardHeader'
+import EmptyLogs from '@/components/base/EmptyLogs'
+import UploadField from '@/components/base/FileDropZone'
 
 const POP_INIT = {
   amount: 0,
@@ -215,7 +212,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                   type="button"
                   onClick={onOpen}
                 >
-                  Fund Wallet
+                  Deposit
                 </Button>
               </div>
             </div>
@@ -266,21 +263,29 @@ export function WalletTransactionHistory({
   const { data: walletHistoryResponse, isLoading: loadingWalletHistory } =
     useWalletPrefundHistory(workspaceID)
 
-  const walletHistory = (
-    transactionData ||
-    walletHistoryResponse?.data?.data ||
-    []
-  )?.toReversed()
+  const walletData = transactionData || walletHistoryResponse?.data?.data || []
+  const walletHistory = walletData && walletData?.reverse()
 
   const data = [
     {
-      title: 'Wallet Transaction History',
+      title: 'Wallet Transactions',
       data: limit ? walletHistory.slice(0, limit) : walletHistory,
     },
   ]
   const formattedActivityData = formatActivityData(data)
 
   const isFetching = isLoading || loadingWalletHistory
+
+  //  {
+  //     ID: 'cm1rzilis00005p9v8dg6u5pn',
+  //     type: 'credit',
+  //     created_at: '2024-10-02T14:50:33Z',
+  //     content: 'processed api integration transaction: test13',
+  //     amount: '1.00',
+  //     isPrefunded: true,
+  //     status: 'success',
+  //     remarks: 'transaction processed'
+  //   },
 
   return isFetching ? (
     <div className="flex w-full flex-col gap-4">
@@ -316,15 +321,12 @@ export function WalletTransactionHistory({
             {items?.data?.map((item, itemIndex) => (
               <div className="flex flex-col gap-y-4 py-2" key={itemIndex}>
                 <div className="flex items-start space-x-4">
-                  <LogTaskType
-                    type={item?.type}
-                    classNames={{ wrapper: 'mt-1' }}
-                  />
+                  <LogTaskType type={item?.type} classNames={{ wrapper: '' }} />
 
-                  <div className="w-full">
+                  <div className="w-full items-start">
                     <div className="flex w-full justify-between">
-                      <p className="text-sm font-medium leading-6">
-                        {item?.created_by}
+                      <p className="text-sm font-medium capitalize leading-6">
+                        {item?.created_by || item?.remarks}
                       </p>
                       <div>
                         <Tooltip

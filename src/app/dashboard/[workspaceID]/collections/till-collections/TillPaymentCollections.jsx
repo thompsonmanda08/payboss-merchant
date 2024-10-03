@@ -11,7 +11,6 @@ import {
 } from '@heroicons/react/24/outline'
 import { Switch, Tooltip, useDisclosure } from '@nextui-org/react'
 import { notify } from '@/lib/utils'
-import { Card, CardHeader } from '@/components/base'
 import PromptModal from '@/components/base/Prompt'
 import {
   Table,
@@ -22,6 +21,8 @@ import {
   TableCell,
 } from '@nextui-org/react'
 import CustomTable from '@/components/containers/tables/Table'
+import CardHeader from '@/components/base/CardHeader'
+import Card from '@/components/base/Card'
 
 export const TILL_TRANSACTION_COLUMNS = [
   { name: 'DATE', uid: 'created_at', sortable: true },

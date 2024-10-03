@@ -1,31 +1,30 @@
 'use client'
 import React, { useEffect } from 'react'
-import { Card, CardHeader, SimpleStats } from '@/components/base'
-import ReportsBarChart from '@/components/charts/ReportsBarChart/ReportsBarChart'
 import {
-  ArrowsPointingInIcon,
-  ArrowsPointingOutIcon,
+  ArrowDownOnSquareStackIcon,
   ArrowsRightLeftIcon,
   ArrowTrendingDownIcon,
   ArrowTrendingUpIcon,
-  ArrowUpIcon,
   ArrowUpOnSquareStackIcon,
   BanknotesIcon,
+  EllipsisVerticalIcon,
   QrCodeIcon,
   QueueListIcon,
 } from '@heroicons/react/24/outline'
-import GradientLineChart from '@/components/charts/GradientLineChart/GradientLineChart'
 import Batches from '@/components/containers/tables/BatchSummaryTable'
 import { formatCurrency } from '@/lib/utils'
 import reportsBarChartData from '@/app/dashboard/[workspaceID]/data/reportsBarChartData'
-import gradientLineChartData from '@/app/dashboard/[workspaceID]/data/gradientLineChartData'
-import OverlayLoader from '@/components/ui/OverlayLoader'
 import { WalletTransactionHistory } from '../workspace/Wallet'
 import PendingApprovals from './PendingAnalytics'
 import { useDashboardAnalytics, useWorkspaceInit } from '@/hooks/useQueryHooks'
 import { Chip } from '@nextui-org/react'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { useQueryClient } from '@tanstack/react-query'
+import { SimpleDropdown } from '@/components/ui/DropdownButton'
+import useNavigation from '@/hooks/useNavigation'
+import Card from '@/components/base/Card'
+import SimpleStats from '@/components/elements/SimpleStats'
+import CardHeader from '@/components/base/CardHeader'
 
 const pendingApprovals = [
   {
@@ -73,10 +72,32 @@ function DashboardAnalytics({ workspaceID }) {
   } = useDashboardAnalytics(workspaceID)
   const dashboardAnalytics = analytics?.data
 
+
+
   const { data: initialization, isLoading } = useWorkspaceInit(workspaceID)
   const role = initialization?.data
 
   const { workspaceWalletBalance } = useWorkspaces()
+  const { dashboardRoute } = useNavigation()
+
+  const walletOptions = [
+    {
+      ID: 1,
+      label: 'View wallet Statement',
+      href: `/${dashboardRoute}/reports/statement`,
+    },
+    {
+      ID: 2,
+      label: 'View deposit history',
+      href: `/${dashboardRoute}/workspace-settings?wallet`,
+    },
+
+    {
+      ID: 3,
+      label: 'Deposit funds',
+      href: `/${dashboardRoute}/workspace-settings?deposit=true`,
+    },
+  ]
 
   const {
     today,
@@ -127,7 +148,7 @@ function DashboardAnalytics({ workspaceID }) {
               smallFigureClasses: 'md:text-base font-bold',
             }}
             isGood={true}
-            Icon={ArrowTrendingUpIcon}
+            Icon={ArrowDownOnSquareStackIcon}
           />
           <SimpleStats
             title={'Overall Disbursements'}
@@ -141,7 +162,7 @@ function DashboardAnalytics({ workspaceID }) {
               smallFigureClasses: 'md:text-base font-bold',
             }}
             isBad={true}
-            Icon={ArrowTrendingDownIcon}
+            Icon={ArrowUpOnSquareStackIcon}
           />
         </div>
         {/*  2ND ROW - DAILY FIGURES AND VALUES */}
@@ -182,7 +203,7 @@ function DashboardAnalytics({ workspaceID }) {
             classNames={{
               smallFigureClasses: 'md:text-base font-semibold',
             }}
-            Icon={ArrowsPointingInIcon}
+            Icon={ArrowDownOnSquareStackIcon}
           />
           <SimpleStats
             title={"Today's Disbursements"}
@@ -195,7 +216,7 @@ function DashboardAnalytics({ workspaceID }) {
             classNames={{
               smallFigureClasses: 'md:text-base font-semibold',
             }}
-            Icon={ArrowsPointingOutIcon}
+            Icon={ArrowUpOnSquareStackIcon}
           />
         </div>
 
@@ -239,11 +260,34 @@ function DashboardAnalytics({ workspaceID }) {
         <div className="grid w-full grid-cols-1 gap-4 2xl:grid-cols-2">
           <Batches />
           <Card className={''}>
-            <CardHeader
-              title={'Wallet Statement Summary'}
-              infoText={'Brief overview of your latest statement transactions'}
+            <div className="flex items-center justify-between">
+              <CardHeader
+                title={'Wallet Statement Summary'}
+                infoText={
+                  'Brief overview of your latest statement transactions'
+                }
+              />
+              <SimpleDropdown
+                isIconOnly
+                classNames={{
+                  trigger:
+                    'bg-transparent-500 w-auto max-w-max shadow-none items-center justify-center',
+                  // innerWrapper,
+                  dropdownItem: 'py-2',
+                  chevronIcon: 'hidden',
+                }}
+                name={
+                  <EllipsisVerticalIcon className="h-5 w-5 cursor-pointer hover:text-primary" />
+                }
+                dropdownItems={walletOptions}
+              />
+            </div>
+
+            <WalletTransactionHistory
+              transactionData={dashboardAnalytics?.walletSummary}
+              workspaceID={workspaceID}
+              limit={5}
             />
-            <WalletTransactionHistory workspaceID={workspaceID} limit={4} />
           </Card>
         </div>
       </div>

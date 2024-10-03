@@ -6,12 +6,13 @@ import { motion } from 'framer-motion'
 import { staggerContainerItemVariants } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { STEPS } from '../SignupForm'
-import { CardHeader, SoftBoxIcon } from '@/components/base'
 import useAuthStore from '@/context/authStore'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@nextui-org/react'
 import { validateTPIN } from '@/app/_actions/auth-actions'
 import { BriefcaseIcon } from '@heroicons/react/24/outline'
+import CardHeader from '@/components/base/CardHeader'
+import SoftBoxIcon from '@/components/base/SoftBoxIcon'
 
 export default function Step1_TPIN({ updateDetails, backToStart }) {
   const {

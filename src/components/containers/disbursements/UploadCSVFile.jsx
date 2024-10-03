@@ -1,5 +1,5 @@
 'use client'
-import { CardHeader, FileDropZone } from '@/components/base'
+
 import { Button } from '@/components/ui/Button'
 import { notify } from '@/lib/utils'
 import usePaymentsStore from '@/context/paymentsStore'
@@ -7,6 +7,7 @@ import Link from 'next/link'
 import React from 'react'
 import { uploadPaymentBatchFile } from '@/app/_actions/pocketbase-actions'
 import useAccountProfile from '@/hooks/useProfileDetails'
+import { SingleFileDropzone } from '@/components/base/FileDropZone'
 
 const UploadCSVFile = ({ navigateForward }) => {
   const { paymentAction, updatePaymentFields, selectedProtocol } =
@@ -48,7 +49,7 @@ const UploadCSVFile = ({ navigateForward }) => {
     <>
       <div className="flex h-full w-full flex-col gap-5">
         <div className="flex flex-col">
-          <FileDropZone
+          <SingleFileDropzone
             isLoading={isLoading}
             otherAcceptedFiles={{
               'application/vnd.ms-excel': [],

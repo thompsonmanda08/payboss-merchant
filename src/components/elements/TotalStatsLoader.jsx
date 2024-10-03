@@ -11,7 +11,7 @@ function TotalStatsLoader({ length, className }) {
       )}
     >
       {Array.from({ length: length || 4 }).map((_, index) => (
-        <div key={index} className="flex gap-2">
+        <div key={index} className="flex flex-1 gap-2 ">
           <Skeleton className={'aspect-square w-12 bg-slate-200'} />
           <div className="flex flex-col gap-1">
             <Skeleton className={'h-6 w-48 bg-slate-200'} />

@@ -58,7 +58,7 @@ export default function UsersTable({
   const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isUsersRoute } = useNavigation()
-  // const { isAdminOrOwner, accountRoles } = useAllUsersAndRoles()
+
   const {
     isLoading,
     setIsLoading,
@@ -68,13 +68,6 @@ export default function UsersTable({
     handleDeleteFromWorkspace,
     handleResetUserPassword,
   } = useWorkspaceStore()
-
-  // const { workspaceUserRole } = useDashboard()
-  // console.log(workspaceUserRole)
-  // const canUpdate = workspaceUserRole?.role?.toLowerCase() == 'admin'
-  // const isAdmin =
-  //   (isUsersRoute && isAdminOrOwner) || (!isUsersRoute && canUpdate)
-  console.log(isUserAdmin)
 
   function ActionButtons({ user }) {
     return isUserAdmin ? (

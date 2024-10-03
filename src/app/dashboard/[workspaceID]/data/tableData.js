@@ -1,10 +1,5 @@
-import { Tooltip } from '@/components/base'
-import Progress from '@/components/progress'
+import Progress from '@/components/ui/Progress'
 import React from 'react'
-
-const CustomTooltip = ({ title, children }) => (
-  <Tooltip content={title}>{children}</Tooltip>
-)
 
 export default function data() {
   return {

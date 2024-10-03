@@ -3,11 +3,12 @@ import { useState } from 'react'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import Table from './Table'
 import data from '@/app/dashboard/[workspaceID]/data/tableData'
-import { Card, CardHeader } from '../../base'
 import { CheckIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid'
 import CustomTable from './Table'
 import { ArrowUpOnSquareStackIcon } from '@heroicons/react/24/outline'
 import { SimpleDropdown } from '@/components/ui/DropdownButton'
+import Card from '@/components/base/Card'
+import CardHeader from '@/components/base/CardHeader'
 
 function Batches() {
   const { columns, rows } = data()

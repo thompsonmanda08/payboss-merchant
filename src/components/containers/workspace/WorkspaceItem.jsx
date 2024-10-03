@@ -1,12 +1,11 @@
 'use client'
-import { Avatar, AvatarGroup } from '@nextui-org/react'
+
 import React from 'react'
-import { Button } from '../../ui/Button'
-import { SoftBoxIcon } from '../../base'
 import { ArrowRightIcon, BriefcaseIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { Description } from '@headlessui/react'
+import SoftBoxIcon from '@/components/base/SoftBoxIcon'
+import { Button } from '@/components/ui/Button'
 
 function WorkspaceItem({ name, description, href, isVisible, onClick }) {
   return (

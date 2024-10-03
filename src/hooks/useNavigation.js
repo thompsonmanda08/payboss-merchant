@@ -1,10 +1,10 @@
 'use client'
-import { usePathname } from 'next/navigation'
-import React, { useState, useEffect } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import useWorkspaces from './useWorkspaces'
 
 const useNavigation = () => {
   const pathname = usePathname()
+  const router = useRouter()
   const { workspaceID, activeWorkspace, workspaces } = useWorkspaces()
 
   const dashboardRoute = `/dashboard/${workspaceID}`
@@ -31,6 +31,7 @@ const useNavigation = () => {
 
   return {
     pathname,
+    router,
     pathArr,
     isProfile,
     isSettingsPage,

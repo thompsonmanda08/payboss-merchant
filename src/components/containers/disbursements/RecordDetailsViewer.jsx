@@ -3,8 +3,8 @@ import React from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal'
 import usePaymentsStore, { validationColumns } from '@/context/paymentsStore'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
-import { CardHeader } from '@/components/base'
 import SummaryTable from '../tables/SummaryTable'
+import CardHeader from '@/components/base/CardHeader'
 
 function RecordDetailsViewer({ batchID }) {
   const {
