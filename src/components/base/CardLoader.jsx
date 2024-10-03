@@ -1,6 +1,6 @@
 'use client'
 
-import { Card } from '@/components/base'
+import Card from './Card'
 
 function CardLoader() {
   return (

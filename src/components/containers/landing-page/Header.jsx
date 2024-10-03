@@ -16,9 +16,9 @@ import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/base/Container'
 import { NavLink } from '@/components/base/NavLink'
 import { cn } from '@/lib/utils'
-import { Logo } from '../../base'
 import { UserIcon } from '@heroicons/react/24/solid'
 import useFloatingHeader from '@/hooks/useFloatingHeader'
+import Logo from '@/components/base/Logo'
 
 function MobileNavLink({ href, children }) {
   return (

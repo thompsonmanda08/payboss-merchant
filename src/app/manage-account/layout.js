@@ -1,5 +1,5 @@
+import SettingsSideBar from '@/components/elements/SettingsSideBar'
 import React from 'react'
-import { SettingsSideBar } from '@/components/base'
 
 function AccountSettingsLayout({ children }) {
   return (

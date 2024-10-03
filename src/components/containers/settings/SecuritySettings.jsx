@@ -1,5 +1,4 @@
 'use client'
-import { Modal } from '@/components/base'
 import useSettingsStore from '@/context/settingsStore'
 import useAccountProfile from '@/hooks/useProfileDetails'
 

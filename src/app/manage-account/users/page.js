@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import LoadingPage from '@/app/loading'
-import { ManagePeople } from '@/components/containers'
+import ManagePeople from '@/components/containers/users/ManagePeople'
 
 function UsersSettingsPage() {
   return (

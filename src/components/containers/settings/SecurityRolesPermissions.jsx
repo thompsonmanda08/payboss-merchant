@@ -1,8 +1,8 @@
 'use client'
-import { Tabs } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import React from 'react'
 import SecuritySettings from './SecuritySettings'
+import Tabs from '@/components/elements/Tabs'
 
 const TABS = [
   { name: 'All Users', href: '#', current: 0 }, // ONLY THE OWNER CAN SEE ALL USER

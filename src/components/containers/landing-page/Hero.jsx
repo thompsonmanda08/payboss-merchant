@@ -1,6 +1,7 @@
-import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/base/Container'
-import { FrameContainer } from '@/components/base'
+import FrameContainer from '@/components/base/FrameContainer'
+import { Button } from '@/components/ui/Button'
+
 import dashboardScreenShot from '@/images/screenshots/dashboard2.png'
 
 export function Hero() {

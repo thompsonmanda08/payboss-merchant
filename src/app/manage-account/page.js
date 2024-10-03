@@ -1,5 +1,5 @@
 import LoadingPage from '@/app/loading'
-import { Workspaces } from '@/components/containers'
+import Workspaces from '@/components/containers/workspace/WorkspacesList'
 import React, { Suspense } from 'react'
 
 async function AllWorkspacesPage() {

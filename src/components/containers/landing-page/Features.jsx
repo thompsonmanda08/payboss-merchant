@@ -1,6 +1,5 @@
 'use client'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Container } from '@/components/base/Container'
 
 import {
   BanknotesIcon,
@@ -21,7 +20,8 @@ import {
   containerVariants,
 } from '@/lib/constants'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import { Tabs } from '@/components/base'
+import { Container } from '@/components/base/Container'
+import Tabs from '@/components/elements/Tabs'
 
 const collections = [
   [

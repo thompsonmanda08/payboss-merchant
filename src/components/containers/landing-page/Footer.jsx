@@ -1,8 +1,7 @@
 import Link from 'next/link'
-
-import { Container } from '@/components/base/Container'
 import { NavLink } from '@/components/base/NavLink'
 import Logo from '@/components/base/Logo'
+import { Container } from '@/components/base/Container'
 
 export function Footer({ showLogo = true, showLinks = true }) {
   return (

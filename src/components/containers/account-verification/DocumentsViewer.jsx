@@ -5,8 +5,9 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 
 import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
-import { CardHeader, Modal } from '@/components/base'
 import useAccountProfile from '@/hooks/useProfileDetails'
+import CardHeader from '@/components/base/CardHeader'
+import Modal from '@/components/base/Modal'
 
 const DocumentsViewer = () => {
   const { businessDocs, signedContractDoc } = useAccountProfile()

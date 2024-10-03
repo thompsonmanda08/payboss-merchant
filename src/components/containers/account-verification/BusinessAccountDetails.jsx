@@ -1,13 +1,12 @@
-import { CardHeader } from '@/components/base'
 import DateSelectField from '@/components/ui/DateSelectField'
 import { Input } from '@/components/ui/InputField'
 import SelectField from '@/components/ui/SelectField'
 import { isValidZambianMobileNumber } from '@/lib/utils'
-import { motion } from 'framer-motion'
 import React from 'react'
 import { getLocalTimeZone, today, parseDate } from '@internationalized/date'
 import { Button } from '@/components/ui/Button'
 import useAccountProfile from '@/hooks/useProfileDetails'
+import CardHeader from '@/components/base/CardHeader'
 
 function BusinessAccountDetails({
   businessDetails,
