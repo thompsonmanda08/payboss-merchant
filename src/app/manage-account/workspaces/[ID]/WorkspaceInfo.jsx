@@ -8,7 +8,6 @@ import useWorkspaces from '@/hooks/useWorkspaces'
 import {
   ArrowRightStartOnRectangleIcon,
   ArrowUturnLeftIcon,
-  ArrowUturnRightIcon,
 } from '@heroicons/react/24/outline'
 import useNavigation from '@/hooks/useNavigation'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
@@ -19,8 +18,6 @@ import { cn } from '@/lib/utils'
 import UsersTable from '@/components/containers/tables/UsersTable'
 import WorkspaceDetails from '@/components/containers/workspace/WorkspaceDetails'
 import Wallet from '@/components/containers/workspace/Wallet'
-import { Balance } from '@/components/base'
-import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 
 const TABS = [

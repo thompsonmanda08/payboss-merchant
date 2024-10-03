@@ -1,5 +1,4 @@
 'use client'
-import { Tabs } from '@/components/base'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import React, { useEffect } from 'react'
 import BusinessAccountDetails from './BusinessAccountDetails'
@@ -8,6 +7,7 @@ import ProgressStageTracker from './ProgressStageTracker'
 import useConfigOptions from '@/hooks/useConfigOptions'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import DocumentsViewer from './DocumentsViewer'
+import Tabs from '@/components/elements/Tabs'
 
 function AccountVerification() {
   const {

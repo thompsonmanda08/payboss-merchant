@@ -1,13 +1,13 @@
 'use client'
 
 import useSettingsStore from '@/context/settingsStore'
-import { Card } from '@/components/base'
 import { useState } from 'react'
 import CardLoader from '@/components/base/CardLoader'
 import { Input } from '@/components/ui/InputField'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import { Button } from '@/components/ui/Button'
+import Card from '@/components/base/Card'
 
 function ProfileDetails() {
   const { user } = useAccountProfile()

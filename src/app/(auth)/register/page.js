@@ -1,6 +1,5 @@
 'use client'
 import Link from 'next/link'
-import { Card, EmptyState, Logo } from '@/components/base'
 import React from 'react'
 import SignUpForm from '@/components/forms/SignupForm'
 
@@ -9,6 +8,9 @@ import Spinner from '@/components/ui/Spinner'
 import useConfigOptions from '@/hooks/useConfigOptions'
 import useAuthStore from '@/context/authStore'
 import { Button } from '@/components/ui/Button'
+import Logo from '@/components/base/Logo'
+import Card from '@/components/base/Card'
+import EmptyState from '@/components/elements/EmptyState'
 
 export default function Register() {
   const { isLoading, isError } = useConfigOptions()

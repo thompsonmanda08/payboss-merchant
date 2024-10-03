@@ -1,11 +1,13 @@
 'use client'
-import { Card, CardHeader, Tabs } from '@/components/base'
 import React, { useState } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import Search from '@/components/ui/Search'
 import useTransactions from '@/hooks/useTransactions'
 import CustomTable from '@/components/containers/tables/Table'
 import { SingleTransactionColumns } from '@/components/containers/tables/SingleTransactionsTable'
+import Card from '@/components/base/Card'
+import CardHeader from '@/components/base/CardHeader'
+import Tabs from '@/components/elements/Tabs'
 
 const transactionColumns = [
   { name: 'DATE', uid: 'batch_name' },
@@ -40,7 +42,10 @@ export default function Transactions() {
     return (
       item?.first_name?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
       item?.last_name?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
-      item?.amount?.toString()?.toLowerCase().includes(searchQuery.toLowerCase())
+      item?.amount
+        ?.toString()
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase())
     )
   })
 

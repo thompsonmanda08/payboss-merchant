@@ -1,5 +1,5 @@
 'use client'
-import { Card } from '@/components/base'
+import Card from '@/components/base/Card'
 import { Switch } from '@nextui-org/switch'
 
 function AccountPreferences() {

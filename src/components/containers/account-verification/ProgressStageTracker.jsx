@@ -1,7 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
 import approvalIllustration from '@/images/illustrations/approval.svg'
-import { Card, CardHeader, TimelineItem } from '@/components/base'
 import { now, getLocalTimeZone } from '@internationalized/date'
 import { formatDate } from '@/lib/utils'
 import {
@@ -10,6 +9,9 @@ import {
   ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
 import useAccountProfile from '@/hooks/useProfileDetails'
+import Card from '@/components/base/Card'
+import CardHeader from '@/components/base/CardHeader'
+import TimelineItem from '@/components/base/TimelineItem'
 
 function ProgressStageTracker() {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split('T')[0])
