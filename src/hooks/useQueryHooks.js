@@ -106,6 +106,7 @@ export const useWorkspaceInit = (workspaceID) =>
     queryKey: [WORKSPACE_DASHBOARD_QUERY_KEY, workspaceID],
     queryFn: async () => await initializeWorkspace(workspaceID),
     refetchOnMount: true,
+    staleTime: 0,
   })
 
 export const useWorkspaceMembers = (workspaceID) =>

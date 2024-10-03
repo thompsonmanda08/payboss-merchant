@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card, CardHeader, SimpleStats } from '@/components/base'
 import ReportsBarChart from '@/components/charts/ReportsBarChart/ReportsBarChart'
 import {
@@ -25,6 +25,7 @@ import PendingApprovals from './PendingAnalytics'
 import { useDashboardAnalytics, useWorkspaceInit } from '@/hooks/useQueryHooks'
 import { Chip } from '@nextui-org/react'
 import useWorkspaces from '@/hooks/useWorkspaces'
+import { useQueryClient } from '@tanstack/react-query'
 
 const pendingApprovals = [
   {
@@ -63,8 +64,13 @@ const pendingApprovals = [
 
 function DashboardAnalytics({ workspaceID }) {
   const { chart, items } = reportsBarChartData
+  const queryClient = useQueryClient()
 
-  const { data: analytics, isFetching } = useDashboardAnalytics(workspaceID)
+  const {
+    data: analytics,
+    isFetching,
+    refetch,
+  } = useDashboardAnalytics(workspaceID)
   const dashboardAnalytics = analytics?.data
 
   const { data: initialization, isLoading } = useWorkspaceInit(workspaceID)
@@ -80,6 +86,10 @@ function DashboardAnalytics({ workspaceID }) {
     allCollections,
     allDisbursements,
   } = dashboardAnalytics || {}
+
+  useEffect(() => {
+    queryClient.invalidateQueries()
+  }, [])
 
   const dataNotReady = isFetching || isLoading
   return (

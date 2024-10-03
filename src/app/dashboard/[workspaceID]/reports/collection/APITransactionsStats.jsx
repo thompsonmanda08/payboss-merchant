@@ -17,49 +17,33 @@ import { downloadCSV, formatCurrency, formatDate } from '@/lib/utils'
 import { DateRangePickerField } from '@/components/ui/DateSelectField'
 import { BULK_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
-import { getBulkAnalyticReports } from '@/app/_actions/transaction-actions'
+import {
+  getAPICollectionAnalyticReports,
+  getBulkAnalyticReports,
+} from '@/app/_actions/transaction-actions'
 import { AnimatePresence, motion } from 'framer-motion'
 import { parseDate, getLocalTimeZone } from '@internationalized/date'
 
 import { useDateFormatter } from '@react-aria/i18n'
 import { TotalValueStat } from '../bulk-payments/BulkTransactionsStats'
-
-const bulkReportsColumns = [
-  { name: 'DATE', uid: 'created_at', sortable: true },
-  { name: 'FIRST NAME', uid: 'first_name', sortable: true },
-
-  { name: 'LAST NAME', uid: 'last_name', sortable: true },
-  { name: 'NRC', uid: 'nrc', sortable: true },
-  { name: 'DESTINATION', uid: 'destination', sortable: true },
-
-  { name: 'AMOUNT', uid: 'amount', sortable: true },
-  { name: 'SERVICE PROVIDER', uid: 'service_provider', sortable: true },
-
-  { name: 'STATUS', uid: 'status', sortable: true },
-  { name: 'REMARKS', uid: 'remarks', sortable: true },
-]
+import { API_KEY_TRANSACTION_COLUMNS } from '../../collections/api-integration/API'
+import { Skeleton } from '@/components/ui/skeleton'
+import TotalStatsLoader from '@/components/base/TotalStatsLoader'
 
 const SERVICE_TYPES = [
   {
-    name: 'Direct Payments',
+    name: 'API Integration Collections',
     index: 0,
   },
   {
-    name: 'Voucher Payments',
+    name: 'Payment Links',
     index: 1,
   },
-  // {
-  //   name: 'Expenses',
-  //   index: 2,
-  // },
 ]
 
-export default function SingleTransactionsStats({ workspaceID }) {
-  const [searchQuery, setSearchQuery] = useState('')
+export default function APITransactionsStats({ workspaceID }) {
   const [dateRange, setDateRange] = useState({})
   const [isExpanded, setIsExpanded] = useState(true)
-  const [openReportsModal, setOpenReportsModal] = useState(false)
-  const [selectedBatch, setSelectedBatch] = useState(null) // ON ROW SELECTED
   let formatter = useDateFormatter({ dateStyle: 'long' })
 
   const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
@@ -72,6 +56,9 @@ export default function SingleTransactionsStats({ workspaceID }) {
     end: parseDate(thisMonth),
   })
 
+  const [searchQuery, setSearchQuery] = React.useState('')
+  const hasSearchFilter = Boolean(searchQuery)
+
   const start_date = formatDate(
     date?.start?.toDate(getLocalTimeZone()),
     'YYYY-MM-DD',
@@ -81,15 +68,17 @@ export default function SingleTransactionsStats({ workspaceID }) {
     'YYYY-MM-DD',
   )
 
-  // HANDLE FET BULK REPORT DATA
+  // HANDLE FETCH FILTERED TRANSACTION REPORT DATA
   const mutation = useMutation({
     mutationKey: [BULK_REPORTS_QUERY_KEY, workspaceID],
-    mutationFn: (dateRange) => getBulkAnalyticReports(workspaceID, dateRange),
+    mutationFn: (dateRange) =>
+      getAPICollectionAnalyticReports(workspaceID, dateRange),
   })
 
-  const report = mutation?.data?.data || []
-  const directBatches = report?.directBatches || []
-  const voucherBatches = report?.voucherBatches || []
+  async function getAPITransactionsData(dateRange) {
+    const response = await mutation.mutateAsync(dateRange)
+    return response
+  }
 
   async function applyDataFilter() {
     const dateRange = {
@@ -97,49 +86,47 @@ export default function SingleTransactionsStats({ workspaceID }) {
       end_date,
     }
 
-    const response = await getBulkReportData(dateRange)
+    const response = await getAPITransactionsData(dateRange)
 
     return response
   }
 
-  async function getBulkReportData(dateRange) {
-    const response = await mutation.mutateAsync(dateRange)
+  const report = mutation?.data?.data?.summary || []
+  const transactions = mutation?.data?.data?.data || []
 
-    return response
-  }
+  const filteredItems = React.useMemo(() => {
+    let filteredrows = [...transactions]
+
+    if (hasSearchFilter) {
+      filteredrows = filteredrows.filter(
+        (row) =>
+          // row?.narration?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          row?.transactionID
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          row?.amount?.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+    }
+
+    return filteredrows
+  }, [transactions, searchQuery])
 
   useEffect(() => {
     if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
-      getBulkReportData()
+      getAPITransactionsData()
     }
   }, [dateRange])
 
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
-      columns={bulkReportsColumns}
-      rows={directBatches || ['1', '2', '3']}
+      columns={API_KEY_TRANSACTION_COLUMNS}
+      rows={filteredItems || []}
       isLoading={mutation.isPending}
       isError={mutation.isError}
       removeWrapper
       onRowAction={(key) => {
         console.log(key)
-        const batch = directBatches.find((row) => row.ID == key)
-        console.log(batch)
-
-        setSelectedBatch(batch)
-        setOpenReportsModal(true)
       }}
-    />,
-    <CustomTable
-      columns={bulkReportsColumns}
-      rows={voucherBatches}
-      isLoading={mutation.isPending}
-      isError={mutation.isError}
-      onRowAction={(key) => {
-        // setSelectedBatchID(key)
-        setOpenReportsModal(true)
-      }}
-      removeWrapper
     />,
   ])
 
@@ -161,7 +148,7 @@ export default function SingleTransactionsStats({ workspaceID }) {
       end_date: thisMonth,
     }
     if (!mutation.data && date?.start && date?.end) {
-      getBulkReportData(dateRange)
+      getAPITransactionsData(dateRange)
     }
   }, [])
 
@@ -190,7 +177,7 @@ export default function SingleTransactionsStats({ workspaceID }) {
         <div className="flex items-end justify-between">
           <CardHeader
             title={
-              'Single Transactions History' +
+              'API Transactions History' +
               ` (${
                 date
                   ? formatter.formatRange(
@@ -220,7 +207,7 @@ export default function SingleTransactionsStats({ workspaceID }) {
         </div>
 
         {/* TODO:  THIS CAN BE ONCE SINGLE COMPONENT */}
-        {report && Object.keys(report).length > 0 && (
+        {
           <AnimatePresence>
             <motion.div
               initial={{ height: 0, opacity: 0 }}
@@ -230,115 +217,44 @@ export default function SingleTransactionsStats({ workspaceID }) {
               }}
             >
               <Card className={'mt-4 shadow-none'}>
-                <TotalValueStat
-                  label={'Total Transaction'}
-                  icon={{
-                    component: <ListBulletIcon className="h-5 w-5" />,
-                    color: 'primary',
-                  }}
-                  count={report?.batches?.count || 0}
-                  value={formatCurrency(report?.batches?.value || 0)}
-                />
-                <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-12 ">
-                  <div className="flex flex-col gap-4">
+                {Object.keys(report).length > 0 ? (
+                  <div className="flex flex-col gap-4 md:flex-row md:justify-between">
                     <TotalValueStat
-                      label={'Total Direct Transaction'}
+                      label={'Total Transactions'}
                       icon={{
                         component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'primary-800',
+                        color: 'primary',
                       }}
-                      count={report?.direct?.all?.count || 0}
-                      value={formatCurrency(report?.direct?.all?.value || 0)}
+                      count={transactions.length || 0}
+                      value={'N/A'}
                     />
                     <TotalValueStat
-                      label={'Proccessed Direct Batches'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'primary-800',
-                      }}
-                      count={report?.direct?.proccessed?.count || 0}
-                      value={formatCurrency(
-                        report?.direct?.proccessed?.value || 0,
-                      )}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    <TotalValueStat
-                      label={'Total Voucher Transaction'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'secondary',
-                      }}
-                      count={report?.voucher?.all?.count || 0}
-                      value={formatCurrency(report?.voucher?.all?.value || 0)}
-                    />
-                    <TotalValueStat
-                      label={'Proccessed Voucher Transaction'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'secondary',
-                      }}
-                      count={report?.voucher?.proccessed?.count || 0}
-                      value={formatCurrency(
-                        report?.voucher?.proccessed?.value || 0,
-                      )}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    <TotalValueStat
-                      label={'Successful Direct Transaction'}
+                      label={'Successful Transactions'}
                       icon={{
                         component: <ListBulletIcon className="h-5 w-5" />,
                         color: 'success',
                       }}
-                      count={report?.directTransactions?.successful?.count || 0}
-                      value={formatCurrency(
-                        report?.directTransactions?.successful?.value || 0,
-                      )}
+                      count={report?.successful_count || 0}
+                      value={formatCurrency(report?.successful_value || 0)}
                     />
+
                     <TotalValueStat
-                      label={'Failed Direct Transactions'}
+                      label={'Failed Transactions'}
                       icon={{
                         component: <ListBulletIcon className="h-5 w-5" />,
                         color: 'danger',
                       }}
-                      count={report?.directTransactions?.failed?.count || 0}
-                      value={formatCurrency(
-                        report?.directTransactions?.failed?.value || 0,
-                      )}
+                      count={report?.failed_count || 0}
+                      value={formatCurrency(report?.failed_value || 0)}
                     />
                   </div>
-                  <div className="flex flex-col gap-4">
-                    <TotalValueStat
-                      label={'Successful Voucher Transaction'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'success',
-                      }}
-                      count={
-                        report?.voucherTransactions?.successful?.count || 0
-                      }
-                      value={formatCurrency(
-                        report?.voucherTransactions?.successful?.value || 0,
-                      )}
-                    />
-                    <TotalValueStat
-                      label={'Failed Voucher Transactions'}
-                      icon={{
-                        component: <ListBulletIcon className="h-5 w-5" />,
-                        color: 'danger',
-                      }}
-                      count={report?.voucherTransactions?.failed?.count || 0}
-                      value={formatCurrency(
-                        report?.voucherTransactions?.failed?.value || 0,
-                      )}
-                    />
-                  </div>
-                </div>
+                ) : (
+                  <TotalStatsLoader className={'justify-between'} />
+                )}
               </Card>
             </motion.div>
           </AnimatePresence>
-        )}
+        }
       </Card>
       {/*  CURRENTLY ACTIVE TABLE */}
       <Card className={'mb-8 w-full'}>

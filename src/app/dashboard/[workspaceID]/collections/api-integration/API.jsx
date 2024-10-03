@@ -36,6 +36,7 @@ import APIConfigViewModal from './APIConfigView'
 import { getAPICollectionLatestTransactions } from '@/app/_actions/transaction-actions'
 
 import { parseDate, getLocalTimeZone } from '@internationalized/date'
+import LoadingPage from '@/app/loading'
 
 export const API_KEY_TRANSACTION_COLUMNS = [
   { name: 'DATE', uid: 'created_at', sortable: true },
@@ -195,17 +196,11 @@ const APIIntegration = ({ workspaceID }) => {
     }
   }, [])
 
-  console.log(mutation.data)
+  const LATEST_TRANSACTIONS = mutation.data?.data?.data || []
 
-  const LATEST_TRANSACTIONS = mutation.data?.data?.data
-
-  console.log(LATEST_TRANSACTIONS)
-
-  // return isFetching ? (
-  //   <LoadingPage />
-  // ) :
-
-  return (
+  return isFetching ? (
+    <LoadingPage />
+  ) : (
     <>
       <APIConfigViewModal
         configData={apiKeyData}

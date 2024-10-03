@@ -413,20 +413,22 @@ export function TotalValueStat({ label, icon, count, value }) {
           </span>
         </div>
       </div>
-      <Button
-        size="sm"
-        className={cn(
-          'h-max min-h-max max-w-max cursor-pointer rounded-lg bg-primary-50 p-2 text-[13px] font-semibold capitalize text-primary',
+      {value && (
+        <Button
+          size="sm"
+          className={cn(
+            'h-max min-h-max max-w-max cursor-pointer rounded-lg bg-primary-50 p-2 text-[13px] font-semibold capitalize text-primary',
 
-          {
-            'bg-red-50 text-red-500': icon?.color === 'danger',
-            'bg-green-50 text-green-600': icon?.color === 'success',
-            'bg-secondary/10 text-orange-600': icon?.color === 'secondary',
-          },
-        )}
-      >
-        {value}
-      </Button>
+            {
+              'bg-red-50 text-red-500': icon?.color === 'danger',
+              'bg-green-50 text-green-600': icon?.color === 'success',
+              'bg-secondary/10 text-orange-600': icon?.color === 'secondary',
+            },
+          )}
+        >
+          {value}
+        </Button>
+      )}
     </div>
   )
 }

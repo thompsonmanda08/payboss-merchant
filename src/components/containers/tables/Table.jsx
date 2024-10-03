@@ -14,13 +14,15 @@ import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
 import Loader from '@/components/ui/Loader'
 import { EyeIcon } from '@heroicons/react/24/outline'
+import Search from '@/components/ui/Search'
+import SelectField from '@/components/ui/SelectField'
 
 export default function CustomTable({
   columns,
   rows,
   selectedKeys,
   setSelectedKeys,
-  rowsPerPage = 9,
+  limitPerRow,
   selectionBehavior,
   isLoading,
   removeWrapper,
@@ -28,16 +30,32 @@ export default function CustomTable({
   emptyCellValue,
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore()
-
+  const [rowsPerPage, setRowsPerPage] = React.useState(limitPerRow || 6)
   const [page, setPage] = React.useState(1)
+
+  const [sortDescriptor, setSortDescriptor] = React.useState({
+    column: 'amount',
+    direction: 'ascending',
+  })
 
   const pages = Math.ceil(rows?.length / rowsPerPage)
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage
     const end = start + rowsPerPage
-    return rows?.slice(start, end) || []
-  }, [page, rows])
+
+    return rows?.slice(start, end)
+  }, [page, rows, rowsPerPage])
+
+  const sortedItems = React.useMemo(() => {
+    return [...items].sort((a, b) => {
+      const first = a[sortDescriptor.column]
+      const second = b[sortDescriptor.column]
+      const cmp = first < second ? -1 : first > second ? 1 : 0
+
+      return sortDescriptor.direction === 'descending' ? -cmp : cmp
+    })
+  }, [sortDescriptor, items])
 
   const renderCell = React.useCallback((row, columnKey) => {
     const cellValue = row[columnKey]
@@ -91,21 +109,48 @@ export default function CustomTable({
     }
   }, [])
 
+  const onRowsPerPageChange = React.useCallback((e) => {
+    setRowsPerPage(Number(e.target.value))
+    setPage(1)
+  }, [])
+
+  const loadingContent = React.useMemo(() => {
+    return (
+      <div className="-mt-8 flex flex-1 items-center rounded-lg">
+        <Loader
+          size={100}
+          classNames={{ wrapper: 'bg-slate-200/50 rounded-xl h-full' }}
+        />
+      </div>
+    )
+  }, [isLoading])
+
   const bottomContent = React.useMemo(() => {
     return (
       pages > 1 && (
-        <div className="flex w-full justify-center">
-          {
-            <Pagination
-              isCompact
-              showControls
-              showShadow
-              color="primary"
-              page={page}
-              total={pages}
-              onChange={(page) => setPage(page)}
+        <div className="flex w-full items-center justify-between">
+          <span className="text-small text-default-400">
+            Total: {rows.length} transactions
+          </span>
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            page={page}
+            total={pages}
+            onChange={(page) => setPage(page)}
+          />
+          <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-slate-400">
+            Rows per page:{' '}
+            <SelectField
+              className="h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
+              onChange={onRowsPerPageChange}
+              placeholder={rowsPerPage.toString()}
+              options={['5', '8', '10', '16', '20']}
+              defaultValue={8}
             />
-          }
+          </label>
         </div>
       )
     )
@@ -114,14 +159,13 @@ export default function CustomTable({
   return (
     <Table
       aria-label="Example table with custom cells"
-      className="max-h-[500px]"
+      className="max-h-[1080px]"
       removeWrapper={removeWrapper}
       classNames={{
         table: cn('align-top items-start justify-start', {
           'min-h-[400px]': isLoading || !rows,
         }),
         wrapper: cn('min-h-[200px]', { 'min-h-max': pages <= 1 }),
-        td: 'bg-red-5',
       }}
       // classNames={}
       // showSelectionCheckboxes
@@ -132,9 +176,10 @@ export default function CustomTable({
       selectionBehavior={selectionBehavior}
       isStriped
       isHeaderSticky
-      // onRowAction={onRowAction ? (key) => onRowAction(key) : null}
       onRowAction={(key) => onRowAction(key)}
       bottomContent={bottomContent}
+      sortDescriptor={sortDescriptor}
+      onSortChange={setSortDescriptor}
     >
       <TableHeader columns={columns} className="fixed">
         {(column) => (
@@ -149,12 +194,14 @@ export default function CustomTable({
       <TableBody
         items={items}
         isLoading={isLoading}
-        loadingContent={
-          <Loader
-            color={'#ffffff'}
-            classNames={{ wrapper: 'bg-slate-900/10 h-full rounded-xl' }}
-          />
-        }
+        loadingContent={loadingContent}
+        // loadingContent={
+        //   <Loader
+        //     // color={'#ffffff'}
+        //     size={48}
+        //     classNames={{ wrapper: 'bg-slate-200/30 h-full rounded-xl' }}
+        //   />
+        // }
         emptyContent={'No Data to display.'}
         align="top"
       >

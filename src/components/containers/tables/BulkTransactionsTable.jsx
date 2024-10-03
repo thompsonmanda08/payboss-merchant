@@ -227,9 +227,8 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
     return (
       <div className="mt-24 flex flex-1 items-center rounded-lg">
         <Loader
-          color={'#ffffff'}
           size={100}
-          classNames={{ wrapper: 'bg-primary-900/5 rounded-xl mt-8 h-full' }}
+          classNames={{ wrapper: 'bg-slate-200/50 rounded-xl mt-8 h-full' }}
         />
       </div>
     )
@@ -364,13 +363,13 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
       // topContentPlacement="outside"
       // bottomContentPlacement="outside"
       sortDescriptor={sortDescriptor}
+      topContent={topContent}
+      bottomContent={bottomContent}
+      onSortChange={setSortDescriptor}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}
       isStriped
       isHeaderSticky
-      topContent={topContent}
-      bottomContent={bottomContent}
-      onSortChange={setSortDescriptor}
     >
       <TableHeader columns={headerColumns} className="fixed">
         {(column) => (

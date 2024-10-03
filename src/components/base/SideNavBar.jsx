@@ -63,7 +63,7 @@ function SideNavBar({ params }) {
     // *************** DISBURSEMENTS AND PAYOUTS ************ //
     {
       ID: 'payments',
-      name: 'Make Payments',
+      name: 'Pay',
       Icon: BanknotesIcon,
       // href: `${dashboardRoute}/payments`,
       subMenuItems: [
@@ -104,7 +104,7 @@ function SideNavBar({ params }) {
     // *************** COLLECTIONS AND INCOME *************** //
     {
       ID: 'collections',
-      name: 'Manage Income',
+      name: 'Get Paid',
       Icon: InboxArrowDownIcon,
       subMenuItems: [
         // {
@@ -163,7 +163,7 @@ function SideNavBar({ params }) {
         //   Icon: PresentationChartLineIcon,
         // },
         {
-          name: 'Bulk Payments',
+          name: 'Payment Reports',
           href: `${dashboardRoute}/reports/bulk-payments`,
           Icon: CircleStackIcon,
         },
@@ -172,18 +172,18 @@ function SideNavBar({ params }) {
         //   href: `${dashboardRoute}/reports/single-payments`,
         //   Icon: ArrowRightCircleIcon,
         // },
-        // {
-        //   name: 'Collections History',
-        //   href: `${dashboardRoute}/reports/collections`,
-        //   Icon: ArrowDownOnSquareStackIcon,
-        // },
+        {
+          name: 'Collection Reports',
+          href: `${dashboardRoute}/reports/collection`,
+          Icon: ArrowDownOnSquareStackIcon,
+        },
         // {
         //   name: 'All Transactions History',
         //   href: `${dashboardRoute}/reports/transactions`,
         //   Icon: NumberedListIcon,
         // },
         {
-          name: 'Statement',
+          name: 'Wallet Statement',
           href: `${dashboardRoute}/reports/statement`,
           Icon: ClipboardDocumentIcon,
         },

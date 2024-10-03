@@ -1,12 +1,12 @@
 import LoadingPage from '@/app/loading'
 import React, { Suspense } from 'react'
-import SingleTransactionsStats from './SingleTransactionsStats'
+import APITransactionsStats from './APITransactionsStats'
 
 export default async function SingleTransactionsStatsPage({ params }) {
   const { workspaceID } = params
   return (
     <Suspense fallback={<LoadingPage />}>
-      <SingleTransactionsStats workspaceID={workspaceID} />
+      <APITransactionsStats workspaceID={workspaceID} />
     </Suspense>
   )
 }
