@@ -32,7 +32,7 @@ export default function SideNavItems({
           const activeLayer = pathArr.includes(ID.toLowerCase())
 
           return (
-            <li key={index} className="flex flex-col">
+            <li key={href || index} className="flex flex-col">
               {subMenuItems ? (
                 <div
                   onClick={() => handleExpand(index)}

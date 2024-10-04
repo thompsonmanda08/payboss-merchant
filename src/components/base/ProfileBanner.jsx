@@ -25,6 +25,7 @@ export default function ProfileBanner({ className }) {
             <Image
               className="z-0 h-full w-full object-cover"
               src={DefaultCover}
+              alt="banner"
               width={1024}
               height={300}
             />

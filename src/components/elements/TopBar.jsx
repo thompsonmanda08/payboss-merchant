@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { BellIcon } from '@heroicons/react/24/solid'
 import { capitalize, cn, formatCurrency } from '@/lib/utils'
@@ -14,23 +14,29 @@ import {
 } from '@nextui-org/react'
 import useAuthStore from '@/context/authStore'
 import { Skeleton } from '../ui/skeleton'
-import useAccountProfile from '@/hooks/useProfileDetails'
 import useNavigation from '@/hooks/useNavigation'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { WalletIcon } from '@heroicons/react/24/outline'
 import useDashboard from '@/hooks/useDashboard'
-import { useWorkspaceInit } from '@/hooks/useQueryHooks'
-import useFloatingHeader from '@/hooks/useFloatingHeader'
 import BreadCrumbLinks from '../base/BreadCrumbLinks'
+import { useWorkspaceInit } from '@/hooks/useQueryHooks'
+import { useQueryClient } from '@tanstack/react-query'
+import { WORKSPACE_DASHBOARD_QUERY_KEY } from '@/lib/constants'
 
-export default function TopNavBar({}) {
-  const { user } = useAccountProfile()
-  const { workspaceID, workspaceWalletBalance } = useWorkspaces()
-  const { isProfile, currentPath, dashboardRoute } = useNavigation()
+export default function TopNavBar({ user }) {
+  const queryClient = useQueryClient()
+  const { isProfile, currentPath, dashboardRoute, workspaceID } =
+    useNavigation()
   const { isLoading } = useWorkspaceInit(workspaceID)
+  const { workspaceWalletBalance } = useWorkspaces()
 
-  const dataNotReady =
-    isLoading || !user || !workspaceWalletBalance || !workspaceID
+  const dataNotReady = !workspaceWalletBalance || isLoading
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: [WORKSPACE_DASHBOARD_QUERY_KEY, workspaceID],
+    })
+  }, [workspaceID])
 
   return dataNotReady ? (
     <NavbarLoader isProfile />
@@ -245,7 +251,6 @@ export function NavbarLoader({ isProfile }) {
           className={cn('aspect-square h-12 rounded-full', {
             'bg-slate-200 p-4 backdrop-blur-md': isProfile,
           })}
-          div
         />
       </div>
     </div>

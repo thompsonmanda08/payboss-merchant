@@ -2,7 +2,6 @@ import Pagination from '@/components/base/Pagination'
 import usePaymentsStore from '@/context/paymentsStore'
 import { cn } from '@/lib/utils'
 import React, { useMemo, useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
 
 function SummaryTable({ columns, data, actions }) {
   const [currentPage, setCurrentPage] = useState(1)
@@ -43,10 +42,10 @@ function SummaryTable({ columns, data, actions }) {
   )
 
   const renderRows = paginatedData?.map((row, rowIndex) => {
-    const tableRow = columns?.map(({ accessor }) => {
+    const tableRow = columns?.map(({ accessor }, index) => {
       return (
         <td
-          key={uuidv4()}
+          key={row?.ID + String(index)}
           className={cn(
             `border-light border-b px-4 py-2 text-left text-sm text-gray-500`,
             {
@@ -64,7 +63,7 @@ function SummaryTable({ columns, data, actions }) {
     if (actions) {
       tableRow?.push(
         <td
-          key={uuidv4()}
+          key={row?.ID}
           className="border-light border-b px-4 py-2 text-left text-sm text-gray-500 "
         >
           {actions(row)}

@@ -6,6 +6,7 @@ import {
   createWorkspaceSession,
   getServerSession,
   getUserSession,
+  getWorkspaceSessionData,
 } from '@/lib/session'
 import { apiClient } from '@/lib/utils'
 
@@ -63,9 +64,17 @@ export async function getUserSetupConfigs() {
       res.data.userDetails?.merchantID,
     )
 
-    let workspaces = res.data?.workspaces?.map((item) => item?.ID)
+    let workspaceIDs = res.data?.workspaces?.map((item) => item?.ID)
+    let workspaces = res.data?.workspaces
 
-    await createWorkspaceSession(workspaces)
+    // Create a workspace session for the logged in user -
+    // This is used to get the active workspace and workspace user as well as permissions
+    await createWorkspaceSession({
+      workspaces: workspaces,
+      workspaceIDs: workspaceIDs,
+      activeWorkspace: workspaces[0],
+      workspacePermissions: null,
+    })
 
     return {
       success: true,
@@ -452,5 +461,10 @@ export async function getAuthSession() {
 
 export async function getUserDetails() {
   const session = await getUserSession()
+  return session
+}
+
+export async function getWorkspaceSession() {
+  const session = await getWorkspaceSessionData()
   return session
 }

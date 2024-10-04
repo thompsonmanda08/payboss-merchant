@@ -1,6 +1,6 @@
 'use server'
 import authenticatedService from '@/lib/authenticatedService'
-import { getUserSession } from '@/lib/session'
+import { getUserSession, updateWorkspaceSession } from '@/lib/session'
 
 export async function initializeWorkspace(workspaceID) {
   if (!workspaceID) {
@@ -19,6 +19,10 @@ export async function initializeWorkspace(workspaceID) {
     })
 
     if (res.status == 200) {
+      await updateWorkspaceSession({
+        workspacePermissions: res.data,
+        workspaceType: res.data.workspaceType,
+      })
       return {
         success: true,
         message: res.message,

@@ -86,11 +86,9 @@ export async function createUserSession(user, merchantID) {
   })
 }
 
-export async function createWorkspaceSession(workspaces) {
+export async function createWorkspaceSession(workspaceData) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24) // AFTER 1 DAY
-  const session = await encrypt({
-    workspaces,
-  })
+  const session = await encrypt(workspaceData)
 
   cookies().set(WORKSPACE_SESSION, session, {
     httpOnly: true,
@@ -99,6 +97,29 @@ export async function createWorkspaceSession(workspaces) {
     sameSite: 'lax',
     path: '/',
   })
+}
+
+// UPDATE THE WOPRKSPACE SESSION
+export async function updateWorkspaceSession(fields) {
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24) // AFTER 1 DAY
+  const isLoggedIn = await verifySession()
+  const cookie = cookies().get(WORKSPACE_SESSION)?.value
+  const oldSession = await decrypt(cookie)
+
+  if (isLoggedIn && oldSession) {
+    const session = await encrypt({
+      ...oldSession,
+      ...fields,
+    })
+
+    cookies().set(WORKSPACE_SESSION, session, {
+      httpOnly: true,
+      secure: true,
+      expires: expiresAt,
+      sameSite: 'lax',
+      path: '/',
+    })
+  }
 }
 
 export async function verifySession() {
@@ -129,12 +150,12 @@ export async function getUserSession() {
   return null
 }
 
-export async function getWorkspaceIDs() {
+export async function getWorkspaceSessionData() {
   const isLoggedIn = await verifySession()
   const cookie = cookies().get(WORKSPACE_SESSION)?.value
   const session = await decrypt(cookie)
 
-  if (isLoggedIn) return session?.workspaces
+  if (isLoggedIn) return session
 
   return null
 }

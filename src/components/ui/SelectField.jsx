@@ -83,11 +83,12 @@ function SelectField({
                 item?.name || item?.label || item?.[listItemName] || item
               return (
                 <SelectItem
+                  k
                   className="font-medium"
                   classNames={{
                     base: '__OPTION__  bg-transparent data-[hover=true]:bg-primary/20 data-[selected=true]:text-white data-[selected=true]:bg-primary data-[selected=true]:font-semibold data-[selectable=true]:focus:text-primary data-[selectable=true]:focus:bg-primary/20 data-[selectable=true]:hover:text-primary data-[selected=true]:focus:text-white data-[selectable=true]:hover:bg-primary/20 data-[selectable=true]:font-[600] data-[selected=true]:focus:bg-primary data-[hover=true]:hover:text-white ',
                   }}
-                  key={ItemValue}
+                  key={ItemValue || idx}
                   value={ItemValue}
                 >
                   {ItemLabel}

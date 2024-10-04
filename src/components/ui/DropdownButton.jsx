@@ -104,9 +104,9 @@ export default function DropdownButton({
               >
                 <Card className="w-full p-2">
                   <motion.ul className=" flex  w-full flex-col text-sm font-semibold transition-all duration-300 ease-in-out">
-                    {item.subMenuItems.map((subItem) => (
+                    {item.subMenuItems.map((subItem, index) => (
                       <Button
-                        key={subItem.key}
+                        key={subItem.key || index}
                         // as={Link}
                         // href={subItem?.href}
                         onPress={(e) => {

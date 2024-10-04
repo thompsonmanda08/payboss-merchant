@@ -83,7 +83,6 @@ function ScreenLock({ open, session }) {
                     Are you still there?
                   </p>
                   <CircularProgress
-                    s
                     classNames={{
                       svg: 'w-36 h-36 drop-shadow-md',
                       indicator: 'stroke-white',

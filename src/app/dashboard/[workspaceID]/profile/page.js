@@ -16,6 +16,7 @@ export default function ProfilePage() {
             <Image
               className="z-0 h-full w-full object-cover"
               src={DefaultCover}
+              alt="Profile Banner"
               width={1024}
               height={300}
             />

@@ -251,6 +251,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
             src={approvalIllustration}
             width={200}
             height={200}
+            alt="Approval Illustration"
           />
           {selectedActionType?.name == PAYMENT_SERVICE_TYPES[0].name
             ? renderBatchApproval

@@ -3,20 +3,17 @@ import React, { useEffect } from 'react'
 import {
   ArrowDownOnSquareStackIcon,
   ArrowsRightLeftIcon,
-  ArrowTrendingDownIcon,
-  ArrowTrendingUpIcon,
   ArrowUpOnSquareStackIcon,
   BanknotesIcon,
   EllipsisVerticalIcon,
   QrCodeIcon,
   QueueListIcon,
 } from '@heroicons/react/24/outline'
-import Batches from '@/components/containers/tables/BatchSummaryTable'
 import { formatCurrency } from '@/lib/utils'
 import reportsBarChartData from '@/app/dashboard/[workspaceID]/data/reportsBarChartData'
 import { WalletTransactionHistory } from '../workspace/Wallet'
 import PendingApprovals from './PendingAnalytics'
-import { useDashboardAnalytics, useWorkspaceInit } from '@/hooks/useQueryHooks'
+import { useDashboardAnalytics } from '@/hooks/useQueryHooks'
 import { Chip } from '@nextui-org/react'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import { useQueryClient } from '@tanstack/react-query'
@@ -25,6 +22,8 @@ import useNavigation from '@/hooks/useNavigation'
 import Card from '@/components/base/Card'
 import SimpleStats from '@/components/elements/SimpleStats'
 import CardHeader from '@/components/base/CardHeader'
+import OverlayLoader from '@/components/ui/OverlayLoader'
+import { WORKSPACE_TYPES } from '@/lib/constants'
 
 const pendingApprovals = [
   {
@@ -61,24 +60,19 @@ const pendingApprovals = [
   },
 ]
 
-function DashboardAnalytics({ workspaceID }) {
+function DashboardAnalytics({ workspaceID, userRole, workspaceType }) {
   const { chart, items } = reportsBarChartData
   const queryClient = useQueryClient()
 
   const {
     data: analytics,
     isFetching,
-    refetch,
+    isLoading,
   } = useDashboardAnalytics(workspaceID)
   const dashboardAnalytics = analytics?.data
 
-
-
-  const { data: initialization, isLoading } = useWorkspaceInit(workspaceID)
-  const role = initialization?.data
-
   const { workspaceWalletBalance } = useWorkspaces()
-  const { dashboardRoute } = useNavigation()
+  const { dashboardRoute, pathname } = useNavigation()
 
   const walletOptions = [
     {
@@ -108,19 +102,21 @@ function DashboardAnalytics({ workspaceID }) {
     allDisbursements,
   } = dashboardAnalytics || {}
 
+  // Invalidate all the queries when the pathname changes
   useEffect(() => {
     queryClient.invalidateQueries()
-  }, [])
+  }, [pathname])
 
   const dataNotReady = isFetching || isLoading
+
   return (
     <>
-      {/* {dataNotReady && <OverlayLoader show={dataNotReady} />} */}
+      {dataNotReady && <OverlayLoader show={dataNotReady} />}
 
       <div className="flex w-full flex-col gap-4 md:gap-6">
         {/* TOP ROW - WALLET BALANCE && OVERALL VALUES */}
         <div className="flex-cols flex w-full flex-wrap items-start gap-4 md:flex-row">
-          <Card className="flex-1 gap-4 border-none bg-gradient-to-br from-primary to-primary-400">
+          <Card className="flex-1 gap-4 border-none bg-gradient-to-br from-primary to-primary-400 shadow-lg shadow-primary-300/50">
             <Chip
               classNames={{
                 base: 'border-1 border-white/30',
@@ -136,95 +132,27 @@ function DashboardAnalytics({ workspaceID }) {
                 : `ZMW 0.00`}
             </p>
           </Card>
-          <SimpleStats
-            title={'Overall Collections'}
-            figure={allCollections?.count || 0}
-            smallFigure={
-              allCollections?.value
-                ? `(${formatCurrency(allCollections?.value)})`
-                : `(ZMW 0.00)`
-            }
-            classNames={{
-              smallFigureClasses: 'md:text-base font-bold',
-            }}
-            isGood={true}
-            Icon={ArrowDownOnSquareStackIcon}
-          />
-          <SimpleStats
-            title={'Overall Disbursements'}
-            figure={allDisbursements?.count || 0}
-            smallFigure={
-              allDisbursements?.value
-                ? `(${formatCurrency(allDisbursements?.value)})`
-                : `(ZMW 0.00)`
-            }
-            classNames={{
-              smallFigureClasses: 'md:text-base font-bold',
-            }}
-            isBad={true}
-            Icon={ArrowUpOnSquareStackIcon}
-          />
-        </div>
-        {/*  2ND ROW - DAILY FIGURES AND VALUES */}
-        <div className="flex w-full flex-col flex-wrap items-center gap-4 md:flex-row ">
-          <SimpleStats
-            title={'Todays Transactions'}
-            figure={today?.count || 0}
-            smallFigure={
-              today?.value ? `(${formatCurrency(today?.value)})` : `(ZMW 0.00)`
-            }
-            classNames={{
-              smallFigureClasses: 'md:text-base font-semibold',
-            }}
-            // isGood={true}
-            Icon={QueueListIcon}
-          />
-          <SimpleStats
-            title={"Yesterday's Transactions"}
-            figure={yesterday?.count || 0}
-            smallFigure={
-              yesterday?.value
-                ? `(${formatCurrency(yesterday?.value)})`
-                : `(ZMW 0.00)`
-            }
-            classNames={{
-              smallFigureClasses: 'md:text-base font-semibold',
-            }}
-            Icon={QueueListIcon}
-          />
-          <SimpleStats
-            title={"Today's Collections"}
-            figure={collectionsToday?.count || 0}
-            smallFigure={
-              collectionsToday?.value
-                ? `(${formatCurrency(collectionsToday?.value)})`
-                : `(ZMW 0.00)`
-            }
-            classNames={{
-              smallFigureClasses: 'md:text-base font-semibold',
-            }}
-            Icon={ArrowDownOnSquareStackIcon}
-          />
-          <SimpleStats
-            title={"Today's Disbursements"}
-            figure={disbursementsToday?.count || 0}
-            smallFigure={
-              disbursementsToday?.value
-                ? `(${formatCurrency(disbursementsToday?.value)})`
-                : `(ZMW 0.00)`
-            }
-            classNames={{
-              smallFigureClasses: 'md:text-base font-semibold',
-            }}
-            Icon={ArrowUpOnSquareStackIcon}
-          />
-        </div>
 
-        {/* 3RD ROW -  */}
-        {role?.can_approve && (
-          <div className="flex w-full grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-4 ">
-            <PendingApprovals data={pendingApprovals} />
-            <div className="flex w-1/3 max-w-lg flex-col gap-4">
+          {/* DISPLAY COLLECTIONS ANALYTICS DATA */}
+          {(workspaceType == WORKSPACE_TYPES[0]?.ID ||
+            workspaceType == WORKSPACE_TYPES[2]?.ID) && (
+            <>
+              {/* ONLY SHOW COLLECTIONS ANALYTICS IF WORKSPACE TYPE IS COLLECTION */}
+              {workspaceType == WORKSPACE_TYPES[0]?.ID && (
+                <SimpleStats
+                  title={"Today's Collections"}
+                  figure={collectionsToday?.count || 0}
+                  smallFigure={
+                    collectionsToday?.value
+                      ? `(${formatCurrency(collectionsToday?.value)})`
+                      : `(ZMW 0.00)`
+                  }
+                  classNames={{
+                    smallFigureClasses: 'md:text-base font-semibold',
+                  }}
+                  Icon={ArrowDownOnSquareStackIcon}
+                />
+              )}
               <SimpleStats
                 title={'Overall Collections'}
                 figure={allCollections?.count || 0}
@@ -237,8 +165,31 @@ function DashboardAnalytics({ workspaceID }) {
                   smallFigureClasses: 'md:text-base font-bold',
                 }}
                 isGood={true}
-                Icon={ArrowTrendingUpIcon}
+                Icon={ArrowDownOnSquareStackIcon}
               />
+            </>
+          )}
+
+          {/* DISPLAY DISBURSEMENTS ANALYTICS DATA */}
+          {(workspaceType == WORKSPACE_TYPES[1]?.ID ||
+            workspaceType == WORKSPACE_TYPES[2]?.ID) && (
+            <>
+              {/* ONLY SHOW DISBURSEMENTS ANALYTICS IF WORKSPACE TYPE IS DISBURSEMENT */}
+              {workspaceType == WORKSPACE_TYPES[1]?.ID && (
+                <SimpleStats
+                  title={"Today's Disbursements"}
+                  figure={disbursementsToday?.count || 0}
+                  smallFigure={
+                    disbursementsToday?.value
+                      ? `(${formatCurrency(disbursementsToday?.value)})`
+                      : `(ZMW 0.00)`
+                  }
+                  classNames={{
+                    smallFigureClasses: 'md:text-base font-semibold',
+                  }}
+                  Icon={ArrowUpOnSquareStackIcon}
+                />
+              )}
               <SimpleStats
                 title={'Overall Disbursements'}
                 figure={allDisbursements?.count || 0}
@@ -251,14 +202,47 @@ function DashboardAnalytics({ workspaceID }) {
                   smallFigureClasses: 'md:text-base font-bold',
                 }}
                 isBad={true}
-                Icon={ArrowTrendingDownIcon}
+                Icon={ArrowUpOnSquareStackIcon}
               />
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </div>
+        {/*  2ND ROW - DAILY FIGURES AND VALUES */}
 
         <div className="grid w-full grid-cols-1 gap-4 2xl:grid-cols-2">
-          <Batches />
+          {userRole?.can_approve && (
+            <div className="flex flex-1 flex-col gap-4">
+              <SimpleStats
+                title={'Todays Transactions'}
+                figure={today?.count || 0}
+                smallFigure={
+                  today?.value
+                    ? `(${formatCurrency(today?.value)})`
+                    : `(ZMW 0.00)`
+                }
+                classNames={{
+                  smallFigureClasses: 'md:text-base font-semibold',
+                }}
+                // isGood={true}
+                Icon={QueueListIcon}
+              />
+              <SimpleStats
+                title={"Yesterday's Transactions"}
+                figure={yesterday?.count || 0}
+                smallFigure={
+                  yesterday?.value
+                    ? `(${formatCurrency(yesterday?.value)})`
+                    : `(ZMW 0.00)`
+                }
+                classNames={{
+                  smallFigureClasses: 'md:text-base font-semibold',
+                }}
+                Icon={QueueListIcon}
+              />
+              <PendingApprovals data={pendingApprovals} />
+            </div>
+          )}
+          {/* <Batches /> */}
           <Card className={''}>
             <div className="flex items-center justify-between">
               <CardHeader

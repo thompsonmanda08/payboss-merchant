@@ -1,6 +1,5 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import useNavigationStore from '@/context/navigationStore'
 import MobileNavBar from './MobileNavBar'
@@ -11,38 +10,34 @@ import {
   ArrowsRightLeftIcon,
   InboxArrowDownIcon,
   AdjustmentsVerticalIcon,
-  ClipboardDocumentIcon,
   Bars3BottomLeftIcon,
   DocumentChartBarIcon,
   CalculatorIcon,
   WrenchScrewdriverIcon,
-  CircleStackIcon,
   ArrowDownOnSquareStackIcon,
-  ArrowRightCircleIcon,
   ArrowUpOnSquareStackIcon,
   WalletIcon,
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/Button'
 import SideNavItems from './SideNavItems'
-import useWorkspaces from '@/hooks/useWorkspaces'
 import { Skeleton } from '../ui/skeleton'
 import WorkspaceSelection from '../containers/workspace/WorkspaceOptions'
 import useNavigation from '@/hooks/useNavigation'
 import Logo from '../base/Logo'
+import { WORKSPACE_TYPES } from '@/lib/constants'
 
-function SideNavBar({ params }) {
-  const pathname = usePathname()
-  const [expandedSection, setExpandedSection] = useState(null)
+function SideNavBar({ workspaceSession }) {
+  const { dashboardRoute, workspaceID, pathname } = useNavigation()
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore()
-  const { workspaceID, workspaceType } = useWorkspaces()
-  const { dashboardRoute } = useNavigation()
+  const [expandedSection, setExpandedSection] = useState(null)
+  const { workspaceType } = workspaceSession
 
   // *************** COLLECTIONS AND INCOME *************** //
   const COLLECTION_SERVICES = [
     {
       ID: 'collections',
-      name: 'Get Paid',
+      name: 'Manage Income',
       Icon: InboxArrowDownIcon,
       subMenuItems: [
         // {
@@ -91,7 +86,7 @@ function SideNavBar({ params }) {
   const DISBURSEMENT_SERVICES = [
     {
       ID: 'payments',
-      name: 'Pay',
+      name: 'Make Payments',
       Icon: BanknotesIcon,
       // href: `${dashboardRoute}/payments`,
       subMenuItems: [
@@ -174,16 +169,16 @@ function SideNavBar({ params }) {
   ]
 
   const SERVICES =
-    workspaceType == 'collections'
+    workspaceType == WORKSPACE_TYPES[0].ID // "collection"
       ? COLLECTION_SERVICES
-      : workspaceType == 'disbursement'
+      : workspaceType == WORKSPACE_TYPES[1].ID //'disbursement'
         ? DISBURSEMENT_SERVICES
         : [...DISBURSEMENT_SERVICES, ...COLLECTION_SERVICES]
 
   const REPORTS =
-    workspaceType == 'collections'
+    workspaceType == WORKSPACE_TYPES[0].ID
       ? COLLECTION_REPORTS
-      : workspaceType == 'disbursement'
+      : workspaceType == WORKSPACE_TYPES[1].ID
         ? DISBURSEMENT_REPORTS
         : [...DISBURSEMENT_REPORTS, ...COLLECTION_REPORTS]
 

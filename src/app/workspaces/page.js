@@ -19,6 +19,7 @@ async function WorkSpacesPage() {
               <Image
                 className="z-0 h-full w-full object-cover"
                 src={DefaultCover}
+                altit="Cover Image"
                 width={1024}
                 height={300}
               />

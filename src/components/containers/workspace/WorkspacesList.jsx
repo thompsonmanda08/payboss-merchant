@@ -153,9 +153,6 @@ export function ListOfWorkspaces({
 
   const isWorkspaceSettings = pathname.split('/').includes('manage-account')
 
-  console.log(workspaces)
-  console.log(allWorkspaces)
-
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <ScrollArea

@@ -36,7 +36,7 @@ export default function Step4({ updateDetails, backToStart }) {
               <Image
                 className="w-fit object-contain"
                 src={IMG}
-                alt={''}
+                alt={'image'}
                 width={440}
                 height={320}
               />

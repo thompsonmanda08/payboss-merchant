@@ -1,9 +1,5 @@
 import { NextResponse } from 'next/server'
-import {
-  getServerSession,
-  getWorkspaceIDs,
-  getWorkspaceSession,
-} from './lib/session'
+import { getServerSession, getWorkspaceSessionData } from './lib/session'
 
 const PROTECTED_ROUTES = [
   // '/dashboard',
@@ -20,11 +16,11 @@ export async function middleware(request) {
   const { pathname } = request.nextUrl
   const url = request.nextUrl.clone() // REQUIRED FOR BASE ABSOLUTE URL
   const response = NextResponse.next()
-  const workspaces = (await getWorkspaceIDs()) || []
   const session = await getServerSession()
+  const workspaceSession = (await getWorkspaceSessionData()) || []
+  const workspaceIDs = workspaceSession?.workspaceIDs || []
   const urlRouteParams = pathname.match(/^\/dashboard\/([^\/]+)\/?$/)
   const accessToken = session?.accessToken || ''
-  
 
   // CHECK FOR  ROUTES
   const isAuthPage =
@@ -47,7 +43,7 @@ export async function middleware(request) {
       return NextResponse.redirect(url)
     }
 
-    if (!workspaces.includes(workspaceID)) {
+    if (!workspaceIDs.includes(workspaceID)) {
       url.pathname = '/workspaces'
       return NextResponse.redirect(url)
     }

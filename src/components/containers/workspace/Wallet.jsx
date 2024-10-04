@@ -21,6 +21,7 @@ import CardHeader from '@/components/base/CardHeader'
 import EmptyLogs from '@/components/base/EmptyLogs'
 import UploadField from '@/components/base/FileDropZone'
 import { ErrorCard } from '@/components/base/ErrorCard'
+import { useState } from 'react'
 
 const POP_INIT = {
   amount: 0,
@@ -31,12 +32,12 @@ const POP_INIT = {
 
 function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
   const queryClient = useQueryClient()
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { isOpen, onClose, onOpenChange, onOpen } = useDisclosure()
 
-  const [formData, setFormData] = React.useState(POP_INIT)
+  const [formData, setFormData] = useState(POP_INIT)
 
-  const [error, setError] = React.useState({
+  const [error, setError] = useState({
     status: '',
     message: '',
   })
@@ -221,14 +222,16 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                 </div>
               ) : (
                 <>
-                  <ErrorCard
-                    status={'Error'}
-                    title={'Missing Configuration'}
-                    message={
-                      'Start the action again to correctly set the configuration variables'
+                  <EmptyLogs
+                    className={'my-auto'}
+                    classNames={{
+                      heading: 'font-bold text-slate-800 text-lg',
+                      paragraph: 'text-slate-500 text-xs lg:text-sm ',
+                    }}
+                    title={'Active Balance'}
+                    subTitle={
+                      'You need to clear out the balance before you can prefund again'
                     }
-                    handleReload={() => router.back()}
-                    buttonText={'Go back'}
                   />
                 </>
               )}
@@ -308,7 +311,7 @@ export function WalletTransactionHistory({
     <div className="flex w-full flex-col gap-4">
       <Skeleton className="mt-6 h-8 max-w-xs" />
       {Array.from({ length: limit || 5 }).map((_, index) => (
-        <div className="flex justify-between">
+        <div key={index} className="flex justify-between">
           <div className="flex w-full gap-4">
             <Skeleton className="h-8 w-24" />
             <div className="flex w-full flex-col gap-2 pr-8">
@@ -331,12 +334,15 @@ export function WalletTransactionHistory({
     >
       {formattedActivityData.length > 0 ? (
         formattedActivityData.map((items, index) => (
-          <div key={index} className="pr-6">
+          <div key={`${index}${items?.title}`} className="pr-6">
             <p className="text-base font-semibold text-slate-600">
               {items.title}
             </p>
             {items?.data?.map((item, itemIndex) => (
-              <div className="flex flex-col gap-y-4 py-2" key={itemIndex}>
+              <div
+                className="flex flex-col gap-y-4 py-2"
+                key={`${itemIndex}${index}${item?.created_by}`}
+              >
                 <div className="flex items-start space-x-4">
                   <LogTaskType type={item?.type} classNames={{ wrapper: '' }} />
 

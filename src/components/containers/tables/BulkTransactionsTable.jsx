@@ -395,7 +395,7 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
       >
         {(item) => (
           <TableRow
-            key={item?.ID || item?.key || item}
+            key={item?.ID || item}
             // className="hover:bg-primary-50"
             align="top"
           >

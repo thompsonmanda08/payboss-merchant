@@ -48,7 +48,7 @@ const PendingApprovalsItem = ({ label, icon, total }) => {
 
 function PendingApprovals({ data }) {
   return (
-    <Card className={'w-2/3'}>
+    <Card className={'flex-1 self-start'}>
       <CardHeader
         title={'Approvals'}
         infoText={'Transactions that require you attention are displayed below'}

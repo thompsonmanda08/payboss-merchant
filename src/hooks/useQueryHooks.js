@@ -55,7 +55,7 @@ export const useSetupConfig = () =>
   useQuery({
     queryKey: [SETUP_QUERY_KEY],
     queryFn: async () => await getUserSetupConfigs(),
-    staleTime: 3600 * 1000,
+    staleTime: Infinity,
     refetchOnMount: true,
   })
 
@@ -70,7 +70,7 @@ export const useKYCData = () =>
   useQuery({
     queryKey: ['KYC'],
     queryFn: async () => await getAllKYCData(),
-    staleTime: 3600 * 1000,
+    staleTime: Infinity,
   })
 
 export const useAllUsers = () =>
@@ -84,7 +84,8 @@ export const useUserDetails = (userID) =>
   useQuery({
     queryKey: [USERS, userID],
     queryFn: async () => await getUser(userID),
-    staleTime: 300 * 5 * 1000,
+    refetchOnMount: true,
+    staleTime: 0,
   })
 
 export const useAccountRoles = () =>
@@ -114,6 +115,7 @@ export const useWorkspaceMembers = (workspaceID) =>
     queryKey: [WORKSPACE_MEMBERS_QUERY_KEY, workspaceID],
     queryFn: async () => await getWorkspaceMembers(workspaceID),
     refetchOnMount: true,
+    staleTime: Infinity,
   })
 
 export const useAllPaymentTransactions = (workspaceID) =>

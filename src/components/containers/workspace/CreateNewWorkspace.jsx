@@ -10,21 +10,7 @@ import {
 import { Input } from '@/components/ui/InputField'
 import { Button } from '@/components/ui/Button'
 import SelectField from '@/components/ui/SelectField'
-
-const WORKSPACE_TYPES = [
-  {
-    ID: 'collection',
-    label: 'Collection',
-  },
-  {
-    ID: 'disbursement',
-    label: 'Disbursement',
-  },
-  {
-    ID: 'hybrid',
-    label: 'Hybrid',
-  },
-]
+import { WORKSPACE_TYPES } from '@/lib/constants'
 
 export default function CreateNewWorkspaceModal({
   handleCreateWorkspace,

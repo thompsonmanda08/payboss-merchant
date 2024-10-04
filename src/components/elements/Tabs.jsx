@@ -45,7 +45,7 @@ export default function Tabs({
         >
           {tabs.map((tab, index) => (
             <Button
-              key={tab?.name}
+              key={index}
               // href={tab.href}
               variant={'light'}
               onClick={() => navigateTo(index)}

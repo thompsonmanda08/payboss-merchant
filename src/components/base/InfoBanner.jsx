@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import { Button } from '../ui/Button'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
@@ -10,17 +9,14 @@ function InfoBanner({
   infoText,
   onButtonPress,
   href,
-  session,
   classNames,
   className,
   children,
 }) {
-  const { infoTextClasses, buttonClasses } = classNames || ''
   const { allowUserToSubmitKYC } = useAccountProfile()
-  const { isCompleteKYC } = session || ''
+  const { infoTextClasses, buttonClasses } = classNames || ''
 
   return (
-    !isCompleteKYC &&
     allowUserToSubmitKYC && (
       <div
         className={cn(

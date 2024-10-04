@@ -85,6 +85,7 @@ function ProgressStageTracker() {
             src={approvalIllustration}
             width={200}
             height={200}
+            alt="Account Approval Process"
           />
           <div className="flex flex-col items-center justify-center gap-2">
             <h3 className="leading-0 m-0 font-bold">

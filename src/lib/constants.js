@@ -115,6 +115,21 @@ const PAYMENT_SERVICE_TYPES = [
   },
 ]
 
+export const WORKSPACE_TYPES = [
+  {
+    ID: 'collection',
+    label: 'Collection',
+  },
+  {
+    ID: 'disbursement',
+    label: 'Disbursement',
+  },
+  // {
+  //   ID: 'hybrid',
+  //   label: 'Hybrid',
+  // },
+]
+
 const PAYMENT_PROTOCOL = ['direct', 'voucher']
 
 const TASK_ICON_BG_COLOR_MAP = {

@@ -39,7 +39,11 @@ function PartnerLogos() {
             >
               {group.map((company) => (
                 <li key={company.name} className="flex">
-                  <Image src={company.logo} alt={company.name} unoptimized />
+                  <Image
+                    src={company.logo}
+                    alt={company.name || 'company logo'}
+                    unoptimized
+                  />
                 </li>
               ))}
             </ul>
