@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/InputField'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import React from 'react'
 import { capitalize, cn, formatCurrency, formatDate, notify } from '@/lib/utils'
 import { TASK_TYPE, WALLET_HISTORY_QUERY_KEY } from '@/lib/constants'
 import { formatActivityData } from '@/lib/utils'
@@ -21,6 +20,7 @@ import StatusMessage from '@/components/base/StatusMessage'
 import CardHeader from '@/components/base/CardHeader'
 import EmptyLogs from '@/components/base/EmptyLogs'
 import UploadField from '@/components/base/FileDropZone'
+import { ErrorCard } from '@/components/base/ErrorCard'
 
 const POP_INIT = {
   amount: 0,
@@ -47,6 +47,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
       ...fields,
     }))
   }
+
   const isDisabled =
     // !formData?.amount ||
     // formData?.amount < 0 ||
@@ -138,12 +139,13 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                 },
               )}
             >
-              <div role="pre-fund-wallet" className="flex  flex-col gap-4">
-                <p className="text-[14px] font-semibold text-slate-800">
-                  Deposit funds into your PayBoss Wallet
-                </p>
+              {Number(balance) == 0 ? (
+                <div role="pre-fund-wallet" className="flex  flex-col gap-4">
+                  <p className="text-[14px] font-semibold text-slate-800">
+                    Deposit funds into your PayBoss Wallet
+                  </p>
 
-                {/* <Input
+                  {/* <Input
                   type="number"
                   label="Amount"
                   value={formData.amount}
@@ -151,70 +153,85 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
                   onChange={(e) => updateFormData({ amount: e.target.value })}
                   name="amount"
                 /> */}
-                <Input
-                  placeholder="Bank Reference No. "
-                  required
-                  label="Reference Number"
-                  value={formData.bank_rrn}
-                  onChange={(e) => updateFormData({ bank_rrn: e.target.value })}
-                  name="bank_rrn"
-                />
-                <DateSelectField
-                  label={'Date of Deposit'}
-                  className="max-w-md"
-                  required
-                  description={'Date the funds were deposited'}
-                  defaultValue={formData?.date_of_deposit}
-                  value={
-                    formData?.date_of_deposit?.split('').length > 9
-                      ? formData?.date_of_deposit
-                      : undefined
-                  }
-                  maxValue={today(getLocalTimeZone())}
-                  labelPlacement={'outside'}
-                  onChange={(date) => {
-                    updateFormData({
-                      date_of_deposit: formatDate(date, 'YYYY-MM-DD'),
-                    })
-                  }}
-                />
+                  <Input
+                    placeholder="Bank Reference No. "
+                    required
+                    label="Reference Number"
+                    value={formData.bank_rrn}
+                    onChange={(e) =>
+                      updateFormData({ bank_rrn: e.target.value })
+                    }
+                    name="bank_rrn"
+                  />
+                  <DateSelectField
+                    label={'Date of Deposit'}
+                    className="max-w-md"
+                    required
+                    description={'Date the funds were deposited'}
+                    defaultValue={formData?.date_of_deposit}
+                    value={
+                      formData?.date_of_deposit?.split('').length > 9
+                        ? formData?.date_of_deposit
+                        : undefined
+                    }
+                    maxValue={today(getLocalTimeZone())}
+                    labelPlacement={'outside'}
+                    onChange={(date) => {
+                      updateFormData({
+                        date_of_deposit: formatDate(date, 'YYYY-MM-DD'),
+                      })
+                    }}
+                  />
 
-                <UploadField
-                  label="Proof of Payment"
-                  isLoading={isLoading}
-                  required
-                  handleFile={async (file) => {
-                    const file_record = await handleFileUpload(
-                      file,
-                      formData.file?.file_record_id,
-                    )
-                    updateFormData({ url: file_record?.file_url })
-                  }}
-                  acceptedFiles={{
-                    'application/pdf': [],
-                    'image/png': [],
-                    'image/jpeg': [],
-                    'image/jpg': [],
-                  }}
-                />
-                {error.status && (
-                  <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
-                    <StatusMessage
-                      error={error.status}
-                      message={error.message}
-                    />
-                  </div>
-                )}
+                  <UploadField
+                    label="Proof of Payment"
+                    isLoading={isLoading}
+                    required
+                    handleFile={async (file) => {
+                      const file_record = await handleFileUpload(
+                        file,
+                        formData.file?.file_record_id,
+                      )
+                      updateFormData({ url: file_record?.file_url })
+                    }}
+                    acceptedFiles={{
+                      'application/pdf': [],
+                      'image/png': [],
+                      'image/jpeg': [],
+                      'image/jpg': [],
+                    }}
+                  />
+                  {error.status && (
+                    <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
+                      <StatusMessage
+                        error={error.status}
+                        message={error.message}
+                      />
+                    </div>
+                  )}
 
-                <Button
-                  isDisabled={isDisabled}
-                  isLoading={isLoading}
-                  type="button"
-                  onClick={onOpen}
-                >
-                  Deposit
-                </Button>
-              </div>
+                  <Button
+                    isDisabled={isDisabled}
+                    isLoading={isLoading}
+                    type="button"
+                    onClick={onOpen}
+                  >
+                    Deposit
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <ErrorCard
+                    status={'Error'}
+                    title={'Missing Configuration'}
+                    message={
+                      'Start the action again to correctly set the configuration variables'
+                    }
+                    handleReload={() => router.back()}
+                    buttonText={'Go back'}
+                  />
+                </>
+              )}
             </div>
           </div>
           {!hideHistory && (

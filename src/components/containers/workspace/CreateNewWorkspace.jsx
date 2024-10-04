@@ -9,6 +9,7 @@ import {
 } from '@nextui-org/react'
 import { Input } from '@/components/ui/InputField'
 import { Button } from '@/components/ui/Button'
+import SelectField from '@/components/ui/SelectField'
 
 const WORKSPACE_TYPES = [
   {

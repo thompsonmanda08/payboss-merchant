@@ -26,8 +26,8 @@ function Workspaces({ user, showHeader = false, className }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const canCreateWorkspace =
-    user?.role?.toLowerCase() == 'admin' ||
-    user?.role?.toLowerCase() == 'owner' ||
+    (user?.role?.toLowerCase() == 'admin' ||
+      user?.role?.toLowerCase() == 'owner') &&
     KYCStageID == 4
 
   const [loading, setLoading] = useState(false)

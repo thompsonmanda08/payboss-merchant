@@ -6,7 +6,7 @@ import { Button } from '../ui/Button'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
-function Error({
+export function ErrorCard({
   title,
   message,
   status,
@@ -64,7 +64,7 @@ export function PermissionDenied() {
 
   return (
     <div className="flex-2 m-auto flex min-h-[50svh] w-full flex-1 items-center justify-center">
-      <Error
+      <ErrorCard
         status={'401'}
         title={'Permission Denied'}
         message={'You do have the permissions to view this page'}
@@ -80,7 +80,7 @@ export function MissingConfigurationError() {
 
   return (
     <div className="flex-2 m-auto flex min-h-[50svh] w-full flex-1 items-center justify-center">
-      <Error
+      <ErrorCard
         status={'Error'}
         title={'Missing Configuration'}
         message={
