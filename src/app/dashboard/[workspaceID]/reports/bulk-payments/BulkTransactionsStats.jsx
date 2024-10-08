@@ -126,7 +126,10 @@ export default function BulkTransactionsStats({ workspaceID }) {
     if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
       getBulkReportData(dateRange)
     }
-  }, [])
+  }, [dateRange])
+
+  console.log(report)
+  console.log(mutation.data)
 
   return (
     <>

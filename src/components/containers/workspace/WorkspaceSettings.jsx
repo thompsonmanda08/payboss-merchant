@@ -148,6 +148,7 @@ function WorkspaceSettings({ workspaceID }) {
             <SearchOrInviteUsers setSearchQuery={setSearchQuery} />
           )}
         </div>
+
         <div className="flex w-full flex-grow flex-col justify-start">
           {activeTab}
         </div>

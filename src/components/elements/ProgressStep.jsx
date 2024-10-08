@@ -3,7 +3,7 @@ import React from 'react'
 
 function ProgressStep({ STEPS, currentTabIndex }) {
   return (
-    <div className="before:content[''] relative z-0 my-2 mb-8 flex flex-row items-center justify-between gap-4 text-base before:absolute before:left-0 before:right-0  before:top-1/2 before:z-10 before:h-[2px] before:bg-foreground/10 ">
+    <div className="before:content[''] relative z-0 my-8 flex flex-row items-center justify-between gap-4 text-base before:absolute before:left-0 before:right-0  before:top-1/2 before:z-10 before:h-[2px] before:bg-foreground/10 ">
       {/* CTA STEP */}
       {STEPS.map((step, index) => {
         return (

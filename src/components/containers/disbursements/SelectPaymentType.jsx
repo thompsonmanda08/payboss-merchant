@@ -1,7 +1,7 @@
 'use client'
 import { cn, notify } from '@/lib/utils'
 import usePaymentsStore from '@/context/paymentsStore'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import useNavigation from '@/hooks/useNavigation'
 import {
   ArrowRightCircleIcon,
@@ -17,7 +17,6 @@ const SelectPaymentType = ({ setCreatePaymentLoading }) => {
   const router = useRouter()
 
   const {
-    paymentAction,
     openPaymentsModal,
     updatePaymentFields,
     setOpenPaymentsModal,
@@ -58,7 +57,8 @@ const SelectPaymentType = ({ setCreatePaymentLoading }) => {
       return
     }
 
-    router.push(`${type.href}/?protocol=${selectedProtocol}`)
+    // router.push(`${type.href}/?protocol=${selectedProtocol}`)
+    router.push(`payments/create/?protocol=${selectedProtocol}`)
     setOpenPaymentsModal(false)
   }
 

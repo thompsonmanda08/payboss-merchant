@@ -92,9 +92,9 @@ export default function WorkspaceSelection({ isSelected }) {
                 activeWorkspace?.workspace
               )}
             </div>
-            {/* <span className="-mt-1 text-xs font-medium italic text-slate-500">
-              Team: 6 Members
-            </span> */}
+            <span className="-mt-1 text-xs font-medium capitalize text-slate-500">
+              {`${activeWorkspace?.workspaceType}'s Workspace`}
+            </span>
           </div>
           <ChevronRightIcon className={cn('h-4 w-4 ease-in-out')} />
         </div>

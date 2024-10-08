@@ -12,7 +12,7 @@ import CardHeader from '@/components/base/CardHeader'
 import SelectPaymentType from '@/components/containers/disbursements/SelectPaymentType'
 import OverlayLoader from '@/components/ui/OverlayLoader'
 
-export default function Disbursements({ workspaceID }) {
+export default function Disbursements({ workspaceID, bulkTransactions }) {
   const {
     openPaymentsModal,
     openBatchDetailsModal,
@@ -26,6 +26,7 @@ export default function Disbursements({ workspaceID }) {
     <BulkTransactionsTable
       key={PAYMENT_SERVICE_TYPES[0]?.name}
       workspaceID={workspaceID}
+      rows={bulkTransactions}
     />,
     // <SingleTransactionsTable
     //   key={PAYMENT_SERVICE_TYPES[1]?.name}

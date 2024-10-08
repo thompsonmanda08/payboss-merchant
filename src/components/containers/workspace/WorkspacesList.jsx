@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/Button'
-import { cn, notify } from '@/lib/utils'
+import { capitalize, cn, notify } from '@/lib/utils'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import React, { useState } from 'react'
 import { useDisclosure } from '@nextui-org/react'
@@ -162,7 +162,7 @@ export function ListOfWorkspaces({
         )}
       >
         {isLoading ? (
-          <Loader size={60} loadingText={'Loading Workspaces...'} />
+          <Loader size={80} loadingText={'Loading Workspaces...'} />
         ) : (
           <div
             className={cn('grid w-full place-items-center gap-4 rounded-lg', {
@@ -176,7 +176,7 @@ export function ListOfWorkspaces({
                   <WorkspaceItem
                     onClick={() => setLoading(true)}
                     name={item?.workspace}
-                    // description={item?.description}
+                    description={`${capitalize(item?.workspaceType)}'s Workspace`}
                     isVisible={item?.isVisible}
                     href={
                       !isWorkspaceSettings

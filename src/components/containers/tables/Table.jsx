@@ -16,6 +16,7 @@ import Loader from '@/components/ui/Loader'
 import { EyeIcon } from '@heroicons/react/24/outline'
 import Search from '@/components/ui/Search'
 import SelectField from '@/components/ui/SelectField'
+import EmptyLogs from '@/components/base/EmptyLogs'
 
 export default function CustomTable({
   columns,
@@ -28,6 +29,8 @@ export default function CustomTable({
   removeWrapper,
   onRowAction = () => {},
   emptyCellValue,
+  emptyDescriptionText,
+  emptyTitleText,
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore()
   const [rowsPerPage, setRowsPerPage] = React.useState(limitPerRow || 6)
@@ -156,6 +159,21 @@ export default function CustomTable({
     )
   }, [rows, pages])
 
+  const emptyContent = React.useMemo(() => {
+    return (
+      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600">
+        <EmptyLogs
+          className={'my-auto mt-16'}
+          classNames={{ heading: 'text-sm text-slate-500 font-medium' }}
+          title={emptyTitleText || 'No data to display.'}
+          subTitle={
+            emptyDescriptionText || 'you have no data to be displayed here.'
+          }
+        />
+      </div>
+    )
+  }, [rows])
+
   return (
     <Table
       aria-label="Example table with custom cells"
@@ -195,14 +213,7 @@ export default function CustomTable({
         items={items}
         isLoading={isLoading}
         loadingContent={loadingContent}
-        // loadingContent={
-        //   <Loader
-        //     // color={'#ffffff'}
-        //     size={48}
-        //     classNames={{ wrapper: 'bg-slate-200/30 h-full rounded-xl' }}
-        //   />
-        // }
-        emptyContent={'No Data to display.'}
+        emptyContent={emptyContent}
         align="top"
       >
         {(item) => (

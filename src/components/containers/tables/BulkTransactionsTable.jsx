@@ -44,13 +44,13 @@ const SERVICE_FILTERS = [
   },
 ]
 
-export default function BulkTransactionsTable({ workspaceID, key }) {
+export default function BulkTransactionsTable({ workspaceID, rows }) {
   // DATA FETCHING
   const { data: bulkTransactionsResponse, isLoading } =
     useBulkTransactions(workspaceID)
 
-  // DEFINE FILTERABLE ROWS AND COLUMNS
-  const rows = bulkTransactionsResponse?.data?.batches || []
+  // // DEFINE FILTERABLE ROWS AND COLUMNS
+  // const rows = bulkTransactionsResponse?.data?.batches || []
   const columns = bulkTransactionColumns
   const { setSelectedBatch, setOpenBatchDetailsModal, setOpenPaymentsModal } =
     usePaymentsStore()
@@ -362,6 +362,7 @@ export default function BulkTransactionsTable({ workspaceID, key }) {
       // selectionMode="multiple"
       // topContentPlacement="outside"
       // bottomContentPlacement="outside"
+      removeWrapper
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       bottomContent={bottomContent}
