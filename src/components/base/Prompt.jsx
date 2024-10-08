@@ -29,7 +29,7 @@ function PromptModal({
       onClose={onClose}
       isDismissable={isDismissable}
       isKeyboardDismissDisabled={isKeyboardDismissDisabled}
-      className={'z-[99999999]'}
+      className={'z-[99999999] max-w-[600px]'}
     >
       <ModalContent>
         {(onClose) => (

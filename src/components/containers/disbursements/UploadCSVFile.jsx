@@ -9,7 +9,7 @@ import { uploadPaymentBatchFile } from '@/app/_actions/pocketbase-actions'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import { SingleFileDropzone } from '@/components/base/FileDropZone'
 
-const UploadCSVFile = ({ navigateForward }) => {
+const UploadCSVFile = ({ navigateForward, navigateBackwards }) => {
   const { paymentAction, updatePaymentFields, selectedProtocol } =
     usePaymentsStore()
   const [isLoading, setIsLoading] = React.useState(false)
@@ -40,7 +40,6 @@ const UploadCSVFile = ({ navigateForward }) => {
     }
 
     notify('error', 'Failed to add file')
-    notify('error', response?.message)
     setIsLoading(false)
     return {}
   }
@@ -105,6 +104,15 @@ const UploadCSVFile = ({ navigateForward }) => {
         </div>
 
         <div className="mt-auto flex w-full items-end justify-end gap-4">
+          <Button
+            className={'bg-primary/10 font-medium text-primary'}
+            color={'primary'}
+            variant="light"
+            onClick={navigateBackwards}
+            isDisabled={isLoading}
+          >
+            Back
+          </Button>
           <Button
             size="lg"
             isLoading={isLoading}

@@ -191,8 +191,8 @@ export const SingleFileDropzone = React.forwardRef(
               >
                 {!isLandscape && (
                   // ONLY SHOWS ON THE UPRIGHT COMPONENT
-                  <p className="py-2 font-medium">
-                    <CheckCircleIcon className="mr-4 h-7 w-7 font-bold text-green-500" />
+                  <p className="flex items-center gap-2 font-bold uppercase">
+                    <CheckCircleIcon className="h-7 w-7 font-bold text-green-500" />
                     Your file is ready
                   </p>
                 )}
@@ -287,13 +287,10 @@ function formatFileSize(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
 }
 
-export default function UploadField({
-  label,
-  isLoading,
-  handleFile,
-  acceptedFiles,
-  ...props
-}) {
+export default function UploadField(
+  { label, isLoading, handleFile, acceptedFiles, ...props },
+  ref,
+) {
   return (
     <motion.div
       key={'step-2-1'}
@@ -305,6 +302,7 @@ export default function UploadField({
         {props?.required && <span className="font-bold text-red-500"> *</span>}
       </label>
       <SingleFileDropzone
+        ref={ref}
         isLandscape
         className={' min-h-8 px-2'}
         isLoading={isLoading}
