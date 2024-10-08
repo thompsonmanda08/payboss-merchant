@@ -7,10 +7,8 @@ import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 import { useDisclosure } from '@nextui-org/react'
 import BatchDetailsPage from '../../../../components/containers/disbursements/ViewBatchDetails'
 import BulkTransactionsTable from '@/components/containers/tables/BulkTransactionsTable'
-import SingleTransactionsTable from '@/components/containers/tables/SingleTransactionsTable'
 import Card from '@/components/base/Card'
 import CardHeader from '@/components/base/CardHeader'
-import Tabs from '@/components/elements/Tabs'
 import SelectPaymentType from '@/components/containers/disbursements/SelectPaymentType'
 import OverlayLoader from '@/components/ui/OverlayLoader'
 
@@ -19,7 +17,6 @@ export default function Disbursements({ workspaceID }) {
     openPaymentsModal,
     openBatchDetailsModal,
     setSelectedActionType,
-    selectedActionType,
     resetPaymentData,
   } = usePaymentsStore()
   const { onClose } = useDisclosure()
@@ -30,11 +27,11 @@ export default function Disbursements({ workspaceID }) {
       key={PAYMENT_SERVICE_TYPES[0]?.name}
       workspaceID={workspaceID}
     />,
-    <SingleTransactionsTable
-      key={PAYMENT_SERVICE_TYPES[1]?.name}
-      workspaceID={workspaceID}
-      onRowAction={(key) => {}}
-    />,
+    // <SingleTransactionsTable
+    //   key={PAYMENT_SERVICE_TYPES[1]?.name}
+    //   workspaceID={workspaceID}
+    //   onRowAction={(key) => {}}
+    // />,
   ])
 
   useEffect(() => {
@@ -50,31 +47,32 @@ export default function Disbursements({ workspaceID }) {
 
   return (
     <>
-      <Card className={'mb-8 w-full'}>
+      <Card className={'mb-8 w-full gap-4'}>
         <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
           <CardHeader
-            title={'Payment Disbursements'}
+            title={'Disbursement Transfers'}
             infoText={
-              'Make payments to your clients or multiple recipients simultaneously with direct transfers'
+              'Make payments to your clients or multiple recipients simultaneously with direct/voucher transfers'
             }
             classNames={{
               titleClasses: 'xl:text-2xl lg:text-xl font-bold',
-              infoClasses: '!text-sm xl:text-base',
+              infoClasses: 'text-[15px] xl:text-base',
             }}
           />
         </div>
 
-        <div className="mt-4 flex w-full items-center justify-between gap-8 ">
+        {/* <div className="mt-4 flex w-full items-center justify-between gap-8 ">
           <Tabs
             className={'my-2 mr-auto max-w-md'}
             tabs={PAYMENT_SERVICE_TYPES}
             currentTab={currentTabIndex}
             navigateTo={navigateTo}
           />
-        </div>
+        </div> */}
+
+        {/* ****  CURRENTLY ACTIVE TABLE */}
+        {activeTab}
       </Card>
-      {/* ****  CURRENTLY ACTIVE TABLE */}
-      {activeTab}
 
       {/************************************************************************/}
       {/* MODALS && OVERLAYS */}
