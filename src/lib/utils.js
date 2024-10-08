@@ -34,7 +34,7 @@ export function formatCurrency(amount) {
   return amount ? currencyFormat.format(amount) : ''
 }
 
-export const formatActivityData = (activityLog) => {
+export const formatActivityData = (activityLog, isNotReverse = true) => {
   const groupedData = {}
 
   activityLog?.forEach((activity) => {
@@ -54,7 +54,7 @@ export const formatActivityData = (activityLog) => {
 
   const result = Object.keys(groupedData).map((date) => ({
     title: date,
-    data: groupedData[date],
+    data: isNotReverse ? groupedData[date] : groupedData[date].reverse(),
   }))
 
   return result

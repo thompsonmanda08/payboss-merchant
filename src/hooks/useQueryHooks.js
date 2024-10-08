@@ -15,11 +15,10 @@ import {
   getBatchDetails,
   getWalletPrefundHistory,
   getAllCollectionTransactions,
-  getBulkAnalyticReports,
-  getAPICollectionLatestTransactions,
 } from '@/app/_actions/transaction-actions'
 import { getAllUsers, getUser } from '@/app/_actions/user-actions'
 import {
+  getWalletPrefunds,
   getWorkspaceAPIKey,
   getWorkspaceMembers,
   initializeWorkspace,
@@ -40,8 +39,8 @@ import {
   DASHBOARD_ANALYTICS_QUERY_KEY,
   PAYMENT_TRANSACTIONS_QUERY_KEY,
   COLLECTION_TRANSACTIONS_QUERY_KEY,
-  BULK_REPORTS_QUERY_KEY,
   WORKSPACE_API_KEY_QUERY_KEY,
+  ACTIVE_PREFUND_QUERY_KEY,
 } from '@/lib/constants'
 
 export const useGeneralConfigOptions = () =>
@@ -174,5 +173,12 @@ export const useWorkspaceAPIKey = (workspaceID) =>
   useQuery({
     queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
     queryFn: async () => await getWorkspaceAPIKey(workspaceID),
+    staleTime: Infinity,
+  })
+
+export const useActivePrefunds = (workspaceID) =>
+  useQuery({
+    queryKey: [ACTIVE_PREFUND_QUERY_KEY, workspaceID],
+    queryFn: async () => await getWalletPrefunds(workspaceID),
     staleTime: Infinity,
   })
