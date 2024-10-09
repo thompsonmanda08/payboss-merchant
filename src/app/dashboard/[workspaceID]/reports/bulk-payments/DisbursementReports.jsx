@@ -61,7 +61,7 @@ const SERVICE_TYPES = [
   // },
 ]
 
-export default function BulkTransactionsStats({ workspaceID }) {
+export default function DisbursementReports({ workspaceID }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [dateRange, setDateRange] = useState({})
   const [isExpanded, setIsExpanded] = useState(true)

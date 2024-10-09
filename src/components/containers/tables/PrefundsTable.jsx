@@ -13,7 +13,6 @@ import {
 import { WalletIcon } from '@heroicons/react/24/outline'
 import { cn, formatCurrency, formatDate } from '@/lib/utils'
 import SoftBoxIcon from '@/components/base/SoftBoxIcon'
-import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
 import EmptyLogs from '@/components/base/EmptyLogs'
 import Loader from '@/components/ui/Loader'
 
@@ -23,15 +22,8 @@ const columns = [
   { name: 'DISBURSED AMOUNT', uid: 'disbursed_amount' },
   { name: 'STATUS', uid: 'status' },
   { name: 'DATE CREATED', uid: 'created_at' },
-  { name: 'VALID TILL', uid: 'expires_on' },
+  { name: 'VALID TIL', uid: 'expires_on' },
 ]
-
-const statusColorMap = {
-  approved: 'success',
-  expired: 'danger',
-  pending: 'warning',
-  locked: 'default',
-}
 
 export default function PrefundsTable({
   rows,
@@ -96,15 +88,11 @@ export default function PrefundsTable({
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[cellValue]}
+            color={item?.isLocked ? 'default' : 'success'}
             size="sm"
             variant="flat"
           >
-            {cellValue == 'approved'
-              ? 'Active'
-              : cellValue == 'expired'
-                ? 'Expired'
-                : 'Locked'}
+            {item?.isLocked ? 'Locked' : 'Active'}
           </Chip>
         )
       case 'created_at':
@@ -242,7 +230,7 @@ export default function PrefundsTable({
         align="top"
       >
         {(item) => (
-          <TableRow key={item?.ID}>
+          <TableRow key={item?.ID} isDisabled={item?.isLocked}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

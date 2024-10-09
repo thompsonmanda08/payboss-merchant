@@ -39,8 +39,9 @@ const PAYMENT_TRANSACTIONS_QUERY_KEY = 'payment-transactions'
 const COLLECTION_TRANSACTIONS_QUERY_KEY = 'collections-transactions'
 const WORKSPACE_API_KEY_QUERY_KEY = 'workspace-api-key'
 const ACTIVE_PREFUND_QUERY_KEY = 'active-prefund-key'
-const BULK_REPORTS_QUERY_KEY = 'bulk-analytics-reports'
-const API_COLLECTIONS_REPORTS_QUERY_KEY = 'api-collections-analytics-reports'
+const BULK_REPORTS_QUERY_KEY = 'disbursement-analytics-reports'
+const COLLECTION_REPORTS_QUERY_KEY = 'collections-analytics-reports'
+const API_COLLECTIONS_REPORTS_QUERY_KEY = 'api-collection-reports'
 
 // ANIMATION_VARIANTS
 const containerVariants = {
@@ -258,6 +259,7 @@ export {
   DASHBOARD_ANALYTICS_QUERY_KEY,
   WORKSPACE_API_KEY_QUERY_KEY,
   BULK_REPORTS_QUERY_KEY,
-  API_COLLECTIONS_REPORTS_QUERY_KEY,
+  COLLECTION_REPORTS_QUERY_KEY,
   ACTIVE_PREFUND_QUERY_KEY,
+  API_COLLECTIONS_REPORTS_QUERY_KEY,
 }

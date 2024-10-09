@@ -80,7 +80,6 @@ const PaymentDetails = ({
 
     notify('error', 'Failed to create payment batch!')
     setError({ status: true, message: response?.message })
-    notify('error', response?.message)
     setLoading(false)
     return
   }
@@ -96,18 +95,6 @@ const PaymentDetails = ({
     setSelectedProtocol(PAYMENT_PROTOCOL[option])
     updatePaymentFields({ protocol: PAYMENT_PROTOCOL[option] })
   }
-
-  useEffect(() => {
-    setError({ status: false, message: '' })
-    setLoading(false)
-  }, [paymentAction])
-
-  useEffect(() => {
-    if (protocol) {
-      setSelectedProtocol(protocol)
-      updatePaymentFields({ protocol })
-    }
-  }, [protocol])
 
   return (
     <div className="mx-auto flex w-full flex-1 flex-col gap-4 md:px-8">

@@ -12,10 +12,8 @@ import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 import Card from '@/components/base/Card'
 import CardHeader from '@/components/base/CardHeader'
 import ProgressStep from '@/components/elements/ProgressStep'
-import InitiatorsLog from '@/components/containers/disbursements/InitiatorsLog'
 import LoadingPage from '@/app/loading'
 import SelectPrefund from '@/components/containers/disbursements/SelectPrefund'
-import { useActivePrefunds } from '@/hooks/useQueryHooks'
 
 export const STEPS = [
   {
@@ -122,6 +120,11 @@ function BulkPaymentAction({ workspaceID }) {
       setSelectedProtocol(protocol)
     }
   }, [protocol])
+
+    useEffect(() => {
+      setError({ status: false, message: '' })
+      setLoading(false)
+    }, [paymentAction])
 
 
 

@@ -1,3 +1,5 @@
+import { formatDate } from '@/lib/utils'
+
 export const convertBulkTransactionsReportToCSV = (objArray) => {
   const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray
   let str = ''
@@ -44,12 +46,11 @@ export const convertWalletStatementToCSV = (objArray) => {
   return str
 }
 
-// TODO
 export const convertAPITransactionToCSV = (objArray) => {
   const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray
   let str = ''
   const headers =
-    'Date,Transaction ID,Service Provider,Source Account,Amount,Service Provider, Status, Remark,'
+    'Date,Transaction ID,Service Provider,Source Account,MNO Ref,MNO Status Description, Remarks, Amount, Status'
   str += headers + '\r\n'
 
   for (let i = 0; i < array.length; i++) {
@@ -59,10 +60,11 @@ export const convertAPITransactionToCSV = (objArray) => {
     line += `"${array[i]?.transactionID || ''}",`
     line += `"${array[i]?.service_provider || ''}",`
     line += `"${array[i]?.destination || ''}",`
+    line += `"${array[i]?.mno_ref || ''}",`
+    line += `"${array[i]?.mno_status_description || ''}",`
+    line += `"${array[i]?.status_description || ''}",`
     line += `"${array[i]?.amount || ''}",`
-    line += `"${array[i]?.service_provider || ''}",`
     line += `"${array[i]?.status || ''}",`
-    line += `"${array[i]?.remarks || ''}",`
 
     str += line + '\r\n'
   }

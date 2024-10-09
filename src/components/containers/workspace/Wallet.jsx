@@ -389,8 +389,8 @@ export function WalletTransactionHistory({
   const { data: walletHistoryResponse, isLoading: loadingWalletHistory } =
     useWalletPrefundHistory(workspaceID)
 
-  const walletData = transactionData || walletHistoryResponse?.data?.data || []
-  const walletHistory = walletData && walletData?.reverse()
+  const walletData = walletHistoryResponse?.data?.data || []
+  const walletHistory = transactionData?.reverse() || walletData?.reverse()
 
   const data = [
     {
@@ -399,21 +399,13 @@ export function WalletTransactionHistory({
     },
   ]
 
+
   const reverseSort = false
   const formattedActivityData = formatActivityData(data, reverseSort)
 
   const isFetching = isLoading || loadingWalletHistory
 
-  //  {
-  //     ID: 'cm1rzilis00005p9v8dg6u5pn',
-  //     type: 'credit',
-  //     created_at: '2024-10-02T14:50:33Z',
-  //     content: 'processed api integration transaction: test13',
-  //     amount: '1.00',
-  //     isPrefunded: true,
-  //     status: 'success',
-  //     remarks: 'transaction processed'
-  //   },
+  console.log(walletData)
 
   function handleClosePrompt() {
     setOpenAttachmentModal(false)
@@ -575,7 +567,7 @@ export function WalletTransactionHistory({
                                 {formatCurrency(item?.amount)}
                               </Chip>
                             </Tooltip>
-                            <Tooltip
+                            {item?.type?.toLowerCase() == 'deposit' && <Tooltip
                               placement="top"
                               content={'View Proof of payment'}
                             >
@@ -588,7 +580,7 @@ export function WalletTransactionHistory({
                               >
                                 <PaperClipIcon className="aspect-square w-5" />
                               </span>
-                            </Tooltip>
+                            </Tooltip>}
                           </div>
 
                           {/* TRANSACTION APPROVAL BUTTON COMPONENTS} */}
@@ -648,9 +640,9 @@ export function WalletTransactionHistory({
         updatePrefundApproval={updatePrefundApproval}
       />
       {/* **************************************************** */}
-      {pathname != `${dashboardRoute}/workspace-settings` && (
+      {/* {pathname != `${dashboardRoute}/workspace-settings` && (
         <AttachmentModal />
-      )}
+      )} */}
       {/* **************************************************** */}
     </>
   )

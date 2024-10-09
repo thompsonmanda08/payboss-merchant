@@ -17,6 +17,8 @@ const SelectPrefund = ({ navigateForward, workspaceID }) => {
 
   const walletActivePrefunds = walletPrefundResponse?.data?.data || []
 
+  console.log(walletActivePrefunds)
+
   const { paymentAction, updatePaymentFields, error, setError } =
     usePaymentsStore()
   const [isLoading, setIsLoading] = React.useState(false)
@@ -46,8 +48,6 @@ const SelectPrefund = ({ navigateForward, workspaceID }) => {
   useEffect(() => {
     updatePaymentFields({ prefundID: selectedKeys.values().next().value })
   }, [selectedKeys])
-
-  
 
   return (
     <>

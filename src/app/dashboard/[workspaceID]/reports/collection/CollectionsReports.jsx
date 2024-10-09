@@ -14,9 +14,12 @@ import { Button } from '@/components/ui/Button'
 import { formatCurrency } from '@/lib/utils'
 
 import { DateRangePickerField } from '@/components/ui/DateSelectField'
-import { BULK_REPORTS_QUERY_KEY } from '@/lib/constants'
+import { COLLECTION_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
-import { getAPICollectionAnalyticReports } from '@/app/_actions/transaction-actions'
+import {
+  getAPICollectionsReport,
+  getTillCollectionsReport,
+} from '@/app/_actions/transaction-actions'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { API_KEY_TRANSACTION_COLUMNS } from '../../collections/api-integration/API'
@@ -25,29 +28,48 @@ import Card from '@/components/base/Card'
 import CardHeader from '@/components/base/CardHeader'
 import Tabs from '@/components/elements/Tabs'
 import TotalValueStat from '@/components/elements/TotalStats'
+import {
+  convertAPITransactionToCSV,
+  downloadCSV,
+} from '@/app/_actions/file-converstion-actions'
 
 const SERVICE_TYPES = [
   {
-    name: 'API Integration Collections',
+    name: 'API Transactions Reports',
     index: 0,
   },
-  // {
-  //   name: 'Payment Links',
-  //   index: 1,
-  // },
+  {
+    name: 'Till Transactions Reports',
+    index: 1,
+  },
 ]
 
-export default function APITransactionsStats({ workspaceID }) {
-  const [dateRange, setDateRange] = useState({})
+export default function CollectionsReports({ workspaceID }) {
+  const [dateRange, setDateRange] = useState()
   const [isExpanded, setIsExpanded] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
 
   // HANDLE FETCH FILTERED TRANSACTION REPORT DATA
   const mutation = useMutation({
-    mutationKey: [BULK_REPORTS_QUERY_KEY, workspaceID],
-    mutationFn: (dateRange) =>
-      getAPICollectionAnalyticReports(workspaceID, dateRange),
+    mutationKey: [COLLECTION_REPORTS_QUERY_KEY, workspaceID],
+    mutationFn: (dateRange) => getCollectionReports(workspaceID, dateRange),
   })
+
+  async function getCollectionReports(workspaceID, dateRange) {
+    // GET ANALYICS REPORT DATA FOR - API COLLECTIONS
+    if (currentTabIndex === 0) {
+      const response = await getAPICollectionsReport(workspaceID, dateRange)
+      return response || []
+    }
+
+    // GET ANALYICS REPORT DATA FOR - TILL COLLECTIONS
+    if (currentTabIndex === 1) {
+      const response = await getTillCollectionsReport(workspaceID, dateRange)
+      return response || []
+    }
+
+    // GET PAYMENT LINK REPORT DATA
+  }
 
   async function getAPITransactionsData(range) {
     return await mutation.mutateAsync(range)
@@ -55,6 +77,8 @@ export default function APITransactionsStats({ workspaceID }) {
 
   const report = mutation?.data?.data?.summary || []
   const transactions = mutation?.data?.data?.data || []
+
+  console.log(mutation?.data)
 
   const hasSearchFilter = Boolean(searchQuery)
 
@@ -79,17 +103,17 @@ export default function APITransactionsStats({ workspaceID }) {
     if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
       getAPITransactionsData(dateRange)
     }
-  }, [])
+  }, [dateRange])
 
   function handleFileExportToCSV() {
     // Implement CSV export functionality here
     if (currentTabIndex === 0) {
-      const csvData = convertToCSV(directBatches)
-      downloadCSV(csvData, 'single_direct_transactions')
+      const csvData = convertAPITransactionToCSV(transactions)
+      downloadCSV(csvData, 'api_collection_transactions')
     }
     if (currentTabIndex === 1) {
-      const csvData = convertToCSV(voucherBatches)
-      downloadCSV(csvData, 'single_voucher_transactions')
+      const csvData = convertAPITransactionToCSV(transactions)
+      downloadCSV(csvData, 'till_collection_transactions')
     }
   }
 
@@ -125,7 +149,7 @@ export default function APITransactionsStats({ workspaceID }) {
         </div>
       </div>
       {/************************************************************************/}
-      <Card className={'mb-8 w-full'}>
+      <Card className={'w-full gap-3'}>
         <div className="flex items-end justify-between">
           <CardHeader
             title={`API Transactions History (${dateRange?.range || '--'})`}
@@ -133,7 +157,31 @@ export default function APITransactionsStats({ workspaceID }) {
               'Transactions logs to keep track of your workspace activity'
             }
           />
-          <div className="flex gap-4">
+        </div>
+
+        <div className="flex w-full items-center justify-between gap-8 ">
+          <Tabs
+            className={'my-2 mr-auto max-w-md'}
+            tabs={SERVICE_TYPES}
+            currentTab={currentTabIndex}
+            navigateTo={navigateTo}
+          />
+          <div className="flex w-full max-w-md gap-4">
+            <Search
+              // className={'mt-auto'}
+              placeholder={'Search by name, or type...'}
+              classNames={{ input: 'h-10' }}
+              onChange={(e) => {
+                setSearchQuery(e.target.value)
+              }}
+            />
+            <Button
+              color={'primary'}
+              onPress={() => handleFileExportToCSV()}
+              startContent={<ArrowDownTrayIcon className="h-5 w-5" />}
+            >
+              Export
+            </Button>
             <Button
               color={'primary'}
               variant="flat"
@@ -158,7 +206,7 @@ export default function APITransactionsStats({ workspaceID }) {
                 opacity: isExpanded ? 1 : 0,
               }}
             >
-              <Card className={'mt-4 shadow-none'}>
+              <Card className={'my-4 shadow-none'}>
                 {Object.keys(report).length > 0 ? (
                   <div className="flex flex-col gap-4 md:flex-row md:justify-between">
                     <div className="flex-1">
@@ -169,7 +217,7 @@ export default function APITransactionsStats({ workspaceID }) {
                           color: 'primary',
                         }}
                         count={transactions.length || 0}
-                        value={'N/A'}
+                        value={''}
                       />
                     </div>
                     <div className="flex-1">
@@ -180,7 +228,7 @@ export default function APITransactionsStats({ workspaceID }) {
                           color: 'success',
                         }}
                         count={report?.successful_count || 0}
-                        value={formatCurrency(report?.successful_value || 0)}
+                        value={formatCurrency(report?.successful_value)}
                       />
                     </div>
 
@@ -203,34 +251,7 @@ export default function APITransactionsStats({ workspaceID }) {
             </motion.div>
           </AnimatePresence>
         }
-      </Card>
-      {/*  CURRENTLY ACTIVE TABLE */}
-      <Card className={'mb-8 w-full'}>
-        <div className="mb-4 flex w-full items-center justify-between gap-8 ">
-          <Tabs
-            className={'my-2 mr-auto max-w-md'}
-            tabs={SERVICE_TYPES}
-            currentTab={currentTabIndex}
-            navigateTo={navigateTo}
-          />
-          <div className="flex w-full max-w-md gap-4">
-            <Search
-              // className={'mt-auto'}
-              placeholder={'Search by name, or type...'}
-              classNames={{ input: 'h-10' }}
-              onChange={(e) => {
-                setSearchQuery(e.target.value)
-              }}
-            />
-            <Button
-              color={'primary'}
-              variant="flat"
-              onPress={() => handleFileExportToCSV()}
-            >
-              <ArrowDownTrayIcon className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
+
         {activeTab}
       </Card>
 
