@@ -33,15 +33,12 @@ import {
 } from '@/lib/constants'
 import APIConfigViewModal from './APIConfigView'
 import { getAPICollectionLatestTransactions } from '@/app/_actions/transaction-actions'
-
-import { parseDate, getLocalTimeZone } from '@internationalized/date'
 import LoadingPage from '@/app/loading'
 import Card from '@/components/base/Card'
 import CardHeader from '@/components/base/CardHeader'
 
 export const API_KEY_TRANSACTION_COLUMNS = [
   { name: 'DATE', uid: 'created_at', sortable: true },
-  // { name: 'SERVICE', uid: 'service' },
   { name: 'TRANSACTION ID', uid: 'transactionID' },
   { name: 'SERVICE PROVIDER', uid: 'service_provider' },
   { name: 'NARRATION', uid: 'narration' },
@@ -72,26 +69,12 @@ const APIIntegration = ({ workspaceID }) => {
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false)
   const [openViewConfig, setOpenViewConfig] = useState(false)
 
-  const thisMonth = formatDate(new Date(), 'YYYY-MM-DD')
   const thirtyDaysAgoDate = new Date()
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
-  const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
+  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD')
+  const end_date = formatDate(new Date(), 'YYYY-MM-DD')
 
-  const [date, setDate] = useState({
-    start: parseDate(thirtyDaysAgo),
-    end: parseDate(thisMonth),
-  })
-
-  const start_date = formatDate(
-    date?.start?.toDate(getLocalTimeZone()),
-    'YYYY-MM-DD',
-  )
-  const end_date = formatDate(
-    date?.end?.toDate(getLocalTimeZone()),
-    'YYYY-MM-DD',
-  )
-
-  // HANDLE FET BULK REPORT DATA
+  // HANDLE FETCH API COLLECTION LATEST TRANSACTION DATA
   const mutation = useMutation({
     mutationKey: [API_COLLECTIONS_REPORTS_QUERY_KEY, workspaceID],
     mutationFn: (dateRange) =>
@@ -140,15 +123,6 @@ const APIIntegration = ({ workspaceID }) => {
       return
     }
 
-    // FEATURE TO DELETE API KEY
-    // if (isDelete && apiKey != null) {
-    //   setApiKey(null)
-    //   notify('success', 'API key has been deleted!')
-    //   setIsDelete(false)
-    //   setIsLoading(false)
-    //   return
-    // }
-
     const response = await setupWorkspaceAPIKey(workspaceID)
 
     if (!response?.success) {
@@ -192,6 +166,7 @@ const APIIntegration = ({ workspaceID }) => {
   }, [unmaskAPIKey])
 
   useEffect(() => {
+    // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
     if (!mutation.data) {
       mutation.mutateAsync({ start_date, end_date })
     }
@@ -250,11 +225,13 @@ const APIIntegration = ({ workspaceID }) => {
                   </span>
                 </div>
               }
-              // emptyContent={
-              //   <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50/50 py-3 text-xs  text-neutral-400 ">
-              //     You have no API keys generated
-              //   </div>
-              // }
+              emptyContent={
+                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3 ">
+                  <span className="flex gap-4 text-sm font-bold capitalize text-neutral-400 ">
+                    You have no API keys generated
+                  </span>
+                </div>
+              }
             >
               {apiKey && (
                 <TableRow key="1">
