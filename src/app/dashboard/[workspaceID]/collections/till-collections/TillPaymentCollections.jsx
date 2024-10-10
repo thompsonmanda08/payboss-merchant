@@ -3,17 +3,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import {
   PlusIcon,
-  Square2StackIcon,
-  ArrowPathIcon,
-  EyeIcon,
-  EyeSlashIcon,
-  Cog6ToothIcon,
   QrCodeIcon,
   ArrowDownTrayIcon,
   ComputerDesktopIcon,
 } from '@heroicons/react/24/outline'
 import { Chip, Spinner, Tooltip, useDisclosure } from '@nextui-org/react'
-import { cn, formatDate, maskString, notify } from '@/lib/utils'
+import { cn, formatDate, notify } from '@/lib/utils'
 import PromptModal from '@/components/base/Prompt'
 import {
   Table,
@@ -24,17 +19,10 @@ import {
   TableCell,
 } from '@nextui-org/react'
 import CustomTable from '@/components/containers/tables/Table'
-import { useTillNumber, useWorkspaceAPIKey } from '@/hooks/useQueryHooks'
-import {
-  generateWorkspaceTillNumer,
-  refreshWorkspaceAPIKey,
-  setupWorkspaceAPIKey,
-} from '@/app/_actions/workspace-actions'
+import { useTillNumber } from '@/hooks/useQueryHooks'
+import { generateWorkspaceTillNumer } from '@/app/_actions/workspace-actions'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import {
-  TILL_COLLECTIONS_QUERY_KEY,
-  WORKSPACE_TILL_NUMBER_QUERY_KEY,
-} from '@/lib/constants'
+import { TILL_COLLECTIONS_QUERY_KEY } from '@/lib/constants'
 import { getTillCollectionsLatestTransactions } from '@/app/_actions/transaction-actions'
 import LoadingPage from '@/app/loading'
 import Card from '@/components/base/Card'
