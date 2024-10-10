@@ -84,7 +84,7 @@ function Workspaces({ user, showHeader = false, className }) {
     <>
       <Card className={cn('gap-6', className)}>
         {showHeader && (
-          <div className="flex justify-between bg-red-500/0">
+          <div className="flex justify-between">
             <div>
               <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
                 Choose a Workspace
@@ -111,11 +111,13 @@ function Workspaces({ user, showHeader = false, className }) {
         )}
 
         {/* ACCOUNT VERIFICATION PROMPTING BANNER */}
-        <InfoBanner
-          buttonText="Submit Documents"
-          infoText="Just one more step, please submit your business documents to aid us with the approval process"
-          href={'manage-account/account-verification'}
-        />
+        {user?.isCompleteKYC && (
+          <InfoBanner
+            buttonText="Submit Documents"
+            infoText="Just one more step, please submit your business documents to aid us with the approval process"
+            href={'manage-account/account-verification'}
+          />
+        )}
 
         <ListOfWorkspaces
           pathname={pathname}
@@ -155,12 +157,11 @@ export function ListOfWorkspaces({
   const isWorkspaceSettings = pathname.split('/').includes('manage-account')
 
   return (
-    <div className="flex w-full flex-col items-center justify-center bg-red-500">
+    <div className="flex w-full flex-col items-center justify-center">
       <ScrollArea
         className={cn(
           'max-h-[500px]} flex w-full min-w-[400px] flex-col lg:px-2',
           { 'max-h-auto lg:max-h-max ': isWorkspaceSettings },
-          { 'max-h-auto lg:max-h-max ': workspaces?.length > 4 },
         )}
       >
         {isLoading ? (

@@ -12,9 +12,12 @@ import Spinner from '@/components/ui/Spinner'
 import useNavigation from '@/hooks/useNavigation'
 import SoftBoxIcon from '@/components/base/SoftBoxIcon'
 
-export default function WorkspaceSelection({ isSelected }) {
-  const { dashboardRoute, activeWorkspace, workspaces } = useNavigation()
-
+export default function WorkspaceSelection({
+  isSelected,
+  dashboardRoute,
+  activeWorkspace,
+  workspaces,
+}) {
   const workspaceOptions = [
     {
       key: 'home',

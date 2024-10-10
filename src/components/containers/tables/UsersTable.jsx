@@ -46,7 +46,7 @@ const columns = [
 export default function UsersTable({
   users = [],
   workspaceID,
-
+  removeWrapper,
   isUserAdmin,
   tableLoading,
 }) {
@@ -233,6 +233,7 @@ export default function UsersTable({
         }}
         isStriped
         isHeaderSticky
+        removeWrapper={removeWrapper}
       >
         <TableHeader columns={columns} className="fixed">
           {(column) => (

@@ -37,7 +37,13 @@ import Modal from '@/components/base/Modal'
 import useWalletStore from '@/context/walletStore'
 import useNavigation from '@/hooks/useNavigation'
 
-function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
+function Wallet({
+  workspaceID,
+  workspaceName,
+  balance,
+  hideHistory,
+  removeWrapper,
+}) {
   const queryClient = useQueryClient()
   const {
     setOpenAttachmentModal,
@@ -199,6 +205,7 @@ function Wallet({ workspaceID, workspaceName, balance, hideHistory }) {
             'flex w-full flex-col items-start justify-center gap-8 md:flex-row',
             {
               'items-center justify-center gap-x-0': hideHistory,
+              'border-none px-0 shadow-none': removeWrapper,
             },
           )}
         >

@@ -12,6 +12,7 @@ import { useDisclosure } from '@nextui-org/react'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import {
   ArrowUturnLeftIcon,
+  BanknotesIcon,
   UserGroupIcon,
   WalletIcon,
   WrenchScrewdriverIcon,
@@ -24,11 +25,14 @@ import useWorkspaceStore from '@/context/workspaceStore'
 import LoadingPage from '@/app/loading'
 import { cn } from '@/lib/utils'
 import useDashboard from '@/hooks/useDashboard'
+import Card from '@/components/base/Card'
+import ActivePockets from './ActivePockets'
 
 const TABS = [
-  { name: 'General', index: 0, icon: WrenchScrewdriverIcon },
-  { name: 'Members', index: 1, icon: UserGroupIcon },
-  { name: 'Wallet', index: 2, icon: WalletIcon },
+  { name: 'General Settings', index: 0, icon: WrenchScrewdriverIcon },
+  { name: 'Workspace Members', index: 1, icon: UserGroupIcon },
+  { name: 'Wallet Deposits', index: 2, icon: WalletIcon },
+  { name: 'Active Pockets', index: 2, icon: BanknotesIcon },
 ]
 
 function WorkspaceSettings({ workspaceID }) {
@@ -76,13 +80,16 @@ function WorkspaceSettings({ workspaceID }) {
       workspaceID={workspaceID}
       isUserAdmin={isAdmin}
       tableLoading={tableLoading}
+      removeWrapper
     />,
     <Wallet
       key={'wallet-details'}
       workspaceName={selectedWorkspace?.workspace}
       workspaceID={workspaceID}
       balance={selectedWorkspace?.balance}
+      removeWrapper
     />,
+    <ActivePockets key={'wallet-pocket'} removeWrapper={true} />,
   ])
 
   function handleNavigation(index) {
@@ -116,7 +123,7 @@ function WorkspaceSettings({ workspaceID }) {
         </div>
       )}
       {/* HEADER */}
-      <div className={cn('mb-2', { 'mb-10': isUserInWorkspace })}>
+      <div className={cn('', { 'mb-4': isUserInWorkspace })}>
         <h2 className="heading-5 !font-bold uppercase tracking-tight text-gray-900">
           {selectedWorkspace?.workspace}
         </h2>
@@ -127,10 +134,11 @@ function WorkspaceSettings({ workspaceID }) {
       </div>
 
       {/* CONTENT */}
-      <div className="flex flex-col gap-4 px-4 lg:p-0">
-        <div className="relative flex items-center justify-between">
+
+      <Card className={'gap-4'}>
+        <div className="relative mb-2 flex items-center justify-between">
           <Tabs
-            className={'absolute md:w-full'}
+            className={' md:w-full'}
             tabs={TABS}
             navigateTo={navigateTo}
             currentTab={currentTabIndex}
@@ -143,23 +151,23 @@ function WorkspaceSettings({ workspaceID }) {
           )}
         </div>
 
-        <div className="">
-          {currentTabIndex == 1 && (
-            <SearchOrInviteUsers setSearchQuery={setSearchQuery} />
-          )}
-        </div>
+        {/* <div className="">
+            {currentTabIndex == 1 && (
+              <SearchOrInviteUsers setSearchQuery={setSearchQuery} />
+            )}
+          </div> */}
 
         <div className="flex w-full flex-grow flex-col justify-start">
           {activeTab}
         </div>
+      </Card>
 
-        {/* MODALS */}
-        <CreateNewUserModal
-          isOpen={isEditingRole || isOpen}
-          onClose={onClose}
-          onOpenChange={onOpenChange}
-        />
-      </div>
+      {/* MODALS */}
+      <CreateNewUserModal
+        isOpen={isEditingRole || isOpen}
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+      />
     </div>
   )
 }

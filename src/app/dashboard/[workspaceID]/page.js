@@ -24,7 +24,7 @@ async function DashboardHome({ params }) {
           buttonText="Submit Documents"
           infoText="Just one more step, please submit your business documents to aid us with the approval process"
           href={'manage-account/account-verification'}
-          user={user}
+          user={session?.user}
         />
       )}
       <DashboardAnalytics

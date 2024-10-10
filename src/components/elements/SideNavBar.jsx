@@ -28,7 +28,8 @@ import Logo from '../base/Logo'
 import { WORKSPACE_TYPES } from '@/lib/constants'
 
 function SideNavBar({ workspaceSession }) {
-  const { dashboardRoute, workspaceID, pathname } = useNavigation()
+  const { dashboardRoute, pathname, activeWorkspace, workspaces } =
+    useNavigation()
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore()
   const [expandedSection, setExpandedSection] = useState(null)
   const { workspaceType } = workspaceSession
@@ -246,24 +247,19 @@ function SideNavBar({ workspaceSession }) {
     })
   }, [pathname])
 
-  const currentWorkspaceID = pathname.split('')[2] || workspaceID
+  const isLoading = !workspaceType || !activeWorkspace?.workspace
 
-  if (!currentWorkspaceID) {
-    // LOADING SKELETON
-    return (
-      <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
-        <Skeleton className="mb-4 h-16 w-full rounded-xl" />
-        <div className="h-full space-y-4">
-          {Array.from({ length: 9 }).map((_, index) => (
-            <Skeleton className="h-10 w-full rounded-lg" key={index} />
-          ))}
-        </div>
-        <Skeleton className="mt-auto h-[50px] w-full rounded-xl" />
+  return isLoading ? (
+    <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
+      <Skeleton className="mb-4 h-16 w-full rounded-xl" />
+      <div className="h-full space-y-4">
+        {Array.from({ length: 9 }).map((_, index) => (
+          <Skeleton className="h-10 w-full rounded-lg" key={index} />
+        ))}
       </div>
-    )
-  }
-
-  return (
+      <Skeleton className="mt-auto h-[50px] w-full rounded-xl" />
+    </div>
+  ) : (
     <>
       <Button
         size="md"
@@ -285,7 +281,11 @@ function SideNavBar({ workspaceSession }) {
         >
           <Logo href={dashboardRoute} />
           <div className="relative py-2">
-            <WorkspaceSelection />
+            <WorkspaceSelection
+              dashboardRoute={dashboardRoute}
+              activeWorkspace={activeWorkspace}
+              workspaces={workspaces}
+            />
           </div>
           <SideNavItems
             navBarItems={SIDE_BAR_OPTIONS}
