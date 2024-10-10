@@ -6,7 +6,6 @@ import CardLoader from '@/components/base/CardLoader'
 import { Input } from '@/components/ui/InputField'
 import useWorkspaces from '@/hooks/useWorkspaces'
 import useAccountProfile from '@/hooks/useProfileDetails'
-import { Button } from '@/components/ui/Button'
 import Card from '@/components/base/Card'
 
 function ProfileDetails() {
@@ -48,14 +47,14 @@ function ProfileDetails() {
                 Personal information and account details
               </p>
             </div>
-            <Button
+            {/* <Button
               type="button"
               variant="light"
               onClick={handleToggleModal}
               className="font-semibold text-primary hover:text-primary/85"
             >
               {openEditModal ? 'Save Changes' : 'Update'}
-            </Button>
+            </Button> */}
           </div>
 
           <div className="mt-4 space-y-4 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">

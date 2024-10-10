@@ -18,13 +18,14 @@ import { cn, formatCurrency, formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
 import Loader from '@/components/ui/Loader'
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { ArrowDownTrayIcon, PlusIcon } from '@heroicons/react/24/outline'
 import Search from '@/components/ui/Search'
 import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
 import SelectField from '@/components/ui/SelectField'
 
 import { useSingleTransactions, useWorkspaceInit } from '@/hooks/useQueryHooks'
 import EmptyLogs from '@/components/base/EmptyLogs'
+import { convertToCSVString } from '@/app/_actions/file-converstion-actions'
 
 export const SingleTransactionColumns = [
   { name: 'DATE CREATED', uid: 'created_at', sortable: true },
@@ -349,6 +350,9 @@ export default function SingleTransactionsTable({
               selectedKeys={visibleColumns}
               setSelectedKeys={setSelectedKeys}
             />
+            <Button onPress={() => convertToCSVString(rows)}>
+              <ArrowDownTrayIcon className="h-5 w-5" /> Export
+            </Button>
 
             {role?.can_initiate && (
               <Button

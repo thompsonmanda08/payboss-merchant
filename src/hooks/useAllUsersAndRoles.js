@@ -11,7 +11,7 @@ const useAllUsersAndRoles = () => {
   const { data: allUserData, isLoading: loadingUser } = useAllUsers()
   const { data: merchantRoles } = useAccountRoles()
   const { data: workspaceRoleData } = useWorkspaceRoles()
-  const { isAccountAdmin, isOwner } = useAccountProfile()
+  const { isAccountAdmin, isOwner, isApprovedUser } = useAccountProfile()
 
   const allUsers = allUserData?.data?.users
   const accountRoles = merchantRoles?.data?.roles || []
@@ -28,6 +28,7 @@ const useAllUsersAndRoles = () => {
     canCreateUsers,
     isAdminOrOwner: canCreateUsers,
     isLoading,
+    isApprovedUser,
   }
 }
 

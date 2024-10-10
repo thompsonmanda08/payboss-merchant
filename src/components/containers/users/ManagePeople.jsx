@@ -65,8 +65,14 @@ function ManagePeople({ classNames }) {
   const { isEditingRole } = useWorkspaceStore()
   const [searchQuery, setSearchQuery] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { canCreateUsers, allUsers, isAdminOrOwner, accountRoles, isLoading } =
-    useAllUsersAndRoles()
+  const {
+    canCreateUsers,
+    allUsers,
+    isAdminOrOwner,
+    accountRoles,
+    isLoading,
+    isApprovedUser,
+  } = useAllUsersAndRoles()
   const { isAccountLevelSettingsRoute, isUserInWorkspace } = useNavigation()
 
   const userSearchResults = allUsers?.filter((user) => {
@@ -76,12 +82,13 @@ function ManagePeople({ classNames }) {
     )
   })
 
-  function resolveAddToWorkspace(e) {
-    e.preventDefault()
-    if (onAdd) return onAdd()
-  }
+  // function resolveAddToWorkspace(e) {
+  //   e.preventDefault()
+  //   if (onAdd) return onAdd()
+  // }
 
-  const allowUserCreation = canCreateUsers && !isUserInWorkspace
+  const allowUserCreation =
+    canCreateUsers && !isUserInWorkspace && isApprovedUser
 
   const TABS = [{ name: 'All Users', index: 0 }]
 
@@ -100,7 +107,7 @@ function ManagePeople({ classNames }) {
       <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
         Manage People
       </h2>
-      <p className=" text-sm text-slate-600">
+      <p className=" mb-4 text-sm text-slate-600">
         Streamline the management of user accounts and their workspaces.
       </p>
 
@@ -109,18 +116,19 @@ function ManagePeople({ classNames }) {
         resolveAddToWorkspace={resolveAddToWorkspace}
       /> */}
 
-      <div className="flex items-center justify-between gap-8 ">
+      <div className="flex w-full items-center justify-between gap-8">
         <Tabs
           tabs={TABS}
+          className={'w-full flex-1'}
           navigateTo={navigateTo}
           currentTab={currentTabIndex}
         />
-        {allowUserCreation && (
+        {allowUserCreation && isApprovedUser && (
           <Button
             endContent={<PlusIcon className=" h-5 w-5" />}
             onPress={onOpen}
           >
-            New User
+            Create New User
           </Button>
         )}
       </div>

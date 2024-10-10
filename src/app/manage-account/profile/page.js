@@ -2,21 +2,18 @@ import Image from 'next/image'
 import { Suspense } from 'react'
 import LoadingPage from '@/app/loading'
 import { DefaultCover } from '@/lib/constants'
-
 import ProfileBanner from '@/components/base/ProfileBanner'
-import ProfileDetails from '@/app/dashboard/[workspaceID]/profile/ProfileDetails'
-import AccountPreferences from '@/app/dashboard/[workspaceID]/profile/AccountPreferences'
+import ProfileDetails from './ProfileDetails'
+import AccountPreferences from './AccountPreferences'
+import ProfileSecuritySettings from '@/components/containers/settings/ProfileSecuritySettings'
 
 function AccountSettings() {
   return (
     <Suspense fallback={<LoadingPage />}>
       <section role="profile-header">
-        <div className="relative flex flex-col">
-          <div className="relative h-[300px] w-full overflow-clip rounded-2xl bg-gray-900 lg:-top-5">
-            {/* <div className="absolute z-50 w-full bg-red-500 py-2">
-              <BreadCrumbLinks isProfile />
-            </div> */}
-            <ProfileBanner className={'top-[0%]'} />
+        <div className="relative flex flex-col lg:px-2">
+          <div className="relative -top-[90px] h-[300px] w-full overflow-clip rounded-t-none bg-gray-900 sm:rounded-2xl">
+            <ProfileBanner />
             <Image
               className="z-0 h-full w-full object-cover"
               src={DefaultCover}
@@ -32,13 +29,11 @@ function AccountSettings() {
         role="profile-content"
         className="z-50 -mt-[160px] flex flex-col gap-4 p-5 md:-mt-[180px] lg:place-items-center"
       >
-        <div className="flex w-full flex-col items-start gap-4 xl:flex-row">
+        <div className="7xl:grid-cols-3 grid w-full  gap-4 md:grid-cols-2 xl:flex-row">
           <ProfileDetails />
+          <ProfileSecuritySettings />
           <AccountPreferences />
         </div>
-        {/* <div className="flex w-full flex-col gap-4 xl:flex-row">
-          <ProfileSecuritySettings />
-        </div> */}
       </section>
     </Suspense>
   )

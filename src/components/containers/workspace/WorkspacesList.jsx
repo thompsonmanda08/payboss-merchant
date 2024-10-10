@@ -17,6 +17,7 @@ import Loader from '@/components/ui/Loader'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import Card from '@/components/base/Card'
 import InfoBanner from '@/components/base/InfoBanner'
+import EmptyLogs from '@/components/base/EmptyLogs'
 
 function Workspaces({ user, showHeader = false, className }) {
   const pathname = usePathname()
@@ -170,7 +171,7 @@ export function ListOfWorkspaces({
                 workspaces?.length > 0,
             })}
           >
-            {RENDER_WORKSPACES &&
+            {RENDER_WORKSPACES && RENDER_WORKSPACES?.length > 0 ? (
               RENDER_WORKSPACES?.map((item) => {
                 return (
                   <WorkspaceItem
@@ -186,7 +187,18 @@ export function ListOfWorkspaces({
                     }
                   />
                 )
-              })}
+              })
+            ) : (
+              <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
+                <EmptyLogs
+                  className={'my-auto'}
+                  title={'Oops! Looks like your KYC is still pending approval'}
+                  subTitle={
+                    'Only the admin or account owner can submit KYC documentation. Once completed, you will be able to create a workspace.'
+                  }
+                />
+              </div>
+            )}
 
             {allowCreateWorkspaces && createFromList && (
               <Button

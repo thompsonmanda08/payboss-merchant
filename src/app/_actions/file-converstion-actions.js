@@ -1,5 +1,28 @@
 import { formatDate } from '@/lib/utils'
 
+export function convertToCSVString(objArray, fileName = 'PayBoss_Report') {
+  const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray
+
+  // Get headers dynamically from the first object in the array
+  const headers = Object.keys(array[0])
+    .map((key) => key.toUpperCase())
+    .join(',')
+    .replaceAll('_', ' ')
+
+  // Initialize CSV string with headers
+  let csvStr = headers + '\r\n'
+
+  // Loop through each object and add values for each key
+  array.forEach((obj) => {
+    let line = Object.values(obj)
+      .map((value) => `"${value || ''}"`)
+      .join(',')
+    csvStr += line + '\r\n'
+  })
+
+  return downloadCSV(csvStr, fileName)
+}
+
 export const convertBulkTransactionsReportToCSV = (objArray) => {
   const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray
   let str = ''
@@ -94,6 +117,8 @@ export const convertSingleTransactionToCSV = (objArray) => {
 
     str += line + '\r\n'
   }
+
+  downloadCSV(str, 'single_transactions')
 
   return str
 }

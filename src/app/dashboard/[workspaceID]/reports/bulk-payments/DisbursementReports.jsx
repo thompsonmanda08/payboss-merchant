@@ -22,10 +22,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import ReportDetailsViewer from '@/components/containers/analytics/ReportDetailsViewer'
 import { singleReportsColumns } from '@/context/paymentsStore'
 import TotalStatsLoader from '@/components/elements/TotalStatsLoader'
-import {
-  convertBulkTransactionsReportToCSV,
-  downloadCSV,
-} from '@/app/_actions/file-converstion-actions'
+import { convertToCSVString } from '@/app/_actions/file-converstion-actions'
 import Card from '@/components/base/Card'
 import CardHeader from '@/components/base/CardHeader'
 import Tabs from '@/components/elements/Tabs'
@@ -69,7 +66,7 @@ export default function DisbursementReports({ workspaceID }) {
   const [selectedBatch, setSelectedBatch] = useState(null) // ON ROW SELECTED
   let formatter = useDateFormatter({ dateStyle: 'long' })
 
-  // HANDLE FET BULK REPORT DATA
+  // HANDLE FETCH BULK REPORT DATA
   const mutation = useMutation({
     mutationKey: [BULK_REPORTS_QUERY_KEY, workspaceID],
     mutationFn: (dateRange) => getBulkAnalyticReports(workspaceID, dateRange),
@@ -110,15 +107,13 @@ export default function DisbursementReports({ workspaceID }) {
   }
 
   function handleFileExportToCSV() {
-    // Implement CSV export functionality here
-    let CSV_DATA
     if (currentTabIndex === 0) {
-      CSV_DATA = convertBulkTransactionsReportToCSV(directBatches)
-      downloadCSV(CSV_DATA, 'bulk_transactions')
+      convertToCSVString(directBatches)
+      return
     }
     if (currentTabIndex === 1) {
-      CSV_DATA = convertBulkTransactionsReportToCSV(voucherBatches)
-      downloadCSV(CSV_DATA, 'bulk_voucher_transactions')
+      convertToCSVString(voucherBatches)
+      return
     }
   }
 
@@ -127,9 +122,6 @@ export default function DisbursementReports({ workspaceID }) {
       getBulkReportData(dateRange)
     }
   }, [dateRange])
-
-  console.log(report)
-  console.log(mutation.data)
 
   return (
     <>
@@ -312,7 +304,6 @@ export default function DisbursementReports({ workspaceID }) {
         </AnimatePresence>
       </Card>
 
-      {/*  CURRENTLY ACTIVE TABLE */}
       <Card className={'mb-8 w-full'}>
         <div className="mb-4 flex w-full items-center justify-between gap-8 ">
           <Tabs
@@ -330,18 +321,14 @@ export default function DisbursementReports({ workspaceID }) {
                 setSearchQuery(e.target.value)
               }}
             />
-            <Button
-              color={'primary'}
-              variant="flat"
-              onPress={() => handleFileExportToCSV()}
-            >
-              <ArrowDownTrayIcon className="h-5 w-5" />
+            <Button onPress={() => handleFileExportToCSV()}>
+              <ArrowDownTrayIcon className="h-5 w-5" /> Export
             </Button>
           </div>
         </div>
         {activeTab}
       </Card>
-      {/*  CURRENTLY ACTIVE TABLE */}
+
       {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
       {openReportsModal && (
         <ReportDetailsViewer

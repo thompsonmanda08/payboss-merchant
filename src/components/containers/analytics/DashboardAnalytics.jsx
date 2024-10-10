@@ -251,7 +251,7 @@ function DashboardAnalytics({ workspaceID, userRole, workspaceType }) {
                   'Brief overview of your latest statement transactions'
                 }
               />
-              <SimpleDropdown
+              {/* <SimpleDropdown
                 isIconOnly
                 classNames={{
                   trigger:
@@ -264,7 +264,7 @@ function DashboardAnalytics({ workspaceID, userRole, workspaceType }) {
                   <EllipsisVerticalIcon className="h-5 w-5 cursor-pointer hover:text-primary" />
                 }
                 dropdownItems={walletOptions}
-              />
+              /> */}
             </div>
 
             <WalletTransactionHistory

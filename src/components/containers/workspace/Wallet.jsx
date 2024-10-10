@@ -399,13 +399,10 @@ export function WalletTransactionHistory({
     },
   ]
 
-
   const reverseSort = false
   const formattedActivityData = formatActivityData(data, reverseSort)
 
   const isFetching = isLoading || loadingWalletHistory
-
-  console.log(walletData)
 
   function handleClosePrompt() {
     setOpenAttachmentModal(false)
@@ -567,20 +564,22 @@ export function WalletTransactionHistory({
                                 {formatCurrency(item?.amount)}
                               </Chip>
                             </Tooltip>
-                            {item?.type?.toLowerCase() == 'deposit' && <Tooltip
-                              placement="top"
-                              content={'View Proof of payment'}
-                            >
-                              <span
-                                onClick={() => {
-                                  setSelectedPrefund(item)
-                                  setOpenAttachmentModal(true)
-                                }}
-                                className="'h-6 hover:bg-slate-300' cursor-pointer self-start rounded-md bg-slate-200 p-[6px] text-lg font-bold text-slate-600 active:opacity-50"
+                            {item?.type?.toLowerCase() == 'deposit' && (
+                              <Tooltip
+                                placement="top"
+                                content={'View Proof of payment'}
                               >
-                                <PaperClipIcon className="aspect-square w-5" />
-                              </span>
-                            </Tooltip>}
+                                <span
+                                  onClick={() => {
+                                    setSelectedPrefund(item)
+                                    setOpenAttachmentModal(true)
+                                  }}
+                                  className="'h-6 hover:bg-slate-300' cursor-pointer self-start rounded-md bg-slate-200 p-[6px] text-lg font-bold text-slate-600 active:opacity-50"
+                                >
+                                  <PaperClipIcon className="aspect-square w-5" />
+                                </span>
+                              </Tooltip>
+                            )}
                           </div>
 
                           {/* TRANSACTION APPROVAL BUTTON COMPONENTS} */}

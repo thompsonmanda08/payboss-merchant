@@ -28,7 +28,7 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
   const [deleteError, setDeleteError] = useState({ status: false, message: '' })
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [deleteWorkspaceName, setDeleteWorkspaceName] = useState('')
-  const { workspaces, allWorkspaces } = useWorkspaces()
+  const { isUserInWorkspace, allWorkspaces } = useWorkspaces()
   const workspace = allWorkspaces.find(
     (workspace) => workspace.ID === workspaceID,
   )
@@ -123,14 +123,14 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
     setIsVisible(!isVisible)
     const response = await changeWorkspaceVisibility(workspaceID, !isVisible)
 
-    if (response?.success) {
-      queryClient.invalidateQueries([SETUP_QUERY_KEY])
-      notify('success', 'Visibility updated successfully')
+    if (!response?.success) {
+      setIsVisible(!isVisible)
+      notify('error', 'Failed to update visibility')
       return
     }
 
-    setIsVisible(!isVisible)
-    notify('error', 'Failed to update visibility')
+    queryClient.invalidateQueries()
+    notify('success', 'Visibility updated successfully')
   }
 
   // CHECK IF WORKSPACE IS VISIBLE
@@ -196,20 +196,24 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
           </form>
         </div>
       </div>
-      <hr className="my-6 h-px bg-slate-900/5" />
-      <div className="flex items-center gap-4 sm:mt-0 sm:flex-auto">
-        <Switch
-          isSelected={isVisible}
-          onValueChange={handleWorkspaceVisibility}
-        />
-        <div className="flex flex-col ">
-          <p className="font-medium text-gray-900">Workspace Visibility</p>
-          <span className="text-xs text-slate-600 xl:text-sm">
-            Activate a to interact with the PayBoss platform using this
-            workspace.
-          </span>
-        </div>
-      </div>
+      {!isUserInWorkspace && (
+        <>
+          <hr className="my-6 h-px bg-slate-900/5" />
+          <div className="flex items-center gap-4 sm:mt-0 sm:flex-auto">
+            <Switch
+              isSelected={isVisible}
+              onValueChange={handleWorkspaceVisibility}
+            />
+            <div className="flex flex-col ">
+              <p className="font-medium text-gray-900">Workspace Visibility</p>
+              <span className="text-xs text-slate-600 xl:text-sm">
+                Activate a to interact with the PayBoss platform using this
+                workspace.
+              </span>
+            </div>
+          </div>
+        </>
+      )}
 
       {!isSandbox && (
         <>

@@ -33,6 +33,10 @@ const useAccountProfile = () => {
     documents?.articles_of_association_url
 
   /* ****** SET STATE VARIABLES**************** */
+  const isApprovedUser =
+    businessDetails?.stageID == 4 &&
+    businessDetails?.isCompleteKYC &&
+    businessDetails?.kyc_approval_status?.toLowerCase() == 'approved'
 
   useEffect(() => {
     if (kycData) {
@@ -107,6 +111,7 @@ const useAccountProfile = () => {
     KYCStageID,
     KYCApprovalStatus,
     allowUserToSubmitKYC,
+    isApprovedUser,
     isOwner,
     isAccountAdmin,
     signedContractDoc,

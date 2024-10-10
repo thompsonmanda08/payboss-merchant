@@ -23,11 +23,8 @@ import PromptModal from '@/components/base/Prompt'
 import useNavigation from '@/hooks/useNavigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { WORKSPACE_MEMBERS_QUERY_KEY } from '@/lib/constants'
-import { adminResetUserPassword } from '@/app/_actions/user-actions'
-import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
-import { useWorkspaceInit } from '@/hooks/useQueryHooks'
-import useDashboard from '@/hooks/useDashboard'
 import Loader from '@/components/ui/Loader'
+import EmptyLogs from '@/components/base/EmptyLogs'
 
 export const roleColorMap = {
   owner: 'success',
@@ -49,8 +46,7 @@ const columns = [
 export default function UsersTable({
   users = [],
   workspaceID,
-  isAdminOrOwner,
-  accountRoles,
+
   isUserAdmin,
   tableLoading,
 }) {
@@ -201,11 +197,40 @@ export default function UsersTable({
     }
   }
 
+  const loadingContent = React.useMemo(() => {
+    return (
+      <div className="mt-24 flex flex-1 items-center rounded-lg">
+        <Loader
+          size={100}
+          classNames={{ wrapper: 'bg-slate-200/50 rounded-xl mt-8 h-full' }}
+        />
+      </div>
+    )
+  }, [tableLoading])
+
+  const emptyContent = React.useMemo(() => {
+    return (
+      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600">
+        <EmptyLogs
+          className={'my-auto mt-16'}
+          classNames={{ heading: 'text-sm text-slate-500 font-medium' }}
+          title={'No transaction data records!'}
+          subTitle={''}
+        />
+      </div>
+    )
+  }, [users])
+
   return (
     <>
       <Table
         aria-label="Example table with custom cells"
-        className="max-h-[700px]"
+        classNames={{
+          table: cn('align-top items-start justify-start', {
+            'min-h-[300px]': isLoading || !users,
+          }),
+          wrapper: cn('min-h-[300px]'),
+        }}
         isStriped
         isHeaderSticky
       >
@@ -220,8 +245,9 @@ export default function UsersTable({
           )}
         </TableHeader>
         <TableBody
-          loadingContent={<Loader />}
           isLoading={tableLoading}
+          loadingContent={loadingContent}
+          emptyContent={emptyContent}
           items={users}
         >
           {(item) => (
