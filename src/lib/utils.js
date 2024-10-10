@@ -105,8 +105,8 @@ export function getUserInitials(name) {
     .join('')
 }
 
-export function capitalize(str) {
-  return str?.charAt(0)?.toUpperCase() + str?.slice(1)
+export function capitalize(str = '') {
+  return str?.toString()?.charAt(0)?.toUpperCase() + str?.toString()?.slice(1)
 }
 
 export function isValidZambianMobileNumber(mobileNumber) {

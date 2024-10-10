@@ -21,6 +21,7 @@ import {
   getWalletPrefunds,
   getWorkspaceAPIKey,
   getWorkspaceMembers,
+  getWorkspaceTillNumber,
   initializeWorkspace,
 } from '@/app/_actions/workspace-actions'
 import {
@@ -41,6 +42,7 @@ import {
   COLLECTION_TRANSACTIONS_QUERY_KEY,
   WORKSPACE_API_KEY_QUERY_KEY,
   ACTIVE_PREFUND_QUERY_KEY,
+  WORKSPACE_TILL_NUMBER_QUERY_KEY,
 } from '@/lib/constants'
 
 export const useGeneralConfigOptions = () =>
@@ -173,6 +175,13 @@ export const useWorkspaceAPIKey = (workspaceID) =>
   useQuery({
     queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
     queryFn: async () => await getWorkspaceAPIKey(workspaceID),
+    staleTime: Infinity,
+  })
+
+export const useTillNumber = (workspaceID) =>
+  useQuery({
+    queryKey: [WORKSPACE_TILL_NUMBER_QUERY_KEY, workspaceID],
+    queryFn: async () => await getWorkspaceTillNumber(workspaceID),
     staleTime: Infinity,
   })
 

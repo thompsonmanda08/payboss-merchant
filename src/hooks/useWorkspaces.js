@@ -5,8 +5,6 @@ import { useGetWorkspaces, useSetupConfig } from './useQueryHooks'
 
 const useWorkspaces = (query) => {
   const pathname = usePathname()
-  const [userInSandbox, setUserInSandbox] = useState(false)
-  const [activeWorkspace, setActiveWorkspace] = useState({})
   const [isSandboxVisible, setIsSandboxVisible] = useState(false)
   const {
     data: workspacesData,
@@ -22,13 +20,6 @@ const useWorkspaces = (query) => {
   const workspaces = setup?.data?.workspaces || []
   const allWorkspaces = workspacesData?.data?.workspaces || []
 
-  // const isWorkspaceAdmin =
-  //   workspaceUserData?.data?.role.toLowerCase() == 'admin'
-  // const isWorkspaceMember =
-  //   workspaceUserData?.data?.role.toLowerCase() == 'member'
-  // const isWorkspaceGuest =
-  //   workspaceUserData?.data?.role.toLowerCase() == 'guest'
-
   const isFetching = fetchingSetup || fetchingWorkspaces
   const isLoading = loadingSetup || loadingWorkspaces
 
@@ -39,6 +30,12 @@ const useWorkspaces = (query) => {
     ? pathname.split('/')[2]
     : query?.workspaceID || ''
 
+  const activeWorkspace = workspaces?.find(
+    (workspace) => workspace?.ID == workspaceID,
+  )
+
+  const userInSandbox = activeWorkspace?.workspace?.toLowerCase() === 'sandbox'
+
   const sandbox = workspaces?.find(
     (item) => item?.workspace?.toLowerCase() === 'sandbox',
   )
@@ -47,23 +44,6 @@ const useWorkspaces = (query) => {
     activeWorkspace?.balance ||
     workspaces?.find((workspace) => workspace?.ID == query?.workspaceID)
       ?.balance
-
-  useEffect(() => {
-    // CHECK IF THE USER IS IN A WORKSPACE
-    if (isUserInWorkspace) {
-      const workspace = workspaces?.find(
-        (workspace) => workspace?.ID === workspaceID,
-      )
-
-      // CHECK IF THE USER IS IN A SANDBOX WORKSPACE
-      if (workspace === sandbox) {
-        setUserInSandbox(true)
-      }
-
-      // SET CURRENTLY ACTIVE WORKSPACE
-      setActiveWorkspace(workspace)
-    }
-  }, [pathname, workspaces, sandbox])
 
   // CHECK IF SANDBOX WORKSPACE IS UNDEFINED
   useEffect(() => {
@@ -80,6 +60,7 @@ const useWorkspaces = (query) => {
     workspaces,
     workspaceID: activeWorkspace?.ID,
     workspaceWalletBalance,
+    isUserInWorkspace,
     sandbox,
     isSandboxVisible,
     setIsSandboxVisible,

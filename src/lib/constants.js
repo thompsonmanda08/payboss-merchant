@@ -42,6 +42,10 @@ const ACTIVE_PREFUND_QUERY_KEY = 'active-prefund-key'
 const BULK_REPORTS_QUERY_KEY = 'disbursement-analytics-reports'
 const COLLECTION_REPORTS_QUERY_KEY = 'collections-analytics-reports'
 const API_COLLECTIONS_REPORTS_QUERY_KEY = 'api-collection-reports'
+const API_COLLECTIONS_QUERY_KEY = 'api-transactions'
+const TILL_COLLECTIONS_REPORTS_QUERY_KEY = 'till-collection-reports'
+const TILL_COLLECTIONS_QUERY_KEY = 'till-transactions'
+const WORKSPACE_TILL_NUMBER_QUERY_KEY = 'workspace-till-number'
 
 // ANIMATION_VARIANTS
 const containerVariants = {
@@ -262,4 +266,8 @@ export {
   COLLECTION_REPORTS_QUERY_KEY,
   ACTIVE_PREFUND_QUERY_KEY,
   API_COLLECTIONS_REPORTS_QUERY_KEY,
+  API_COLLECTIONS_QUERY_KEY,
+  TILL_COLLECTIONS_REPORTS_QUERY_KEY,
+  TILL_COLLECTIONS_QUERY_KEY,
+  WORKSPACE_TILL_NUMBER_QUERY_KEY,
 }

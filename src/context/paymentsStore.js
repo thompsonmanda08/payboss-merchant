@@ -182,18 +182,17 @@ const usePaymentsStore = create((set, get) => ({
 export default usePaymentsStore
 
 export const validationColumns = [
-  { header: 'First Name', accessor: 'first_name' },
-  { header: 'Last Name', accessor: 'last_name' },
-  { header: 'Email', accessor: 'email' },
-  { header: 'Mobile No.', accessor: 'contact' },
-  { header: 'NRC', accessor: 'nrc' },
-  // { header: 'Account Type', accessor: 'account' },
-  { header: 'Mobile/Account No.', accessor: 'destination' },
-  { header: 'Amount', accessor: 'amount' },
-  { header: 'Service', accessor: 'service_provider' },
-  { header: 'Narration', accessor: 'narration' },
-  { header: 'Remarks', accessor: 'remarks' },
-  { header: 'Status', accessor: 'status' },
+  { header: 'FIRST NAME', uid: 'first_name' },
+  { header: 'LAST NAME', uid: 'last_name' },
+  { header: 'EMAIL', uid: 'email' },
+  { header: 'MOBILE NO.', uid: 'contact' },
+  { header: 'NRC', uid: 'nrc' },
+  { header: 'MOBILE/ACCOUNT NO.', uid: 'destination' },
+  { header: 'SERVICE', uid: 'service_provider' },
+  { header: 'NARRATION', uid: 'narration' },
+  { header: 'REMARKS', uid: 'remarks' },
+  { header: 'AMOUNT', uid: 'amount' },
+  { header: 'STATUS', uid: 'status' },
 ]
 
 export const singleReportsColumns = [
