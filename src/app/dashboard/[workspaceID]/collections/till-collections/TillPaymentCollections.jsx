@@ -135,7 +135,7 @@ export default function TillPaymentCollections({ workspaceID }) {
   ) : (
     <>
       <TillNumberBanner
-        configData={apiKeyData}
+        tillNumber={TILL_NUMBER}
         isLoading={isFetching}
         isOpen={openViewConfig}
         onClose={() => {
@@ -188,7 +188,7 @@ export default function TillPaymentCollections({ workspaceID }) {
                 </div>
               }
             >
-              {TILL_NUMBER != [] ? (
+              {
                 <TableRow name="1">
                   <TableCell>
                     <Button
@@ -203,7 +203,7 @@ export default function TillPaymentCollections({ workspaceID }) {
                       }
                     >
                       <h3 className="mb-1 text-[clamp(2rem,1vw,2.5rem)] font-black uppercase text-primary-600">
-                        {TILL_NUMBER}
+                        {TILL_NUMBER || 'TILL NUMBER'}
                       </h3>
                     </Button>
                   </TableCell>
@@ -211,42 +211,57 @@ export default function TillPaymentCollections({ workspaceID }) {
                   <TableCell align="center">
                     <Chip
                       color="primary"
-                      className="flex flex-row items-center text-[clamp(1.25rem,1vw,2rem)]"
+                      className={cn(
+                        'm-0 flex flex-row items-center justify-center rounded-md text-[clamp(1.25rem,1vw,2rem)]',
+                        {
+                          '-mb-3 mt-1': !TILL_NUMBER,
+                        },
+                      )}
                     >
                       <span>*</span> 484 <span>*</span>
-                      <span className="text-[clamp(1rem,1vw,1.5rem)] font-bold">{` ${TILL_NUMBER} * `}</span>
+                      <span className="text-[clamp(1rem,1vw,1.5rem)] font-bold">{` ${TILL_NUMBER || 'TILL NUMBER'} * `}</span>
                       [
                       <span className="text-[clamp(1rem,1vw,1.5rem)] font-bold">
                         {' '}
                         AMOUNT{' '}
                       </span>
                       ] #
-                    </Chip>
+                    </Chip>{' '}
+                    {!TILL_NUMBER && (
+                      <>
+                        <br />
+                        <span className="flex font-medium text-neutral-400">
+                          You currenly do not have a Till Number, generate on
+                          here ☝🏾
+                        </span>
+                      </>
+                    )}
                   </TableCell>
 
                   <TableCell>
                     <>
                       <div className="flex items-center gap-4">
+                        {/* BANNER DISPLAY */}
                         <Tooltip
                           color="secondary"
                           content="Till Number Banner Download"
                         >
-                          <span className="rounded-md bg-secondary/10 p-2 transition-all duration-300 ease-in-out hover:bg-secondary/20">
-                            {' '}
-                            <ArrowDownTrayIcon
-                              onClick={() => setOpenViewConfig(true)}
-                              className="h-6 w-6 cursor-pointer text-secondary hover:opacity-90"
-                            />
+                          <span
+                            className="cursor-pointer rounded-md bg-secondary/10 p-2 text-secondary transition-all duration-300 ease-in-out hover:bg-secondary hover:text-white"
+                            onClick={() => setOpenViewConfig(true)}
+                          >
+                            <ComputerDesktopIcon className={`h-6 w-6 `} />
                           </span>
                         </Tooltip>
+
+                        {/* BANNER DOWNLOAD */}
                         <Tooltip
                           color="default"
                           content="View Till Number Banner"
                         >
-                          {/* BANNER DISPLAY */}
-                          <span className="rounded-md bg-primary/10 p-2 text-primary transition-all duration-300 ease-in-out hover:bg-primary/20">
-                            <ComputerDesktopIcon
-                              className={`h-6 w-6 cursor-pointer`}
+                          <span className="cursor-pointer rounded-md bg-primary p-2 text-white transition-all duration-300 ease-in-out hover:bg-primary/80">
+                            <ArrowDownTrayIcon
+                              className="h-6 w-6"
                               // onClick={() => copyToClipboard(apiKey?.name)}
                             />
                           </span>
@@ -255,13 +270,7 @@ export default function TillPaymentCollections({ workspaceID }) {
                     </>
                   </TableCell>
                 </TableRow>
-              ) : (
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3 ">
-                  <span className="flex gap-4 text-sm font-bold capitalize text-neutral-400 ">
-                    You have no till number generated
-                  </span>
-                </div>
-              )}
+              }
             </TableBody>
           </Table>
 
