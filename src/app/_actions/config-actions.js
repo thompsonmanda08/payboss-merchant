@@ -69,12 +69,14 @@ export async function getUserSetupConfigs() {
 
     // Create a workspace session for the logged in user -
     // This is used to get the active workspace and workspace user as well as permissions
-    await createWorkspaceSession({
-      workspaces: workspaces,
-      workspaceIDs: workspaceIDs,
-      activeWorkspace: workspaces[0],
-      workspacePermissions: null,
-    })
+    if (workspaces) {
+      await createWorkspaceSession({
+        workspaces: workspaces,
+        workspaceIDs: workspaceIDs,
+        activeWorkspace: workspaces?.[0] || null,
+        workspacePermissions: null,
+      })
+    }
 
     return {
       success: true,
@@ -83,6 +85,7 @@ export async function getUserSetupConfigs() {
       status: res.status,
     }
   } catch (error) {
+    console.error(error)
     return {
       success: false,
       message: error?.response?.data?.error || 'Operation failed!',
