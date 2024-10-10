@@ -12,12 +12,14 @@ function InfoBanner({
   classNames,
   className,
   children,
+  user,
 }) {
-  const { allowUserToSubmitKYC } = useAccountProfile()
+  const { allowUserToSubmitKYC, isApprovedUser } = useAccountProfile()
   const { infoTextClasses, buttonClasses } = classNames || ''
 
   return (
-    allowUserToSubmitKYC && (
+    allowUserToSubmitKYC &&
+    !isApprovedUser && (
       <div
         className={cn(
           'mb-4 flex max-h-16 flex-1 items-center justify-between rounded-lg bg-secondary/10 p-2 pl-5 text-orange-600',

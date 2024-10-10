@@ -155,11 +155,12 @@ export function ListOfWorkspaces({
   const isWorkspaceSettings = pathname.split('/').includes('manage-account')
 
   return (
-    <div className="flex w-full flex-col items-center justify-center">
+    <div className="flex w-full flex-col items-center justify-center bg-red-500">
       <ScrollArea
         className={cn(
-          'flex w-full min-w-[400px] flex-col lg:max-h-[500px] lg:px-2',
+          'max-h-[500px]} flex w-full min-w-[400px] flex-col lg:px-2',
           { 'max-h-auto lg:max-h-max ': isWorkspaceSettings },
+          { 'max-h-auto lg:max-h-max ': workspaces?.length > 4 },
         )}
       >
         {isLoading ? (

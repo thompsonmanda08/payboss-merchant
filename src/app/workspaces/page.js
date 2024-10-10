@@ -11,7 +11,7 @@ async function WorkSpacesPage() {
 
   return (
     <Suspense fallback={<LoadingPage />}>
-      <main className="flex h-full min-h-screen items-start justify-start overflow-hidden bg-background text-foreground">
+      <main className="flex h-full min-h-screen items-start justify-start overflow-x-clip bg-background text-foreground">
         <div className="flex h-full max-h-screen w-full flex-col">
           <section role="workspace-header">
             <div className="relative h-[380px] w-full overflow-clip rounded-b-3xl bg-gray-900">
@@ -29,8 +29,8 @@ async function WorkSpacesPage() {
           </section>
 
           <section
-            role="workspace-header"
-            className="z-20 mx-auto -mt-40 w-full max-w-[1440px] px-5 md:px-10"
+            role="workspaces-list"
+            className="z-20 mx-auto -mt-40 mb-20 w-full max-w-[1440px] px-5 md:px-10"
           >
             <Workspaces user={session?.user} showHeader />
           </section>
