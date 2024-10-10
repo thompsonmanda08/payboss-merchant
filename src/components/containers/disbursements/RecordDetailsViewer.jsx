@@ -5,6 +5,7 @@ import usePaymentsStore, { validationColumns } from '@/context/paymentsStore'
 import { useBatchDetails } from '@/hooks/useQueryHooks'
 import SummaryTable from '../tables/SummaryTable'
 import CardHeader from '@/components/base/CardHeader'
+import SingleTransactionsTable from '../tables/SingleTransactionsTable'
 
 function RecordDetailsViewer({ batchID }) {
   const {
@@ -41,42 +42,40 @@ function RecordDetailsViewer({ batchID }) {
       isOpen={openModalView}
       onClose={closeRecordsModal}
       // onConfirm={handleConfirmationClose}
-      classNames={{ overlay: 'z-[55]' }}
+      classNames={{ overlay: 'z-[55]', base: 'max-w-[1440px]' }}
       isDismissible={false}
-      size={'full'}
     >
       <ModalContent>
         {() => (
           <>
             <ModalHeader className="tracking-tight">
-              <CardHeader
-                className={'mt-10'}
-                title={title}
-                infoText={infoText}
-              />
+              <CardHeader title={title} infoText={infoText} />
             </ModalHeader>
             <ModalBody className="gap-0">
               {/* IF MODAL OPENED AND TOTAL RECORDS ARRAY IS NOT EMPTY */}
               {openAllRecordsModal && batchDetails?.total && (
-                <SummaryTable
-                  columns={validationColumns}
-                  data={batchDetails?.total}
+                <SingleTransactionsTable
+                  columnData={validationColumns}
+                  rowData={batchDetails?.total}
+                  removeWrapper
                 />
               )}
 
               {/* IF MODAL OPENED AND TOTAL VALID RECORDS ARRAY IS NOT EMPTY */}
               {openValidRecordsModal && batchDetails?.valid && (
-                <SummaryTable
-                  columns={validationColumns}
-                  data={batchDetails?.valid}
+                <SingleTransactionsTable
+                  columnData={validationColumns}
+                  rowData={batchDetails?.valid}
+                  removeWrapper
                 />
               )}
 
               {/* IF MODAL OPENED AND TOTAL INVALID RECORDS ARRAY IS NOT EMPTY */}
               {openInvalidRecordsModal && batchDetails?.invalid?.length && (
-                <SummaryTable
-                  columns={validationColumns}
-                  data={batchDetails?.invalid}
+                <SingleTransactionsTable
+                  columnData={validationColumns}
+                  rowData={batchDetails?.invalid}
+                  removeWrapper
                 />
               )}
             </ModalBody>

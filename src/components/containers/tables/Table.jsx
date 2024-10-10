@@ -7,8 +7,13 @@ import {
   TableRow,
   TableCell,
   Pagination,
+  Tooltip,
+  Chip,
 } from '@nextui-org/react'
-import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants'
+import {
+  SERVICE_PROVIDER_COLOR_MAP,
+  TRANSACTION_STATUS_COLOR_MAP,
+} from '@/lib/constants'
 import { cn, formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import usePaymentsStore from '@/context/paymentsStore'
@@ -91,6 +96,35 @@ export default function CustomTable({
           >
             {cellValue}
           </Button>
+        )
+      case 'service_provider':
+        return (
+          <Tooltip
+            color="default"
+            placement="right"
+            content={
+              row?.mno_status_description ||
+              row?.status_description ||
+              'No description'
+            }
+            delay={500}
+            closeDelay={500}
+            showArrow={true}
+          >
+            <Chip
+              color="primary"
+              className={cn(
+                'mx-auto self-center capitalize',
+                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider.toLowerCase()],
+              )}
+              classNames={{
+                content: 'font-semibold',
+              }}
+              variant="flat"
+            >
+              {cellValue}
+            </Chip>
+          </Tooltip>
         )
       case 'link':
         return (

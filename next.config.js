@@ -22,6 +22,9 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    serverComponentsExternalPackages: ['@react-pdf/renderer'],
+  },
 
   // webpack(config) {
   //   config.module.rules.push({

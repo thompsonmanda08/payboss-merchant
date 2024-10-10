@@ -618,10 +618,8 @@ export function WalletTransactionHistory({
           <div className="flex flex-1 items-center rounded-lg bg-slate-50 text-sm font-semibold text-slate-600">
             <EmptyLogs
               className={'my-auto'}
-              title={'No Wallet Prefund Logs Recorded'}
-              subTitle={
-                'Make a deposit and submit a Proof of Payment (POP) to prefund your wallet'
-              }
+              title={'No Wallet Transactions'}
+              subTitle={'You have not made any wallet transactions yet.'}
             />
           </div>
         )}

@@ -723,8 +723,16 @@ export async function getAPICollectionsReport(workspaceID, dateFilter) {
   }
 }
 
-// ************************** TILL NUMBER COLLECTIONS REPORTS ****************************** //
-export async function getTillCollectionsReport(workspaceID, dateFilter) {
+// *********************** API COLLECTIONS LATEST TRANSACTIONS ************************* //
+export async function getAPICollectionLatestTransactions(
+  workspaceID,
+  dateFilter,
+) {
+  // const {
+  //     "start_date":"2024-08-01",
+  //     "end_date":"2014-10-01"
+  //  } = dateFilter
+
   if (!workspaceID) {
     return {
       success: false,
@@ -734,9 +742,10 @@ export async function getTillCollectionsReport(workspaceID, dateFilter) {
       statusText: 'BAD_REQUEST',
     }
   }
+
   try {
     const res = await authenticatedService({
-      url: `analytics/merchant/workspace/${workspaceID}/till/report`,
+      url: `transaction/merchant/collection/api-integration/${workspaceID}`,
       method: 'POST',
       data: dateFilter,
     })
@@ -770,16 +779,11 @@ export async function getTillCollectionsReport(workspaceID, dateFilter) {
   }
 }
 
-// *********************** API COLLECTIONS LATEST TRANSACTIONS ************************* //
-export async function getAPICollectionLatestTransactions(
+// *********************** TILL NUMBER LATEST TRANSACTIONS ************************* //
+export async function getTillCollectionsLatestTransactions(
   workspaceID,
   dateFilter,
 ) {
-  // const {
-  //     "start_date":"2024-08-01",
-  //     "end_date":"2014-10-01"
-  //  } = dateFilter
-
   if (!workspaceID) {
     return {
       success: false,
@@ -789,10 +793,56 @@ export async function getAPICollectionLatestTransactions(
       statusText: 'BAD_REQUEST',
     }
   }
-
   try {
     const res = await authenticatedService({
-      url: `transaction/merchant/collection/api-integration/${workspaceID}`,
+      url: `transaction/merchant/collection/till/${workspaceID}`,
+      method: 'POST',
+      data: dateFilter,
+    })
+
+    if (res.status == 200) {
+      return {
+        success: true,
+        message: res.message,
+        data: res.data,
+        status: res.status,
+        statusText: res.statusText,
+      }
+    }
+
+    return {
+      success: false,
+      message: res?.data?.error || 'Operation Failed!',
+      data: res?.data || res,
+      status: res.status,
+      statusText: res?.statusText,
+    }
+  } catch (error) {
+    console.error(error?.response)
+    return {
+      success: false,
+      message: error?.response?.data?.error || 'Operation Failed!',
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    }
+  }
+}
+
+// *********************** TILL NUMBER COLLECTION REPORTS ************************* //
+export async function getTillCollectionsReport(workspaceID, dateFilter) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: 'workspaceID ID is required',
+      data: [],
+      status: 400,
+      statusText: 'BAD_REQUEST',
+    }
+  }
+  try {
+    const res = await authenticatedService({
+      url: `analytics/merchant/workspace/${workspaceID}/till/report`,
       method: 'POST',
       data: dateFilter,
     })

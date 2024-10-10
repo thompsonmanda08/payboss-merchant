@@ -28,7 +28,7 @@ import {
 } from '@/app/_actions/workspace-actions'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  API_COLLECTIONS_REPORTS_QUERY_KEY,
+  API_COLLECTIONS_QUERY_KEY,
   WORKSPACE_API_KEY_QUERY_KEY,
 } from '@/lib/constants'
 import APIConfigViewModal from './APIConfigView'
@@ -76,7 +76,7 @@ const APIIntegration = ({ workspaceID }) => {
 
   // HANDLE FETCH API COLLECTION LATEST TRANSACTION DATA
   const mutation = useMutation({
-    mutationKey: [API_COLLECTIONS_REPORTS_QUERY_KEY, workspaceID],
+    mutationKey: [API_COLLECTIONS_QUERY_KEY, workspaceID],
     mutationFn: (dateRange) =>
       getAPICollectionLatestTransactions(workspaceID, dateRange),
   })
