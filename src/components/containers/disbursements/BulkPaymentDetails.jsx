@@ -1,21 +1,19 @@
 'use client'
-import React, { useEffect } from 'react'
+import React from 'react'
 import usePaymentsStore from '@/context/paymentsStore'
 import { Input } from '@/components/ui/InputField'
 import { Button } from '@/components/ui/Button'
 import { formatCurrency, notify } from '@/lib/utils'
 import { BanknotesIcon, WalletIcon } from '@heroicons/react/24/outline'
-import { useSearchParams } from 'next/navigation'
-import { PAYMENT_PROTOCOL } from '@/lib/constants'
 import useDashboard from '@/hooks/useDashboard'
 import { initializeBulkTransaction } from '@/app/_actions/transaction-actions'
-import CustomRadioGroup from '@/components/ui/CustomRadioGroup'
 import StatusMessage from '@/components/base/StatusMessage'
 
 const PaymentDetails = ({
   navigateForward,
   navigateBackwards,
   workspaceID,
+  protocol,
 }) => {
   const {
     setLoading,
@@ -26,26 +24,13 @@ const PaymentDetails = ({
     paymentAction,
     setBatchDetails,
     resetPaymentData,
-    selectedProtocol,
-    setSelectedProtocol,
     selectedActionType,
   } = usePaymentsStore()
 
   const { workspaceUserRole: role } = useDashboard()
-  const urlParams = useSearchParams()
-  const protocol = urlParams.get('protocol')
 
   async function handleProceed() {
     setLoading(true)
-
-    if (!paymentAction?.protocol) {
-      notify('error', 'Select a service protocol')
-      setError({
-        status: true,
-        message: 'Select a service protocol (Direct or Voucher)',
-      })
-      return
-    }
 
     if (
       paymentAction?.batch_name == '' &&
@@ -91,11 +76,6 @@ const PaymentDetails = ({
     navigateBackwards()
   }
 
-  function handleProtocolSelection(option) {
-    setSelectedProtocol(PAYMENT_PROTOCOL[option])
-    updatePaymentFields({ protocol: PAYMENT_PROTOCOL[option] })
-  }
-
   return (
     <div className="mx-auto flex w-full flex-1 flex-col gap-4 md:px-8">
       <div className="flex w-full flex-1 gap-4">
@@ -122,33 +102,51 @@ const PaymentDetails = ({
             </div>
           </div>
         )}
-        {selectedProtocol ? (
-          <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 py-3 pl-5 pr-4">
-            <BanknotesIcon className="h-6 w-6 text-primary" />
-            <div className="h-8 border-r-2 border-primary/60" />
-            <div className="flex w-full justify-between text-sm font-medium capitalize text-primary 2xl:text-base">
-              <p>{selectedProtocol}</p>
-            </div>
+        <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 py-3 pl-5 pr-4">
+          <BanknotesIcon className="h-6 w-6 text-primary" />
+          <div className="h-8 border-r-2 border-primary/60" />
+          <div className="flex w-full justify-between text-sm font-medium capitalize text-primary 2xl:text-base">
+            <p>{protocol}</p>
           </div>
-        ) : (
-          <CustomRadioGroup
-            onChange={(option) => handleProtocolSelection(option)}
-            labelText="Service Protocol"
-            defaultValue={protocol}
-            options={PAYMENT_PROTOCOL?.map((item, index) => (
-              <div key={index} className="flex flex-1 capitalize">
-                <span className="font-medium">{item}</span>
-              </div>
-            ))}
-          />
-        )}
+        </div>
+      </div>
+      <div className="grid w-full grid-cols-3 gap-5">
+        <ul className="flex-3 col-span-2 list-disc rounded-md bg-primary-50 px-10 py-4 text-sm leading-6 text-slate-600">
+          <li>
+            Be sure that the provided batch file is in the same format as the
+            provided template to prevent transaction failure.
+          </li>
+          <li>
+            <strong>
+              Your batch total amount must equal the amount on the selected
+              prefund
+            </strong>
+          </li>
+          <li>
+            During validation and pending approval, the selected prefund wallet
+            will be disbaled and locked for the duration of the batch process.
+          </li>
+          <li>
+            <strong>
+              A batch name to is required label the batch process.
+            </strong>
+          </li>
+          <li>
+            In the case that a transaction fails, the prefund wallet will be
+            unlocked and ready for transactions equal only to the amount of the
+            failed transactions as the available balance.
+          </li>
+        </ul>
         <Input
           label={'Batch Name'}
-          className="mb-auto w-full max-w-lg"
-          containerClasses="w-full max-w-full"
+          className="mb-auto"
+          required={true}
+          placeholder={'Enter a batch name'}
+          containerClasses="w-full col-span-1 max-w-lg"
           value={paymentAction?.batch_name}
+          onError={error?.status}
           onChange={(e) => {
-            updatePaymentFields({ batch_name: e.target.value })
+            updatePaymentFields({ batch_name: e.target.value, protocol })
           }}
         />
       </div>

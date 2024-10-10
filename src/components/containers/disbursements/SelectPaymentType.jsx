@@ -58,7 +58,7 @@ const SelectPaymentType = ({ setCreatePaymentLoading }) => {
     }
 
     // router.push(`${type.href}/?protocol=${selectedProtocol}`)
-    router.push(`payments/create/?protocol=${selectedProtocol}`)
+    router.push(`payments/create/${selectedProtocol}`)
     setOpenPaymentsModal(false)
   }
 

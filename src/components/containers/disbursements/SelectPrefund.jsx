@@ -9,15 +9,13 @@ import { useEffect } from 'react'
 import { notify } from '@/lib/utils'
 import StatusMessage from '@/components/base/StatusMessage'
 
-const SelectPrefund = ({ navigateForward, workspaceID }) => {
-  const { data: walletPrefundResponse, isLoading: walletPrefundLoading } =
-    useActivePrefunds(workspaceID)
-
+const SelectPrefund = ({
+  navigateForward,
+  workspaceID,
+  walletActivePrefunds,
+  protocol,
+}) => {
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]))
-
-  const walletActivePrefunds = walletPrefundResponse?.data?.data || []
-
-  console.log(walletActivePrefunds)
 
   const { paymentAction, updatePaymentFields, error, setError } =
     usePaymentsStore()
@@ -32,7 +30,7 @@ const SelectPrefund = ({ navigateForward, workspaceID }) => {
       )
 
       if (prefund) {
-        updatePaymentFields({ prefund: prefund })
+        updatePaymentFields({ prefund, protocol })
         navigateForward()
       }
 
@@ -55,7 +53,6 @@ const SelectPrefund = ({ navigateForward, workspaceID }) => {
         <PrefundsTable
           removeWrapper={true}
           rows={walletActivePrefunds}
-          isLoading={walletPrefundLoading}
           selectedKeys={selectedKeys}
           setSelectedKeys={setSelectedKeys}
           selectionBehavior={'multiple'}
@@ -63,10 +60,6 @@ const SelectPrefund = ({ navigateForward, workspaceID }) => {
           emptyDescriptionText={
             'You have no active prefunds available at this moment'
           }
-          onRowAction={(key) => {
-            console.log('Selected Prefund key: ' + key)
-            updatePaymentFields({ prefund: key })
-          }}
         />
         {error?.status && (
           <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">

@@ -1,14 +1,13 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 import usePaymentsStore from '@/context/paymentsStore'
 import UploadCSVFile from '@/components/containers/disbursements/UploadCSVFile'
 import PaymentDetails from '@/components/containers/disbursements/BulkPaymentDetails'
 import ValidationDetails from '@/components/containers/disbursements/ValidationDetails'
 import RecordDetailsViewer from '@/components/containers/disbursements/RecordDetailsViewer'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import ApproverAction from '@/components/containers/disbursements/ApproverAction'
-import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
 import Card from '@/components/base/Card'
 import CardHeader from '@/components/base/CardHeader'
 import ProgressStep from '@/components/elements/ProgressStep'
@@ -44,22 +43,19 @@ export const STEPS = [
   },
 ]
 
-function BulkPaymentAction({ workspaceID }) {
+function BulkPaymentAction({ workspaceID, protocol, activePrefunds }) {
   // ** INITIALIZES STEPS **//
-  const [currentStep, setCurrentStep] = useState(STEPS[0])
-  const urlParams = useSearchParams()
-  const protocol = urlParams.get('protocol')
+  // const [currentStep, setCurrentStep] = useState(STEPS[0])
 
   // ** INITIALIZEs PAYMENT STATE **//
   const {
     openAllRecordsModal,
     openValidRecordsModal,
     openInvalidRecordsModal,
-    selectedProtocol,
-    setSelectedProtocol,
-    setSelectedActionType,
+    setLoading,
     paymentAction,
     setError,
+    paymentActiona,
   } = usePaymentsStore()
 
   const router = useRouter()
@@ -72,9 +68,12 @@ function BulkPaymentAction({ workspaceID }) {
         workspaceID={workspaceID}
         navigateForward={goForward}
         navigateBackwards={goBack}
+        protocol={protocol}
+        walletActivePrefunds={activePrefunds}
       />,
       <UploadCSVFile
         key={'step-2'}
+        protocol={protocol}
         navigateForward={goForward}
         navigateBackwards={goBack}
       />,
@@ -83,6 +82,7 @@ function BulkPaymentAction({ workspaceID }) {
         navigateForward={goForward}
         navigateBackwards={goBack}
         workspaceID={workspaceID}
+        protocol={protocol}
       />,
       <ValidationDetails
         key={'step-4'}
@@ -105,37 +105,14 @@ function BulkPaymentAction({ workspaceID }) {
   }
 
   useEffect(() => {
-    setCurrentStep(STEPS[currentTabIndex])
-    setSelectedActionType(PAYMENT_SERVICE_TYPES[0])
-    setError({})
-
-    //TODO: => CLEAR DATA WHEN THE THE COMPONENT IS UNMOUNTED
-    // return () => {
-    //   resetPaymentData()
-    // }
-  }, [currentTabIndex])
-
-  useEffect(() => {
-    if (protocol) {
-      setSelectedProtocol(protocol)
-    }
-  }, [protocol])
-
-    useEffect(() => {
-      setError({ status: false, message: '' })
-      setLoading(false)
-    }, [paymentAction])
-
-
+    setError({ status: false, message: '' })
+    setLoading(false)
+  }, [paymentAction, currentTabIndex])
 
   //**************** USER ROLE CHECK *************************************** //
   // if (!role?.can_initiate) return router.back()
 
-  // *************** CHECK FOR SERVICE PROTOCOL - REQUIRED *************** //
-  // TODO: MAKE WORKSPACE USER COOKIE
-  // if (!selectedProtocol) return <MissingConfigurationError />
-
-  return !workspaceID && !selectedProtocol ? (
+  return !workspaceID && !protocol ? (
     <LoadingPage />
   ) : (
     <>
@@ -143,21 +120,16 @@ function BulkPaymentAction({ workspaceID }) {
         <CardHeader
           title={
             <>
-              {currentStep.title}
-              {
-                selectedProtocol && (
-                  <span className="capitalize"> ({selectedProtocol})</span>
-                ) //ONLY FOR THE CREATE PAYMENTS PAGE
-              }
+              {STEPS[currentTabIndex].title}
+              <span className="capitalize"> ({protocol})</span>
             </>
           }
-          infoText={currentStep.infoText}
+          infoText={STEPS[currentTabIndex].infoText}
           handleClose={() => router.back()}
         />
         <ProgressStep STEPS={STEPS} currentTabIndex={currentTabIndex} />
         {activeTab}
       </Card>
-      {/* <InitiatorsLog /> */}
 
       {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
       {(openAllRecordsModal ||

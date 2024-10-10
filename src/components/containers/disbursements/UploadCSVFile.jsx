@@ -9,9 +9,8 @@ import { uploadPaymentBatchFile } from '@/app/_actions/pocketbase-actions'
 import useAccountProfile from '@/hooks/useProfileDetails'
 import { SingleFileDropzone } from '@/components/base/FileDropZone'
 
-const UploadCSVFile = ({ navigateForward, navigateBackwards }) => {
-  const { paymentAction, updatePaymentFields, selectedProtocol } =
-    usePaymentsStore()
+const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
+  const { paymentAction, updatePaymentFields } = usePaymentsStore()
   const [isLoading, setIsLoading] = React.useState(false)
   const { merchantID } = useAccountProfile()
 
@@ -62,7 +61,7 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards }) => {
 
           <p className="mt-2 text-xs font-medium text-gray-500 lg:text-[13px]">
             Having trouble with the validation and file uploads? Download
-            {selectedProtocol == 'direct' ? (
+            {protocol == 'direct' ? (
               <Link
                 href={'/batch_record_template.xlsx'}
                 download={'batch_record_template.xlsx'}

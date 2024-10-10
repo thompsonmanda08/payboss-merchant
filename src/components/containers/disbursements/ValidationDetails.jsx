@@ -116,7 +116,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
   }, [batchID, selectedBatch?.ID, queryID])
 
   return isLoading || loading || !queryID || !batchDetails ? (
-    <Loader />
+    <Loader size={80} />
   ) : (
     <>
       <div className="flex h-full w-full flex-col justify-between">
