@@ -179,9 +179,10 @@ export function ListOfWorkspaces({
                     description={`${capitalize(item?.workspaceType)}'s Workspace`}
                     isVisible={item?.isVisible}
                     href={
-                      !isWorkspaceSettings
-                        ? `/dashboard/${item?.ID}`
-                        : `manage-account/workspaces/${item?.ID}`
+                      `/dashboard/${item?.ID}`
+                      // !isWorkspaceSettings
+                      //   ? `/dashboard/${item?.ID}`
+                      //   : `manage-account/workspaces/${item?.ID}`
                     }
                   />
                 )
