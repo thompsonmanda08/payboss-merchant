@@ -32,7 +32,7 @@ const TABS = [
   { name: 'General Settings', index: 0, icon: WrenchScrewdriverIcon },
   { name: 'Workspace Members', index: 1, icon: UserGroupIcon },
   { name: 'Wallet Deposits', index: 2, icon: WalletIcon },
-  { name: 'Active Pockets', index: 2, icon: BanknotesIcon },
+  { name: 'Active Pockets', index: 3, icon: BanknotesIcon },
 ]
 
 function WorkspaceSettings({ workspaceID }) {
@@ -89,7 +89,11 @@ function WorkspaceSettings({ workspaceID }) {
       balance={selectedWorkspace?.balance}
       removeWrapper
     />,
-    <ActivePockets key={'wallet-pocket'} removeWrapper={true} />,
+    <ActivePockets
+      key={'wallet-pocket'}
+      workspaceID={workspaceID}
+      removeWrapper={true}
+    />,
   ])
 
   function handleNavigation(index) {
