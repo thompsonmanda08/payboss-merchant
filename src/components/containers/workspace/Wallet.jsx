@@ -396,8 +396,13 @@ export function WalletTransactionHistory({
   const { data: walletHistoryResponse, isLoading: loadingWalletHistory } =
     useWalletPrefundHistory(workspaceID)
 
-  const walletData = walletHistoryResponse?.data?.data || []
-  const walletHistory = transactionData?.reverse() || walletData?.reverse()
+  const walletData = transactionData || walletHistoryResponse?.data?.data || []
+
+  const walletHistory = walletData.sort(
+    (a, b) => new Date(b.created_at) - new Date(a.created_at),
+  )
+
+
 
   const data = [
     {

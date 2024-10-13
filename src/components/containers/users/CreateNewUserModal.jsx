@@ -263,7 +263,11 @@ function CreateNewUserModal({ isOpen, onClose }) {
   }, [selectedUser])
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} placement="center">
+    <Modal
+      isOpen={isOpen || isEditingRole}
+      onClose={handleClose}
+      placement="center"
+    >
       <ModalContent>
         {(onClose) => (
           <>

@@ -44,6 +44,7 @@ export const formatActivityData = (activityLog, isNotReverse = true) => {
         month: 'long',
         day: 'numeric',
       })
+
       if (!groupedData[created_at]) {
         groupedData[created_at] = []
       }

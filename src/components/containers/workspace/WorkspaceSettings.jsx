@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/Button'
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Tabs from '@/components/elements/Tabs'
 import UsersTable from '../tables/UsersTable'
 import WorkspaceDetails from './WorkspaceDetails'
@@ -32,21 +32,22 @@ import WorkspaceMembers from './WorkspaceMembers'
 const TABS = [
   { name: 'General Settings', index: 0, icon: WrenchScrewdriverIcon },
   { name: 'Workspace Members', index: 1, icon: UserGroupIcon },
-  { name: 'Wallet Deposits', index: 2, icon: WalletIcon },
-  { name: 'Active Pockets', index: 3, icon: BanknotesIcon },
+  { name: 'Active Pockets', index: 2, icon: BanknotesIcon },
+  { name: 'Wallet Deposits', index: 3, icon: WalletIcon },
 ]
 
 function WorkspaceSettings({ workspaceID }) {
   const { back } = useRouter()
-  const { allWorkspaces, activeWorkspace } = useWorkspaces()
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const { isUserInWorkspace, isUsersRoute } = useNavigation()
+  const pathname = usePathname()
 
+  const { allWorkspaces } = useWorkspaces()
   const { canCreateUsers } = useAllUsersAndRoles()
-  const { isEditingRole, setExistingUsers, existingUsers } = useWorkspaceStore()
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
-  const { data: members, isLoading: usersLoading } =
-    useWorkspaceMembers(workspaceID)
+  const isUserInWorkspace =
+    pathname.split('/')[1] == 'dashboard' && pathname.split('/').length >= 3
+
+  const { data: members, isLoading } = useWorkspaceMembers(workspaceID)
 
   const workspaceUsers = members?.data?.users || []
 
@@ -67,7 +68,7 @@ function WorkspaceSettings({ workspaceID }) {
       key={'members'}
       workspaceUsers={workspaceUsers}
       workspaceID={workspaceID}
-      isLoading={usersLoading}
+      isLoading={isLoading}
     />,
     <ActivePockets
       key={'active-wallet-pocket'}
@@ -90,7 +91,7 @@ function WorkspaceSettings({ workspaceID }) {
   const allowUserCreation =
     currentTabIndex == 1 && canCreateUsers && !isUserInWorkspace
 
-  return !selectedWorkspace && !isUserInWorkspace ? (
+  return !selectedWorkspace || isLoading ? (
     <LoadingPage />
   ) : (
     <div className={cn('px-2', { 'px-3': isUserInWorkspace })}>
@@ -148,7 +149,7 @@ function WorkspaceSettings({ workspaceID }) {
 
       {/* MODALS */}
       <CreateNewUserModal
-        isOpen={isEditingRole || isOpen}
+        isOpen={isOpen}
         onClose={onClose}
         onOpenChange={onOpenChange}
       />
