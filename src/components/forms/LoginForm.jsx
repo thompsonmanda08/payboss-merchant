@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import Card from '../base/Card'
 import StatusMessage from '../base/StatusMessage'
+import Link from 'next/link'
 
 function LoginForm() {
   const { push } = useRouter()
@@ -101,6 +102,15 @@ function LoginForm() {
             updateLoginDetails({ password: e.target.value })
           }}
         />
+        <p className="-mt-1 ml-1 text-xs font-medium text-foreground/60 xl:text-sm">
+          Forgot password?{' '}
+          <Link
+            href={'/support'}
+            className="text-primary hover:text-primary/80"
+          >
+            Contact Support
+          </Link>
+        </p>
         <Button
           type="submit"
           isLoading={isLoading}

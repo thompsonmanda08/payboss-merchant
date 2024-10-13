@@ -10,7 +10,7 @@ const PROTECTED_ROUTES = [
   // Add more protected routes as needed
 ]
 
-const PUBLIC_ROUTE = ['/', '/login', '/register']
+const PUBLIC_ROUTE = ['/', '/login', '/register', '/support']
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl
