@@ -3,7 +3,7 @@ import {
   assignUsersToWorkspace,
 } from '@/app/_actions/user-actions'
 import { deleteUserFromWorkspace } from '@/app/_actions/workspace-actions'
-import { notify } from '@/lib/utils'
+import { generateRandomString, notify } from '@/lib/utils'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -33,11 +33,12 @@ const useWorkspaceStore = create((set, get) => ({
   // METHODS AND ACTIONS
 
   handleAddToWorkspace: (user) => {
+    set({ error: { status: false, message: '' } })
+
     // Filter out the user with the matching email, if exists then don't add
     const { addedUsers, existingUsers } = get()
     const aldreadyAdded = addedUsers.find((u) => u.ID === user.ID)
     const userExists = existingUsers.find((u) => u.userID === user.ID)
-
 
     if (aldreadyAdded) {
       notify('warning', `${aldreadyAdded?.first_name} is already added!`)
@@ -68,6 +69,8 @@ const useWorkspaceStore = create((set, get) => ({
   },
 
   handleRemoveFromWorkspace: (user) => {
+    set({ error: { status: false, message: '' } })
+
     if (!user || !user.ID) {
       console.error('Invalid user or user ID')
       return
@@ -85,6 +88,7 @@ const useWorkspaceStore = create((set, get) => ({
   },
 
   handleUserRoleChange: (user, roleID) => {
+    set({ error: { status: false, message: '' } })
     // Map through the users and add the property workspaceRole = roleID to the user with the matching ID and return the other as they are
     set((state) => {
       return {
@@ -133,13 +137,14 @@ const useWorkspaceStore = create((set, get) => ({
   },
 
   handleResetUserPassword: async (workspaceID) => {
-    set({ isLoading: true })
+    set({ isLoading: true, error: { status: false, message: '' } })
+
     const { selectedUser } = get()
 
     // TODO: Generate random string
     const passwordInfo = {
       changePassword: true,
-      password: 'PB0484G@#$%Szm',
+      password: generateRandomString(12),
     }
 
     const response = await adminResetUserPassword(

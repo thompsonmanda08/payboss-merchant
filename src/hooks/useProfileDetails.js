@@ -95,7 +95,7 @@ const useAccountProfile = () => {
   }, [kycData])
 
   useEffect(() => {
-    if (businessDetails) {
+    if (businessDetails?.name && merchant == '') {
       setMerchant(businessDetails?.name)
     }
   }, [businessDetails])

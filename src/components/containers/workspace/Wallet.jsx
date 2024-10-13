@@ -205,7 +205,7 @@ function Wallet({
             'flex w-full flex-col items-start justify-center gap-8 md:flex-row',
             {
               'items-center justify-center gap-x-0': hideHistory,
-              'border-none px-0 shadow-none': removeWrapper,
+              'rounded-none border-none p-0 shadow-none': removeWrapper,
             },
           )}
         >

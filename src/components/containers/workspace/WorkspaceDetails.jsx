@@ -15,7 +15,12 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
+function WorkspaceDetails({
+  workspaceID,
+  navigateTo,
+  workspaceName,
+  workspaceUsers,
+}) {
   const { back } = useRouter()
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
@@ -300,6 +305,7 @@ function WorkspaceDetails({ workspaceID, navigateTo, workspaceName }) {
         workspaceID={workspaceID}
         workspaceName={workspaceName}
         navigateTo={navigateTo}
+        workspaceUsers={workspaceUsers}
       />
     </>
   )

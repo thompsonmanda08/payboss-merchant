@@ -47,6 +47,7 @@ function AddUserToWorkspace({
   workspaceID,
   workspaceName,
   navigateTo,
+  workspaceUsers,
 }) {
   const queryClient = useQueryClient()
   const { allUsers, workspaceRoles } = useAllUsersAndRoles()
@@ -62,11 +63,9 @@ function AddUserToWorkspace({
     handleClearAllSelected,
     handleUserRoleChange,
     handleSubmitAddedUsers,
-  } = useWorkspaceStore((state) => state)
-
-  // const { data: members } = useWorkspaceMembers(workspaceID)
-
-  // const workspaceUsers = members?.data?.users || []
+    existingUsers,
+    setExistingUsers,
+  } = useWorkspaceStore()
 
   const renderCell = useCallback((user, columnKey) => {
     const cellValue = user[columnKey]
@@ -147,7 +146,7 @@ function AddUserToWorkspace({
             isDisabled={user?.role == 'owner'}
             onPress={() => handleAddToWorkspace(user)}
           >
-            <Tooltip color="primary" content="Remove User">
+            <Tooltip color="primary" content="Add User">
               <span className="cursor-pointer text-lg text-primary active:opacity-50">
                 <UserPlusIcon className="h-5 w-5" />
               </span>
@@ -202,7 +201,6 @@ function AddUserToWorkspace({
 
   useEffect(() => {
     return () => {
-      // queryClient.cancelQueries()
       handleClearAllSelected()
     }
   }, [])
@@ -211,16 +209,26 @@ function AddUserToWorkspace({
     setError({ status: false, message: '' })
   }, [addedUsers])
 
+  useEffect(() => {
+    // UPDATE EXISITING USERS LIST
+    if (workspaceUsers != [] && existingUsers.length == 0) {
+      setExistingUsers(workspaceUsers)
+    }
+  }, [])
+
+  const isDataReady = workspaceRoles.length > 0 && allUsers?.length > 1
+
   return (
     <Modal
       // IF ROLES AND USERS ARE LOADED THEN RENDER FULL SIZE
-      size={workspaceRoles && allUsers?.length > 1 ? 'full' : '5xl'}
+      // size={'5xl'}
+      className="max-w-7xl"
       isOpen={isOpen}
       onClose={onClose}
     >
       <ModalContent>
         {(onClose) =>
-          allUsers && workspaceRoles && allUsers?.length > 1 ? (
+          isDataReady ? (
             <>
               <ModalHeader className="flex gap-1">
                 Add User to Workspace

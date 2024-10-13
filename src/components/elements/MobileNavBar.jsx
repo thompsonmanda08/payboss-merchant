@@ -33,7 +33,7 @@ function MobileNavBar({
       <nav
         className={cn(
           `fixed left-[-100%] top-0 z-[999] h-full w-[70%] min-w-[300px] max-w-[412px] flex-col bg-white p-5 transition-all duration-300 ease-in-out`,
-          { 'left-0 flex md:-left-[100%]': isMobileMenuOpen },
+          { 'left-0 flex lg:-left-[100%]': isMobileMenuOpen },
         )}
       >
         <button

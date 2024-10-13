@@ -10,6 +10,7 @@ import {
   Tooltip,
   Avatar,
   useDisclosure,
+  Pagination,
 } from '@nextui-org/react'
 import {
   ArrowPathIcon,
@@ -20,40 +21,41 @@ import {
 import { cn, getUserInitials } from '@/lib/utils'
 import useWorkspaceStore from '@/context/workspaceStore'
 import PromptModal from '@/components/base/Prompt'
-import useNavigation from '@/hooks/useNavigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { WORKSPACE_MEMBERS_QUERY_KEY } from '@/lib/constants'
 import Loader from '@/components/ui/Loader'
 import EmptyLogs from '@/components/base/EmptyLogs'
+import { usePathname } from 'next/navigation'
 
 export const roleColorMap = {
   owner: 'success',
   admin: 'primary',
   approver: 'secondary',
   initiator: 'warning',
-  viewer: 'danger',
+  viewer: 'default',
 }
 
 const columns = [
   { name: 'NAME', uid: 'first_name' },
   { name: 'USERNAME/MOBILE NO.', uid: 'username' },
-  // { name: 'WORKSPACE', uid: 'workspace' },
   { name: 'ROLE', uid: 'role' },
   { name: 'ACTIONS', uid: 'actions' },
 ]
 
-//! NOTE: ONLY THE OWNER WILL BE ABLE TO SEE ALL THE USERS
 export default function UsersTable({
   users = [],
   workspaceID,
   removeWrapper,
   isUserAdmin,
   tableLoading,
+  rowsPerPage = 8,
 }) {
+  const pathname = usePathname()
   const queryClient = useQueryClient()
-  const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false)
+  const [page, setPage] = React.useState(1)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { isUsersRoute } = useNavigation()
+  const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false)
+  const isUsersRoute = pathname == '/manage-account/users'
 
   const {
     isLoading,
@@ -64,6 +66,15 @@ export default function UsersTable({
     handleDeleteFromWorkspace,
     handleResetUserPassword,
   } = useWorkspaceStore()
+
+  const pages = Math.ceil(users?.length / rowsPerPage)
+
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage
+    const end = start + rowsPerPage
+
+    return users?.slice(start, end)
+  }, [page, users, rowsPerPage])
 
   function ActionButtons({ user }) {
     return isUserAdmin ? (
@@ -197,16 +208,44 @@ export default function UsersTable({
     }
   }
 
-  const loadingContent = React.useMemo(() => {
+  const bottomContent = React.useMemo(() => {
     return (
-      <div className="mt-24 flex flex-1 items-center rounded-lg">
-        <Loader
-          size={100}
-          classNames={{ wrapper: 'bg-slate-200/50 rounded-xl mt-8 h-full' }}
+      <div className="flex items-center justify-center px-2 py-2">
+        {/* <span className="w-[30%] text-small text-default-400">
+          {selectedKeys === 'all'
+            ? 'All items selected'
+            : `${selectedKeys.size} of ${rows.length} selected`}
+        </span> */}
+        <Pagination
+          isCompact
+          showControls
+          showShadow
+          color="primary"
+          page={page}
+          total={pages}
+          onChange={setPage}
         />
+        {/* <div className="hidden w-[30%] justify-end gap-2 sm:flex">
+          <Button
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onPreviousPage}
+          >
+            Previous
+          </Button>
+          <Button
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onNextPage}
+          >
+            Next
+          </Button>
+        </div> */}
       </div>
     )
-  }, [tableLoading])
+  }, [items.length, page, pages])
 
   const emptyContent = React.useMemo(() => {
     return (
@@ -214,26 +253,39 @@ export default function UsersTable({
         <EmptyLogs
           className={'my-auto mt-16'}
           classNames={{ heading: 'text-sm text-slate-500 font-medium' }}
-          title={'No transaction data records!'}
-          subTitle={''}
+          title={'No users to display.'}
+          subTitle={'you have no users to be displayed here.'}
         />
       </div>
     )
-  }, [users])
+  }, [items])
+
+  const loadingContent = React.useMemo(() => {
+    return (
+      <div className="-mt-8 flex flex-1 items-center rounded-lg">
+        <Loader
+          size={100}
+          classNames={{ wrapper: 'bg-slate-200/50 rounded-xl h-full' }}
+        />
+      </div>
+    )
+  }, [tableLoading])
 
   return (
     <>
       <Table
-        aria-label="Example table with custom cells"
+        aria-label="Users table with custom cells"
         classNames={{
           table: cn('align-top items-start justify-start', {
-            'min-h-[300px]': isLoading || !users,
+            'min-h-[400px]': isLoading || !items,
           }),
-          wrapper: cn('min-h-[300px]'),
+          wrapper: cn('min-h-[400px]'),
         }}
         isStriped
         isHeaderSticky
         removeWrapper={removeWrapper}
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
       >
         <TableHeader columns={columns} className="fixed">
           {(column) => (
@@ -249,7 +301,7 @@ export default function UsersTable({
           isLoading={tableLoading}
           loadingContent={loadingContent}
           emptyContent={emptyContent}
-          items={users}
+          items={items}
         >
           {(item) => (
             <TableRow key={item?.ID}>
@@ -283,6 +335,7 @@ export default function UsersTable({
           from this {isUsersRoute ? 'account' : 'workspace'}.
         </p>
       </PromptModal>
+
       <PromptModal
         isOpen={openResetPasswordPrompt}
         onOpen={onOpen}

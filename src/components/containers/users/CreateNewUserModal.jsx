@@ -1,7 +1,11 @@
 'use client'
 import { Input } from '@/components/ui/InputField'
 import SelectField from '@/components/ui/SelectField'
-import { isValidZambianMobileNumber, notify } from '@/lib/utils'
+import {
+  generateRandomString,
+  isValidZambianMobileNumber,
+  notify,
+} from '@/lib/utils'
 import {
   Modal,
   ModalContent,
@@ -47,8 +51,6 @@ function CreateNewUserModal({ isOpen, onClose }) {
   //   [selectedKeys],
   // )
 
-
-
   // ON CREATE => NO IDS are needed for now... only the role name
   const USER_ROLES = getUserRoles()
 
@@ -80,7 +82,13 @@ function CreateNewUserModal({ isOpen, onClose }) {
       return
     }
 
-    let response = await createNewUser(newUser)
+    const userData = {
+      ...newUser,
+      changePassword: true,
+      password: generateRandomString(10),
+    }
+
+    let response = await createNewUser(userData)
 
     if (response?.success) {
       notify('success', 'User created successfully!')

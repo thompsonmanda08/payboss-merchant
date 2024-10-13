@@ -27,6 +27,7 @@ import { cn } from '@/lib/utils'
 import useDashboard from '@/hooks/useDashboard'
 import Card from '@/components/base/Card'
 import ActivePockets from './ActivePockets'
+import WorkspaceMembers from './WorkspaceMembers'
 
 const TABS = [
   { name: 'General Settings', index: 0, icon: WrenchScrewdriverIcon },
@@ -38,33 +39,20 @@ const TABS = [
 function WorkspaceSettings({ workspaceID }) {
   const { back } = useRouter()
   const { allWorkspaces, activeWorkspace } = useWorkspaces()
-  const { isUserInWorkspace, isUsersRoute } = useNavigation()
-  const [searchQuery, setSearchQuery] = useState('')
-  const { canCreateUsers, isAdminOrOwner } = useAllUsersAndRoles()
-  const { isEditingRole, setExistingUsers, existingUsers } = useWorkspaceStore()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
+  const { isUserInWorkspace, isUsersRoute } = useNavigation()
+
+  const { canCreateUsers } = useAllUsersAndRoles()
+  const { isEditingRole, setExistingUsers, existingUsers } = useWorkspaceStore()
+
   const { data: members, isLoading: usersLoading } =
     useWorkspaceMembers(workspaceID)
 
-  const { workspaceUserRole, isLoading: initLoading } = useDashboard()
-  const canUpdate = workspaceUserRole?.role?.toLowerCase() == 'admin'
-  const isAdmin =
-    (isUsersRoute && isAdminOrOwner) || (!isUsersRoute && canUpdate)
-
   const workspaceUsers = members?.data?.users || []
-  const tableLoading = initLoading || usersLoading
 
   const selectedWorkspace = allWorkspaces.find(
     (workspace) => workspace.ID === workspaceID,
   )
-
-  const userSearchResults = workspaceUsers?.filter((user) => {
-    return (
-      user?.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user?.first_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user?.last_name?.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })
 
   // ******************* COMPONENT RENDERER ************************** //
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
@@ -73,26 +61,25 @@ function WorkspaceSettings({ workspaceID }) {
       workspaceID={workspaceID}
       workspaceName={selectedWorkspace?.workspace}
       navigateTo={handleNavigation}
+      workspaceUsers={workspaceUsers}
     />,
-    <UsersTable
+    <WorkspaceMembers
       key={'members'}
-      users={userSearchResults}
+      workspaceUsers={workspaceUsers}
       workspaceID={workspaceID}
-      isUserAdmin={isAdmin}
-      tableLoading={tableLoading}
-      removeWrapper
+      isLoading={usersLoading}
+    />,
+    <ActivePockets
+      key={'active-wallet-pocket'}
+      workspaceID={workspaceID}
+      removeWrapper={true}
     />,
     <Wallet
-      key={'wallet-details'}
+      key={'wallet'}
       workspaceName={selectedWorkspace?.workspace}
       workspaceID={workspaceID}
       balance={selectedWorkspace?.balance}
       removeWrapper
-    />,
-    <ActivePockets
-      key={'wallet-pocket'}
-      workspaceID={workspaceID}
-      removeWrapper={true}
     />,
   ])
 
@@ -100,17 +87,10 @@ function WorkspaceSettings({ workspaceID }) {
     navigateTo(index)
   }
 
-  useEffect(() => {
-    // UPDATE EXISITING USERS LIST
-    if (workspaceUsers && !existingUsers.length) {
-      setExistingUsers(workspaceUsers)
-    }
-  }, [])
-
   const allowUserCreation =
     currentTabIndex == 1 && canCreateUsers && !isUserInWorkspace
 
-  return (!selectedWorkspace && !isUserInWorkspace) || !activeWorkspace ? (
+  return !selectedWorkspace && !isUserInWorkspace ? (
     <LoadingPage />
   ) : (
     <div className={cn('px-2', { 'px-3': isUserInWorkspace })}>
