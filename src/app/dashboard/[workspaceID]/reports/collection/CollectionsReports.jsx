@@ -158,18 +158,23 @@ export default function CollectionsReports({ workspaceID }) {
       {/************************************************************************/}
       <Card className={'w-full gap-3'}>
         <div className="flex items-end justify-between">
-          <CardHeader
-            title={`${SERVICE_TYPES[currentTabIndex].name} (${dateRange?.range || '--'})`}
-            infoText={SERVICE_TYPES[currentTabIndex].description}
-          />
-        </div>
-        <div className="flex w-full items-center justify-between gap-8 ">
           <Tabs
-            className={'my-2 mr-auto max-w-md'}
+            className={'mb-2 mr-auto'}
             tabs={SERVICE_TYPES}
             currentTab={currentTabIndex}
             navigateTo={navigateTo}
           />
+        </div>
+        <div className="flex w-full items-center justify-between gap-8 ">
+          <CardHeader
+            title={`${SERVICE_TYPES[currentTabIndex].name} (${dateRange?.range || '--'})`}
+            infoText={SERVICE_TYPES[currentTabIndex].description}
+            classNames={{
+              titleClasses: 'xl:text-[clamp(1.125rem,1vw,1.75rem)] font-bold',
+              infoClasses: 'text-[clamp(0.8rem,0.8vw,1rem)]',
+            }}
+          />
+
           <div className="flex w-full max-w-md gap-4">
             <Search
               // className={'mt-auto'}
@@ -209,7 +214,7 @@ export default function CollectionsReports({ workspaceID }) {
                 opacity: isExpanded ? 1 : 0,
               }}
             >
-              <Card className={'my-4 shadow-none'}>
+              <Card className={'mb-4 mt-2 shadow-none'}>
                 {Object.keys(report).length > 0 ? (
                   <div className="flex flex-col gap-4 md:flex-row md:justify-between">
                     <div className="flex-1">
