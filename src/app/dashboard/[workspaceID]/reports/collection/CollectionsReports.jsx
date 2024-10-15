@@ -16,11 +16,7 @@ import { formatCurrency } from '@/lib/utils'
 import { DateRangePickerField } from '@/components/ui/DateSelectField'
 import { COLLECTION_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
-import {
-  getAPICollectionsReport,
-  getCollectionsReport,
-  getTillCollectionsReport,
-} from '@/app/_actions/transaction-actions'
+import { getCollectionsReport } from '@/app/_actions/transaction-actions'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { API_KEY_TRANSACTION_COLUMNS } from '../../collections/api-integration/API'
@@ -29,22 +25,22 @@ import Card from '@/components/base/Card'
 import CardHeader from '@/components/base/CardHeader'
 import Tabs from '@/components/elements/Tabs'
 import TotalValueStat from '@/components/elements/TotalStats'
-import {
-  convertAPITransactionToCSV,
-  convertToCSVString,
-  downloadCSV,
-} from '@/app/_actions/file-converstion-actions'
+import { convertToCSVString } from '@/app/_actions/file-converstion-actions'
 
 const SERVICE_TYPES = [
   {
     name: 'API Transactions Reports',
+    description:
+      'Reports on API transactions that took place within the date range applied',
     index: 0,
-    service: 'api-integration',
+    service: 'api-integration', // SERVICE TYPE REQUIRED BY API ENDPOINT
   },
   {
     name: 'Till Transactions Reports',
+    description:
+      'Reports on till transactions that took place within the date range applied',
     index: 1,
-    service: 'till',
+    service: 'till', // SERVICE TYPE REQUIRED BY API ENDPOINT
   },
 ]
 
@@ -56,11 +52,15 @@ export default function CollectionsReports({ workspaceID }) {
   // HANDLE FETCH FILTERED TRANSACTION REPORT DATA
   const mutation = useMutation({
     mutationKey: [COLLECTION_REPORTS_QUERY_KEY, workspaceID],
-    mutationFn: (dateRange) => getReportsData(dateRange),
+    mutationFn: (filterDates) => getReportsData(filterDates),
   })
 
   // ABSTRACT THE DATE RANGE FROM THE DATE PICKER - TO FETCH ASYNCHRONOUSLY
-  async function getAPITransactionsData(range) {
+  async function runAsyncMutation(range) {
+    // IF NO DATE RANGE IS SELECTED, RETURN EMPTY ARRAY
+    if (!range?.start_date && !range?.end_date) {
+      return []
+    }
     return await mutation.mutateAsync(range)
   }
 
@@ -84,7 +84,7 @@ export default function CollectionsReports({ workspaceID }) {
   const report = mutation?.data?.data?.summary || []
   const transactions = mutation?.data?.data?.data || []
 
-  console.log(mutation?.data)
+  // console.log(mutation?.data)
 
   // RESOLVE DATA FILTERING
   const hasSearchFilter = Boolean(searchQuery)
@@ -107,7 +107,7 @@ export default function CollectionsReports({ workspaceID }) {
 
   useEffect(() => {
     if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
-      getAPITransactionsData(dateRange)
+      runAsyncMutation(dateRange)
     }
   }, [dateRange])
 
@@ -132,7 +132,7 @@ export default function CollectionsReports({ workspaceID }) {
   ])
 
   useEffect(() => {
-    getAPITransactionsData(dateRange)
+    runAsyncMutation(dateRange)
   }, [currentTabIndex])
 
   return (
@@ -148,7 +148,7 @@ export default function CollectionsReports({ workspaceID }) {
             setDateRange={setDateRange}
           />{' '}
           <Button
-            onPress={() => getAPITransactionsData(dateRange)}
+            onPress={() => runAsyncMutation(dateRange)}
             endContent={<FunnelIcon className="h-5 w-5" />}
           >
             Apply
@@ -159,10 +159,8 @@ export default function CollectionsReports({ workspaceID }) {
       <Card className={'w-full gap-3'}>
         <div className="flex items-end justify-between">
           <CardHeader
-            title={`API Transactions History (${dateRange?.range || '--'})`}
-            infoText={
-              'Transactions logs to keep track of your workspace activity'
-            }
+            title={`${SERVICE_TYPES[currentTabIndex].name} (${dateRange?.range || '--'})`}
+            infoText={SERVICE_TYPES[currentTabIndex].description}
           />
         </div>
         <div className="flex w-full items-center justify-between gap-8 ">
