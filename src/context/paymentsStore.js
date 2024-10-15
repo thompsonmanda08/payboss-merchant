@@ -182,17 +182,17 @@ const usePaymentsStore = create((set, get) => ({
 export default usePaymentsStore
 
 export const validationColumns = [
-  { header: 'FIRST NAME', uid: 'first_name' },
-  { header: 'LAST NAME', uid: 'last_name' },
-  { header: 'EMAIL', uid: 'email' },
-  { header: 'MOBILE NO.', uid: 'contact' },
-  { header: 'NRC', uid: 'nrc' },
-  { header: 'MOBILE/ACCOUNT NO.', uid: 'destination' },
-  { header: 'SERVICE', uid: 'service_provider' },
-  { header: 'NARRATION', uid: 'narration' },
-  { header: 'REMARKS', uid: 'remarks' },
-  { header: 'AMOUNT', uid: 'amount' },
-  { header: 'STATUS', uid: 'status' },
+  { name: 'FIRST NAME', uid: 'first_name', sortable: true },
+  { name: 'LAST NAME', uid: 'last_name', sortable: true },
+  { name: 'EMAIL', uid: 'email', sortable: true },
+  { name: 'MOBILE NO.', uid: 'contact', sortable: true },
+  { name: 'NRC', uid: 'nrc', sortable: true },
+  { name: 'MOBILE/ACCOUNT NO.', uid: 'destination', sortable: true },
+  { name: 'SERVICE', uid: 'service_provider', sortable: true },
+  { name: 'NARRATION', uid: 'narration' },
+  { name: 'REMARKS', uid: 'remarks' },
+  { name: 'AMOUNT', uid: 'amount', sortable: true },
+  { name: 'STATUS', uid: 'status', sortable: true },
 ]
 
 export const singleReportsColumns = [

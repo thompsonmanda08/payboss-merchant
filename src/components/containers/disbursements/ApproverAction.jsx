@@ -138,11 +138,19 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     transactionDetails?.status?.toLowerCase() == 'rejected' ||
     batchDetails?.status?.toLowerCase() == 'rejected'
 
+  console.log(selectedBatch)
+
   const isInReview =
     selectedBatch?.status == 'review' ||
     batchDetails?.status == 'review' ||
-    transactionDetails?.status == 'submitted'
-  transactionDetails?.status == 'review'
+    transactionDetails?.status == 'submitted' ||
+    transactionDetails?.status == 'review'
+
+  const isProcessed =
+    selectedBatch?.status == 'processed' ||
+    batchDetails?.status == 'processed' ||
+    transactionDetails?.status == 'processed' ||
+    transactionDetails?.status == 'processed'
 
   const renderBatchApproval = useMemo(() => {
     return (
@@ -150,12 +158,18 @@ const ApproverAction = ({ navigateForward, batchID }) => {
         <h3 className="leading-0 m-0 text-[clamp(1rem,1rem+1vw,1.25rem)] font-bold uppercase tracking-tight">
           {isApprovedOrRejected
             ? `Batch ${selectedBatch?.status || batchDetails?.status}`
-            : 'Batch payout requires approval'}
+            : isProcessed
+              ? `Batch Proccessed`
+              : 'Batch payout requires approval'}
         </h3>
 
         {isApprovedOrRejected ? (
           <p className="text-center text-[15px] text-slate-500">
             Check the status and batch details for more information.
+          </p>
+        ) : isProcessed ? (
+          <p className="text-center text-[15px] text-slate-500">
+            This batch has been processed and funds have been released.
           </p>
         ) : role?.can_approve ? (
           <p className="text-center text-[15px] text-slate-500">

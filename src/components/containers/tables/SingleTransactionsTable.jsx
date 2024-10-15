@@ -43,12 +43,12 @@ export const SingleTransactionColumns = [
 // DEFINE FILTERABLE SERVICES
 const SERVICE_FILTERS = [
   {
-    name: 'direct single disbursement',
-    uid: 'direct single disbursement',
+    name: 'direct disbursement',
+    uid: 'direct disbursement',
   },
   {
-    name: 'voucher single disbursement',
-    uid: 'voucher single disbursement',
+    name: 'voucher disbursement',
+    uid: 'voucher disbursement',
   },
 ]
 
@@ -292,21 +292,37 @@ export default function SingleTransactionsTable({
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="flex items-center justify-center px-2 py-2">
-        {pages > 1 && (
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={(page) => setPage(page)}
-          />
-        )}
+      <div className="flex w-full items-center justify-between px-2 py-2">
+        <Pagination
+          isCompact
+          showControls
+          showShadow
+          color="primary"
+          page={page}
+          total={pages}
+          onChange={setPage}
+        />
+        <div className="hidden w-[30%] justify-end gap-2 sm:flex">
+          <Button
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onPreviousPage}
+          >
+            Previous
+          </Button>
+          <Button
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onNextPage}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     )
-  }, [rows, pages])
+  }, [items.length, page, pages])
 
   const topContent = React.useMemo(() => {
     return (
