@@ -39,6 +39,7 @@ const useAccountProfile = () => {
     businessDetails?.kyc_approval_status?.toLowerCase() == 'approved'
 
   useEffect(() => {
+    // Set KYC Data if it exists
     if (kycData) {
       setMerchantID(businessDetails?.ID)
       setIsCompleteKYC(businessDetails?.isCompleteKYC)
@@ -53,6 +54,7 @@ const useAccountProfile = () => {
       )
     }
 
+    //  Check Business Documents if they exist
     if (Object.keys(documents).length > 0) {
       let attachments = [
         {
@@ -82,6 +84,7 @@ const useAccountProfile = () => {
         },
       ]
 
+      // Set Business Documents in state variable
       setBusinessDocs(attachments)
     }
 

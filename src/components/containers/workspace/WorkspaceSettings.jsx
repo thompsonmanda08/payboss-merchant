@@ -67,6 +67,7 @@ function WorkspaceSettings({ workspaceID }) {
     <WorkspaceMembers
       key={'members'}
       workspaceUsers={workspaceUsers}
+      workspaceName={selectedWorkspace?.workspace}
       workspaceID={workspaceID}
       isLoading={isLoading}
     />,

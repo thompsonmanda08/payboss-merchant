@@ -14,6 +14,7 @@ import { Switch, useDisclosure } from '@nextui-org/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { PlusIcon } from '@heroicons/react/24/outline'
 
 function WorkspaceDetails({
   workspaceID,
@@ -237,6 +238,7 @@ function WorkspaceDetails({
             <Button
               onClick={onOpenAdd}
               className="self-end rounded-md px-3 py-2 text-sm font-semibold  shadow-sm"
+              endContent={<PlusIcon className="h-5 w-5" />}
             >
               Add Workspace Members
             </Button>

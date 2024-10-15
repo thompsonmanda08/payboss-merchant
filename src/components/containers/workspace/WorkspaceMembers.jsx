@@ -1,32 +1,25 @@
 'use client'
 import CardHeader from '@/components/base/CardHeader'
 import useDashboard from '@/hooks/useDashboard'
-import React, { useState } from 'react'
+import React from 'react'
 import UsersTable from '../tables/UsersTable'
-import { usePathname } from 'next/navigation'
+import { useDisclosure } from '@nextui-org/react'
+import AddUserToWorkspace from './AddUserToWorkspace'
 
 export default function WorkspaceMembers({
   workspaceID,
   workspaceUsers,
   isLoading,
+  workspaceName,
 }) {
-  const [searchQuery, setSearchQuery] = useState('')
-
+  const {
+    isOpen: openAdd,
+    onOpen: onOpenAdd,
+    onClose: onCloseAdd,
+  } = useDisclosure()
   const { workspaceUserRole } = useDashboard()
-  const pathname = usePathname()
-  const isUsersRoute = pathname == '/manage-account/users'
 
   const canUpdate = workspaceUserRole?.role?.toLowerCase() == 'admin'
-  const isAdmin =
-    (isUsersRoute && isAdminOrOwner) || (!isUsersRoute && canUpdate)
-
-  const userSearchResults = workspaceUsers?.filter((user) => {
-    return (
-      user?.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user?.first_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user?.last_name?.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })
 
   return (
     <div>
@@ -38,13 +31,22 @@ export default function WorkspaceMembers({
         }
       />
       <UsersTable
-        users={userSearchResults}
+        users={workspaceUsers}
         workspaceID={workspaceID}
-        isUserAdmin={isAdmin}
+        isUserAdmin={canUpdate}
         tableLoading={isLoading}
+        onAddUser={onOpenAdd}
         removeWrapper
       />
-      ,
+      <AddUserToWorkspace
+        isOpen={openAdd}
+        onOpen={onOpenAdd}
+        onClose={onCloseAdd}
+        workspaceID={workspaceID}
+        workspaceName={workspaceName}
+        isLoading={isLoading}
+        workspaceUsers={workspaceUsers}
+      />
     </div>
   )
 }

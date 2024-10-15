@@ -15,10 +15,11 @@ import {
 import {
   ArrowPathIcon,
   PencilSquareIcon,
+  PlusIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline'
 
-import { cn, getUserInitials } from '@/lib/utils'
+import { cn, getUserInitials, notify } from '@/lib/utils'
 import useWorkspaceStore from '@/context/workspaceStore'
 import PromptModal from '@/components/base/Prompt'
 import { useQueryClient } from '@tanstack/react-query'
@@ -26,6 +27,11 @@ import { WORKSPACE_MEMBERS_QUERY_KEY } from '@/lib/constants'
 import Loader from '@/components/ui/Loader'
 import EmptyLogs from '@/components/base/EmptyLogs'
 import { usePathname } from 'next/navigation'
+import SelectField from '@/components/ui/SelectField'
+import { Button } from '@/components/ui/Button'
+import { SingleSelectionDropdown } from '@/components/ui/DropdownButton'
+import Search from '@/components/ui/Search'
+import CreateNewUserModal from '../users/CreateNewUserModal'
 
 export const roleColorMap = {
   owner: 'success',
@@ -36,10 +42,29 @@ export const roleColorMap = {
 }
 
 const columns = [
-  { name: 'NAME', uid: 'first_name' },
-  { name: 'USERNAME/MOBILE NO.', uid: 'username' },
-  { name: 'ROLE', uid: 'role' },
+  { name: 'NAME', uid: 'first_name', sortable: true },
+  { name: 'USERNAME/MOBILE NO.', uid: 'username', sortable: true },
+  { name: 'ROLE', uid: 'role', sortable: true },
   { name: 'ACTIONS', uid: 'actions' },
+]
+
+const ROLE_FILTERS = [
+  {
+    name: 'Admin',
+    uid: 'admin',
+  },
+  {
+    name: 'Initiator',
+    uid: 'initiator',
+  },
+  {
+    name: 'Approver',
+    uid: 'approver',
+  },
+  {
+    name: 'Viewer',
+    uid: 'viewer',
+  },
 ]
 
 export default function UsersTable({
@@ -48,17 +73,14 @@ export default function UsersTable({
   removeWrapper,
   isUserAdmin,
   tableLoading,
-  rowsPerPage = 8,
+  rowLimit = 5,
+  allowUserCreation,
+  isApprovedUser,
+  onAddUser,
 }) {
-  const pathname = usePathname()
-  const queryClient = useQueryClient()
-  const [page, setPage] = React.useState(1)
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false)
-  const isUsersRoute = pathname == '/manage-account/users'
-
   const {
     isLoading,
+    isEditingRole,
     setIsLoading,
     setIsEditingRole,
     setSelectedUser,
@@ -67,18 +89,128 @@ export default function UsersTable({
     handleResetUserPassword,
   } = useWorkspaceStore()
 
+  const pathname = usePathname()
+  const queryClient = useQueryClient()
+  const [page, setPage] = React.useState(1)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: createUserModal,
+    onOpen: openCreateUserModal,
+    onClose: closeCreateUserModal,
+  } = useDisclosure()
+  const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false)
+  const isUsersRoute = pathname == '/manage-account/users'
+
+  // DEFINE FILTERABLE COLUMNS
+  const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid)
+
+  const [filterValue, setFilterValue] = React.useState('')
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]))
+  const [visibleColumns, setVisibleColumns] = React.useState(
+    new Set(INITIAL_VISIBLE_COLUMNS),
+  )
+
+  const [roleFilter, setRoleFilter] = React.useState('all')
+
+  const [rowsPerPage, setRowsPerPage] = React.useState(rowLimit)
+
+  const [sortDescriptor, setSortDescriptor] = React.useState({
+    column: 'amount',
+    direction: 'ascending',
+  })
+
+  const hasSearchFilter = Boolean(filterValue)
+
+  const headerColumns = React.useMemo(() => {
+    if (visibleColumns === 'all') return columns
+
+    return columns.filter((column) =>
+      Array.from(visibleColumns).includes(column.uid),
+    )
+  }, [visibleColumns])
+
+  // GETS USERS ARRAY AND APPLIES FILTERS AND RETURNS A FILTERED ARRAY
+  const filteredItems = React.useMemo(() => {
+    let filteredrows = [...users]
+
+    if (hasSearchFilter) {
+      filteredrows = filteredrows.filter(
+        (row) =>
+          row?.name?.toLowerCase().includes(filterValue.toLowerCase()) ||
+          row?.first_name?.toLowerCase().includes(filterValue.toLowerCase()) ||
+          row?.last_name?.toLowerCase().includes(filterValue.toLowerCase()) ||
+          row?.email?.toLowerCase().includes(filterValue.toLowerCase()) ||
+          row?.username?.toLowerCase().includes(filterValue.toLowerCase()),
+      )
+    }
+    if (
+      roleFilter !== 'all' &&
+      Array.from(roleFilter).length !== ROLE_FILTERS.length
+    ) {
+      let filters = Array.from(roleFilter)
+
+      filteredrows = filteredrows.filter((row) => filters.includes(row?.role))
+    }
+
+    return filteredrows
+  }, [users, filterValue, roleFilter])
+
   const pages = Math.ceil(users?.length / rowsPerPage)
 
+  // ITEMS TO BE DISPLAYED ON THE FIRST RENDER OF THE TABLE
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage
     const end = start + rowsPerPage
 
-    return users?.slice(start, end)
-  }, [page, users, rowsPerPage])
+    return filteredItems.slice(start, end)
+  }, [page, filteredItems, rowsPerPage])
 
+  // ITEMS ARRAY THAT HAS BEEN SORTED
+  const sortedItems = React.useMemo(() => {
+    return [...items].sort((a, b) => {
+      const first = a[sortDescriptor.column]
+      const second = b[sortDescriptor.column]
+      const cmp = first < second ? -1 : first > second ? 1 : 0
+
+      return sortDescriptor.direction === 'descending' ? -cmp : cmp
+    })
+  }, [sortDescriptor, items])
+
+  // MOVE TO THE NEXT PAGE
+  const onNextPage = React.useCallback(() => {
+    if (page < pages) {
+      setPage(page + 1)
+    }
+  }, [page, pages])
+
+  // MOVE TO THE PREV PAGE
+  const onPreviousPage = React.useCallback(() => {
+    if (page > 1) {
+      setPage(page - 1)
+    }
+  }, [page])
+
+  // CHANGE THE ROW NUMBER LIMIT
+  const onRowsPerPageChange = React.useCallback((e) => {
+    setRowsPerPage(Number(e.target.value))
+    setPage(1)
+  }, [])
+
+  // AHNDLE EXPLICIT SEARCH
+  const onSearchChange = React.useCallback((value) => {
+    if (value) {
+      setFilterValue(value)
+      setPage(1)
+    } else {
+      setFilterValue('')
+    }
+  }, [])
+
+  // RENDER ACTION BUTTONS
   function ActionButtons({ user }) {
     return isUserAdmin ? (
       <div className="relative flex items-center justify-center gap-4">
+        {/* EDIT USER ROLE */}
         {!isUsersRoute && (
           <Tooltip color="default" content="Edit user">
             <span
@@ -92,6 +224,8 @@ export default function UsersTable({
             </span>
           </Tooltip>
         )}
+
+        {/* RESET USER PASSOWRD BY ACCOUNT ADMIN */}
         {isUsersRoute && (
           <Tooltip
             color="secondary"
@@ -113,6 +247,7 @@ export default function UsersTable({
           </Tooltip>
         )}
 
+        {/* DELETE USER BY ACCOUNT ADMIN OR REMOVE USER FROM WORKSPACE */}
         <Tooltip color="danger" content="Delete user">
           <span
             onClick={() => {
@@ -186,7 +321,7 @@ export default function UsersTable({
     [isUsersRoute],
   )
 
-  async function _handleResetUserPassword() {
+  async function resetUserPassword() {
     const response = await handleResetUserPassword()
     if (response) {
       onClose()
@@ -197,7 +332,15 @@ export default function UsersTable({
     setIsLoading(false)
   }
 
-  async function _handleDeleteFromWorkspace() {
+  async function handleRemoveUser() {
+    // TO REMOVE A USER FROM THE MERCHANT ACCOUNT AND ALL WORKSPACES
+    if (isUsersRoute) {
+      notify('error', "You can't delete a user, contact support!")
+      setIsLoading(false)
+      return
+    }
+
+    // BY DEFFAULT ONLY REMOVE USER FROM WORKSPACE
     const response = await handleDeleteFromWorkspace()
     if (response) {
       queryClient.invalidateQueries({
@@ -208,13 +351,101 @@ export default function UsersTable({
     }
   }
 
+  const topContent = React.useMemo(() => {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-3">
+          <Search
+            placeholder="Search by name..."
+            value={filterValue}
+            onClear={() => onClear()}
+            onChange={(e) => onSearchChange(e.target.value)}
+          />
+          <div className="relative flex gap-3">
+            <SingleSelectionDropdown
+              name={'Role'}
+              className={'min-w-[160px]'}
+              classNames={{
+                trigger: ' bg-primary-50',
+              }}
+              disallowEmptySelection={true}
+              closeOnSelect={false}
+              buttonVariant="flat"
+              selectionMode="multiple"
+              selectedKeys={roleFilter}
+              dropdownItems={ROLE_FILTERS}
+              onSelectionChange={setRoleFilter}
+            />
+            <SingleSelectionDropdown
+              name={'Columns'}
+              className={'min-w-[160px]'}
+              classNames={{
+                trigger: ' bg-primary-50',
+              }}
+              closeOnSelect={false}
+              buttonVariant="flat"
+              selectionMode="multiple"
+              disallowEmptySelection={true}
+              onSelectionChange={setVisibleColumns}
+              dropdownItems={columns}
+              selectedKeys={visibleColumns}
+              setSelectedKeys={setSelectedKeys}
+            />
+
+            {allowUserCreation && isApprovedUser && isUsersRoute && (
+              <Button
+                color="primary"
+                endContent={<PlusIcon className="h-5 w-5" />}
+                onPress={openCreateUserModal}
+              >
+                Create New User
+              </Button>
+            )}
+            {isUserAdmin && !isUsersRoute && (
+              <Button
+                color="primary"
+                endContent={<PlusIcon className="h-5 w-5" />}
+                onPress={onAddUser}
+              >
+                Add Workspace Members
+              </Button>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-small text-default-400">
+            Total: {users.length} Users
+          </span>
+          <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-slate-400">
+            Rows per page:{' '}
+            <SelectField
+              className="-mb-1 h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
+              onChange={onRowsPerPageChange}
+              placeholder={rowsPerPage.toString()}
+              options={['5', '8', '10', '20']}
+              defaultValue={8}
+            />
+          </label>
+        </div>
+      </div>
+    )
+  }, [
+    filterValue,
+    roleFilter,
+    visibleColumns,
+    onRowsPerPageChange,
+    users.length,
+    onSearchChange,
+    hasSearchFilter,
+  ])
+
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="flex items-center justify-center px-2 py-2">
+      <div className="flex w-full items-center justify-between px-2 py-2">
         {/* <span className="w-[30%] text-small text-default-400">
           {selectedKeys === 'all'
             ? 'All items selected'
-            : `${selectedKeys.size} of ${rows.length} selected`}
+            : `${selectedKeys.size} of ${users.length} selected`}
         </span> */}
         <Pagination
           isCompact
@@ -225,7 +456,7 @@ export default function UsersTable({
           total={pages}
           onChange={setPage}
         />
-        {/* <div className="hidden w-[30%] justify-end gap-2 sm:flex">
+        <div className="hidden w-[30%] justify-end gap-2 sm:flex">
           <Button
             isDisabled={pages === 1}
             size="sm"
@@ -242,7 +473,7 @@ export default function UsersTable({
           >
             Next
           </Button>
-        </div> */}
+        </div>
       </div>
     )
   }, [items.length, page, pages])
@@ -262,7 +493,7 @@ export default function UsersTable({
 
   const loadingContent = React.useMemo(() => {
     return (
-      <div className="-mt-8 flex flex-1 items-center rounded-lg">
+      <div className="mt-32 flex flex-1 items-center rounded-lg">
         <Loader
           size={100}
           classNames={{ wrapper: 'bg-slate-200/50 rounded-xl h-full' }}
@@ -275,23 +506,31 @@ export default function UsersTable({
     <>
       <Table
         aria-label="Users table with custom cells"
+        className="max-h-[980px] "
         classNames={{
-          table: cn('align-top items-start justify-start', {
-            'min-h-[400px]': isLoading || !items,
-          }),
-          wrapper: cn('min-h-[400px]'),
+          table: cn('align-top items-center justify-center', {}),
         }}
+        removeWrapper={removeWrapper}
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        bottomContent={bottomContent}
+        onSortChange={setSortDescriptor}
+        selectedKeys={selectedKeys}
+        onSelectionChange={setSelectedKeys}
         isStriped
         isHeaderSticky
-        removeWrapper={removeWrapper}
-        bottomContent={bottomContent}
         bottomContentPlacement="outside"
       >
-        <TableHeader columns={columns} className="fixed">
+        <TableHeader columns={headerColumns} className="fixed">
           {(column) => (
             <TableColumn
               key={column.uid}
-              align={column.uid === 'actions' ? 'center' : 'start'}
+              allowsSorting={column.sortable}
+              align={
+                column.uid === 'actions' || column.uid === 'status'
+                  ? 'center'
+                  : 'start'
+              }
             >
               {column.name}
             </TableColumn>
@@ -301,7 +540,7 @@ export default function UsersTable({
           isLoading={tableLoading}
           loadingContent={loadingContent}
           emptyContent={emptyContent}
-          items={items}
+          items={tableLoading ? [] : sortedItems}
         >
           {(item) => (
             <TableRow key={item?.ID}>
@@ -321,7 +560,7 @@ export default function UsersTable({
           setSelectedUser(null)
         }}
         title="Remove Workspace User"
-        onConfirm={_handleDeleteFromWorkspace}
+        onConfirm={handleRemoveUser}
         confirmText="Remove"
         isDisabled={isLoading}
         isLoading={isLoading}
@@ -336,6 +575,7 @@ export default function UsersTable({
         </p>
       </PromptModal>
 
+      {/* PROMPT TO RESET USER PASSWORD */}
       <PromptModal
         isOpen={openResetPasswordPrompt}
         onOpen={onOpen}
@@ -344,7 +584,7 @@ export default function UsersTable({
           setOpenResetPasswordPrompt(false)
         }}
         title="Reset User Password"
-        onConfirm={_handleResetUserPassword}
+        onConfirm={resetUserPassword}
         confirmText="Reset"
         isDisabled={isLoading}
         isLoading={isLoading}
@@ -358,6 +598,12 @@ export default function UsersTable({
           password? <br /> An email will be sent with the new default password.
         </p>
       </PromptModal>
+
+      {/* CREATE  A NEW USER  */}
+      <CreateNewUserModal
+        isOpen={isEditingRole || createUserModal}
+        onClose={closeCreateUserModal}
+      />
     </>
   )
 }

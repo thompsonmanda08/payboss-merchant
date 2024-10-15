@@ -190,7 +190,7 @@ function AddUserToWorkspace({
     }
 
     notify('success', `Users were added to ${workspaceName}!`)
-    navigateTo(1)
+    navigateTo?.(1)
     onClose()
     handleClearAllSelected()
     queryClient.invalidateQueries({

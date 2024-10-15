@@ -85,7 +85,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
     const userData = {
       ...newUser,
       changePassword: true,
-      password: generateRandomString(10),
+      password: generateRandomString(16), // Generates unique user password
     }
 
     let response = await createNewUser(userData)
