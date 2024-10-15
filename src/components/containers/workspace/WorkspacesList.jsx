@@ -194,9 +194,9 @@ export function ListOfWorkspaces({
               <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
                 <EmptyLogs
                   className={'my-auto'}
-                  title={'Oops! Looks like your KYC is still pending approval'}
+                  title={'Oops! Looks like you have no workspaces yet!'}
                   subTitle={
-                    'Only the admin or account owner can submit KYC documentation. Once completed, you will be able to create a workspace.'
+                    'Only the admin or account owner can create a workspace.'
                   }
                 />
               </div>

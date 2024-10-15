@@ -676,20 +676,21 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
   }
 }
 
-// ************************** API COLLECTIONS REPORTS ****************************** //
-export async function getAPICollectionsReport(workspaceID, dateFilter) {
-  if (!workspaceID) {
+// ************************** API & TILL COLLECTIONS REPORTS ****************************** //
+export async function getCollectionsReport(workspaceID, service, dateFilter) {
+  if (!workspaceID || !service) {
     return {
       success: false,
-      message: 'workspaceID ID is required',
+      message: 'workspaceID Or Service are required',
       data: [],
       status: 400,
       statusText: 'BAD_REQUEST',
     }
   }
+
   try {
     const res = await authenticatedService({
-      url: `analytics/merchant/workspace/${workspaceID}/api-integration/report`,
+      url: `analytics/merchant/workspace/${workspaceID}/${service}/report`,
       method: 'POST',
       data: dateFilter,
     })
@@ -829,49 +830,3 @@ export async function getTillCollectionsLatestTransactions(
   }
 }
 
-// *********************** TILL NUMBER COLLECTION REPORTS ************************* //
-export async function getTillCollectionsReport(workspaceID, dateFilter) {
-  if (!workspaceID) {
-    return {
-      success: false,
-      message: 'workspaceID ID is required',
-      data: [],
-      status: 400,
-      statusText: 'BAD_REQUEST',
-    }
-  }
-  try {
-    const res = await authenticatedService({
-      url: `analytics/merchant/workspace/${workspaceID}/till/report`,
-      method: 'POST',
-      data: dateFilter,
-    })
-
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      }
-    }
-
-    return {
-      success: false,
-      message: res?.data?.error || 'Operation Failed!',
-      data: res?.data || res,
-      status: res.status,
-      statusText: res?.statusText,
-    }
-  } catch (error) {
-    console.error(error?.response)
-    return {
-      success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    }
-  }
-}

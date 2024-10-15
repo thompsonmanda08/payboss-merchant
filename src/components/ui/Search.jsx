@@ -36,7 +36,7 @@ export default function Search({
         )}
       />
       <Input
-        isClearable={isClearable}
+        // isClearable={isClearable}
         containerClasses={'max-w-xl'}
         className={cn(
           'h-12 w-full max-w-xl  pl-10 text-base placeholder:font-normal placeholder:text-slate-400',

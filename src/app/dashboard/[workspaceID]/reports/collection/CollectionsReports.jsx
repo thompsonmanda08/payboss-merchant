@@ -18,6 +18,7 @@ import { COLLECTION_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
 import {
   getAPICollectionsReport,
+  getCollectionsReport,
   getTillCollectionsReport,
 } from '@/app/_actions/transaction-actions'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -30,6 +31,7 @@ import Tabs from '@/components/elements/Tabs'
 import TotalValueStat from '@/components/elements/TotalStats'
 import {
   convertAPITransactionToCSV,
+  convertToCSVString,
   downloadCSV,
 } from '@/app/_actions/file-converstion-actions'
 
@@ -37,10 +39,12 @@ const SERVICE_TYPES = [
   {
     name: 'API Transactions Reports',
     index: 0,
+    service: 'api-integration',
   },
   {
     name: 'Till Transactions Reports',
     index: 1,
+    service: 'till',
   },
 ]
 
@@ -52,36 +56,38 @@ export default function CollectionsReports({ workspaceID }) {
   // HANDLE FETCH FILTERED TRANSACTION REPORT DATA
   const mutation = useMutation({
     mutationKey: [COLLECTION_REPORTS_QUERY_KEY, workspaceID],
-    mutationFn: (dateRange) => getCollectionReports(workspaceID, dateRange),
+    mutationFn: (dateRange) => getReportsData(dateRange),
   })
 
-  async function getCollectionReports(workspaceID, dateRange) {
-    // GET ANALYICS REPORT DATA FOR - API COLLECTIONS
-    if (currentTabIndex === 0) {
-      const response = await getAPICollectionsReport(workspaceID, dateRange)
-      return response || []
-    }
-
-    // GET ANALYICS REPORT DATA FOR - TILL COLLECTIONS
-    if (currentTabIndex === 1) {
-      const response = await getTillCollectionsReport(workspaceID, dateRange)
-      return response || []
-    }
-
-    // GET PAYMENT LINK REPORT DATA
-  }
-
+  // ABSTRACT THE DATE RANGE FROM THE DATE PICKER - TO FETCH ASYNCHRONOUSLY
   async function getAPITransactionsData(range) {
     return await mutation.mutateAsync(range)
   }
 
+  // FETCH COLLECTIONS REPORT DATA - ASYNC AS HOISTED INTO THE MUTATION FUNCTION
+  async function getReportsData(dateRange) {
+    let serviceType = SERVICE_TYPES[currentTabIndex]?.service
+
+    if (!serviceType) {
+      serviceType = 'api-integration'
+    }
+
+    const response = await getCollectionsReport(
+      workspaceID,
+      serviceType,
+      dateRange,
+    )
+    return response || []
+  }
+
+  // MUTATION RESPONSE DATA
   const report = mutation?.data?.data?.summary || []
   const transactions = mutation?.data?.data?.data || []
 
   console.log(mutation?.data)
 
+  // RESOLVE DATA FILTERING
   const hasSearchFilter = Boolean(searchQuery)
-
   const filteredItems = React.useMemo(() => {
     let filteredrows = [...transactions]
 
@@ -107,26 +113,27 @@ export default function CollectionsReports({ workspaceID }) {
 
   function handleFileExportToCSV() {
     // Implement CSV export functionality here
-    if (currentTabIndex === 0) {
-      const csvData = convertAPITransactionToCSV(transactions)
-      downloadCSV(csvData, 'api_collection_transactions')
-    }
-    if (currentTabIndex === 1) {
-      const csvData = convertAPITransactionToCSV(transactions)
-      downloadCSV(csvData, 'till_collection_transactions')
-    }
+    if (currentTabIndex === 0)
+      convertToCSVString(transactions, 'api_collection_transactions')
+
+    if (currentTabIndex === 1)
+      convertToCSVString(transactions, 'till_collection_transactions')
   }
 
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
-    <CustomTable
-      columns={API_KEY_TRANSACTION_COLUMNS}
-      rows={filteredItems || []}
-      isLoading={mutation.isPending}
-      isError={mutation.isError}
-      removeWrapper
-      onRowAction={(key) => {}}
-    />,
+    // <CustomTable
+    //   columns={API_KEY_TRANSACTION_COLUMNS}
+    //   rows={filteredItems || []}
+    //   isLoading={mutation.isPending}
+    //   isError={mutation.isError}
+    //   removeWrapper
+    //   onRowAction={(key) => {}}
+    // />
   ])
+
+  useEffect(() => {
+    getAPITransactionsData(dateRange)
+  }, [currentTabIndex])
 
   return (
     <>
@@ -158,7 +165,6 @@ export default function CollectionsReports({ workspaceID }) {
             }
           />
         </div>
-
         <div className="flex w-full items-center justify-between gap-8 ">
           <Tabs
             className={'my-2 mr-auto max-w-md'}
@@ -195,7 +201,6 @@ export default function CollectionsReports({ workspaceID }) {
             </Button>
           </div>
         </div>
-
         {/* TODO:  THIS CAN BE ONCE SINGLE COMPONENT */}
         {
           <AnimatePresence>
@@ -251,8 +256,15 @@ export default function CollectionsReports({ workspaceID }) {
             </motion.div>
           </AnimatePresence>
         }
-
-        {activeTab}
+        {/* {activeTab} */}
+        <CustomTable
+          columns={API_KEY_TRANSACTION_COLUMNS}
+          rows={filteredItems || []}
+          isLoading={mutation.isPending}
+          isError={mutation.isError}
+          removeWrapper
+          // onRowAction={(key) => {}}
+        />
       </Card>
 
       {/************************************************************************/}
