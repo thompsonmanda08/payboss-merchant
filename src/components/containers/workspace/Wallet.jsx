@@ -374,6 +374,8 @@ export function WalletTransactionHistory({
   limit,
   transactionData,
   isLoading,
+  className,
+  classNames,
 }) {
   const queryClient = useQueryClient()
   const { isOpen, onClose, onOpen } = useDisclosure()
@@ -401,8 +403,6 @@ export function WalletTransactionHistory({
   const walletHistory = walletData.sort(
     (a, b) => new Date(b.created_at) - new Date(a.created_at),
   )
-
-
 
   const data = [
     {
@@ -488,144 +488,161 @@ export function WalletTransactionHistory({
     handleClosePrompt()
   }
 
-  const { pathname, dashboardRoute } = useNavigation()
+  const { wrapper } = classNames || ''
 
   return isFetching ? (
     <WalletLHistoryLoader />
   ) : (
     <>
       <div
-        className={cn('my-auto flex min-h-96 flex-col py-4', {
-          'my-0': formattedActivityData?.length > 0,
-        })}
+        className={cn(
+          'my-auto flex min-h-96 flex-col py-4',
+          {
+            'my-0': formattedActivityData?.length > 0,
+          },
+          className,
+          wrapper,
+        )}
       >
         {formattedActivityData.length > 0 ? (
-          formattedActivityData.map((items, index) => (
-            <div key={`${index}${items?.title}`} className="pr-6">
-              <p className="text-base font-semibold text-slate-600">
-                {items.title}
-              </p>
-              {items?.data?.map((item, itemIndex) => (
-                <div
-                  className="flex flex-col gap-y-4 py-2"
-                  key={`${itemIndex}${index}${item?.created_by}`}
-                >
-                  <div className="flex items-start space-x-4">
-                    <LogTaskType
-                      type={item?.type}
-                      classNames={{ wrapper: '' }}
-                    />
+          formattedActivityData.map((items, index) => {
+            // TRANSACTIONS GROUPPED BY DATE
+            return (
+              <div key={`${index}${items?.title}`} className="pr-6">
+                <p className="text-base font-semibold text-slate-600">
+                  {items.title}
+                </p>
+                {items?.data?.map((item, itemIndex) => {
+                  // EACH TRANSACTION ITEM
+                  const isGreen =
+                    (item?.status == 'success' || item?.status == 'approved') &&
+                    item?.type == 'credit' &&
+                    item?.isPrefunded
 
-                    <div className="w-full items-start">
-                      <div className="flex w-full justify-between">
-                        <p className="text-xs text-slate-700 ">
-                          <span className="text-sm font-medium capitalize leading-6">
-                            {item?.created_by || item?.remarks}
-                          </span>{' '}
-                          <br />
-                          {item?.content}
-                          <span className="ml-2 font-normal leading-4 text-slate-400">
-                            ...
-                            {formatDistance(
-                              new Date(item?.created_at),
-                              new Date(),
-                            )}{' '}
-                            ago
-                          </span>
-                        </p>
-                        <div className="flex max-w-max flex-col items-end">
-                          <div className="flex gap-2">
-                            <Tooltip
-                              placement="left"
-                              classNames={{
-                                content: cn(
-                                  'text-nowrap bg-primary text-white',
-                                  {
-                                    'bg-success/10 text-green-600':
-                                      (item?.status == 'success' ||
-                                        item?.status == 'approved') &&
-                                      item?.isPrefunded,
-                                    'bg-secondary/10 text-secondary':
-                                      item?.status == 'pending',
-                                    'bg-danger/10 text-danger':
-                                      item?.status == 'rejected',
-                                  },
-                                ),
-                              }}
-                              content={`${capitalize(item?.status)}: ${item?.isPrefunded && !item?.isExpired ? 'Active funds' : item?.isExpired ? 'Expired funds' : item?.status == 'approved' ? 'Awaiting fund activation' : item?.status == 'rejected' ? item?.remarks : 'Awating admin action'}`}
-                            >
-                              <Chip
-                                classNames={{
-                                  base: cn(
-                                    'p-2 py-4 cursor-pointer rounded-md bg-primary/10 text-primary-700',
-                                    {
-                                      'bg-green-600/10 text-green-600':
-                                        (item?.status == 'success' ||
-                                          item?.status == 'approved') &&
-                                        item?.isPrefunded,
-                                      'bg-secondary/10 text-secondary':
-                                        item?.status == 'pending',
-                                      'bg-danger/10 text-danger':
-                                        item?.status == 'rejected',
-                                    },
-                                  ),
-                                  content: cn('text-base font-bold', {}),
-                                }}
-                                variant="flat"
-                              >
-                                {formatCurrency(item?.amount)}
-                              </Chip>
-                            </Tooltip>
-                            {item?.type?.toLowerCase() == 'deposit' && (
-                              <Tooltip
-                                placement="top"
-                                content={'View Proof of payment'}
-                              >
-                                <span
-                                  onClick={() => {
-                                    setSelectedPrefund(item)
-                                    setOpenAttachmentModal(true)
+                  const isYellow = item?.status == 'pending'
+
+                  const isRed =
+                    item?.status == 'rejected' || item?.type == 'debit'
+                  
+                  const isGray = item?.isExpired 
+
+                  return (
+                    <div
+                      className="flex flex-col gap-y-4 py-2"
+                      key={`${itemIndex}${index}${item?.created_by}`}
+                    >
+                      <div className="flex items-start space-x-4">
+                        <LogTaskType
+                          type={item?.type}
+                          classNames={{ wrapper: '' }}
+                        />
+
+                        <div className="w-full items-start">
+                          <div className="flex w-full justify-between">
+                            <p className="text-xs text-slate-700 ">
+                              <span className="text-sm font-medium capitalize leading-6">
+                                {item?.created_by || item?.remarks}
+                              </span>{' '}
+                              <br />
+                              {item?.content}
+                              <span className="ml-2 font-normal leading-4 text-slate-400">
+                                ...
+                                {formatDistance(
+                                  new Date(item?.created_at),
+                                  new Date(),
+                                )}{' '}
+                                ago
+                              </span>
+                            </p>
+                            <div className="flex max-w-max flex-col items-end">
+                              <div className="flex gap-2">
+                                <Tooltip
+                                  placement="left"
+                                  classNames={{
+                                    content: cn(
+                                      'text-nowrap bg-primary text-white',
+                                      {
+                                        'bg-success/10 text-green-600': isGreen,
+                                        'bg-secondary/10 text-secondary':
+                                          isYellow,
+                                        'bg-danger/10 text-danger': isRed,
+                                      },
+                                    ),
                                   }}
-                                  className="'h-6 hover:bg-slate-300' cursor-pointer self-start rounded-md bg-slate-200 p-[6px] text-lg font-bold text-slate-600 active:opacity-50"
+                                  content={`${capitalize(item?.status)}: ${item?.isPrefunded && !item?.isExpired ? 'Active funds' : item?.isExpired ? 'Expired funds' : item?.status == 'approved' ? 'Awaiting fund activation' : item?.status == 'rejected' ? item?.remarks : 'Awating admin action'}`}
                                 >
-                                  <PaperClipIcon className="aspect-square w-5" />
-                                </span>
-                              </Tooltip>
-                            )}
-                          </div>
+                                  <Chip
+                                    classNames={{
+                                      base: cn(
+                                        'p-2 py-4 cursor-pointer rounded-md bg-primary/10 text-primary-700',
 
-                          {/* TRANSACTION APPROVAL BUTTON COMPONENTS} */}
-                          {item?.status == 'pending' &&
-                            workspaceUserRole?.can_approve && (
-                              <div className="mb-4 ml-auto mt-2 flex max-w-max gap-2">
-                                <Button
-                                  size="sm"
-                                  color={'danger'}
-                                  className={'h-8'}
-                                  onClick={() => reject(item)}
-                                >
-                                  Reject
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  className={'h-8'}
-                                  onClick={() => approve(item)}
-                                >
-                                  Approve
-                                </Button>
+                                        {
+                                          'bg-success/10 text-green-600':
+                                            isGreen,
+                                          'bg-secondary/10 text-secondary':
+                                            isYellow,
+                                          'bg-danger/10 text-danger': isRed,
+                                        },
+                                      ),
+                                      content: cn('text-base font-bold', {}),
+                                    }}
+                                    variant="flat"
+                                  >
+                                    {formatCurrency(item?.amount)}
+                                  </Chip>
+                                </Tooltip>
+                                {item?.type?.toLowerCase() == 'deposit' && (
+                                  <Tooltip
+                                    placement="top"
+                                    content={'View Proof of payment'}
+                                  >
+                                    <span
+                                      onClick={() => {
+                                        setSelectedPrefund(item)
+                                        setOpenAttachmentModal(true)
+                                      }}
+                                      className="'h-6 hover:bg-slate-300' cursor-pointer self-start rounded-md bg-slate-200 p-[6px] text-lg font-bold text-slate-600 active:opacity-50"
+                                    >
+                                      <PaperClipIcon className="aspect-square w-5" />
+                                    </span>
+                                  </Tooltip>
+                                )}
                               </div>
-                            )}
+
+                              {/* TRANSACTION APPROVAL BUTTON COMPONENTS} */}
+                              {item?.status == 'pending' &&
+                                workspaceUserRole?.can_approve && (
+                                  <div className="mb-4 ml-auto mt-2 flex max-w-max gap-2">
+                                    <Button
+                                      size="sm"
+                                      color={'danger'}
+                                      className={'h-8'}
+                                      onClick={() => reject(item)}
+                                    >
+                                      Reject
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      className={'h-8'}
+                                      onClick={() => approve(item)}
+                                    >
+                                      Approve
+                                    </Button>
+                                  </div>
+                                )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-              {index != formattedActivityData?.length - 1 && (
-                <hr className="my-4 h-px border-0 bg-slate-100"></hr>
-              )}
-            </div>
-          ))
+                  )
+                })}
+                {index != formattedActivityData?.length - 1 && (
+                  <hr className="my-4 h-px border-0 bg-slate-100"></hr>
+                )}
+              </div>
+            )
+          })
         ) : (
           <div className="flex flex-1 items-center rounded-lg bg-slate-50 text-sm font-semibold text-slate-600">
             <EmptyLogs

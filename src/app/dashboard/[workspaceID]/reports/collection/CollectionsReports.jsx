@@ -141,7 +141,7 @@ export default function CollectionsReports({ workspaceID }) {
         <div className="flex items-center gap-2">
           <DateRangePickerField
             label={'Reports Date Range'}
-            description={'Dates to generate transactional reports'}
+            description={'Dates to generate reports'}
             visibleMonths={2}
             autoFocus
             dateRange={dateRange}

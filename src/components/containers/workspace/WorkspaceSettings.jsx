@@ -1,12 +1,10 @@
 'use client'
 import { Button } from '@/components/ui/Button'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Tabs from '@/components/elements/Tabs'
-import UsersTable from '../tables/UsersTable'
 import WorkspaceDetails from './WorkspaceDetails'
 import useCustomTabsHook from '@/hooks/useCustomTabsHook'
-import { SearchOrInviteUsers } from '../users/ManagePeople'
 import CreateNewUserModal from '../users/CreateNewUserModal'
 import { useDisclosure } from '@nextui-org/react'
 import useWorkspaces from '@/hooks/useWorkspaces'
@@ -17,24 +15,15 @@ import {
   WalletIcon,
   WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline'
-import useNavigation from '@/hooks/useNavigation'
 import Wallet from './Wallet'
 import useAllUsersAndRoles from '@/hooks/useAllUsersAndRoles'
 import { useWorkspaceMembers } from '@/hooks/useQueryHooks'
-import useWorkspaceStore from '@/context/workspaceStore'
 import LoadingPage from '@/app/loading'
 import { cn } from '@/lib/utils'
-import useDashboard from '@/hooks/useDashboard'
 import Card from '@/components/base/Card'
 import ActivePockets from './ActivePockets'
 import WorkspaceMembers from './WorkspaceMembers'
-
-const TABS = [
-  { name: 'General Settings', index: 0, icon: WrenchScrewdriverIcon },
-  { name: 'Workspace Members', index: 1, icon: UserGroupIcon },
-  { name: 'Active Pockets', index: 2, icon: BanknotesIcon },
-  { name: 'Wallet Deposits', index: 3, icon: WalletIcon },
-]
+import { WORKSPACE_TYPES } from '@/lib/constants'
 
 function WorkspaceSettings({ workspaceID }) {
   const { back } = useRouter()
@@ -55,6 +44,41 @@ function WorkspaceSettings({ workspaceID }) {
     (workspace) => workspace.ID === workspaceID,
   )
 
+  const DISBURESEMENT_TABS =
+    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[1]?.ID ||
+    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[2]?.ID
+      ? [
+          { name: 'Active Pockets', index: 2, icon: BanknotesIcon },
+          { name: 'Wallet Deposits', index: 3, icon: WalletIcon },
+        ]
+      : []
+
+  const TABS = [
+    { name: 'General Settings', index: 0, icon: WrenchScrewdriverIcon },
+    { name: 'Workspace Members', index: 1, icon: UserGroupIcon },
+    ...DISBURESEMENT_TABS,
+  ]
+
+  // Components to be rendered for the workspace type
+  const DISBURSMENT_COMPONENTS =
+    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[1]?.ID ||
+    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[2]?.ID
+      ? [
+          <ActivePockets
+            key={'active-wallet-pocket'}
+            workspaceID={workspaceID}
+            removeWrapper={true}
+          />,
+          <Wallet
+            key={'wallet'}
+            workspaceName={selectedWorkspace?.workspace}
+            workspaceID={workspaceID}
+            balance={selectedWorkspace?.balance}
+            removeWrapper
+          />,
+        ]
+      : []
+
   // ******************* COMPONENT RENDERER ************************** //
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
     <WorkspaceDetails
@@ -71,18 +95,8 @@ function WorkspaceSettings({ workspaceID }) {
       workspaceID={workspaceID}
       isLoading={isLoading}
     />,
-    <ActivePockets
-      key={'active-wallet-pocket'}
-      workspaceID={workspaceID}
-      removeWrapper={true}
-    />,
-    <Wallet
-      key={'wallet'}
-      workspaceName={selectedWorkspace?.workspace}
-      workspaceID={workspaceID}
-      balance={selectedWorkspace?.balance}
-      removeWrapper
-    />,
+    // Provides the disbursement tabs
+    ...DISBURSMENT_COMPONENTS,
   ])
 
   function handleNavigation(index) {

@@ -46,6 +46,7 @@ const API_COLLECTIONS_QUERY_KEY = 'api-transactions'
 const TILL_COLLECTIONS_REPORTS_QUERY_KEY = 'till-collection-reports'
 const TILL_COLLECTIONS_QUERY_KEY = 'till-transactions'
 const WORKSPACE_TILL_NUMBER_QUERY_KEY = 'workspace-till-number'
+const WALLET_STATEMENT_REPORTS_QUERY_KEY = 'wallet-statement-report'
 
 // ANIMATION_VARIANTS
 const containerVariants = {
@@ -270,4 +271,5 @@ export {
   TILL_COLLECTIONS_REPORTS_QUERY_KEY,
   TILL_COLLECTIONS_QUERY_KEY,
   WORKSPACE_TILL_NUMBER_QUERY_KEY,
+  WALLET_STATEMENT_REPORTS_QUERY_KEY,
 }

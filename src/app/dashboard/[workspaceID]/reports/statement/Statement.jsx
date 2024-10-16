@@ -1,64 +1,70 @@
 'use client'
-import React, { useState } from 'react'
-import useCustomTabsHook from '@/hooks/useCustomTabsHook'
+import React, { useEffect, useState } from 'react'
 import { ArrowDownTrayIcon, FunnelIcon } from '@heroicons/react/24/outline'
-import { parseDate, getLocalTimeZone } from '@internationalized/date'
 import { Button } from '@/components/ui/Button'
-import { formatDate } from '@/lib/utils'
 
 import { DateRangePickerField } from '@/components/ui/DateSelectField'
-import { BULK_REPORTS_QUERY_KEY } from '@/lib/constants'
+import { WALLET_STATEMENT_REPORTS_QUERY_KEY } from '@/lib/constants'
 import { useMutation } from '@tanstack/react-query'
-import { getBulkAnalyticReports } from '@/app/_actions/transaction-actions'
-import ReportDetailsViewer from '@/components/containers/analytics/ReportDetailsViewer'
+import { getWalletStatementReport } from '@/app/_actions/transaction-actions'
 import { WalletTransactionHistory } from '@/components/containers/workspace/Wallet'
-import { useWalletPrefundHistory } from '@/hooks/useQueryHooks'
-import { useDateFormatter } from '@react-aria/i18n'
-import {
-  convertWalletStatementToCSV,
-  downloadCSV,
-} from '@/app/_actions/file-converstion-actions'
+import { convertToCSVString } from '@/app/_actions/file-converstion-actions'
 import Card from '@/components/base/Card'
 import CardHeader from '@/components/base/CardHeader'
+import Search from '@/components/ui/Search'
 
 export default function StatementReport({ workspaceID }) {
-  const [openReportsModal, setOpenReportsModal] = useState(false)
+  const [dateRange, setDateRange] = useState()
+  const [searchQuery, setSearchQuery] = useState('')
 
-  let formatter = useDateFormatter({ dateStyle: 'long' })
-
-  const [date, setDate] = useState({})
-
-  // HANDLE FET BULK REPORT DATA
   const mutation = useMutation({
-    mutationKey: [BULK_REPORTS_QUERY_KEY, workspaceID],
-    mutationFn: (dateRange) => getBulkAnalyticReports(workspaceID, dateRange),
+    mutationKey: [WALLET_STATEMENT_REPORTS_QUERY_KEY, workspaceID],
+    mutationFn: (filterDates) => getReportsData(filterDates),
   })
 
-  const { data: walletHistoryResponse, isLoading: loadingWalletHistory } =
-    useWalletPrefundHistory(workspaceID)
-
-  const walletHistory = walletHistoryResponse?.data?.data || []
-
-  const statementTransactions = mutation?.data?.data || []
+  const statementTransactions = mutation?.data?.data?.data || []
 
   // handle get wallet history asyncronously with a date mutation - date range
-  async function getWalletTransactionHistory() {
-    await mutation.mutateAsync(dateRange)
+  async function runAsyncMutation(range) {
+    if (!range?.start_date && !range?.end_date) {
+      return []
+    }
+    await mutation.mutateAsync(range)
+  }
+
+  async function getReportsData(range) {
+    const response = await getWalletStatementReport(workspaceID, range)
+    return response || []
   }
 
   // Implement mannual CSV export functionality
   function handleFileExportToCSV() {
-    const csvData = convertWalletStatementToCSV(walletHistory)
-    downloadCSV(csvData, 'wallet_statement')
+    convertToCSVString(statementTransactions, 'wallet_statement')
   }
 
-  // ****************** COMPONENT RENDERER *************************** //
-  const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
-    <WalletTransactionHistory
-      workspaceID={workspaceID}
-      transactionData={walletHistory.filter((item) => item?.isPrefunded)}
-    />,
-  ])
+  // RESOLVE DATA FILTERING
+  const hasSearchFilter = Boolean(searchQuery)
+  const filteredItems = React.useMemo(() => {
+    let filteredrows = [...statementTransactions]
+
+    if (hasSearchFilter) {
+      filteredrows = filteredrows.filter(
+        (row) =>
+          row?.ID?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          row?.amount?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          row?.type?.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+    }
+
+    return filteredrows
+  }, [statementTransactions, searchQuery])
+
+  useEffect(() => {
+    if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
+      runAsyncMutation(dateRange)
+      return
+    }
+  }, [dateRange])
 
   return (
     <>
@@ -66,14 +72,14 @@ export default function StatementReport({ workspaceID }) {
         <div className="flex items-center gap-2">
           <DateRangePickerField
             label={'Reports Date Range'}
-            description={'Dates to generate transactional reports'}
+            description={'Dates to generate reports'}
             visibleMonths={2}
             autoFocus
-            dateRange={date}
-            setDateRange={setDate}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
           />{' '}
           <Button
-            onPress={getWalletTransactionHistory}
+            onPress={() => runAsyncMutation(dateRange)}
             endContent={<FunnelIcon className="h-5 w-5" />}
           >
             Apply
@@ -85,52 +91,40 @@ export default function StatementReport({ workspaceID }) {
       <Card className={'mb-8 w-full'}>
         <div className="flex items-center gap-2">
           <CardHeader
-            title={'Wallet Statement'}
+            title={'Wallet Statement Report'}
             classNames={{
-              titleClasses: 'lg:text-lg xl:text-xl font-bold',
-              infoClasses: 'md:text-base',
+              titleClasses: 'xl:text-[clamp(1.125rem,1vw,1.75rem)] font-bold',
+              infoClasses: 'text-[clamp(0.8rem,0.8vw,1rem)]',
             }}
             infoText={
-              'Statement transactions:' + ` (${date ? date.range : '--'})`
+              'Statement transactions:' +
+              ` (${dateRange ? dateRange.range : '--'})`
             }
           />
-          <Button
-            onPress={() => handleFileExportToCSV()}
-            endContent={<ArrowDownTrayIcon className="h-5 w-5" />}
-          >
-            Export
-          </Button>
-        </div>
 
-        {/* <div className="mb-4 flex w-full items-center justify-between gap-8 ">
-          <Tabs
-            className={'my-2 mr-auto max-w-md'}
-            tabs={SERVICE_TYPES}
-            currentTab={currentTabIndex}
-            navigateTo={navigateTo}
-          />
-          <div className="flex w-full max-w-md">
+          <div className="flex w-full max-w-md gap-4">
             <Search
-              // className={'mt-auto'}
-              placeholder={'Search by name, or type...'}
+              placeholder={'Search by type, ID or amount...'}
               classNames={{ input: 'h-10' }}
               onChange={(e) => {
                 setSearchQuery(e.target.value)
               }}
             />
+            <Button
+              onPress={handleFileExportToCSV}
+              endContent={<ArrowDownTrayIcon className="h-5 w-5" />}
+            >
+              Export
+            </Button>
           </div>
-        </div> */}
-        {activeTab}
-      </Card>
-      {/* *************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
-      {openReportsModal && (
-        <ReportDetailsViewer
-          setOpenReportsModal={setOpenReportsModal}
-          openReportsModal={openReportsModal}
-          batchID={selectedBatch?.ID}
+        </div>
+
+        <WalletTransactionHistory
+          workspaceID={workspaceID}
+          transactionData={filteredItems || []}
+          isLoading={mutation.isPending}
         />
-      )}
-      {/*********************************************************************** */}
+      </Card>
     </>
   )
 }
