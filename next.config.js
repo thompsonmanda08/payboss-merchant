@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
+
   images: {
     remotePatterns: [
       {
@@ -21,9 +23,6 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-  },
-  experimental: {
-    serverComponentsExternalPackages: ['@react-pdf/renderer'],
   },
 
   // webpack(config) {

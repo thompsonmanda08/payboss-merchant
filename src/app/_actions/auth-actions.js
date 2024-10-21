@@ -374,6 +374,7 @@ export async function logUserOut() {
   }
   return false
 }
+
 export async function lockScrenOnUserIdle(state) {
   const isLoggedIn = await verifySession()
   if (isLoggedIn) {
