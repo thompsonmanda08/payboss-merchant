@@ -9,11 +9,19 @@ import ScreenLock, {
 } from "@/components/elements/screen-lock";
 import FirstLogin from "@/components/elements/first-login";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { useEffect, useState } from "react";
 
 const queryClient = new QueryClient();
 
 function Providers({ session, authSession, children }) {
   const { online } = useNetwork();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <QueryClientProvider client={queryClient}>

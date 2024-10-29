@@ -29,7 +29,7 @@
     --destructive: 2 78% 50%;
     --destructive-foreground: 224 71.4% 4.1%;
 
-    --border: 220 13% 91%;
+    --border: 270 14% 97;
     --input: 220 13% 91%;
     --ring: 216 100% 81%;
 
@@ -62,9 +62,9 @@
     --destructive: 2 78% 50%;
     --destructive-foreground: 224 71.4% 4.1%;
 
-    --border: 216 77% 46;
-    --input: 220 13% 91%;
-    --ring: 216 100% 81%;
+    --border: 0 1% 10%;
+    --input: 0 1% 17%;
+    --ring: 216 77% 42%;
   }
 }
 

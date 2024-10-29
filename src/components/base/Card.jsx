@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 function Card({ className, classObject, href, children }) {
   const cardClasses = cn(
-    "flex w-full flex-col rounded-2xl bg-background p-5 shadow-lg shadow-neutral-400/10 border border-border transition-all duration-300 overflow-clip",
+    "flex w-full flex-col rounded-2xl bg-card p-5 shadow-lg dark:shadow-background shadow-neutral-400/10 border border-border transition-all duration-300 overflow-clip",
     className,
     classObject
   );
