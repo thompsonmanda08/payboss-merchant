@@ -47,21 +47,21 @@ function LoginForm() {
     }
 
     const response = await authenticateUser(loginDetails);
-    if (response?.success) {
-      queryClient.invalidateQueries();
-      setAuth(response?.data);
-      const loginUrl = urlParams.get("callbackUrl") || "/workspaces";
-      push(loginUrl);
-    }
+    console.log(response);
 
     if (!response?.success) {
       updateErrorStatus({
-        status: response?.status,
+        status: !response?.success,
         message: response?.message,
       });
       setIsLoading(false);
       return;
     }
+
+    queryClient.invalidateQueries();
+    setAuth(response?.data);
+    const loginUrl = urlParams.get("callbackUrl") || "/workspaces";
+    push(loginUrl);
   }
 
   useEffect(() => {

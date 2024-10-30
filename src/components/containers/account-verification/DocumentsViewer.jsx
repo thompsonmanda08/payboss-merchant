@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import fileImage from "@/images/attachment.png";
+import fileImage from "@";
 import Image from "next/image";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
@@ -41,7 +41,7 @@ const DocumentsViewer = () => {
             <Button
               key={index}
               variant="light"
-              className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border border-primary-100 bg-slate-100 p-4 transition-all duration-300 ease-in-out"
+              className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border border-primary-100 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
               onClick={() => {
                 setSelectedDoc(document);
                 setIsOpen(true);
@@ -67,7 +67,7 @@ const DocumentsViewer = () => {
           {signedContractDoc && (
             <Button
               variant="light"
-              className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border border-primary-100 bg-slate-100 p-4 transition-all duration-300 ease-in-out"
+              className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border border-primary-100 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
               onClick={() => {
                 setSelectedDoc(signedContractDoc);
                 setIsOpen(true);

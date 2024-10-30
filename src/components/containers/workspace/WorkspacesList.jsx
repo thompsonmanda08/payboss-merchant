@@ -146,7 +146,6 @@ export function ListOfWorkspaces({
   loading,
   setLoading,
   allowCreateWorkspaces,
-  createFromList = false,
   openModal,
 }) {
   const { workspaces, allWorkspaces, isLoading } = useWorkspace();
@@ -174,9 +173,10 @@ export function ListOfWorkspaces({
             })}
           >
             {RENDER_WORKSPACES && RENDER_WORKSPACES?.length > 0 ? (
-              RENDER_WORKSPACES?.map((item) => {
+              RENDER_WORKSPACES?.map((item, index) => {
                 return (
                   <WorkspaceItem
+                    key={index}
                     onClick={() => setLoading(true)}
                     name={item?.workspace}
                     description={`${capitalize(
@@ -184,10 +184,10 @@ export function ListOfWorkspaces({
                     )}'s Workspace`}
                     isVisible={item?.isVisible}
                     href={
-                      `/dashboard/${item?.ID}`
-                      // !isWorkspaceSettings
-                      //   ? `/dashboard/${item?.ID}`
-                      //   : `manage-account/workspaces/${item?.ID}`
+                      // `/dashboard/${item?.ID}`
+                      !isWorkspaceSettings
+                        ? `/dashboard/${item?.ID}`
+                        : `manage-account/workspaces/${item?.ID}`
                     }
                   />
                 );
@@ -204,7 +204,7 @@ export function ListOfWorkspaces({
               </div>
             )}
 
-            {allowCreateWorkspaces && createFromList && (
+            {allowCreateWorkspaces && isWorkspaceSettings && (
               <Button
                 onPress={openModal}
                 className={cn(

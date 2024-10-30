@@ -23,7 +23,10 @@ import { cn, getUserInitials, notify } from "@/lib/utils";
 import useWorkspaceStore from "@/context/workspaceStore";
 import PromptModal from "@/components/base/Prompt";
 import { useQueryClient } from "@tanstack/react-query";
-import { WORKSPACE_MEMBERS_QUERY_KEY } from "@/lib/constants";
+import {
+  rowsPerPageOptions,
+  WORKSPACE_MEMBERS_QUERY_KEY,
+} from "@/lib/constants";
 import Loader from "@/components/ui/loader";
 import EmptyLogs from "@/components/base/EmptyLogs";
 import { usePathname } from "next/navigation";
@@ -358,16 +361,14 @@ export default function UsersTable({
           <Search
             placeholder="Search by name..."
             value={filterValue}
-            onClear={() => onClear()}
+            // onClear={() => onClear()}
             onChange={(e) => onSearchChange(e.target.value)}
           />
           <div className="relative flex gap-3">
             <SingleSelectionDropdown
               name={"Role"}
               className={"min-w-[160px]"}
-              classNames={{
-                trigger: " bg-primary-50",
-              }}
+      
               disallowEmptySelection={true}
               closeOnSelect={false}
               buttonVariant="flat"
@@ -379,9 +380,7 @@ export default function UsersTable({
             <SingleSelectionDropdown
               name={"Columns"}
               className={"min-w-[160px]"}
-              classNames={{
-                trigger: " bg-primary-50",
-              }}
+          
               closeOnSelect={false}
               buttonVariant="flat"
               selectionMode="multiple"
@@ -421,8 +420,9 @@ export default function UsersTable({
             <SelectField
               className="-mb-1 h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
               onChange={onRowsPerPageChange}
+              value={rowsPerPage}
               placeholder={rowsPerPage.toString()}
-              options={["5", "8", "10", "20"]}
+              options={rowsPerPageOptions}
               defaultValue={8}
             />
           </label>
@@ -480,7 +480,7 @@ export default function UsersTable({
 
   const emptyContent = React.useMemo(() => {
     return (
-      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600">
+      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 dark:bg-foreground/5 text-sm font-semibold text-slate-600">
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
@@ -496,7 +496,7 @@ export default function UsersTable({
       <div className="mt-32 flex flex-1 items-center rounded-lg">
         <Loader
           size={100}
-          classNames={{ wrapper: "bg-slate-200/50 rounded-xl h-full" }}
+          classNames={{ wrapper: "bg-foreground-200/50 rounded-xl h-full" }}
         />
       </div>
     );

@@ -60,7 +60,7 @@ function SelectField({
           }}
           variant="bordered"
           placeholder={placeholder || "Select"}
-          selectedKeys={Boolean(prefilled) ? [value] : "all"}
+          selectedKeys={Boolean(prefilled) ? [value] : undefined}
           value={value}
           onChange={onChange}
           defaultValue={defaultValue}

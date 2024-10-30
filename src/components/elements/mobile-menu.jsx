@@ -25,9 +25,12 @@ function MobileNavBar({
         <motion.div
           whileInView={{ opacity: [0, 1], transition: { duration: 0.3 } }}
           onClick={toggleMobileMenu}
-          className={cn(`absolute left-[-100%] z-[99] hidden bg-slate-900/80`, {
-            "inset-0 block lg:hidden": isMobileMenuOpen,
-          })}
+          className={cn(
+            `absolute left-[-100%] z-[99] hidden bg-foreground-900/80`,
+            {
+              "inset-0 block lg:hidden": isMobileMenuOpen,
+            }
+          )}
         />
       )}
       <nav

@@ -15,7 +15,7 @@ async function AuthLayout({ children }) {
               unoptimized
               loading="lazy"
               src={DefaultCover}
-              alt=""
+              alt="Cover"
               width={1024}
               height={300}
             />

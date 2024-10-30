@@ -210,7 +210,7 @@ function WorkspaceDetails({
       </div>
       {!isUserInWorkspace && (
         <>
-          <hr className="my-6 h-px bg-slate-900/5" />
+          <hr className="my-6 h-px bg-foreground-900/5" />
           <div className="flex items-center gap-4 sm:mt-0 sm:flex-auto">
             <Switch
               isSelected={isVisible}
@@ -229,7 +229,7 @@ function WorkspaceDetails({
 
       {!isSandbox && (
         <>
-          <hr className="my-6 h-px bg-slate-900/5" />
+          <hr className="my-6 h-px bg-foreground-900/5" />
           <div className="flex flex-col gap-4 md:flex-row md:justify-between">
             <div className="flex max-w-4xl flex-col gap-4">
               <h2 className="text-base font-semibold leading-3 text-foreground">
@@ -249,7 +249,7 @@ function WorkspaceDetails({
               Add Workspace Members
             </Button>
           </div>
-          <hr className="my-6 h-px bg-slate-900/5" />
+          <hr className="my-6 h-px bg-foreground-900/5" />
           <div className="flex flex-col gap-8 md:flex-row md:justify-between">
             <div className="flex max-w-4xl flex-col gap-4">
               <h2 className="text-base font-semibold leading-7 text-foreground">

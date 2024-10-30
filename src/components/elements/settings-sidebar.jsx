@@ -18,6 +18,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import useAuthStore from "@/context/authStore";
 import useNavigation from "@/hooks/useNavigation";
+import NavIconButton from "../ui/nav-icon-button";
 
 function SettingsSideBar({
   title,
@@ -99,9 +100,12 @@ function SettingsSideBar({
         <motion.div
           whileInView={{ opacity: [0, 1], transition: { duration: 0.3 } }}
           onClick={toggleSideBar}
-          className={cn(`absolute left-[-100%] z-[99] hidden bg-slate-900/60`, {
-            "inset-0 block": openSettingsSideBar,
-          })}
+          className={cn(
+            `absolute left-[-100%] z-[99] hidden bg-foreground-900/60`,
+            {
+              "inset-0 block": openSettingsSideBar,
+            }
+          )}
         />
       )}
       <motion.nav
@@ -132,7 +136,7 @@ function SettingsSideBar({
           {/* ******************** WORKSPACE SETTINGS ******************************* */}
           <div
             role="`workspace_settings`"
-            className="p- flex flex-col justify-start p-2"
+            className="md:px-4 flex flex-col justify-start p-2"
           >
             <p className="m-2 text-xs font-medium uppercase tracking-wide text-slate-600">
               {!isAccountLevelSettingsRoute ? title : "ACCOUNT SETTINGS"}
@@ -161,15 +165,19 @@ function SettingsSideBar({
 
           {/* ************************************************************* */}
           <hr className="mt-auto" />
-          <Button
-            variant="light"
-            // size="sm"
-            className="my-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
-            onClick={handleUserLogOut}
-            startContent={<PowerIcon className="h-4 w-4" />}
-          >
-            Log out
-          </Button>
+          <div className="flex gap-2 items-center px-5  pt-2">
+            <NavIconButton className={"bg-primary"}>
+              <PowerIcon className="h-5 w-5 text-white" />
+            </NavIconButton>
+            <Button
+              variant="light"
+              // size="sm"
+              className="my-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
+              onClick={handleUserLogOut}
+            >
+              Log out
+            </Button>
+          </div>
         </div>
       </motion.nav>
     </>

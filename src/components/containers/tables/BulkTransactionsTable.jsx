@@ -230,7 +230,9 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       <div className="mt-24 flex flex-1 items-center rounded-lg">
         <Loader
           size={100}
-          classNames={{ wrapper: "bg-slate-200/50 rounded-xl mt-8 h-full" }}
+          classNames={{
+            wrapper: "bg-foreground-200/50 rounded-xl mt-8 h-full",
+          }}
         />
       </div>
     );
@@ -238,7 +240,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
 
   const emptyContent = React.useMemo(() => {
     return (
-      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600">
+      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 dark:bg-foreground/5 text-sm font-semibold text-slate-600">
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
@@ -283,9 +285,6 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
             <SingleSelectionDropdown
               name={"Type"}
               className={"min-w-[160px]"}
-              classNames={{
-                trigger: " bg-primary-50",
-              }}
               disallowEmptySelection={true}
               closeOnSelect={false}
               buttonVariant="flat"
@@ -297,9 +296,6 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
             <SingleSelectionDropdown
               name={"Columns"}
               className={"min-w-[160px]"}
-              classNames={{
-                trigger: " bg-primary-50",
-              }}
               closeOnSelect={false}
               buttonVariant="flat"
               selectionMode="multiple"

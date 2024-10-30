@@ -6,11 +6,10 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import clsx from "clsx";
 
 import { Container } from "@/components/base/Container";
-import screenshotContacts from "@/images/screenshots/contacts.png";
-import screenshotInventory from "@/images/screenshots/inventory.png";
-import screenshotProfitLoss from "@/images/screenshots/profit-loss.png";
 
-import bpIcon from "@/images/logos/payboss-icon.svg";
+const screenshotContacts = "images/screenshots/contacts.png";
+const screenshotInventory = "images/screenshots/inventory.png";
+const screenshotProfitLoss = "images/screenshots/profit-loss.png";
 
 const features = [
   {

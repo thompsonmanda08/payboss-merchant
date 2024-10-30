@@ -1,4 +1,3 @@
-import empty from "@/images/emptyLogs.svg";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -37,7 +36,13 @@ const EmptyLogs = ({
       >
         {subTitle} {listName}
       </p>
-      <Image src={image || empty} alt="empty list" className="w-[450px]" />
+      <Image
+        src={image || "/images/emptyLogs.svg"}
+        alt="empty list"
+        className="w-[450px] aspect-video"
+        width={450}
+        height={450}
+      />
     </div>
   );
 };

@@ -144,7 +144,7 @@ export default function PrefundsTable({
 
   const emptyContent = React.useMemo(() => {
     return (
-      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600">
+      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 dark:bg-foreground/5 text-sm font-semibold text-slate-600">
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
@@ -162,7 +162,7 @@ export default function PrefundsTable({
       <div className="-mt-8 flex flex-1 items-center rounded-lg">
         <Loader
           size={100}
-          classNames={{ wrapper: "bg-slate-200/50 rounded-xl h-full" }}
+          classNames={{ wrapper: "bg-foreground-200/50 rounded-xl h-full" }}
         />
       </div>
     );

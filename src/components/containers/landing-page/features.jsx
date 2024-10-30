@@ -232,7 +232,7 @@ function Collections() {
                         {revenue.Icon.role}
                       </div>
                     </div>
-                    <div className="overflow-hidden rounded-full bg-slate-800 p-3">
+                    <div className="overflow-hidden rounded-full bg-foreground-800 p-3">
                       <revenue.Icon.element className="h-6 w-6 text-white" />
                     </div>
                   </figcaption>
@@ -280,7 +280,7 @@ function Spending() {
                         {expense.Icon.role}
                       </div>
                     </div>
-                    <div className="overflow-hidden rounded-full bg-slate-800 p-3">
+                    <div className="overflow-hidden rounded-full bg-foreground-800 p-3">
                       <expense.Icon.element className="h-6 w-6 text-white" />
                     </div>
                   </figcaption>

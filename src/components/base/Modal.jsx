@@ -69,7 +69,7 @@ function Modal({
           transition={{ duration: 0.25 }}
           onClick={dismissModal}
           className={cn(
-            "absolute inset-0 z-50 flex h-screen w-full items-center justify-center bg-slate-800/50",
+            "absolute inset-0 z-50 flex h-screen w-full items-center justify-center bg-foreground-800/50",
             overlay
           )}
         >

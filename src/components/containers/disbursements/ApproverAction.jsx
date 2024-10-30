@@ -2,7 +2,6 @@
 import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, notify } from "@/lib/utils";
-import approvalIllustration from "@/images/illustrations/approval.svg";
 import Image from "next/image";
 import {
   reviewBatch,
@@ -266,7 +265,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
         <div className="flex w-full select-none flex-col items-center gap-9 rounded-2xl bg-primary-50/70 p-9">
           <Image
             className="aspect-square max-h-80 object-contain"
-            src={approvalIllustration}
+            src={"/images/illustrations/approval.svg"}
             width={200}
             height={200}
             alt="Approval Illustration"

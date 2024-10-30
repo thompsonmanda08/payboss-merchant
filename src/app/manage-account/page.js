@@ -1,8 +1,12 @@
-import LoadingPage from '@/app/loading'
-import Workspaces from '@/components/containers/workspace/WorkspacesList'
-import React, { Suspense } from 'react'
+import LoadingPage from "@/app/loading";
+import Workspaces from "@/components/containers/workspace/WorkspacesList";
+import React, { Suspense } from "react";
+import { getUserDetails } from "../_actions/config-actions";
 
 async function AllWorkspacesPage() {
+  const session = await getUserDetails();
+  console.log(session?.user);
+
   return (
     <Suspense fallback={<LoadingPage />}>
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
@@ -17,11 +21,12 @@ async function AllWorkspacesPage() {
         </div>
 
         <Workspaces
-          className={'m-0 border-none bg-transparent p-0 shadow-none'}
+          user={session?.user}
+          className={"m-0 border-none bg-transparent p-0 shadow-none"}
         />
       </div>
     </Suspense>
-  )
+  );
 }
 
-export default AllWorkspacesPage
+export default AllWorkspacesPage;

@@ -20,14 +20,14 @@ export default function NavItemIcon({
           " bg-gradient-to-tr from-primary to-blue-300 font-bold":
             isSelected || (isSelected && activeLayer),
           " bg-gradient-to-tr from-primary to-blue-300 text-white": activeLayer,
-          "shadow-none": isExpanded,
+          "shadow-none bg-gradient-to-tr from-primary to-blue-300": isExpanded,
         }
       )}
     >
       <Icon
         fontSize={18}
         className={cn("h-5 w-5 text-foreground/50 group-hover:text-white", {
-          "text-white": isSelected || activeLayer,
+          "text-white": isSelected || activeLayer || isExpanded,
         })}
       />
     </Button>

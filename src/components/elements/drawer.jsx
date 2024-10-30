@@ -26,7 +26,7 @@ const Drawer = ({ isOpen, onClose, title, infoText, className, children }) => {
       {isOpen && (
         <>
           <motion.div
-            className="fixed inset-y-0 right-0 z-50 flex max-w-full bg-slate-500/20"
+            className="fixed inset-y-0 right-0 z-50 flex max-w-full bg-foreground-500/20"
             initial="hidden"
             animate="visible"
             exit="exit"

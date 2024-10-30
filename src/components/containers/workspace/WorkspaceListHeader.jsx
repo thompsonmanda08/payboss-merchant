@@ -19,7 +19,7 @@ function WorkspaceHeader({ user }) {
             as={Link}
             href={"/manage-account"}
             variant="light"
-            className="data[hover=true]:bg-slate-900/30  z-30 aspect-square min-w-[120px] rounded-full bg-slate-900/20 text-white"
+            className="data[hover=true]:bg-foreground-900/30  z-30 aspect-square min-w-[120px] rounded-full bg-foreground-900/20 text-white"
             startContent={<Cog6ToothIcon className=" h-6 w-6" />}
           >
             Manage
@@ -28,7 +28,7 @@ function WorkspaceHeader({ user }) {
         <Button
           onClick={handleUserLogOut}
           variant="light"
-          className="data[hover=true]:bg-slate-900/30 z-30 aspect-square min-w-[120px] rounded-full bg-slate-900/20 text-white"
+          className="data[hover=true]:bg-foreground-900/30 z-30 aspect-square min-w-[120px] rounded-full bg-foreground-900/20 text-white"
           startContent={<PowerIcon className=" h-6 w-6" />}
         >
           Sign out

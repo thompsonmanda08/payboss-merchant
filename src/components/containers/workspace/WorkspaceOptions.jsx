@@ -5,6 +5,7 @@ import {
   ArrowPathIcon,
   BriefcaseIcon,
   ChevronRightIcon,
+  HomeIcon,
   WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 import DropdownButton from "@/components/ui/dropdown-button";
@@ -25,7 +26,7 @@ export default function WorkspaceSelection({
       href: "/workspaces",
       shortcut: "⌘H",
       description: "Go back Home",
-      Icon: ArrowPathIcon,
+      Icon: HomeIcon,
     },
 
     {

@@ -11,17 +11,28 @@ import {
   DropdownSection,
   DropdownItem,
   Button,
+  Switch,
 } from "@nextui-org/react";
 import useAuthStore from "@/context/authStore";
 import { Skeleton } from "../ui/skeleton";
 import useNavigation from "@/hooks/useNavigation";
 import useWorkspaces from "@/hooks/useWorkspaces";
-import { WalletIcon } from "@heroicons/react/24/outline";
+import {
+  ChatBubbleLeftRightIcon,
+  MoonIcon,
+  PowerIcon,
+  SunIcon,
+  WalletIcon,
+} from "@heroicons/react/24/outline";
 import useDashboard from "@/hooks/useDashboard";
 import BreadCrumbLinks from "../base/BreadCrumbLinks";
 import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { WORKSPACE_DASHBOARD_QUERY_KEY } from "@/lib/constants";
+import NavIconButton from "../ui/nav-icon-button";
+import SelectField from "../ui/select-field";
+import ThemeSwitcher from "../base/ThemeSwitcher";
+import { useTheme } from "next-themes";
 
 export default function TopNavBar({ user }) {
   const queryClient = useQueryClient();
@@ -97,8 +108,11 @@ export default function TopNavBar({ user }) {
                 </span>
               </div>
             </Link>
-            <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:right-1 after:top-0 after:h-2 after:w-2 after:rounded-full after:bg-primary-500 after:content-['']">
-              <BellIcon className="top-0 h-6 w-6 " />
+            <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:-right-1 after:-top-1 after:h-3 after:aspect-square after:w-3 after:rounded-full after:bg-secondary after:content-['']">
+              {/* <BellIcon className="top-0 h-6 w-6 " /> */}
+              <NavIconButton className={"bg-primary"}>
+                <BellIcon className="h-5 w-5 text-white" />
+              </NavIconButton>
             </div>
             <AvatarDropdown user={user} isProfile={isProfile} />
           </div>
@@ -112,15 +126,23 @@ export function AvatarDropdown({ user, isProfile }) {
   const { handleUserLogOut } = useAuthStore((state) => state);
   const { dashboardRoute } = useNavigation();
   const { workspaceUserRole: role } = useDashboard();
+  const { theme, setTheme } = useTheme();
+  const [isSelected, setIsSelected] = React.useState(
+    theme == "dark" ? true : false
+  );
+
   return (
     <Dropdown
       // showArrow
       radius="sm"
       classNames={{
-        base: "before:bg-default-200", // change arrow background
-        content: cn("p-0 border-small border-divider bg-background", {
-          "bg-background/80 backdrop-blur-md": isProfile,
-        }),
+        base: "before:bg-default-200 mr-5 min-w-60 dark:shadow-foreground ", // change arrow background
+        content: cn(
+          "p-0 border-sm border-divider bg-card border-[1px] border-border",
+          {
+            "bg-card/80 backdrop-blur-md": isProfile,
+          }
+        ),
       }}
     >
       <DropdownTrigger>
@@ -173,42 +195,59 @@ export function AvatarDropdown({ user, isProfile }) {
             Exit to Workspaces
           </DropdownItem>
           <DropdownItem key="settings" href={settingsPathname + '/workspaces'}>
-            Settings
+            Profile Settings
           </DropdownItem> */}
         </DropdownSection>
 
-        {/* <DropdownSection aria-label="Preferences" showDivider>
-          <DropdownItem key="quick_search" shortcut="⌘K">
+        <DropdownSection aria-label="Preferences" showDivider>
+          {/* <DropdownItem key="quick_search" shortcut="⌘K">
             Quick search
-          </DropdownItem>
+          </DropdownItem> */}
           <DropdownItem
             isReadOnly
             key="theme"
             className="flex cursor-default justify-between"
           >
-            <div className="flex h-12 w-full cursor-default items-center justify-between">
-              <span>Theme</span>
-              <SelectField
-                // className="z-10 h-8 w-24 rounded-md border-small border-default-300  bg-transparent py-1 text-tiny text-default-500 outline-none group-data-[hover=true]:border-default-500 dark:border-default-200"
-                className={'ml-auto w-[100px]'}
-                wrapperClassName={'h-8'}
-                id="theme"
-                name="theme"
-                options={['System', 'Light', 'Dark']}
-              />
+            <div className="flex w-full cursor-default items-center justify-between">
+              <span>Dark Mode</span>
+              {/* <ThemeSwitcher /> */}
+              <Switch
+                defaultSelected
+                isSelected={isSelected}
+                onValueChange={(value) => {
+                  setIsSelected(value);
+                  setTheme(value ? "dark" : "light");
+                }}
+                size="md"
+                color="primary"
+                startContent={<SunIcon />}
+                endContent={<MoonIcon />}
+              >
+                {/* Dark mode */}
+              </Switch>
             </div>
           </DropdownItem>
-        </DropdownSection> */}
+        </DropdownSection>
 
         <DropdownSection aria-label="Help & Feedback">
-          <DropdownItem key="Home" href="/workspaces">
-            Exit to Workspaces
+          <DropdownItem key="Home" href="/workspaces" shortcut="⌘K">
+            Go to Workspaces
           </DropdownItem>
           <DropdownItem key="help_and_feedback" href="/support">
-            Help & Feedback
+            <div className="flex justify-between items-center">
+              <span> Help & Support</span>{" "}
+              <NavIconButton className={"scale-90"}>
+                <ChatBubbleLeftRightIcon className="h-5 w-5" />
+              </NavIconButton>
+            </div>
           </DropdownItem>
           <DropdownItem key="logout" onClick={handleUserLogOut}>
-            Log Out
+            <div className="flex justify-between items-center">
+              <span>Log Out</span>{" "}
+              <NavIconButton className={"scale-80 bg-primary"}>
+                <PowerIcon className="h-5 w-5 text-white" />
+              </NavIconButton>
+            </div>
           </DropdownItem>
         </DropdownSection>
       </DropdownMenu>
@@ -224,13 +263,13 @@ export function NavbarLoader({ isProfile }) {
           className={cn(
             "mb-2 aspect-square h-[8px] w-full max-w-xl rounded-lg",
             {
-              "bg-slate-200 p-4 backdrop-blur-md": isProfile,
+              "bg-foreground-200 p-4 backdrop-blur-md": isProfile,
             }
           )}
         />
         <Skeleton
           className={cn("aspect-square h-5 w-full max-w-xs rounded-lg", {
-            "bg-slate-200 p-4 backdrop-blur-md": isProfile,
+            "bg-foreground-200 p-4 backdrop-blur-md": isProfile,
           })}
         />
       </div>
@@ -238,18 +277,18 @@ export function NavbarLoader({ isProfile }) {
         <div className=" flex space-x-2">
           <Skeleton
             className={cn("aspect-square h-8 rounded-full", {
-              "bg-slate-200 p-4 backdrop-blur-md": isProfile,
+              "bg-foreground-200 p-4 backdrop-blur-md": isProfile,
             })}
           />
           <Skeleton
             className={cn("aspect-square h-8 rounded-full", {
-              "bg-slate-200 p-4 backdrop-blur-md": isProfile,
+              "bg-foreground-200 p-4 backdrop-blur-md": isProfile,
             })}
           />
         </div>
         <Skeleton
           className={cn("aspect-square h-12 rounded-full", {
-            "bg-slate-200 p-4 backdrop-blur-md": isProfile,
+            "bg-foreground-200 p-4 backdrop-blur-md": isProfile,
           })}
         />
       </div>

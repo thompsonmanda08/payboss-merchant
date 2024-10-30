@@ -620,7 +620,7 @@ export function WalletTransactionHistory({
                                         setSelectedPrefund(item);
                                         setOpenAttachmentModal(true);
                                       }}
-                                      className="'h-6 hover:bg-slate-300' cursor-pointer self-start rounded-md bg-slate-200 p-[6px] text-lg font-bold text-slate-600 active:opacity-50"
+                                      className="'h-6 hover:bg-foreground-300' cursor-pointer self-start rounded-md bg-foreground-200 p-[6px] text-lg font-bold text-slate-600 active:opacity-50"
                                     >
                                       <PaperClipIcon className="aspect-square w-5" />
                                     </span>
@@ -657,13 +657,13 @@ export function WalletTransactionHistory({
                   );
                 })}
                 {index != formattedActivityData?.length - 1 && (
-                  <hr className="my-4 h-px border-0 bg-slate-100"></hr>
+                  <hr className="my-4 h-px border-0 bg-foreground-100"></hr>
                 )}
               </div>
             );
           })
         ) : (
-          <div className="flex flex-1 items-center rounded-lg bg-slate-50 text-sm font-semibold text-slate-600">
+          <div className="flex flex-1 items-center rounded-lg dark:bg-foreground/5 bg-slate-50 text-sm font-semibold text-slate-600">
             <EmptyLogs
               className={"my-auto"}
               title={"No Wallet Transactions"}

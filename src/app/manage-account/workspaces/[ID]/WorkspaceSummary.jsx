@@ -26,7 +26,7 @@ const TABS = [
   { name: "Wallet", index: 2 },
 ];
 
-function WorkspaceInfo({ workspaceID }) {
+function WorkspaceSummary({ workspaceID }) {
   const { back } = useRouter();
   const { allWorkspaces, activeWorkspace } = useWorkspaces();
   const { isUserInWorkspace } = useNavigation();
@@ -58,17 +58,7 @@ function WorkspaceInfo({ workspaceID }) {
       workspaceID={workspaceID}
       workspaceName={selectedWorkspace?.workspace}
       navigateTo={handleNavigation}
-    />,
-    <UsersTable
-      key={"members"}
-      users={userSearchResults}
-      workspaceID={workspaceID}
-    />,
-    <Wallet
-      key={"wallet-details"}
-      workspaceName={selectedWorkspace?.workspace}
-      workspaceID={workspaceID}
-      balance={selectedWorkspace?.balance}
+      workspaceUsers={workspaceUsers}
     />,
   ]);
 
@@ -83,38 +73,33 @@ function WorkspaceInfo({ workspaceID }) {
     }
   }, []);
 
-  const allowUserCreation =
-    currentTabIndex == 1 && canCreateUsers && !isUserInWorkspace;
-
-  return (!selectedWorkspace && !isUserInWorkspace) || !activeWorkspace ? (
+  return !selectedWorkspace && !isUserInWorkspace ? (
     <LoadingPage />
   ) : (
     <div className={cn("px-2", { "px-3": isUserInWorkspace })}>
-      {!isUserInWorkspace && (
-        <div className="relative flex w-full items-center justify-between lg:-left-5">
-          <Button
-            aria-label="back"
-            color="light"
-            className={"text-primary sm:w-auto sm:max-w-fit"}
-            onClick={() => back()}
-            startContent={<ArrowUturnLeftIcon className="h-5 w-5" />}
-          >
-            Return to Workspaces
-          </Button>
-          <Button
-            as={Link}
-            href={`/dashboard/${workspaceID}`}
-            aria-label="back"
-            color="light"
-            className={"text-primary sm:w-auto sm:max-w-fit"}
-            endContent={<ArrowRightStartOnRectangleIcon className="h-5 w-5" />}
-          >
-            Go to Workspace Dashboard
-          </Button>
-        </div>
-      )}
+      <div className="relative flex w-full items-center justify-between lg:-left-5">
+        <Button
+          aria-label="back"
+          color="light"
+          className={"text-primary sm:w-auto sm:max-w-fit"}
+          onClick={() => back()}
+          startContent={<ArrowUturnLeftIcon className="h-5 w-5" />}
+        >
+          Return to Workspaces
+        </Button>
+        <Button
+          as={Link}
+          href={`/dashboard/${workspaceID}`}
+          aria-label="back"
+          color="light"
+          className={"text-primary sm:w-auto sm:max-w-fit"}
+          endContent={<ArrowRightStartOnRectangleIcon className="h-5 w-5" />}
+        >
+          Go to Workspace Dashboard
+        </Button>
+      </div>
       {/* HEADER */}
-      <div className={cn("mt-8")}>
+      <div className={cn("my-4")}>
         <h2 className="heading-5 !font-bold uppercase tracking-tight text-gray-900">
           {selectedWorkspace?.workspace}
         </h2>
@@ -126,12 +111,12 @@ function WorkspaceInfo({ workspaceID }) {
 
       {/* CONTENT */}
       <div className="flex flex-col gap-4 px-4 lg:p-0">
-        <div className="flex w-full flex-grow flex-col justify-start">
+        {/* <div className="flex w-full flex-grow flex-col justify-start">
           {activeTab}
-        </div>
+        </div> */}
       </div>
     </div>
   );
 }
 
-export default WorkspaceInfo;
+export default WorkspaceSummary;

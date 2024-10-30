@@ -117,7 +117,7 @@ export default function Step1_TPIN({ updateDetails, backToStart }) {
                 ease: "easeInOut",
               },
             }}
-            className="flex w-full flex-col gap-4 rounded-lg bg-slate-50 p-4"
+            className="flex w-full flex-col gap-4 rounded-lg dark:bg-foreground/5 bg-slate-50 p-4"
           >
             <div className="flex items-start gap-4">
               <SoftBoxIcon>

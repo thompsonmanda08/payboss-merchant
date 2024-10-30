@@ -18,7 +18,7 @@ import {
 import Link from "next/link";
 
 const buttonClasses =
-  "items-center justify-between gap-2 rounded-lg font-medium capitalize text-primary shadow-sm";
+  "items-center justify-between gap-2 rounded-lg font-medium capitalize text-primary shadow-sm bg-primary/10";
 
 export default function DropdownButton({
   className,
@@ -78,6 +78,17 @@ export default function DropdownButton({
             shortcut={item.shortcut}
             showDivider={item?.showDivider}
             description={item?.description}
+            onClick={() => {
+              if (item?.href) {
+                if (item?.href?.includes("http")) {
+                  window.open(item?.href, "_blank");
+                } else {
+                  window.location.href = item?.href;
+                }
+
+                return;
+              }
+            }}
             startContent={
               item?.Icon ? <item.Icon className={cn(iconClasses)} /> : undefined
             }
@@ -95,15 +106,11 @@ export default function DropdownButton({
               <motion.div
                 animate={{
                   opacity: [0, 1],
-                  // x: [-100, 0],
-                  // transition: {
-                  //   duration: 0.3,
-                  // },
                 }}
-                className="absolute -top-1 left-[100%] z-0 hidden w-full min-w-[200px] p-2 transition-all duration-300 ease-in-out group-hover:flex"
+                className="absolute -top-1 left-[100%] z-0 max-h-96 hidden w-full min-w-[200px] p-2 transition-all duration-300 ease-in-out group-hover:flex"
               >
                 <Card className="w-full p-2">
-                  <motion.ul className=" flex  w-full flex-col text-sm font-semibold transition-all duration-300 ease-in-out">
+                  <motion.ul className="flex  w-full flex-col text-sm font-semibold transition-all duration-300 ease-in-out">
                     {item.subMenuItems.map((subItem, index) => (
                       <Button
                         key={subItem.key || index}

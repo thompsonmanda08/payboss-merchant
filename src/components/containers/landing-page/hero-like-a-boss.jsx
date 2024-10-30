@@ -1,7 +1,5 @@
 "use client";
 import BackgroundSVG from "@/components/base/BackgroundSVG";
-import { Container } from "@/components/base/Container";
-import FrameContainer from "@/components/base/FrameContainer";
 import { Button } from "@/components/ui/button";
 import { DefaultCover } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -48,16 +46,18 @@ export function HeroLikeABoss() {
               </Link>
             </div>
           </div>
-          <div className="lg:flex flex-col flex-grow w-full flex-1 h-full hidden  relative">
+          <div className="lg:flex flex-col flex-grow w-full flex-1 h-full hidden relative">
             <LadyBoss />
           </div>
-          <LadyBoss className={"max-w-[380px] aspect-[3/5]  lg:hidden"} />
+          <LadyBoss className={"max-w-[380px] aspect-[3/5] lg:hidden"} />
           <Image
             className="w-full h-full absolute opacity-80 md:opacity-90 lg:opacity-100 lg:right-[-300px] xl:right-0 hidden lg:block max-w-[900px] -bottom-24 rounded-l-[300px] object-cover z-0"
             src={DefaultCover}
             alt="Official LadyBoss"
             width={800}
             height={800}
+            priority
+            unoptimized
           />
         </div>
       </section>
@@ -65,7 +65,7 @@ export function HeroLikeABoss() {
   );
 }
 
-function LadyBoss({ className }) {
+export function LadyBoss({ className }) {
   return (
     <Image
       className={cn("w-full h-full block object-cover z-10", className)}
@@ -73,6 +73,8 @@ function LadyBoss({ className }) {
       alt="Official LadyBoss"
       width={800}
       height={800}
+      priority
+      unoptimized
     />
   );
 }

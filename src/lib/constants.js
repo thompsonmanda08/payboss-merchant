@@ -19,6 +19,29 @@ const WORKSPACE_SESSION = "pb-next-workspace";
 const placeHolderImage = "/images/placeholder-image.webp";
 const DefaultCover = "/images/profile-cover.jpg";
 
+const rowsPerPageOptions = [
+  {
+    ID: 5,
+    label: "5",
+  },
+  {
+    ID: 8,
+    label: "8",
+  },
+  {
+    ID: 10,
+    label: "10",
+  },
+  {
+    ID: 15,
+    label: "15",
+  },
+  {
+    ID: 20,
+    label: "20",
+  },
+];
+
 // QUERY KEYS
 const USER_DATA_KEY = "user";
 const CONFIGS_QUERY_KEY = "configs";
@@ -237,6 +260,7 @@ export {
   TRANSACTION_STATUS_COLOR_MAP,
   PAYMENT_PROTOCOL,
   SERVICE_PROVIDER_COLOR_MAP,
+  rowsPerPageOptions,
 
   // ANIMATIONS
   staggerContainerItemVariants,

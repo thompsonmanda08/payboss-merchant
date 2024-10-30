@@ -271,12 +271,12 @@ function SideNavBar({ workspaceSession }) {
       </Button>
       <div
         className={cn("hidden h-full w-[380px] lg:flex", {
-          "flex-red-500": toggleMobileMenu,
+          flex: toggleMobileMenu,
         })}
       >
         <nav
           className={cn(
-            `h-full w-full flex-col rounded-r-3xl bg-background p-5 transition-all duration-500 ease-in-out`
+            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`
           )}
         >
           <Logo href={dashboardRoute} />
