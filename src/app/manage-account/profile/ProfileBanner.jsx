@@ -34,7 +34,7 @@ export default function ProfileBanner({ className }) {
             <h2 className="heading-4  !font-bold capitalize text-white lg:text-xl">
               {`${user?.first_name} ${user?.last_name}`}
             </h2>
-            <p className="heading-5 font-semibold capitalize text-slate-200">
+            <div className="heading-5 font-semibold capitalize text-slate-200">
               {merchant}{" "}
               <Chip
                 color={"success"}
@@ -43,7 +43,7 @@ export default function ProfileBanner({ className }) {
               >
                 <strong>{user?.role}</strong>
               </Chip>
-            </p>
+            </div>
           </div>
         </div>
       </div>
