@@ -5,7 +5,6 @@ import { getUserDetails } from "../_actions/config-actions";
 
 async function AllWorkspacesPage() {
   const session = await getUserDetails();
-  console.log(session?.user);
 
   return (
     <Suspense fallback={<LoadingPage />}>

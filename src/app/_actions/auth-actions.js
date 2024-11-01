@@ -268,8 +268,6 @@ export async function authenticateUser(loginCredentials) {
 
     const response = res.data;
 
-    // console.log(response);
-
     const accessToken = response?.token;
     const refreshToken = response?.refreshToken;
     const expiresIn = response?.expires_in;
@@ -283,7 +281,7 @@ export async function authenticateUser(loginCredentials) {
       status: res.status,
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return {
       success: false,

@@ -11,8 +11,6 @@ async function WorkSpacesPage() {
   const isLoggedin = await getAuthSession();
   const { user } = session || null;
 
-  console.log(session);
-
   if (!isLoggedin?.accessToken) redirect("/login");
 
   return (

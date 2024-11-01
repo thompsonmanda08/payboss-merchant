@@ -84,8 +84,6 @@ export default function CollectionsReports({ workspaceID }) {
   const report = mutation?.data?.data?.summary || [];
   const transactions = mutation?.data?.data?.data || [];
 
-  // console.log(mutation?.data)
-
   // RESOLVE DATA FILTERING
   const hasSearchFilter = Boolean(searchQuery);
   const filteredItems = React.useMemo(() => {

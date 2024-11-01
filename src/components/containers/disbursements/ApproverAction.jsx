@@ -137,8 +137,6 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     transactionDetails?.status?.toLowerCase() == "rejected" ||
     batchDetails?.status?.toLowerCase() == "rejected";
 
-  console.log(selectedBatch);
-
   const isInReview =
     selectedBatch?.status == "review" ||
     batchDetails?.status == "review" ||

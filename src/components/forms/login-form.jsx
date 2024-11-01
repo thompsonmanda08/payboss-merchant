@@ -47,7 +47,6 @@ function LoginForm() {
     }
 
     const response = await authenticateUser(loginDetails);
-    console.log(response);
 
     if (!response?.success) {
       updateErrorStatus({
