@@ -268,10 +268,11 @@ function SideNavBar({ workspaceSession }) {
         onClick={toggleMobileMenu}
       >
         <Bars3BottomLeftIcon className="h-7 w-7  text-foreground/70" />
+        <Logo href={"#"} />
       </Button>
       <div
-        className={cn("hidden h-full w-[380px] lg:flex", {
-          flex: toggleMobileMenu,
+        className={cn("h-full hidden w-[380px] lg:flex", {
+          "flex ": openMobileMenu,
         })}
       >
         <nav
