@@ -19,6 +19,7 @@ import { motion } from "framer-motion";
 import useAuthStore from "@/context/authStore";
 import useNavigation from "@/hooks/useNavigation";
 import NavIconButton from "../ui/nav-icon-button";
+import Logo from "../base/Logo";
 
 function SettingsSideBar({
   title,
@@ -78,7 +79,7 @@ function SettingsSideBar({
     <>
       <div
         className={cn(
-          "fixed z-[77] flex h-16 w-screen bg-background shadow-sm lg:hidden",
+          "fixed z-[77] flex h-16 w-screen bg-card/60 dark:shadow-black/10 dark:shadow-xl backdrop-blur-md shadow-sm lg:hidden",
           {
             "bg-transparent": isProfile,
           }
@@ -92,7 +93,7 @@ function SettingsSideBar({
           onClick={toggleSideBar}
           startContent={<Bars3BottomLeftIcon className="h-7 w-7  " />}
         >
-          {homeRoute == "/workspaces" ? "Manage Account" : currentPath}
+          <Logo href={"#"} />
         </Button>
       </div>
 

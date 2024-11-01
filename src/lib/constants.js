@@ -229,12 +229,12 @@ const TASK_TYPE = {
   },
   credit: {
     icon: <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />,
-    color: "green-600",
+    color: "green-500",
     label: "Credit",
   },
   Deposit: {
     icon: <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />,
-    color: "green-600",
+    color: "green-500",
     label: "Deposit",
   },
 };

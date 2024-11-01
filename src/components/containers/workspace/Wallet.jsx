@@ -596,7 +596,7 @@ export function WalletTransactionHistory({
                                         "p-2 py-4 cursor-pointer rounded-md bg-primary/10 text-primary-700",
 
                                         {
-                                          "bg-success/10 text-green-600":
+                                          "bg-success/10 text-green-500":
                                             isGreen,
                                           "bg-secondary/10 text-secondary":
                                             isYellow,

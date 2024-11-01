@@ -84,12 +84,12 @@ function Workspaces({ user, showHeader = false, className }) {
     <>
       <Card className={cn("gap-6", className)}>
         {showHeader && (
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-8">
             <div>
               <h2 className="heading-3 !font-bold tracking-tight text-foreground">
                 Choose a Workspace
               </h2>
-              <p className=" text-sm text-foreground-600">
+              <p className=" text-sm text-foreground-600 max-w-4xl">
                 Access your account through a workspace for the convenience of
                 having all your tools and resources organized in one place.
               </p>
