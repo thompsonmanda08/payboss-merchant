@@ -22,7 +22,7 @@ const EmptyLogs = ({
     >
       <p
         className={cn(
-          "text-center text-base  leading-6 text-primary-900",
+          "text-center text-base  leading-6 dark:text-foreground-700 text-primary-900",
           heading
         )}
       >

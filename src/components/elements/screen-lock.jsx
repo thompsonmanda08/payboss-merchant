@@ -31,13 +31,13 @@ function ScreenLock({ open, session }) {
 
   async function handleRefreshAuthToken() {
     setIsLoading(true);
-    await lockScrenOnUserIdle(false); // User is no longer idle
     onClose();
+    await lockScrenOnUserIdle(false); // User is no longer idle
     setIsLoading(false);
 
     // TODO: IMPLEMENT REFRESH TOKEN IN THE ACTIVE FUNCTION WITH SET INTERVAL
     // const res = await getRefreshToken();
-    queryClient.invalidateQueries();
+    // queryClient.invalidateQueries();
 
     // if (res.success) {
     //   onClose()
