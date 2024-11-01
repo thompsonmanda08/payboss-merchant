@@ -56,7 +56,7 @@ export default function TopNavBar({ user }) {
       className={cn(
         `__TOPBAR rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center rounded-xl bg-background/80 py-3 pr-5 shadow-sm backdrop-blur-md transition-all md:pl-2 lg:sticky lg:top-0 lg:justify-start lg:shadow-none`,
         {
-          "bg-transparent px-10 pl-20 pr-10 text-white backdrop-blur-none":
+          "bg-transparent lg:static px-10 pl-20 pr-10 text-white backdrop-blur-none":
             isProfile,
         }
         // { 'bg-red-600 ': isFloating },
@@ -82,7 +82,14 @@ export default function TopNavBar({ user }) {
         </div>
 
         {/* FAR RIGHT SIDE */}
-        <div className="relative z-50 ml-auto flex  items-center justify-center rounded-full">
+        <div
+          className={cn(
+            "relative z-50 ml-auto flex  items-center justify-center rounded-full",
+            {
+              "bg-card/5 pl-4 pr-1 py-0.5": isProfile,
+            }
+          )}
+        >
           <div
             className={cn("flex items-center gap-4 text-foreground-400", {
               "text-white": isProfile,
@@ -97,7 +104,7 @@ export default function TopNavBar({ user }) {
                 }
               )}
             >
-              <WalletIcon className="h-5 w-5 group-hover:text-primary" />{" "}
+              <WalletIcon className="h-7 w-7 group-hover:text-primary" />{" "}
               <div className=" flex flex-col items-start">
                 <span
                   className={cn(
