@@ -191,13 +191,4 @@ export async function deleteSession() {
   if (typeof window !== "undefined") {
     localStorage.removeItem("pb-config-store");
   }
-
-  const authCookie = (await cookies()).get(AUTH_SESSION)?.value;
-
-  // JUST A DOUBLE CHECK TO MAKE SURE THE COOKIE IS DELETED
-  if (authCookie) {
-    (await cookies()).delete(AUTH_SESSION);
-    return true;
-  }
-  return true;
 }

@@ -51,7 +51,7 @@ export function HeroLikeABoss() {
           </div>
           <LadyBoss className={"max-w-[380px] aspect-[3/5] lg:hidden"} />
           <Image
-            className="w-full h-full absolute opacity-80 md:opacity-90 lg:opacity-100 lg:right-[-300px] xl:right-0 hidden lg:block max-w-[900px] -bottom-24 rounded-l-[300px] object-cover z-0"
+            className="w-full h-full absolute opacity-80 md:opacity-90 lg:opacity-100 lg:right-[-25%] xl:right-[-3%] hidden lg:block max-w-[900px] -bottom-24 rounded-l-[300px] object-cover z-0"
             src={DefaultCover}
             alt="Official LadyBoss"
             width={800}

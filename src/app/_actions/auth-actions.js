@@ -339,8 +339,7 @@ export async function getRefreshToken() {
 export async function logUserOut() {
   const isLoggedIn = await verifySession();
   if (isLoggedIn) {
-    deleteSession();
-    // localStorage.removeItem("pb-config-store");
+    await deleteSession();
     return true;
   }
   return false;
