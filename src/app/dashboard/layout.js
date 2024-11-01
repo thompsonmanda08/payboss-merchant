@@ -7,13 +7,11 @@ import {
 import TopNavBar from '@/components/elements/top-bar'
 
 export default async function DashboardLayout({ children }) {
-  const auth = await getAuthSession()
+  const authSession = await getAuthSession();
   const session = await getUserDetails()
   const workspaceSession = (await getWorkspaceSession()) || []
 
-  if (!auth) {
-    redirect('/login')
-  }
+  if (!authSession?.accessToken) redirect("/login");
 
   return (
     <main className="flex h-screen items-start justify-start overflow-hidden bg-background text-foreground">

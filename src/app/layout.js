@@ -5,6 +5,7 @@ import Providers from "./providers";
 import { getAuthSession, getUserDetails } from "./_actions/config-actions";
 
 import localFont from "next/font/local";
+import { redirect } from "next/navigation";
 
 const inter = localFont({
   src: "font/Inter-VariableFont_slnt,wght.ttf",
@@ -23,6 +24,8 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   const session = await getUserDetails();
   const authSession = await getAuthSession();
+
+  if (!authSession?.accessToken) redirect("/login");
 
   return (
     <html

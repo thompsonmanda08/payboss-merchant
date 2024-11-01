@@ -10,6 +10,7 @@ import ScreenLock, {
 import FirstLogin from "@/components/elements/first-login";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 
 const queryClient = new QueryClient();
 

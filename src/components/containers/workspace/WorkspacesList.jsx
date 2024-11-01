@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { capitalize, cn, notify } from "@/lib/utils";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDisclosure } from "@nextui-org/react";
 import { createNewWorkspace } from "@/app/_actions/config-actions";
 import { useQueryClient } from "@tanstack/react-query";
@@ -19,19 +19,20 @@ import Card from "@/components/base/Card";
 import InfoBanner from "@/components/base/InfoBanner";
 import EmptyLogs from "@/components/base/EmptyLogs";
 
-function Workspaces({ user, showHeader = false, className }) {
+function WorkspacesList({ user, showHeader = false, className, workspaces }) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
   const { KYCStageID } = useAccountProfile();
-
+  const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const isManagePage = pathname.split("/").includes("manage-account");
+  const { workspaces: activeWorkspaces, isLoading } = useWorkspace();
 
   const canCreateWorkspace =
     (user?.role?.toLowerCase() == "admin" ||
       user?.role?.toLowerCase() == "owner") &&
     KYCStageID == 4;
 
-  const [loading, setLoading] = useState(false);
   const [newWorkspace, setNewWorkspace] = useState({
     workspace: "",
     description: "",
@@ -80,6 +81,9 @@ function Workspaces({ user, showHeader = false, className }) {
     onOpenChange();
   }
 
+  // IF ON MANAGE WORKSPACES PAGE, SHOW ALL WORKSPACES AND IF ON DASHBOARD SHOW ONLY PROVIDED WORKSPACES OR ACTIVE WORKSPACES
+  const WORKSPACES = isManagePage ? workspaces : workspaces || activeWorkspaces;
+
   return (
     <>
       <Card className={cn("gap-6", className)}>
@@ -121,13 +125,72 @@ function Workspaces({ user, showHeader = false, className }) {
           />
         )}
 
-        <ListOfWorkspaces
-          pathname={pathname}
-          loading={loading}
-          setLoading={setLoading}
-          allowCreateWorkspaces={canCreateWorkspace}
-          openModal={onOpen}
-        />
+        <div className="flex w-full flex-col items-center justify-center">
+          <ScrollArea
+            className={cn(
+              "max-h-[500px]} flex w-full min-w-[400px] flex-col lg:px-2",
+              { "max-h-auto lg:max-h-max ": isManagePage }
+            )}
+          >
+            {isLoading ? (
+              <Loader size={80} loadingText={"Loading Workspaces..."} />
+            ) : (
+              <div
+                className={cn(
+                  "grid w-full place-items-center gap-4 rounded-lg",
+                  {
+                    "grid-cols-[repeat(auto-fill,minmax(400px,1fr))]":
+                      WORKSPACES?.length > 0,
+                  }
+                )}
+              >
+                {WORKSPACES.length ? (
+                  WORKSPACES?.map((item, index) => {
+                    return (
+                      <WorkspaceItem
+                        key={index}
+                        onClick={() => setLoading(true)}
+                        name={item?.workspace}
+                        description={`${capitalize(
+                          item?.workspaceType
+                        )}'s Workspace`}
+                        isVisible={item?.isVisible}
+                        href={
+                          isManagePage
+                            ? `manage-account/workspaces/${item?.ID}`
+                            : `/dashboard/${item?.ID}`
+                        }
+                      />
+                    );
+                  })
+                ) : (
+                  <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
+                    <EmptyLogs
+                      className={"my-auto"}
+                      title={"Oops! Looks like you have no workspaces yet!"}
+                      subTitle={
+                        "Only the admin or account owner can create a workspace."
+                      }
+                    />
+                  </div>
+                )}
+
+                {canCreateWorkspace && isManagePage && (
+                  <Button
+                    onPress={onOpen}
+                    className={cn(
+                      "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
+                      { "col-span-full": workspaces?.length < 0 }
+                    )}
+                  >
+                    <PlusIcon className=" h-6 w-6" />
+                    Create Workspace
+                  </Button>
+                )}
+              </div>
+            )}
+          </ScrollArea>
+        </div>
       </Card>
 
       {/* OVERLAYS AND MODALS  */}
@@ -145,85 +208,4 @@ function Workspaces({ user, showHeader = false, className }) {
   );
 }
 
-export function ListOfWorkspaces({
-  loading,
-  setLoading,
-  allowCreateWorkspaces,
-  openModal,
-}) {
-  const { workspaces, allWorkspaces, isLoading } = useWorkspace();
-  const pathname = usePathname();
-  const RENDER_WORKSPACES =
-    pathname?.split("/")?.length > 2 ? allWorkspaces : workspaces;
-
-  const isWorkspaceSettings = pathname.split("/").includes("manage-account");
-
-  return (
-    <div className="flex w-full flex-col items-center justify-center">
-      <ScrollArea
-        className={cn(
-          "max-h-[500px]} flex w-full min-w-[400px] flex-col lg:px-2",
-          { "max-h-auto lg:max-h-max ": isWorkspaceSettings }
-        )}
-      >
-        {isLoading ? (
-          <Loader size={80} loadingText={"Loading Workspaces..."} />
-        ) : (
-          <div
-            className={cn("grid w-full place-items-center gap-4 rounded-lg", {
-              "grid-cols-[repeat(auto-fill,minmax(400px,1fr))]":
-                workspaces?.length > 0,
-            })}
-          >
-            {RENDER_WORKSPACES && RENDER_WORKSPACES?.length > 0 ? (
-              RENDER_WORKSPACES?.map((item, index) => {
-                return (
-                  <WorkspaceItem
-                    key={index}
-                    onClick={() => setLoading(true)}
-                    name={item?.workspace}
-                    description={`${capitalize(
-                      item?.workspaceType
-                    )}'s Workspace`}
-                    isVisible={item?.isVisible}
-                    href={
-                      // `/dashboard/${item?.ID}`
-                      !isWorkspaceSettings
-                        ? `/dashboard/${item?.ID}`
-                        : `manage-account/workspaces/${item?.ID}`
-                    }
-                  />
-                );
-              })
-            ) : (
-              <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
-                <EmptyLogs
-                  className={"my-auto"}
-                  title={"Oops! Looks like you have no workspaces yet!"}
-                  subTitle={
-                    "Only the admin or account owner can create a workspace."
-                  }
-                />
-              </div>
-            )}
-
-            {allowCreateWorkspaces && isWorkspaceSettings && (
-              <Button
-                onPress={openModal}
-                className={cn(
-                  "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
-                  { "col-span-full": workspaces?.length < 0 }
-                )}
-              >
-                <PlusIcon className=" h-6 w-6" />
-                Create Workspace
-              </Button>
-            )}
-          </div>
-        )}
-      </ScrollArea>
-    </div>
-  );
-}
-
-export default Workspaces;
+export default WorkspacesList;

@@ -2,15 +2,24 @@ import React, { Suspense } from "react";
 import Image from "next/image";
 import { DefaultCover } from "@/lib/constants";
 import WorkspaceHeader from "@/components/containers/workspace/WorkspaceListHeader";
-import { getAuthSession, getUserDetails } from "../_actions/config-actions";
+import {
+  getAuthSession,
+  getUserDetails,
+  getUserSetupConfigs,
+} from "../_actions/config-actions";
 import LoadingPage from "../loading";
-import Workspaces from "@/components/containers/workspace/WorkspacesList";
 import { redirect } from "next/navigation";
+import WorkspacesList from "@/components/containers/workspace/WorkspacesList";
 
 async function WorkSpacesPage() {
   const session = await getUserDetails();
   const { user } = session || {};
   const isLoggedin = await getAuthSession();
+  // const setupConfig = await getUserSetupConfigs();
+
+  // console.log(setupConfig);
+
+  // const workspaces = setupConfig?.data?.workspaces || [];
 
   if (!isLoggedin?.accessToken) redirect("/login");
 
@@ -37,7 +46,7 @@ async function WorkSpacesPage() {
             role="workspaces-list"
             className="z-20 mx-auto -mt-40 mb-20 w-full max-w-[1440px] px-5 md:px-10"
           >
-            <Workspaces user={user} showHeader />
+            <WorkspacesList user={user} showHeader />
           </section>
         </div>
       </main>

@@ -1,15 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession, getWorkspaceSessionData } from "./lib/session";
 
-const PROTECTED_ROUTES = [
-  // '/dashboard',
-  // '/settings',
-  // '/dashboard/profile',
-  // '/dashboard/payments/',
-  // '/dashboard/payments/direct',
-  // Add more protected routes as needed
-];
-
 const PUBLIC_ROUTE = ["/", "/login", "/register", "/support"];
 
 export async function middleware(request) {
@@ -36,7 +27,6 @@ export async function middleware(request) {
   /**********USER MUST CHOOSE A WORKSPACE TO SEE DASHBOARDS *********/
   if (urlRouteParams && isUserInWorkspace) {
     const workspaceID = urlRouteParams[1];
-    const userId = urlRouteParams[2];
 
     if (accessToken && isAuthPage) {
       url.pathname = `/dashboard${workspaceID}`;
