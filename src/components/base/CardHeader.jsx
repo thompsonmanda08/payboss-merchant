@@ -16,14 +16,14 @@ function CardHeader({ title, infoText, handleClose, className, classNames }) {
         <div className={cn("flex flex-col", innerWrapper)}>
           <h3
             className={cn(
-              "font-semibold leading-8 tracking-tight text-foreground/80",
+              "font-semibold leading-8 tracking-tight text-foreground/70",
               titleClasses
             )}
           >
             {title}
           </h3>
           {infoText && (
-            <p className={cn("text-sm text-gray-500", infoClasses)}>
+            <p className={cn("text-sm text-slate-500", infoClasses)}>
               {infoText}
             </p>
           )}

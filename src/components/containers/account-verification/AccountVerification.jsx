@@ -71,10 +71,10 @@ function AccountVerification() {
         role="account-verification-header"
         className="flex w-full flex-col"
       >
-        <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
+        <h2 className="heading-3 !font-bold tracking-tight text-foreground ">
           Account Verification
         </h2>
-        <p className=" text-sm text-slate-600">
+        <p className=" text-sm text-slate-600 dark:text-slate-500">
           Initiate your KYC, business details, and document verification process
           from this section
         </p>

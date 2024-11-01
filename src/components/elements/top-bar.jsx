@@ -91,7 +91,7 @@ export default function TopNavBar({ user }) {
             <Link
               href={dashboardRoute + "/workspace-settings?wallet=true"}
               className={cn(
-                "mr-2 flex group cursor-pointer items-start gap-3 text-foreground-600",
+                "mr-2 flex group cursor-pointer items-start gap-3 text-slate-600",
                 {
                   "text-white": isProfile,
                 }

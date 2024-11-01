@@ -308,8 +308,6 @@ export async function getRefreshToken() {
       const refreshToken = response?.refreshToken;
       const expiresIn = response?.expires_in;
 
-      console.log(response);
-
       await createAuthSession(accessToken, expiresIn, refreshToken);
 
       return {

@@ -89,7 +89,7 @@ function Workspaces({ user, showHeader = false, className }) {
               <h2 className="heading-3 !font-bold tracking-tight text-foreground">
                 Choose a Workspace
               </h2>
-              <p className=" text-sm text-foreground-600 max-w-4xl">
+              <p className=" text-sm text-slate-600 max-w-4xl">
                 Access your account through a workspace for the convenience of
                 having all your tools and resources organized in one place.
               </p>

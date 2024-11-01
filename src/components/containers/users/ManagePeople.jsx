@@ -1,19 +1,8 @@
 "use client";
-import Tabs from "@/components/elements/tabs";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-import React, { useState } from "react";
-import Search from "@/components/ui/search";
-import { Input } from "@/components/ui/input-field";
-import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
-import { Button } from "@/components/ui/button";
+import React from "react";
 import UsersTable from "../tables/UsersTable";
-import CreateNewUserModal from "./CreateNewUserModal";
 import { cn } from "@/lib/utils";
-import { useDisclosure } from "@nextui-org/react";
-import { PlusIcon } from "@heroicons/react/24/outline";
-import useNavigation from "@/hooks/useNavigation";
 import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
-import useWorkspaceStore from "@/context/workspaceStore";
 
 export const ROLES = [
   {
@@ -105,7 +94,7 @@ function ManagePeople({ classNames }) {
 
   return (
     <div className={cn("mx-auto flex w-full max-w-7xl flex-col", wrapper)}>
-      <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
+      <h2 className="heading-3 !font-bold tracking-tight text-foreground-900 ">
         Manage People
       </h2>
       <p className=" mb-4 text-sm text-slate-600">

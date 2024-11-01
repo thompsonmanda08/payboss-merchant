@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import fileImage from "@";
+
 import Image from "next/image";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
@@ -41,24 +41,26 @@ const DocumentsViewer = () => {
             <Button
               key={index}
               variant="light"
-              className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border border-primary-100 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
+              className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border dark:hover:bg-primary/30 border-primary-100 dark:bg-primary/10 dark:border-primary-600/20 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
               onClick={() => {
                 setSelectedDoc(document);
                 setIsOpen(true);
               }}
             >
               <Link href={document?.url} target="_blank">
-                <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 z-50 h-5 w-5 text-primary/20 hover:text-primary" />
+                <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 z-50 h-5 w-5 text-foreground/20 hover:text-primary" />
               </Link>
               <div className="h-[65%]">
                 <Image
                   className="h-full w-full object-cover"
-                  src={fileImage}
+                  src={"/images/attachment.png"}
                   alt="file"
+                  width={80}
+                  height={100}
                   unoptimized
                 />
               </div>
-              <span className="text-[13px] text-black/90">
+              <span className="text-[13px] text-foreground/90">
                 {document?.name}
               </span>
             </Button>
@@ -67,24 +69,26 @@ const DocumentsViewer = () => {
           {signedContractDoc && (
             <Button
               variant="light"
-              className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border border-primary-100 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
+              className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border dark:hover:bg-primary/30 border-primary-100 dark:bg-primary/10 dark:border-primary-600/20 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
               onClick={() => {
                 setSelectedDoc(signedContractDoc);
                 setIsOpen(true);
               }}
             >
               <Link href={signedContractDoc?.url} target="_blank">
-                <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 z-50 h-5 w-5 text-primary/20 hover:text-primary" />
+                <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 z-50 h-5 w-5 text-foreground/20 hover:text-primary" />
               </Link>
               <div className="h-[65%]">
                 <Image
                   className="h-full w-full object-cover"
-                  src={fileImage}
+                  src={"/images/attachment.png"}
                   alt="file"
                   unoptimized
+                  width={80}
+                  height={100}
                 />
               </div>
-              <span className="text-[13px] text-black/90">
+              <span className="text-[13px] text-foreground/90">
                 {signedContractDoc?.name}
               </span>
             </Button>

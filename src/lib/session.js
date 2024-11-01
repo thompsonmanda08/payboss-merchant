@@ -30,7 +30,7 @@ export async function decrypt(session) {
 
 export async function createAuthSession(
   accessToken,
-  expiresIn,
+  expiresIn = 3600,
   refreshToken = ""
 ) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // AFTER 1 HOUR
@@ -130,7 +130,7 @@ export async function updateWorkspaceSession(fields) {
     const session = await encrypt({
       ...oldSession,
       ...fields,
-    })
+    });
 
     if (session) {
       (await cookies()).set(WORKSPACE_SESSION, session, {

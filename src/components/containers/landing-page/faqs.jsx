@@ -96,9 +96,7 @@ export function Faqs() {
                     <h3 className="font-bold text-lg leading-7 ">
                       {faq.question}
                     </h3>
-                    <p className="mt-4 text-sm text-foreground-600">
-                      {faq.answer}
-                    </p>
+                    <p className="mt-4 text-sm text-slate-600">{faq.answer}</p>
                   </li>
                 ))}
               </ul>

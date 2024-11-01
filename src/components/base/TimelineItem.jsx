@@ -9,7 +9,8 @@ function TimelineItem({ stage, isLastItem, isCompleted, isPending, Icon }) {
     <div
       className={cn("flex cursor-pointer p-2 py-4", {
         "before:bg-primary/20": isCompleted,
-        "bg-gradient-to-r from-card to-primary-50/70": isPending,
+        "bg-gradient-to-r from-card to-primary-50/70 dark:to-primary-400/5":
+          isPending,
       })}
     >
       <SoftBoxIcon
@@ -26,11 +27,16 @@ function TimelineItem({ stage, isLastItem, isCompleted, isPending, Icon }) {
       </SoftBoxIcon>
 
       <div className="ml-4 flex flex-col">
-        <p className="font-medium text-slate-600">{stage?.name}</p>
-        <span className="text-xs font-medium uppercase leading-5 text-slate-400">
-          {/* {stage?.date} | {stage?.time} */}
+        <h4 className="text-xs font-semibold uppercase text-slate-400">
           KYC Stage {stage?.ID}
-        </span>
+        </h4>
+        <p className="font-medium text-slate-600 text-xs sm:text-sm">
+          {stage?.name}
+        </p>
+        {/* <span className="text-xs font-medium uppercase leading-5 text-slate-400">
+          {stage?.date} | {stage?.time} 
+      
+        </span> */}
       </div>
     </div>
   );

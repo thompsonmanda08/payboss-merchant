@@ -63,7 +63,7 @@ function ProgressStageTracker() {
           "Your account is under review! We will notify you when your account is approved."
         }
       />
-      <div className="flex w-full items-center  lg:px-10">
+      <div className="flex w-full items-center lg:px-10">
         <div className="flex w-full flex-col gap-4">
           {STAGES.map((stage, index) => {
             return (
@@ -78,7 +78,7 @@ function ProgressStageTracker() {
             );
           })}
         </div>
-        <div className="flex w-full min-w-80 select-none flex-col items-center gap-9 rounded-2xl bg-primary-50/70 p-9">
+        <div className="flex w-full min-w-80 select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50/70 p-9">
           <Image
             className="aspect-square max-w-80 object-contain"
             src={"/images/illustrations/approval.svg"}

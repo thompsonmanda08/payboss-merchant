@@ -227,7 +227,7 @@ function WorkspaceSummary({ workspaceID }) {
         <h2 className="heading-5 !font-bold uppercase tracking-tight text-foreground">
           Workspace ({selectedWorkspace?.workspace})
         </h2>
-        <p className=" text-sm text-foreground-600">
+        <p className=" text-sm text-slate-600">
           Workspaces provide a structured way to group and manage services,
           users, and transactions effectively.
         </p>
@@ -302,7 +302,7 @@ function WorkspaceSummary({ workspaceID }) {
                 <PencilIcon className="h-4 w-4" />
               </NavIconButton>
             </div>
-            <p className=" text-sm text-foreground-600">
+            <p className=" text-sm text-slate-600">
               {selectedWorkspace?.description}
             </p>
           </div>
@@ -312,7 +312,7 @@ function WorkspaceSummary({ workspaceID }) {
         <div className="flex w-full gap-4">
           <div
             className={cn(
-              "flex group select-none items-start gap-2 text-foreground-600"
+              "flex group select-none items-start gap-2 text-slate-600"
             )}
           >
             <WalletIcon className="h-12 w-12" />{" "}
