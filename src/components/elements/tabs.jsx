@@ -40,7 +40,7 @@ export default function Tabs({
       <div className={cn("hidden sm:block", innerWrapper)}>
         <nav
           className={cn(
-            "min-w-md -mb-px flex gap-x-4 rounded-lg dark:bg-primary-400/5 bg-foreground/5  p-1",
+            "min-w-md -mb-px flex gap-x-4 rounded-lg dark:bg-default/30 bg-default/40  p-1",
             nav
           )}
           aria-label="Tabs"

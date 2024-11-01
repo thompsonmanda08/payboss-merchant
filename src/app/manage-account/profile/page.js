@@ -1,11 +1,11 @@
-import Image from 'next/image'
-import { Suspense } from 'react'
-import LoadingPage from '@/app/loading'
-import { DefaultCover } from '@/lib/constants'
-import ProfileBanner from '@/components/base/ProfileBanner'
-import ProfileDetails from './ProfileDetails'
-import AccountPreferences from './AccountPreferences'
-import ProfileSecuritySettings from '@/components/containers/settings/ProfileSecuritySettings'
+import Image from "next/image";
+import { Suspense } from "react";
+import LoadingPage from "@/app/loading";
+import { DefaultCover } from "@/lib/constants";
+import ProfileBanner from "@/app/manage-account/profile/ProfileBanner";
+import ProfileDetails from "./ProfileDetails";
+import AccountPreferences from "./AccountPreferences";
+import ProfileSecuritySettings from "@/app/manage-account/profile/ProfileSecuritySettings";
 
 function AccountSettings() {
   return (
@@ -36,7 +36,7 @@ function AccountSettings() {
         </div>
       </section>
     </Suspense>
-  )
+  );
 }
 
-export default AccountSettings
+export default AccountSettings;

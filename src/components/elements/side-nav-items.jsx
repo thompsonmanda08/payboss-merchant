@@ -38,7 +38,7 @@ export default function SideNavItems({
                   onClick={() => handleExpand(index)}
                   className={cn(
                     `group flex cursor-pointer items-center gap-3 rounded-sm 
-                        p-3 text-sm font-medium text-slate-600 transition-all duration-200 ease-in-out`,
+                        p-3 text-sm font-medium text-foreground-600 transition-all duration-200 ease-in-out`,
                     {
                       "text-primary shadow-none shadow-slate-700/10":
                         isExpanded,
@@ -74,7 +74,7 @@ export default function SideNavItems({
                 <Link
                   href={href}
                   className={cn(
-                    `group flex cursor-pointer items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium text-slate-600 transition-all duration-200 ease-in-out `,
+                    `group flex cursor-pointer items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium text-foreground-600 transition-all duration-200 ease-in-out `,
                     {
                       "rounded-lg bg-primary/10 font-medium text-primary shadow-none shadow-slate-400/10":
                         isSelected,
@@ -107,7 +107,7 @@ export default function SideNavItems({
                       href={subItem.href}
                       onClick={handleLinkClick}
                       className={cn(
-                        `group relative ml-4 flex items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium  transition-all duration-200 ease-in-out before:absolute before:-left-5 before:-top-10 before:h-16 before:w-6 before:rounded-lg before:border-b before:border-l-[2px] before:border-r-8 before:border-t-8 before:border-[#e4ebf6] before:dark:border-l-border before:dark:border-b-border  before:border-r-transparent before:border-t-transparent hover:bg-primary/10 before:content-[""] text-slate-600 md:ml-6 hover:text-primary`,
+                        `group relative ml-4 flex items-center gap-3 rounded-sm bg-transparent p-3 text-sm font-medium  transition-all duration-200 ease-in-out before:absolute before:-left-5 before:-top-10 before:h-16 before:w-6 before:rounded-lg before:border-b before:border-l-[2px] before:border-r-8 before:border-t-8 before:border-[#e4ebf6] before:dark:border-l-border before:dark:border-b-border  before:border-r-transparent before:border-t-transparent hover:bg-primary/10 before:content-[""] text-foreground-600 md:ml-6 hover:text-primary`,
                         {
                           "bg-primary/5 text-primary font-medium":
                             pathname === subItem.href,

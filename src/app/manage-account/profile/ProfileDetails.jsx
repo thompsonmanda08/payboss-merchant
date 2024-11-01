@@ -40,10 +40,10 @@ function ProfileDetails() {
         <div>
           <div className="flex w-full items-end justify-between">
             <div>
-              <h2 className="text-base font-semibold leading-7 text-gray-900">
+              <h2 className="text-base font-semibold leading-7 text-foreground-900">
                 Profile
               </h2>
-              <p className="mt-1 text-sm leading-6 text-gray-500">
+              <p className="mt-1 text-sm leading-6 text-foreground-500">
                 Personal information and account details
               </p>
             </div>
@@ -57,9 +57,9 @@ function ProfileDetails() {
             </Button> */}
           </div>
 
-          <div className="mt-4 space-y-4 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
+          <div className="mt-4 space-y-4 divide-y divide-foreground-100 border-t border-foreground-200 text-sm leading-6">
             <div className="items-center pt-6 sm:flex">
-              <span className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+              <span className="font-medium text-foreground-900 sm:w-64 sm:flex-none sm:pr-6">
                 First Name
               </span>
               <span className="mt-1 flex justify-between gap-x-4 sm:mt-0 sm:flex-auto">
@@ -74,12 +74,12 @@ function ProfileDetails() {
                     }}
                   />
                 ) : (
-                  <p className="text-gray-900">{`${user?.first_name} `}</p>
+                  <p className="text-foreground-900">{`${user?.first_name} `}</p>
                 )}
               </span>
             </div>
             <div className="items-center pt-6 sm:flex">
-              <span className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+              <span className="font-medium text-foreground-900 sm:w-64 sm:flex-none sm:pr-6">
                 Last Name
               </span>
               <span className="mt-1 flex justify-between gap-x-4 sm:mt-0 sm:flex-auto">
@@ -93,13 +93,13 @@ function ProfileDetails() {
                     }}
                   />
                 ) : (
-                  <p className="text-gray-900">{`${user?.last_name}`}</p>
+                  <p className="text-foreground-900">{`${user?.last_name}`}</p>
                 )}
               </span>
             </div>
             {/* ************************************************* */}
             <div className="items-center pt-4 sm:flex">
-              <span className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+              <span className="font-medium text-foreground-900 sm:w-64 sm:flex-none sm:pr-6">
                 Username
               </span>
               <span className="mt-1 flex justify-between gap-x-4 sm:mt-0 sm:flex-auto">
@@ -108,7 +108,7 @@ function ProfileDetails() {
             </div>
             {/* ************************************************* */}
             <div className="items-center pt-4 sm:flex">
-              <span className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+              <span className="font-medium text-foreground-900 sm:w-64 sm:flex-none sm:pr-6">
                 Email address
               </span>
               <span className="mt-1 flex justify-between gap-x-4 sm:mt-0 sm:flex-auto">

@@ -108,11 +108,11 @@ function SettingsSideBar({
       )}
       <motion.nav
         className={cn(
-          `sticky -left-[110%] z-50 hidden h-full min-h-screen w-[380px] rounded-r-3xl bg-card px-2 py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
+          `sticky -left-[110%] z-50 hidden h-full min-h-screen w-[380px] rounded-r-3xl bg-card py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
           { "absolute left-0 z-[100] block": openSettingsSideBar }
         )}
       >
-        <div className="relative flex h-full w-full flex-col">
+        <div className="relative flex h-full w-full flex-col px-5">
           <Button
             isIconOnly
             variant="light"
@@ -125,21 +125,21 @@ function SettingsSideBar({
             variant="light"
             as={Link}
             href={homeRoute}
-            className="mb-2 h-auto w-full justify-start p-2 text-foreground-500 hover:text-primary-600 data-[hover=true]:bg-primary/50"
-            startContent={<ArrowLeftIcon className="h-4 w-4" />}
+            className="h-12 w-full justify-start p-2 text-foreground-500 hover:text-primary dark:data-[hover=true]:text-primary-50 data-[hover=true]:bg-primary/10"
+            startContent={<ArrowLeftIcon className="h-5 w-5" />}
           >
             {backButtonText || "Back to Workspaces"}
           </Button>
-          <hr />
+          <hr className="my-2" />
           {/* ******************** WORKSPACE SETTINGS ******************************* */}
           <div
             role="`workspace_settings`"
-            className="md:px-4 flex flex-col justify-start p-2"
+            className="flex flex-col justify-start"
           >
-            <p className="m-2 text-xs font-medium uppercase tracking-wide text-foreground-400">
+            <p className="text-[13px] font-medium uppercase tracking-wide py-2 text-foreground-400">
               {!isAccountLevelSettingsRoute ? title : "ACCOUNT SETTINGS"}
             </p>
-
+            <hr className="my-2" />
             {SETTINGS_LINKS?.map(({ href, Icon, name }, index) => {
               return (
                 <Button
@@ -148,9 +148,9 @@ function SettingsSideBar({
                   href={href}
                   variant="light"
                   className={cn(
-                    "my-1 h-12 w-full justify-start p-2 text-foreground-500 hover:text-primary dark:data-[hover=true]:text-primary-50 data-[hover=true]:bg-primary/50",
+                    "my-1 h-12 w-full justify-start p-2 text-foreground-500 hover:text-primary dark:data-[hover=true]:text-primary-50 data-[hover=true]:bg-primary/10",
                     {
-                      "bg-primary/50 dark:text-foreground text-primary-600":
+                      "dark:bg-primary/50 bg-primary/10 dark:text-foreground text-primary-600":
                         pathname == href,
                     }
                   )}

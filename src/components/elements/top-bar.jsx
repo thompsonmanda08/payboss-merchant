@@ -109,7 +109,11 @@ export default function TopNavBar({ user }) {
                 >
                   Wallet Balance
                 </span>
-                <span className="-mt-1 text-base font-bold text-primary">
+                <span
+                  className={cn("-mt-1 text-base font-bold text-primary", {
+                    "text-white": isProfile,
+                  })}
+                >
                   {formatCurrency(workspaceWalletBalance || "0.00")}
                 </span>
               </div>

@@ -78,6 +78,7 @@ export default function DisbursementReports({ workspaceID }) {
 
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
+      key={`direct-payments-${workspaceID}`}
       columns={bulkReportsColumns}
       rows={directBatches || ["1", "2", "3"]}
       isLoading={mutation.isPending}
@@ -90,6 +91,7 @@ export default function DisbursementReports({ workspaceID }) {
       }}
     />,
     <CustomTable
+      key={`voucher-payments-${workspaceID}`}
       columns={bulkReportsColumns}
       rows={voucherBatches}
       isLoading={mutation.isPending}

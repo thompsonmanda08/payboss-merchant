@@ -174,6 +174,7 @@ function AddUserToWorkspace({
       default:
         return cellValue;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function submitAddedUsers() {
@@ -203,10 +204,12 @@ function AddUserToWorkspace({
     return () => {
       handleClearAllSelected();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setError({ status: false, message: "" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addedUsers]);
 
   useEffect(() => {
@@ -214,6 +217,7 @@ function AddUserToWorkspace({
     if (workspaceUsers != [] && existingUsers.length == 0) {
       setExistingUsers(workspaceUsers);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isDataReady = workspaceRoles.length > 0 && allUsers?.length > 1;

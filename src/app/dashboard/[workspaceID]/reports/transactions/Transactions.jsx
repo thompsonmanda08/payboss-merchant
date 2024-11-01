@@ -51,6 +51,7 @@ export default function Transactions() {
 
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
+      key={"transactions"}
       columns={SingleTransactionColumns}
       rows={transactionRows}
       isLoading={isLoading}

@@ -5,7 +5,7 @@ import { DefaultCover } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Chip } from "@nextui-org/react";
 import Image from "next/image";
-import { roleColorMap } from "../containers/tables/UsersTable";
+import { roleColorMap } from "../../../components/containers/tables/UsersTable";
 
 export default function ProfileBanner({ className }) {
   const { user, merchant } = useAccountProfile();
@@ -31,15 +31,15 @@ export default function ProfileBanner({ className }) {
             />
           </div>
           <div className="flex flex-col gap-0">
-            <h2 className="heading-4  !font-bold capitalize text-background lg:text-xl">
+            <h2 className="heading-4  !font-bold capitalize text-white lg:text-xl">
               {`${user?.first_name} ${user?.last_name}`}
             </h2>
             <p className="heading-5 font-semibold capitalize text-slate-200">
               {merchant}{" "}
               <Chip
-                color={roleColorMap[user?.role]}
+                color={"success"}
                 variant="flat"
-                className="ml-2 text-sm font-bold"
+                className="ml-2 text-sm text-green-500 font-bold"
               >
                 <strong>{user?.role}</strong>
               </Chip>

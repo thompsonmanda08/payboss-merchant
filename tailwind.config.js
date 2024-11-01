@@ -116,5 +116,23 @@ export const plugins = [
   formsPlugin,
   nextui({
     addCommonColors: true,
+    themes: {
+      light: {
+        colors: {
+          default: {
+            DEFAULT: "#e7f1ff",
+            foreground: "#fcfcfc",
+          },
+        },
+      },
+      dark: {
+        colors: {
+          default: {
+            DEFAULT: "#0e1014",
+            foreground: "#fcfcfc",
+          },
+        },
+      },
+    },
   }),
 ];

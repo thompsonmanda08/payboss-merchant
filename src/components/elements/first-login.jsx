@@ -70,7 +70,7 @@ export default function FirstLogin({ open }) {
 
   useEffect(() => {
     setError({ message: "", status: false });
-  }, [password]);
+  }, [password, setError]);
 
   return (
     <Modal

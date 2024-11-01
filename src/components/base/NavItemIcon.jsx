@@ -15,7 +15,7 @@ export default function NavItemIcon({
       isIconOnly
       onClick={onIconPress}
       className={cn(
-        "z-10 flex h-10 w-10 items-center justify-center rounded-lg bg-background shadow-none shadow-slate-700/10 transition-all duration-500 ease-in-out group-hover:bg-primary group-hover:text-white",
+        "z-10 flex h-10 w-10 items-center justify-center rounded-lg dark:bg-primary-400/5 bg-background shadow-none shadow-slate-700/10 transition-all duration-500 ease-in-out group-hover:bg-primary group-hover:text-white",
         {
           " bg-gradient-to-tr from-primary to-blue-300 font-bold":
             isSelected || (isSelected && activeLayer),

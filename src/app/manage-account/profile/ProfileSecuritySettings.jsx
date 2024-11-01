@@ -13,18 +13,18 @@ function ProfileSecuritySettings() {
         <div>
           <div className="flex w-full items-end justify-between">
             <div>
-              <h2 className="text-base font-semibold leading-7 text-gray-900">
+              <h2 className="text-base font-semibold leading-7 text-foreground-900">
                 Security
               </h2>
-              <p className="mt-1 text-sm leading-6 text-gray-500">
+              <p className="mt-1 text-sm leading-6 text-foreground-500">
                 Update your security settings to protect your account and data.
               </p>
             </div>
           </div>
-          <div className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
+          <div className="mt-6 space-y-6 divide-y divide-foreground-100 border-t border-foreground-200 text-sm leading-6">
             <div>
               <div className="items-center pt-6 sm:flex">
-                <div className="flex flex-col font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+                <div className="flex flex-col font-medium text-foreground-900 sm:w-64 sm:flex-none sm:pr-6">
                   Password
                   <span className="text-xs font-normal text-slate-600">
                     Change your password
@@ -33,7 +33,7 @@ function ProfileSecuritySettings() {
                 {!changePassword && (
                   <>
                     <span className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                      <p className="text-gray-900">************</p>
+                      <p className="text-foreground-900">************</p>
                     </span>
                     <button
                       type="button"
@@ -52,11 +52,11 @@ function ProfileSecuritySettings() {
             </div>
             {/* *************************************** */}
             <div className="items-center pt-6 opacity-50 grayscale sm:flex">
-              <p className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+              <p className="font-medium text-foreground-900 sm:w-64 sm:flex-none sm:pr-6">
                 2F Authentication
               </p>
               <div className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                <div className="font-medium text-gray-900">
+                <div className="font-medium text-foreground-900">
                   [disabled] Coming Soon!
                 </div>
                 <Switch isDisabled />

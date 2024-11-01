@@ -157,7 +157,7 @@ function WorkspaceDetails({
     ) {
       setIsSandbox(true);
     }
-  }, []);
+  }, [workspace]);
 
   // CLEAR ERROR STATE
   useEffect(() => {

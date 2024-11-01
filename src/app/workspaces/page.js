@@ -9,7 +9,7 @@ import Workspaces from "@/components/containers/workspace/WorkspacesList";
 async function WorkSpacesPage() {
   const session = await getUserDetails();
   const isLoggedin = await getAuthSession();
-  const { user } = session || null;
+  const { user } = session || {};
 
   if (!isLoggedin?.accessToken) redirect("/login");
 
