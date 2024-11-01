@@ -100,17 +100,14 @@ function SettingsSideBar({
         <motion.div
           whileInView={{ opacity: [0, 1], transition: { duration: 0.3 } }}
           onClick={toggleSideBar}
-          className={cn(
-            `absolute left-[-100%] z-[99] hidden bg-foreground-900/60`,
-            {
-              "inset-0 block": openSettingsSideBar,
-            }
-          )}
+          className={cn(`absolute left-[-100%] z-[99] hidden bg-black/60`, {
+            "inset-0 block": openSettingsSideBar,
+          })}
         />
       )}
       <motion.nav
         className={cn(
-          `sticky -left-[110%] z-50 hidden h-full min-h-screen w-[380px] rounded-r-3xl bg-popover px-2 py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
+          `sticky -left-[110%] z-50 hidden h-full min-h-screen w-[380px] rounded-r-3xl bg-card px-2 py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
           { "absolute left-0 z-[100] block": openSettingsSideBar }
         )}
       >
@@ -127,7 +124,7 @@ function SettingsSideBar({
             variant="light"
             as={Link}
             href={homeRoute}
-            className="mb-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
+            className="mb-2 h-auto w-full justify-start p-2 text-foreground-500 hover:text-primary-600 data-[hover=true]:bg-primary/50"
             startContent={<ArrowLeftIcon className="h-4 w-4" />}
           >
             {backButtonText || "Back to Workspaces"}
@@ -138,7 +135,7 @@ function SettingsSideBar({
             role="`workspace_settings`"
             className="md:px-4 flex flex-col justify-start p-2"
           >
-            <p className="m-2 text-xs font-medium uppercase tracking-wide text-slate-600">
+            <p className="m-2 text-xs font-medium uppercase tracking-wide text-foreground-400">
               {!isAccountLevelSettingsRoute ? title : "ACCOUNT SETTINGS"}
             </p>
 
@@ -150,9 +147,10 @@ function SettingsSideBar({
                   href={href}
                   variant="light"
                   className={cn(
-                    "my-1 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50",
+                    "my-1 h-12 w-full justify-start p-2 text-foreground-500 hover:text-primary dark:data-[hover=true]:text-primary-50 data-[hover=true]:bg-primary/50",
                     {
-                      "bg-primary-50 text-primary-600": pathname == href,
+                      "bg-primary/50 dark:text-foreground text-primary-600":
+                        pathname == href,
                     }
                   )}
                   startContent={<Icon className="h-5 w-5" />}
@@ -172,7 +170,7 @@ function SettingsSideBar({
             <Button
               variant="light"
               // size="sm"
-              className="my-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
+              className="my-2 h-auto w-full justify-start p-2 text-foreground-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
               onClick={handleUserLogOut}
             >
               Log out

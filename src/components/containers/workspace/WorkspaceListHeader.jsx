@@ -1,5 +1,6 @@
 "use client";
 import Logo from "@/components/base/Logo";
+import ThemeSwitcher from "@/components/base/ThemeSwitcher";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/context/authStore";
 import { Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/outline";
@@ -12,7 +13,7 @@ function WorkspaceHeader({ user }) {
   return (
     <>
       <Logo isWhite className="absolute left-5 top-5 z-30 md:left-10 " />
-      <div className="absolute right-5 top-5 flex gap-4 md:right-10">
+      <div className="absolute right-5 top-5 flex gap-4 md:right-10 items-center">
         {(user?.role?.toLowerCase() == "admin" ||
           user?.role?.toLowerCase() == "owner") && (
           <Button
@@ -33,6 +34,11 @@ function WorkspaceHeader({ user }) {
         >
           Sign out
         </Button>
+        <ThemeSwitcher
+          className={
+            "dark:bg-foreground/30 text-white hover:text-white hover:opacity-80 z-50"
+          }
+        />
       </div>
     </>
   );

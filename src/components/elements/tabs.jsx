@@ -40,7 +40,7 @@ export default function Tabs({
       <div className={cn("hidden sm:block", innerWrapper)}>
         <nav
           className={cn(
-            "min-w-md -mb-px flex gap-x-4 rounded-lg bg-foreground-500/5  p-1",
+            "min-w-md -mb-px flex gap-x-4 rounded-lg dark:bg-primary-400/5 bg-foreground/5  p-1",
             nav
           )}
           aria-label="Tabs"
@@ -65,9 +65,9 @@ export default function Tabs({
                 )
               }
               className={cn(
-                "whitespace-nowrap border-b-1 border-transparent px-4 text-sm  text-gray-500 hover:border-gray-300 hover:bg-background hover:text-primary data-[hover=true]:bg-background",
+                "whitespace-nowrap border-b-1 border-transparent px-4 text-sm  text-gray-500 hover:border-gray-300 hover:bg-background hover:text-primary data-[hover=true]:bg-background ",
                 {
-                  "border-primary bg-background text-primary shadow-sm":
+                  "border-primary dark:broder-primary-300 dark:bg-card bg-background dark:text-primary-400 text-primary shadow-sm":
                     tab?.index == currentTab,
                 },
                 button

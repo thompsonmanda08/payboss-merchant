@@ -86,10 +86,10 @@ function Workspaces({ user, showHeader = false, className }) {
         {showHeader && (
           <div className="flex justify-between">
             <div>
-              <h2 className="heading-3 !font-bold tracking-tight text-gray-900 ">
+              <h2 className="heading-3 !font-bold tracking-tight text-foreground">
                 Choose a Workspace
               </h2>
-              <p className=" text-sm text-slate-600">
+              <p className=" text-sm text-foreground-600">
                 Access your account through a workspace for the convenience of
                 having all your tools and resources organized in one place.
               </p>
@@ -102,7 +102,9 @@ function Workspaces({ user, showHeader = false, className }) {
                 endContent={<PlusIcon className=" h-5 w-5" />}
                 variant="flat"
                 color="primary"
-                className={"mt-auto bg-primary-50 px-4"}
+                className={
+                  "mt-auto bg-primary-50 dark:bg-primary dark:text-primary-foreground px-4"
+                }
               >
                 New
               </Button>
@@ -111,7 +113,7 @@ function Workspaces({ user, showHeader = false, className }) {
         )}
 
         {/* ACCOUNT VERIFICATION PROMPTING BANNER */}
-        {user?.isCompleteKYC && (
+        {user && !user?.isCompleteKYC && (
           <InfoBanner
             buttonText="Submit Documents"
             infoText="Just one more step, please submit your business documents to aid us with the approval process"
@@ -130,6 +132,7 @@ function Workspaces({ user, showHeader = false, className }) {
 
       {/* OVERLAYS AND MODALS  */}
       {<OverlayLoader show={loading} />}
+
       <CreateNewWorkspaceModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -208,7 +211,7 @@ export function ListOfWorkspaces({
               <Button
                 onPress={openModal}
                 className={cn(
-                  "h-24 w-full flex-col border border-primary-100 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
+                  "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
                   { "col-span-full": workspaces?.length < 0 }
                 )}
               >

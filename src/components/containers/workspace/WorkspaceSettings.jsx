@@ -124,10 +124,10 @@ function WorkspaceSettings({ workspaceID }) {
       )}
       {/* HEADER */}
       <div className={cn("", { "mb-4": isUserInWorkspace })}>
-        <h2 className="heading-5 !font-bold uppercase tracking-tight text-gray-900">
+        <h2 className="heading-5 !font-bold uppercase tracking-tight text-foreground">
           {selectedWorkspace?.workspace}
         </h2>
-        <p className=" text-sm text-slate-600">
+        <p className=" text-sm text-foreground-p">
           Workspaces provide a structured way to group and manage services,
           users, and transactions effectively.
         </p>

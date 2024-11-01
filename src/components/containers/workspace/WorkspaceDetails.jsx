@@ -208,7 +208,7 @@ function WorkspaceDetails({
           </form>
         </div>
       </div>
-      {!isUserInWorkspace && (
+      {/* {!isUserInWorkspace && (
         <>
           <hr className="my-6 h-px bg-foreground-900/5" />
           <div className="flex items-center gap-4 sm:mt-0 sm:flex-auto">
@@ -225,7 +225,7 @@ function WorkspaceDetails({
             </div>
           </div>
         </>
-      )}
+      )} */}
 
       {!isSandbox && (
         <>

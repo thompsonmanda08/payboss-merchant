@@ -46,7 +46,7 @@ export default function DropdownButton({
           variant="bordered"
           isIconOnly={isIconOnly}
           className={cn(
-            "border-px focus: mb-1 h-auto max-h-[60px] w-full items-center justify-start border border-primary-100 bg-transparent  p-2 capitalize",
+            "border-[1px]] mb-1 h-auto max-h-[60px] w-full items-center justify-start border hover:border-primary bg-transparent  p-2 capitalize",
             trigger
           )}
         >

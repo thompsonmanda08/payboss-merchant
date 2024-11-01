@@ -54,7 +54,7 @@ export default function TopNavBar({ user }) {
   ) : (
     <nav
       className={cn(
-        `__TOPBAR rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center rounded-xl bg-background/90 py-3 pr-5 shadow-sm backdrop-blur-md transition-all md:pl-2 lg:sticky lg:top-0 lg:justify-start lg:shadow-none`,
+        `__TOPBAR rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center rounded-xl bg-background/80 py-3 pr-5 shadow-sm backdrop-blur-md transition-all md:pl-2 lg:sticky lg:top-0 lg:justify-start lg:shadow-none`,
         {
           "bg-transparent px-10 pl-20 pr-10 text-white backdrop-blur-none":
             isProfile,
@@ -63,6 +63,7 @@ export default function TopNavBar({ user }) {
       )}
     >
       <div className="flex w-full items-center">
+        {/* LEFT SIDE */}
         <div
           className={cn(
             "relative left-16 hidden transition-all duration-300 ease-in-out lg:left-0 lg:block",
@@ -79,31 +80,36 @@ export default function TopNavBar({ user }) {
             {currentPath}
           </h2>
         </div>
+
+        {/* FAR RIGHT SIDE */}
         <div className="relative z-50 ml-auto flex  items-center justify-center rounded-full">
           <div
-            className={cn("flex items-center gap-4 text-gray-400", {
+            className={cn("flex items-center gap-4 text-foreground-400", {
               "text-white": isProfile,
             })}
           >
             <Link
               href={dashboardRoute + "/workspace-settings?wallet=true"}
               className={cn(
-                "mr-2 flex cursor-pointer items-start gap-3 text-primary",
+                "mr-2 flex group cursor-pointer items-start gap-3 text-foreground-600",
                 {
                   "text-white": isProfile,
                 }
               )}
             >
-              <WalletIcon className="h-5 w-5" />{" "}
-              <div className="flex flex-col items-start">
+              <WalletIcon className="h-5 w-5 group-hover:text-primary" />{" "}
+              <div className=" flex flex-col items-start">
                 <span
-                  className={cn("text-xs font-medium text-slate-600", {
-                    "text-white": isProfile,
-                  })}
+                  className={cn(
+                    "text-xs font-medium group-hover:text-primary",
+                    {
+                      "text-white group-hover:text-white": isProfile,
+                    }
+                  )}
                 >
                   Wallet Balance
                 </span>
-                <span className="-mt-1 text-base font-bold">
+                <span className="-mt-1 text-base font-bold text-primary">
                   {formatCurrency(workspaceWalletBalance || "0.00")}
                 </span>
               </div>
