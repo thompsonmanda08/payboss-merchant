@@ -136,7 +136,7 @@ export default function SideNavItems({
       </ul>
       <hr className="mt-auto" />
       <div
-        onClick={() => handleUserLogOut()}
+        onClick={() => handleUserLogOut(pathname)}
         className={cn(
           `group flex cursor-pointer items-center gap-3 rounded-lg bg-transparent p-3 text-sm font-bold text-slate-600 shadow-none transition-all duration-200 ease-in-out hover:text-primary`
         )}
@@ -145,7 +145,7 @@ export default function SideNavItems({
           isSelected={true}
           activeLayer={false}
           Icon={PowerIcon}
-          onIconPress={handleUserLogOut}
+          onIconPress={() => handleUserLogOut(pathname)}
         />
         Log out
       </div>

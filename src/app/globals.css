@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  
   :root {
     --background: 0 0% 98%;
     --foreground: 224 71.4% 4.1%;
@@ -93,16 +92,6 @@
 }
 
 @layer utilities {
-  /* Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"] {
@@ -174,17 +163,16 @@
 }
 /* ************************** */
 
-.text-shadow-sm {
-  /* color: red; */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
-}
-.text-shadow-md {
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
-}
-.text-shadow-lg {
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-}
-
 .blue-gradient {
   background: linear-gradient(90deg, #1b64ce 0%, #8c86f0 100%);
+}
+
+/* Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

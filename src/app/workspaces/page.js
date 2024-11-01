@@ -5,11 +5,12 @@ import WorkspaceHeader from "@/components/containers/workspace/WorkspaceListHead
 import { getAuthSession, getUserDetails } from "../_actions/config-actions";
 import LoadingPage from "../loading";
 import Workspaces from "@/components/containers/workspace/WorkspacesList";
+import { redirect } from "next/navigation";
 
 async function WorkSpacesPage() {
   const session = await getUserDetails();
-  const isLoggedin = await getAuthSession();
   const { user } = session || {};
+  const isLoggedin = await getAuthSession();
 
   if (!isLoggedin?.accessToken) redirect("/login");
 

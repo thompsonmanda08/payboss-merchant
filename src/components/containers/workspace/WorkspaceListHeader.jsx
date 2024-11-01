@@ -27,7 +27,7 @@ function WorkspaceHeader({ user }) {
           </Button>
         )}
         <Button
-          onClick={handleUserLogOut}
+          onClick={() => handleUserLogOut("/workspaces")}
           variant="light"
           className="data[hover=true]:bg-foreground-900/30 z-30 aspect-square min-w-[120px] rounded-full bg-foreground-900/20 text-white"
           startContent={<PowerIcon className=" h-6 w-6" />}

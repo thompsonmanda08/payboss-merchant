@@ -172,7 +172,7 @@ function SettingsSideBar({
               variant="light"
               // size="sm"
               className="my-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
-              onClick={handleUserLogOut}
+              onClick={() => handleUserLogOut("/manage-account")}
             >
               Log out
             </Button>

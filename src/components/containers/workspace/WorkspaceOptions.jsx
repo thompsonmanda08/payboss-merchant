@@ -96,7 +96,7 @@ export default function WorkspaceSelection({
                 activeWorkspace?.workspace
               )}
             </div>
-            <span className="-mt-1 text-xs font-medium capitalize text-foreground/50">
+            <span className="-mt-1 text-xs font-medium capitalize text-foreground-600 tracking-wide">
               {`${activeWorkspace?.workspaceType}'s Workspace`}
             </span>
           </div>

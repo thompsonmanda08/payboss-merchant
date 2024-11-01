@@ -98,26 +98,26 @@ export default function TopNavBar({ user }) {
             <Link
               href={dashboardRoute + "/workspace-settings?wallet=true"}
               className={cn(
-                "mr-2 flex group cursor-pointer items-start gap-3 text-slate-600",
+                "mr-4 flex group cursor-pointer items-start gap-3 text-foreground-600",
                 {
                   "text-white": isProfile,
                 }
               )}
             >
-              <WalletIcon className="h-7 w-7 group-hover:text-primary" />{" "}
+              <NavIconButton className={"bg-primary"}>
+                <WalletIcon className="h-5 w-5 text-white" />
+              </NavIconButton>
+
               <div className=" flex flex-col items-start">
                 <span
-                  className={cn(
-                    "text-xs font-medium group-hover:text-primary",
-                    {
-                      "text-white group-hover:text-white": isProfile,
-                    }
-                  )}
+                  className={cn("text-sm leading-4 tracking-wide", {
+                    "text-white group-hover:text-white": isProfile,
+                  })}
                 >
                   Wallet Balance
                 </span>
                 <span
-                  className={cn("-mt-1 text-base font-bold text-primary", {
+                  className={cn("-mt-1 text-sm font-bold text-primary", {
                     "text-white": isProfile,
                   })}
                 >
@@ -126,7 +126,6 @@ export default function TopNavBar({ user }) {
               </div>
             </Link>
             <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:-right-1 after:-top-1 after:h-3 after:aspect-square after:w-3 after:rounded-full after:bg-secondary after:content-['']">
-              {/* <BellIcon className="top-0 h-6 w-6 " /> */}
               <NavIconButton className={"bg-primary"}>
                 <BellIcon className="h-5 w-5 text-white" />
               </NavIconButton>
@@ -141,7 +140,7 @@ export default function TopNavBar({ user }) {
 
 export function AvatarDropdown({ user, isProfile }) {
   const { handleUserLogOut } = useAuthStore((state) => state);
-  const { dashboardRoute } = useNavigation();
+  const { dashboardRoute, pathname } = useNavigation();
   const { workspaceUserRole: role } = useDashboard();
   const { theme, setTheme } = useTheme();
   const [isSelected, setIsSelected] = React.useState(
@@ -258,7 +257,7 @@ export function AvatarDropdown({ user, isProfile }) {
               </NavIconButton>
             </div>
           </DropdownItem>
-          <DropdownItem key="logout" onClick={handleUserLogOut}>
+          <DropdownItem key="logout" onClick={() => handleUserLogOut(pathname)}>
             <div className="flex justify-between items-center">
               <span>Log Out</span>{" "}
               <NavIconButton className={"scale-80 bg-primary"}>

@@ -185,7 +185,19 @@ export async function getWorkspaceSessionData() {
 
 export async function deleteSession() {
   (await cookies()).delete(AUTH_SESSION);
-  // cookies().delete(USER_SESSION)
-  // cookies().delete(WORKSPACE_SESSION)
-  redirect("/login");
+  (await cookies()).delete(USER_SESSION);
+  (await cookies()).delete(WORKSPACE_SESSION);
+
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("pb-config-store");
+  }
+
+  const authCookie = (await cookies()).get(AUTH_SESSION)?.value;
+
+  // JUST A DOUBLE CHECK TO MAKE SURE THE COOKIE IS DELETED
+  if (authCookie) {
+    (await cookies()).delete(AUTH_SESSION);
+    return true;
+  }
+  return true;
 }

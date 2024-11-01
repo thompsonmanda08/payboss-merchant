@@ -29,7 +29,7 @@ function Avatar({ firstName, lastName, src, email, showUserInfo, isProfile }) {
         <span className="items-center flex">
           <div className="flex min-w-[120px] flex-col items-start">
             <p
-              className={cn("text-sm font-semibold text-slate-600", {
+              className={cn("text-sm font-semibold text-foreground-600", {
                 "text-white": isProfile,
               })}
             >{`${firstName} ${lastName}`}</p>

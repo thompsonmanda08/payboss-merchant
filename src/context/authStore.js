@@ -1,23 +1,23 @@
-import { logUserOut } from '@/app/_actions/auth-actions'
-import { create } from 'zustand'
+import { logUserOut } from "@/app/_actions/auth-actions";
+import { create } from "zustand";
 
 const INITIAL_STATE = {
   isLoading: false,
   auth: {},
   password: {
-    newPassword: '',
-    confirmPassword: '',
+    newPassword: "",
+    confirmPassword: "",
   },
 
-  error: { status: false, message: '' }, // STATUS, MESSAGE, FIELD-ERROR
-  merchantID: '',
+  error: { status: false, message: "" }, // STATUS, MESSAGE, FIELD-ERROR
+  merchantID: "",
   isValidTPIN: false,
   isKYCSent: false,
   accountCreated: false,
   businessInfo: {},
   newAdminUser: {},
   loginDetails: {},
-}
+};
 
 const useAuthStore = create((set, get) => ({
   ...INITIAL_STATE,
@@ -34,31 +34,31 @@ const useAuthStore = create((set, get) => ({
   setIsKYCSent: (isKYCSent) => set({ isKYCSent }),
 
   updateErrorStatus: (fields) => {
-    set((state) => ({ error: { ...state.error, ...fields } }))
+    set((state) => ({ error: { ...state.error, ...fields } }));
   },
 
   updateLoginDetails: (fields) =>
     set((state) => {
-      return { loginDetails: { ...state.loginDetails, ...fields } }
+      return { loginDetails: { ...state.loginDetails, ...fields } };
     }),
 
   updatePasswordField: (fields) =>
     set((state) => {
-      return { password: { ...state.password, ...fields } }
+      return { password: { ...state.password, ...fields } };
     }),
 
   // METHODS AND ACTIONS
   handleUserLogOut: async (pathname) => {
-    const isLoggedOut = await logUserOut()
+    const isLoggedOut = await logUserOut();
     if (isLoggedOut) {
       window.location.href = pathname
         ? `/login?callbackUrl=${pathname}`
-        : '/login'
+        : "/login";
 
-      get().resetAuthData()
-      return isLoggedOut
+      get().resetAuthData();
+      return isLoggedOut;
     }
-    return isLoggedOut
+    return isLoggedOut;
   },
 
   // CLear & Reset
@@ -66,6 +66,6 @@ const useAuthStore = create((set, get) => ({
     set({
       ...INITIAL_STATE,
     }),
-}))
+}));
 
-export default useAuthStore
+export default useAuthStore;

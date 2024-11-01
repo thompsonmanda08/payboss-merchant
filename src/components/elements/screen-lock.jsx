@@ -21,6 +21,7 @@ import {
 } from "@/app/_actions/auth-actions";
 import useAuthStore from "@/context/authStore";
 import { useIdleTimer } from "react-idle-timer/legacy";
+import { usePathname } from "next/navigation";
 
 function ScreenLock({ open, session }) {
   const queryClient = useQueryClient();
@@ -28,6 +29,7 @@ function ScreenLock({ open, session }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [seconds, setSeconds] = useState(90);
+  const pathname = usePathname();
 
   async function handleRefreshAuthToken() {
     setIsLoading(true);
@@ -59,7 +61,7 @@ function ScreenLock({ open, session }) {
     }, 1000);
 
     if (seconds == 0) {
-      handleUserLogOut();
+      handleUserLogOut(pathname);
     }
 
     return () => {
@@ -127,7 +129,7 @@ function ScreenLock({ open, session }) {
                 color="danger"
                 variant="light"
                 isDisabled={isLoading}
-                onPress={handleUserLogOut}
+                onPress={() => handleUserLogOut(pathname)}
               >
                 Log out
               </Button>
