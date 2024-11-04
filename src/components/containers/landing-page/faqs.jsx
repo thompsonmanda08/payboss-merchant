@@ -79,14 +79,14 @@ export function Faqs() {
           >
             Frequently Asked Questions
           </h2>
-          <p className="mt-4 text-lg tracking-tight text-foreground/70">
+          <p className="mt-4 text-lg tracking-tight text-foreground-600">
             If you can’t find what you’re looking for, email our support team
             and someone will get back to you soon.
           </p>
         </div>
         <ul
           role="list"
-          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3"
+          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-10 lg:max-w-none lg:grid-cols-3"
         >
           {faqs.map((column, columnIndex) => (
             <li key={columnIndex}>
@@ -96,7 +96,9 @@ export function Faqs() {
                     <h3 className="font-bold text-lg leading-7 ">
                       {faq.question}
                     </h3>
-                    <p className="mt-4 text-sm text-slate-600">{faq.answer}</p>
+                    <p className="mt-4 text-sm text-foreground-500">
+                      {faq.answer}
+                    </p>
                   </li>
                 ))}
               </ul>

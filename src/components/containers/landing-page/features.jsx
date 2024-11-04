@@ -216,7 +216,7 @@ function Collections() {
                 key={revenueIndex}
                 variants={staggerContainerItemVariants}
               >
-                <figure className="relative rounded-2xl bg-gradient-to-br from-background to-card p-6 shadow-xl dark:shadow-background/10 shadow-slate-500/5">
+                <figure className="relative rounded-2xl bg-card dark:bg-gradient-to-br dark:from-secondary/5 dark:to-primary/5 p-6 shadow-xl dark:shadow-background/10 shadow-slate-500/5">
                   <revenue.Icon.element className="absolute left-6 top-6 w-[100px] dark:opacity-5 fill-slate-100" />
                   <blockquote className="relative">
                     <p className="text-lg tracking-tight text-foreground/70 dark:text-foreground">
@@ -232,7 +232,7 @@ function Collections() {
                         {revenue.Icon.role}
                       </div>
                     </div>
-                    <div className="overflow-hidden rounded-full bg-foreground-800 p-3">
+                    <div className="overflow-hidden rounded-full bg-slate-900 dark:bg-accent p-3">
                       <revenue.Icon.element className="h-6 w-6 text-white" />
                     </div>
                   </figcaption>
@@ -264,7 +264,7 @@ function Spending() {
                 key={expenseIndex}
                 variants={staggerContainerItemVariants}
               >
-                <figure className="relative rounded-2xl bg-gradient-to-br from-background to-card p-6 shadow-xl dark:shadow-background/10 shadow-slate-500/5">
+                <figure className="relative rounded-2xl bg-card dark:bg-gradient-to-br dark:from-secondary/5 dark:to-primary/5 p-6 shadow-xl dark:shadow-background/10 shadow-slate-500/5">
                   <expense.Icon.element className="absolute left-6 top-6 w-[100px] dark:opacity-5 fill-slate-100" />
                   <blockquote className="relative">
                     <p className="text-lg tracking-tight text-foreground/90">
@@ -280,7 +280,7 @@ function Spending() {
                         {expense.Icon.role}
                       </div>
                     </div>
-                    <div className="overflow-hidden rounded-full bg-foreground-800 p-3">
+                    <div className="overflow-hidden rounded-full bg-slate-900 dark:bg-accent p-3">
                       <expense.Icon.element className="h-6 w-6 text-white" />
                     </div>
                   </figcaption>
