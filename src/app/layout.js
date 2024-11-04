@@ -54,7 +54,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body
         className={cn(
-          "flex min-h-screen flex-col bg-background font-inter",
+          "flex min-h-screen flex-col bg-background font-inter overflow-x-hidden",
           inter.variable
         )}
       >

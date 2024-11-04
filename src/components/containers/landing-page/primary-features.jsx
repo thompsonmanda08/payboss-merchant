@@ -6,6 +6,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import clsx from "clsx";
 
 import { Container } from "@/components/base/Container";
+import { AnimatePresence, motion } from "framer-motion";
 
 const features = [
   {
@@ -56,10 +57,10 @@ export function PrimaryFeatures() {
     <section
       id="why-payboss"
       aria-label="why payboss for running your business"
-      className="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32"
+      className="relative overflow-hidden bg-blue-600 w-screen pb-28 pt-20 sm:py-32 "
     >
       <Image
-        className="absolute left-1/2 top-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]"
+        className="absolute left-1/2 top-1/2 max-w-none object-cover translate-x-[-44%] translate-y-[-42%]"
         src={"/images/background-features.jpg"}
         alt="feature image"
         width={2245}
@@ -68,12 +69,13 @@ export function PrimaryFeatures() {
       />
       <Container className="relative">
         <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
-          <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
+          <h2 className="font-display heading-1 tracking-tight text-white sm:text-4xl md:text-5xl">
             Why Choose PayBoss?
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            Well everything you need if you aren’t that picky about minor
-            details like compliance.
+            {
+              "Well everything you need if you aren't that picky about minor details like compliance."
+            }
           </p>
         </div>
         <TabGroup
@@ -121,30 +123,61 @@ export function PrimaryFeatures() {
                   ))}
                 </TabList>
               </div>
-              <TabPanels className="lg:col-span-7">
-                {features.map((feature) => (
-                  <TabPanel key={feature.title} unmount={false}>
-                    <div className="relative sm:px-6 lg:hidden">
-                      <div className="absolute -inset-x-4 bottom-[-4.25rem] top-[-6.5rem] bg-background/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl" />
-                      <p className="relative mx-auto max-w-2xl text-base text-white sm:text-center">
-                        {feature.description}
-                      </p>
-                    </div>
-                    <div className="mt-10 w-[45rem] overflow-hidden rounded-xl bg-slate-50 dark:bg-foreground/5 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
-                      <Image
-                        className="w-full"
-                        src={feature.image}
-                        width={1024}
-                        height={768}
-                        unoptimized
-                        loading="lazy"
-                        alt="feature image"
-                        sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
-                      />
-                    </div>
-                  </TabPanel>
-                ))}
-              </TabPanels>
+              <AnimatePresence>
+                <TabPanels className="lg:col-span-7">
+                  {features.map((feature, index) => (
+                    <TabPanel key={feature.title} unmount={false}>
+                      <div className="relative sm:px-6 lg:hidden">
+                        <div className="absolute -inset-x-4 bottom-[-4.25rem] top-[-6.5rem] bg-background/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl" />
+                        <p className="relative mx-auto max-w-2xl text-base text-white sm:text-center">
+                          {feature.description}
+                        </p>
+                      </div>
+                      <motion.div
+                        key={selectedIndex + index}
+                        variants={{
+                          hidden: { opacity: 1 },
+                          show: {
+                            opacity: 1,
+                            transition: {
+                              // staggerChildren: 0.25,
+                              duration: 1,
+                            },
+                          },
+                          exit: { opacity: 0 },
+                        }}
+                        initial={"hidden"}
+                        animate={"show"}
+                        exit={"exit"}
+                        className="mt-10 w-[45rem] overflow-hidden rounded-xl bg-slate-50 dark:bg-foreground/5 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]"
+                      >
+                        <motion.div
+                          variants={{
+                            hidden: { opacity: 0 },
+                            show: { opacity: 1 },
+                            exit: { opacity: 0 },
+                          }}
+                          transition={{
+                            duration: 0.8,
+                          }}
+                          className="flex flex-1 w-full h-full"
+                        >
+                          <Image
+                            className="w-full"
+                            src={feature.image}
+                            width={1024}
+                            height={768}
+                            unoptimized
+                            loading="lazy"
+                            alt="feature image"
+                            sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
+                          />
+                        </motion.div>
+                      </motion.div>
+                    </TabPanel>
+                  ))}
+                </TabPanels>
+              </AnimatePresence>
             </>
           )}
         </TabGroup>
