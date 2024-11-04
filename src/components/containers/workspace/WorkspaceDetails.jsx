@@ -10,7 +10,7 @@ import AddUserToWorkspace from "@/components/containers/workspace/AddUserToWorks
 import useWorkspaces from "@/hooks/useWorkspaces";
 import { SETUP_QUERY_KEY, WORKSPACES_QUERY_KEY } from "@/lib/constants";
 import { cn, notify } from "@/lib/utils";
-import { Switch, useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -37,27 +37,27 @@ function WorkspaceDetails({
   });
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteWorkspaceName, setDeleteWorkspaceName] = useState("");
-  const { isUserInWorkspace, allWorkspaces } = useWorkspaces();
-  const workspace = allWorkspaces.find(
-    (workspace) => workspace.ID === workspaceID
-  );
+  const { isUserInWorkspace, activeWorkspace } = useWorkspaces();
+  // const workspace = allWorkspaces.find(
+  //   (workspace) => workspace.ID === workspaceID
+  // );
 
   const [isSandbox, setIsSandbox] = useState(
-    workspace?.workspace.toLowerCase() == "sandbox"
+    activeWorkspace?.workspace.toLowerCase() == "sandbox"
   );
 
   const [newWorkspace, setNewWorkspace] = useState({
-    workspace: workspace?.workspace,
-    description: workspace?.description,
+    workspace: activeWorkspace?.workspace,
+    description: activeWorkspace?.description,
   });
 
-  const [isVisible, setIsVisible] = useState(workspace?.isVisible);
+  const [isVisible, setIsVisible] = useState(activeWorkspace?.isVisible);
 
   const noChangesToSave =
-    !workspace ||
+    !activeWorkspace ||
     isSandbox ||
-    (newWorkspace.workspace == workspace?.workspace &&
-      newWorkspace.description == workspace?.description);
+    (newWorkspace.workspace == activeWorkspace?.workspace &&
+      newWorkspace.description == activeWorkspace?.description);
 
   function editWorkspaceField(fields) {
     setNewWorkspace((prev) => {
@@ -101,7 +101,7 @@ function WorkspaceDetails({
   async function handleDeleteWorkspace() {
     setDeleteLoading(true);
 
-    if (deleteWorkspaceName !== workspace?.workspace) {
+    if (deleteWorkspaceName !== activeWorkspace?.workspace) {
       setDeleteLoading(false);
       setDeleteError({
         status: true,
@@ -147,17 +147,17 @@ function WorkspaceDetails({
 
   // CHECK IF WORKSPACE IS VISIBLE
   useEffect(() => {
-    if (workspace != undefined && workspace?.isVisible) {
-      setIsVisible(workspace?.isVisible);
+    if (activeWorkspace != undefined && activeWorkspace?.isVisible) {
+      setIsVisible(activeWorkspace?.isVisible);
     }
 
     if (
-      workspace != undefined &&
-      workspace?.workspace.toLowerCase() == "sandbox"
+      activeWorkspace != undefined &&
+      activeWorkspace?.workspace.toLowerCase() == "sandbox"
     ) {
       setIsSandbox(true);
     }
-  }, [workspace]);
+  }, [activeWorkspace]);
 
   // CLEAR ERROR STATE
   useEffect(() => {
@@ -179,7 +179,7 @@ function WorkspaceDetails({
           >
             <Input
               label="Workspace Name"
-              defaultValue={workspace?.workspace}
+              defaultValue={activeWorkspace?.workspace}
               isDisabled={loading || isSandbox}
               onChange={(e) => {
                 editWorkspaceField({ workspace: e.target.value });
@@ -189,7 +189,7 @@ function WorkspaceDetails({
             <Input
               label="Description"
               isDisabled={loading || isSandbox}
-              defaultValue={workspace?.description}
+              defaultValue={activeWorkspace?.description}
               containerClasses={cn("", { "w-full max-w-[700px]": isSandbox })}
               onChange={(e) => {
                 editWorkspaceField({ description: e.target.value });
@@ -292,7 +292,7 @@ function WorkspaceDetails({
         <p className="text-sm text-foreground/70">
           This action cannot be undone. Please type{" "}
           <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
-            {workspace?.workspace}
+            {activeWorkspace?.workspace}
           </code>{" "}
           to confirm your choice to proceed.
         </p>

@@ -1,13 +1,12 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useGetWorkspaces, useSetupConfig } from "./useQueryHooks";
+import { useSetupConfig } from "./useQueryHooks";
 
 const useWorkspaces = (query) => {
   const pathname = usePathname();
-  const [isSandboxVisible, setIsSandboxVisible] = useState(false);
-
   const { data: setup, isFetching, isLoading } = useSetupConfig();
+  const [isSandboxVisible, setIsSandboxVisible] = useState(false);
 
   const workspaces = setup?.data?.workspaces || [];
 

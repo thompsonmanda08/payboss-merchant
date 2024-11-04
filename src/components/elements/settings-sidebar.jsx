@@ -13,8 +13,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import { redirect, usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import useAuthStore from "@/context/authStore";
 import useNavigation from "@/hooks/useNavigation";
@@ -25,7 +25,7 @@ function SettingsSideBar({
   title,
   backButtonText,
   // isProfile,
-  // settingsPathname,
+  session,
 }) {
   const pathname = usePathname();
   const [openSettingsSideBar, setOpenSettingsSideBar] = useState(false);
@@ -165,7 +165,10 @@ function SettingsSideBar({
           {/* ************************************************************* */}
           <hr className="mt-auto" />
           <div className="flex gap-2 items-center px-5  pt-2">
-            <NavIconButton className={"bg-primary"}>
+            <NavIconButton
+              className={"bg-primary"}
+              onClick={() => handleUserLogOut("/manage-account")}
+            >
               <PowerIcon className="h-5 w-5 text-white" />
             </NavIconButton>
             <Button

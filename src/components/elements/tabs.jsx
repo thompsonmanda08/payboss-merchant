@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import SelectField from "../ui/select-field";
-import { WalletIcon } from "@heroicons/react/24/outline";
 
 export default function Tabs({
   tabs,

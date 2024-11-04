@@ -1,15 +1,16 @@
-import SideNavBar from '@/components/elements/side-navbar'
+import SideNavBar from "@/components/elements/side-navbar";
 import {
   getAuthSession,
   getUserDetails,
   getWorkspaceSession,
-} from '../_actions/config-actions'
-import TopNavBar from '@/components/elements/top-bar'
+} from "../_actions/config-actions";
+import TopNavBar from "@/components/elements/top-bar";
+import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({ children }) {
   const authSession = await getAuthSession();
-  const session = await getUserDetails()
-  const workspaceSession = (await getWorkspaceSession()) || []
+  const session = await getUserDetails();
+  const workspaceSession = (await getWorkspaceSession()) || [];
 
   if (!authSession?.accessToken) redirect("/login");
 
@@ -21,5 +22,5 @@ export default async function DashboardLayout({ children }) {
         {children}
       </div>
     </main>
-  )
+  );
 }

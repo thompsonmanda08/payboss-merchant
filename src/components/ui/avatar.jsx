@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { cn, getUserInitials } from "@/lib/utils";
 import { Avatar as NextAvatar } from "@nextui-org/react";
 

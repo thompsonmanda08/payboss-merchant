@@ -1,21 +1,12 @@
 import LoadingPage from "@/app/loading";
 import Workspaces from "@/components/containers/workspace/WorkspacesList";
 import React, { Suspense } from "react";
-import {
-  getAllWorkspaces,
-  getAuthSession,
-  getUserDetails,
-} from "../_actions/config-actions";
-import { redirect } from "next/navigation";
+import { getAllWorkspaces, getUserDetails } from "../_actions/config-actions";
 
 async function AllWorkspacesPage() {
   const session = await getUserDetails();
-  const authSession = await getAuthSession();
-
   const workspacesResponse = await getAllWorkspaces();
   const workspaces = workspacesResponse?.data?.workspaces || [];
-
-  if (!authSession?.accessToken) redirect("/login");
 
   return (
     <Suspense fallback={<LoadingPage />}>

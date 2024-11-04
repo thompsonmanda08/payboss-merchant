@@ -186,7 +186,6 @@ export async function getWorkspaceSessionData() {
 export async function deleteSession() {
   (await cookies()).delete(AUTH_SESSION);
   (await cookies()).delete(USER_SESSION);
-  (await cookies()).delete(WORKSPACE_SESSION);
 
   if (typeof window !== "undefined") {
     localStorage.removeItem("pb-config-store");

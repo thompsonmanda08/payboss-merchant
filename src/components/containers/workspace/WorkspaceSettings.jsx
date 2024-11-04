@@ -25,11 +25,11 @@ import ActivePockets from "./ActivePockets";
 import WorkspaceMembers from "./WorkspaceMembers";
 import { WORKSPACE_TYPES } from "@/lib/constants";
 
-function WorkspaceSettings({ workspaceID }) {
+function WorkspaceSettings({ workspaceID, workspace }) {
   const { back } = useRouter();
   const pathname = usePathname();
 
-  const { allWorkspaces } = useWorkspaces();
+  const { activeWorkspace } = useWorkspaces();
   const { canCreateUsers } = useAllUsersAndRoles();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -37,12 +37,10 @@ function WorkspaceSettings({ workspaceID }) {
     pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
 
   const { data: members, isLoading } = useWorkspaceMembers(workspaceID);
-
   const workspaceUsers = members?.data?.users || [];
 
-  const selectedWorkspace = allWorkspaces.find(
-    (workspace) => workspace.ID === workspaceID
-  );
+  // SELECTED WORKSPACE FROM PROPS OR CURRENLTY ACTIVE WORKSPACE
+  const selectedWorkspace = workspace || activeWorkspace;
 
   const DISBURESEMENT_TABS =
     selectedWorkspace?.workspaceType == WORKSPACE_TYPES[1]?.ID ||
@@ -106,7 +104,7 @@ function WorkspaceSettings({ workspaceID }) {
   const allowUserCreation =
     currentTabIndex == 1 && canCreateUsers && !isUserInWorkspace;
 
-  return !selectedWorkspace || isLoading ? (
+  return isLoading ? (
     <LoadingPage />
   ) : (
     <div className={cn("px-2", { "px-3": isUserInWorkspace })}>

@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import {
-  ArrowPathIcon,
   BriefcaseIcon,
   ChevronRightIcon,
   HomeIcon,
@@ -10,7 +9,6 @@ import {
 } from "@heroicons/react/24/outline";
 import DropdownButton from "@/components/ui/dropdown-button";
 import Spinner from "@/components/ui/Spinner";
-import useNavigation from "@/hooks/useNavigation";
 import SoftBoxIcon from "@/components/base/SoftBoxIcon";
 
 export default function WorkspaceSelection({
