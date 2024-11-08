@@ -32,6 +32,7 @@ function DateSelectField({
   return (
     <DatePicker
       label={label}
+      key={label}
       variant="bordered"
       value={value ? parseDate(value) : undefined}
       // hideTimeZone

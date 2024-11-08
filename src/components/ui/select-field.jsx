@@ -44,22 +44,22 @@ function SelectField({
         <Select
           className={cn("font-medium", className)}
           classNames={{
-            base: "text-lg shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground ",
-            value: "font-semibold text-foreground/70 capitalize",
+            base: "text-lg shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium text-foreground placeholder:text-muted-foreground ",
+            value:
+              "text-foreground group-data-[has-value=true]:text-foreground font-inter tracking-tight capitalize",
             trigger: cn(
-              "focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1  focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70"
+              "focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70"
               // {
               //   'border-red-500 focus:border-red-500/70 focus-visible:ring-red-500/30':
               //     onError,
               // },
             ),
             listbox: "font-medium",
-            popoverContent:
-              "font-medium rounded-md text-foreground/700 font-medium",
+            popoverContent: "rounded-md text-foreground-700 font-medium",
             selectorIcon: "w-4 h-4",
           }}
           variant="bordered"
-          placeholder={placeholder || "Select"}
+          placeholder={placeholder || "Choose an option"}
           selectedKeys={Boolean(prefilled) ? [value] : undefined}
           value={value}
           onChange={onChange}
@@ -85,10 +85,9 @@ function SelectField({
 
               return (
                 <SelectItem
-                  k
                   className="font-medium"
                   classNames={{
-                    base: "__OPTION__  bg-transparent data-[hover=true]:bg-primary/20 data-[selected=true]:text-white data-[selected=true]:bg-primary data-[selected=true]:font-semibold data-[selectable=true]:focus:text-primary data-[selectable=true]:focus:bg-primary/20 data-[selectable=true]:hover:text-primary data-[selected=true]:focus:text-white data-[selectable=true]:hover:bg-primary/20 data-[selectable=true]:font-[600] data-[selected=true]:focus:bg-primary data-[hover=true]:hover:text-white ",
+                    base: "data-[hover=true]:bg-primary/10 data-[selected=true]:text-white data-[selected=true]:bg-primary data-[selected=true]:font-semibold data-[selectable=true]:focus:text-primary data-[selectable=true]:focus:bg-primary/20 data-[selectable=true]:hover:text-primary data-[selected=true]:focus:text-white data-[selectable=true]:hover:bg-primary/20 data-[selectable=true]:font-[600] data-[selected=true]:focus:bg-primary data-[hover=true]:hover:text-white ",
                   }}
                   key={ItemValue || idx}
                   value={ItemValue}
