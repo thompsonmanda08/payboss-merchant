@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { Switch, useDisclosure } from "@nextui-org/react";
 import useWorkspaces from "@/hooks/useWorkspaces";
@@ -34,18 +34,15 @@ import {
 } from "@/app/_actions/config-actions";
 import NavIconButton from "@/components/ui/nav-icon-button";
 
-const TABS = [
-  { name: "General", index: 0 },
-  { name: "Members", index: 1 },
-  { name: "Wallet", index: 2 },
-];
-
-function WorkspaceSummary({ workspaceID }) {
+function WorkspaceSummary({ workspaceID, workspaces }) {
   const { back } = useRouter();
   const queryClient = useQueryClient();
-  const { allWorkspaces, isUserInWorkspace } = useWorkspaces();
+  const pathname = usePathname();
 
-  const selectedWorkspace = allWorkspaces.find(
+  const isUserInWorkspace =
+    pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
+
+  const selectedWorkspace = workspaces.find(
     (workspace) => workspace.ID === workspaceID
   );
 
