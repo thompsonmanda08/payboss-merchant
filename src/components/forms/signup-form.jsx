@@ -153,11 +153,7 @@ export default function SignUpForm() {
     // ******************************************************************************************** //
 
     // ************** STEP: 1 ==>  CREATE NEW MERCHANT ACCOUNT *********************************** //
-    if (
-      currentTabIndex === 1 &&
-      STEPS[currentTabIndex] === STEPS[1] &&
-      !isValidTPIN
-    ) {
+    if (currentTabIndex === 1 && STEPS[currentTabIndex] === STEPS[1]) {
       const response = await createNewMerchant(businessInfo);
 
       let merchantID = response?.data?.merchantID;
@@ -167,7 +163,7 @@ export default function SignUpForm() {
       }
 
       if (response?.success && (response?.data?.merchantID || merchantID)) {
-        notify("success", "Details Submitted For Approval");
+        notify("success", "Business Details Submitted!");
         navigateForward();
         setIsLoading(false);
         return;
@@ -181,11 +177,7 @@ export default function SignUpForm() {
     // ******************************************************************************************** //
 
     // ************** STEP: 2 ==>  APPEND MERCHANT ACCOUNT BANK DETAILS *************************** //
-    if (
-      currentTabIndex === 2 &&
-      STEPS[currentTabIndex] === STEPS[2] &&
-      !isValidTPIN
-    ) {
+    if (currentTabIndex === 2 && STEPS[currentTabIndex] === STEPS[2]) {
       const response = await submitMerchantBankDetails(
         businessInfo,
         merchantID

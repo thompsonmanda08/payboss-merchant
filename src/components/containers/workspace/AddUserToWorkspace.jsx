@@ -29,6 +29,7 @@ import { UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import SelectField from "@/components/ui/select-field";
 import useWorkspaceStore from "@/context/workspaceStore";
 import { WORKSPACE_MEMBERS_QUERY_KEY } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 
 const columns = [
   { name: "NAME", uid: "name" },
@@ -213,14 +214,17 @@ function AddUserToWorkspace({
   }, [addedUsers]);
 
   useEffect(() => {
+    
     // UPDATE EXISITING USERS LIST
     if (workspaceUsers != [] && existingUsers.length == 0) {
       setExistingUsers(workspaceUsers);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isDataReady = workspaceRoles.length > 0 && allUsers?.length > 1;
+  const router = useRouter();
 
   return (
     <Modal
@@ -382,7 +386,7 @@ function AddUserToWorkspace({
                       }
                       buttonText={"Add New Users"}
                       onButtonClick={() => {
-                        navigateTo(1);
+                        router.push("/manage-account/users");
                         onClose();
                       }}
                     />
