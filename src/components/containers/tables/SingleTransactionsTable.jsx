@@ -16,7 +16,7 @@ import {
 } from "@/lib/constants";
 import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import usePaymentsStore from "@/context/paymentsStore";
+import usePaymentsStore from "@/context/payment-store";
 import Loader from "@/components/ui/loader";
 import { ArrowDownTrayIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Search from "@/components/ui/search";

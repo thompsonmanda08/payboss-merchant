@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import usePaymentsStore from "@/context/paymentsStore";
+import usePaymentsStore from "@/context/payment-store";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, notify } from "@/lib/utils";

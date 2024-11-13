@@ -13,7 +13,7 @@ import {
   Button,
   Switch,
 } from "@nextui-org/react";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { Skeleton } from "../ui/skeleton";
 import useNavigation from "@/hooks/useNavigation";
 import useWorkspaces from "@/hooks/useWorkspaces";

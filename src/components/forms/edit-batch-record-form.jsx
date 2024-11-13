@@ -1,6 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input-field";
-import usePaymentsStore from "@/context/paymentsStore";
+import usePaymentsStore from "@/context/payment-store";
 import { Button } from "../ui/button";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";

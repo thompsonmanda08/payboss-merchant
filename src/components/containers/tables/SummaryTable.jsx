@@ -1,18 +1,18 @@
-import Pagination from '@/components/base/Pagination'
-import usePaymentsStore from '@/context/paymentsStore'
-import { cn } from '@/lib/utils'
-import React, { useMemo, useState } from 'react'
+import Pagination from "@/components/base/Pagination";
+import usePaymentsStore from "@/context/payment-store";
+import { cn } from "@/lib/utils";
+import React, { useMemo, useState } from "react";
 
 function SummaryTable({ columns, data, actions }) {
-  const [currentPage, setCurrentPage] = useState(1)
-  const rowsPerPage = 10
-  const totalPages = Math.ceil(data?.length / rowsPerPage)
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
+  const totalPages = Math.ceil(data?.length / rowsPerPage);
 
-  const { openInvalidRecordsModal, selectedRecord } = usePaymentsStore()
+  const { openInvalidRecordsModal, selectedRecord } = usePaymentsStore();
 
   const handlePageChange = (page) => {
-    setCurrentPage(page)
-  }
+    setCurrentPage(page);
+  };
 
   const renderColumns = columns?.map(({ header }) => {
     return (
@@ -22,8 +22,8 @@ function SummaryTable({ columns, data, actions }) {
       >
         {header?.toUpperCase()}
       </th>
-    )
-  })
+    );
+  });
 
   if (actions) {
     renderColumns?.push(
@@ -32,14 +32,14 @@ function SummaryTable({ columns, data, actions }) {
         className="border-light border-b px-4 py-2 text-left text-sm font-medium text-gray-900"
       >
         ACTIONS
-      </th>,
-    )
+      </th>
+    );
   }
 
   const paginatedData = data?.slice(
     (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage,
-  )
+    currentPage * rowsPerPage
+  );
 
   const renderRows = paginatedData?.map((row, rowIndex) => {
     const tableRow = columns?.map(({ accessor }, index) => {
@@ -49,16 +49,16 @@ function SummaryTable({ columns, data, actions }) {
           className={cn(
             `border-light border-b px-4 py-2 text-left text-sm text-gray-500`,
             {
-              'font-medium capitalize text-red-500':
-                accessor == 'remarks' && openInvalidRecordsModal,
-              'text-primary': row[accessor] == 'Record Modified',
-            },
+              "font-medium capitalize text-red-500":
+                accessor == "remarks" && openInvalidRecordsModal,
+              "text-primary": row[accessor] == "Record Modified",
+            }
           )}
         >
           {row[accessor]}
         </td>
-      )
-    })
+      );
+    });
 
     if (actions) {
       tableRow?.push(
@@ -67,8 +67,8 @@ function SummaryTable({ columns, data, actions }) {
           className="border-light border-b px-4 py-2 text-left text-sm text-gray-500 "
         >
           {actions(row)}
-        </td>,
-      )
+        </td>
+      );
     }
 
     return (
@@ -78,8 +78,8 @@ function SummaryTable({ columns, data, actions }) {
       >
         {tableRow}
       </tr>
-    )
-  })
+    );
+  });
 
   return useMemo(
     () => (
@@ -99,8 +99,8 @@ function SummaryTable({ columns, data, actions }) {
         />
       </div>
     ),
-    [columns, data, actions, currentPage, totalPages],
-  )
+    [columns, data, actions, currentPage, totalPages]
+  );
 }
 
-export default SummaryTable
+export default SummaryTable;

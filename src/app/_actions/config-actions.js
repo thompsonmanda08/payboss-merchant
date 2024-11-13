@@ -1,6 +1,6 @@
 "use server";
 
-import authenticatedService from "@/lib/authenticatedService";
+import authenticatedService from "@/lib/api-config";
 import {
   createUserSession,
   createWorkspaceSession,

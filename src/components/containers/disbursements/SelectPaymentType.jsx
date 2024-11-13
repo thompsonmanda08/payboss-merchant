@@ -1,6 +1,6 @@
 "use client";
 import { cn, notify } from "@/lib/utils";
-import usePaymentsStore from "@/context/paymentsStore";
+import usePaymentsStore from "@/context/payment-store";
 import { useRouter } from "next/navigation";
 import useNavigation from "@/hooks/useNavigation";
 import {

@@ -1,19 +1,19 @@
-'use server'
-import authenticatedService from '@/lib/authenticatedService'
-import { USER_SESSION } from '@/lib/constants'
-import { getUserSession } from '@/lib/session'
-import { cookies } from 'next/headers'
+"use server";
+import authenticatedService from "@/lib/api-config";
+import { USER_SESSION } from "@/lib/constants";
+import { getUserSession } from "@/lib/session";
+import { cookies } from "next/headers";
 
 export async function createNewUser(newUser) {
-  const session = await getUserSession()
-  const merchantID = session?.user?.merchantID
+  const session = await getUserSession();
+  const merchantID = session?.user?.merchantID;
 
   try {
     const res = await authenticatedService({
-      method: 'POST',
+      method: "POST",
       url: `merchant/${merchantID}/user/other/new`,
       data: newUser,
-    })
+    });
 
     if (res.status == 201) {
       return {
@@ -22,36 +22,36 @@ export async function createNewUser(newUser) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
 export async function getAllUsers() {
-  const session = await getUserSession()
-  const merchantID = session?.user?.merchantID
+  const session = await getUserSession();
+  const merchantID = session?.user?.merchantID;
 
   try {
     const res = await authenticatedService({
       url: `merchant/users/${merchantID}`,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -59,28 +59,28 @@ export async function getAllUsers() {
         message: res.message,
         data: res.data,
         status: res.status,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      message: res?.data?.error || res?.statusText || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return {
       success: false,
       message:
         error?.response?.data?.error ||
         error?.response?.statusText ||
-        'Operation Failed!',
+        "Operation Failed!",
       data: error?.response,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -95,11 +95,11 @@ export async function assignUsersToWorkspace(users, workspaceID) {
   try {
     const res = await authenticatedService({
       url: `merchant/workspace/user/mapping/${workspaceID}`,
-      method: 'POST',
+      method: "POST",
       data: {
         users,
       },
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -108,36 +108,36 @@ export async function assignUsersToWorkspace(users, workspaceID) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
 export async function getUser(userID) {
-  const session = await getUserSession()
-  const merchantID = session?.user?.merchantID
+  const session = await getUserSession();
+  const merchantID = session?.user?.merchantID;
 
   try {
     const res = await authenticatedService({
       url: `merchant/user/${userID}`,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -145,43 +145,43 @@ export async function getUser(userID) {
         message: res.message,
         data: res.data,
         status: res.status,
-      }
+      };
     }
 
-    const response = res?.data || res
+    const response = res?.data || res;
 
     return {
       success: false,
-      message: res?.data?.error || res?.statusText || 'Operation Failed!',
+      message: res?.data?.error || res?.statusText || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return {
       success: false,
       message:
         error?.response?.data?.error ||
         error?.response?.statusText ||
-        'Operation Failed!',
+        "Operation Failed!",
       data: error?.response,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
 export async function updateProfileData(userID, userData) {
-  const session = await getUserSession()
-  const merchantID = session?.user?.merchantID
+  const session = await getUserSession();
+  const merchantID = session?.user?.merchantID;
 
   try {
     const res = await authenticatedService({
       url: `merchant/${merchantID}/user/${userID}`,
-      method: 'PATCH',
+      method: "PATCH",
       data: userData,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -189,38 +189,38 @@ export async function updateProfileData(userID, userData) {
         message: res.message,
         data: res.data,
         status: res.status,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
 export async function updateSystemUserData(userID, userData) {
-  const session = await getUserSession()
-  const merchantID = session?.user?.merchantID
+  const session = await getUserSession();
+  const merchantID = session?.user?.merchantID;
 
   try {
     const res = await authenticatedService({
       url: `merchant/${merchantID}/user/${userID}`,
-      method: 'PATCH',
+      method: "PATCH",
       data: userData,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -228,37 +228,37 @@ export async function updateSystemUserData(userID, userData) {
         message: res.message,
         data: res.data,
         status: res.status,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
 export async function changeUserPassword(password) {
-  (await cookies()).delete(USER_SESSION)
+  (await cookies()).delete(USER_SESSION);
 
   try {
     const res = await authenticatedService({
       url: `merchant/user/change/password `,
-      method: 'PATCH',
+      method: "PATCH",
       data: { password },
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -266,25 +266,25 @@ export async function changeUserPassword(password) {
         message: res.message,
         data: res.data,
         status: res.status,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -292,9 +292,9 @@ export async function adminResetUserPassword(userID, newPasswordData) {
   try {
     const res = await authenticatedService({
       url: `merchant/user/reset/password/${userID}`,
-      method: 'PATCH',
+      method: "PATCH",
       data: newPasswordData,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -303,24 +303,24 @@ export async function adminResetUserPassword(userID, newPasswordData) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import useSettingsStore from "@/context/settingsStore";
+import useSettingsStore from "@/context/settings-store";
 import { useState } from "react";
 import CardLoader from "@/components/base/CardLoader";
 import { Input } from "@/components/ui/input-field";

@@ -1,11 +1,11 @@
-'use client'
-import React from 'react'
-import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal'
-import usePaymentsStore, { validationColumns } from '@/context/paymentsStore'
-import { useBatchDetails } from '@/hooks/useQueryHooks'
-import SummaryTable from '../tables/SummaryTable'
-import CardHeader from '@/components/base/CardHeader'
-import SingleTransactionsTable from '../tables/SingleTransactionsTable'
+"use client";
+import React from "react";
+import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/modal";
+import usePaymentsStore, { validationColumns } from "@/context/payment-store";
+import { useBatchDetails } from "@/hooks/useQueryHooks";
+import SummaryTable from "../tables/SummaryTable";
+import CardHeader from "@/components/base/CardHeader";
+import SingleTransactionsTable from "../tables/SingleTransactionsTable";
 
 function RecordDetailsViewer({ batchID }) {
   const {
@@ -14,35 +14,35 @@ function RecordDetailsViewer({ batchID }) {
     openInvalidRecordsModal,
     closeRecordsModal,
     batchDetails: batchState,
-  } = usePaymentsStore()
+  } = usePaymentsStore();
 
-  const { data: batch } = useBatchDetails(batchState?.ID || batchID)
-  const batchDetails = batch?.data
+  const { data: batch } = useBatchDetails(batchState?.ID || batchID);
+  const batchDetails = batch?.data;
 
   // Determine which modal view to open
   const openModalView =
     (openInvalidRecordsModal && batchDetails?.invalid?.length) ||
     openValidRecordsModal ||
-    openAllRecordsModal
+    openAllRecordsModal;
 
   const title = openInvalidRecordsModal
-    ? 'Invalid Records'
+    ? "Invalid Records"
     : openValidRecordsModal
-      ? 'Valid Records'
-      : 'All Records'
+    ? "Valid Records"
+    : "All Records";
 
   const infoText = openAllRecordsModal
-    ? 'This list includes all the records that have been processed. Review them carefully.'
+    ? "This list includes all the records that have been processed. Review them carefully."
     : openValidRecordsModal
-      ? 'All records in this list are valid and ready for the next step.'
-      : 'The records listed here contain errors or missing information. Please update them to proceed with the transaction.'
+    ? "All records in this list are valid and ready for the next step."
+    : "The records listed here contain errors or missing information. Please update them to proceed with the transaction.";
 
   return (
     <Modal
       isOpen={openModalView}
       onClose={closeRecordsModal}
       // onConfirm={handleConfirmationClose}
-      classNames={{ overlay: 'z-[55]', base: 'max-w-[1440px]' }}
+      classNames={{ overlay: "z-[55]", base: "max-w-[1440px]" }}
       isDismissible={false}
     >
       <ModalContent>
@@ -83,7 +83,7 @@ function RecordDetailsViewer({ batchID }) {
         )}
       </ModalContent>
     </Modal>
-  )
+  );
 }
 
-export default RecordDetailsViewer
+export default RecordDetailsViewer;

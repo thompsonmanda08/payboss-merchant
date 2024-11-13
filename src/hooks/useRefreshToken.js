@@ -1,5 +1,5 @@
 "use client";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { getRefreshToken } from "@/app/_actions/auth-actions";
 
 const useRefreshToken = () => {

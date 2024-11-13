@@ -7,7 +7,7 @@ import { staggerContainerItemVariants } from "@/lib/constants";
 import { formatDate, isValidZambianMobileNumber } from "@/lib/utils";
 import { STEPS } from "../signup-form";
 import DateSelectField from "@/components/ui/date-select-field";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import SelectField from "@/components/ui/select-field";
 import useConfigOptions from "@/hooks/useConfigOptions";

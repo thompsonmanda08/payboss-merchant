@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import useRefreshToken from "./useRefreshToken";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { apiClient } from "@/lib/utils";
 
 const useAuthenticatedService = () => {

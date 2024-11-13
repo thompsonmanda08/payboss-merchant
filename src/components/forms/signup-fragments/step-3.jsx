@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input-field";
 import { motion } from "framer-motion";
 import { staggerContainerItemVariants } from "@/lib/constants";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { STEPS } from "../signup-form";
 import Image from "next/image";
 import CardHeader from "@/components/base/CardHeader";

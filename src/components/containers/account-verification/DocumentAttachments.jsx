@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { uploadBusinessFile } from "@/app/_actions/pocketbase-actions";
 
 import { notify } from "@/lib/utils";

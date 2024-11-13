@@ -7,7 +7,7 @@ import {
   reviewBatch,
   reviewSingleTransaction,
 } from "@/app/_actions/transaction-actions";
-import usePaymentsStore from "@/context/paymentsStore";
+import usePaymentsStore from "@/context/payment-store";
 import { useDisclosure } from "@nextui-org/react";
 import { Input } from "@/components/ui/input-field";
 import useWorkspaces from "@/hooks/useWorkspaces";

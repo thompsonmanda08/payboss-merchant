@@ -20,7 +20,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 import { cn, getUserInitials, notify } from "@/lib/utils";
-import useWorkspaceStore from "@/context/workspaceStore";
+import useWorkspaceStore from "@/context/workspaces-store";
 import PromptModal from "@/components/base/Prompt";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -342,7 +342,6 @@ export default function UsersTable({
       setIsLoading(false);
       return;
     }
-
 
     // The last person cannot be removed from the workspace
     if (users.length == 1) {

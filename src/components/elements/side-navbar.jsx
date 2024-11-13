@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import useNavigationStore from "@/context/navigationStore";
+import useNavigationStore from "@/context/navigation-store.js";
 import MobileNavBar from "./mobile-menu";
 
 import {

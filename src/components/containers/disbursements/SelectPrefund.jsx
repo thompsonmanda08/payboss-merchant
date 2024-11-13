@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import usePaymentsStore from "@/context/paymentsStore";
+import usePaymentsStore from "@/context/payment-store";
 import React from "react";
 import { useActivePrefunds } from "@/hooks/useQueryHooks";
 import PrefundsTable from "../tables/PrefundsTable";

@@ -1,6 +1,6 @@
-'use server'
+"use server";
 
-import authenticatedService from '@/lib/authenticatedService'
+import authenticatedService from "@/lib/api-config";
 
 // ****************** ******************************** ************************** //
 // ****************** BULK TRANSACTION API ENDPOINTS ************************** //
@@ -13,17 +13,17 @@ export async function getAllPaymentTransactions(workspaceID) {
   if (!workspaceID) {
     return {
       success: false,
-      message: 'Workspace ID is required',
+      message: "Workspace ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `transaction/merchant/payment/transactions/${workspaceID}`,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -32,25 +32,25 @@ export async function getAllPaymentTransactions(workspaceID) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -59,17 +59,17 @@ export async function getAllCollectionTransactions(workspaceID) {
   if (!workspaceID) {
     return {
       success: false,
-      message: 'Workspace ID is required',
+      message: "Workspace ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `transaction/merchant/collection/transactions/${workspaceID}`,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -78,25 +78,25 @@ export async function getAllCollectionTransactions(workspaceID) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -107,17 +107,17 @@ export async function getAllBulkTransactions(workspaceID) {
   if (!workspaceID) {
     return {
       success: false,
-      message: 'Workspace ID is required',
+      message: "Workspace ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `transaction/payments/bulk/batches/${workspaceID}`,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -126,25 +126,25 @@ export async function getAllBulkTransactions(workspaceID) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -153,17 +153,17 @@ export async function getBatchDetails(batchID) {
   if (!batchID) {
     return {
       success: false,
-      message: 'batch ID is required',
+      message: "batch ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `transaction/payments/bulk/batch/details/${batchID}`,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -172,25 +172,25 @@ export async function getBatchDetails(batchID) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -200,18 +200,18 @@ export async function reviewBatch(batchID, reviewDetails) {
   if (!batchID) {
     return {
       success: false,
-      message: 'batch ID is required',
+      message: "batch ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
   try {
     const res = await authenticatedService({
       url: `transaction/payments/bulk/review-submission/${batchID}`,
-      method: 'POST',
+      method: "POST",
       data: reviewDetails,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -220,47 +220,47 @@ export async function reviewBatch(batchID, reviewDetails) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
 // ********************** INITIALIZE BATCH TRANSACTION******************** //
 export async function initializeBulkTransaction(workspaceID, transactionData) {
-  const { batch_name, url, protocol } = transactionData
+  const { batch_name, url, protocol } = transactionData;
   if (!workspaceID) {
     return {
       success: false,
-      message: 'Workspace ID is required',
+      message: "Workspace ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `transaction/${protocol}/payments/bulk/${workspaceID}`,
-      method: 'POST',
+      method: "POST",
       data: transactionData,
-    })
+    });
 
     if (res.status == 200 || res.status == 201) {
       return {
@@ -269,40 +269,40 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
 // TODO: WILL BE REMOVED
 export async function updateInvalidDirectBulkTransactionDetails(
   transactionID,
-  transactionData,
+  transactionData
 ) {
-  const { batchID, destination, amount } = transactionData
+  const { batchID, destination, amount } = transactionData;
 
   try {
     const res = await authenticatedService({
       url: `transaction/direct/payments/bulk/${transactionID}`,
-      method: 'PATCH',
+      method: "PATCH",
       data: { batchID, destination, amount },
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -311,24 +311,24 @@ export async function updateInvalidDirectBulkTransactionDetails(
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -338,17 +338,17 @@ export async function submitBatchForApproval(batchID) {
   if (!batchID) {
     return {
       success: false,
-      message: 'batch ID is required',
+      message: "batch ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `transaction/payments/bulk/review-submission/${batchID}`,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -357,25 +357,25 @@ export async function submitBatchForApproval(batchID) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -383,17 +383,17 @@ export async function getWalletPrefundHistory(workspaceID) {
   if (!workspaceID) {
     return {
       success: false,
-      message: 'Workspace ID is required',
+      message: "Workspace ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `merchant/workspace/wallet/prefund/${workspaceID}/history`,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -402,25 +402,25 @@ export async function getWalletPrefundHistory(workspaceID) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -433,17 +433,17 @@ export async function getAllSingleTransactions(workspaceID) {
   if (!workspaceID) {
     return {
       success: false,
-      message: 'Workspace ID is required',
+      message: "Workspace ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `transaction/payments/single/transactions/${workspaceID}`,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -452,51 +452,51 @@ export async function getAllSingleTransactions(workspaceID) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
 // ********************** INITIALIZE SINGLE TRANSACTION******************** //
 export async function initializeSingleTransaction(
   workspaceID,
-  transactionData,
+  transactionData
 ) {
-  const { protocol } = transactionData
+  const { protocol } = transactionData;
 
   if (!workspaceID) {
     return {
       success: false,
-      message: 'Workspace ID is required',
+      message: "Workspace ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `transaction/${protocol}/payments/single/${workspaceID}`,
-      method: 'POST',
+      method: "POST",
       data: transactionData,
-    })
+    });
 
     if (res.status == 200 || res.status == 201) {
       return {
@@ -505,24 +505,24 @@ export async function initializeSingleTransaction(
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -531,17 +531,17 @@ export async function submitTransactionForApproval(ID) {
   if (!ID) {
     return {
       success: false,
-      message: 'Transaction ID is required',
+      message: "Transaction ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `transaction/payments/single/review-submission/${ID}`,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -550,25 +550,25 @@ export async function submitTransactionForApproval(ID) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -578,18 +578,18 @@ export async function reviewSingleTransaction(transactionID, reviewDetails) {
   if (!transactionID) {
     return {
       success: false,
-      message: 'batch ID is required',
+      message: "batch ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
   try {
     const res = await authenticatedService({
       url: `transaction/payments/single/review-submission/${transactionID}`,
-      method: 'POST',
+      method: "POST",
       data: reviewDetails,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -598,25 +598,25 @@ export async function reviewSingleTransaction(transactionID, reviewDetails) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -634,18 +634,18 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
   if (!workspaceID) {
     return {
       success: false,
-      message: 'workspaceID ID is required',
+      message: "workspaceID ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
   try {
     const res = await authenticatedService({
       url: `analytics/merchant/workspace/${workspaceID}/bulk/payments`,
-      method: 'POST',
+      method: "POST",
       data: dateFilter,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -654,25 +654,25 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -681,19 +681,19 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
   if (!workspaceID || !service) {
     return {
       success: false,
-      message: 'workspaceID Or Service are required',
+      message: "workspaceID Or Service are required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `analytics/merchant/workspace/${workspaceID}/${service}/report`,
-      method: 'POST',
+      method: "POST",
       data: dateFilter,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -702,32 +702,32 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
 // *********************** API COLLECTIONS LATEST TRANSACTIONS ************************* //
 export async function getAPICollectionLatestTransactions(
   workspaceID,
-  dateFilter,
+  dateFilter
 ) {
   // const {
   //     "start_date":"2024-08-01",
@@ -737,19 +737,19 @@ export async function getAPICollectionLatestTransactions(
   if (!workspaceID) {
     return {
       success: false,
-      message: 'workspaceID ID is required',
+      message: "workspaceID ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
 
   try {
     const res = await authenticatedService({
       url: `transaction/merchant/collection/api-integration/${workspaceID}`,
-      method: 'POST',
+      method: "POST",
       data: dateFilter,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -758,48 +758,48 @@ export async function getAPICollectionLatestTransactions(
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
 // *********************** TILL NUMBER LATEST TRANSACTIONS ************************* //
 export async function getTillCollectionsLatestTransactions(
   workspaceID,
-  dateFilter,
+  dateFilter
 ) {
   if (!workspaceID) {
     return {
       success: false,
-      message: 'workspaceID ID is required',
+      message: "workspaceID ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
   try {
     const res = await authenticatedService({
       url: `transaction/merchant/collection/till/${workspaceID}`,
-      method: 'POST',
+      method: "POST",
       data: dateFilter,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -808,25 +808,25 @@ export async function getTillCollectionsLatestTransactions(
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }
 
@@ -840,18 +840,18 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
   if (!workspaceID) {
     return {
       success: false,
-      message: 'workspaceID ID is required',
+      message: "workspaceID ID is required",
       data: [],
       status: 400,
-      statusText: 'BAD_REQUEST',
-    }
+      statusText: "BAD_REQUEST",
+    };
   }
   try {
     const res = await authenticatedService({
       url: `merchant/workspace/wallet/prefund/${workspaceID}/history`,
-      method: 'POST',
+      method: "POST",
       data: dateFilter,
-    })
+    });
 
     if (res.status == 200) {
       return {
@@ -860,24 +860,24 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
         data: res.data,
         status: res.status,
         statusText: res.statusText,
-      }
+      };
     }
 
     return {
       success: false,
-      message: res?.data?.error || 'Operation Failed!',
+      message: res?.data?.error || "Operation Failed!",
       data: res?.data || res,
       status: res.status,
       statusText: res?.statusText,
-    }
+    };
   } catch (error) {
-    console.error(error?.response)
+    console.error(error?.response);
     return {
       success: false,
-      message: error?.response?.data?.error || 'Operation Failed!',
+      message: error?.response?.data?.error || "Operation Failed!",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    }
+    };
   }
 }

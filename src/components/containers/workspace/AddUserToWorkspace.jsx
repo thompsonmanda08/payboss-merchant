@@ -27,7 +27,7 @@ import CardHeader from "@/components/base/CardHeader";
 import Spinner from "../../ui/Spinner";
 import { UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import SelectField from "@/components/ui/select-field";
-import useWorkspaceStore from "@/context/workspaceStore";
+import useWorkspaceStore from "@/context/workspaces-store";
 import { WORKSPACE_MEMBERS_QUERY_KEY } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { notify } from "@/lib/utils";
-import usePaymentsStore from "@/context/paymentsStore";
+import usePaymentsStore from "@/context/payment-store";
 import Link from "next/link";
 import React from "react";
 import { uploadPaymentBatchFile } from "@/app/_actions/pocketbase-actions";
