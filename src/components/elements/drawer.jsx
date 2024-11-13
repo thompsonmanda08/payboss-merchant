@@ -1,24 +1,24 @@
-'use client'
-import React from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { CardHeader } from '../base'
-import { cn } from '@/lib/utils'
+"use client";
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CardHeader } from "../base";
+import { cn } from "@/lib/utils";
 
 const drawerVariants = {
-  hidden: { x: '100%', opacity: 0 },
+  hidden: { x: "100%", opacity: 0 },
   visible: {
     x: 0,
     opacity: 1,
     transition: {
       duration: 0.3,
-      type: 'spring',
+      type: "spring",
       stiffness: 300,
       damping: 30,
-      ease: 'easeInOut',
+      ease: "easeInOut",
     },
   },
-  exit: { x: '100%', opacity: 0 },
-}
+  exit: { x: "100%", opacity: 0 },
+};
 
 const Drawer = ({ isOpen, onClose, title, infoText, className, children }) => {
   return (
@@ -26,7 +26,7 @@ const Drawer = ({ isOpen, onClose, title, infoText, className, children }) => {
       {isOpen && (
         <>
           <motion.div
-            className="fixed inset-y-0 right-0 z-50 flex max-w-full bg-slate-500/20"
+            className="fixed inset-y-0 right-0 z-50 flex max-w-full bg-foreground-500/20"
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -34,8 +34,8 @@ const Drawer = ({ isOpen, onClose, title, infoText, className, children }) => {
           >
             <div
               className={cn(
-                'flex h-full w-full max-w-md flex-col overflow-y-auto rounded-lg bg-white p-4 shadow-xl',
-                className,
+                "flex h-full w-full max-w-md flex-col overflow-y-auto rounded-lg bg-background p-4 shadow-xl",
+                className
               )}
             >
               <CardHeader
@@ -50,7 +50,7 @@ const Drawer = ({ isOpen, onClose, title, infoText, className, children }) => {
         </>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-export default Drawer
+export default Drawer;

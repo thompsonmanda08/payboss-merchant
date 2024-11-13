@@ -1,7 +1,6 @@
-import { cn } from '@/lib/utils'
-import { Button } from '../ui/Button'
-import SelectField from '../ui/SelectField'
-import { WalletIcon } from '@heroicons/react/24/outline'
+import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
+import SelectField from "../ui/select-field";
 
 export default function Tabs({
   tabs,
@@ -11,9 +10,9 @@ export default function Tabs({
   classNames,
   Icon,
 }) {
-  const { innerWrapper, button, nav, icon } = classNames || ''
+  const { innerWrapper, button, nav, icon } = classNames || "";
   return (
-    <div className={cn('w-full sm:w-auto', className)}>
+    <div className={cn("w-full sm:w-auto", className)}>
       <div className="w-full sm:hidden sm:w-auto">
         <label htmlFor="tabs" className="sr-only">
           Select a tab
@@ -24,22 +23,24 @@ export default function Tabs({
           name="tabs"
           options={tabs}
           className=" h-auto w-full"
-          placeholder={'Select a tab'}
+          placeholder={"Select a tab"}
           value={tabs.find((tab) => tab?.index == currentTab)?.index.toString()}
           defaultValue={tabs
             .find((tab) => tab?.index == currentTab)
             ?.index.toString()}
           onChange={(e) => {
-            let tab = tabs.find((tab) => tab?.index == parseInt(e.target.value))
-            navigateTo(tab?.index)
+            let tab = tabs.find(
+              (tab) => tab?.index == parseInt(e.target.value)
+            );
+            navigateTo(tab?.index);
           }}
         />
       </div>
-      <div className={cn('hidden sm:block', innerWrapper)}>
+      <div className={cn("hidden sm:block", innerWrapper)}>
         <nav
           className={cn(
-            'min-w-md -mb-px flex gap-x-4 rounded-lg bg-slate-500/5  p-1',
-            nav,
+            "min-w-md -mb-px flex gap-x-4 rounded-lg dark:bg-default/30 bg-default/40  p-1",
+            nav
           )}
           aria-label="Tabs"
         >
@@ -47,30 +48,30 @@ export default function Tabs({
             <Button
               key={index}
               // href={tab.href}
-              variant={'light'}
+              variant={"light"}
               onClick={() => navigateTo(index)}
               startContent={
                 tab?.icon && (
                   <tab.icon
                     className={cn(
-                      'h-5 w-5 text-slate-600',
+                      "h-5 w-5 text-slate-600",
                       {
-                        'bg-white text-primary': tab?.index == currentTab,
+                        "bg-background text-primary": tab?.index == currentTab,
                       },
-                      icon,
+                      icon
                     )}
                   />
                 )
               }
               className={cn(
-                'whitespace-nowrap border-b-1 border-transparent px-4 text-sm  text-gray-500 hover:border-gray-300 hover:bg-white hover:text-primary data-[hover=true]:bg-white',
+                "whitespace-nowrap border-b-1 border-transparent px-4 text-sm  text-gray-500 hover:border-gray-300 hover:bg-background hover:text-primary data-[hover=true]:bg-background ",
                 {
-                  'border-primary bg-white text-primary shadow-sm':
+                  "border-primary dark:broder-primary-300 dark:bg-card bg-background dark:text-primary-400 text-primary shadow-sm":
                     tab?.index == currentTab,
                 },
-                button,
+                button
               )}
-              aria-current={tab?.index == currentTab ? 'active' : undefined}
+              aria-current={tab?.index == currentTab ? "active" : undefined}
             >
               {tab?.name || tab?.title || tab?.label}
             </Button>
@@ -78,5 +79,5 @@ export default function Tabs({
         </nav>
       </div>
     </div>
-  )
+  );
 }
