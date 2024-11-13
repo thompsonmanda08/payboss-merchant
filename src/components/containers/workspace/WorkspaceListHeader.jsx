@@ -2,7 +2,7 @@
 import Logo from "@/components/base/Logo";
 import ThemeSwitcher from "@/components/base/ThemeSwitcher";
 import { Button } from "@/components/ui/button";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React from "react";

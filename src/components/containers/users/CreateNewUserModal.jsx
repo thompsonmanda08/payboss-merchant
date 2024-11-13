@@ -23,7 +23,7 @@ import {
   updateSystemUserData,
 } from "@/app/_actions/user-actions";
 import useNavigation from "@/hooks/useNavigation";
-import useWorkspaceStore from "@/context/workspaceStore";
+import useWorkspaceStore from "@/context/workspaces-store";
 import { changeUserRoleInWorkspace } from "@/app/_actions/workspace-actions";
 import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
 

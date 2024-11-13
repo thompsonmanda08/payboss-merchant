@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { staggerContainerItemVariants } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { STEPS } from "../signup-form";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@nextui-org/react";
 import { validateTPIN } from "@/app/_actions/auth-actions";

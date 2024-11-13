@@ -20,7 +20,7 @@ import { useMutation } from "@tanstack/react-query";
 import { getBulkAnalyticReports } from "@/app/_actions/transaction-actions";
 import { AnimatePresence, motion } from "framer-motion";
 import ReportDetailsViewer from "@/components/containers/analytics/ReportDetailsViewer";
-import { singleReportsColumns } from "@/context/paymentsStore";
+import { singleReportsColumns } from "@/context/payment-store";
 import TotalStatsLoader from "@/components/elements/total-stats-loader";
 import { convertToCSVString } from "@/app/_actions/file-converstion-actions";
 import Card from "@/components/base/Card";

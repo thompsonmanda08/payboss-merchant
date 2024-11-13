@@ -1,8 +1,8 @@
-'use client'
-import React from 'react'
-import { singleReportsColumns } from '@/context/paymentsStore'
-import SingleTransactionsTable from '../tables/SingleTransactionsTable'
-import Modal from '@/components/base/Modal'
+"use client";
+import React from "react";
+import { singleReportsColumns } from "@/context/payment-store";
+import SingleTransactionsTable from "../tables/SingleTransactionsTable";
+import Modal from "@/components/base/Modal";
 
 function ReportDetailsViewer({
   columns,
@@ -15,12 +15,12 @@ function ReportDetailsViewer({
     <Modal
       show={openReportsModal}
       onClose={() => {
-        setOpenReportsModal(false)
+        setOpenReportsModal(false);
       }}
       // onConfirm={handleConfirmationClose}
-      title={'Transaction Report Details'}
-      infoText={'Track each transactions status througout the payment proccess'}
-      classNames={{ overlay: 'z-[55]', container: 'px-2' }}
+      title={"Transaction Report Details"}
+      infoText={"Track each transactions status througout the payment proccess"}
+      classNames={{ overlay: "z-[55]", container: "px-2" }}
       isDismissible={false}
       disableAction={true}
       removeCallToAction={true}
@@ -35,7 +35,7 @@ function ReportDetailsViewer({
         removeWrapper
       />
     </Modal>
-  )
+  );
 }
 
-export default ReportDetailsViewer
+export default ReportDetailsViewer;

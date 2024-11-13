@@ -19,7 +19,7 @@ import {
   getRefreshToken,
   lockScrenOnUserIdle,
 } from "@/app/_actions/auth-actions";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { useIdleTimer } from "react-idle-timer/legacy";
 import { usePathname } from "next/navigation";
 

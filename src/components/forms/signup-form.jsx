@@ -6,7 +6,7 @@ import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { Button } from "../ui/button";
 import { containerVariants } from "@/lib/constants";
 import { notify } from "@/lib/utils";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import Step0 from "./signup-fragments/step-0";
 import Step1 from "./signup-fragments/step-1";
 import Step2 from "./signup-fragments/step-2";

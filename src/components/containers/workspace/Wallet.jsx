@@ -40,7 +40,7 @@ import UploadField from "@/components/base/FileDropZone";
 import { useState } from "react";
 import { PaperClipIcon } from "@heroicons/react/24/outline";
 import Modal from "@/components/base/Modal";
-import useWalletStore from "@/context/walletStore";
+import useWalletStore from "@/context/wallet-store";
 import useNavigation from "@/hooks/useNavigation";
 
 function Wallet({

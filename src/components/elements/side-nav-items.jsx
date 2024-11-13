@@ -5,7 +5,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { cn } from "@/lib/utils";
 import { PowerIcon } from "@heroicons/react/24/solid";
 
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import useNavigation from "@/hooks/useNavigation";
 import NavItemIcon from "../base/NavItemIcon";
 

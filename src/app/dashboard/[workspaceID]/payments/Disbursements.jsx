@@ -1,6 +1,6 @@
 "use client";
 
-import usePaymentsStore from "@/context/paymentsStore";
+import usePaymentsStore from "@/context/payment-store";
 import React, { useEffect, useState } from "react";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { PAYMENT_SERVICE_TYPES } from "@/lib/constants";

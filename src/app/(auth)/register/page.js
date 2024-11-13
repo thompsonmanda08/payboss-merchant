@@ -6,7 +6,7 @@ import SignUpForm from "@/components/forms/signup-form";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/Spinner";
 import useConfigOptions from "@/hooks/useConfigOptions";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/base/Logo";
 import Card from "@/components/base/Card";

@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input-field";
 import { PASSWORD_PATTERN } from "@/lib/constants";
 import { useQueryClient } from "@tanstack/react-query";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { changeUserPassword } from "@/app/_actions/user-actions";
 import { notify } from "@/lib/utils";
 import StatusMessage from "../base/StatusMessage";

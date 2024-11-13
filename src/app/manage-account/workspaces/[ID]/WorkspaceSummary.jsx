@@ -16,7 +16,7 @@ import {
 import useNavigation from "@/hooks/useNavigation";
 import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
 import { useWorkspaceMembers } from "@/hooks/useQueryHooks";
-import useWorkspaceStore from "@/context/workspaceStore";
+import useWorkspaceStore from "@/context/workspaces-store";
 import LoadingPage from "@/app/loading";
 import { cn, formatCurrency, notify } from "@/lib/utils";
 import UsersTable from "@/components/containers/tables/UsersTable";

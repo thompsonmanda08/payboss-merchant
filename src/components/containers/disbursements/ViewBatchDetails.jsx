@@ -4,7 +4,7 @@ import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import ValidationDetails from "@/components/containers/disbursements/ValidationDetails";
 import ApproverAction from "@/components/containers/disbursements/ApproverAction";
 import RecordDetailsViewer from "@/components/containers/disbursements/RecordDetailsViewer";
-import usePaymentsStore from "@/context/paymentsStore";
+import usePaymentsStore from "@/context/payment-store";
 import { Modal, ModalContent, ModalBody, ModalHeader } from "@nextui-org/react";
 
 import { useQueryClient } from "@tanstack/react-query";

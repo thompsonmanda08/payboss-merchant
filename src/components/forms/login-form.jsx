@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "../ui/button";
-import useAuthStore from "@/context/authStore";
+import useAuthStore from "@/context/auth-store";
 import { authenticateUser } from "@/app/_actions/auth-actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";

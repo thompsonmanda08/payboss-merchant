@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import usePaymentsStore from "@/context/paymentsStore";
+import usePaymentsStore from "@/context/payment-store";
 import { Button } from "@/components/ui/button";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { useBatchDetails } from "@/hooks/useQueryHooks";
