@@ -1,7 +1,6 @@
-"use client";
-import React from "react";
-import Spinner from "./Spinner";
-import { cn } from "@/lib/utils";
+import React from 'react'
+import Spinner from './Spinner'
+import { cn } from '@/lib/utils'
 
 function Loader({
   size = 50,
@@ -11,28 +10,28 @@ function Loader({
   classNames,
   isLandscape,
 }) {
-  const { container, wrapper, spinner, text } = classNames || "";
+  const { container, wrapper, spinner, text } = classNames || ''
   return (
     <div
       className={cn(
-        "grid min-h-80 min-w-80 flex-1 flex-grow place-items-center rounded-xl bg-card/10 py-8",
-        wrapper
+        'grid min-h-80 flex-1 flex-grow place-items-center rounded-xl bg-slate-200/10 py-8',
+        wrapper,
       )}
     >
       <div
         className={cn(
-          "flex w-max flex-col items-center justify-start gap-4",
+          'flex w-max flex-col items-center justify-start gap-4',
           container,
           className,
-          { "flex-row": isLandscape }
+          { 'flex-row': isLandscape },
         )}
       >
         <Spinner size={size} color={color} className={spinner} />
         {loadingText && (
           <p
             className={cn(
-              "mt-4 max-w-sm break-words font-bold text-foreground/80",
-              text
+              'mt-4 max-w-sm break-words font-bold text-slate-800',
+              text,
             )}
           >
             {loadingText}
@@ -40,7 +39,7 @@ function Loader({
         )}
       </div>
     </div>
-  );
+  )
 }
 
-export default Loader;
+export default Loader

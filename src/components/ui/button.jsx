@@ -1,14 +1,13 @@
-import { Button as NextUIButton } from "@nextui-org/react";
-import { cn } from "@/lib/utils";
+import { Button as NextUIButton } from '@nextui-org/react'
+import { cn } from '@/lib/utils'
 
-export function Button({ children, loadingText, size, className, ...props }) {
-  props.variant ??= "solid";
-  props.color ??= "primary";
+export function Button({ children, loadingText, className, ...props }) {
+  props.variant ??= 'solid'
+  props.color ??= 'primary'
 
   return (
     <NextUIButton
       radius="sm"
-      size={size}
       spinner={
         <svg
           className="h-5 w-5 animate-spin text-current"
@@ -31,10 +30,10 @@ export function Button({ children, loadingText, size, className, ...props }) {
           />
         </svg>
       }
-      className={cn("min-w-max font-semibold", className)}
+      className={cn('h-10 min-w-max font-semibold', className)}
       {...props}
     >
-      {props.isLoading ? loadingText || "" : children}
+      {props.isLoading ? loadingText || '' : children}
     </NextUIButton>
-  );
+  )
 }
