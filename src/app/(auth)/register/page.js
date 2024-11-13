@@ -85,8 +85,8 @@ export function AccountCreatedSuccess() {
           Account Created Successfully!
         </h2>
         <p className="max-w-md py-4 pb-6 text-center text-sm leading-6 tracking-tight text-foreground/70 md:text-base">
-          You will need to login and upload a few verification documents to
-          verify your account. Approval takes up to{" "}
+          You will need to login and upload verification documents to verify
+          your account. Approval takes up to{" "}
           <span className="font-bold">2 working days</span>, however you have
           limited access to your account until approval is completed.
         </p>

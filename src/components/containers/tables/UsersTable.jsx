@@ -343,6 +343,14 @@ export default function UsersTable({
       return;
     }
 
+
+    // The last person cannot be removed from the workspace
+    if (users.length == 1) {
+      notify("error", "Workspace cannot be empty!");
+      setIsLoading(false);
+      return;
+    }
+
     // BY DEFFAULT ONLY REMOVE USER FROM WORKSPACE
     const response = await handleDeleteFromWorkspace();
     if (response) {
@@ -368,7 +376,6 @@ export default function UsersTable({
             <SingleSelectionDropdown
               name={"Role"}
               className={"min-w-[160px]"}
-      
               disallowEmptySelection={true}
               closeOnSelect={false}
               buttonVariant="flat"
@@ -380,7 +387,6 @@ export default function UsersTable({
             <SingleSelectionDropdown
               name={"Columns"}
               className={"min-w-[160px]"}
-          
               closeOnSelect={false}
               buttonVariant="flat"
               selectionMode="multiple"

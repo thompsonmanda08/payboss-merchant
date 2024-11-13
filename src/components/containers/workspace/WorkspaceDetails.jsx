@@ -131,19 +131,19 @@ function WorkspaceDetails({
   }
 
   // CHANGE WORKSPACE VISIBILITY
-  async function handleWorkspaceVisibility() {
-    setIsVisible(!isVisible);
-    const response = await changeWorkspaceVisibility(workspaceID, !isVisible);
+  // async function handleWorkspaceVisibility() {
+  //   setIsVisible(!isVisible);
+  //   const response = await changeWorkspaceVisibility(workspaceID, !isVisible);
 
-    if (!response?.success) {
-      setIsVisible(!isVisible);
-      notify("error", "Failed to update visibility");
-      return;
-    }
+  //   if (!response?.success) {
+  //     setIsVisible(!isVisible);
+  //     notify("error", "Failed to update visibility");
+  //     return;
+  //   }
 
-    queryClient.invalidateQueries();
-    notify("success", "Visibility updated successfully");
-  }
+  //   queryClient.invalidateQueries();
+  //   notify("success", "Visibility updated successfully");
+  // }
 
   // CHECK IF WORKSPACE IS VISIBLE
   useEffect(() => {
