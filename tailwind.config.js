@@ -121,7 +121,7 @@ export const plugins = [
         colors: {
           default: {
             DEFAULT: "#e7f1ff",
-            foreground: "#fcfcfc",
+            foreground: "#4982d9",
           },
         },
       },

@@ -1,27 +1,27 @@
-'use client'
-import { useEffect, useState } from 'react'
-import { useAccountRoles, useKYCData, useSetupConfig } from './useQueryHooks'
+"use client";
+import { useEffect, useState } from "react";
+import { useKYCData, useSetupConfig } from "./useQueryHooks";
 
 const useAccountProfile = () => {
-  const { data: setup } = useSetupConfig()
-  const { data: kycData } = useKYCData()
+  const { data: setup } = useSetupConfig();
+  const { data: kycData } = useKYCData();
 
-  const user = setup?.data?.userDetails || []
+  const user = setup?.data?.userDetails || [];
 
-  const isOwner = user?.role?.toLowerCase() == 'owner'
-  const isAccountAdmin = user?.role?.toLowerCase() == 'admin'
+  const isOwner = user?.role?.toLowerCase() == "owner";
+  const isAccountAdmin = user?.role?.toLowerCase() == "admin";
 
-  const businessDetails = kycData?.data?.details || {}
-  const documents = kycData?.data?.documents || {}
-  const [merchantID, setMerchantID] = useState('')
-  const [merchant, setMerchant] = useState('')
-  const [isCompleteKYC, setIsCompleteKYC] = useState('')
-  const [KYCStage, setKYCStage] = useState('')
-  const [KYCStageID, setKYCStageID] = useState('')
-  const [KYCApprovalStatus, setKYCApprovalStatus] = useState('')
-  const [allowUserToSubmitKYC, setAllowUserToSubmitKYC] = useState('')
-  const [businessDocs, setBusinessDocs] = useState([])
-  const [signedContractDoc, setSignedContractDoc] = useState(null)
+  const businessDetails = kycData?.data?.details || {};
+  const documents = kycData?.data?.documents || {};
+  const [merchantID, setMerchantID] = useState("");
+  const [merchant, setMerchant] = useState("");
+  const [isCompleteKYC, setIsCompleteKYC] = useState("");
+  const [KYCStage, setKYCStage] = useState("");
+  const [KYCStageID, setKYCStageID] = useState("");
+  const [KYCApprovalStatus, setKYCApprovalStatus] = useState("");
+  const [allowUserToSubmitKYC, setAllowUserToSubmitKYC] = useState("");
+  const [businessDocs, setBusinessDocs] = useState([]);
+  const [signedContractDoc, setSignedContractDoc] = useState(null);
 
   // IF THE DOCUMENT OBJECT IS NOT EMPTY DOCS EXIST
   const refDocsExist =
@@ -30,78 +30,78 @@ const useAccountProfile = () => {
     documents?.cert_of_incorporation_url ||
     documents?.share_holder_url ||
     documents?.tax_clearance_certificate_url ||
-    documents?.articles_of_association_url
+    documents?.articles_of_association_url;
 
   /* ****** SET STATE VARIABLES**************** */
   const isApprovedUser =
     businessDetails?.stageID == 4 &&
     businessDetails?.isCompleteKYC &&
-    businessDetails?.kyc_approval_status?.toLowerCase() == 'approved'
+    businessDetails?.kyc_approval_status?.toLowerCase() == "approved";
 
   useEffect(() => {
     // Set KYC Data if it exists
     if (kycData) {
-      setMerchantID(businessDetails?.ID)
-      setIsCompleteKYC(businessDetails?.isCompleteKYC)
-      setKYCStage(businessDetails?.stage)
-      setKYCStageID(businessDetails?.stageID)
-      setKYCApprovalStatus(businessDetails?.kyc_approval_status?.toLowerCase())
+      setMerchantID(businessDetails?.ID);
+      setIsCompleteKYC(businessDetails?.isCompleteKYC);
+      setKYCStage(businessDetails?.stage);
+      setKYCStageID(businessDetails?.stageID);
+      setKYCApprovalStatus(businessDetails?.kyc_approval_status?.toLowerCase());
       setAllowUserToSubmitKYC(
         businessDetails?.stageID < 1 ||
-          businessDetails?.stage?.toLowerCase() == 'new' ||
+          businessDetails?.stage?.toLowerCase() == "new" ||
           !businessDetails?.isCompleteKYC ||
-          businessDetails?.kyc_approval_status?.toLowerCase() == 'rejected',
-      )
+          businessDetails?.kyc_approval_status?.toLowerCase() == "rejected"
+      );
     }
 
     //  Check Business Documents if they exist
     if (Object.keys(documents).length > 0) {
       let attachments = [
         {
-          name: 'Company Profile',
-          url: documents?.company_profile_url || '#',
-          type: 'COMPANY_PROFILE',
+          name: "Company Profile",
+          url: documents?.company_profile_url || "#",
+          type: "COMPANY_PROFILE",
         },
         {
-          name: 'Certificate of Incorporation',
-          url: documents?.cert_of_incorporation_url || '#',
-          type: 'CERTIFICATE_INC',
+          name: "Certificate of Incorporation",
+          url: documents?.cert_of_incorporation_url || "#",
+          type: "CERTIFICATE_INC",
         },
         {
-          name: 'Shareholder Agreement',
-          url: documents?.share_holder_url || '#',
-          type: 'SHAREHOLDER_AGREEMENT',
+          name: "Shareholder Agreement",
+          url: documents?.share_holder_url || "#",
+          type: "SHAREHOLDER_AGREEMENT",
         },
         {
-          name: 'Tax Clearance Certificate',
-          url: documents?.tax_clearance_certificate_url || '#',
-          type: 'TAX_CLEARANCE',
+          name: "Tax Clearance Certificate",
+          url: documents?.tax_clearance_certificate_url || "#",
+          type: "TAX_CLEARANCE",
         },
         {
-          name: 'Articles of Association',
-          url: documents?.articles_of_association_url || '#',
-          type: 'ARTICLES_ASSOCIATION',
+          name: "Articles of Association",
+          url: documents?.articles_of_association_url || "#",
+          type: "ARTICLES_ASSOCIATION",
         },
-      ]
+      ];
 
       // Set Business Documents in state variable
-      setBusinessDocs(attachments)
+      setBusinessDocs(attachments);
     }
 
     if (documents?.signed_contract) {
       setSignedContractDoc({
-        name: 'Signed Contract Document',
-        url: documents?.signed_contract || '#',
-        type: 'SIGNED_CONTRACT',
-      })
+        name: "Signed Contract Document",
+        url: documents?.signed_contract || "#",
+        type: "SIGNED_CONTRACT",
+      });
     }
-  }, [kycData])
+  }, [kycData]);
 
   useEffect(() => {
-    if (businessDetails?.name && merchant == '') {
-      setMerchant(businessDetails?.name)
+    if (businessDetails?.name && merchant == "") {
+      setMerchant(businessDetails?.name);
     }
-  }, [businessDetails])
+  }, [businessDetails]);
 
   return {
     user,
@@ -119,7 +119,7 @@ const useAccountProfile = () => {
     isAccountAdmin,
     signedContractDoc,
     refDocsExist,
-  }
-}
+  };
+};
 
-export default useAccountProfile
+export default useAccountProfile;

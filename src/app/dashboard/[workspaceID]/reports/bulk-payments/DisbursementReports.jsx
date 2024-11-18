@@ -220,7 +220,7 @@ export default function DisbursementReports({ workspaceID }) {
                   <div className="flex flex-col flex-wrap sm:flex-row md:justify-evenly">
                     <div className="flex flex-1 flex-col gap-4">
                       <TotalValueStat
-                        label={"Proccessed Direct Batches"}
+                        label={"Proccessed Direct Transactions"}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "primary-800",
@@ -231,7 +231,7 @@ export default function DisbursementReports({ workspaceID }) {
                         )}
                       />
                       <TotalValueStat
-                        label={"Proccessed Voucher Batches"}
+                        label={"Proccessed Voucher Transactions"}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "secondary",
@@ -245,7 +245,7 @@ export default function DisbursementReports({ workspaceID }) {
 
                     <div className="flex flex-1 flex-col gap-4">
                       <TotalValueStat
-                        label={"Successful Direct Transaction"}
+                        label={"Successful Direct Transactions"}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "success",
@@ -272,7 +272,7 @@ export default function DisbursementReports({ workspaceID }) {
 
                     <div className="flex flex-1 flex-col gap-4">
                       <TotalValueStat
-                        label={"Successful Voucher Transaction"}
+                        label={"Successful Voucher Transactions"}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "success",

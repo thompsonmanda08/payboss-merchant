@@ -4,64 +4,14 @@ import UsersTable from "../tables/UsersTable";
 import { cn } from "@/lib/utils";
 import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
 
-export const ROLES = [
-  {
-    key: "admin",
-    id: "admin",
-    label: "Admin",
-    description:
-      "Manage people, payments, billing and other workspace settings.",
-  },
-  {
-    key: "approver",
-    id: "approver",
-    label: "Approver",
-    description: "Track and approve transactions a workspace.",
-  },
-  {
-    id: "initiator",
-    key: "initiator",
-    label: "Initiator",
-    description: "Initate transactions in a workspace",
-  },
+function ManagePeople({ users, roles, permissions }) {
+  const { isLoading, isApprovedUser } = useAllUsersAndRoles();
+  // TODO => REMOVE THIS LINE
 
-  {
-    id: "viewer",
-    key: "viewer",
-    label: "Viewer",
-    description: "View-only access is granted",
-  },
-];
+  const { isOwner, isAccountAdmin } = permissions || "";
 
-export const SYSTEM_ROLES = [
-  {
-    key: "admin",
-    id: "admin",
-    label: "Admin",
-    description:
-      "Manage people, payments, billing and other workspace settings.",
-  },
-  {
-    id: "viewer",
-    key: "viewer",
-    label: "Viewer",
-    description: "View-only access is granted",
-  },
-];
+  const allowUserCreation = (isAccountAdmin || isOwner) && isApprovedUser;
 
-function ManagePeople({ classNames }) {
-  const { wrapper } = classNames || "";
-  // const { isEditingRole } = useWorkspaceStore()
-  // const [searchQuery, setSearchQuery] = useState('')
-  // const { isOpen, onOpen, onClose } = useDisclosure()
-  const {
-    canCreateUsers,
-    allUsers,
-    isAdminOrOwner,
-    accountRoles,
-    isLoading,
-    isApprovedUser,
-  } = useAllUsersAndRoles();
   // const { isAccountLevelSettingsRoute, isUserInWorkspace } = useNavigation()
 
   // const userSearchResults = allUsers?.filter((user) => {
@@ -76,24 +26,8 @@ function ManagePeople({ classNames }) {
   //   if (onAdd) return onAdd()
   // }
 
-  const allowUserCreation = canCreateUsers && isApprovedUser;
-
-  // const TABS = [{ name: 'All Users', index: 0 }]
-
-  // const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
-  //   <UsersTable
-  //     key={'all-users'}
-  //     users={userSearchResults}
-  //     accountRoles={accountRoles}
-  //     isUserAdmin={isAdminOrOwner}
-  //     tableLoading={isLoading}
-  //     allowUserCreation={allowUserCreation}
-  //     isApprovedUser={isApprovedUser}
-  //   />,
-  // ])
-
   return (
-    <div className={cn("mx-auto flex w-full max-w-7xl flex-col", wrapper)}>
+    <div className={cn("mx-auto flex w-full max-w-7xl flex-col")}>
       <h2 className="heading-3 !font-bold tracking-tight text-foreground-900 ">
         Manage People
       </h2>
@@ -116,9 +50,9 @@ function ManagePeople({ classNames }) {
       {activeTab} */}
       <UsersTable
         key={"all-users"}
-        users={allUsers}
-        accountRoles={accountRoles}
-        isUserAdmin={isAdminOrOwner}
+        users={users}
+        accountRoles={roles}
+        isUserAdmin={isOwner || isAccountAdmin}
         tableLoading={isLoading}
         allowUserCreation={allowUserCreation}
         isApprovedUser={isApprovedUser}

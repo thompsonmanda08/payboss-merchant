@@ -130,7 +130,7 @@ function SettingsSideBar({
           >
             {backButtonText || "Back to Workspaces"}
           </Button>
-          <hr className="my-2" />
+          <hr className="my-2 dark:border-primary/20" />
           {/* ******************** WORKSPACE SETTINGS ******************************* */}
           <div
             role="`workspace_settings`"
@@ -139,7 +139,7 @@ function SettingsSideBar({
             <p className="text-[13px] font-medium uppercase tracking-wide py-2 text-foreground-400">
               {!isAccountLevelSettingsRoute ? title : "ACCOUNT SETTINGS"}
             </p>
-            <hr className="my-2" />
+            <hr className="my-2 dark:border-primary/20" />
             {SETTINGS_LINKS?.map(({ href, Icon, name }, index) => {
               return (
                 <Button
@@ -163,7 +163,7 @@ function SettingsSideBar({
           </div>
 
           {/* ************************************************************* */}
-          <hr className="mt-auto" />
+          <hr className="mt-auto dark:border-primary/20" />
           <div className="flex gap-2 items-center px-5  pt-2">
             <NavIconButton
               className={"bg-primary"}

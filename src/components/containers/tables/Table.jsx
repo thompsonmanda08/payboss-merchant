@@ -166,7 +166,7 @@ export default function CustomTable({
     return (
       pages > 1 && (
         <div className="flex w-full items-center justify-between">
-          <span className="text-small text-default-400">
+          <span className="text-small text-foreground-400">
             Total: {rows.length} transactions
           </span>
           <Pagination
@@ -178,10 +178,10 @@ export default function CustomTable({
             total={pages}
             onChange={(page) => setPage(page)}
           />
-          <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-slate-400">
+          <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-foreground-400">
             Rows per page:{" "}
             <SelectField
-              className="h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
+              className="h-8 min-w-max bg-transparent text-sm text-foreground-400 outline-none"
               onChange={onRowsPerPageChange}
               placeholder={rowsPerPage.toString()}
               options={["5", "8", "10", "16", "20"]}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -36,6 +36,40 @@ import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import Search from "@/components/ui/search";
 import CreateNewUserModal from "../users/CreateNewUserModal";
 
+const ACCOUNT_ROLES = [
+  {
+    name: "Owner",
+    uid: "owner",
+  },
+  {
+    name: "Admin",
+    uid: "admin",
+  },
+  {
+    name: "Viewer",
+    uid: "viewer",
+  },
+];
+
+const WORKSPACE_ROLES = [
+  {
+    name: "Admin",
+    uid: "admin",
+  },
+  {
+    name: "Approver",
+    uid: "approver",
+  },
+  {
+    name: "Initiator",
+    uid: "initiator",
+  },
+  {
+    name: "Viewer",
+    uid: "viewer",
+  },
+];
+
 export const roleColorMap = {
   owner: "success",
   admin: "primary",
@@ -49,25 +83,6 @@ const columns = [
   { name: "USERNAME/MOBILE NO.", uid: "username", sortable: true },
   { name: "ROLE", uid: "role", sortable: true },
   { name: "ACTIONS", uid: "actions" },
-];
-
-const ROLE_FILTERS = [
-  {
-    name: "Admin",
-    uid: "admin",
-  },
-  {
-    name: "Initiator",
-    uid: "initiator",
-  },
-  {
-    name: "Approver",
-    uid: "approver",
-  },
-  {
-    name: "Viewer",
-    uid: "viewer",
-  },
 ];
 
 export default function UsersTable({
@@ -103,6 +118,8 @@ export default function UsersTable({
   } = useDisclosure();
   const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false);
   const isUsersRoute = pathname == "/manage-account/users";
+
+  const ROLE_FILTERS = isUsersRoute ? ACCOUNT_ROLES : WORKSPACE_ROLES;
 
   // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
@@ -146,6 +163,7 @@ export default function UsersTable({
           row?.username?.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
+
     if (
       roleFilter !== "all" &&
       Array.from(roleFilter).length !== ROLE_FILTERS.length
@@ -210,63 +228,65 @@ export default function UsersTable({
   }, []);
 
   // RENDER ACTION BUTTONS
-  function ActionButtons({ user }) {
-    return isUserAdmin ? (
-      <div className="relative flex items-center justify-center gap-4">
-        {/* EDIT USER ROLE */}
-        {!isUsersRoute && (
-          <Tooltip color="default" content="Edit user">
+  const renderActionButtons = React.useCallback(() => {
+    if (isUserAdmin) {
+      return (
+        <div className="relative flex items-center justify-center gap-4">
+          {/* EDIT USER ROLE */}
+          {!isUsersRoute && (
+            <Tooltip color="default" content="Edit user">
+              <span
+                onClick={() => {
+                  setSelectedUser(user);
+                  setIsEditingRole(true);
+                }}
+                className="cursor-pointer text-lg text-primary active:opacity-50"
+              >
+                <PencilSquareIcon className="h-5 w-5" />
+              </span>
+            </Tooltip>
+          )}
+
+          {/* RESET USER PASSOWRD BY ACCOUNT ADMIN */}
+          {isUsersRoute && (
+            <Tooltip
+              color="secondary"
+              content="Reset User Password"
+              classNames={{
+                base: "text-white",
+                content: "bg-secondary text-white",
+              }}
+            >
+              <span
+                onClick={() => {
+                  setSelectedUser(user);
+                  setOpenResetPasswordPrompt(true);
+                }}
+                className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
+              >
+                <ArrowPathIcon className="h-5 w-5" />
+              </span>
+            </Tooltip>
+          )}
+
+          {/* DELETE USER BY ACCOUNT ADMIN OR REMOVE USER FROM WORKSPACE */}
+          <Tooltip color="danger" content="Delete user">
             <span
               onClick={() => {
                 setSelectedUser(user);
-                setIsEditingRole(true);
+                onOpen();
               }}
-              className="cursor-pointer text-lg text-primary active:opacity-50"
+              className="cursor-pointer text-lg text-danger active:opacity-50"
             >
-              <PencilSquareIcon className="h-5 w-5" />
+              <TrashIcon className="h-5 w-5" />
             </span>
           </Tooltip>
-        )}
+        </div>
+      );
+    }
 
-        {/* RESET USER PASSOWRD BY ACCOUNT ADMIN */}
-        {isUsersRoute && (
-          <Tooltip
-            color="secondary"
-            content="Reset User Password"
-            classNames={{
-              base: "text-white",
-              content: "bg-secondary text-white",
-            }}
-          >
-            <span
-              onClick={() => {
-                setSelectedUser(user);
-                setOpenResetPasswordPrompt(true);
-              }}
-              className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
-            >
-              <ArrowPathIcon className="h-5 w-5" />
-            </span>
-          </Tooltip>
-        )}
-
-        {/* DELETE USER BY ACCOUNT ADMIN OR REMOVE USER FROM WORKSPACE */}
-        <Tooltip color="danger" content="Delete user">
-          <span
-            onClick={() => {
-              setSelectedUser(user);
-              onOpen();
-            }}
-            className="cursor-pointer text-lg text-danger active:opacity-50"
-          >
-            <TrashIcon className="h-5 w-5" />
-          </span>
-        </Tooltip>
-      </div>
-    ) : (
-      <>N/A</>
-    );
-  }
+    return <span className="text-default">No Action</span>;
+  }, [isUserAdmin]);
 
   // TABLE CELL RENDERER
   const renderCell = React.useCallback(
@@ -315,7 +335,7 @@ export default function UsersTable({
             </Chip>
           );
         case "actions":
-          return <ActionButtons user={user} />;
+          return renderActionButtons();
 
         default:
           return cellValue;

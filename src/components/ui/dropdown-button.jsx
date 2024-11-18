@@ -68,7 +68,7 @@ export default function DropdownButton({
             key={item?.key}
             color={item?.key === "new" ? "primary" : "default"}
             className={cn(
-              "group w-[260px] hover:bg-primary/10 dark:hover:bg-default focus:bg-primary/10 dark:data-[hover=true]:border-primary/10 data-[hover=true]:border-border data-[hover=true]:bg-primary/10 data-[hover=true]:text-primary",
+              "group w-[260px] hover:bg-primary/10 hover:text-primary dark:hover:bg-default focus:bg-primary/10 dark:data-[hover=true]:border-primary/10 data-[hover=true]:border-border data-[hover=true]:bg-primary/10 data-[hover=true]:text-primary",
               {
                 "text-danger": item?.key === "delete",
               },
@@ -212,7 +212,7 @@ export function SingleSelectionDropdown({
               key={itemValue}
               description={item?.description}
               className={cn(
-                "!focus-within:bg-primary-100 !hover:bg-primary-100 !focus:bg-primary-100 !data-[hover=true]:border-primary-200 !data-[selectable=true]:focus:bg-primary-100 !data-[focus=true]:bg-primary-100 !data-[hover=true]:bg-primary-100 !data-[hover=true]:text-primary !data-[selected=true]:text-primary group min-w-max capitalize",
+                "!focus-within:bg-primary-100 !hover:bg-primary-100 !focus:bg-primary-100 !data-[hover=true]:border-primary-200 !data-[selectable=true]:focus:bg-primary-100 !data-[focus=true]:bg-primary-100 !data-[hover=true]:bg-primary-100 !data-[hover=true]:text-primary !data-[selected=true]:text-primary group min-w-max capitalize !data-[hover=true]:text-primary",
 
                 dropdownItem
               )}
