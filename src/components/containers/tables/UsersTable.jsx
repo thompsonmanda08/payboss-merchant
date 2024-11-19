@@ -228,65 +228,68 @@ export default function UsersTable({
   }, []);
 
   // RENDER ACTION BUTTONS
-  const renderActionButtons = React.useCallback(() => {
-    if (isUserAdmin) {
-      return (
-        <div className="relative flex items-center justify-center gap-4">
-          {/* EDIT USER ROLE */}
-          {!isUsersRoute && (
-            <Tooltip color="default" content="Edit user">
+  const renderActionButtons = React.useCallback(
+    (user) => {
+      if (isUserAdmin) {
+        return (
+          <div className="relative flex items-center justify-center gap-4">
+            {/* EDIT USER ROLE */}
+            {!isUsersRoute && (
+              <Tooltip color="default" content="Edit user">
+                <span
+                  onClick={() => {
+                    setSelectedUser(user);
+                    setIsEditingRole(true);
+                  }}
+                  className="cursor-pointer text-lg text-primary active:opacity-50"
+                >
+                  <PencilSquareIcon className="h-5 w-5" />
+                </span>
+              </Tooltip>
+            )}
+
+            {/* RESET USER PASSOWRD BY ACCOUNT ADMIN */}
+            {isUsersRoute && (
+              <Tooltip
+                color="secondary"
+                content="Reset User Password"
+                classNames={{
+                  base: "text-white",
+                  content: "bg-secondary text-white",
+                }}
+              >
+                <span
+                  onClick={() => {
+                    setSelectedUser(user);
+                    setOpenResetPasswordPrompt(true);
+                  }}
+                  className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
+                >
+                  <ArrowPathIcon className="h-5 w-5" />
+                </span>
+              </Tooltip>
+            )}
+
+            {/* DELETE USER BY ACCOUNT ADMIN OR REMOVE USER FROM WORKSPACE */}
+            <Tooltip color="danger" content="Delete user">
               <span
                 onClick={() => {
                   setSelectedUser(user);
-                  setIsEditingRole(true);
+                  onOpen();
                 }}
-                className="cursor-pointer text-lg text-primary active:opacity-50"
+                className="cursor-pointer text-lg text-danger active:opacity-50"
               >
-                <PencilSquareIcon className="h-5 w-5" />
+                <TrashIcon className="h-5 w-5" />
               </span>
             </Tooltip>
-          )}
+          </div>
+        );
+      }
 
-          {/* RESET USER PASSOWRD BY ACCOUNT ADMIN */}
-          {isUsersRoute && (
-            <Tooltip
-              color="secondary"
-              content="Reset User Password"
-              classNames={{
-                base: "text-white",
-                content: "bg-secondary text-white",
-              }}
-            >
-              <span
-                onClick={() => {
-                  setSelectedUser(user);
-                  setOpenResetPasswordPrompt(true);
-                }}
-                className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
-              >
-                <ArrowPathIcon className="h-5 w-5" />
-              </span>
-            </Tooltip>
-          )}
-
-          {/* DELETE USER BY ACCOUNT ADMIN OR REMOVE USER FROM WORKSPACE */}
-          <Tooltip color="danger" content="Delete user">
-            <span
-              onClick={() => {
-                setSelectedUser(user);
-                onOpen();
-              }}
-              className="cursor-pointer text-lg text-danger active:opacity-50"
-            >
-              <TrashIcon className="h-5 w-5" />
-            </span>
-          </Tooltip>
-        </div>
-      );
-    }
-
-    return <span className="text-default">No Action</span>;
-  }, [isUserAdmin]);
+      return <span className="text-default">No Action</span>;
+    },
+    [isUserAdmin]
+  );
 
   // TABLE CELL RENDERER
   const renderCell = React.useCallback(
@@ -335,7 +338,7 @@ export default function UsersTable({
             </Chip>
           );
         case "actions":
-          return renderActionButtons();
+          return renderActionButtons(user);
 
         default:
           return cellValue;
