@@ -10,12 +10,12 @@ async function AllWorkspacesPage() {
 
   return (
     <Suspense fallback={<LoadingPage />}>
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
+      <div className="flex w-full flex-col gap-8">
         <div className="flex flex-col mb-4">
           <h2 className="heading-3 !font-bold tracking-tight text-foreground">
             Workspaces
           </h2>
-          <p className="text-foreground-500 tracking-wide">
+          <p className="text-foreground-600 ">
             Workspaces provide a structured way to group and manage services,
             users, and transactions effectively.
           </p>

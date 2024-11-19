@@ -1,15 +1,14 @@
 import React from "react";
 import SoftBoxIcon from "./SoftBoxIcon";
-import { cn, formatDate } from "@/lib/utils";
-import { now, getLocalTimeZone } from "@internationalized/date";
-import { CheckBadgeIcon, CreditCardIcon } from "@heroicons/react/24/outline";
+import { cn } from "@/lib/utils";
+import { CheckBadgeIcon } from "@heroicons/react/24/outline";
 
 function TimelineItem({ stage, isLastItem, isCompleted, isPending, Icon }) {
   return (
     <div
       className={cn("flex cursor-pointer p-2 py-4", {
         "before:bg-primary/20": isCompleted,
-        "bg-gradient-to-r from-card to-primary-50/70 dark:to-primary-400/5":
+        "bg-gradient-to-r from-card to-primary-50 dark:to-primary-400/5":
           isPending,
       })}
     >
@@ -33,10 +32,6 @@ function TimelineItem({ stage, isLastItem, isCompleted, isPending, Icon }) {
         <p className="font-medium text-slate-600 text-xs sm:text-sm">
           {stage?.name}
         </p>
-        {/* <span className="text-xs font-medium uppercase leading-5 text-slate-400">
-          {stage?.date} | {stage?.time} 
-      
-        </span> */}
       </div>
     </div>
   );

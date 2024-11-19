@@ -66,7 +66,7 @@ function AccountVerification() {
   useEffect(() => {}, [KYCStageID, KYCApprovalStatus]);
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col">
+    <div className="flex w-full flex-col">
       <section
         role="account-verification-header"
         className="flex w-full flex-col"
@@ -74,7 +74,7 @@ function AccountVerification() {
         <h2 className="heading-3 !font-bold tracking-tight text-foreground ">
           Account Verification
         </h2>
-        <p className=" text-sm text-slate-600 dark:text-slate-500">
+        <p className="text-sm text-foreground-600">
           Initiate your KYC, business details, and document verification process
           from this section
         </p>

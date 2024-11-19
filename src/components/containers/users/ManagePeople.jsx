@@ -10,13 +10,15 @@ function ManagePeople({ users, roles, permissions }) {
   const allowUserCreation = (isAccountAdmin || isOwner) && isApprovedUser;
 
   return (
-    <div className={cn("mx-auto flex w-full max-w-7xl flex-col")}>
-      <h2 className="heading-3 !font-bold tracking-tight text-foreground-900 ">
-        Manage People
-      </h2>
-      <p className=" mb-4 text-sm text-slate-600">
-        Streamline the management of user accounts and their workspaces.
-      </p>
+    <div className={cn("flex w-full flex-col gap-8")}>
+      <div className="flex w-full flex-col">
+        <h2 className="heading-3 !font-bold tracking-tight text-foreground-900 ">
+          Manage People
+        </h2>
+        <p className="text-sm text-foreground-600">
+          Streamline the management of user accounts and their workspaces.
+        </p>
+      </div>
       {/* <SearchOrInviteUsers
         setSearchQuery={setSearchQuery}
         resolveAddToWorkspace={resolveAddToWorkspace}
@@ -36,7 +38,6 @@ function ManagePeople({ users, roles, permissions }) {
         users={users}
         accountRoles={roles}
         isUserAdmin={isOwner || isAccountAdmin}
-        // tableLoading={isLoading}
         allowUserCreation={allowUserCreation}
         isApprovedUser={isApprovedUser}
       />

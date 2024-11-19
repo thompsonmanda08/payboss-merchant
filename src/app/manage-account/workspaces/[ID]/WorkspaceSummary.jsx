@@ -191,32 +191,11 @@ function WorkspaceSummary({ workspaceID, workspaces }) {
     <LoadingPage />
   ) : (
     <div className={cn("px-2", { "px-3": isUserInWorkspace })}>
-      <div className="relative mb-8 flex w-full items-center justify-between lg:-left-5">
-        <Button
-          aria-label="back"
-          color="light"
-          className={"text-primary sm:w-auto sm:max-w-fit"}
-          onClick={() => back()}
-          startContent={<ArrowUturnLeftIcon className="h-5 w-5" />}
-        >
-          Return to Workspaces
-        </Button>
-        <Button
-          as={Link}
-          href={`/dashboard/${workspaceID}`}
-          aria-label="back"
-          color="light"
-          className={"text-primary sm:w-auto sm:max-w-fit"}
-          endContent={<ArrowRightStartOnRectangleIcon className="h-5 w-5" />}
-        >
-          Go to Workspace Dashboard
-        </Button>
-      </div>
       <div className={cn("mb-8")}>
-        <h2 className="heading-5 !font-bold uppercase tracking-tight text-foreground">
+        <h2 className="heading-3 !font-bold uppercase tracking-tight text-foreground">
           Workspace ({selectedWorkspace?.workspace})
         </h2>
-        <p className=" text-sm text-slate-600">
+        <p className="text-sm text-foreground-600">
           Workspaces provide a structured way to group and manage services,
           users, and transactions effectively.
         </p>
@@ -291,38 +270,46 @@ function WorkspaceSummary({ workspaceID, workspaces }) {
                 <PencilIcon className="h-4 w-4" />
               </NavIconButton>
             </div>
-            <p className=" text-sm text-slate-600">
+            <p className=" text-sm text-foreground-500">
               {selectedWorkspace?.description}
             </p>
           </div>
         )}
-        <hr className="my-6 h-px bg-foreground-900/5" />
+        <hr className="my-6 h-px border-foreground/10" />
         {/* ****************************** WALLET DETAILS *********************************** */}
-        <div className="flex w-full gap-4">
+        <div className="flex w-full justify-between gap-4">
           <div
             className={cn(
               "flex group select-none items-start gap-2 text-slate-600"
             )}
           >
-            <WalletIcon className="h-12 w-12" />{" "}
+            <WalletIcon className="h-12 w-12 dark:text-foreground text-primary" />{" "}
             <div className=" flex flex-col items-start">
-              <span className={cn("text-sm font-medium ")}>
-                Workspace Wallet Balance
+              <span className={cn("font-medium text-foreground")}>
+                Wallet Balance
               </span>
-              <span className="-mt-1 text-base lg:text-lg font-bold text-primary">
+              <span className="-mt-1 text-base lg:text-lg font-bold text-primary dark:text-primary-500">
                 {formatCurrency(selectedWorkspace?.balance || "0.00")}
               </span>
             </div>
           </div>
+          <Button
+            as={Link}
+            href={`/dashboard/${workspaceID}`}
+            className={"sm:w-auto sm:max-w-fit"}
+            endContent={<ArrowRightStartOnRectangleIcon className="h-5 w-5" />}
+          >
+            Go to Dashboard
+          </Button>
         </div>
-        <hr className="my-6 h-px bg-foreground-900/5" />
+        <hr className="my-6 h-px border-foreground/10" />
         {/* ****************************** WORKSPACE VISIBILITY *********************************** */}
         <div className="flex items-center justify-between w-full gap-4 sm:mt-0 sm:flex-auto">
           <div className="flex flex-col items-start gap-1">
             <h4 className="font-semibold text-foreground">
               Workspace Visibility
             </h4>
-            <p className="text-sm text-foreground-400">
+            <p className="text-sm text-foreground-500">
               Activate a to interact with the PayBoss platform using this
               workspace.
             </p>
@@ -334,7 +321,7 @@ function WorkspaceSummary({ workspaceID, workspaces }) {
           />
         </div>
 
-        <hr className="my-6 h-px bg-foreground-900/5" />
+        <hr className="my-6 h-px border-foreground/10" />
         {/* ****************************** WORKSPACE MEMBERS MANAGEMENT *********************************** */}
         {!isSandbox && (
           <>
@@ -343,7 +330,7 @@ function WorkspaceSummary({ workspaceID, workspaces }) {
                 <h4 className="font-semibold text-foreground">
                   Add Users to Workspace
                 </h4>
-                <p className="text-sm text-foreground-400">
+                <p className="text-sm text-foreground-500">
                   Add users to this workspace to allow them to interact with the
                   PayBoss platform.
                 </p>
@@ -357,13 +344,13 @@ function WorkspaceSummary({ workspaceID, workspaces }) {
                 Add Workspace Members
               </Button>
             </div>
-            <hr className="my-6 h-px bg-foreground-900/5" />
+            <hr className="my-6 h-px border-foreground/10" />
             <div className="flex flex-col gap-8 md:flex-row md:justify-between">
               <div className="flex max-w-4xl flex-col gap-1">
                 <h4 className="font-semibold text-foreground">
                   Deactivate Workspace
                 </h4>
-                <p className="text-sm text-foreground-400">
+                <p className="text-sm text-foreground-500">
                   If you wish to deactivate or delete your workspace. This
                   action can only be reversed by contacting our support team.
                   Please note that all information related to this workspace

@@ -11,7 +11,7 @@ async function WorkSpaceIDPage(props) {
 
   return (
     <Suspense fallback={<LoadingPage />}>
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4">
+      <div className="flex w-full flex-col gap-8">
         <WorkspaceSummary workspaceID={params.ID} workspaces={workspaces} />
       </div>
     </Suspense>

@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { now, getLocalTimeZone } from "@internationalized/date";
-import { formatDate } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import {
   ChatBubbleOvalLeftEllipsisIcon,
   ClipboardDocumentCheckIcon,
@@ -24,8 +24,6 @@ function ProgressStageTracker() {
       infoText:
         "Documents as well as business information submission. This process usually takes up to 24 hours, try reloading the page or come back later for a status update.",
       Icon: ClipboardDocumentCheckIcon,
-      date: formatDate(date).replaceAll("-", " "),
-      time,
     },
     {
       ID: 2,
@@ -33,8 +31,6 @@ function ProgressStageTracker() {
       infoText:
         "Your account and your KYC data is being reviewed by the PayBoss support team. This process usually takes up to 24 hours, You will receive an email notification when your application has been reviewed",
       Icon: ShieldExclamationIcon,
-      date: formatDate(date).replaceAll("-", " "),
-      time,
     },
     {
       ID: 3,
@@ -42,16 +38,12 @@ function ProgressStageTracker() {
       infoText:
         "Review & Negotiation all you to reach an understanding with the PayBoss team, on the PayBoss services and pricing as well as commission information",
       Icon: ChatBubbleOvalLeftEllipsisIcon,
-      date: formatDate(date).replaceAll("-", " "),
-      time,
     },
     {
       ID: 4,
       name: "Account Approved",
       infoText:
         "Congratulations! Your account has been approved, enjoy the PayBoss services to the fullest",
-      date: formatDate(date).replaceAll("-", " "),
-      time,
     },
   ];
 
@@ -78,7 +70,11 @@ function ProgressStageTracker() {
             );
           })}
         </div>
-        <div className="flex w-full min-w-80 select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50/70 p-9">
+        <div
+          className={cn(
+            "flex w-full min-w-80 select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9"
+          )}
+        >
           <Image
             className="aspect-square max-w-80 object-contain"
             src={"/images/illustrations/approval.svg"}
@@ -87,12 +83,11 @@ function ProgressStageTracker() {
             alt="Account Approval Process"
           />
           <div className="flex flex-col items-center justify-center gap-2">
-            <h3 className="leading-0 m-0 font-bold">
-              {STAGES[KYCStageID - 1]?.name || "Account Approval Process"}
+            <h3 className="text-[clamp(16px,11px+0.5vw,1.5rem)] font-bold">
+              {STAGES[KYCStageID - 1]?.name}
             </h3>
-            <p className="text-center text-sm tracking-tight text-slate-600">
-              {STAGES[KYCStageID - 1]?.infoText ||
-                " This process usually takes up to 24 hours, try reloading the page or come back later for a status update."}
+            <p className="text-center text-[clamp(11px,8px+0.5vw,1rem)] max-w-md text-foreground-500">
+              {STAGES[KYCStageID - 1]?.infoText}
             </p>
           </div>
         </div>
