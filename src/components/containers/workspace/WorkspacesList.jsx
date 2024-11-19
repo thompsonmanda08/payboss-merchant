@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { capitalize, cn, notify } from "@/lib/utils";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDisclosure } from "@nextui-org/react";
 import { createNewWorkspace } from "@/app/_actions/config-actions";
 import { useQueryClient } from "@tanstack/react-query";

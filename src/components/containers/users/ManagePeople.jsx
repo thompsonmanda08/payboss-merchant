@@ -2,29 +2,12 @@
 import React from "react";
 import UsersTable from "../tables/UsersTable";
 import { cn } from "@/lib/utils";
-import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
 
 function ManagePeople({ users, roles, permissions }) {
-  const { isLoading, isApprovedUser } = useAllUsersAndRoles();
-  // TODO => REMOVE THIS LINE
+  const { isOwner, isAccountAdmin, isApprovedUser } = permissions || "";
 
-  const { isOwner, isAccountAdmin } = permissions || "";
-
+  // ONLY ALLOW USER CREATION IS THE USER IS ADMIN/OWNER AND THE USER IS APPROVED
   const allowUserCreation = (isAccountAdmin || isOwner) && isApprovedUser;
-
-  // const { isAccountLevelSettingsRoute, isUserInWorkspace } = useNavigation()
-
-  // const userSearchResults = allUsers?.filter((user) => {
-  //   return (
-  //     user?.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //     user?.name.toLowerCase().includes(searchQuery.toLowerCase())
-  //   )
-  // })
-
-  // function resolveAddToWorkspace(e) {
-  //   e.preventDefault()
-  //   if (onAdd) return onAdd()
-  // }
 
   return (
     <div className={cn("mx-auto flex w-full max-w-7xl flex-col")}>
@@ -53,7 +36,7 @@ function ManagePeople({ users, roles, permissions }) {
         users={users}
         accountRoles={roles}
         isUserAdmin={isOwner || isAccountAdmin}
-        tableLoading={isLoading}
+        // tableLoading={isLoading}
         allowUserCreation={allowUserCreation}
         isApprovedUser={isApprovedUser}
       />

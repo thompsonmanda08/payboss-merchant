@@ -2,26 +2,18 @@
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { Switch, useDisclosure } from "@nextui-org/react";
-import useWorkspaces from "@/hooks/useWorkspaces";
 import {
   ArrowRightStartOnRectangleIcon,
   ArrowUturnLeftIcon,
   PencilIcon,
-  PencilSquareIcon,
   PlusIcon,
   WalletIcon,
 } from "@heroicons/react/24/outline";
-import useNavigation from "@/hooks/useNavigation";
-import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
 import { useWorkspaceMembers } from "@/hooks/useQueryHooks";
 import useWorkspaceStore from "@/context/workspaces-store";
 import LoadingPage from "@/app/loading";
 import { cn, formatCurrency, notify } from "@/lib/utils";
-import UsersTable from "@/components/containers/tables/UsersTable";
-import WorkspaceDetails from "@/components/containers/workspace/WorkspaceDetails";
-import Wallet from "@/components/containers/workspace/Wallet";
 import Link from "next/link";
 import { Input } from "@/components/ui/input-field";
 import { useQueryClient } from "@tanstack/react-query";

@@ -33,9 +33,10 @@ function ScreenLock({ open, session }) {
 
   async function handleRefreshAuthToken() {
     setIsLoading(true);
-    onClose();
     await lockScrenOnUserIdle(false); // User is no longer idle
+    onClose();
     setIsLoading(false);
+    queryClient.invalidateQueries();
 
     // TODO: IMPLEMENT REFRESH TOKEN IN THE ACTIVE FUNCTION WITH SET INTERVAL
     // const res = await getRefreshToken();
@@ -158,6 +159,7 @@ export function IdleTimerContainer({ authSession }) {
   const onIdle = async () => {
     setState("Idle");
     await lockScrenOnUserIdle(true);
+    await getRefreshToken();
   };
 
   const onActive = () => {
@@ -167,11 +169,15 @@ export function IdleTimerContainer({ authSession }) {
     // IN INTERVALS
     setInterval(async () => {
       await getRefreshToken();
-    }, 1000 * 60 * 4);
+    }, 1000 * 60 * 4.5);
   };
 
-  const onAction = () => {
+  const onAction = async () => {
     setCount(count + 1);
+
+    if (count == 10000) {
+      await getRefreshToken();
+    }
   };
 
   const { getRemainingTime } = useIdleTimer({

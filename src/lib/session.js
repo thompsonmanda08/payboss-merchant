@@ -2,7 +2,6 @@ import "server-only";
 
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { AUTH_SESSION, USER_SESSION, WORKSPACE_SESSION } from "./constants";
 
 const secretKey =
@@ -82,11 +81,18 @@ export async function updateAuthSession(fields) {
   }
 }
 
-export async function createUserSession(user, merchantID) {
+export async function createUserSession({
+  user,
+  merchantID,
+  userPermissions,
+  kyc,
+}) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24); // AFTER 1 DAY
   const session = await encrypt({
     user,
     merchantID,
+    userPermissions,
+    kyc,
   });
 
   if (session) {
@@ -102,9 +108,19 @@ export async function createUserSession(user, merchantID) {
   }
 }
 
-export async function createWorkspaceSession(workspaceData) {
+export async function createWorkspaceSession({
+  workspaces,
+  workspaceIDs,
+  activeWorkspace,
+  workspacePermissions,
+}) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24); // AFTER 1 DAY
-  const session = await encrypt(workspaceData);
+  const session = await encrypt({
+    workspaces,
+    workspaceIDs,
+    activeWorkspace,
+    workspacePermissions,
+  });
 
   if (session) {
     (await cookies()).set(WORKSPACE_SESSION, session, {
@@ -157,8 +173,10 @@ export async function verifySession() {
 
 export async function getServerSession() {
   const isLoggedIn = await verifySession();
+
   const cookie = (await cookies()).get(AUTH_SESSION)?.value;
   const session = await decrypt(cookie);
+
   if (isLoggedIn) return session;
 
   return null;
@@ -166,15 +184,19 @@ export async function getServerSession() {
 
 export async function getUserSession() {
   const isLoggedIn = await verifySession();
+
   const cookie = (await cookies()).get(USER_SESSION)?.value;
   const session = await decrypt(cookie);
+
   if (isLoggedIn) return session;
 
   return null;
 }
 
+// GET THE WORKSPACE SESSION DATA
 export async function getWorkspaceSessionData() {
   const isLoggedIn = await verifySession();
+
   const cookie = (await cookies()).get(WORKSPACE_SESSION)?.value;
   const session = await decrypt(cookie);
 
@@ -183,6 +205,7 @@ export async function getWorkspaceSessionData() {
   return null;
 }
 
+// DELETE THE SESSION
 export async function deleteSession() {
   (await cookies()).delete(AUTH_SESSION);
   (await cookies()).delete(USER_SESSION);

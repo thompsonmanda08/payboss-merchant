@@ -11,13 +11,17 @@ async function UsersSettingsPage() {
   const userRoles = await getUserAccountRoles();
   const allUsers = await getAllUsers();
 
-  const userDetails = await getUserDetails();
-
-  // console.log(userDetails);
+  const session = await getUserDetails();
+  const user = session?.user;
+  const kyc = session?.kyc;
 
   const permissions = {
-    isOwner: userDetails?.user?.role?.toLowerCase() == "owner",
-    isAccountAdmin: userDetails?.user?.role?.toLowerCase() == "admin",
+    isOwner: session?.user?.role?.toLowerCase() == "owner",
+    isAccountAdmin: session?.user?.role?.toLowerCase() == "admin",
+    isApprovedUser:
+      kyc?.stageID == 4 &&
+      user?.isCompleteKYC &&
+      kyc?.kyc_approval_status?.toLowerCase() == "approved",
   };
   return (
     <Suspense fallback={<LoadingPage />}>

@@ -50,20 +50,13 @@ export async function getUserSetupConfigs() {
       url: `merchant/user/setup`,
     });
 
-    if (res.status !== 200) {
-      const response = res?.data || res;
-      return {
-        success: false,
-        message: response?.error || response?.message,
-        data: null,
-        status: res.status,
-      };
-    }
-
-    await createUserSession(
-      res.data?.userDetails,
-      res.data.userDetails?.merchantID
-    );
+    // CREATE A USER SESSION COOKIE TO STORE THE LOGGED IN USER DATA
+    await createUserSession({
+      user: res.data?.userDetails,
+      merchantID: res.data?.merchantID,
+      userPermissions: res.data?.userPermissions,
+      kyc: res.data?.kyc,
+    });
 
     let workspaceIDs = res.data?.workspaces?.map((item) => item?.ID);
     let workspaces = res.data?.workspaces;
@@ -236,6 +229,7 @@ export async function updateUserRole() {
     };
   }
 }
+
 export async function changeWorkspaceVisibility(workspaceID, isVisible) {
   // const session = await getUserSession()
   // const merchantID = session?.user?.merchantID
