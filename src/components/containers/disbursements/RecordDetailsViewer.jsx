@@ -3,7 +3,6 @@ import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/modal";
 import usePaymentsStore, { validationColumns } from "@/context/payment-store";
 import { useBatchDetails } from "@/hooks/useQueryHooks";
-import SummaryTable from "../tables/SummaryTable";
 import CardHeader from "@/components/base/CardHeader";
 import SingleTransactionsTable from "../tables/SingleTransactionsTable";
 
