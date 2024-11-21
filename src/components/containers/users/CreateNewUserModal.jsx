@@ -26,12 +26,17 @@ import useNavigation from "@/hooks/useNavigation";
 import useWorkspaceStore from "@/context/workspaces-store";
 import { changeUserRoleInWorkspace } from "@/app/_actions/workspace-actions";
 import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
+import { usePathname } from "next/navigation";
 
 function CreateNewUserModal({ isOpen, onClose }) {
   const { isEditingRole, selectedUser, setSelectedUser, setIsEditingRole } =
     useWorkspaceStore();
   const queryClient = useQueryClient();
-  const { isAccountLevelSettingsRoute, isUsersRoute } = useNavigation();
+  const pathname = usePathname();
+
+  const isAccountLevelSettingsRoute = pathname.startsWith("/manage-account");
+  const isUserInWorkspace =
+    pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
 
   const [loading, setLoading] = useState(false);
   const [newUser, setNewUser] = useState({
@@ -161,16 +166,15 @@ function CreateNewUserModal({ isOpen, onClose }) {
 
   function getUserRoles() {
     // MANAGE ACCOUNT AND NEW USER TO SYSTEM
-    if (isAccountLevelSettingsRoute && isUsersRoute) {
+    if (
+      (isAccountLevelSettingsRoute && isUsersRoute) ||
+      (!isUsersRoute && isEditingRole)
+    ) {
       // return accountRoles
       return ["admin", "viewer"];
     }
 
-    // WORKSPACE MEMBER USER ROLE LIST
-    if (!isUsersRoute) {
-      // return workspaceRoles;
-      return ["admin", "viewer"];
-    }
+    return workspaceRoles;
   }
 
   function isValidData() {
