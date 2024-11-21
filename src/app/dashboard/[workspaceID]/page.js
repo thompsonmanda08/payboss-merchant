@@ -1,22 +1,24 @@
-import React, { Suspense } from 'react'
-import LoadingPage from '../../loading'
-import InfoBanner from '@/components/base/InfoBanner'
-import DashboardAnalytics from '@/components/containers/analytics/DashboardAnalytics'
+import React, { Suspense } from "react";
+import LoadingPage from "../../loading";
+import InfoBanner from "@/components/base/InfoBanner";
+import DashboardAnalytics from "@/components/containers/analytics/DashboardAnalytics";
 import {
   getUserDetails,
   getWorkspaceSession,
-} from '@/app/_actions/config-actions'
+} from "@/app/_actions/config-actions";
 
 async function DashboardHome(props) {
   const params = await props.params;
-  const workspaceSession = (await getWorkspaceSession()) || []
-  const session = await getUserDetails()
-  const { workspaceID } = params
-  const workspacePermissions = workspaceSession?.workspacePermissions
+  const workspaceSession = (await getWorkspaceSession()) || [];
+  const session = await getUserDetails();
+  const { workspaceID } = params;
+  const workspacePermissions = workspaceSession?.workspacePermissions;
 
   if (!workspacePermissions) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
+
+  console.log(workspaceSession);
 
   return (
     <Suspense fallback={<LoadingPage />}>
@@ -24,7 +26,7 @@ async function DashboardHome(props) {
         <InfoBanner
           buttonText="Submit Documents"
           infoText="Just one more step, please submit your business documents to aid us with the approval process"
-          href={'manage-account/account-verification'}
+          href={"manage-account/account-verification"}
           user={session?.user}
         />
       )}
@@ -34,7 +36,7 @@ async function DashboardHome(props) {
         workspaceType={workspaceSession?.workspaceType}
       />
     </Suspense>
-  )
+  );
 }
 
-export default DashboardHome
+export default DashboardHome;

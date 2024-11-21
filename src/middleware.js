@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { getServerSession, getWorkspaceSessionData } from "./lib/session";
 
-const PUBLIC_ROUTE = ["/", "/login", "/register", "/support"];
+const PUBLIC_ROUTE = [
+  "/",
+  "/login",
+  "/register",
+  "/support",
+  "/sentry-example-page",
+];
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
