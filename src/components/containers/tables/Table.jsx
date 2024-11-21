@@ -22,6 +22,7 @@ import { EyeIcon } from "@heroicons/react/24/outline";
 import Search from "@/components/ui/search";
 import SelectField from "@/components/ui/select-field";
 import EmptyLogs from "@/components/base/EmptyLogs";
+import { format } from "date-fns";
 
 export default function CustomTable({
   columns,
@@ -77,7 +78,7 @@ export default function CustomTable({
       case "created_at":
         return (
           <span className={cn("text-nowrap capitalize")}>
-            {formatDate(cellValue).replaceAll("-", " ")}
+            {format(cellValue, "dd-MMM-yyyy hh:mm:ss a")}
           </span>
         );
       case "status":

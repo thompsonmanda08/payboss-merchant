@@ -259,6 +259,9 @@ export async function deleteUserFromWorkspace(recordID) {
       };
     }
 
+    revalidatePath("/manage-account/workspaces/[ID]", "page");
+    revalidatePath("/dashboard/[workspaceID]/workspace-settings", "page");
+
     return {
       success: false,
       message: res?.data?.error || "Operation Failed!",

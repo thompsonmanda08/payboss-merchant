@@ -1,16 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useMemo, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Switch, useDisclosure } from "@nextui-org/react";
 import {
   ArrowRightStartOnRectangleIcon,
-  ArrowUturnLeftIcon,
   PencilIcon,
   PlusIcon,
   WalletIcon,
 } from "@heroicons/react/24/outline";
-import { useWorkspaceMembers } from "@/hooks/useQueryHooks";
 import useWorkspaceStore from "@/context/workspaces-store";
 import LoadingPage from "@/app/loading";
 import { cn, formatCurrency, notify } from "@/lib/utils";
@@ -26,8 +24,13 @@ import {
 } from "@/app/_actions/config-actions";
 import NavIconButton from "@/components/ui/nav-icon-button";
 
-function WorkspaceSummary({ workspaceID, workspaces }) {
-  const { back } = useRouter();
+function WorkspaceSummary({
+  workspaceID,
+  workspaces,
+  allUsers,
+  workspaceRoles,
+  workspaceMembers,
+}) {
   const queryClient = useQueryClient();
   const pathname = usePathname();
 
@@ -37,15 +40,19 @@ function WorkspaceSummary({ workspaceID, workspaces }) {
   const selectedWorkspace = workspaces.find(
     (workspace) => workspace.ID === workspaceID
   );
-
-  const [isSandbox, setIsSandbox] = useState(
-    selectedWorkspace?.workspace.toLowerCase() == "sandbox"
-  );
-  const [changeWorkspaceDetails, setChangeWorkspaceDetails] = useState(false);
-
-  const { setExistingUsers, existingUsers } = useWorkspaceStore();
+  const isSandbox = selectedWorkspace?.workspace.toLowerCase() == "sandbox";
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { setExistingUsers, existingUsers } = useWorkspaceStore();
+
+  const [deleteWorkspaceName, setDeleteWorkspaceName] = useState("");
+  const [isVisible, setIsVisible] = useState(selectedWorkspace?.isVisible);
+  const [changeWorkspaceDetails, setChangeWorkspaceDetails] = useState(false);
+
+  const [newWorkspace, setNewWorkspace] = useState({
+    workspace: selectedWorkspace?.workspace,
+    description: selectedWorkspace?.description,
+  });
 
   const {
     isOpen: openAdd,
@@ -59,19 +66,6 @@ function WorkspaceSummary({ workspaceID, workspaces }) {
   });
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const [deleteWorkspaceName, setDeleteWorkspaceName] = useState("");
-
-  const { data: members } = useWorkspaceMembers(workspaceID);
-
-  const workspaceUsers = members?.data?.users || [];
-
-  const [newWorkspace, setNewWorkspace] = useState({
-    workspace: selectedWorkspace?.workspace,
-    description: selectedWorkspace?.description,
-  });
-
-  const [isVisible, setIsVisible] = useState(selectedWorkspace?.isVisible);
 
   function editWorkspaceField(fields) {
     setNewWorkspace((prev) => {
@@ -95,8 +89,8 @@ function WorkspaceSummary({ workspaceID, workspaces }) {
 
   useEffect(() => {
     // UPDATE EXISITING USERS LIST
-    if (workspaceUsers && !existingUsers.length) {
-      setExistingUsers(workspaceUsers);
+    if (workspaceMembers && !existingUsers.length) {
+      setExistingUsers(workspaceMembers);
     }
   }, []);
 
@@ -410,7 +404,9 @@ function WorkspaceSummary({ workspaceID, workspaces }) {
         onClose={onCloseAdd}
         workspaceID={workspaceID}
         workspaceName={selectedWorkspace?.workspace}
-        workspaceUsers={workspaceUsers}
+        workspaceMembers={workspaceMembers}
+        workspaceRoles={workspaceRoles}
+        allUsers={allUsers}
       />
     </div>
   );

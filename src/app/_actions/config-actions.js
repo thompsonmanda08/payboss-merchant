@@ -9,7 +9,7 @@ import {
   getWorkspaceSessionData,
 } from "@/lib/session";
 import { apiClient } from "@/lib/utils";
-import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function getAccountConfigOptions() {
   try {
@@ -292,6 +292,8 @@ export async function createNewWorkspace(newWorkspace) {
 
     const response = res?.data || res;
 
+    // revalidatePath("/workspaces", "page");
+
     return {
       success: false,
       message: response?.error || response?.message,
@@ -331,6 +333,8 @@ export async function updateWorkspace({ workspace, description, ID }) {
     }
 
     const response = res?.data || res;
+    revalidatePath("/manage-account/workspaces/[ID]", "page");
+    revalidatePath("/dashboard/[workspaceID]/workspace-settings", "page");
 
     return {
       success: false,
@@ -355,21 +359,12 @@ export async function deleteWorkspace(workspaceID) {
       url: `merchant/workspace/${workspaceID}`, //URL
     });
 
-    if (res.status == 201 || res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
-
-    const response = res?.data || res;
+    revalidatePath("/manage-account/workspaces/[ID]", "page");
 
     return {
-      success: false,
-      message: response?.error || response?.message,
-      data: null,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
     };
   } catch (error) {

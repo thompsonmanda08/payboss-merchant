@@ -1,18 +1,33 @@
 import LoadingPage from "@/app/loading";
 import React, { Suspense } from "react";
 import WorkspaceSummary from "./WorkspaceSummary";
-import { getAllWorkspaces } from "@/app/_actions/config-actions";
+import {
+  getAllWorkspaces,
+  getWorkspaceRoles,
+} from "@/app/_actions/config-actions";
+import { getAllUsers } from "@/app/_actions/user-actions";
+import { getWorkspaceMembers } from "@/app/_actions/workspace-actions";
 
-async function WorkSpaceIDPage(props) {
-  const params = await props.params;
+async function WorkSpaceIDPage({ params }) {
+  const workspaceID = (await params).ID;
 
   const workspacesResponse = await getAllWorkspaces();
   const workspaces = workspacesResponse?.data?.workspaces || [];
 
+  const allUsersData = await getAllUsers();
+  const workspaceMembers = await getWorkspaceMembers(workspaceID);
+  const workspaceRoleData = await getWorkspaceRoles();
+
   return (
-    <Suspense fallback={<LoadingPage />}>
+    <Suspense fallback={<LoadingPage loadingText="Initializing Workspace.." />}>
       <div className="flex w-full flex-col gap-8">
-        <WorkspaceSummary workspaceID={params.ID} workspaces={workspaces} />
+        <WorkspaceSummary
+          workspaceID={workspaceID}
+          workspaces={workspaces}
+          allUsers={allUsersData?.data?.users}
+          workspaceMembers={workspaceMembers?.data?.users}
+          workspaceRoles={workspaceRoleData?.data?.roles}
+        />
       </div>
     </Suspense>
   );

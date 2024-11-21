@@ -16,7 +16,6 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 
-import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
 import { notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
@@ -49,9 +48,10 @@ function AddUserToWorkspace({
   workspaceName,
   navigateTo,
   workspaceUsers,
+  allUsers,
+  workspaceRoles,
 }) {
   const queryClient = useQueryClient();
-  const { allUsers, workspaceRoles } = useAllUsersAndRoles();
 
   const {
     addedUsers,
@@ -144,7 +144,7 @@ function AddUserToWorkspace({
             color="primary"
             size="sm"
             className="relative"
-            isDisabled={user?.role == "owner"}
+            // isDisabled={user?.role == "owner"}
             onPress={() => handleAddToWorkspace(user)}
           >
             <Tooltip color="primary" content="Add User">
@@ -162,7 +162,7 @@ function AddUserToWorkspace({
             color="danger"
             size="sm"
             className="relative"
-            isDisabled={user?.role == "owner"}
+            // isDisabled={user?.role == "owner"}
             onPress={() => handleRemoveFromWorkspace(user)}
           >
             <Tooltip color="danger" content="Remove User">
@@ -214,7 +214,6 @@ function AddUserToWorkspace({
   }, [addedUsers]);
 
   useEffect(() => {
-    
     // UPDATE EXISITING USERS LIST
     if (workspaceUsers != [] && existingUsers.length == 0) {
       setExistingUsers(workspaceUsers);
@@ -230,7 +229,7 @@ function AddUserToWorkspace({
     <Modal
       // IF ROLES AND USERS ARE LOADED THEN RENDER FULL SIZE
       // size={'5xl'}
-      className="max-w-7xl"
+      className="max-w-[1560px]"
       isOpen={isOpen}
       onClose={onClose}
     >

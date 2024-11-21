@@ -2,6 +2,7 @@
 import authenticatedService from "@/lib/api-config";
 import { USER_SESSION } from "@/lib/constants";
 import { getUserSession } from "@/lib/session";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function createNewUser(newUser) {
@@ -110,6 +111,9 @@ export async function assignUsersToWorkspace(users, workspaceID) {
         statusText: res.statusText,
       };
     }
+
+    revalidatePath("/manage-account/workspaces/[ID]", "page");
+    revalidatePath("/dashboard/[workspaceID]/workspace-settings", "page");
 
     return {
       success: false,
