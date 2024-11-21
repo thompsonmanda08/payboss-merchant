@@ -362,9 +362,9 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       // bottomContentPlacement="outside"
       removeWrapper
       sortDescriptor={sortDescriptor}
+      onSortChange={setSortDescriptor}
       topContent={topContent}
       bottomContent={bottomContent}
-      onSortChange={setSortDescriptor}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}
       isStriped

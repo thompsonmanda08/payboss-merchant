@@ -37,6 +37,7 @@ export default function CustomTable({
   emptyCellValue,
   emptyDescriptionText,
   emptyTitleText,
+  classNames,
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
   const [rowsPerPage, setRowsPerPage] = React.useState(limitPerRow || 6);
@@ -215,10 +216,18 @@ export default function CustomTable({
       className="max-h-[1080px]"
       removeWrapper={removeWrapper}
       classNames={{
-        table: cn("align-top items-start justify-start", {
-          "min-h-[400px]": isLoading || !rows,
-        }),
-        wrapper: cn("min-h-[200px]", { "min-h-max": pages <= 1 }),
+        table: cn(
+          "align-top items-start justify-start",
+          {
+            "min-h-[400px]": isLoading || !rows,
+          },
+          classNames?.table
+        ),
+        wrapper: cn(
+          "min-h-[200px]",
+          { "min-h-max": pages <= 1 },
+          classNames?.wrapper
+        ),
       }}
       // classNames={}
       // showSelectionCheckboxes
@@ -238,6 +247,7 @@ export default function CustomTable({
         {(column) => (
           <TableColumn
             key={column.uid}
+            allowsSorting={column.sortable}
             align={column.uid === "status" ? "center" : "start"}
           >
             {column.name}
@@ -245,14 +255,14 @@ export default function CustomTable({
         )}
       </TableHeader>
       <TableBody
-        items={items}
+        items={sortedItems}
         isLoading={isLoading}
         loadingContent={loadingContent}
         emptyContent={emptyContent}
         align="top"
       >
         {(item) => (
-          <TableRow key={item?.ID || item?.key || item} align="top">
+          <TableRow key={item?.transactionID || item?.ID} align="top">
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

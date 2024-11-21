@@ -32,29 +32,24 @@ import SoftBoxIcon from "@/components/base/SoftBoxIcon";
 
 export const API_KEY_TRANSACTION_COLUMNS = [
   { name: "DATE", uid: "created_at", sortable: true },
-  { name: "TRANSACTION ID", uid: "transactionID" },
-  { name: "SERVICE PROVIDER", uid: "service_provider" },
   { name: "NARRATION", uid: "narration" },
+  { name: "PROVIDER", uid: "service_provider", sortable: true },
+  { name: "SOURCE ACCOUNT", uid: "destination", sortable: true },
   { name: "MNO REF.", uid: "mno_ref" },
   // { name: 'MNO STATUS DESCRIPTION', uid: 'mno_status_description' },
-  { name: "SOURCE ACCOUNT", uid: "destination", sortable: true },
-
   { name: "REMARKS", uid: "status_description" },
   { name: "AMOUNT", uid: "amount", sortable: true },
+  { name: "TRANSACTION ID", uid: "transactionID" },
   { name: "STATUS", uid: "status", sortable: true },
 ];
 
 export default function TillPaymentCollections({ workspaceID }) {
   const queryClient = useQueryClient();
   const { data: tillNumberResponse, isFetching } = useTillNumber(workspaceID);
+
   const { onOpen, onClose } = useDisclosure();
-  const [copiedKey, setCopiedKey] = useState(null);
-  const [apiKey, setApiKey] = useState([]);
-  const [apiKeyData, setApiKeyData] = useState([]);
-  const [isDelete, setIsDelete] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
   const [openViewConfig, setOpenViewConfig] = useState(false);
 
   const thirtyDaysAgoDate = new Date();
@@ -76,11 +71,6 @@ export default function TillPaymentCollections({ workspaceID }) {
 
   async function handleUserAction() {
     setIsLoading(true);
-    // THERE CAN ONLY BE ONE TILL_NUMBER KEY
-    if (apiKey?.name && isNew) {
-      notify("error", "You already have an Till Number for this workspace!");
-      return;
-    }
 
     const response = await generateWorkspaceTillNumer(workspaceID);
 
@@ -93,21 +83,12 @@ export default function TillPaymentCollections({ workspaceID }) {
 
     queryClient.invalidateQueries();
 
-    setApiKeyData(response?.data);
-    setApiKey(response?.data);
     notify("success", "Till Number has been generated!");
     setIsLoading(false);
     setIsNew(false);
 
     return;
   }
-
-  useEffect(() => {
-    if (TILL_NUMBER) {
-      setApiKeyData(tillNumberResponse?.data);
-      setApiKey(TILL_NUMBER);
-    }
-  }, [TILL_NUMBER]);
 
   useEffect(() => {
     // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
@@ -117,18 +98,6 @@ export default function TillPaymentCollections({ workspaceID }) {
   }, []);
 
   const LATEST_TRANSACTIONS = mutation.data?.data?.data || [];
-
-  // return (
-  //   <TillNumberBanner
-  //     // configData={apiKeyData}
-  //     // isLoading={isFetching}
-  //     isOpen={true}
-  //     onClose={() => {
-  //       setOpenViewConfig(false)
-  //       onClose()
-  //     }}
-  //   />
-  // )
 
   return isFetching ? (
     <LoadingPage />
@@ -275,23 +244,26 @@ export default function TillPaymentCollections({ workspaceID }) {
               }
             </TableBody>
           </Table>
+        </Card>
 
-          <div>
+        <Card>
+          <div className="flex w-full items-center justify-between">
             <CardHeader
-              className={"my-4"}
+              className={"mb-4"}
               title={"Recent Transactions"}
               infoText={
                 "Transactions made to your workspace wallet in the last 30days."
               }
             />
-            <CustomTable
-              columns={API_KEY_TRANSACTION_COLUMNS}
-              rows={LATEST_TRANSACTIONS || []}
-              rowsPerPage={6}
-              isLoading={mutation.isPending}
-              removeWrapper
-            />
           </div>
+          <CustomTable
+            columns={API_KEY_TRANSACTION_COLUMNS}
+            rows={LATEST_TRANSACTIONS || []}
+            rowsPerPage={6}
+            isLoading={mutation.isPending}
+            // removeWrapper
+            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
+          />
         </Card>
       </div>
       {/* MODALS */}

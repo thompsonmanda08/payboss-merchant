@@ -324,76 +324,87 @@ const APIIntegration = ({ workspaceID }) => {
               )}
             </TableBody>
           </Table>
-
-          <PromptModal
-            isOpen={isNew || isDelete || isRefresh}
-            onOpen={onOpen}
-            onClose={() => {
-              onClose();
-              setIsNew(false);
-              setIsDelete(false);
-              setIsRefresh(false);
-            }}
-            title={
-              isNew
-                ? "Generate New API Key"
-                : isDelete
-                ? "Delete API Key"
-                : isRefresh
-                ? "Refresh API Key"
-                : "API Keys"
-            }
-            onConfirm={handleUserAction}
-            confirmText={
-              isNew
-                ? "Generate"
-                : isDelete
-                ? "Delete"
-                : isRefresh
-                ? "Refresh"
-                : "Confirm"
-            }
-            isDisabled={isLoading}
-            isLoading={isLoading}
-            isDismissable={false}
-          >
-            {isDelete ? (
-              <>
-                <p className="-mt-4 text-sm leading-6 text-foreground/70">
-                  <strong>Are you sure you want to delete this API Key?</strong>{" "}
-                  <br />
-                  This action is not reversible and will result in the
-                  non-operation of this key. Make sure you update any
-                  application making use of this Key.
-                </p>
-              </>
-            ) : isNew ? (
-              <p className="-mt-4 text-sm leading-6 text-foreground/70">
-                <strong>
-                  Are you sure you want to generate a new API key?
-                </strong>
-                <br />
-                This API key will allow you channel funds to your workspace
-                wallet from 3rd party applications and interfaces.
-              </p>
-            ) : (
-              <p className="-mt-4 text-sm leading-6 text-foreground/70">
-                <strong>Are you sure you want to refresh this API key?</strong>
-                <br />
-                By confirming this, your API key will be changed to a new one
-                and you will not be able to use the old API anymore.
-              </p>
-            )}
-          </PromptModal>
         </Card>
 
-        <CustomTable
-          columns={API_KEY_TRANSACTION_COLUMNS}
-          rows={LATEST_TRANSACTIONS}
-          rowsPerPage={10}
-          isLoading={mutation.isPending}
-        />
+        <Card>
+          <div className="flex w-full items-center justify-between gap-4">
+            <CardHeader
+              className={"mb-4"}
+              title={"Recent Transactions"}
+              infoText={
+                "Transactions made to your workspace wallet in the last 30days."
+              }
+            />
+          </div>
+          <CustomTable
+            // removeWrapper
+            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
+            columns={API_KEY_TRANSACTION_COLUMNS}
+            rows={LATEST_TRANSACTIONS}
+            isLoading={mutation.isPending}
+          />
+        </Card>
       </div>
+
+      {/* DELETE PROMPS */}
+      <PromptModal
+        isOpen={isNew || isDelete || isRefresh}
+        onOpen={onOpen}
+        onClose={() => {
+          onClose();
+          setIsNew(false);
+          setIsDelete(false);
+          setIsRefresh(false);
+        }}
+        title={
+          isNew
+            ? "Generate New API Key"
+            : isDelete
+            ? "Delete API Key"
+            : isRefresh
+            ? "Refresh API Key"
+            : "API Keys"
+        }
+        onConfirm={handleUserAction}
+        confirmText={
+          isNew
+            ? "Generate"
+            : isDelete
+            ? "Delete"
+            : isRefresh
+            ? "Refresh"
+            : "Confirm"
+        }
+        isDisabled={isLoading}
+        isLoading={isLoading}
+        isDismissable={false}
+      >
+        {isDelete ? (
+          <>
+            <p className="-mt-4 text-sm leading-6 text-foreground/70">
+              <strong>Are you sure you want to delete this API Key?</strong>{" "}
+              <br />
+              This action is not reversible and will result in the non-operation
+              of this key. Make sure you update any application making use of
+              this Key.
+            </p>
+          </>
+        ) : isNew ? (
+          <p className="-mt-4 text-sm leading-6 text-foreground/70">
+            <strong>Are you sure you want to generate a new API key?</strong>
+            <br />
+            This API key will allow you channel funds to your workspace wallet
+            from 3rd party applications and interfaces.
+          </p>
+        ) : (
+          <p className="-mt-4 text-sm leading-6 text-foreground/70">
+            <strong>Are you sure you want to refresh this API key?</strong>
+            <br />
+            By confirming this, your API key will be changed to a new one and
+            you will not be able to use the old API anymore.
+          </p>
+        )}
+      </PromptModal>
     </>
   );
 };
