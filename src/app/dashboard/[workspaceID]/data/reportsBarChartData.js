@@ -37,6 +37,7 @@ const reportsBarChartData = {
       label: 'Overall',
       progress: { content: formatCurrency('0'), percentage: 10 },
     },
+    
     {
       label: 'Income',
       icon: {

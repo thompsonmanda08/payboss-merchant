@@ -168,7 +168,8 @@ function CreateNewUserModal({ isOpen, onClose }) {
 
     // WORKSPACE MEMBER USER ROLE LIST
     if (!isUsersRoute) {
-      return workspaceRoles;
+      // return workspaceRoles;
+      return ["admin", "viewer"];
     }
   }
 

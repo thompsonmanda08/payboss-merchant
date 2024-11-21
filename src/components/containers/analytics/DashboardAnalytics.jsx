@@ -8,8 +8,9 @@ import {
   EllipsisVerticalIcon,
   QrCodeIcon,
   QueueListIcon,
+  WalletIcon,
 } from "@heroicons/react/24/outline";
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import reportsBarChartData from "@/app/dashboard/[workspaceID]/data/reportsBarChartData";
 import { WalletTransactionHistory } from "../workspace/Wallet";
 import PendingApprovals from "./PendingAnalytics";
@@ -23,7 +24,39 @@ import Card from "@/components/base/Card";
 import SimpleStats from "@/components/elements/simple-stats";
 import CardHeader from "@/components/base/CardHeader";
 import OverlayLoader from "@/components/ui/overlay-loader";
-import { WORKSPACE_TYPES } from "@/lib/constants";
+import { MONTHS, WORKSPACE_TYPES } from "@/lib/constants";
+import CustomTable from "../tables/Table";
+import ReportsBarChart from "@/components/charts/ReportsBarChart/ReportsBarChart";
+
+const TRANSACTION_COLUMNS = [
+  { name: "DATE", uid: "created_at", sortable: true },
+  { name: "NARRATION", uid: "narration" },
+  { name: "PROVIDER", uid: "service_provider", sortable: true },
+  { name: "SOURCE ACCOUNT", uid: "destination", sortable: true },
+  { name: "AMOUNT", uid: "amount", sortable: true },
+  { name: "STATUS", uid: "status", sortable: true },
+];
+
+const lastestTransactionsSample = [
+  {
+    ID: "khbevqwrihbgvpqiuhbvqe",
+    created_at: "2023-06-20T12:00:00Z",
+    narration: "Transfer from John Doe",
+    service_provider: "MTN",
+    destination: "0700000000",
+    amount: 10000,
+    status: "successful",
+  },
+  {
+    ID: "fqewefaehgwrhnbwr",
+    created_at: "2023-06-20T12:00:00Z",
+    narration: "Transfer from John Doe",
+    service_provider: "MTN",
+    destination: "0700000000",
+    amount: 10000,
+    status: "successful",
+  },
+];
 
 const pendingApprovals = [
   {
@@ -34,64 +67,62 @@ const pendingApprovals = [
       component: <ArrowUpOnSquareStackIcon className="h-6 w-6 rotate-90" />,
     },
   },
+  // {
+  //   label: "Bulk Voucher Transfers",
+  //   total: 0,
+  //   icon: {
+  //     color: "success",
+  //     component: <BanknotesIcon className="h-6 w-6" />,
+  //   },
+  // },
   {
-    label: "Bulk Voucher Transfers",
-    total: 0,
-    icon: {
-      color: "success",
-      component: <BanknotesIcon className="h-6 w-6" />,
-    },
-  },
-  {
-    label: "Sinlge Direct Transfers",
+    label: "Wallet Prefund Requests",
     total: 0,
     icon: {
       color: "secondary",
-      component: <ArrowsRightLeftIcon className="h-6 w-6" />,
+      component: <WalletIcon className="h-6 w-6" />,
     },
   },
-  {
-    label: "Single Voucher Transfers",
-    total: 0,
-    icon: {
-      color: "danger",
-      component: <QrCodeIcon className="h-6 w-6 rotate-90" />,
-    },
-  },
+  // {
+  //   label: "Single Voucher Transfers",
+  //   total: 0,
+  //   icon: {
+  //     color: "danger",
+  //     component: <QrCodeIcon className="h-6 w-6 rotate-90" />,
+  //   },
+  // },
 ];
 
-function DashboardAnalytics({ workspaceID, userRole, workspaceType }) {
+function DashboardAnalytics({
+  workspaceID,
+  permissions,
+  workspaceType,
+  dashboardAnalytics,
+  workspaceWalletBalance,
+}) {
   const { chart, items } = reportsBarChartData;
-  const queryClient = useQueryClient();
 
-  const {
-    data: analytics,
-    isFetching,
-    isLoading,
-  } = useDashboardAnalytics(workspaceID);
-  const dashboardAnalytics = analytics?.data;
+  // const { workspaceWalletBalance } = useWorkspaces();
+  // const { dashboardRoute, pathname } = useNavigation();
 
-  const { workspaceWalletBalance } = useWorkspaces();
-  const { dashboardRoute, pathname } = useNavigation();
+  // const walletOptions = [
+  //   {
+  //     ID: 1,
+  //     label: "View wallet Statement",
+  //     href: `/${dashboardRoute}/reports/statement`,
+  //   },
+  //   {
+  //     ID: 2,
+  //     label: "View deposit history",
+  //     href: `/${dashboardRoute}/workspace-settings?wallet`,
+  //   },
 
-  const walletOptions = [
-    {
-      ID: 1,
-      label: "View wallet Statement",
-      href: `/${dashboardRoute}/reports/statement`,
-    },
-    {
-      ID: 2,
-      label: "View deposit history",
-      href: `/${dashboardRoute}/workspace-settings?wallet`,
-    },
-
-    {
-      ID: 3,
-      label: "Deposit funds",
-      href: `/${dashboardRoute}/workspace-settings?deposit=true`,
-    },
-  ];
+  //   {
+  //     ID: 3,
+  //     label: "Deposit funds",
+  //     href: `/${dashboardRoute}/workspace-settings?deposit=true`,
+  //   },
+  // ];
 
   const {
     today,
@@ -100,20 +131,72 @@ function DashboardAnalytics({ workspaceID, userRole, workspaceType }) {
     disbursementsToday,
     allCollections,
     allDisbursements,
+    walletSummary,
+    latestTransactions,
+    monthlyCollections,
+    monthlyDisbursements,
   } = dashboardAnalytics || {};
 
-  // Invalidate all the queries when the pathname changes
-  useEffect(() => {
-    queryClient.invalidateQueries();
-  }, [pathname]);
+  const monthlyTransactionRecords =
+    workspaceType == WORKSPACE_TYPES[0]?.ID
+      ? monthlyCollections
+      : WORKSPACE_TYPES[1]?.ID
+      ? monthlyDisbursements
+      : [...monthlyDisbursements, ...monthlyCollections]; // HYBRID WORKSPACE
 
-  const dataNotReady = isFetching || isLoading;
+  const monthlyTransactions = {
+    chart: {
+      labels: MONTHS,
+      datasets: {
+        label: "Transactions",
+        data: MONTHS.map((month) => {
+          const transaction = monthlyTransactionRecords.find((item) =>
+            String(item.month).toLowerCase().startsWith(month.toLowerCase())
+          );
+          return transaction ? transaction.count : 0;
+        }), // Total Transactions
+      },
+    },
+  };
+
+  const thisMonth = new Date().getMonth();
+  const currentMonth = MONTHS[thisMonth];
+  const previousMonth = MONTHS[(thisMonth - 1 + MONTHS.length) % MONTHS.length]; // Handle January to December wrap-around
+
+  const previousMonthTransactions = monthlyTransactionRecords.find((item) =>
+    String(item.month).toLowerCase().startsWith(previousMonth.toLowerCase())
+  );
+
+  const currentMonthTransactions = monthlyTransactionRecords.find((item) =>
+    String(item.month).toLowerCase().startsWith(currentMonth.toLowerCase())
+  );
+
+  // Extract counts or default to 0 if no transactions
+  const previousCount = previousMonthTransactions?.count || 0;
+  const currentCount = currentMonthTransactions?.count || 0;
+
+  // Calculate the percentage change between the current month and the previous month
+  const percentageChange = previousCount
+    ? ((currentCount - previousCount) / previousCount) * 100
+    : 0; // Avoid division by zero
+
+  // Determine if it was an increase, decrease, or no change
+  const changeType =
+    currentCount > previousCount
+      ? true // increse
+      : currentCount < previousCount
+      ? false // decrease
+      : "none"; // no change
+
+  console.log(currentCount, previousCount, percentageChange, changeType);
+
+  const dataNotReady = !permissions?.ID;
 
   return (
     <>
       {dataNotReady && <OverlayLoader show={dataNotReady} />}
 
-      <div className="flex w-full flex-col gap-4 md:gap-6">
+      <div className="flex w-full flex-col gap-4 md:gap-4">
         {/* TOP ROW - WALLET BALANCE && OVERALL VALUES */}
         <div className="flex-cols flex w-full flex-wrap items-start gap-4 md:flex-row">
           <Card className="flex-1 gap-4 border-none bg-gradient-to-br from-primary to-primary-400 shadow-lg shadow-primary-300/50">
@@ -132,29 +215,37 @@ function DashboardAnalytics({ workspaceID, userRole, workspaceType }) {
                 : `ZMW 0.00`}
             </p>
           </Card>
+          <>
+            <SimpleStats
+              title={`Today's ${workspaceType}`}
+              figure={today?.count || 0}
+              smallFigure={
+                today?.value
+                  ? `(${formatCurrency(collectionsToday?.value)})`
+                  : `(ZMW 0.00)`
+              }
+              classNames={{
+                smallFigureClasses: "md:text-base font-semibold",
+              }}
+              Icon={ArrowDownOnSquareStackIcon}
+            />
 
-          {/* DISPLAY COLLECTIONS ANALYTICS DATA */}
-          {(workspaceType == WORKSPACE_TYPES[0]?.ID ||
-            workspaceType == WORKSPACE_TYPES[2]?.ID) && (
-            <>
-              {/* ONLY SHOW COLLECTIONS ANALYTICS IF WORKSPACE TYPE IS COLLECTION */}
-              {workspaceType == WORKSPACE_TYPES[0]?.ID && (
-                <SimpleStats
-                  title={"Today's Collections"}
-                  figure={collectionsToday?.count || 0}
-                  smallFigure={
-                    collectionsToday?.value
-                      ? `(${formatCurrency(collectionsToday?.value)})`
-                      : `(ZMW 0.00)`
-                  }
-                  classNames={{
-                    smallFigureClasses: "md:text-base font-semibold",
-                  }}
-                  Icon={ArrowDownOnSquareStackIcon}
-                />
-              )}
+            <SimpleStats
+              title={`Yesterday's ${workspaceType}`}
+              figure={yesterday?.count || 0}
+              smallFigure={
+                yesterday?.value
+                  ? `(${formatCurrency(collectionsToday?.value)})`
+                  : `(ZMW 0.00)`
+              }
+              classNames={{
+                smallFigureClasses: "md:text-base font-semibold",
+              }}
+              Icon={ArrowDownOnSquareStackIcon}
+            />
+            {workspaceType == WORKSPACE_TYPES[0]?.ID ? (
               <SimpleStats
-                title={"Overall Collections"}
+                title={"All Collections"}
                 figure={allCollections?.count || 0}
                 smallFigure={
                   allCollections?.value
@@ -167,31 +258,9 @@ function DashboardAnalytics({ workspaceID, userRole, workspaceType }) {
                 isGood={true}
                 Icon={ArrowDownOnSquareStackIcon}
               />
-            </>
-          )}
-
-          {/* DISPLAY DISBURSEMENTS ANALYTICS DATA */}
-          {(workspaceType == WORKSPACE_TYPES[1]?.ID ||
-            workspaceType == WORKSPACE_TYPES[2]?.ID) && (
-            <>
-              {/* ONLY SHOW DISBURSEMENTS ANALYTICS IF WORKSPACE TYPE IS DISBURSEMENT */}
-              {workspaceType == WORKSPACE_TYPES[1]?.ID && (
-                <SimpleStats
-                  title={"Today's Disbursements"}
-                  figure={disbursementsToday?.count || 0}
-                  smallFigure={
-                    disbursementsToday?.value
-                      ? `(${formatCurrency(disbursementsToday?.value)})`
-                      : `(ZMW 0.00)`
-                  }
-                  classNames={{
-                    smallFigureClasses: "md:text-base font-semibold",
-                  }}
-                  Icon={ArrowUpOnSquareStackIcon}
-                />
-              )}
+            ) : (
               <SimpleStats
-                title={"Overall Disbursements"}
+                title={"All Disbursements"}
                 figure={allDisbursements?.count || 0}
                 smallFigure={
                   allDisbursements?.value
@@ -204,45 +273,13 @@ function DashboardAnalytics({ workspaceID, userRole, workspaceType }) {
                 isBad={true}
                 Icon={ArrowUpOnSquareStackIcon}
               />
-            </>
-          )}
+            )}
+          </>
         </div>
-        {/*  2ND ROW - DAILY FIGURES AND VALUES */}
 
-        <div className="grid w-full grid-cols-1 gap-4 2xl:grid-cols-2">
-          {userRole?.can_approve && (
-            <div className="flex flex-1 flex-col gap-4">
-              <SimpleStats
-                title={"Todays Transactions"}
-                figure={today?.count || 0}
-                smallFigure={
-                  today?.value
-                    ? `(${formatCurrency(today?.value)})`
-                    : `(ZMW 0.00)`
-                }
-                classNames={{
-                  smallFigureClasses: "md:text-base font-semibold",
-                }}
-                // isGood={true}
-                Icon={QueueListIcon}
-              />
-              <SimpleStats
-                title={"Yesterday's Transactions"}
-                figure={yesterday?.count || 0}
-                smallFigure={
-                  yesterday?.value
-                    ? `(${formatCurrency(yesterday?.value)})`
-                    : `(ZMW 0.00)`
-                }
-                classNames={{
-                  smallFigureClasses: "md:text-base font-semibold",
-                }}
-                Icon={QueueListIcon}
-              />
-              <PendingApprovals data={pendingApprovals} />
-            </div>
-          )}
-          {/* <Batches /> */}
+        {/*  2ND ROW - MONTHLY FIGURES AND VALUES */}
+
+        <div className="grid w-full grid-cols-1 gap-4 xl:grid-cols-2">
           <Card className={""}>
             <div className="flex items-center justify-between">
               <CardHeader
@@ -268,12 +305,68 @@ function DashboardAnalytics({ workspaceID, userRole, workspaceType }) {
             </div>
 
             <WalletTransactionHistory
-              transactionData={dashboardAnalytics?.walletSummary}
+              transactionData={walletSummary}
               workspaceID={workspaceID}
               limit={5}
             />
           </Card>
+
+          <div className="flex flex-1 self-start flex-col gap-4">
+            <ReportsBarChart
+              title="Transactions Summary"
+              description={
+                previousCount == 0 ? (
+                  <>
+                    <span className={cn("font-bold text-primary")}>
+                      {currentCount}
+                    </span>{" "}
+                    transactions this month of about{" "}
+                    <span className={cn("font-bold text-primary")}>
+                      {formatCurrency(currentMonthTransactions.value)}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    (
+                    <span
+                      className={cn("font-bold text-primary", {
+                        "text-green-500": changeType,
+                        "text-red-500": !changeType,
+                      })}
+                    >
+                      {changeType
+                        ? `+${percentageChange}`
+                        : `-${percentageChange}`}
+                    </span>
+                    ) than last month
+                  </>
+                )
+              }
+              chart={monthlyTransactions.chart}
+              // items={items}
+            />
+            <PendingApprovals
+              data={pendingApprovals}
+              canApprove={permissions?.can_approve}
+            />
+          </div>
         </div>
+
+        {/*  3RD ROW - LATEST TRANSACTIONS */}
+        <Card className={""}>
+          <div className="flex justify-between">
+            <CardHeader
+              title={"Latest Transactions"}
+              infoText={"Some recent transactions from the last few days"}
+            />
+          </div>
+          <CustomTable
+            columns={TRANSACTION_COLUMNS}
+            rows={latestTransactions || []}
+            rowsPerPage={6}
+            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
+          />
+        </Card>
       </div>
     </>
   );

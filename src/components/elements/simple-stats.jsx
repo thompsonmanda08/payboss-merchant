@@ -21,7 +21,7 @@ function SimpleStats({
       <div className="flex flex-col gap-3">
         <h2
           className={cn(
-            "text-nowrap text-xs font-semibold text-foreground/50 md:text-sm",
+            "text-nowrap text-xs font-semibold text-foreground/50 md:text-sm capitalize",
             heading
           )}
         >
@@ -37,7 +37,7 @@ function SimpleStats({
           {smallFigure && (
             <span
               className={cn(
-                "ml-2 text-xs font-semibold text-primary text-foreground/50 sm:text-sm",
+                "ml-2 text-xs font-semibold text-foreground/50 sm:text-sm",
                 smallFigureClasses,
                 {
                   "text-green-500": isGood,

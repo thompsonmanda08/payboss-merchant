@@ -15,6 +15,7 @@ import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import SoftBoxIcon from "@/components/base/SoftBoxIcon";
 import EmptyLogs from "@/components/base/EmptyLogs";
 import Loader from "@/components/ui/loader";
+import { format } from "date-fns";
 
 const columns = [
   { name: "NAME", uid: "name" },
@@ -96,7 +97,7 @@ export default function PrefundsTable({
           </Chip>
         );
       case "created_at":
-        return formatDate(cellValue).replaceAll("-", " ");
+        return format(cellValue, "dd-MMM-yyyy hh:mm:ss a");
 
       default:
         return cellValue;

@@ -91,7 +91,7 @@ export default function UsersTable({
   removeWrapper,
   isUserAdmin,
   tableLoading,
-  rowLimit = 5,
+  rowLimit = 10,
   allowUserCreation,
   isApprovedUser,
   onAddUser,

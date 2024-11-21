@@ -19,6 +19,21 @@ const WORKSPACE_SESSION = "pb-next-workspace";
 const placeHolderImage = "/images/placeholder-image.webp";
 const DefaultCover = "/images/profile-cover.jpg";
 
+export const MONTHS = [
+  "January",
+  "Febuary",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 const rowsPerPageOptions = [
   {
     ID: 5,

@@ -19,6 +19,7 @@ import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import SelectField from "@/components/ui/select-field";
 import { useBulkTransactions, useWorkspaceInit } from "@/hooks/useQueryHooks";
 import EmptyLogs from "@/components/base/EmptyLogs";
+import { format } from "date-fns";
 
 const bulkTransactionColumns = [
   { name: "DATE CREATED", uid: "created_at", sortable: true },
@@ -138,13 +139,13 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       case "created_at":
         return (
           <span className={cn("text-nowrap capitalize")}>
-            {formatDate(cellValue).replaceAll("-", " ")}
+            {format(cellValue, "dd-MMM-yyyy hh:mm:ss a")}
           </span>
         );
       case "updated_at":
         return (
           <span className={cn("text-nowrap capitalize")}>
-            {formatDate(cellValue).replaceAll("-", " ")}
+            {format(cellValue, "dd-MMM-yyyy hh:mm:ss a")}
           </span>
         );
       case "batch_name":

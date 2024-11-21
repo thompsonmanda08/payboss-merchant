@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Tabs from "@/components/elements/tabs";
 import WorkspaceDetails from "./WorkspaceDetails";
@@ -24,23 +24,20 @@ import Card from "@/components/base/Card";
 import ActivePockets from "./ActivePockets";
 import WorkspaceMembers from "./WorkspaceMembers";
 import { WORKSPACE_TYPES } from "@/lib/constants";
+import useWorkspaceStore from "@/context/workspaces-store";
 
-function WorkspaceSettings({ workspaceID, workspace }) {
-  const { back } = useRouter();
-  const pathname = usePathname();
+function WorkspaceSettings({
+  workspaceID,
+  selectedWorkspace,
+  allUsers,
+  workspaceMembers,
+  workspaceRoles,
+  permissions,
+}) {
+  const { isLoading } = useAllUsersAndRoles();
+  const { existingUsers, setExistingUsers } = useWorkspaceStore();
 
-  const { activeWorkspace } = useWorkspaces();
-  const { canCreateUsers } = useAllUsersAndRoles();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
-  const isUserInWorkspace =
-    pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
-
-  const { data: members, isLoading } = useWorkspaceMembers(workspaceID);
-  const workspaceUsers = members?.data?.users || [];
-
-  // SELECTED WORKSPACE FROM PROPS OR CURRENLTY ACTIVE WORKSPACE
-  const selectedWorkspace = workspace || activeWorkspace;
 
   const DISBURESEMENT_TABS =
     selectedWorkspace?.workspaceType == WORKSPACE_TYPES[1]?.ID ||
@@ -84,14 +81,17 @@ function WorkspaceSettings({ workspaceID, workspace }) {
       workspaceID={workspaceID}
       workspaceName={selectedWorkspace?.workspace}
       navigateTo={handleNavigation}
-      workspaceUsers={workspaceUsers}
+      workspaceRoles={workspaceRoles}
+      allUsers={allUsers}
     />,
     <WorkspaceMembers
       key={"members"}
-      workspaceUsers={workspaceUsers}
+      workspaceMembers={workspaceMembers}
       workspaceName={selectedWorkspace?.workspace}
       workspaceID={workspaceID}
-      isLoading={isLoading}
+      // isLoading={isLoading}
+      workspaceRoles={workspaceRoles}
+      allUsers={allUsers}
     />,
     // Provides the disbursement tabs
     ...DISBURSMENT_COMPONENTS,
@@ -101,31 +101,26 @@ function WorkspaceSettings({ workspaceID, workspace }) {
     navigateTo(index);
   }
 
-  const allowUserCreation =
-    currentTabIndex == 1 && canCreateUsers && !isUserInWorkspace;
+  const canCreateUsers = permissions?.isAdmin || permissions?.isOwner;
+  const allowUserCreation = currentTabIndex == 1 && canCreateUsers;
 
-  return isLoading ? (
+  useEffect(() => {
+    // UPDATE EXISITING USERS LIST
+    if (workspaceMembers != [] && existingUsers?.length == 0) {
+      setExistingUsers(workspaceMembers);
+    }
+  }, []);
+
+  return !workspaceMembers ? (
     <LoadingPage />
   ) : (
-    <div className={cn("px-2", { "px-3": isUserInWorkspace })}>
-      {!isUserInWorkspace && (
-        <div className="relative lg:-left-5">
-          <Button
-            aria-label="back"
-            color="light"
-            className={"text-primary sm:w-auto sm:max-w-fit"}
-            onClick={() => back()}
-          >
-            <ArrowUturnLeftIcon className="h-5 w-5" /> Return to Workspaces
-          </Button>
-        </div>
-      )}
+    <div className={cn("px-3")}>
       {/* HEADER */}
-      <div className={cn("", { "mb-4": isUserInWorkspace })}>
-        <h2 className="heading-5 !font-bold uppercase tracking-tight text-foreground">
+      <div className={cn("mb-4")}>
+        <h2 className="heading-3 !font-bold uppercase tracking-tight text-foreground">
           {selectedWorkspace?.workspace}
         </h2>
-        <p className=" text-sm text-foreground-p">
+        <p className=" text-sm text-foreground-600">
           Workspaces provide a structured way to group and manage services,
           users, and transactions effectively.
         </p>

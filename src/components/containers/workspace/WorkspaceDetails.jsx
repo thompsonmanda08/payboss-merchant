@@ -1,5 +1,4 @@
 import {
-  changeWorkspaceVisibility,
   deleteWorkspace,
   updateWorkspace,
 } from "@/app/_actions/config-actions";
@@ -20,7 +19,9 @@ function WorkspaceDetails({
   workspaceID,
   navigateTo,
   workspaceName,
-  workspaceUsers,
+  workspaceMembers,
+  workspaceRoles,
+  allUsers,
 }) {
   const { back } = useRouter();
   const queryClient = useQueryClient();
@@ -130,21 +131,6 @@ function WorkspaceDetails({
     setDeleteLoading(false);
   }
 
-  // CHANGE WORKSPACE VISIBILITY
-  // async function handleWorkspaceVisibility() {
-  //   setIsVisible(!isVisible);
-  //   const response = await changeWorkspaceVisibility(workspaceID, !isVisible);
-
-  //   if (!response?.success) {
-  //     setIsVisible(!isVisible);
-  //     notify("error", "Failed to update visibility");
-  //     return;
-  //   }
-
-  //   queryClient.invalidateQueries();
-  //   notify("success", "Visibility updated successfully");
-  // }
-
   // CHECK IF WORKSPACE IS VISIBLE
   useEffect(() => {
     if (activeWorkspace != undefined && activeWorkspace?.isVisible) {
@@ -208,24 +194,6 @@ function WorkspaceDetails({
           </form>
         </div>
       </div>
-      {/* {!isUserInWorkspace && (
-        <>
-          <hr className="my-6 h-px bg-foreground-900/5" />
-          <div className="flex items-center gap-4 sm:mt-0 sm:flex-auto">
-            <Switch
-              isSelected={isVisible}
-              onValueChange={handleWorkspaceVisibility}
-            />
-            <div className="flex flex-col ">
-              <p className="font-medium text-gray-900">Workspace Visibility</p>
-              <span className="text-xs text-slate-600 xl:text-sm">
-                Activate a to interact with the PayBoss platform using this
-                workspace.
-              </span>
-            </div>
-          </div>
-        </>
-      )} */}
 
       {!isSandbox && (
         <>
@@ -313,7 +281,9 @@ function WorkspaceDetails({
         workspaceID={workspaceID}
         workspaceName={workspaceName}
         navigateTo={navigateTo}
-        workspaceUsers={workspaceUsers}
+        workspaceMembers={workspaceMembers}
+        workspaceRoles={workspaceRoles}
+        allUsers={allUsers}
       />
     </>
   );

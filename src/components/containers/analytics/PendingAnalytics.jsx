@@ -46,12 +46,16 @@ const PendingApprovalsItem = ({ label, icon, total }) => {
   );
 };
 
-function PendingApprovals({ data }) {
+function PendingApprovals({ data, canApprove }) {
   return (
     <Card className={"flex-1 self-start"}>
       <CardHeader
-        title={"Approvals"}
-        infoText={"Transactions that require you attention are displayed below"}
+        title={canApprove ? "Pending Approvals" : "Initiated Transactions"}
+        infoText={
+          canApprove
+            ? "Transactions that require you attention are displayed below"
+            : "Transactions that require approval"
+        }
       />
       <div className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-8">
         {data &&

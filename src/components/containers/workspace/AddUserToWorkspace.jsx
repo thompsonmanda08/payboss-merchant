@@ -47,7 +47,7 @@ function AddUserToWorkspace({
   workspaceID,
   workspaceName,
   navigateTo,
-  workspaceUsers,
+  workspaceMembers,
   allUsers,
   workspaceRoles,
 }) {
@@ -144,7 +144,7 @@ function AddUserToWorkspace({
             color="primary"
             size="sm"
             className="relative"
-            // isDisabled={user?.role == "owner"}
+            isDisabled={user?.role == "owner"}
             onPress={() => handleAddToWorkspace(user)}
           >
             <Tooltip color="primary" content="Add User">
@@ -162,7 +162,7 @@ function AddUserToWorkspace({
             color="danger"
             size="sm"
             className="relative"
-            // isDisabled={user?.role == "owner"}
+            isDisabled={user?.role == "owner"}
             onPress={() => handleRemoveFromWorkspace(user)}
           >
             <Tooltip color="danger" content="Remove User">
@@ -215,14 +215,12 @@ function AddUserToWorkspace({
 
   useEffect(() => {
     // UPDATE EXISITING USERS LIST
-    if (workspaceUsers != [] && existingUsers.length == 0) {
-      setExistingUsers(workspaceUsers);
+    if (workspaceMembers != [] && existingUsers?.length == 0) {
+      setExistingUsers(workspaceMembers);
     }
+  }, [workspaceMembers]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const isDataReady = workspaceRoles.length > 0 && allUsers?.length > 1;
+  const isDataReady = workspaceRoles?.length > 0 && allUsers?.length > 0;
   const router = useRouter();
 
   return (
@@ -238,8 +236,8 @@ function AddUserToWorkspace({
           isDataReady ? (
             <>
               <ModalHeader className="flex gap-1">
-                Add User to Workspace
-                {workspaceName && <span>({workspaceName})</span>}
+                Add Members to
+                {workspaceName && <span>{workspaceName}</span>}
               </ModalHeader>
               <ModalBody>
                 <section role="user-section" className="flex w-full gap-8">

@@ -16,22 +16,14 @@ export async function createNewUser(newUser) {
       data: newUser,
     });
 
-    if (res.status == 201) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
+    revalidatePath("/manage-account/users", "page");
 
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
     console.error(error?.response);
@@ -86,13 +78,6 @@ export async function getAllUsers() {
 }
 
 export async function assignUsersToWorkspace(users, workspaceID) {
-  // const users = [
-  //   {
-  //     userID: 'string',
-  //     roleID: 'string',
-  //   },
-  // ]
-
   try {
     const res = await authenticatedService({
       url: `merchant/workspace/user/mapping/${workspaceID}`,
@@ -135,31 +120,16 @@ export async function assignUsersToWorkspace(users, workspaceID) {
 }
 
 export async function getUser(userID) {
-  const session = await getUserSession();
-  const merchantID = session?.user?.merchantID;
-
   try {
     const res = await authenticatedService({
       url: `merchant/user/${userID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
-
-    const response = res?.data || res;
-
     return {
-      success: false,
-      message: res?.data?.error || res?.statusText || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
     };
   } catch (error) {
     console.error(error);
@@ -187,21 +157,13 @@ export async function updateProfileData(userID, userData) {
       data: userData,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
+    revalidatePath("/manage-account/profile", "page");
 
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
     };
   } catch (error) {
     console.error(error?.response);
@@ -226,21 +188,13 @@ export async function updateSystemUserData(userID, userData) {
       data: userData,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
+    // revalidatePath("/manage-account/profile", "page");
 
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
     };
   } catch (error) {
     console.error(error?.response);
@@ -264,21 +218,13 @@ export async function changeUserPassword(password) {
       data: { password },
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
+    revalidatePath("/manage-account/profile", "page");
 
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
     };
   } catch (error) {
     console.error(error?.response);
@@ -300,22 +246,12 @@ export async function adminResetUserPassword(userID, newPasswordData) {
       data: newPasswordData,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
     console.error(error?.response);

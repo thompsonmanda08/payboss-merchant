@@ -9,22 +9,24 @@ function ReportsBarChart({ color, title, description, chart, items }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {});
 
   const renderItems = useMemo(() =>
-    items.map(
-      ({ icon, label, progress }) => (
-        <div className="w-1/2 p-2 sm:w-1/4" key={label}>
-          <ReportsBarChartItem
-            color={color}
-            icon={{ color: icon.color, component: icon.component }}
-            label={label}
-            progress={{
-              content: progress.content,
-              percentage: progress.percentage,
-            }}
-          />
-        </div>
-      ),
-      [items]
-    )
+    items
+      ? items?.map(
+          ({ icon, label, progress }) => (
+            <div className="w-1/2 p-2 sm:w-1/4" key={label}>
+              <ReportsBarChartItem
+                color={color}
+                icon={{ color: icon.color, component: icon.component }}
+                label={label}
+                progress={{
+                  content: progress.content,
+                  percentage: progress.percentage,
+                }}
+              />
+            </div>
+          ),
+          [items]
+        )
+      : []
   );
 
   const renderBarChart = useMemo(
@@ -43,7 +45,7 @@ function ReportsBarChart({ color, title, description, chart, items }) {
       {renderBarChart}
       <h6 className="mt-2 text-lg font-medium capitalize">{title}</h6>
       <p className="text-sm font-normal text-gray-600">{description}</p>
-      <div className="-mx-2 flex flex-wrap">{renderItems}</div>
+      {items && <div className="-mx-2 flex flex-wrap">{renderItems}</div>}
     </Card>
   );
 }

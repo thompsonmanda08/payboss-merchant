@@ -12,7 +12,7 @@ function ManagePeople({ users, roles, permissions }) {
   return (
     <div className={cn("flex w-full flex-col gap-8")}>
       <div className="flex w-full flex-col">
-        <h2 className="heading-3 !font-bold tracking-tight text-foreground-900 ">
+        <h2 className="heading-3 !font-bold tracking-tight text-foreground">
           Manage People
         </h2>
         <p className="text-sm text-foreground-600">
@@ -40,6 +40,7 @@ function ManagePeople({ users, roles, permissions }) {
         isUserAdmin={isOwner || isAccountAdmin}
         allowUserCreation={allowUserCreation}
         isApprovedUser={isApprovedUser}
+        
       />
     </div>
   );

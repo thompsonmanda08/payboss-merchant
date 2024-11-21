@@ -1,14 +1,50 @@
-import LoadingPage from '@/app/loading'
-import React, { Suspense } from 'react'
-import { getUserDetails } from '@/app/_actions/config-actions'
-import WorkspaceSettings from '@/components/containers/workspace/WorkspaceSettings'
+import LoadingPage from "@/app/loading";
+import React, { Suspense } from "react";
+import {
+  getAllWorkspaces,
+  getUserDetails,
+  getWorkspaceRoles,
+} from "@/app/_actions/config-actions";
+import WorkspaceSettings from "@/components/containers/workspace/WorkspaceSettings";
+import { getAllUsers } from "@/app/_actions/user-actions";
+import { getWorkspaceMembers } from "@/app/_actions/workspace-actions";
 
-export default async function ManageWorkspacePage(props) {
-  const params = await props.params;
-  const { workspaceID } = params
+export default async function ManageWorkspacePage({ params }) {
+  const workspaceID = (await params).workspaceID;
+
+  const workspacesResponse = await getAllWorkspaces();
+  const workspaces = workspacesResponse?.data?.workspaces || [];
+  const activeWorkspace = await workspaces?.find(
+    (workspace) => workspace?.ID == workspaceID
+  );
+
+  const allUsersData = await getAllUsers();
+  const workspaceMembers = await getWorkspaceMembers(workspaceID);
+  const workspaceRoleData = await getWorkspaceRoles();
+
+  const session = await getUserDetails();
+  const user = session?.user;
+  const kyc = session?.kyc;
+
+  const permissions = {
+    isOwner: session?.user?.role?.toLowerCase() == "owner",
+    isAccountAdmin: session?.user?.role?.toLowerCase() == "admin",
+    isApprovedUser:
+      kyc?.stageID == 4 &&
+      user?.isCompleteKYC &&
+      kyc?.kyc_approval_status?.toLowerCase() == "approved",
+  };
+
   return (
     <Suspense fallback={<LoadingPage />}>
-      <WorkspaceSettings workspaceID={workspaceID} />
+      <WorkspaceSettings
+        workspaceID={workspaceID}
+        selectedWorkspace={activeWorkspace}
+        allUsers={allUsersData?.data?.users}
+        workspaceMembers={workspaceMembers?.data?.users}
+        workspaceRoles={workspaceRoleData?.data?.roles}
+        permissions={permissions}
+      />
     </Suspense>
-  )
+  );
 }
