@@ -1,31 +1,21 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   ArrowDownOnSquareStackIcon,
-  ArrowsRightLeftIcon,
   ArrowUpOnSquareStackIcon,
   BanknotesIcon,
-  EllipsisVerticalIcon,
-  QrCodeIcon,
-  QueueListIcon,
   WalletIcon,
 } from "@heroicons/react/24/outline";
 import { cn, formatCurrency } from "@/lib/utils";
-import reportsBarChartData from "@/app/dashboard/[workspaceID]/data/reportsBarChartData";
-import { WalletTransactionHistory } from "../workspace/Wallet";
-import PendingApprovals from "./PendingAnalytics";
-import { useDashboardAnalytics } from "@/hooks/useQueryHooks";
+import { WalletTransactionHistory } from "../../../components/containers/workspace/Wallet";
+import PendingApprovals from "../../../components/containers/analytics/PendingAnalytics";
 import { Chip } from "@nextui-org/react";
-import useWorkspaces from "@/hooks/useWorkspaces";
-import { useQueryClient } from "@tanstack/react-query";
-import { SimpleDropdown } from "@/components/ui/dropdown-button";
-import useNavigation from "@/hooks/useNavigation";
 import Card from "@/components/base/Card";
 import SimpleStats from "@/components/elements/simple-stats";
 import CardHeader from "@/components/base/CardHeader";
 import OverlayLoader from "@/components/ui/overlay-loader";
 import { MONTHS, WORKSPACE_TYPES } from "@/lib/constants";
-import CustomTable from "../tables/Table";
+import CustomTable from "../../../components/containers/tables/Table";
 import ReportsBarChart from "@/components/charts/ReportsBarChart/ReportsBarChart";
 
 const TRANSACTION_COLUMNS = [
@@ -37,46 +27,28 @@ const TRANSACTION_COLUMNS = [
   { name: "STATUS", uid: "status", sortable: true },
 ];
 
-const lastestTransactionsSample = [
-  {
-    ID: "khbevqwrihbgvpqiuhbvqe",
-    created_at: "2023-06-20T12:00:00Z",
-    narration: "Transfer from John Doe",
-    service_provider: "MTN",
-    destination: "0700000000",
-    amount: 10000,
-    status: "successful",
-  },
-  {
-    ID: "fqewefaehgwrhnbwr",
-    created_at: "2023-06-20T12:00:00Z",
-    narration: "Transfer from John Doe",
-    service_provider: "MTN",
-    destination: "0700000000",
-    amount: 10000,
-    status: "successful",
-  },
-];
-
 const pendingApprovals = [
   {
     label: "Bulk Direct Transfers",
+    workspaceType: WORKSPACE_TYPES[1].ID,
     total: 0,
     icon: {
       color: "primary",
       component: <ArrowUpOnSquareStackIcon className="h-6 w-6 rotate-90" />,
     },
   },
-  // {
-  //   label: "Bulk Voucher Transfers",
-  //   total: 0,
-  //   icon: {
-  //     color: "success",
-  //     component: <BanknotesIcon className="h-6 w-6" />,
-  //   },
-  // },
+  {
+    label: "Wallet Settlements",
+    workspaceType: WORKSPACE_TYPES[0].ID,
+    total: 0,
+    icon: {
+      color: "success",
+      component: <BanknotesIcon className="h-6 w-6" />,
+    },
+  },
   {
     label: "Wallet Prefund Requests",
+    workspaceType: WORKSPACE_TYPES[1].ID,
     total: 0,
     icon: {
       color: "secondary",
@@ -100,7 +72,7 @@ function DashboardAnalytics({
   dashboardAnalytics,
   workspaceWalletBalance,
 }) {
-  const { chart, items } = reportsBarChartData;
+  // const { chart, items } = reportsBarChartData;
 
   // const { workspaceWalletBalance } = useWorkspaces();
   // const { dashboardRoute, pathname } = useNavigation();
@@ -150,7 +122,7 @@ function DashboardAnalytics({
       datasets: {
         label: "Transactions",
         data: MONTHS.map((month) => {
-          const transaction = monthlyTransactionRecords.find((item) =>
+          const transaction = monthlyTransactionRecords?.find((item) =>
             String(item.month).toLowerCase().startsWith(month.toLowerCase())
           );
           return transaction ? transaction.count : 0;
@@ -163,11 +135,11 @@ function DashboardAnalytics({
   const currentMonth = MONTHS[thisMonth];
   const previousMonth = MONTHS[(thisMonth - 1 + MONTHS.length) % MONTHS.length]; // Handle January to December wrap-around
 
-  const previousMonthTransactions = monthlyTransactionRecords.find((item) =>
+  const previousMonthTransactions = monthlyTransactionRecords?.find((item) =>
     String(item.month).toLowerCase().startsWith(previousMonth.toLowerCase())
   );
 
-  const currentMonthTransactions = monthlyTransactionRecords.find((item) =>
+  const currentMonthTransactions = monthlyTransactionRecords?.find((item) =>
     String(item.month).toLowerCase().startsWith(currentMonth.toLowerCase())
   );
 
@@ -322,7 +294,7 @@ function DashboardAnalytics({
                     </span>{" "}
                     transactions this month of about{" "}
                     <span className={cn("font-bold text-primary")}>
-                      {formatCurrency(currentMonthTransactions.value)}
+                      {formatCurrency(currentMonthTransactions?.value || 0)}
                     </span>
                   </>
                 ) : (
@@ -347,6 +319,7 @@ function DashboardAnalytics({
             />
             <PendingApprovals
               data={pendingApprovals}
+              workspaceType={workspaceType}
               canApprove={permissions?.can_approve}
             />
           </div>

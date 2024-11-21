@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import LoadingPage from "../../loading";
 import InfoBanner from "@/components/base/InfoBanner";
-import DashboardAnalytics from "@/components/containers/analytics/DashboardAnalytics";
+import DashboardAnalytics from "@/app/dashboard/[workspaceID]/DashboardAnalytics";
 import {
   getAllWorkspaces,
   getUserDetails,
