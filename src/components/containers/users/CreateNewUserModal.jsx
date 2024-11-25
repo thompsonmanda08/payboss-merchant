@@ -35,8 +35,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
   const pathname = usePathname();
 
   const isAccountLevelSettingsRoute = pathname.startsWith("/manage-account");
-  const isUserInWorkspace =
-    pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
+  const isUsersRoute = pathname.split("/manage-account/users");
 
   const [loading, setLoading] = useState(false);
   const [newUser, setNewUser] = useState({
@@ -166,15 +165,12 @@ function CreateNewUserModal({ isOpen, onClose }) {
 
   function getUserRoles() {
     // MANAGE ACCOUNT AND NEW USER TO SYSTEM
-    if (
-      (isAccountLevelSettingsRoute && isUsersRoute) ||
-      (!isUsersRoute && isEditingRole)
-    ) {
-      // return accountRoles
-      return ["admin", "viewer"];
+
+    if (isEditingRole) {
+      return workspaceRoles;
     }
 
-    return workspaceRoles;
+    return ["admin", "viewer"];
   }
 
   function isValidData() {
@@ -292,7 +288,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
                 }
                 required
                 onError={error?.onRole}
-                value={newUser?.role}
+                value={newUser?.role || "Choose a role"}
                 options={USER_ROLES}
                 placeholder={isEditingRole ? newUser?.role : "Choose a role"}
                 listItemName={"role"}
