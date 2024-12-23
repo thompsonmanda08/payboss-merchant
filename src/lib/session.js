@@ -45,7 +45,7 @@ export async function createAuthSession(
   if (session) {
     (await cookies()).set(AUTH_SESSION, session, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       maxAge: expiresIn,
       sameSite: "lax",
       path: "/",
@@ -70,7 +70,7 @@ export async function updateAuthSession(fields) {
     if (session) {
       (await cookies()).set(AUTH_SESSION, session, {
         httpOnly: true,
-        secure: true,
+        secure: false,
         expires: expiresAt,
         sameSite: "lax",
         path: "/",
@@ -98,7 +98,7 @@ export async function createUserSession({
   if (session) {
     (await cookies()).set(USER_SESSION, session, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       expires: expiresAt,
       sameSite: "lax",
       path: "/",
@@ -125,7 +125,7 @@ export async function createWorkspaceSession({
   if (session) {
     (await cookies()).set(WORKSPACE_SESSION, session, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       expires: expiresAt,
       sameSite: "lax",
       path: "/",
@@ -151,7 +151,7 @@ export async function updateWorkspaceSession(fields) {
     if (session) {
       (await cookies()).set(WORKSPACE_SESSION, session, {
         httpOnly: true,
-        secure: true,
+        secure: false,
         expires: expiresAt,
         sameSite: "lax",
         path: "/",

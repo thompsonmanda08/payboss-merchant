@@ -126,9 +126,9 @@ export default function Step1({ updateDetails, backToStart }) {
                   ? step?.date_of_incorporation
                   : ""
               }
-              maxValue={today(getLocalTimeZone())}
               labelPlacement={"outside"}
               required={true}
+              maxValue={today(getLocalTimeZone())}
               onChange={(date) => {
                 updateDetails(STEPS[0], {
                   date_of_incorporation: formatDate(date, "YYYY-MM-DD"),
