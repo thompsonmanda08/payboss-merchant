@@ -14,6 +14,8 @@ import {
 } from "@nextui-org/react";
 import {
   ArrowPathIcon,
+  LockClosedIcon,
+  LockOpenIcon,
   PencilSquareIcon,
   PlusIcon,
   TrashIcon,
@@ -104,6 +106,7 @@ export default function UsersTable({
     setSelectedUser,
     selectedUser,
     handleDeleteFromWorkspace,
+    handleDeleteFromAccount,
     handleResetUserPassword,
   } = useWorkspaceStore();
 
@@ -117,6 +120,7 @@ export default function UsersTable({
     onClose: closeCreateUserModal,
   } = useDisclosure();
   const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false);
+  const [openUnlockUserPrompt, setOpenUnlockUserPrompt] = useState(false);
   const isUsersRoute = pathname == "/manage-account/users";
 
   const ROLE_FILTERS = isUsersRoute ? ACCOUNT_ROLES : WORKSPACE_ROLES;
@@ -231,6 +235,8 @@ export default function UsersTable({
   const renderActionButtons = React.useCallback(
     (user) => {
       if (isUserAdmin) {
+        console.log("USER", user);
+        
         return (
           <div className="relative flex items-center justify-center gap-4">
             {/* EDIT USER ROLE */}
@@ -250,24 +256,44 @@ export default function UsersTable({
 
             {/* RESET USER PASSOWRD BY ACCOUNT ADMIN */}
             {isUsersRoute && (
-              <Tooltip
-                color="secondary"
-                content="Reset User Password"
-                classNames={{
-                  base: "text-white",
-                  content: "bg-secondary text-white",
-                }}
-              >
-                <span
-                  onClick={() => {
-                    setSelectedUser(user);
-                    setOpenResetPasswordPrompt(true);
-                  }}
-                  className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
+              <>
+                {!user?.isLockedOut && <Tooltip
+                  color="default"
+                  content="Unlock User"
+                  // classNames={{
+                  //   base: "text-white",
+                  //   content: "bg-secondary text-white",
+                  // }}
                 >
-                  <ArrowPathIcon className="h-5 w-5" />
-                </span>
-              </Tooltip>
+                  <span
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setOpenUnlockUserPrompt(true);
+                    }}
+                    className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
+                  >
+                    <LockClosedIcon className="h-5 w-5" />
+                  </span>
+                </Tooltip>}
+                <Tooltip
+                  color="secondary"
+                  content="Reset User Password"
+                  classNames={{
+                    base: "text-white",
+                    content: "bg-secondary text-white",
+                  }}
+                >
+                  <span
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setOpenResetPasswordPrompt(true);
+                    }}
+                    className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
+                  >
+                    <ArrowPathIcon className="h-5 w-5" />
+                  </span>
+                </Tooltip>
+              </>
             )}
 
             {/* DELETE USER BY ACCOUNT ADMIN OR REMOVE USER FROM WORKSPACE */}
@@ -361,9 +387,24 @@ export default function UsersTable({
   async function handleRemoveUser() {
     // TO REMOVE A USER FROM THE MERCHANT ACCOUNT AND ALL WORKSPACES
     if (isUsersRoute) {
-      notify("error", "You can't delete a user, contact support!");
-      setIsLoading(false);
-      return;
+
+      // ONLY OWNER CAN NOT BE REMOVED FROM ACCOUNT
+      if (selectedUser?.role == "owner") {
+        notify("error", "Owner cannot be removed!");
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await handleDeleteFromAccount();
+      if (response) {
+        onClose();
+        setIsLoading(false);
+        return;
+      }
+      
+
+      // RETURN AFTER DELETING USER FROM ACCOUNT
+      return
     }
 
     // The last person cannot be removed from the workspace
@@ -380,8 +421,8 @@ export default function UsersTable({
         queryKey: [WORKSPACE_MEMBERS_QUERY_KEY, workspaceID],
       });
       onClose();
-      setIsLoading(false);
     }
+    
   }
 
   const topContent = React.useMemo(() => {
@@ -508,7 +549,7 @@ export default function UsersTable({
 
   const emptyContent = React.useMemo(() => {
     return (
-      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 dark:bg-foreground/5 text-sm font-semibold text-slate-600">
+      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
@@ -534,7 +575,7 @@ export default function UsersTable({
     <>
       <Table
         aria-label="Users table with custom cells"
-        className="max-h-[980px] "
+        className="max-h-[980px]"
         classNames={{
           table: cn("align-top items-center justify-center", {}),
         }}
@@ -668,7 +709,7 @@ export function UserAvatarComponent({
           {...props}
         />
       ) : (
-        <div className="text-md grid h-9 w-9 flex-none scale-90 place-items-center items-center justify-center rounded-xl bg-primary-700 font-medium uppercase text-white ring-2 ring-primary  ring-offset-1">
+        <div className="text-md grid h-9 w-9 flex-none scale-90 place-items-center items-center justify-center rounded-xl bg-primary-700 font-medium uppercase text-white ring-2 ring-primary ring-offset-1">
           {getUserInitials(`${firstName} ${lastName}`)}
         </div>
       )}

@@ -1,6 +1,7 @@
 import {
   adminResetUserPassword,
   assignUsersToWorkspace,
+  deleteSystemUserData,
 } from "@/app/_actions/user-actions";
 import { deleteUserFromWorkspace } from "@/app/_actions/workspace-actions";
 import { generateRandomString, notify } from "@/lib/utils";
@@ -166,6 +167,21 @@ const useWorkspaceStore = create((set, get) => ({
     const { selectedUser } = get();
 
     const response = await deleteUserFromWorkspace(selectedUser?.ID);
+
+    if (response?.success) {
+      notify("success", `You Removed ${selectedUser?.first_name}!`);
+      return response?.success;
+    }
+
+    notify("error", response?.message);
+    return response?.success;
+  },
+
+  handleDeleteFromAccount: async () => {
+    set({ isLoading: true });
+    const { selectedUser } = get();
+
+    const response = await deleteSystemUserData(selectedUser?.ID);
 
     if (response?.success) {
       notify("success", `You Removed ${selectedUser?.first_name}!`);

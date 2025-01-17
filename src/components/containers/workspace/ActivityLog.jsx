@@ -84,12 +84,12 @@ const ActivityLog = () => {
             {items.data.map((item, itemIndex) => (
               <div className="flex flex-col gap-y-4 py-2" key={itemIndex}>
                 <div className="flex items-center space-x-4">
-                  {renderTaskType(item.type)}
+                  {renderTaskType(item?.type)}
 
                   <div className="w-full">
                     <div className="flex w-full justify-between">
                       <p className="mb-[4px] text-[14px] font-medium leading-6">
-                        {item.created_by.user_name}
+                        {item?.created_by.user_name}
                       </p>
                       <p className="leading-4] text-[12px] font-normal text-[#898989]">
                         {formatDistance(new Date(item.createdAt), new Date())}

@@ -239,7 +239,7 @@ function Wallet({
                     }
                   )}
                 >
-                  <div role="pre-fund-wallet" className="flex  flex-col gap-4">
+                  <div role="pre-fund-wallet" className="flex flex-col gap-4">
                     <p className="text-[14px] font-semibold text-foreground/80">
                       Deposit funds into your PayBoss Wallet
                     </p>
@@ -327,7 +327,7 @@ function Wallet({
               </div>
             )}
           {!hideHistory && (
-            <ScrollArea className="flex h-full max-h-[600px] flex-[2] flex-grow flex-col items-start gap-8 ">
+            <ScrollArea className="flex h-full max-h-[600px] flex-[2] flex-grow flex-col items-start gap-8">
               <CardHeader
                 title="Wallet Transaction History"
                 infoText={
@@ -548,7 +548,7 @@ export function WalletTransactionHistory({
 
                         <div className="w-full items-start">
                           <div className="flex w-full justify-between">
-                            <p className="text-xs text-foreground/70 ">
+                            <p className="text-xs text-foreground/70">
                               <span className="text-sm font-medium capitalize leading-6">
                                 {item?.created_by || item?.remarks}
                               </span>{" "}
@@ -663,7 +663,7 @@ export function WalletTransactionHistory({
             );
           })
         ) : (
-          <div className="flex flex-1 items-center rounded-lg dark:bg-foreground/5 bg-slate-50 text-sm font-semibold text-slate-600">
+          <div className="flex flex-1 items-center rounded-lg bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
             <EmptyLogs
               className={"my-auto"}
               title={"No Wallet Transactions"}
@@ -774,7 +774,7 @@ export function WalletLHistoryLoader({ limit }) {
               <Skeleton className="h-4 w-full max-w-lg" />
             </div>
           </div>
-          <div className="flex w-fit max-w-xs flex-col items-end gap-2 ">
+          <div className="flex w-fit max-w-xs flex-col items-end gap-2">
             <Skeleton className="h-8 w-40" />
             <Skeleton className="h-4 w-20" />
           </div>
