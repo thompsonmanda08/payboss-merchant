@@ -34,22 +34,12 @@ function ScreenLock({ open, session }) {
   async function handleRefreshAuthToken() {
     setIsLoading(true);
     await lockScrenOnUserIdle(false); // User is no longer idle
-    onClose();
-    setIsLoading(false);
     queryClient.invalidateQueries();
+    onClose();
+    await getRefreshToken();
+    setIsLoading(false);
 
-    // TODO: IMPLEMENT REFRESH TOKEN IN THE ACTIVE FUNCTION WITH SET INTERVAL
-    // const res = await getRefreshToken();
-    // queryClient.invalidateQueries();
-
-    // if (res.success) {
-    //   onClose()
-    //   setIsLoading(false)
-    //   queryClient.invalidateQueries()
-    //   return
-    // }
-
-    // setIsLoading(false)
+    
   }
 
   useEffect(() => {
@@ -61,9 +51,7 @@ function ScreenLock({ open, session }) {
       setSeconds((x) => x - 1);
     }, 1000);
 
-    if (seconds == 0) {
-      handleUserLogOut(pathname);
-    }
+    if (seconds == 0) handleUserLogOut();
 
     return () => {
       clearInterval(interval);
@@ -80,11 +68,9 @@ function ScreenLock({ open, session }) {
       hideCloseButton={true}
     >
       <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalBody className="flex flex-col gap-y-2">
-              <Card className=" mt-4 border-none bg-gradient-to-br from-primary-300 to-primary-500">
-                <CardBody className="items-center justify-center pb-0 ">
+        <ModalBody className="flex flex-col gap-y-2">
+              <Card className="mt-4 border-none bg-gradient-to-br from-primary-300 to-primary-500">
+                <CardBody className="items-center justify-center pb-0">
                   <p className="mb-4 text-center text-xl font-bold text-white">
                     Are you still there?
                   </p>
@@ -118,7 +104,7 @@ function ScreenLock({ open, session }) {
                     Seconds
                   </Chip>
 
-                  <p className="text-center text-sm font-medium  leading-6 tracking-tight text-slate-200">
+                  <p className="text-center text-sm font-medium leading-6 tracking-tight text-slate-200">
                     You have been idle for some time now, verify that your
                     session is still active otherwise you will be logged out.
                   </p>
@@ -130,7 +116,7 @@ function ScreenLock({ open, session }) {
                 color="danger"
                 variant="light"
                 isDisabled={isLoading}
-                onPress={() => handleUserLogOut(pathname)}
+                onPress={handleUserLogOut}
               >
                 Log out
               </Button>
@@ -143,8 +129,6 @@ function ScreenLock({ open, session }) {
                 Am still here
               </Button>
             </ModalFooter>
-          </>
-        )}
       </ModalContent>
     </Modal>
   );
@@ -159,7 +143,6 @@ export function IdleTimerContainer({ authSession }) {
   const onIdle = async () => {
     setState("Idle");
     await lockScrenOnUserIdle(true);
-    await getRefreshToken();
   };
 
   const onActive = () => {
@@ -175,7 +158,7 @@ export function IdleTimerContainer({ authSession }) {
   const onAction = async () => {
     setCount(count + 1);
 
-    if (count == 10000) {
+    if (count == 1000) {
       await getRefreshToken();
     }
   };
@@ -193,6 +176,7 @@ export function IdleTimerContainer({ authSession }) {
     const interval = setInterval(() => {
       setRemaining(Math.ceil(getRemainingTime() / 1000));
     }, 500);
+
 
     return () => {
       clearInterval(interval);

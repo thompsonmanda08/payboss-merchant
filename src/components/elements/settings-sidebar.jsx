@@ -91,7 +91,7 @@ function SettingsSideBar({
             { "text-white": isProfile }
           )}
           onClick={toggleSideBar}
-          startContent={<Bars3BottomLeftIcon className="h-7 w-7  " />}
+          startContent={<Bars3BottomLeftIcon className="h-7 w-7" />}
         >
           <Logo href={"#"} />
         </Button>
@@ -125,7 +125,7 @@ function SettingsSideBar({
             variant="light"
             as={Link}
             href={homeRoute}
-            className="h-12 w-full justify-start p-2 text-foreground-500 hover:text-primary dark:data-[hover=true]:text-primary-50 data-[hover=true]:bg-primary/10"
+            className="h-12 w-full justify-start p-2 text-foreground-500 hover:text-primary data-[hover=true]:bg-primary/10 dark:data-[hover=true]:text-primary-50"
             startContent={<ArrowLeftIcon className="h-5 w-5" />}
           >
             {backButtonText || "Back to Workspaces"}
@@ -136,7 +136,7 @@ function SettingsSideBar({
             role="`workspace_settings`"
             className="flex flex-col justify-start"
           >
-            <p className="text-[13px] font-medium uppercase tracking-wide py-2 text-foreground-400">
+            <p className="py-2 text-[13px] font-medium uppercase tracking-wide text-foreground-400">
               {!isAccountLevelSettingsRoute ? title : "ACCOUNT SETTINGS"}
             </p>
             <hr className="my-2 dark:border-primary/20" />
@@ -164,10 +164,10 @@ function SettingsSideBar({
 
           {/* ************************************************************* */}
           <hr className="mt-auto dark:border-primary/20" />
-          <div className="flex gap-2 items-center px-5  pt-2">
+          <div className="flex items-center gap-2 px-5 pt-2">
             <NavIconButton
               className={"bg-primary"}
-              onClick={() => handleUserLogOut("/manage-account")}
+              onClick={() => handleUserLogOut()}
             >
               <PowerIcon className="h-5 w-5 text-white" />
             </NavIconButton>
@@ -175,7 +175,7 @@ function SettingsSideBar({
               variant="light"
               // size="sm"
               className="my-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
-              onClick={() => handleUserLogOut("/manage-account")}
+              onClick={() => handleUserLogOut()}
             >
               Log out
             </Button>

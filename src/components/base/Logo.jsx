@@ -18,7 +18,7 @@ function Logo({
   href,
 }) {
   const { theme } = useTheme();
-  const [logoUrl, setLogoUrl] = useState("/images/logo/logo-light.svg");
+  const [logoUrl, setLogoUrl] = useState(payBossLogo);
 
   useEffect(() => {
     let logoType;

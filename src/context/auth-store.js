@@ -62,9 +62,7 @@ const useAuthStore = create((set, get) => ({
   handleUserLogOut: async (pathname) => {
     const isLoggedOut = await logUserOut();
     if (isLoggedOut) {
-      window.location.href = pathname
-        ? `/login?callbackUrl=${pathname}`
-        : "/login";
+      window.location.href = `/login`
 
       get().resetAuthData();
       return isLoggedOut;

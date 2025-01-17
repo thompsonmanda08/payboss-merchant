@@ -67,6 +67,8 @@ export async function updateAuthSession(fields) {
       ...fields,
     });
 
+    
+
     if (session) {
       (await cookies()).set(AUTH_SESSION, session, {
         httpOnly: true,

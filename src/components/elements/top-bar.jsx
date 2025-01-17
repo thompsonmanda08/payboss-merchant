@@ -108,7 +108,7 @@ export default function TopNavBar({ user }) {
                 <WalletIcon className="h-5 w-5 text-white" />
               </NavIconButton>
 
-              <div className=" flex flex-col items-start">
+              <div className="flex flex-col items-start">
                 <span
                   className={cn("text-sm leading-4 tracking-wide", {
                     "text-white group-hover:text-white": isProfile,
@@ -125,7 +125,7 @@ export default function TopNavBar({ user }) {
                 </span>
               </div>
             </Link>
-            <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:-right-1 after:-top-1 after:h-3 after:aspect-square after:w-3 after:rounded-full after:bg-secondary after:content-['']">
+            <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:-right-1 after:-top-1 after:aspect-square after:h-3 after:w-3 after:rounded-full after:bg-secondary after:content-['']">
               <NavIconButton className={"bg-primary"}>
                 <BellIcon className="h-5 w-5 text-white" />
               </NavIconButton>
@@ -250,15 +250,15 @@ export function AvatarDropdown({ user, isProfile }) {
             Go to Workspaces
           </DropdownItem>
           <DropdownItem key="help_and_feedback" href="/support">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <span> Help & Support</span>{" "}
               <NavIconButton className={"scale-90"}>
                 <ChatBubbleLeftRightIcon className="h-5 w-5" />
               </NavIconButton>
             </div>
           </DropdownItem>
-          <DropdownItem key="logout" onClick={() => handleUserLogOut(pathname)}>
-            <div className="flex justify-between items-center">
+          <DropdownItem key="logout" onClick={handleUserLogOut}>
+            <div className="flex items-center justify-between">
               <span>Log Out</span>{" "}
               <NavIconButton className={"scale-80 bg-primary"}>
                 <PowerIcon className="h-5 w-5 text-white" />
@@ -290,7 +290,7 @@ export function NavbarLoader({ isProfile }) {
         />
       </div>
       <div className="flex items-center gap-2">
-        <div className=" flex space-x-2">
+        <div className="flex space-x-2">
           <Skeleton
             className={cn("aspect-square h-8 rounded-full", {
               "bg-foreground-200 p-4 backdrop-blur-md": isProfile,
