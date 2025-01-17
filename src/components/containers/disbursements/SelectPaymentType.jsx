@@ -57,6 +57,12 @@ const SelectPaymentType = ({ setCreatePaymentLoading }) => {
       return;
     }
 
+
+    if (setSelectedProtocol == "voucher") {
+      notify("warning", "Currently under maintainance. ");
+      return;
+    }
+
     // router.push(`${type.href}/?protocol=${selectedProtocol}`)
     router.push(`payments/create/${selectedProtocol}`);
     setOpenPaymentsModal(false);
