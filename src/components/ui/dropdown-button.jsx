@@ -15,7 +15,6 @@ import {
   ChevronRightIcon,
   EllipsisHorizontalIcon,
 } from "@heroicons/react/24/outline";
-import Link from "next/link";
 
 const buttonClasses =
   "items-center justify-between gap-2 rounded-lg font-medium capitalize text-primary shadow-sm dark:bg-primary-400/5 bg-primary/10";
@@ -46,7 +45,7 @@ export default function DropdownButton({
           variant="bordered"
           isIconOnly={isIconOnly}
           className={cn(
-            "border-[1px]] mb-1 h-auto max-h-[60px] w-full items-center justify-start border-border border hover:border-primary bg-transparent  p-2 capitalize",
+            "border-[1px]] mb-1 h-auto max-h-[60px] w-full items-center justify-start border-border border hover:border-primary bg-transparent p-2 capitalize",
             trigger
           )}
         >
@@ -60,6 +59,9 @@ export default function DropdownButton({
         variant={variant || "faded"}
         items={dropDownItems || items}
         className={innerWrapper}
+        classNames={{
+          base: "overflow-visible",
+        }}
         onClose
         {...props}
       >
@@ -68,7 +70,7 @@ export default function DropdownButton({
             key={item?.key}
             color={item?.key === "new" ? "primary" : "default"}
             className={cn(
-              "group w-[260px] hover:bg-primary/10 hover:text-primary dark:hover:bg-default focus:bg-primary/10 dark:data-[hover=true]:border-primary/10 data-[hover=true]:border-border data-[hover=true]:bg-primary/10 data-[hover=true]:text-primary",
+              "group w-[260px] hover:bg-primary/10 hover:text-primary dark:hover:bg-default focus:bg-primary/10 dark:data-[hover=true]:border-primary/10 data-[hover=true]:border-border data-[hover=true]:bg-primary/10 data-[hover=true]:text-primary overflow-visible",
               {
                 "text-danger": item?.key === "delete",
               },
@@ -78,7 +80,7 @@ export default function DropdownButton({
             shortcut={item.shortcut}
             showDivider={item?.showDivider}
             description={item?.description}
-            onClick={() => {
+            onPress={() => {
               if (item?.href) {
                 if (item?.href?.includes("http")) {
                   window.open(item?.href, "_blank");
@@ -107,10 +109,12 @@ export default function DropdownButton({
                 animate={{
                   opacity: [0, 1],
                 }}
-                className="absolute -top-1 left-[100%] z-0 max-h-96 hidden w-full min-w-[200px] p-2 transition-all duration-300 ease-in-out group-hover:flex"
+                className={cn(
+                  "absolute -top-1 left-0 group-hover:left-[100%] z-50 hidden max-h-96 w-full min-w-[200px] p-2 transition-all duration-300 ease-in-out group-hover:flex"
+                )}
               >
-                <Card className="w-full p-2 overflow-y-auto no-scrollbar">
-                  <motion.ul className="flex  w-full flex-col text-sm font-semibold transition-all duration-300 ease-in-out">
+                <Card className="no-scrollbar w-full overflow-y-auto p-2">
+                  <motion.ul className="flex w-full flex-col text-sm font-semibold transition-all duration-300 ease-in-out">
                     {item.subMenuItems.map((subItem, index) => (
                       <Button
                         key={subItem.key || index}
@@ -125,11 +129,7 @@ export default function DropdownButton({
                             <subItem.Icon className={cn(iconClasses, "mt-1")} />
                           ) : undefined
                         }
-                        className="group my-auto h-14 items-start justify-start gap-2 rounded-md bg-transparent p-2 text-medium text-foreground/70  hover:text-primary
-                        
-                        
-                             hover:bg-primary/10 dark:hover:bg-default focus:bg-primary/10 dark:data-[hover=true]:border-primary/10 data-[hover=true]:border-border data-[hover=true]:bg-primary/10 data-[hover=true]:text-primary
-                        "
+                        className="group my-auto h-14 items-start justify-start gap-2 rounded-md bg-transparent p-2 text-medium text-foreground/70 hover:bg-primary/10 hover:text-primary focus:bg-primary/10 data-[hover=true]:border-border data-[hover=true]:bg-primary/10 data-[hover=true]:text-primary dark:hover:bg-default dark:data-[hover=true]:border-primary/10"
                       >
                         <div className="flex flex-col items-start justify-start font-medium">
                           {subItem.label}
