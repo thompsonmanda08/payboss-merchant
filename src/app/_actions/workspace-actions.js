@@ -2,6 +2,21 @@
 import authenticatedService from "@/lib/api-config";
 import { updateWorkspaceSession } from "@/lib/session";
 
+/**
+ * Initializes a workspace and updates the session with the workspace permissions
+ * and type.
+ *
+ * @param {string} workspaceID - The ID of the workspace to initialize.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following
+ * properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An object containing the workspace permissions and type.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function initializeWorkspace(workspaceID) {
   if (!workspaceID) {
     return {
@@ -54,6 +69,30 @@ export async function initializeWorkspace(workspaceID) {
   }
 }
 
+/**
+ * Submits a Proof of Payment (POP) for a workspace.
+ *
+ * @param {Object} popDetails - The details of the Proof of Payment (POP) to be
+ * submitted. The object should contain the following properties:
+ *
+ * - `amount`: The amount of the Proof of Payment (POP) to be submitted.
+ * - `currency`: The currency of the Proof of Payment (POP) to be submitted.
+ * - `paymentMethod`: The payment method used to make the payment.
+ * - `paymentReference`: The payment reference for the payment.
+ * - `paymentDate`: The date of the payment.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the Proof of
+ * Payment (POP) is being submitted.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An object containing the submitted Proof of Payment (POP) details.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function submitPOP(popDetails, workspaceID) {
   if (!workspaceID) {
     return {
@@ -105,6 +144,22 @@ export async function submitPOP(popDetails, workspaceID) {
   }
 }
 
+/**
+ * Retrieves a list of all the prefund requests made by the logged-in
+ * merchant for the given workspace.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the prefund
+ * requests are being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of prefund request objects.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getWalletPrefunds(workspaceID) {
   if (!workspaceID) {
     return {

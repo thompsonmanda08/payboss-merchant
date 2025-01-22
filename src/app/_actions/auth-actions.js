@@ -10,6 +10,14 @@ import {
 
 import { apiClient } from "@/lib/utils";
 
+/**
+ * Validates a merchant's TPIN, 
+ * If the TPIN is valid, an API response containing the merchant's information is returned.
+ * If the TPIN is invalid, an API response with a message indicating the error is returned.
+ * @param {string} tpin - The TPIN to be validated
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object which indicates the success or failure of the operation.
+ * 
+ */
 export async function validateTPIN(tpin) {
   try {
     const res = await apiClient.get(
@@ -39,6 +47,14 @@ export async function validateTPIN(tpin) {
   }
 }
 
+/**
+ * Creates a new merchant by calling the API endpoint and posting the business information.
+ * If the operation is successful, an API response containing the merchant's information is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ * @param {BusinessInfo} businessInfo - An object containing the business information of the merchant.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object which indicates the success or failure of the operation.
+ * 
+ */
 export async function createNewMerchant(businessInfo) {
   try {
     const res = await apiClient.post(`merchant/onboard/new`, businessInfo, {
@@ -62,6 +78,16 @@ export async function createNewMerchant(businessInfo) {
     };
   }
 }
+
+/**
+ * Submits the merchant's bank details by calling the API endpoint.
+ * If the operation is successful, an API response containing the submitted bank details is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @param {Object} data - An object containing the bank details to be submitted.
+ * @param {string} merchantID - The ID of the merchant whose bank details are being submitted.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ */
 
 export async function submitMerchantBankDetails(data, merchantID) {
   try {
@@ -102,6 +128,16 @@ export async function submitMerchantBankDetails(data, merchantID) {
   }
 }
 
+/**
+ * Updates the merchant's details by sending a PATCH request to the API.
+ * If the update is successful, an API response containing the updated details is returned.
+ * If the update fails, an API response with a message indicating the error is returned.
+ *
+ * @param {Object} businessInfo - An object containing the new business information of the merchant.
+ * @param {string} merchantID - The ID of the merchant whose details are being updated.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ */
+
 export async function updateMerchantDetails(businessInfo, merchantID) {
   try {
     const res = await apiClient.patch(
@@ -139,6 +175,17 @@ export async function updateMerchantDetails(businessInfo, merchantID) {
     };
   }
 }
+
+/**
+ * Creates a new admin user for a merchant by calling the API endpoint.
+ * If the operation is successful, an API response containing the new user's details is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @param {Object} newUser - An object containing the new user's details.
+ * @param {string} merchantID - The ID of the merchant whose admin user is being created.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ *
+*/
 
 export async function createMerchantAdminUser(newUser, merchantID) {
   try {
@@ -219,6 +266,14 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
   }
 }
 
+/**
+ * Updates the business document references by sending a PATCH request to the API.
+ * If the update is successful, an API response containing the updated document references is returned.
+ * If the update fails, an API response with a message indicating the error is returned.
+ *
+ * @param {array} payloadUrls - An array of URLs containing the updated document references.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ */
 export async function updateBusinessDocumentRefs(payloadUrls) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
@@ -259,6 +314,16 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
   }
 }
 
+/**
+ * Authenticates a user with their email and password by calling the API endpoint
+ * and creates an authentication session upon successful login.
+ *
+ * @param {LoginDetails} param - An object containing login details.
+ * @param {string} param.email - The email of the user.
+ * @param {string} param.password - The password of the user.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object which indicates the success or failure of the operation.
+ *
+ */
 export async function authenticateUser(loginCredentials) {
   try {
     const res = await apiClient.post(

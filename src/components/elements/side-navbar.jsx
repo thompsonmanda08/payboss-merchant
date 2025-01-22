@@ -87,12 +87,12 @@ function SideNavBar({ workspaceSession }) {
   const DISBURSEMENT_SERVICES = [
     {
       ID: "payments",
-      name: "Make Payments",
+      name: "Manage Payments",
       Icon: BanknotesIcon,
       // href: `${dashboardRoute}/payments`,
       subMenuItems: [
         {
-          name: "Transfers",
+          name: "Disbursements",
           href: `${dashboardRoute}/payments`,
           Icon: ArrowsRightLeftIcon,
         },
@@ -267,7 +267,7 @@ function SideNavBar({ workspaceSession }) {
         className="absolute left-6 top-3 z-[99] h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
         onClick={toggleMobileMenu}
       >
-        <Bars3BottomLeftIcon className="h-7 w-7  text-foreground/70" />
+        <Bars3BottomLeftIcon className="h-7 w-7 text-foreground/70" />
         <Logo href={"#"} />
       </Button>
       <div

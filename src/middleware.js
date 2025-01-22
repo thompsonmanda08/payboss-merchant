@@ -6,6 +6,7 @@ const PUBLIC_ROUTE = [
   "/login",
   "/register",
   "/support",
+  "/checkout",
   "/sentry-example-page",
 ];
 

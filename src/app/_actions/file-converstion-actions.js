@@ -1,9 +1,17 @@
 import { formatDate } from '@/lib/utils'
 
-export function convertToCSVString(objArray, fileName = 'PayBoss_Report') {
+/**
+ * Converts a given array of objects into a CSV string
+ * @param {Array<object>} objArray The array of objects to convert
+ * @param {string} [columnHeaders] Optional parameter to specify custom column headers
+ * @param {string} [fileName='PayBoss_Report'] Optional parameter to specify a custom file name for the downloaded file
+ * @returns {string} The CSV string
+ */
+export function convertToCSVString(objArray, columnHeaders, fileName = 'PayBoss_Report') {
   const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray
 
   // Get headers dynamically from the first object in the array
+  // TODO: Remove - serviceID, workspaceID, service, charge, credit amount
   const headers = Object.keys(array[0])
     .map((key) => key.toUpperCase())
     .join(',')

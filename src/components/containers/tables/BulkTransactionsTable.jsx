@@ -221,11 +221,6 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
     }
   }, []);
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
-  }, []);
-
   const loadingContent = React.useMemo(() => {
     return (
       <div className="mt-24 flex flex-1 items-center rounded-lg">
@@ -241,7 +236,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
 
   const emptyContent = React.useMemo(() => {
     return (
-      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 dark:bg-foreground/5 text-sm font-semibold text-slate-600">
+      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
@@ -279,7 +274,6 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
             isClearable={true}
             placeholder="Search by name..."
             value={filterValue}
-            onClear={() => onClear()}
             onChange={(e) => onSearchChange(e.target.value)}
           />
           <div className="relative flex gap-3">
@@ -348,7 +342,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
   return (
     <Table
       aria-label="Transactions table with custom cells"
-      className="max-h-[980px] "
+      className="max-h-[980px]"
       classNames={{
         table: cn("align-top min-h-[300px] items-center justify-center", {
           "min-h-max": pages <= 1,

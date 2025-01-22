@@ -83,7 +83,7 @@ const PaymentDetails = ({
     <div className="mx-auto flex w-full flex-1 flex-col gap-4 md:px-8">
       <div className="flex w-full flex-1 gap-4">
         {paymentAction?.prefund && (
-          <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 p-4 ">
+          <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 p-4">
             <WalletIcon className="h-6 w-6 text-primary" />
             <div className="h-8 border-r-2 border-primary/60" />
             <div className="flex w-full justify-between text-sm font-medium text-primary 2xl:text-base">
@@ -97,7 +97,7 @@ const PaymentDetails = ({
           </div>
         )}
         {selectedActionType?.name && (
-          <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 p-4 ">
+          <div className="flex w-full items-center gap-3 rounded-md bg-primary/10 p-4">
             <selectedActionType.Icon className="h-6 w-6 text-primary" />
             <div className="h-8 border-r-2 border-primary/60" />
             <div className="flex w-full justify-between text-sm font-medium text-primary 2xl:text-base">
@@ -119,12 +119,7 @@ const PaymentDetails = ({
             Be sure that the provided batch file is in the same format as the
             provided template to prevent transaction failure.
           </li>
-          <li>
-            <strong>
-              Your batch total amount must equal the amount on the selected
-              prefund
-            </strong>
-          </li>
+
           <li>
             During validation and pending approval, the selected prefund wallet
             will be disbaled and locked for the duration of the batch process.

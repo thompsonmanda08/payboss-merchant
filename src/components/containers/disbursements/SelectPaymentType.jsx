@@ -29,13 +29,13 @@ const SelectPaymentType = ({ setCreatePaymentLoading }) => {
 
   const PAYMENT_SERVICE_TYPES = [
     {
-      name: "Bulk Transfer",
+      name: "Bulk Disbursement",
       Icon: CircleStackIcon,
       href: `${dashboardRoute}/payments/create/bulk`,
       index: 0,
     },
     {
-      name: "Single Transfer",
+      name: "Single Disbursement",
       Icon: ArrowRightCircleIcon,
       href: `${dashboardRoute}/payments/create/single`,
       index: 1,
@@ -54,12 +54,6 @@ const SelectPaymentType = ({ setCreatePaymentLoading }) => {
 
     if (!setSelectedProtocol) {
       notify("warning", "Please select a service protocol");
-      return;
-    }
-
-
-    if (setSelectedProtocol == "voucher") {
-      notify("warning", "Currently under maintainance. ");
       return;
     }
 

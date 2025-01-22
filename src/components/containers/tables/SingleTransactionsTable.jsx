@@ -263,10 +263,7 @@ export default function SingleTransactionsTable({
     }
   }, []);
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
-  }, []);
+
 
   const loadingContent = React.useMemo(() => {
     return (
@@ -337,7 +334,7 @@ export default function SingleTransactionsTable({
             isClearable={true}
             placeholder="Search by name..."
             value={filterValue}
-            onClear={() => onClear()}
+          
             onChange={(e) => onSearchChange(e.target.value)}
           />
           <div className="relative flex gap-3">

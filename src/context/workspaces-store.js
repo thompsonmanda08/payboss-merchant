@@ -2,11 +2,11 @@ import {
   adminResetUserPassword,
   assignUsersToWorkspace,
   deleteSystemUserData,
+  unlockSystemUser,
 } from "@/app/_actions/user-actions";
 import { deleteUserFromWorkspace } from "@/app/_actions/workspace-actions";
 import { generateRandomString, notify } from "@/lib/utils";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 const INITIAL_STATE = {
   addedUsers: [],
@@ -137,15 +137,14 @@ const useWorkspaceStore = create((set, get) => ({
     return await assignUsersToWorkspace(users, workspaceID);
   },
 
-  handleResetUserPassword: async (workspaceID) => {
+  handleResetUserPassword: async () => {
     set({ isLoading: true, error: { status: false, message: "" } });
 
     const { selectedUser } = get();
 
-    // TODO: Generate random string
     const passwordInfo = {
       changePassword: true,
-      password: generateRandomString(12),
+      password: generateRandomString(12), // Generate random string
     };
 
     const response = await adminResetUserPassword(
@@ -162,7 +161,7 @@ const useWorkspaceStore = create((set, get) => ({
     return response?.success;
   },
 
-  handleDeleteFromWorkspace: async (workspaceID) => {
+  handleDeleteFromWorkspace: async () => {
     set({ isLoading: true });
     const { selectedUser } = get();
 
@@ -174,6 +173,22 @@ const useWorkspaceStore = create((set, get) => ({
     }
 
     notify("error", response?.message);
+    return response?.success;
+  },
+
+  handleUnlockSystemUser: async () => {
+    set({ isLoading: true });
+    const { selectedUser } = get();
+
+    const response = await unlockSystemUser(selectedUser?.ID);
+
+    if (response?.success) {
+      notify("success", `You unlocked ${selectedUser?.first_name}!`);
+      return response?.success;
+    }
+
+    notify("error", response?.message);
+    set({ isLoading: false });
     return response?.success;
   },
 
@@ -189,6 +204,8 @@ const useWorkspaceStore = create((set, get) => ({
     }
 
     notify("error", response?.message);
+
+    set({ isLoading: false });
     return response?.success;
   },
 

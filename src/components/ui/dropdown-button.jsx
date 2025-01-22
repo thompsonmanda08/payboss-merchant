@@ -60,7 +60,7 @@ export default function DropdownButton({
         items={dropDownItems || items}
         className={innerWrapper}
         classNames={{
-          base: "overflow-visible",
+          base: "overflow-visible", // REQUIRED FOR SUB MENU ITEMS
         }}
         onClose
         {...props}

@@ -7,6 +7,7 @@ import Modal from "@/components/base/Modal";
 function ReportDetailsViewer({
   columns,
   batch,
+  setSelectedBatch,
   openReportsModal,
   setOpenReportsModal,
   isLoading,
@@ -16,10 +17,11 @@ function ReportDetailsViewer({
       show={openReportsModal}
       onClose={() => {
         setOpenReportsModal(false);
+        setSelectedBatch(null);
       }}
       // onConfirm={handleConfirmationClose}
       title={"Transaction Report Details"}
-      infoText={"Track each transactions status througout the payment proccess"}
+      infoText={"Track each transactions status throughout the payment process"}
       classNames={{ overlay: "z-[55]", container: "px-2" }}
       isDismissible={false}
       disableAction={true}

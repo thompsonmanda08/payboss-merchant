@@ -13,7 +13,7 @@ import { cookies } from "next/headers";
  * @param {Object} newUser - An object containing the new user's details.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  *
-*/
+ */
 export async function createNewUser(newUser) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
@@ -277,7 +277,7 @@ export async function deleteSystemUserData(userID) {
   try {
     const res = await authenticatedService({
       method: "DELETE",
-      url: `merchant/users/${userID}`
+      url: `merchant/user/${userID}`,
     });
 
     revalidatePath("/manage-account/users", "page");
@@ -315,7 +315,7 @@ export async function unlockSystemUser(userID) {
 
   try {
     const res = await authenticatedService({
-      url: `/api/v2/merchant/${merchantID}/user/${userID}`
+      url: `/merchant/${merchantID}/user/${userID}`,
     });
 
     revalidatePath("/manage-account/users", "page");

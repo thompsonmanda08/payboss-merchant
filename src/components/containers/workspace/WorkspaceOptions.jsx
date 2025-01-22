@@ -17,6 +17,7 @@ export default function WorkspaceSelection({
   activeWorkspace,
   workspaces,
 }) {
+
   const workspaceOptions = [
     {
       key: "home",
@@ -94,7 +95,7 @@ export default function WorkspaceSelection({
                 activeWorkspace?.workspace
               )}
             </div>
-            <span className="-mt-1 text-xs font-medium capitalize text-foreground-600 tracking-wide">
+            <span className="-mt-1 text-xs font-medium capitalize tracking-wide text-foreground-600">
               {`${activeWorkspace?.workspaceType}'s Workspace`}
             </span>
           </div>

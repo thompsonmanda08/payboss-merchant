@@ -52,10 +52,6 @@ const SERVICE_TYPES = [
     name: "Bulk Voucher Payments",
     index: 1,
   },
-  // {
-  //   name: 'Single Payments',
-  //   index: 2,
-  // },
 ];
 
 export default function DisbursementReports({ workspaceID }) {
@@ -84,11 +80,7 @@ export default function DisbursementReports({ workspaceID }) {
       isLoading={mutation.isPending}
       isError={mutation.isError}
       removeWrapper
-      onRowAction={(key) => {
-        const batch = directBatches.find((row) => row.ID == key);
-        setSelectedBatch(batch);
-        setOpenReportsModal(true);
-      }}
+      onRowAction={handleBatchSelection}
     />,
     <CustomTable
       key={`voucher-payments-${workspaceID}`}
@@ -96,16 +88,28 @@ export default function DisbursementReports({ workspaceID }) {
       rows={voucherBatches}
       isLoading={mutation.isPending}
       isError={mutation.isError}
-      onRowAction={(key) => {
-        // setSelectedBatchID(key)
-        setOpenReportsModal(true);
-      }}
+      onRowAction={handleBatchSelection}
       removeWrapper
     />,
   ]);
 
   async function getBulkReportData(range) {
     return await mutation.mutateAsync(range);
+  }
+
+  function handleBatchSelection(ID) {
+    let batch = null;
+    if (currentTabIndex === 0) {
+      batch = directBatches.find((row) => row.ID == ID);
+    }
+
+    if (currentTabIndex === 1) {
+      batch = voucherBatches.find((row) => row.ID == ID);
+    }
+    setSelectedBatch(batch);
+    setOpenReportsModal(true);
+    console.log("Selected ID", ID);
+    console.log("Selected Batch", batch, ID);
   }
 
   function handleFileExportToCSV() {
@@ -307,7 +311,7 @@ export default function DisbursementReports({ workspaceID }) {
       </Card>
 
       <Card className={"mb-8 w-full"}>
-        <div className="mb-4 flex w-full items-center justify-between gap-8 ">
+        <div className="mb-4 flex w-full items-center justify-between gap-8">
           <Tabs
             className={"my-2 mr-auto max-w-md"}
             tabs={SERVICE_TYPES}
@@ -336,6 +340,7 @@ export default function DisbursementReports({ workspaceID }) {
         <ReportDetailsViewer
           setOpenReportsModal={setOpenReportsModal}
           openReportsModal={openReportsModal}
+          setSelectedBatch={setSelectedBatch}
           batch={selectedBatch}
           columns={singleReportsColumns}
         />

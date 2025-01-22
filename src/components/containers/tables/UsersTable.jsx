@@ -21,7 +21,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 
-import { cn, getUserInitials, notify } from "@/lib/utils";
+import { cn, getUserInitials, maskString, notify } from "@/lib/utils";
 import useWorkspaceStore from "@/context/workspaces-store";
 import PromptModal from "@/components/base/Prompt";
 import { useQueryClient } from "@tanstack/react-query";
@@ -108,6 +108,7 @@ export default function UsersTable({
     handleDeleteFromWorkspace,
     handleDeleteFromAccount,
     handleResetUserPassword,
+    handleUnlockSystemUser,
   } = useWorkspaceStore();
 
   const pathname = usePathname();
@@ -236,7 +237,7 @@ export default function UsersTable({
     (user) => {
       if (isUserAdmin) {
         console.log("USER", user);
-        
+
         return (
           <div className="relative flex items-center justify-center gap-4">
             {/* EDIT USER ROLE */}
@@ -257,24 +258,19 @@ export default function UsersTable({
             {/* RESET USER PASSOWRD BY ACCOUNT ADMIN */}
             {isUsersRoute && (
               <>
-                {!user?.isLockedOut && <Tooltip
-                  color="default"
-                  content="Unlock User"
-                  // classNames={{
-                  //   base: "text-white",
-                  //   content: "bg-secondary text-white",
-                  // }}
-                >
-                  <span
-                    onClick={() => {
-                      setSelectedUser(user);
-                      setOpenUnlockUserPrompt(true);
-                    }}
-                    className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
-                  >
-                    <LockClosedIcon className="h-5 w-5" />
-                  </span>
-                </Tooltip>}
+                {user?.isLockedOut && (
+                  <Tooltip color="default" content="Unlock User">
+                    <span
+                      onClick={() => {
+                        setSelectedUser(user);
+                        setOpenUnlockUserPrompt(true);
+                      }}
+                      className="cursor-pointer text-lg font-bold text-green-600 active:opacity-50"
+                    >
+                      <LockOpenIcon className="h-5 w-5" />
+                    </span>
+                  </Tooltip>
+                )}
                 <Tooltip
                   color="secondary"
                   content="Reset User Password"
@@ -312,7 +308,11 @@ export default function UsersTable({
         );
       }
 
-      return <span className="text-default">No Action</span>;
+      return (
+        <Tooltip color="default" content="If you are an admin, try reloading!">
+          <span className="text-default">No Action</span>;
+        </Tooltip>
+      );
     },
     [isUserAdmin]
   );
@@ -329,7 +329,14 @@ export default function UsersTable({
               key={cellValue}
               firstName={user?.first_name}
               lastName={user?.last_name}
-              email={user?.email}
+              email={
+                <span className="flex items-center gap-1">
+                  {user?.email}{" "}
+                  {user?.isLockedOut && (
+                    <LockClosedIcon className="h-3 w-3 text-primary" />
+                  )}
+                </span>
+              }
               size="sm"
               className="rounded-md"
               src={user?.image}
@@ -387,7 +394,6 @@ export default function UsersTable({
   async function handleRemoveUser() {
     // TO REMOVE A USER FROM THE MERCHANT ACCOUNT AND ALL WORKSPACES
     if (isUsersRoute) {
-
       // ONLY OWNER CAN NOT BE REMOVED FROM ACCOUNT
       if (selectedUser?.role == "owner") {
         notify("error", "Owner cannot be removed!");
@@ -401,10 +407,9 @@ export default function UsersTable({
         setIsLoading(false);
         return;
       }
-      
 
       // RETURN AFTER DELETING USER FROM ACCOUNT
-      return
+      return;
     }
 
     // The last person cannot be removed from the workspace
@@ -422,7 +427,6 @@ export default function UsersTable({
       });
       onClose();
     }
-    
   }
 
   const topContent = React.useMemo(() => {
@@ -432,7 +436,6 @@ export default function UsersTable({
           <Search
             placeholder="Search by name..."
             value={filterValue}
-            // onClear={() => onClear()}
             onChange={(e) => onSearchChange(e.target.value)}
           />
           <div className="relative flex gap-3">
@@ -621,26 +624,27 @@ export default function UsersTable({
         </TableBody>
       </Table>
       {/* MODALS */}
+
+      {/* PROMPT TO UNLOCK A LOCKED USER ACCOUNT */}
       <PromptModal
-        isOpen={isOpen}
-        onOpen={onOpen}
+        isOpen={openUnlockUserPrompt}
+        onOpen={setOpenUnlockUserPrompt}
         onClose={() => {
-          onClose();
-          setSelectedUser(null);
+          setOpenUnlockUserPrompt(false);
         }}
-        title="Remove Workspace User"
-        onConfirm={handleRemoveUser}
-        confirmText="Remove"
+        title="Unlock User Account"
+        onConfirm={handleUnlockSystemUser}
         isDisabled={isLoading}
         isLoading={isLoading}
         isDismissable={false}
       >
-        <p className="-mt-4 text-sm leading-6 text-foreground/70">
-          Are you sure you want to remove{" "}
-          <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
-            {`${selectedUser?.first_name} ${selectedUser?.last_name}`}
+        <p className="-mt-4 text-sm leading-5 text-foreground/70">
+          By unlocking{" "}
+          <code className="rounded-md bg-primary/10 p-0.5 px-2 font-medium text-primary-700">
+            {`${selectedUser?.first_name} ${selectedUser?.last_name}`}&apos;s
           </code>{" "}
-          from this {isUsersRoute ? "account" : "workspace"}.
+          account, an email will be sent to {selectedUser?.email} with a new
+          password. Are you sure you want to proceed?
         </p>
       </PromptModal>
 
@@ -665,6 +669,30 @@ export default function UsersTable({
             {`${selectedUser?.first_name} ${selectedUser?.last_name}`}&apos;s
           </code>{" "}
           password? <br /> An email will be sent with the new default password.
+        </p>
+      </PromptModal>
+
+      {/* PROMPT TO DELETE USER FROM ACCOUNT OR WORKSPACE */}
+      <PromptModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={() => {
+          onClose();
+          setSelectedUser(null);
+        }}
+        title="Remove Workspace User"
+        onConfirm={handleRemoveUser}
+        confirmText="Remove"
+        isDisabled={isLoading}
+        isLoading={isLoading}
+        isDismissable={false}
+      >
+        <p className="-mt-4 text-sm leading-6 text-foreground/70">
+          Are you sure you want to remove{" "}
+          <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
+            {`${selectedUser?.first_name} ${selectedUser?.last_name}`}
+          </code>{" "}
+          from this {isUsersRoute ? "account" : "workspace"}.
         </p>
       </PromptModal>
 
