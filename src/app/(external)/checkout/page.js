@@ -1,25 +1,30 @@
 import React from "react";
 import Logo from "@/components/base/Logo";
+import { Footer } from "@/components/containers/landing-page/footer";
 
-async function CheckoutPage() {
+async function CheckoutPage(props) {
+  const searchParams = await props.searchParams;
   return (
     <>
-      <div className="flex w-full flex-1 flex-col bg-red-500 p-4">
-        <Logo />
-        <div className="mt-2 flex w-full flex-col px-2">
-          <h2
-            className={
-              "w-full text-[clamp(18px,18px+1vw,1.5rem)] text-white font-bold"
-            }
-          >
-            Checkout
-          </h2>
-          <p className="text-foreground">Complete the checkout process here</p>
-        </div>
+      <Logo />
+      <div className="my-2 flex w-full flex-col px-2">
+        <h2
+          className={
+            "w-full text-[clamp(18px,18px+1vw,1.5rem)] text-foreground font-bold"
+          }
+        >
+          Checkout
+        </h2>
+        <p className="text-foreground">Complete the checkout process here</p>
+      </div>
 
-        <div className="flex w-full flex-1 flex-col items-center justify-center bg-red-800">
-          IFRAME HERE
-        </div>
+      <div className="flex w-full flex-1 flex-col items-center justify-center">
+        <iframe
+          src={"https://payboss-merchants.bgsgroup.co.zm/"}
+          title={"PayBoss Checkout"}
+          className="flex w-full flex-1"
+          style={{ border: "none" }}
+        />
       </div>
     </>
   );
