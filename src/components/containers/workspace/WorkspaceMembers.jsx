@@ -3,7 +3,7 @@ import CardHeader from "@/components/base/CardHeader";
 import useDashboard from "@/hooks/useDashboard";
 import React from "react";
 import UsersTable from "../tables/UsersTable";
-import { useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@heroui/react";
 import AddUserToWorkspace from "./AddUserToWorkspace";
 
 export default function WorkspaceMembers({

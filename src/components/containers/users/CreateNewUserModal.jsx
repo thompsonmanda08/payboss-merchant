@@ -12,7 +12,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import StatusMessage from "@/components/base/StatusMessage";

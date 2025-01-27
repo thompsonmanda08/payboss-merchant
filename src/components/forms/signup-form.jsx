@@ -16,7 +16,7 @@ import {
   createNewMerchant,
   submitMerchantBankDetails,
 } from "@/app/_actions/auth-actions";
-import { Card } from "@nextui-org/react";
+import { Card } from "@heroui/react";
 import Step1_TPIN from "./signup-fragments/step-1-1";
 import StatusMessage from "../base/StatusMessage";
 

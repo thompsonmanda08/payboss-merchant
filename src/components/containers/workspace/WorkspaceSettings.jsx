@@ -6,7 +6,7 @@ import Tabs from "@/components/elements/tabs";
 import WorkspaceDetails from "./WorkspaceDetails";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import CreateNewUserModal from "../users/CreateNewUserModal";
-import { useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@heroui/react";
 import useWorkspaces from "@/hooks/useWorkspaces";
 import {
   ArrowUturnLeftIcon,

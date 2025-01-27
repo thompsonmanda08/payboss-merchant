@@ -9,7 +9,7 @@ import AddUserToWorkspace from "@/components/containers/workspace/AddUserToWorks
 import useWorkspaces from "@/hooks/useWorkspaces";
 import { SETUP_QUERY_KEY, WORKSPACES_QUERY_KEY } from "@/lib/constants";
 import { cn, notify } from "@/lib/utils";
-import { useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";

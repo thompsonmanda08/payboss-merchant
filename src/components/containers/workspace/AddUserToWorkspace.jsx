@@ -14,7 +14,7 @@ import {
   ModalFooter,
   Chip,
   Tooltip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import { notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";

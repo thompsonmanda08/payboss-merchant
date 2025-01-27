@@ -1,7 +1,7 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 import { useNetwork } from "@/hooks/useNetwork";
 import { motion } from "framer-motion";
 import ScreenLock, {
@@ -31,7 +31,7 @@ function Providers({ session, authSession, children }) {
         enableSystem
         disableTransitionOnChange
       >
-        <NextUIProvider locale="en-GB">
+        <HeroUIProvider locale="en-GB">
           {!online && (
             <motion.div
               whileInView={{
@@ -57,7 +57,7 @@ function Providers({ session, authSession, children }) {
           {authSession?.screenLocked && (
             <ScreenLock open={authSession?.screenLocked} />
           )}
-        </NextUIProvider>
+        </HeroUIProvider>
       </NextThemesProvider>
 
       <ReactQueryDevtools initialIsOpen={false} />

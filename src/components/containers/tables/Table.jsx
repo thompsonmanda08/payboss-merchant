@@ -9,7 +9,7 @@ import {
   Pagination,
   Tooltip,
   Chip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   SERVICE_PROVIDER_COLOR_MAP,
   TRANSACTION_STATUS_COLOR_MAP,

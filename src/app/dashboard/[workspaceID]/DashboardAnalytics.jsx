@@ -9,7 +9,7 @@ import {
 import { cn, formatCurrency } from "@/lib/utils";
 import { WalletTransactionHistory } from "../../../components/containers/workspace/Wallet";
 import PendingApprovals from "../../../components/containers/analytics/PendingAnalytics";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import Card from "@/components/base/Card";
 import SimpleStats from "@/components/elements/simple-stats";
 import CardHeader from "@/components/base/CardHeader";

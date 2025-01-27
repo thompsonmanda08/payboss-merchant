@@ -6,7 +6,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
 import SelectField from "@/components/ui/select-field";

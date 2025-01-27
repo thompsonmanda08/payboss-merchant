@@ -16,7 +16,7 @@ import {
 } from "@/lib/constants";
 import { formatActivityData } from "@/lib/utils";
 import PromptModal from "@/components/base/Prompt";
-import { Chip, Tooltip, useDisclosure } from "@nextui-org/react";
+import { Chip, Tooltip, useDisclosure } from "@heroui/react";
 import { uploadPOPDocument } from "@/app/_actions/pocketbase-actions";
 import {
   approveWalletPrefund,

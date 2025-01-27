@@ -9,7 +9,7 @@ import {
   Button,
   Chip,
   Pagination,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { WalletIcon } from "@heroicons/react/24/outline";
 import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import SoftBoxIcon from "@/components/base/SoftBoxIcon";

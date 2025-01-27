@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { STEPS } from "../signup-form";
 import useAuthStore from "@/context/auth-store";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@nextui-org/react";
+import { Checkbox } from "@heroui/react";
 import { validateTPIN } from "@/app/_actions/auth-actions";
 import { BriefcaseIcon } from "@heroicons/react/24/outline";
 import CardHeader from "@/components/base/CardHeader";

@@ -5,7 +5,7 @@ import { uploadBusinessFile } from "@/app/_actions/pocketbase-actions";
 
 import { notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@nextui-org/react";
+import { Checkbox } from "@heroui/react";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import {
   sendBusinessDocumentRefs,

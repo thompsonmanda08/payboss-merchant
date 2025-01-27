@@ -4,7 +4,7 @@ import usePaymentsStore from "@/context/payment-store";
 import React, { useEffect, useState } from "react";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { PAYMENT_SERVICE_TYPES } from "@/lib/constants";
-import { useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@heroui/react";
 import BatchDetailsPage from "../../../../components/containers/disbursements/ViewBatchDetails";
 import BulkTransactionsTable from "@/components/containers/tables/BulkTransactionsTable";
 import Card from "@/components/base/Card";

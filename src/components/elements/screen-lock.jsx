@@ -11,7 +11,7 @@ import {
   CardBody,
   CardFooter,
   Chip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import { Button } from "../ui/button";
 import { useQueryClient } from "@tanstack/react-query";

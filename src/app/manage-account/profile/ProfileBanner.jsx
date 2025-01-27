@@ -3,7 +3,7 @@ import useAccountProfile from "@/hooks/useProfileDetails";
 import { useSetupConfig } from "@/hooks/useQueryHooks";
 import { DefaultCover } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import Image from "next/image";
 import { roleColorMap } from "../../../components/containers/tables/UsersTable";
 

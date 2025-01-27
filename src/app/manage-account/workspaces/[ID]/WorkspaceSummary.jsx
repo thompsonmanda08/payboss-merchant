@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Switch, useDisclosure } from "@nextui-org/react";
+import { Switch, useDisclosure } from "@heroui/react";
 import {
   ArrowRightStartOnRectangleIcon,
   PencilIcon,

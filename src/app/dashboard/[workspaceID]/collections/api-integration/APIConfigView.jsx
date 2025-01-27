@@ -8,7 +8,7 @@ import {
   ModalHeader,
   Snippet,
   ModalFooter,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { syntaxHighlight } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
 import Tabs from "@/components/elements/tabs";

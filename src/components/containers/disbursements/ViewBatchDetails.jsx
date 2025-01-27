@@ -5,7 +5,7 @@ import ValidationDetails from "@/components/containers/disbursements/ValidationD
 import ApproverAction from "@/components/containers/disbursements/ApproverAction";
 import RecordDetailsViewer from "@/components/containers/disbursements/RecordDetailsViewer";
 import usePaymentsStore from "@/context/payment-store";
-import { Modal, ModalContent, ModalBody, ModalHeader } from "@nextui-org/react";
+import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
 
 import { useQueryClient } from "@tanstack/react-query";
 import CardHeader from "@/components/base/CardHeader";

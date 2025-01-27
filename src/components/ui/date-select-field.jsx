@@ -1,6 +1,6 @@
 "use client";
 import { cn, formatDate } from "@/lib/utils";
-import { DatePicker, DateRangePicker } from "@nextui-org/react";
+import { DatePicker, DateRangePicker } from "@heroui/react";
 import React, { useEffect } from "react";
 import { parseDate, today, getLocalTimeZone } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
@@ -96,9 +96,9 @@ export function DateRangePickerField({
   }, [value]);
 
   return (
-    // <NextUIProvider locale="es-GB">
-    // {/* </NextUIProvider> */}
-    <DateRangePicker
+    // <HeroUIProvider locale="es-GB">
+    // {/* </HeroUIProvider> */}
+    (<DateRangePicker
       label={label}
       showMonthAndYearPickers
       defaultValue={defaultValue}
@@ -139,7 +139,7 @@ export function DateRangePickerField({
         },
       }}
       {...props}
-    />
+    />)
   );
 }
 

@@ -9,7 +9,7 @@ import {
   EyeSlashIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
-import { Spinner, Tooltip, useDisclosure } from "@nextui-org/react";
+import { Spinner, Tooltip, useDisclosure } from "@heroui/react";
 import { formatDate, maskString, notify } from "@/lib/utils";
 import PromptModal from "@/components/base/Prompt";
 import {
@@ -19,7 +19,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import CustomTable from "@/components/containers/tables/Table";
 import { useWorkspaceAPIKey } from "@/hooks/useQueryHooks";
 import {

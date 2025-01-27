@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
-// import { Image } from '@nextui-org/react'
+// import { Image } from '@heroui/react'
 
 export default function FrameContainer({ image, description, className }) {
   return (

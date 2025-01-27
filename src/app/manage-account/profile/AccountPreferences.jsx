@@ -1,6 +1,6 @@
 "use client";
 import Card from "@/components/base/Card";
-import { Switch } from "@nextui-org/switch";
+import { Switch } from "@heroui/switch";
 
 function AccountPreferences() {
   const APPLICATION_CONFIG = [

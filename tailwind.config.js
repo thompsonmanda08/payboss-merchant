@@ -4,11 +4,11 @@ const headlessuiPlugin = require("@headlessui/tailwindcss");
 const formsPlugin = require("@tailwindcss/forms");
 const tailwindAnimate = require("tailwindcss-animate");
 
-const { nextui } = require("@nextui-org/theme");
+const { heroui } = require("@heroui/theme");
 export const darkMode = ["class"];
 export const content = [
   "./src/**/*.{js,jsx,ts,tsx}",
-  "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+  "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
 ];
 export const prefix = "";
 export const theme = {
@@ -114,7 +114,7 @@ export const plugins = [
   tailwindAnimate,
   headlessuiPlugin,
   formsPlugin,
-  nextui({
+  heroui({
     addCommonColors: true,
     themes: {
       light: {

@@ -8,7 +8,7 @@ import {
   reviewSingleTransaction,
 } from "@/app/_actions/transaction-actions";
 import usePaymentsStore from "@/context/payment-store";
-import { useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@heroui/react";
 import { Input } from "@/components/ui/input-field";
 import useWorkspaces from "@/hooks/useWorkspaces";
 import { useQueryClient } from "@tanstack/react-query";

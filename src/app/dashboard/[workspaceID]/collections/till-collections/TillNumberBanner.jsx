@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Modal, ModalContent, ModalBody, ModalHeader } from "@nextui-org/react";
+import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
 import Loader from "@/components/ui/loader";
 import CardHeader from "@/components/base/CardHeader";
 import { DefaultCover } from "@/lib/constants";

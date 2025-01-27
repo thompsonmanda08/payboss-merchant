@@ -1,4 +1,4 @@
-import { Button as NextUIButton } from "@nextui-org/react";
+import { Button as NextUIButton } from "@heroui/react";
 import { cn } from "@/lib/utils";
 
 export function Button({ children, loadingText, size, className, ...props }) {

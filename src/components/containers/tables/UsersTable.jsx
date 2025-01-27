@@ -11,7 +11,7 @@ import {
   Avatar,
   useDisclosure,
   Pagination,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   ArrowPathIcon,
   LockClosedIcon,

@@ -7,7 +7,7 @@ import {
   TableRow,
   TableCell,
   Pagination,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { TRANSACTION_STATUS_COLOR_MAP } from "@/lib/constants";
 import { cn, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";

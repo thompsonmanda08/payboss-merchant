@@ -7,7 +7,7 @@ import {
   ArrowDownTrayIcon,
   ComputerDesktopIcon,
 } from "@heroicons/react/24/outline";
-import { Chip, Spinner, Tooltip, useDisclosure } from "@nextui-org/react";
+import { Chip, Spinner, Tooltip, useDisclosure } from "@heroui/react";
 import { cn, formatDate, notify } from "@/lib/utils";
 import PromptModal from "@/components/base/Prompt";
 import {
@@ -17,7 +17,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import CustomTable from "@/components/containers/tables/Table";
 import { useTillNumber } from "@/hooks/useQueryHooks";
 import { generateWorkspaceTillNumer } from "@/app/_actions/workspace-actions";

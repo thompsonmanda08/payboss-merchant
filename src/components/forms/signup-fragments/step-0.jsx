@@ -1,7 +1,7 @@
 //BUSINESS REGISTRATION STATUS
 "use client";
 import React, { useEffect } from "react";
-import { RadioGroup } from "@nextui-org/react";
+import { RadioGroup } from "@heroui/react";
 import { motion } from "framer-motion";
 import { staggerContainerItemVariants } from "@/lib/constants";
 import { STEPS } from "../signup-form";

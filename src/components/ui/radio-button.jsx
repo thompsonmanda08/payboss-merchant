@@ -1,5 +1,5 @@
 import React from 'react'
-import { Radio, cn } from '@nextui-org/react'
+import { Radio, cn } from "@heroui/react"
 
 const CustomRadioButton = (props) => {
   const { children, ...otherProps } = props

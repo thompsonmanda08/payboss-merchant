@@ -1,7 +1,7 @@
 "use client";
 
 import { cn, getUserInitials } from "@/lib/utils";
-import { Avatar as NextAvatar } from "@nextui-org/react";
+import { Avatar as NextAvatar } from "@heroui/react";
 
 function Avatar({ firstName, lastName, src, email, showUserInfo, isProfile }) {
   return (

@@ -7,7 +7,7 @@ import {
   DropdownItem,
   Card,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { capitalize, cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {

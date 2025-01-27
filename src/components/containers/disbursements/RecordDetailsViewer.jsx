@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/modal";
+import { Modal, ModalContent, ModalHeader, ModalBody } from "@heroui/modal";
 import usePaymentsStore, { validationColumns } from "@/context/payment-store";
 import { useBatchDetails } from "@/hooks/useQueryHooks";
 import CardHeader from "@/components/base/CardHeader";
