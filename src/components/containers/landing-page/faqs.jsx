@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import { Container } from "@/components/base/Container";
-
 const faqs = [
   [
     {
@@ -64,18 +62,18 @@ export function Faqs() {
       className="relative overflow-hidden bg-card py-20 sm:py-32"
     >
       <Image
-        className="absolute left-1/2 top-0 max-w-none dark:bg-blend-color-burn dark:opacity-0 -translate-y-1/4 translate-x-[-30%] "
+        className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%] dark:opacity-0 dark:bg-blend-color-burn"
         src={"/images/background-faqs.jpg"}
         alt="background image"
         width={1558}
         height={946}
         unoptimized
       />
-      <div className="relative container">
+      <div className="container relative">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2
             id="faq-title"
-            className="font-bold text-3xl tracking-tight sm:text-4xl"
+            className="text-3xl font-bold tracking-tight sm:text-4xl"
           >
             Frequently Asked Questions
           </h2>
@@ -93,7 +91,7 @@ export function Faqs() {
               <ul role="list" className="flex flex-col gap-y-8">
                 {column.map((faq, faqIndex) => (
                   <li key={faqIndex}>
-                    <h3 className="font-bold text-lg leading-7 ">
+                    <h3 className="text-lg font-bold leading-7">
                       {faq.question}
                     </h3>
                     <p className="mt-4 text-sm text-foreground-500">

@@ -166,9 +166,15 @@ export function SingleSelectionDropdown({
   listItemName,
   ...props
 }) {
-  const { trigger, innerWrapper, dropdownItem, chevronIcon } = classNames || "";
+  const { trigger, innerWrapper, dropdownItem, chevronIcon, base } =
+    classNames || "";
   return (
-    <Dropdown className={cn("min-w-max", className)}>
+    <Dropdown
+      className={cn("min-w-max", className)}
+      classNames={{
+        base: cn("min-w-max bg-red-500", base),
+      }}
+    >
       <DropdownTrigger>
         <Button
           variant={buttonVariant}

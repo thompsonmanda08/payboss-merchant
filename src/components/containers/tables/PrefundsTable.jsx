@@ -76,7 +76,7 @@ export default function PrefundsTable({
               </h3>
               {item?.available_balance && (
                 <div className="flex max-w-[260px] justify-between gap-2">
-                  <p className=" truncate text-sm font-medium text-slate-600">
+                  <p className="truncate text-sm font-medium text-slate-600">
                     Available Balance: {formatCurrency(item?.available_balance)}
                   </p>
                 </div>
@@ -145,7 +145,7 @@ export default function PrefundsTable({
 
   const emptyContent = React.useMemo(() => {
     return (
-      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 dark:bg-foreground/5 text-sm font-semibold text-slate-600">
+      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
@@ -204,7 +204,7 @@ export default function PrefundsTable({
         table: cn("align-top items-start justify-start", {
           "min-h-[400px]": isLoading || !rows,
         }),
-        wrapper: cn("min-h-[200px]", { "min-h-max": pages <= 1 }),
+        base: cn("overflow-x-auto", { "": pages <= 1 }),
       }}
       selectedKeys={selectedKeys}
       selectionMode="multiple"

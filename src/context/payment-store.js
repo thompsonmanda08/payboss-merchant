@@ -201,11 +201,13 @@ export const singleReportsColumns = [
   { name: "NRC", uid: "nrc", sortable: true },
   // { name: 'PHONE', uid: 'contact', sortable: true },
   { name: "SERVICE PROVIDER", uid: "service_provider" },
+  { name: "MNO RRN", uid: "transaction_rrn" },
   { name: "DESTINATION ACCOUNT", uid: "destination", sortable: true },
-  // { name: 'NARRATION', uid: 'narration', sortable: true },
-  { name: "REMARKS", uid: "remarks", sortable: true },
+  // { name: "NARRATION", uid: "narration" },
+  { name: "REMARKS", uid: "remarks" },
   { name: "AMOUNT", uid: "amount", sortable: true },
   { name: "STATUS", uid: "status", sortable: true },
+  { name: "STATUS DESCRIPTION", uid: "status_description" },
 
   // { name: 'ACTIONS', uid: 'actions' },
 ];

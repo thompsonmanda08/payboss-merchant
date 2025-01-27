@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,7 @@ export function CallToAction() {
       />
       <Container className="relative">
         <div className="mx-auto max-w-xl text-center">
-          <h2 className="font-display heading-1  text-3xl tracking-tight text-white sm:text-4xl">
+          <h2 className="font-display heading-1 text-3xl tracking-tight text-white sm:text-4xl">
             Get Started Today
           </h2>
           <p className="mt-4 text-center text-lg tracking-tight text-white">

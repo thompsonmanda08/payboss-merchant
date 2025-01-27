@@ -270,16 +270,17 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       <div className="flex flex-col gap-4">
         <div className="flex gap-3">
           <Search
-            // TODO => Implement Clear button on input
-            isClearable={true}
             placeholder="Search by name..."
             value={filterValue}
             onChange={(e) => onSearchChange(e.target.value)}
           />
-          <div className="relative flex gap-3">
+          <div className="relative flex items-center gap-3">
             <SingleSelectionDropdown
               name={"Type"}
-              className={"min-w-[160px]"}
+              className={"hidden min-w-[160px] md:flex"}
+              classNames={{
+                trigger: "hidden lg:flex",
+              }}
               disallowEmptySelection={true}
               closeOnSelect={false}
               buttonVariant="flat"
@@ -290,7 +291,10 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
             />
             <SingleSelectionDropdown
               name={"Columns"}
-              className={"min-w-[160px]"}
+              className={"hidden min-w-[160px] lg:flex"}
+              classNames={{
+                trigger: "hidden lg:flex",
+              }}
               closeOnSelect={false}
               buttonVariant="flat"
               selectionMode="multiple"
@@ -304,6 +308,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
             {role?.can_initiate && (
               <Button
                 color="primary"
+                size={"lg"}
                 endContent={<PlusIcon className="h-5 w-5" />}
                 onPress={() => setOpenPaymentsModal(true)}
               >
@@ -312,7 +317,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
             )}
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="hidden items-center justify-between md:flex">
           <span className="text-small text-default-400">
             Total: {rows.length} transactions
           </span>
@@ -342,13 +347,15 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
   return (
     <Table
       aria-label="Transactions table with custom cells"
-      className="max-h-[980px]"
       classNames={{
-        table: cn("align-top min-h-[300px] items-center justify-center", {
-          "min-h-max": pages <= 1,
-          "min-h-[300px]": isLoading || !rows,
-        }),
-        // wrapper: cn('min-h-max', { 'min-h-max': pages <= 1 }),
+        table: cn(
+          "align-top min-h-[300px] w-full overflow-scroll items-center justify-center",
+          {
+            // "min-h-max": pages <= 1,
+            // "min-h-[300px]": isLoading || !rows,
+          }
+        ),
+        base: cn("overflow-x-auto", { "": pages <= 1 }),
       }}
       // classNames={}
       // showSelectionCheckboxes
@@ -365,7 +372,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       isStriped
       isHeaderSticky
     >
-      <TableHeader columns={headerColumns} className="fixed">
+      <TableHeader columns={headerColumns} className="fixed w-full">
         {(column) => (
           <TableColumn
             key={column.uid}

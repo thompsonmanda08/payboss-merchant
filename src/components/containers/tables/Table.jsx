@@ -34,7 +34,7 @@ export default function CustomTable({
   isLoading,
   removeWrapper,
   onRowAction = () => {},
-  emptyCellValue,
+  emptyCellValue = "N/A",
   emptyDescriptionText,
   emptyTitleText,
   classNames,
@@ -197,7 +197,7 @@ export default function CustomTable({
 
   const emptyContent = React.useMemo(() => {
     return (
-      <div className="mt-4 flex flex-1 items-center rounded-2xl dark:bg-foreground/5 bg-slate-50 text-sm font-semibold text-slate-600">
+      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
@@ -223,8 +223,9 @@ export default function CustomTable({
           },
           classNames?.table
         ),
-        wrapper: cn(
-          "min-h-[200px]",
+
+        base: cn(
+          "min-h-[200px] overflow-x-auto",
           { "min-h-max": pages <= 1 },
           classNames?.wrapper
         ),
