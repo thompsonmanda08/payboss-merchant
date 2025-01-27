@@ -219,15 +219,15 @@ const APIIntegration = ({ workspaceID }) => {
             <TableBody
               isLoading={isFetching}
               loadingContent={
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3 ">
+                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
                   <span className="flex gap-4 text-sm font-bold capitalize text-primary">
                     <Spinner size="sm" /> Loading API key...
                   </span>
                 </div>
               }
               emptyContent={
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3 ">
-                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70 ">
+                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
+                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70">
                     You have no API keys generated
                   </span>
                 </div>
@@ -260,7 +260,7 @@ const APIIntegration = ({ workspaceID }) => {
                       </>
                     ) : (
                       <>
-                        <span className="relative -left-32 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50/0 py-3 text-xs  text-foreground/70 ">
+                        <span className="relative -left-32 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50/0 py-3 text-xs text-foreground/70">
                           You have no API keys generated
                         </span>
                       </>

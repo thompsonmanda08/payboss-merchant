@@ -280,7 +280,7 @@ export default function SingleTransactionsTable({
 
   const emptyContent = React.useMemo(() => {
     return (
-      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 dark:bg-foreground/5 text-sm font-semibold text-slate-600">
+      <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}

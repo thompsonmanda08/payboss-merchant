@@ -10,15 +10,15 @@ import BackgroundSVG from "@/components/base/BackgroundSVG";
 
 // Create Document Component
 export const TillBanner = ({ till }) => (
-  <div className="relative flex h-full min-h-[600px] flex-1 ">
+  <div className="relative flex h-full min-h-[600px] flex-1">
     <BackgroundSVG />
     <div className="flex flex-1 flex-col justify-between gap-4 p-4">
       {/* <Logo /> */}
       <p className="max-w-max text-center text-[clamp(2rem,2vw,4rem)] font-black leading-3 opacity-0">
         Pay like a Boss with PayBoss
       </p>
-      <div className="flex flex-col items-center justify-center gap-0 font-display">
-        <h2 className="text-[clamp(2rem,12vw,4rem)] font-bold">*484*</h2>
+      <div className="font-display flex flex-col items-center justify-center gap-0">
+        <h2 className="text-[clamp(2rem,12vw,4rem)] font-bold">*848#</h2>
         <span className="text-[clamp(4rem,3vw,6rem)] font-black text-primary">
           {till}
         </span>
@@ -26,7 +26,7 @@ export const TillBanner = ({ till }) => (
           {" *AMOUNT# "}
         </span>
       </div>
-      <div className="font-semi-bold flex items-center justify-center font-display italic">
+      <div className="font-semi-bold font-display flex items-center justify-center italic">
         Powered by <Logo href="#" aria-label="Home" className="" />
       </div>
     </div>
@@ -79,13 +79,6 @@ export default function TillNumberBanner({
             <ModalBody className="mb-4 !pr-0">
               {isLoading ? <Loader /> : <TillBanner till={tillNumber} />}
             </ModalBody>
-            {/* <ModalFooter>
-              <p className="mx-auto max-w-[600px] text-center text-sm font-medium italic text-primary/80">
-                Note: API Keys provide access to your account through 3rd party
-                application and allows for the collection of payments through
-                PayBoss.
-              </p>
-            </ModalFooter> */}
           </>
         </ModalContent>
       </Modal>
