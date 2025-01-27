@@ -10,6 +10,7 @@
   },
   "browserslist": "defaults, not ie <= 11",
   "author": "github.com/thompsonmanda08",
+  "type": "module",
   "license": "LICENSE.txt",
   "dependencies": {
     "@headlessui/react": "^2.2.0",
