@@ -12,7 +12,7 @@ export default function WorkspaceMembers({
   workspaceName,
   allUsers,
   workspaceMembers,
-  workspaceRoles
+  workspaceRoles,
 }) {
   const {
     isOpen: openAdd,

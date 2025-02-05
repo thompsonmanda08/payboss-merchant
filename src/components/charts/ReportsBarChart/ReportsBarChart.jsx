@@ -4,6 +4,7 @@ import { Bar } from "react-chartjs-2";
 import configs from "./configs";
 import { Progress } from "@heroui/react";
 import Card from "@/components/base/Card";
+import { cn } from "@/lib/utils";
 
 function ReportsBarChart({ color, title, description, chart, items }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {});
@@ -32,7 +33,7 @@ function ReportsBarChart({ color, title, description, chart, items }) {
   const renderBarChart = useMemo(
     () => (
       <div
-        className={`mb-3 h-48 rounded-lg bg-gradient-to-b  from-primary-800 to-primary-900 py-2 pr-1`}
+        className={`mb-3 h-48 rounded-lg bg-gradient-to-b from-primary-800 to-primary-900 py-2 pr-1`}
       >
         <Bar data={data} options={options} />
       </div>
@@ -42,9 +43,9 @@ function ReportsBarChart({ color, title, description, chart, items }) {
 
   return (
     <Card>
-      {renderBarChart}
       <h6 className="mt-2 text-lg font-medium capitalize">{title}</h6>
-      <p className="text-sm font-normal text-gray-600">{description}</p>
+      <p className={cn("text-sm text-foreground-500 mb-4")}>{description}</p>
+      {renderBarChart}
       {items && <div className="-mx-2 flex flex-wrap">{renderItems}</div>}
     </Card>
   );
@@ -63,7 +64,7 @@ function ReportsBarChartItem({ icon, label, progress }) {
           {label}
         </span>
       </div>
-      <div className="w-full ">
+      <div className="w-full">
         <span className="text-sm font-medium text-primary-900"></span>
         <div className="mt-1 w-3/4">
           <Progress

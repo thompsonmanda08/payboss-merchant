@@ -15,7 +15,7 @@ import {
 } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import StatusMessage from "@/components/base/StatusMessage";
+import StatusMessage from "@/components/base/status-message";
 import { useQueryClient } from "@tanstack/react-query";
 import { USERS } from "@/lib/constants";
 import {

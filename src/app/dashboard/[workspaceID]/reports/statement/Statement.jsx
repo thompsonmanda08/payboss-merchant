@@ -8,7 +8,7 @@ import { WALLET_STATEMENT_REPORTS_QUERY_KEY } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
 import { getWalletStatementReport } from "@/app/_actions/transaction-actions";
 import { WalletTransactionHistory } from "@/components/containers/workspace/Wallet";
-import { convertToCSVString } from "@/app/_actions/file-converstion-actions";
+import { convertToCSVString } from "@/app/_actions/file-conversion-actions";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import Search from "@/components/ui/search";
@@ -50,9 +50,9 @@ export default function StatementReport({ workspaceID }) {
     if (hasSearchFilter) {
       filteredrows = filteredrows.filter(
         (row) =>
-          row?.ID?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          row?.amount?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          row?.type?.toLowerCase().includes(searchQuery.toLowerCase())
+          row?.ID?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+          row?.amount?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+          row?.type?.toLowerCase().includes(searchQuery?.toLowerCase())
       );
     }
 

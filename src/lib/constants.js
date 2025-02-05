@@ -168,6 +168,10 @@ export const WORKSPACE_TYPES = [
     ID: "disbursement",
     label: "Disbursement",
   },
+  {
+    ID: "bills",
+    label: "Bill Payments",
+  },
   // {
   //   ID: 'hybrid',
   //   label: 'Hybrid',

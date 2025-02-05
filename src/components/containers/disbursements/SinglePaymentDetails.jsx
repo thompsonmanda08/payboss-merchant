@@ -239,7 +239,7 @@
 //                   required={true}
 //                   onChange={(e) => {
 //                     updatePaymentFields({
-//                       accountType: e.target.value.toString().toLowerCase(),
+//                       accountType: e.target.value.toString()?.toLowerCase(),
 //                     })
 //                   }}
 //                 />

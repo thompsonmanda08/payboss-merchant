@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import CardHeader from "@/components/base/CardHeader";
-import Modal from "@/components/base/Modal";
+import Modal from "@/components/base/custom-modal";
 
 const DocumentsViewer = () => {
   const { businessDocs, signedContractDoc } = useAccountProfile();

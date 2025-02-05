@@ -17,6 +17,10 @@ import {
   ArrowDownOnSquareStackIcon,
   ArrowUpOnSquareStackIcon,
   WalletIcon,
+  ReceiptPercentIcon,
+  ArrowTopRightOnSquareIcon,
+  ArrowLeftEndOnRectangleIcon,
+  ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
@@ -125,26 +129,38 @@ function SideNavBar({ workspaceSession }) {
     },
   ];
 
+  // *************** BILL PAYMENTS ******************** //
+  const BILL_PAYMENT_SERVICES = [
+    {
+      name: "Bill Payments",
+      href: `${dashboardRoute}/bills`,
+      Icon: ReceiptPercentIcon,
+    },
+  ];
+
   // *************** DISBURSEMENTS REPORTS ************ //
   const DISBURSEMENT_REPORTS = [
     {
-      name: "Disbursement Reports",
-      href: `${dashboardRoute}/reports/bulk-payments`,
-      Icon: ArrowUpOnSquareStackIcon,
+      name: "Disbursements",
+      href: `${dashboardRoute}/reports/disbursements`,
+      Icon: ArrowRightStartOnRectangleIcon,
     },
-    // {
-    //   name: 'Single Payments',
-    //   href: `${dashboardRoute}/reports/single-payments`,
-    //   Icon: ArrowRightCircleIcon,
-    // },
   ];
 
   // *************** COLLECTION REPORTS **************** //
   const COLLECTION_REPORTS = [
     {
-      name: "Collection Reports",
+      name: "Collections",
       href: `${dashboardRoute}/reports/collection`,
-      Icon: ArrowDownOnSquareStackIcon,
+      Icon: ArrowLeftEndOnRectangleIcon,
+    },
+  ];
+
+  const BILL_PAYMENTS_REPORTS = [
+    {
+      name: "Bill Payment Reports",
+      href: `${dashboardRoute}/reports/bills`,
+      Icon: ReceiptPercentIcon,
     },
   ];
 
@@ -152,7 +168,7 @@ function SideNavBar({ workspaceSession }) {
   const MISC_SERVICES = [
     // {
     //   ID: 'ecommerce',
-    //   name: 'E-Commerce',
+    //   name: 'Online Stores',
     //   Icon: BuildingStorefrontIcon,
     //   subMenuItems: [
     //     {
@@ -174,14 +190,26 @@ function SideNavBar({ workspaceSession }) {
       ? COLLECTION_SERVICES
       : workspaceType == WORKSPACE_TYPES[1].ID //'disbursement'
       ? DISBURSEMENT_SERVICES
-      : [...DISBURSEMENT_SERVICES, ...COLLECTION_SERVICES];
+      : workspaceType == WORKSPACE_TYPES[2].ID //'bills'
+      ? BILL_PAYMENT_SERVICES
+      : [
+          ...DISBURSEMENT_SERVICES,
+          ...COLLECTION_SERVICES,
+          ...BILL_PAYMENT_SERVICES,
+        ];
 
   const REPORTS =
     workspaceType == WORKSPACE_TYPES[0].ID
       ? COLLECTION_REPORTS
       : workspaceType == WORKSPACE_TYPES[1].ID
       ? DISBURSEMENT_REPORTS
-      : [...DISBURSEMENT_REPORTS, ...COLLECTION_REPORTS];
+      : workspaceType == WORKSPACE_TYPES[2].ID
+      ? BILL_PAYMENTS_REPORTS
+      : [
+          ...DISBURSEMENT_REPORTS,
+          ...COLLECTION_REPORTS,
+          ...BILL_PAYMENTS_REPORTS,
+        ];
 
   const SIDE_BAR_OPTIONS = [
     {

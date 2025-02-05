@@ -2,7 +2,7 @@
 import React from "react";
 import { singleReportsColumns } from "@/context/payment-store";
 import SingleTransactionsTable from "../tables/SingleTransactionsTable";
-import Modal from "@/components/base/Modal";
+import Modal from "@/components/base/custom-modal";
 
 function ReportDetailsViewer({
   columns,

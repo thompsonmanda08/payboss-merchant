@@ -40,7 +40,7 @@ function WorkspaceSummary({
   const selectedWorkspace = workspaces.find(
     (workspace) => workspace.ID === workspaceID
   );
-  const isSandbox = selectedWorkspace?.workspace.toLowerCase() == "sandbox";
+  const isSandbox = selectedWorkspace?.workspace?.toLowerCase() == "sandbox";
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { setExistingUsers, existingUsers } = useWorkspaceStore();

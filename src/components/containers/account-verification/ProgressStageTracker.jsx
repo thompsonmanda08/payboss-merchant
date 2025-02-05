@@ -10,7 +10,7 @@ import {
 import useAccountProfile from "@/hooks/useProfileDetails";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
-import TimelineItem from "@/components/base/TimelineItem";
+import TimelineItem from "@/components/base/timeline-item";
 function ProgressStageTracker() {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split("T")[0]);
   const date = formatDate(fullDate).replaceAll("-", " ");

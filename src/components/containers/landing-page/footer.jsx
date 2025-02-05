@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { NavLink } from "@/components/base/NavLink";
+import { NavLink } from "@/components/base/nav-link";
 import Logo from "@/components/base/Logo";
 import { Container } from "@/components/base/Container";
 import ThemeSwitcher from "@/components/base/ThemeSwitcher";

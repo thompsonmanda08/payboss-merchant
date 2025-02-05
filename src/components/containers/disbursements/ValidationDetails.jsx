@@ -15,7 +15,7 @@ import useWorkspaces from "@/hooks/useWorkspaces";
 import Loader from "@/components/ui/loader";
 import useDashboard from "@/hooks/useDashboard";
 import StatusCard from "@/components/elements/status-card";
-import StatusMessage from "@/components/base/StatusMessage";
+import StatusMessage from "@/components/base/status-message";
 
 const ValidationDetails = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient();

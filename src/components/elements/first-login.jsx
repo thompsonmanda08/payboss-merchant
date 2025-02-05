@@ -16,7 +16,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import useAuthStore from "@/context/auth-store";
 import { changeUserPassword } from "@/app/_actions/user-actions";
 import { notify } from "@/lib/utils";
-import StatusMessage from "../base/StatusMessage";
+import StatusMessage from "../base/status-message";
 
 export default function FirstLogin({ open }) {
   const queryClient = useQueryClient();

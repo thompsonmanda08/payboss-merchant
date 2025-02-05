@@ -22,7 +22,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import ReportDetailsViewer from "@/components/containers/analytics/ReportDetailsViewer";
 import { singleReportsColumns } from "@/context/payment-store";
 import TotalStatsLoader from "@/components/elements/total-stats-loader";
-import { convertToCSVString } from "@/app/_actions/file-converstion-actions";
+import { convertToCSVString } from "@/app/_actions/file-conversion-actions";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import Tabs from "@/components/elements/tabs";

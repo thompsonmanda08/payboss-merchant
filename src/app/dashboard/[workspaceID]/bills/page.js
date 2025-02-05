@@ -1,13 +1,14 @@
 import LoadingPage from "@/app/loading";
 import React, { Suspense } from "react";
-import CollectionsReports from "./CollectionsReports";
+import BillPayments from "./bill-payments";
 
-export default async function CollectionsReportsPage(props) {
+export default async function BillPaymentsPage(props) {
   const params = await props.params;
   const { workspaceID } = params;
+
   return (
     <Suspense fallback={<LoadingPage />}>
-      <CollectionsReports workspaceID={workspaceID} />
+      <BillPayments workspaceID={workspaceID} />
     </Suspense>
   );
 }

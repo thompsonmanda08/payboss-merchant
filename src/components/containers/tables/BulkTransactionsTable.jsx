@@ -96,8 +96,8 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
     if (hasSearchFilter) {
       filteredrows = filteredrows.filter(
         (row) =>
-          row?.batch_name?.toLowerCase().includes(filterValue.toLowerCase()) ||
-          row?.amount?.toLowerCase().includes(filterValue.toLowerCase())
+          row?.batch_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
+          row?.amount?.toLowerCase().includes(filterValue?.toLowerCase())
       );
     }
     if (

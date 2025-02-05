@@ -33,13 +33,13 @@ import {
 } from "@/hooks/useQueryHooks";
 import Card from "@/components/base/Card";
 import Balance from "@/components/base/Balance";
-import StatusMessage from "@/components/base/StatusMessage";
+import StatusMessage from "@/components/base/status-message";
 import CardHeader from "@/components/base/CardHeader";
 import EmptyLogs from "@/components/base/EmptyLogs";
 import UploadField from "@/components/base/FileDropZone";
 import { useState } from "react";
 import { PaperClipIcon } from "@heroicons/react/24/outline";
-import Modal from "@/components/base/Modal";
+import Modal from "@/components/base/custom-modal";
 import useWalletStore from "@/context/wallet-store";
 import useNavigation from "@/hooks/useNavigation";
 

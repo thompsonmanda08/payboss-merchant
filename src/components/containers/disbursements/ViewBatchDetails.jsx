@@ -82,7 +82,7 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
   useEffect(() => {
     setCurrentStep(
       BATCH_DETAILS_STEPS[
-        selectedBatch.status.toLowerCase() != "submitted"
+        selectedBatch.status?.toLowerCase() != "submitted"
           ? COMPONENT_LIST_RENDERER.length - 1
           : currentTabIndex
       ]
@@ -90,7 +90,7 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
   }, [currentTabIndex]);
 
   useEffect(() => {
-    if (selectedBatch.status.toLowerCase() != "submitted") {
+    if (selectedBatch.status?.toLowerCase() != "submitted") {
       navigateTo(COMPONENT_LIST_RENDERER.length - 1);
     }
   }, []);

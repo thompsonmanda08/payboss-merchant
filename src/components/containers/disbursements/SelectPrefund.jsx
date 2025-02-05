@@ -7,7 +7,7 @@ import { useActivePrefunds } from "@/hooks/useQueryHooks";
 import PrefundsTable from "../tables/PrefundsTable";
 import { useEffect } from "react";
 import { notify } from "@/lib/utils";
-import StatusMessage from "@/components/base/StatusMessage";
+import StatusMessage from "@/components/base/status-message";
 
 const SelectPrefund = ({
   navigateForward,

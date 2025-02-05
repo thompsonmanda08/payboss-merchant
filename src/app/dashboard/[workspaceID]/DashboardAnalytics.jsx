@@ -1,9 +1,13 @@
 "use client";
 import React from "react";
 import {
-  ArrowDownOnSquareStackIcon,
+  ArrowLeftEndOnRectangleIcon,
+  ArrowRightStartOnRectangleIcon,
   ArrowUpOnSquareStackIcon,
   BanknotesIcon,
+  EllipsisVerticalIcon,
+  ListBulletIcon,
+  ReceiptPercentIcon,
   WalletIcon,
 } from "@heroicons/react/24/outline";
 import { cn, formatCurrency } from "@/lib/utils";
@@ -17,6 +21,7 @@ import OverlayLoader from "@/components/ui/overlay-loader";
 import { MONTHS, WORKSPACE_TYPES } from "@/lib/constants";
 import CustomTable from "../../../components/containers/tables/Table";
 import ReportsBarChart from "@/components/charts/ReportsBarChart/ReportsBarChart";
+import { SimpleDropdown } from "@/components/ui/dropdown-button";
 
 const TRANSACTION_COLUMNS = [
   { name: "DATE", uid: "created_at", sortable: true },
@@ -72,42 +77,24 @@ function DashboardAnalytics({
   dashboardAnalytics,
   workspaceWalletBalance,
 }) {
-  // const { chart, items } = reportsBarChartData;
-
-  // const { workspaceWalletBalance } = useWorkspaces();
-  // const { dashboardRoute, pathname } = useNavigation();
-
-  // const walletOptions = [
-  //   {
-  //     ID: 1,
-  //     label: "View wallet Statement",
-  //     href: `/${dashboardRoute}/reports/statement`,
-  //   },
-  //   {
-  //     ID: 2,
-  //     label: "View deposit history",
-  //     href: `/${dashboardRoute}/workspace-settings?wallet`,
-  //   },
-
-  //   {
-  //     ID: 3,
-  //     label: "Deposit funds",
-  //     href: `/${dashboardRoute}/workspace-settings?deposit=true`,
-  //   },
-  // ];
-
   const {
     today,
     yesterday,
     collectionsToday,
     disbursementsToday,
+    billsToday,
     allCollections,
     allDisbursements,
+    allTransactions,
+    allBills,
     walletSummary,
     latestTransactions,
     monthlyCollections,
     monthlyDisbursements,
+    monthlyBills,
   } = dashboardAnalytics || {};
+
+  console.log("dashboardAnalytics", dashboardAnalytics);
 
   const monthlyTransactionRecords =
     workspaceType == WORKSPACE_TYPES[0]?.ID
@@ -123,7 +110,7 @@ function DashboardAnalytics({
         label: "Transactions",
         data: MONTHS.map((month) => {
           const transaction = monthlyTransactionRecords?.find((item) =>
-            String(item.month).toLowerCase().startsWith(month.toLowerCase())
+            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase())
           );
           return transaction ? transaction.count : 0;
         }), // Total Transactions
@@ -136,11 +123,11 @@ function DashboardAnalytics({
   const previousMonth = MONTHS[(thisMonth - 1 + MONTHS.length) % MONTHS.length]; // Handle January to December wrap-around
 
   const previousMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month).toLowerCase().startsWith(previousMonth.toLowerCase())
+    String(item.month)?.toLowerCase().startsWith(previousMonth?.toLowerCase())
   );
 
   const currentMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month).toLowerCase().startsWith(currentMonth.toLowerCase())
+    String(item.month)?.toLowerCase().startsWith(currentMonth?.toLowerCase())
   );
 
   // Extract counts or default to 0 if no transactions
@@ -152,17 +139,26 @@ function DashboardAnalytics({
     ? ((currentCount - previousCount) / previousCount) * 100
     : 0; // Avoid division by zero
 
-  // Determine if it was an increase, decrease, or no change
-  const changeType =
-    currentCount > previousCount
-      ? true // increse
-      : currentCount < previousCount
-      ? false // decrease
-      : "none"; // no change
+  // // Determine if it was an increase, decrease, or no change
+  // const changeType =
+  //   currentCount > previousCount
+  //     ? true //
+  //     : currentCount < previousCount
+  //     ? false // decrease
+  //     : "none"; // no change
 
-  console.log(currentCount, previousCount, percentageChange, changeType);
+  // console.log(currentCount, previousCount, percentageChange, changeType);
 
   const dataNotReady = !permissions?.ID;
+
+  const CardIcon =
+    workspaceType == WORKSPACE_TYPES[0]?.ID // COLLECTIONS
+      ? ArrowLeftEndOnRectangleIcon
+      : workspaceType == WORKSPACE_TYPES[1]?.ID // DISBURSEMENTS
+      ? ArrowRightStartOnRectangleIcon
+      : workspaceType == WORKSPACE_TYPES[2]?.ID // BILLS
+      ? ReceiptPercentIcon
+      : ListBulletIcon; // HYBRID
 
   return (
     <>
@@ -187,66 +183,46 @@ function DashboardAnalytics({
                 : `ZMW 0.00`}
             </p>
           </Card>
-          <>
-            <SimpleStats
-              title={`Today's ${workspaceType}`}
-              figure={today?.count || 0}
-              smallFigure={
-                today?.value
-                  ? `(${formatCurrency(collectionsToday?.value)})`
-                  : `(ZMW 0.00)`
-              }
-              classNames={{
-                smallFigureClasses: "md:text-base font-semibold",
-              }}
-              Icon={ArrowDownOnSquareStackIcon}
-            />
+          <SimpleStats
+            title={`Today's ${workspaceType}`}
+            figure={today?.count || 0}
+            smallFigure={
+              today?.value ? `(${formatCurrency(today?.value)})` : `(ZMW 0.00)`
+            }
+            classNames={{
+              smallFigureClasses: "md:text-base font-semibold",
+            }}
+            Icon={CardIcon}
+          />
 
-            <SimpleStats
-              title={`Yesterday's ${workspaceType}`}
-              figure={yesterday?.count || 0}
-              smallFigure={
-                yesterday?.value
-                  ? `(${formatCurrency(collectionsToday?.value)})`
-                  : `(ZMW 0.00)`
-              }
-              classNames={{
-                smallFigureClasses: "md:text-base font-semibold",
-              }}
-              Icon={ArrowDownOnSquareStackIcon}
-            />
-            {workspaceType == WORKSPACE_TYPES[0]?.ID ? (
-              <SimpleStats
-                title={"All Collections"}
-                figure={allCollections?.count || 0}
-                smallFigure={
-                  allCollections?.value
-                    ? `(${formatCurrency(allCollections?.value)})`
-                    : `(ZMW 0.00)`
-                }
-                classNames={{
-                  smallFigureClasses: "md:text-base font-bold",
-                }}
-                isGood={true}
-                Icon={ArrowDownOnSquareStackIcon}
-              />
-            ) : (
-              <SimpleStats
-                title={"All Disbursements"}
-                figure={allDisbursements?.count || 0}
-                smallFigure={
-                  allDisbursements?.value
-                    ? `(${formatCurrency(allDisbursements?.value)})`
-                    : `(ZMW 0.00)`
-                }
-                classNames={{
-                  smallFigureClasses: "md:text-base font-bold",
-                }}
-                isBad={true}
-                Icon={ArrowUpOnSquareStackIcon}
-              />
-            )}
-          </>
+          <SimpleStats
+            title={`Yesterday's ${workspaceType}`}
+            figure={yesterday?.count || 0}
+            smallFigure={
+              yesterday?.value
+                ? `(${formatCurrency(yesterday?.value)})`
+                : `(ZMW 0.00)`
+            }
+            classNames={{
+              smallFigureClasses: "md:text-base font-semibold",
+            }}
+            Icon={CardIcon}
+          />
+
+          <SimpleStats
+            title={"All Transactions"}
+            figure={allTransactions?.count || 0}
+            smallFigure={
+              allTransactions?.value
+                ? `(${formatCurrency(allTransactions?.value)})`
+                : `(ZMW 0.00)`
+            }
+            classNames={{
+              smallFigureClasses: "md:text-base font-bold",
+            }}
+            isBad={true}
+            Icon={CardIcon}
+          />
         </div>
 
         {/*  2ND ROW - MONTHLY FIGURES AND VALUES */}
@@ -264,15 +240,15 @@ function DashboardAnalytics({
                 isIconOnly
                 classNames={{
                   trigger:
-                    'bg-transparent-500 w-auto max-w-max shadow-none items-center justify-center',
+                    "bg-transparent-500 w-auto max-w-max shadow-none items-center justify-center",
                   // innerWrapper,
-                  dropdownItem: 'py-2',
-                  chevronIcon: 'hidden',
+                  dropdownItem: "py-2",
+                  chevronIcon: "hidden",
                 }}
                 name={
                   <EllipsisVerticalIcon className="h-5 w-5 cursor-pointer hover:text-primary" />
                 }
-                dropdownItems={walletOptions}
+                // dropdownItems={walletOptions}
               /> */}
             </div>
 
@@ -283,45 +259,22 @@ function DashboardAnalytics({
             />
           </Card>
 
-          <div className="flex flex-1 self-start flex-col gap-4">
+          <div className="flex flex-1 flex-col gap-4 self-start">
             <ReportsBarChart
               title="Transactions Summary"
-              description={
-                previousCount == 0 ? (
-                  <>
-                    <span className={cn("font-bold text-primary")}>
-                      {currentCount}
-                    </span>{" "}
-                    transactions this month of about{" "}
-                    <span className={cn("font-bold text-primary")}>
-                      {formatCurrency(currentMonthTransactions?.value || 0)}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    (
-                    <span
-                      className={cn("font-bold text-primary", {
-                        "text-green-500": changeType,
-                        "text-red-500": !changeType,
-                      })}
-                    >
-                      {changeType
-                        ? `+${percentageChange}`
-                        : `-${percentageChange}`}
-                    </span>
-                    ) than last month
-                  </>
-                )
-              }
+              description={"Monthly transactions by count and value"}
               chart={monthlyTransactions.chart}
               // items={items}
             />
-            <PendingApprovals
-              data={pendingApprovals}
-              workspaceType={workspaceType}
-              canApprove={permissions?.can_approve}
-            />
+
+            {/* APPROVALS FOR DISBURSEMENTS */}
+            {workspaceType == WORKSPACE_TYPES[1]?.ID && (
+              <PendingApprovals
+                data={pendingApprovals}
+                workspaceType={workspaceType}
+                canApprove={permissions?.can_approve}
+              />
+            )}
           </div>
         </div>
 

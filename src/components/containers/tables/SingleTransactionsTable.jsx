@@ -25,7 +25,7 @@ import SelectField from "@/components/ui/select-field";
 
 import { useSingleTransactions, useWorkspaceInit } from "@/hooks/useQueryHooks";
 import EmptyLogs from "@/components/base/EmptyLogs";
-import { convertToCSVString } from "@/app/_actions/file-converstion-actions";
+import { convertToCSVString } from "@/app/_actions/file-conversion-actions";
 
 export const SingleTransactionColumns = [
   { name: "DATE CREATED", uid: "created_at", sortable: true },
@@ -112,9 +112,9 @@ export default function SingleTransactionsTable({
     if (hasSearchFilter) {
       filteredrows = filteredrows.filter(
         (row) =>
-          row?.first_name.toLowerCase().includes(filterValue.toLowerCase()) ||
-          row?.last_name.toLowerCase().includes(filterValue.toLowerCase()) ||
-          row?.amount.toLowerCase().includes(filterValue.toLowerCase())
+          row?.first_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
+          row?.last_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
+          row?.amount?.toLowerCase().includes(filterValue?.toLowerCase())
       );
     }
     if (
@@ -206,7 +206,7 @@ export default function SingleTransactionsTable({
               color="primary"
               className={cn(
                 "mx-auto self-center capitalize",
-                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider.toLowerCase()]
+                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider?.toLowerCase()]
               )}
               classNames={{
                 content: "font-semibold",
@@ -262,8 +262,6 @@ export default function SingleTransactionsTable({
       setFilterValue("");
     }
   }, []);
-
-
 
   const loadingContent = React.useMemo(() => {
     return (
@@ -334,7 +332,6 @@ export default function SingleTransactionsTable({
             isClearable={true}
             placeholder="Search by name..."
             value={filterValue}
-          
             onChange={(e) => onSearchChange(e.target.value)}
           />
           <div className="relative flex gap-3">

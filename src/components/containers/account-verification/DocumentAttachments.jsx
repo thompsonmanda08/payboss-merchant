@@ -13,7 +13,7 @@ import {
 } from "@/app/_actions/auth-actions";
 import { useQueryClient } from "@tanstack/react-query";
 import CardHeader from "@/components/base/CardHeader";
-import StatusMessage from "@/components/base/StatusMessage";
+import StatusMessage from "@/components/base/status-message";
 import EmptyLogs from "@/components/base/EmptyLogs";
 import UploadField from "@/components/base/FileDropZone";
 

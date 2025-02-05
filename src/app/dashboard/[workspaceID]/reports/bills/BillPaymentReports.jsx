@@ -44,7 +44,7 @@ const SERVICE_TYPES = [
   },
 ];
 
-export default function CollectionsReports({ workspaceID }) {
+export default function BillPaymentReports({ workspaceID }) {
   const [dateRange, setDateRange] = useState();
   const [isExpanded, setIsExpanded] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -110,33 +110,16 @@ export default function CollectionsReports({ workspaceID }) {
   }, [dateRange]);
 
   function handleFileExportToCSV() {
-    let columnHeaders;
     // Implement CSV export functionality here
     if (currentTab === 0)
-      columnHeaders = API_KEY_TRANSACTION_COLUMNS.map(
-        (column) => column?.name
-      ).join(",");
+      convertToCSVString(transactions, "api_collection_transactions");
 
-    convertToCSVString({
-      objArray: transactions,
-      columnHeaders,
-      fileName: "api_collection_transactions",
-    });
-
-    if (currentTab === 1) {
-      columnHeaders = API_KEY_TRANSACTION_COLUMNS.map(
-        (column) => column?.name
-      ).join(",");
-
-      convertToCSVString({
-        objArray: transactions,
-        columnHeaders,
-        fileName: "till_collection_transactions",
-      });
-    }
+    if (currentTab === 1)
+      convertToCSVString(transactions, "till_collection_transactions");
   }
 
   const [currentTab, setCurrentTab] = useState(0);
+
 
   useEffect(() => {
     runAsyncMutation(dateRange);
@@ -162,7 +145,6 @@ export default function CollectionsReports({ workspaceID }) {
           </Button>
         </div>
       </div>
-
       {/************************************************************************/}
       <Card className={"w-full gap-3"}>
         <div className="flex items-end justify-between">
@@ -170,7 +152,7 @@ export default function CollectionsReports({ workspaceID }) {
             className={"mb-2 mr-auto"}
             tabs={SERVICE_TYPES}
             currentTab={currentTab}
-            navigateTo={setCurrentTab}
+            setCurrentTab={setCurrentTab}
           />
         </div>
         <div className="flex w-full items-center justify-between gap-8">
@@ -214,7 +196,7 @@ export default function CollectionsReports({ workspaceID }) {
             </Button>
           </div>
         </div>
-
+        {/* TODO:  THIS CAN BE ONCE SINGLE COMPONENT */}
         {
           <AnimatePresence>
             <motion.div

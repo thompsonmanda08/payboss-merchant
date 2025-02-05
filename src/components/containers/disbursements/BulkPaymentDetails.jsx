@@ -7,7 +7,7 @@ import { formatCurrency, notify } from "@/lib/utils";
 import { BanknotesIcon, WalletIcon } from "@heroicons/react/24/outline";
 import useDashboard from "@/hooks/useDashboard";
 import { initializeBulkTransaction } from "@/app/_actions/transaction-actions";
-import StatusMessage from "@/components/base/StatusMessage";
+import StatusMessage from "@/components/base/status-message";
 
 const PaymentDetails = ({
   navigateForward,

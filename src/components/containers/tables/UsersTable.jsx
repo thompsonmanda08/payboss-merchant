@@ -161,11 +161,11 @@ export default function UsersTable({
     if (hasSearchFilter) {
       filteredrows = filteredrows.filter(
         (row) =>
-          row?.name?.toLowerCase().includes(filterValue.toLowerCase()) ||
-          row?.first_name?.toLowerCase().includes(filterValue.toLowerCase()) ||
-          row?.last_name?.toLowerCase().includes(filterValue.toLowerCase()) ||
-          row?.email?.toLowerCase().includes(filterValue.toLowerCase()) ||
-          row?.username?.toLowerCase().includes(filterValue.toLowerCase())
+          row?.name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
+          row?.first_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
+          row?.last_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
+          row?.email?.toLowerCase().includes(filterValue?.toLowerCase()) ||
+          row?.username?.toLowerCase().includes(filterValue?.toLowerCase())
       );
     }
 
@@ -363,7 +363,7 @@ export default function UsersTable({
           return (
             <Chip
               className="capitalize"
-              color={roleColorMap[user?.role.toLowerCase()]}
+              color={roleColorMap[user?.role?.toLowerCase()]}
               size="sm"
               variant="flat"
             >

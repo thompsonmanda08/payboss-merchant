@@ -44,7 +44,7 @@ function WorkspaceDetails({
   // );
 
   const [isSandbox, setIsSandbox] = useState(
-    activeWorkspace?.workspace.toLowerCase() == "sandbox"
+    activeWorkspace?.workspace?.toLowerCase() == "sandbox"
   );
 
   const [newWorkspace, setNewWorkspace] = useState({
@@ -139,7 +139,7 @@ function WorkspaceDetails({
 
     if (
       activeWorkspace != undefined &&
-      activeWorkspace?.workspace.toLowerCase() == "sandbox"
+      activeWorkspace?.workspace?.toLowerCase() == "sandbox"
     ) {
       setIsSandbox(true);
     }

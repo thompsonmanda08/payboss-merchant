@@ -18,7 +18,7 @@ import {
 } from "@/app/_actions/auth-actions";
 import { Card } from "@heroui/react";
 import Step1_TPIN from "./signup-fragments/step-1-1";
-import StatusMessage from "../base/StatusMessage";
+import StatusMessage from "../base/status-message";
 
 export const STEPS = [
   "business-registration",

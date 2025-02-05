@@ -117,7 +117,7 @@ export default function CustomTable({
               color="primary"
               className={cn(
                 "mx-auto self-center capitalize",
-                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider.toLowerCase()]
+                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider?.toLowerCase()]
               )}
               classNames={{
                 content: "font-semibold",

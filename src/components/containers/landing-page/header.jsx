@@ -5,7 +5,7 @@ import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/base/Container";
-import { NavLink } from "@/components/base/NavLink";
+import { NavLink } from "@/components/base/nav-link";
 import { cn } from "@/lib/utils";
 import { UserIcon } from "@heroicons/react/24/solid";
 import useFloatingHeader from "@/hooks/useFloatingHeader";

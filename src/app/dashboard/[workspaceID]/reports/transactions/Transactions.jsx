@@ -40,12 +40,12 @@ export default function Transactions() {
 
   const transactionRows = allPaymentTransactions?.filter((item) => {
     return (
-      item?.first_name?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
-      item?.last_name?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+      item?.first_name?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+      item?.last_name?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
       item?.amount
         ?.toString()
         ?.toLowerCase()
-        .includes(searchQuery.toLowerCase())
+        .includes(searchQuery?.toLowerCase())
     );
   });
 

@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PAYMENT_PROTOCOL } from "@/lib/constants";
 import { useEffect } from "react";
-import Modal from "@/components/base/Modal";
+import Modal from "@/components/base/custom-modal";
 import CustomRadioGroup from "@/components/ui/custom-radio-group";
 
 const SelectPaymentType = ({ setCreatePaymentLoading }) => {

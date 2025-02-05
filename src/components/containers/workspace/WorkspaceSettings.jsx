@@ -1,23 +1,18 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import React, { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import Tabs from "@/components/elements/tabs";
 import WorkspaceDetails from "./WorkspaceDetails";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import CreateNewUserModal from "../users/CreateNewUserModal";
 import { useDisclosure } from "@heroui/react";
-import useWorkspaces from "@/hooks/useWorkspaces";
 import {
-  ArrowUturnLeftIcon,
   BanknotesIcon,
   UserGroupIcon,
   WalletIcon,
   WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 import Wallet from "./Wallet";
-import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
-import { useWorkspaceMembers } from "@/hooks/useQueryHooks";
 import LoadingPage from "@/app/loading";
 import { cn } from "@/lib/utils";
 import Card from "@/components/base/Card";
@@ -34,36 +29,55 @@ function WorkspaceSettings({
   workspaceRoles,
   permissions,
 }) {
-  const { isLoading } = useAllUsersAndRoles();
   const { existingUsers, setExistingUsers } = useWorkspaceStore();
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const DISBURESEMENT_TABS =
+  const isDisbursementOrHybrid =
     selectedWorkspace?.workspaceType == WORKSPACE_TYPES[1]?.ID ||
-    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[2]?.ID
-      ? [
-          { name: "Active Pockets", index: 2, icon: BanknotesIcon },
-          { name: "Wallet Deposits", index: 3, icon: WalletIcon },
-        ]
-      : [];
+    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[3]?.ID;
+
+  const isBillPaymentWorkspace =
+    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[2]?.ID;
+
+  const DISBURSEMENT_TABS = isDisbursementOrHybrid
+    ? // DISBURSEMENTS & HYBRID WORKSPACES TAB LABELS
+      [
+        { name: "Active Pockets", index: 2, icon: BanknotesIcon },
+        { name: "Wallet Deposits", index: 3, icon: WalletIcon },
+      ]
+    : // BILL PAYMENTS TAB LABEL
+    isBillPaymentWorkspace
+    ? [{ name: "Wallet Deposits", index: 2, icon: WalletIcon }]
+    : [];
 
   const TABS = [
     { name: "General Settings", index: 0, icon: WrenchScrewdriverIcon },
     { name: "Workspace Members", index: 1, icon: UserGroupIcon },
-    ...DISBURESEMENT_TABS,
+    ...DISBURSEMENT_TABS,
   ];
 
   // Components to be rendered for the workspace type
-  const DISBURSMENT_COMPONENTS =
-    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[1]?.ID ||
-    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[2]?.ID
+  const TAB_COMPONENTS =
+    // DISBURSEMENTS & HYBRID WORKSPACES
+    isDisbursementOrHybrid
       ? [
           <ActivePockets
             key={"active-wallet-pocket"}
             workspaceID={workspaceID}
             removeWrapper={true}
           />,
+          <Wallet
+            key={"wallet"}
+            workspaceName={selectedWorkspace?.workspace}
+            workspaceID={workspaceID}
+            balance={selectedWorkspace?.balance}
+            removeWrapper
+          />,
+        ]
+      : // BILL PAYMENTS SELECTED
+      isBillPaymentWorkspace
+      ? [
           <Wallet
             key={"wallet"}
             workspaceName={selectedWorkspace?.workspace}
@@ -94,7 +108,7 @@ function WorkspaceSettings({
       allUsers={allUsers}
     />,
     // Provides the disbursement tabs
-    ...DISBURSMENT_COMPONENTS,
+    ...TAB_COMPONENTS,
   ]);
 
   function handleNavigation(index) {
@@ -105,7 +119,7 @@ function WorkspaceSettings({
   const allowUserCreation = currentTabIndex == 1 && canCreateUsers;
 
   useEffect(() => {
-    // UPDATE EXISITING USERS LIST
+    // UPDATE EXISTING USERS LIST
     if (workspaceMembers != [] && existingUsers?.length == 0) {
       setExistingUsers(workspaceMembers);
     }
@@ -120,7 +134,7 @@ function WorkspaceSettings({
         <h2 className="heading-3 !font-bold uppercase tracking-tight text-foreground">
           {selectedWorkspace?.workspace}
         </h2>
-        <p className=" text-sm text-foreground-600">
+        <p className="text-sm text-foreground-600">
           Workspaces provide a structured way to group and manage services,
           users, and transactions effectively.
         </p>
@@ -131,7 +145,7 @@ function WorkspaceSettings({
       <Card className={"gap-4"}>
         <div className="relative mb-2 flex items-center justify-between">
           <Tabs
-            className={" md:w-full"}
+            className={"md:w-full"}
             tabs={TABS}
             navigateTo={navigateTo}
             currentTab={currentTabIndex}

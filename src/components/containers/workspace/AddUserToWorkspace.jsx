@@ -20,7 +20,7 @@ import { notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { roleColorMap, UserAvatarComponent } from "../tables/UsersTable";
-import StatusMessage from "@/components/base/StatusMessage";
+import StatusMessage from "@/components/base/status-message";
 import EmptyState from "@/components/elements/empty-state";
 import CardHeader from "@/components/base/CardHeader";
 import Spinner from "../../ui/Spinner";

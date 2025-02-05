@@ -7,7 +7,7 @@ import { PowerIcon } from "@heroicons/react/24/solid";
 
 import useAuthStore from "@/context/auth-store";
 import useNavigation from "@/hooks/useNavigation";
-import NavItemIcon from "../base/NavItemIcon";
+import NavItemIcon from "../base/nav-item-icon";
 
 export default function SideNavItems({
   // pathname,
@@ -29,7 +29,7 @@ export default function SideNavItems({
           const currentPage =
             subMenuItems && subMenuItems.length > 0 ? subMenuItems.href : href;
           const isSelected = pathname === currentPage;
-          const activeLayer = pathArr.includes(ID.toLowerCase());
+          const activeLayer = pathArr.includes(ID?.toLowerCase());
 
           return (
             <li key={href || index} className="flex flex-col">
