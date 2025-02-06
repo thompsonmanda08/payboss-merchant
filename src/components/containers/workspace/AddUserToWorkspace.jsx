@@ -27,7 +27,6 @@ import Spinner from "../../ui/Spinner";
 import { UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import SelectField from "@/components/ui/select-field";
 import useWorkspaceStore from "@/context/workspaces-store";
-import { WORKSPACE_MEMBERS_QUERY_KEY } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 
 const columns = [
@@ -195,9 +194,7 @@ function AddUserToWorkspace({
     navigateTo?.(1);
     onClose();
     handleClearAllSelected();
-    queryClient.invalidateQueries({
-      queryKey: [WORKSPACE_MEMBERS_QUERY_KEY, workspaceID],
-    });
+    queryClient.invalidateQueries();
     return;
   }
 
@@ -214,7 +211,7 @@ function AddUserToWorkspace({
   }, [addedUsers]);
 
   useEffect(() => {
-    // UPDATE EXISITING USERS LIST
+    // UPDATE EXISTING USERS LIST
     if (workspaceMembers != [] && existingUsers?.length == 0) {
       setExistingUsers(workspaceMembers);
     }
@@ -367,7 +364,7 @@ function AddUserToWorkspace({
               </ModalHeader>
               <ModalBody>
                 {!allUsers || !workspaceRoles ? (
-                  <div className="flex aspect-square w-[200px] flex-1 items-center justify-center self-center p-10 ">
+                  <div className="flex aspect-square w-[200px] flex-1 items-center justify-center self-center p-10">
                     <Spinner size={64} />
                   </div>
                 ) : (

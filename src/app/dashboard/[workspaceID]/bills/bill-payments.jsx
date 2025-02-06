@@ -33,15 +33,14 @@ import {
   API_COLLECTIONS_QUERY_KEY,
   WORKSPACE_API_KEY_QUERY_KEY,
 } from "@/lib/constants";
-import APIConfigViewModal from "./APIConfigView";
-import { getAPICollectionLatestTransactions } from "@/app/_actions/transaction-actions";
+import { getBillsLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
+import BillPaymentAPIConfigModal from "./bill-api-config-modal";
 
 export const BILLS_TRANSACTION_COLUMNS = [
   { name: "DATE", uid: "created_at", sortable: true },
-  { name: "TRANSACTION ID", uid: "transactionID" },
   { name: "SERVICE PROVIDER", uid: "service_provider" },
   { name: "VOUCHER TYPE", uid: "voucher_type" },
   { name: "NARRATION", uid: "narration" },
@@ -53,17 +52,18 @@ export const BILLS_TRANSACTION_COLUMNS = [
   { name: "REMARKS", uid: "status_description" },
   { name: "AMOUNT", uid: "amount", sortable: true },
   { name: "STATUS", uid: "status", sortable: true },
+  { name: "TRANSACTION ID", uid: "transactionID" },
 ];
 
 const BillPayments = ({ workspaceID }) => {
   const queryClient = useQueryClient();
   const { data: apiKeyResponse, isFetching } = useWorkspaceAPIKey(workspaceID);
-  const { onOpen, onClose } = useDisclosure();
-  const [copiedKey, setCopiedKey] = useState(null);
   const [apiKey, setApiKey] = useState([]);
   const [apiKeyData, setApiKeyData] = useState([]);
-  const [isDelete, setIsDelete] = useState(false);
+  const { onOpen, onClose } = useDisclosure();
+  const [copiedKey, setCopiedKey] = useState(null);
   const [isNew, setIsNew] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
   const [isRefresh, setIsRefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
@@ -78,7 +78,7 @@ const BillPayments = ({ workspaceID }) => {
   const mutation = useMutation({
     mutationKey: [API_COLLECTIONS_QUERY_KEY, workspaceID],
     mutationFn: (dateRange) =>
-      getAPICollectionLatestTransactions(workspaceID, dateRange),
+      getBillsLatestTransactions(workspaceID, dateRange),
   });
 
   const API = useMemo(() => {
@@ -123,6 +123,7 @@ const BillPayments = ({ workspaceID }) => {
       return;
     }
 
+    //  GENERATE BILL PAYMENTS API KEY
     const response = await setupWorkspaceAPIKey(workspaceID);
 
     if (!response?.success) {
@@ -135,6 +136,7 @@ const BillPayments = ({ workspaceID }) => {
     queryClient.invalidateQueries({
       queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
     });
+
     setApiKeyData(response?.data);
     setApiKey(response?.data?.API);
     notify("success", "API key has been generated!");
@@ -178,20 +180,11 @@ const BillPayments = ({ workspaceID }) => {
     <LoadingPage />
   ) : (
     <>
-      <APIConfigViewModal
-        configData={apiKeyData}
-        isLoading={isFetching}
-        isOpen={openViewConfig}
-        onClose={() => {
-          setOpenViewConfig(false);
-          onClose();
-        }}
-      />
       <div className="flex w-full flex-col gap-4">
         <Card className="">
           <div className="mb-8 flex justify-between">
             <CardHeader
-              title={"API Key"}
+              title={"Bills API Key"}
               infoText={
                 "Use the API keys to collect payments to your workspace wallet."
               }
@@ -345,6 +338,16 @@ const BillPayments = ({ workspaceID }) => {
           />
         </Card>
       </div>
+
+      <BillPaymentAPIConfigModal
+        configData={apiKeyData}
+        isLoading={isFetching}
+        isOpen={openViewConfig}
+        onClose={() => {
+          setOpenViewConfig(false);
+          onClose();
+        }}
+      />
 
       {/* DELETE PROMPTS */}
       <PromptModal

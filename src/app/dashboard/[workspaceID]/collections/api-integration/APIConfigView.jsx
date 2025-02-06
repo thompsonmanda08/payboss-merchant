@@ -71,7 +71,7 @@ export default function APIConfigViewModal({
       }}
     />,
 
-    <CollectionResponses
+    <ActionResponses
       key={currentStep.title}
       config={{
         url: configData?.collectionURL,
@@ -144,27 +144,28 @@ export default function APIConfigViewModal({
   );
 }
 
-export function API_Authentication({ config }) {
-  const { authentication, response, url } = config;
+export function API_Authentication({ config, titles }) {
+  const { payload, authentication, response, url } = config;
+
   return (
     <div className="flex w-full flex-col gap-5">
       <div className="max-w-full">
         <h4 className="text-base font-bold text-slate-600">
-          Authentication URL
+          {titles?.url || "Authentication URL"}
         </h4>
-        <Snippet hideSymbol className="">
+        <Snippet hideSymbol className="w-full flex-1">
           <p className="text-wrap">POST ~ {url}</p>
         </Snippet>
       </div>
       <div className="flex w-full flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
-          Authentication Payload
+          {titles?.payload || "Authentication Payload"}
         </h4>
         <Snippet hideSymbol>
           <pre
             dangerouslySetInnerHTML={{
               __html: syntaxHighlight(
-                JSON.stringify(authentication, undefined, 2)
+                JSON.stringify(payload || authentication, undefined, 2)
               ),
             }}
           ></pre>
@@ -173,7 +174,7 @@ export function API_Authentication({ config }) {
 
       <div className="flex flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
-          Authentication Response
+          {titles?.response || "Authentication Response"}
         </h4>
         <Snippet hideSymbol>
           <pre
@@ -187,24 +188,28 @@ export function API_Authentication({ config }) {
   );
 }
 
-export function CollectionResponses({ config }) {
-  const { collection, response, url } = config;
+export function ActionResponses({ config, titles }) {
+  const { collection, response, url, payload } = config;
   return (
     <div className="flex w-full flex-col gap-8">
       <div className="max-w-full">
-        <h4 className="text-base font-bold text-slate-600">Collection URL</h4>
-        <Snippet hideSymbol className="">
+        <h4 className="text-base font-bold text-slate-600">
+          {titles?.url || "Collection URL"}
+        </h4>
+        <Snippet hideSymbol className="w-full flex-1">
           <p className="text-wrap">POST ~ {url}</p>
         </Snippet>
       </div>
       <div className="flex flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
-          Collection Payload
+          {titles?.payload || "Collection Payload"}
         </h4>
         <Snippet hideSymbol className="w-full">
           <pre
             dangerouslySetInnerHTML={{
-              __html: syntaxHighlight(JSON.stringify(collection, undefined, 2)),
+              __html: syntaxHighlight(
+                JSON.stringify(payload || collection, undefined, 2)
+              ),
             }}
           ></pre>
         </Snippet>
@@ -212,7 +217,7 @@ export function CollectionResponses({ config }) {
 
       <div className="flex flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
-          Collection Response
+          {titles?.response || "Collection Response"}
         </h4>
         <Snippet hideSymbol className="w-full">
           <pre
@@ -226,22 +231,22 @@ export function CollectionResponses({ config }) {
   );
 }
 
-export function StatusResponses({ config }) {
+export function StatusResponses({ config, titles }) {
   const { response, url } = config;
   return (
     <div className="flex w-full flex-col gap-8">
       <div className="max-w-full">
         <h4 className="text-base font-bold text-slate-600">
-          Status Callback URL
+          {titles?.url || "Status Callback URL"}
         </h4>
-        <Snippet hideSymbol className="">
+        <Snippet hideSymbol className="w-full flex-1">
           <p className="text-wrap">GET ~ {url}</p>
         </Snippet>
       </div>
 
       <div className="flex flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
-          Transaction Status Response
+          {titles?.response || "Transaction Status Response"}
         </h4>
         <Snippet hideSymbol className="w-full">
           <pre

@@ -19,28 +19,21 @@ import { useMutation } from "@tanstack/react-query";
 import { getCollectionsReport } from "@/app/_actions/transaction-actions";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { API_KEY_TRANSACTION_COLUMNS } from "../../collections/api-integration/API";
 import TotalStatsLoader from "@/components/elements/total-stats-loader";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import Tabs from "@/components/elements/tabs";
 import TotalValueStat from "@/components/elements/total-stats";
 import { convertToCSVString } from "@/app/_actions/file-conversion-actions";
+import { BILLS_TRANSACTION_COLUMNS } from "../../bills/bill-payments";
 
 const SERVICE_TYPES = [
   {
-    name: "API Transactions Reports",
+    name: "BIll Payment Reports",
     description:
-      "Reports on API transactions that took place within the date range applied",
+      "Reports on Bill API transactions that took place within the date range applied",
     index: 0,
-    service: "api-integration", // SERVICE TYPE REQUIRED BY API ENDPOINT
-  },
-  {
-    name: "Till Transactions Reports",
-    description:
-      "Reports on till transactions that took place within the date range applied",
-    index: 1,
-    service: "till", // SERVICE TYPE REQUIRED BY API ENDPOINT
+    service: "bill", // SERVICE TYPE REQUIRED BY API ENDPOINT
   },
 ];
 
@@ -64,12 +57,12 @@ export default function BillPaymentReports({ workspaceID }) {
     return await mutation.mutateAsync(range);
   }
 
-  // FETCH COLLECTIONS REPORT DATA - ASYNC AS HOISTED INTO THE MUTATION FUNCTION
+  // FETCH BILLS REPORT DATA - ASYNC AS HOISTED INTO THE MUTATION FUNCTION
   async function getReportsData(dateRange) {
     let serviceType = SERVICE_TYPES[currentTab]?.service;
 
     if (!serviceType) {
-      serviceType = "api-integration";
+      serviceType = "bill";
     }
 
     const response = await getCollectionsReport(
@@ -112,14 +105,13 @@ export default function BillPaymentReports({ workspaceID }) {
   function handleFileExportToCSV() {
     // Implement CSV export functionality here
     if (currentTab === 0)
-      convertToCSVString(transactions, "api_collection_transactions");
+      convertToCSVString(transactions, "bill_payment_transactions");
 
     if (currentTab === 1)
       convertToCSVString(transactions, "till_collection_transactions");
   }
 
   const [currentTab, setCurrentTab] = useState(0);
-
 
   useEffect(() => {
     runAsyncMutation(dateRange);
@@ -253,12 +245,12 @@ export default function BillPaymentReports({ workspaceID }) {
         }
         {/* {activeTab} */}
         <CustomTable
-          columns={API_KEY_TRANSACTION_COLUMNS}
+          columns={BILLS_TRANSACTION_COLUMNS}
           rows={filteredItems || []}
           isLoading={mutation.isPending}
           isError={mutation.isError}
           removeWrapper
-          // onRowAction={(key) => {}}
+          onRowAction={(key) => {}}
         />
       </Card>
 

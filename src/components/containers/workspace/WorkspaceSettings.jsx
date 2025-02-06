@@ -88,6 +88,10 @@ function WorkspaceSettings({
         ]
       : [];
 
+  function handleNavigation(index) {
+    navigateTo(index);
+  }
+
   // ******************* COMPONENT RENDERER ************************** //
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
     <WorkspaceDetails
@@ -110,10 +114,6 @@ function WorkspaceSettings({
     // Provides the disbursement tabs
     ...TAB_COMPONENTS,
   ]);
-
-  function handleNavigation(index) {
-    navigateTo(index);
-  }
 
   const canCreateUsers = permissions?.isAdmin || permissions?.isOwner;
   const allowUserCreation = currentTabIndex == 1 && canCreateUsers;

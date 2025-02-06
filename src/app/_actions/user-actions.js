@@ -122,8 +122,7 @@ export async function assignUsersToWorkspace(users, workspaceID) {
       };
     }
 
-    revalidatePath("/manage-account/workspaces/[ID]", "page");
-    revalidatePath("/dashboard/[workspaceID]/workspace-settings", "page");
+    revalidatePath("/", "page");
 
     return {
       success: false,

@@ -9,7 +9,7 @@ import AddUserToWorkspace from "@/components/containers/workspace/AddUserToWorks
 import useWorkspaces from "@/hooks/useWorkspaces";
 import { SETUP_QUERY_KEY, WORKSPACES_QUERY_KEY } from "@/lib/constants";
 import { cn, notify } from "@/lib/utils";
-import { useDisclosure } from "@heroui/react";
+import { Switch, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -73,8 +73,8 @@ function WorkspaceDetails({
 
     // VALIDATE INPUTS
     if (
-      newWorkspace.workspace.length <= 3 ||
-      newWorkspace.description.length <= 3
+      newWorkspace.workspace?.length <= 3 ||
+      newWorkspace.description?.length <= 3
     ) {
       notify("error", "Provide valid name and description!");
       setLoading(false);
@@ -87,8 +87,8 @@ function WorkspaceDetails({
     });
 
     if (response?.success) {
-      queryClient.invalidateQueries({ queryKey: [SETUP_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: [WORKSPACES_QUERY_KEY] });
+      queryClient.invalidateQueries();
+
       setLoading(false);
       notify("success", "Changes Saved!");
       return;
@@ -157,7 +157,7 @@ function WorkspaceDetails({
   return (
     <>
       <div className="flex w-full flex-1 flex-col gap-4">
-        <div className="flex flex-col gap-6 ">
+        <div className="flex flex-col gap-6">
           <form
             onSubmit={handleUpdateWorkspace}
             role={"edit-workspace-details"}
@@ -198,24 +198,38 @@ function WorkspaceDetails({
       {!isSandbox && (
         <>
           <hr className="my-6 h-px bg-foreground-900/5" />
-          <div className="flex flex-col gap-4 md:flex-row md:justify-between">
-            <div className="flex max-w-4xl flex-col gap-4">
-              <h2 className="text-base font-semibold leading-3 text-foreground">
-                Add Users to Workspace
-              </h2>
-              <p className="text-sm leading-6 text-gray-400">
-                Add users to this workspace to allow them to interact with the
-                PayBoss platform.
-              </p>
+          <div className="flex flex-col gap-8 md:flex-row md:justify-between md:gap-16 xl:gap-24">
+            <div className="flex w-full flex-col items-center justify-between md:flex-row">
+              <div className="flex max-w-4xl flex-col gap-2">
+                <h2 className="text-base font-semibold leading-3 text-foreground">
+                  Add Users to Workspace
+                </h2>
+                <p className="text-sm leading-6 text-gray-400">
+                  Give others access to this workspace
+                </p>
+              </div>
+
+              <Button
+                onClick={onOpenAdd}
+                className="rounded-md px-3 py-2 text-sm font-semibold shadow-sm"
+                endContent={<PlusIcon className="h-5 w-5" />}
+              >
+                Add Members
+              </Button>
             </div>
 
-            <Button
-              onClick={onOpenAdd}
-              className="self-end rounded-md px-3 py-2 text-sm font-semibold  shadow-sm"
-              endContent={<PlusIcon className="h-5 w-5" />}
-            >
-              Add Workspace Members
-            </Button>
+            <div className="flex w-full items-center justify-between">
+              <div className="flex max-w-4xl flex-col gap-2">
+                <h2 className="text-base font-semibold leading-3 text-foreground">
+                  Change Workspace Visibility
+                </h2>
+                <p className="text-sm leading-6 text-gray-400">
+                  Change workspace to allow other users to have access
+                </p>
+              </div>
+
+              <Switch isSelected={true} isDisabled></Switch>
+            </div>
           </div>
           <hr className="my-6 h-px bg-foreground-900/5" />
           <div className="flex flex-col gap-8 md:flex-row md:justify-between">
