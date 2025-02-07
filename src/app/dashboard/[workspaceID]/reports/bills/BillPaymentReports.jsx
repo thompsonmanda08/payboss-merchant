@@ -103,12 +103,15 @@ export default function BillPaymentReports({ workspaceID }) {
   }, [dateRange]);
 
   function handleFileExportToCSV() {
+    let columnHeaders;
     // Implement CSV export functionality here
-    if (currentTab === 0)
-      convertToCSVString(transactions, "bill_payment_transactions");
-
-    if (currentTab === 1)
-      convertToCSVString(transactions, "till_collection_transactions");
+    if (currentTab === 0) {
+      convertToCSVString({
+        objArray: transactions,
+        // columnHeaders,
+        fileName: "bill_payment_transactions",
+      });
+    }
   }
 
   const [currentTab, setCurrentTab] = useState(0);
@@ -144,7 +147,7 @@ export default function BillPaymentReports({ workspaceID }) {
             className={"mb-2 mr-auto"}
             tabs={SERVICE_TYPES}
             currentTab={currentTab}
-            setCurrentTab={setCurrentTab}
+            navigateTo={setCurrentTab}
           />
         </div>
         <div className="flex w-full items-center justify-between gap-8">
