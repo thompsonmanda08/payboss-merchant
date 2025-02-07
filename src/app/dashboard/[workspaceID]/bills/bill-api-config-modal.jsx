@@ -88,7 +88,7 @@ const BILLS_API_KEY_DATA = {
   paymentStatusURL:
     "https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/status/{transactionId}",
   paymentStatusResponse: {
-    status: "success | failed | pending",
+    status: "successful | failed | pending",
     message: "status description",
     transactionID: "your transaction ID",
     bill_ref: "bill ref | null",
