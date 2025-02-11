@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody } from "@heroui/modal";
-import usePaymentsStore, { validationColumns } from "@/context/payment-store";
+import usePaymentsStore from "@/context/payment-store";
 import { useBatchDetails } from "@/hooks/useQueryHooks";
 import CardHeader from "@/components/base/CardHeader";
 import SingleTransactionsTable from "../tables/SingleTransactionsTable";
+import { SINGLE_TRANSACTIONS_VALIDATION_COLUMNS } from "@/lib/table-columns";
 
 function RecordDetailsViewer({ batchID }) {
   const {
@@ -36,13 +37,15 @@ function RecordDetailsViewer({ batchID }) {
     ? "All records in this list are valid and ready for the next step."
     : "The records listed here contain errors or missing information. Please update them to proceed with the transaction.";
 
+  console.log(batchDetails?.total);
+
   return (
     <Modal
       isOpen={openModalView}
       onClose={closeRecordsModal}
       // onConfirm={handleConfirmationClose}
       classNames={{ overlay: "z-[55]", base: "max-w-[1440px]" }}
-      isDismissible={false}
+      isDismissable={false}
     >
       <ModalContent>
         {() => (
@@ -54,7 +57,7 @@ function RecordDetailsViewer({ batchID }) {
               {/* IF MODAL OPENED AND TOTAL RECORDS ARRAY IS NOT EMPTY */}
               {openAllRecordsModal && batchDetails?.total && (
                 <SingleTransactionsTable
-                  columnData={validationColumns}
+                  columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
                   rowData={batchDetails?.total}
                   removeWrapper
                 />
@@ -63,7 +66,7 @@ function RecordDetailsViewer({ batchID }) {
               {/* IF MODAL OPENED AND TOTAL VALID RECORDS ARRAY IS NOT EMPTY */}
               {openValidRecordsModal && batchDetails?.valid && (
                 <SingleTransactionsTable
-                  columnData={validationColumns}
+                  columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
                   rowData={batchDetails?.valid}
                   removeWrapper
                 />
@@ -72,7 +75,7 @@ function RecordDetailsViewer({ batchID }) {
               {/* IF MODAL OPENED AND TOTAL INVALID RECORDS ARRAY IS NOT EMPTY */}
               {openInvalidRecordsModal && batchDetails?.invalid?.length && (
                 <SingleTransactionsTable
-                  columnData={validationColumns}
+                  columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
                   rowData={batchDetails?.invalid}
                   removeWrapper
                 />

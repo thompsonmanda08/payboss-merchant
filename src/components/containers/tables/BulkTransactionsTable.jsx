@@ -20,17 +20,7 @@ import SelectField from "@/components/ui/select-field";
 import { useBulkTransactions, useWorkspaceInit } from "@/hooks/useQueryHooks";
 import EmptyLogs from "@/components/base/EmptyLogs";
 import { format } from "date-fns";
-
-const bulkTransactionColumns = [
-  { name: "DATE CREATED", uid: "created_at", sortable: true },
-  { name: "NAME", uid: "batch_name", sortable: true },
-  { name: "TOTAL RECORDS", uid: "number_of_records", sortable: true },
-  { name: "TOTAL AMOUNT", uid: "total_amount", sortable: true },
-  { name: "SERVICE", uid: "service", sortable: true },
-  { name: "LAST MODIFIED", uid: "updated_at", sortable: true },
-  { name: "STATUS", uid: "status", sortable: true },
-  { name: "ACTIONS", uid: "actions" },
-];
+import { BULK_TRANSACTIONS_COLUMN } from "@/lib/table-columns";
 
 // DEFINE FILTERABLE SERVICES
 const SERVICE_FILTERS = [
@@ -47,12 +37,9 @@ const SERVICE_FILTERS = [
 
 export default function BulkTransactionsTable({ workspaceID, rows }) {
   // DATA FETCHING
-  const { data: bulkTransactionsResponse, isLoading } =
-    useBulkTransactions(workspaceID);
+  const { isLoading } = useBulkTransactions(workspaceID);
 
-  // // DEFINE FILTERABLE ROWS AND COLUMNS
-  // const rows = bulkTransactionsResponse?.data?.batches || []
-  const columns = bulkTransactionColumns;
+  const columns = BULK_TRANSACTIONS_COLUMN;
   const { setSelectedBatch, setOpenBatchDetailsModal, setOpenPaymentsModal } =
     usePaymentsStore();
 
@@ -91,10 +78,10 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredrows = [...rows];
+    let filteredRows = [...rows];
 
     if (hasSearchFilter) {
-      filteredrows = filteredrows.filter(
+      filteredRows = filteredRows.filter(
         (row) =>
           row?.batch_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.amount?.toLowerCase().includes(filterValue?.toLowerCase())
@@ -106,12 +93,12 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
     ) {
       let filters = Array.from(serviceProtocolFilter);
 
-      filteredrows = filteredrows.filter((row) =>
+      filteredRows = filteredRows.filter((row) =>
         filters.includes(row?.service)
       );
     }
 
-    return filteredrows;
+    return filteredRows;
   }, [rows, filterValue, serviceProtocolFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
@@ -194,18 +181,6 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
         return cellValue;
     }
   }, []);
-
-  const onNextPage = React.useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = React.useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
 
   const onRowsPerPageChange = React.useCallback((e) => {
     setRowsPerPage(Number(e.target.value));

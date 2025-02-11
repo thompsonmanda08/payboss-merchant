@@ -20,28 +20,16 @@ import { useMutation } from "@tanstack/react-query";
 import { getBulkAnalyticReports } from "@/app/_actions/transaction-actions";
 import { AnimatePresence, motion } from "framer-motion";
 import ReportDetailsViewer from "@/components/containers/analytics/ReportDetailsViewer";
-import { singleReportsColumns } from "@/context/payment-store";
 import TotalStatsLoader from "@/components/elements/total-stats-loader";
-import { convertToCSVString } from "@/app/_actions/file-conversion-actions";
+import { bulkTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import Tabs from "@/components/elements/tabs";
 import TotalValueStat from "@/components/elements/total-stats";
-
-const bulkReportsColumns = [
-  { name: "DATE", uid: "created_at", sortable: true },
-  { name: "NAME", uid: "name", sortable: true },
-
-  { name: "TOTAL RECORDS", uid: "allRecords", sortable: true },
-  { name: "TOTAL AMOUNT", uid: "allRecordsValue", sortable: true },
-
-  { name: "TOTAL SUCCESSFUL", uid: "successfulRecords", sortable: true },
-  { name: "AMOUNT SUCCESSFUL", uid: "successfulRecordsValue", sortable: true },
-
-  { name: "TOTAL FAILED", uid: "failedRecords", sortable: true },
-  { name: "AMOUNT FAILED", uid: "failedRecordsValue", sortable: true },
-  { name: "STATUS", uid: "status", sortable: true },
-];
+import {
+  BULK_REPORTS_COLUMNS,
+  SINGLE_TRANSACTION_REPORTS_COLUMNS,
+} from "@/lib/table-columns";
 
 const SERVICE_TYPES = [
   {
@@ -75,7 +63,7 @@ export default function DisbursementReports({ workspaceID }) {
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
       key={`direct-payments-${workspaceID}`}
-      columns={bulkReportsColumns}
+      columns={BULK_REPORTS_COLUMNS}
       rows={directBatches || ["1", "2", "3"]}
       isLoading={mutation.isPending}
       isError={mutation.isError}
@@ -84,7 +72,7 @@ export default function DisbursementReports({ workspaceID }) {
     />,
     <CustomTable
       key={`voucher-payments-${workspaceID}`}
-      columns={bulkReportsColumns}
+      columns={BULK_REPORTS_COLUMNS}
       rows={voucherBatches}
       isLoading={mutation.isPending}
       isError={mutation.isError}
@@ -108,17 +96,22 @@ export default function DisbursementReports({ workspaceID }) {
     }
     setSelectedBatch(batch);
     setOpenReportsModal(true);
-    console.log("Selected ID", ID);
-    console.log("Selected Batch", batch, ID);
   }
 
   function handleFileExportToCSV() {
     if (currentTabIndex === 0) {
-      convertToCSVString(directBatches);
+      bulkTransactionsReportToCSV({
+        objArray: directBatches,
+        fileName: "direct_bulk_transactions",
+      });
       return;
     }
     if (currentTabIndex === 1) {
-      convertToCSVString(voucherBatches);
+      bulkTransactionsReportToCSV({
+        objArray: voucherBatches,
+        fileName: "voucher_bulk_transactions",
+      });
+
       return;
     }
   }
@@ -224,7 +217,7 @@ export default function DisbursementReports({ workspaceID }) {
                   <div className="flex flex-col flex-wrap sm:flex-row md:justify-evenly">
                     <div className="flex flex-1 flex-col gap-4">
                       <TotalValueStat
-                        label={"Proccessed Direct Transactions"}
+                        label={"Processed Direct Transactions"}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "primary-800",
@@ -235,7 +228,7 @@ export default function DisbursementReports({ workspaceID }) {
                         )}
                       />
                       <TotalValueStat
-                        label={"Proccessed Voucher Transactions"}
+                        label={"Processed Voucher Transactions"}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "secondary",
@@ -327,8 +320,11 @@ export default function DisbursementReports({ workspaceID }) {
                 setSearchQuery(e.target.value);
               }}
             />
-            <Button onPress={() => handleFileExportToCSV()}>
-              <ArrowDownTrayIcon className="h-5 w-5" /> Export
+            <Button
+              onPress={handleFileExportToCSV}
+              startContent={<ArrowDownTrayIcon className="h-5 w-5" />}
+            >
+              Export
             </Button>
           </div>
         </div>
@@ -341,8 +337,8 @@ export default function DisbursementReports({ workspaceID }) {
           setOpenReportsModal={setOpenReportsModal}
           openReportsModal={openReportsModal}
           setSelectedBatch={setSelectedBatch}
+          columns={SINGLE_TRANSACTION_REPORTS_COLUMNS}
           batch={selectedBatch}
-          columns={singleReportsColumns}
         />
       )}
       {/************************************************************************/}

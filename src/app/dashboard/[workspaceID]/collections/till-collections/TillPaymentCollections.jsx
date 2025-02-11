@@ -30,7 +30,7 @@ import CardHeader from "@/components/base/CardHeader";
 import TillNumberBanner from "./TillNumberBanner";
 import SoftBoxIcon from "@/components/base/SoftBoxIcon";
 
-export const API_KEY_TRANSACTION_COLUMNS = [
+export const TILL_TRANSACTION_COLUMNS = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "NARRATION", uid: "narration" },
   { name: "PROVIDER", uid: "service_provider", sortable: true },
@@ -143,15 +143,15 @@ export default function TillPaymentCollections({ workspaceID }) {
             <TableBody
               isLoading={isFetching}
               loadingContent={
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3 ">
+                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
                   <span className="flex gap-4 text-sm font-bold capitalize text-primary">
                     <Spinner size="sm" /> Loading till number...
                   </span>
                 </div>
               }
               emptyContent={
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3 ">
-                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70 ">
+                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
+                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70">
                     You have no till number generated
                   </span>
                 </div>
@@ -221,7 +221,7 @@ export default function TillPaymentCollections({ workspaceID }) {
                             className="cursor-pointer rounded-md bg-secondary/10 p-2 text-secondary transition-all duration-300 ease-in-out hover:bg-secondary hover:text-white"
                             onClick={() => setOpenViewConfig(true)}
                           >
-                            <ComputerDesktopIcon className={`h-6 w-6 `} />
+                            <ComputerDesktopIcon className={`h-6 w-6`} />
                           </span>
                         </Tooltip>
 
@@ -257,7 +257,7 @@ export default function TillPaymentCollections({ workspaceID }) {
             />
           </div>
           <CustomTable
-            columns={API_KEY_TRANSACTION_COLUMNS}
+            columns={TILL_TRANSACTION_COLUMNS}
             rows={LATEST_TRANSACTIONS || []}
             rowsPerPage={6}
             isLoading={mutation.isPending}

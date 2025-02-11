@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { singleReportsColumns } from "@/context/payment-store";
 import SingleTransactionsTable from "../tables/SingleTransactionsTable";
 import Modal from "@/components/base/custom-modal";
 
@@ -31,7 +30,7 @@ function ReportDetailsViewer({
       height={400}
     >
       <SingleTransactionsTable
-        columnData={singleReportsColumns}
+        columnData={columns}
         rowData={batch?.transactions}
         isLoading={isLoading}
         removeWrapper

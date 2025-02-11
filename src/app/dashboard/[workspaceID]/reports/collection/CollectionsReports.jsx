@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import Search from "@/components/ui/search";
 import CustomTable from "@/components/containers/tables/Table";
 import {
@@ -19,13 +18,13 @@ import { useMutation } from "@tanstack/react-query";
 import { getCollectionsReport } from "@/app/_actions/transaction-actions";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { API_KEY_TRANSACTION_COLUMNS } from "../../collections/api-integration/API";
 import TotalStatsLoader from "@/components/elements/total-stats-loader";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import Tabs from "@/components/elements/tabs";
 import TotalValueStat from "@/components/elements/total-stats";
-import { convertToCSVString } from "@/app/_actions/file-conversion-actions";
+import { apiTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
+import { API_KEY_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 
 const SERVICE_TYPES = [
   {
@@ -110,27 +109,15 @@ export default function CollectionsReports({ workspaceID }) {
   }, [dateRange]);
 
   function handleFileExportToCSV() {
-    let columnHeaders;
-    // Implement CSV export functionality here
     if (currentTab === 0)
-      columnHeaders = API_KEY_TRANSACTION_COLUMNS.map(
-        (column) => column?.name
-      ).join(",");
-
-    convertToCSVString({
-      objArray: transactions,
-      columnHeaders,
-      fileName: "api_collection_transactions",
-    });
+      apiTransactionsReportToCSV({
+        objArray: transactions,
+        fileName: "api_collection_transactions",
+      });
 
     if (currentTab === 1) {
-      columnHeaders = API_KEY_TRANSACTION_COLUMNS.map(
-        (column) => column?.name
-      ).join(",");
-
-      convertToCSVString({
+      apiTransactionsReportToCSV({
         objArray: transactions,
-        columnHeaders,
         fileName: "till_collection_transactions",
       });
     }

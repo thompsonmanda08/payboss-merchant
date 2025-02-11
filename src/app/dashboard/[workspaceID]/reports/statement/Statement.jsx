@@ -8,7 +8,10 @@ import { WALLET_STATEMENT_REPORTS_QUERY_KEY } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
 import { getWalletStatementReport } from "@/app/_actions/transaction-actions";
 import { WalletTransactionHistory } from "@/components/containers/workspace/Wallet";
-import { convertToCSVString } from "@/app/_actions/file-conversion-actions";
+import {
+  convertToCSVString,
+  walletStatementReportToCSV,
+} from "@/app/_actions/file-conversion-actions";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import Search from "@/components/ui/search";
@@ -39,16 +42,16 @@ export default function StatementReport({ workspaceID }) {
 
   // Implement mannual CSV export functionality
   function handleFileExportToCSV() {
-    convertToCSVString(statementTransactions, "wallet_statement");
+    walletStatementReportToCSV({ objArray: statementTransactions });
   }
 
   // RESOLVE DATA FILTERING
   const hasSearchFilter = Boolean(searchQuery);
   const filteredItems = React.useMemo(() => {
-    let filteredrows = [...statementTransactions];
+    let filteredRows = [...statementTransactions];
 
     if (hasSearchFilter) {
-      filteredrows = filteredrows.filter(
+      filteredRows = filteredRows.filter(
         (row) =>
           row?.ID?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
           row?.amount?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
@@ -56,7 +59,7 @@ export default function StatementReport({ workspaceID }) {
       );
     }
 
-    return filteredrows;
+    return filteredRows;
   }, [statementTransactions, searchQuery]);
 
   useEffect(() => {

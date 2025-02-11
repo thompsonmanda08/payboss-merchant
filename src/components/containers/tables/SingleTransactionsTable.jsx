@@ -25,20 +25,8 @@ import SelectField from "@/components/ui/select-field";
 
 import { useSingleTransactions, useWorkspaceInit } from "@/hooks/useQueryHooks";
 import EmptyLogs from "@/components/base/EmptyLogs";
-import { convertToCSVString } from "@/app/_actions/file-conversion-actions";
-
-export const SingleTransactionColumns = [
-  { name: "DATE CREATED", uid: "created_at", sortable: true },
-  { name: "FIRST NAME", uid: "first_name", sortable: true },
-  { name: "LAST NAME", uid: "last_name", sortable: true },
-  { name: "SERVICE", uid: "service" },
-  { name: "SERVICE PROVIDER", uid: "service_provider" },
-  { name: "DESTINATION ACCOUNT", uid: "destination", sortable: true },
-  { name: "LAST MODIFIED", uid: "updated_at", sortable: true },
-  { name: "AMOUNT", uid: "amount", sortable: true },
-  { name: "STATUS", uid: "status", sortable: true },
-  // { name: 'ACTIONS', uid: 'actions' },
-];
+import { SINGLE_TRANSACTIONS_COLUMNS } from "@/lib/table-columns";
+import { convertSingleTransactionToCSV } from "@/app/_actions/file-conversion-actions";
 
 // DEFINE FILTERABLE SERVICES
 const SERVICE_FILTERS = [
@@ -63,7 +51,7 @@ export default function SingleTransactionsTable({
     useSingleTransactions(workspaceID);
 
   // DEFINE FILTERABLE ROWS AND COLUMNS
-  const columns = columnData || SingleTransactionColumns;
+  const columns = columnData || SINGLE_TRANSACTIONS_COLUMNS;
   const rows = rowData || transactionsResponse?.data?.data || [];
 
   const {
@@ -107,10 +95,10 @@ export default function SingleTransactionsTable({
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredrows = [...rows];
+    let filteredRows = [...rows];
 
     if (hasSearchFilter) {
-      filteredrows = filteredrows.filter(
+      filteredRows = filteredRows.filter(
         (row) =>
           row?.first_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.last_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
@@ -121,12 +109,12 @@ export default function SingleTransactionsTable({
       serviceProtocolFilter !== "all" &&
       Array.from(serviceProtocolFilter).length !== SERVICE_FILTERS.length
     ) {
-      filteredrows = filteredrows.filter((row) =>
+      filteredRows = filteredRows.filter((row) =>
         Array.from(serviceProtocolFilter).includes(row?.service)
       );
     }
 
-    return filteredrows;
+    return filteredRows;
   }, [rows, filterValue, serviceProtocolFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
@@ -358,7 +346,14 @@ export default function SingleTransactionsTable({
               selectedKeys={visibleColumns}
               setSelectedKeys={setSelectedKeys}
             />
-            <Button onPress={() => convertToCSVString(rows)}>
+
+            <Button
+              onPress={() =>
+                convertSingleTransactionToCSV({
+                  objArray: rows,
+                })
+              }
+            >
               <ArrowDownTrayIcon className="h-5 w-5" /> Export
             </Button>
 

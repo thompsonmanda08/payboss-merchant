@@ -1,67 +1,127 @@
-import { formatDate } from "@/lib/utils";
+import {
+  API_KEY_TRANSACTION_COLUMNS,
+  BILLS_TRANSACTION_COLUMNS,
+  SINGLE_TRANSACTION_REPORTS_COLUMNS,
+  SINGLE_TRANSACTIONS_COLUMNS,
+} from "@/lib/table-columns";
+import { formatCurrency, formatDate } from "@/lib/utils";
+
+export function downloadCSV(data, fileName) {
+  const csvData = new Blob([data], { type: "text/csv" });
+  const csvURL = URL.createObjectURL(csvData);
+  const link = document.createElement("a");
+  link.href = csvURL;
+  link.download = `${fileName}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 
 /**
  * Converts a given array of objects into a CSV string
  * @param {Array<object>} objArray The array of objects to convert
  * @param {string} [columnHeaders] Optional parameter to specify custom column headers e.g. "Date,Name,Total Records,Status"
  * @param {string} [fileName='PayBoss_Report'] Optional parameter to specify a custom file name for the downloaded file
+ * @param {Function} formatDate Function to format date fields
+ * @param {Function} formatCurrency Function to format currency fields
  * @returns {string} The CSV string
  */
 export function convertToCSVString({
-  objArray = {},
+  objArray = [],
   columnHeaders = undefined,
   fileName = "PayBoss_Report",
 }) {
-  const array = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
+  if (!Array.isArray(objArray) || objArray.length === 0) {
+    console.error("Invalid or empty data provided for CSV conversion.");
+    return;
+  }
 
-  // Use supplied string of column headers or Get headers dynamically from the first object in the array
+  // Get all unique keys from the array to maintain column structure
+  const allKeys = [...new Set(objArray.flatMap((obj) => Object.keys(obj)))];
+
+  // Use provided column headers, or generate from object keys
   const headers = columnHeaders
     ? columnHeaders
-    : Object.keys(array[0])
-        .map((key) => key.toUpperCase())
-        .join(",")
-        .replaceAll("_", " ");
+    : allKeys.map((key) => key.toUpperCase().replaceAll("_", " ")).join(",");
 
   // Initialize CSV string with headers
   let csvStr = headers + "\r\n";
 
-  // Loop through each object and add values for each key
-  array.forEach((obj) => {
-    let line = Object.values(obj)
-      .map((value) => `"${value || ""}"`)
+  // Generate rows, ensuring missing values are replaced with "N/A"
+  objArray.forEach((obj) => {
+    let line = allKeys
+      .map((key) => {
+        let value = obj[key] !== undefined ? obj[key] : "N/A";
+
+        // Apply date formatting if the key suggests it's a date
+        if (key.toLowerCase().includes("created_at") && value !== "N/A") {
+          value = formatDate(value);
+        }
+
+        // Apply currency formatting if the key suggests it's an amount
+        // if (
+        //   (key.toLowerCase().includes("amount") ||
+        //     key.toLowerCase().includes("")) &&
+        //   value !== "N/A"
+        // ) {
+        //   value = formatCurrency(value);
+        // }
+
+        // Apply phone formatting if the key suggests it's an amount
+        if (
+          (key.toLowerCase().includes("destination") ||
+            key.toLowerCase().includes("amount") ||
+            key.toLowerCase().includes("price") ||
+            key.toLowerCase().includes("source")) &&
+          value !== "N/A"
+        ) {
+          value = `\t\t${value}`;
+        }
+
+        return `"${value}"`; // Ensure proper CSV formatting
+      })
       .join(",");
+
     csvStr += line + "\r\n";
   });
 
   return downloadCSV(csvStr, fileName);
 }
 
-export const convertBulkTransactionsReportToCSV = (objArray) => {
+export const bulkTransactionsReportToCSV = ({
+  objArray = [],
+  fileName = "PayBoss_Report",
+}) => {
   const array = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
   let str = "";
-  const headers =
-    "Date,Name,Total Records,Total Amount,Total Successful,Total Failed, Amount Failed";
+
+  const headers = BULK_REPORTS_COLUMNS?.map((col) => col?.name).join(",");
+
   str += headers + "\r\n";
 
   for (let i = 0; i < array.length; i++) {
     let line = "";
-    let date = formatDate(array[i]?.created_at).replaceAll("-", "_");
+    let date = formatDate(array[i]?.created_at);
     line += `"${date || ""}",`;
-    line += `"${array[i]?.name || ""}",`;
-    line += `"${array[i]?.allRecords || ""}",`;
-    line += `"${array[i]?.allRecordsValue || ""}",`;
-    line += `"${array[i]?.successfulRecords || ""}",`;
-    line += `"${array[i]?.successfulRecordsValue || ""}",`;
-    line += `"${array[i]?.failedRecords || ""}",`;
-    line += `"${array[i]?.failedRecordsValue || ""}",`;
+    line += `"${array[i]?.name || "N/A"}",`;
+    line += `"${array[i]?.allRecords || "N/A"}",`;
+    line += `"${`\t\t${array[i]?.allRecordsValue}` || "N/A"}",`;
+    line += `"${array[i]?.successfulRecords || "N/A"}",`;
+    line += `"${`\t\t${array[i]?.successfulRecordsValue}` || "N/A"}",`;
+    line += `"${array[i]?.failedRecords || "N/A"}",`;
+    line += `"${`\t\t${array[i]?.failedRecordsValue}` || "N/A"}",`;
+    line += `"${array[i]?.status || "N/A"}",`;
 
     str += line + "\r\n";
   }
 
-  return str;
+  return downloadCSV(str, fileName);
 };
 
-export const convertWalletStatementToCSV = (objArray) => {
+export const walletStatementReportToCSV = ({
+  objArray = [],
+  fileName = "PayBoss_Wallet_Statement_Report",
+}) => {
   const array = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
   let str = "";
   const headers = "Date,Narration,Initiator,Amount,Status,Remarks";
@@ -69,7 +129,8 @@ export const convertWalletStatementToCSV = (objArray) => {
 
   for (let i = 0; i < array.length; i++) {
     let line = "";
-    line += `"${formatDate(array[i]?.created_at, "DD-MM-YYYY") || ""}",`;
+    let date = formatDate(array[i]?.created_at);
+    line += `"${date || ""}",`;
     line += `"${array[i]?.content || ""}",`;
     line += `"${array[i]?.created_by || ""}",`;
     line += `"${array[i]?.amount || ""}",`;
@@ -79,70 +140,126 @@ export const convertWalletStatementToCSV = (objArray) => {
     str += line + "\r\n";
   }
 
-  return str;
+  return downloadCSV(str, fileName);
 };
 
-export const convertAPITransactionToCSV = (objArray) => {
+export const apiTransactionsReportToCSV = ({
+  objArray = [],
+  columnHeaders = undefined,
+  fileName = "PayBoss_Report",
+}) => {
+  if (!Array.isArray(objArray) || objArray.length === 0) {
+    console.error("Invalid or empty data provided for CSV conversion.");
+    return;
+  }
+
   const array = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
   let str = "";
-  const headers =
-    "Date,Transaction ID,Service Provider,Source Account,MNO Ref,MNO Status Description, Remarks, Amount, Status";
+
+  const headers = API_KEY_TRANSACTION_COLUMNS?.map((col) => col?.name).join(
+    ","
+  );
+
   str += headers + "\r\n";
 
   for (let i = 0; i < array.length; i++) {
     let line = "";
-    let date = formatDate(array[i]?.created_at).replaceAll("-", "_");
+    let date = formatDate(array[i]?.created_at);
     line += `"${date || ""}",`;
-    line += `"${array[i]?.transactionID || ""}",`;
-    line += `"${array[i]?.service_provider || ""}",`;
-    line += `"${array[i]?.destination || ""}",`;
-    line += `"${array[i]?.mno_ref || ""}",`;
-    line += `"${array[i]?.mno_status_description || ""}",`;
-    line += `"${array[i]?.status_description || ""}",`;
-    line += `"${array[i]?.amount || ""}",`;
-    line += `"${array[i]?.status || ""}",`;
+    line += `"${array[i]?.service_provider || "N/A"}",`;
+    line += `"${array[i]?.narration || "N/A"}",`;
+    // line += `"${array[i]?.voucher_type || "N/A"}",`;
+    line += `"${array[i]?.mno_ref || "N/A"}",`;
+    line += `"${array[i]?.mno_status_description || "N/A"}",`;
+    line += `"${`\t\t${array[i]?.destination}` || "N/A"}",`;
+    line += `"${array[i]?.status_description || "N/A"}",`;
+    line += `"${array[i]?.amount || "N/A"}",`;
+    line += `"${array[i]?.status || "N/A"}",`;
+    line += `"${array[i]?.transactionID || "N/A"}",`;
 
     str += line + "\r\n";
   }
 
-  return str;
+  return downloadCSV(str, fileName);
 };
 
-export const convertSingleTransactionToCSV = (objArray) => {
+export const billTransactionsReportToCSV = ({
+  objArray = [],
+  fileName = "PayBoss_Bill_Report",
+}) => {
+  if (!Array.isArray(objArray) || objArray.length === 0) {
+    console.error("Invalid or empty data provided for CSV conversion.");
+    return;
+  }
+
   const array = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
   let str = "";
-  const headers =
-    "Date,First Name,Last Name,NRC,Destination,Amount,Service Provider, Status, Remark,";
+
+  const headers = BILLS_TRANSACTION_COLUMNS?.map((col) => col?.name).join(",");
+
   str += headers + "\r\n";
 
   for (let i = 0; i < array.length; i++) {
     let line = "";
-    let date = formatDate(array[i]?.created_at).replaceAll("-", "_");
+    let date = formatDate(array[i]?.created_at);
     line += `"${date || ""}",`;
-    line += `"${array[i]?.first_name || ""}",`;
-    line += `"${array[i]?.last_name || ""}",`;
-    line += `"${array[i]?.nrc || ""}",`;
-    line += `"${array[i]?.destination || ""}",`;
-    line += `"${array[i]?.amount || ""}",`;
-    line += `"${array[i]?.service_provider || ""}",`;
-    line += `"${array[i]?.status || ""}",`;
-    line += `"${array[i]?.remarks || ""}",`;
+    line += `"${array[i]?.service_provider || "N/A"}",`;
+    line += `"${array[i]?.voucher_type || "N/A"}",`;
+    line += `"${array[i]?.narration || "N/A"}",`;
+    line += `"${array[i]?.bill_ref || "N/A"}",`;
+    line += `"${array[i]?.bill_status_description || "N/A"}",`;
+    line += `"${`\t\t${array[i]?.destination}` || "N/A"}",`;
+    line += `"${array[i]?.status_description || "N/A"}",`;
+    line += `"${array[i]?.amount || "N/A"}",`;
+    line += `"${array[i]?.status || "N/A"}",`;
+    line += `"${array[i]?.transactionID || "N/A"}",`;
 
     str += line + "\r\n";
   }
 
-  downloadCSV(str, "single_transactions");
-
-  return str;
+  return downloadCSV(str, fileName);
 };
 
-export const downloadCSV = (data, fileName) => {
-  const csvData = new Blob([data], { type: "text/csv" });
-  const csvURL = URL.createObjectURL(csvData);
-  const link = document.createElement("a");
-  link.href = csvURL;
-  link.download = `${fileName}.csv`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+export const convertSingleTransactionToCSV = ({
+  objArray = [],
+  columnHeaders = undefined,
+  fileName = "PayBoss_Transactions_Report",
+}) => {
+  if (!Array.isArray(objArray) || objArray.length === 0) {
+    console.error("Invalid or empty data provided for CSV conversion.");
+    return;
+  }
+
+  const array = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
+
+  let str = "";
+
+  const headers = SINGLE_TRANSACTION_REPORTS_COLUMNS?.map(
+    (col) => col?.name
+  ).join(",");
+
+  str += headers + "\r\n";
+
+  for (let i = 0; i < array.length; i++) {
+    let line = "";
+    let date = array[i]?.created_at
+      ? formatDate(array[i]?.created_at)
+      : undefined;
+    line += `"${date || "--/--/----"}",`;
+    line += `"${array[i]?.first_name || "N/A"}",`;
+    line += `"${array[i]?.last_name || "N/A"}",`;
+    line += `"${array[i]?.nrc || "N/A"}",`;
+    // line += `"${array[i]?.service || "N/A"}",`;
+    line += `"${array[i]?.service_provider || "N/A"}",`;
+    line += `"${`\t\t${array[i]?.destination}` || "N/A"}",`;
+    line += `"${array[i]?.transaction_rrn || "N/A"}",`;
+    line += `"${array[i]?.remarks || "N/A"}",`;
+    line += `"${array[i]?.amount || "N/A"}",`;
+    line += `"${array[i]?.status || "N/A"}",`;
+    line += `"${array[i]?.status_description || "N/A"}",`;
+
+    str += line + "\r\n";
+  }
+
+  return downloadCSV(str, fileName);
 };

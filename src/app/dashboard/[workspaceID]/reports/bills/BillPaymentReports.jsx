@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import Search from "@/components/ui/search";
 import CustomTable from "@/components/containers/tables/Table";
 import {
@@ -24,8 +23,8 @@ import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import Tabs from "@/components/elements/tabs";
 import TotalValueStat from "@/components/elements/total-stats";
-import { convertToCSVString } from "@/app/_actions/file-conversion-actions";
-import { BILLS_TRANSACTION_COLUMNS } from "../../bills/bill-payments";
+import { billTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
+import { BILLS_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 
 const SERVICE_TYPES = [
   {
@@ -103,12 +102,9 @@ export default function BillPaymentReports({ workspaceID }) {
   }, [dateRange]);
 
   function handleFileExportToCSV() {
-    let columnHeaders;
-    // Implement CSV export functionality here
     if (currentTab === 0) {
-      convertToCSVString({
+      billTransactionsReportToCSV({
         objArray: transactions,
-        // columnHeaders,
         fileName: "bill_payment_transactions",
       });
     }

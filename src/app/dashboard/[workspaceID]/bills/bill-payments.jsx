@@ -39,21 +39,7 @@ import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import BillPaymentAPIConfigModal from "./bill-api-config-modal";
 
-export const BILLS_TRANSACTION_COLUMNS = [
-  { name: "DATE", uid: "created_at", sortable: true },
-  { name: "SERVICE PROVIDER", uid: "service_provider" },
-  { name: "VOUCHER TYPE", uid: "voucher_type" },
-  { name: "NARRATION", uid: "narration" },
-  { name: "BILL REF.", uid: "bill_ref" },
 
-  { name: "BILL STATUS DESCRIPTION", uid: "bill_status_description" },
-  { name: "ACCOUNT", uid: "destination", sortable: true },
-
-  { name: "REMARKS", uid: "status_description" },
-  { name: "AMOUNT", uid: "amount", sortable: true },
-  { name: "STATUS", uid: "status", sortable: true },
-  { name: "TRANSACTION ID", uid: "transactionID" },
-];
 
 const BillPayments = ({ workspaceID }) => {
   const queryClient = useQueryClient();

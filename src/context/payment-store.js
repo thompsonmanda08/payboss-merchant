@@ -1,5 +1,3 @@
-import { updateInvalidDirectBulkTransactionDetails } from "@/app/_actions/transaction-actions";
-import { notify } from "@/lib/utils";
 import { create } from "zustand";
 
 const INITIAL_STATE = {
@@ -111,64 +109,6 @@ const usePaymentsStore = create((set, get) => ({
     }));
   },
 
-  saveSelectedRecord: async () => {
-    const { selectedRecord, batchDetails, updateSelectedRecord } = get();
-
-    // find selected record in invalid records
-    const selectedRecordID = selectedRecord?.ID;
-
-    // find selected record in invalid records using selectedRecordID and replace it with the updated record in state
-    const invalidRecords = batchDetails?.invalid;
-
-    const payload = {
-      batchID: selectedRecord?.batchID,
-      destination: selectedRecord?.destination,
-      amount: selectedRecord?.amount,
-    };
-
-    const response = await updateInvalidDirectBulkTransactionDetails(
-      selectedRecordID,
-      payload
-    );
-
-    if (response?.success) {
-      const updatedInvalidRecords = invalidRecords?.map((record) => {
-        // if record ID matches selectedRecordID, return the updated record
-        if (record.ID === selectedRecordID) {
-          return selectedRecord;
-        }
-        // otherwise return the original record
-        return record;
-      });
-
-      // Now that we have updated the invalid record array, we can either send  it back to the server for validation or update our current BatchDetails
-
-      // Update our current BatchDetails
-      set((state) => ({
-        loading: false,
-        batchDetails: {
-          ...state.batchDetails,
-          invalid: updatedInvalidRecords,
-        },
-      }));
-      notify("success", "Record updated!");
-      return response;
-    }
-
-    // If the update fails, set the error message and loading status
-    set({
-      loading: false,
-      error: {
-        status: true,
-        message: response?.message,
-      },
-    });
-    notify("error", "Record update failed!");
-    return response;
-    // Send updated invalid records back to the server for validation
-    // const response = await submitInvalidRecords(updatedInvalidRecords)
-  },
-
   // Clear & Reset
   resetPaymentData: () =>
     set((state) => {
@@ -179,35 +119,3 @@ const usePaymentsStore = create((set, get) => ({
 }));
 
 export default usePaymentsStore;
-
-export const validationColumns = [
-  { name: "FIRST NAME", uid: "first_name", sortable: true },
-  { name: "LAST NAME", uid: "last_name", sortable: true },
-  { name: "EMAIL", uid: "email", sortable: true },
-  { name: "MOBILE NO.", uid: "contact", sortable: true },
-  { name: "NRC", uid: "nrc", sortable: true },
-  { name: "MOBILE/ACCOUNT NO.", uid: "destination", sortable: true },
-  { name: "SERVICE", uid: "service_provider", sortable: true },
-  { name: "NARRATION", uid: "narration" },
-  { name: "REMARKS", uid: "remarks" },
-  { name: "AMOUNT", uid: "amount", sortable: true },
-  { name: "STATUS", uid: "status", sortable: true },
-];
-
-export const singleReportsColumns = [
-  { name: "DATE CREATED", uid: "created_at", sortable: true },
-  { name: "FIRST NAME", uid: "first_name", sortable: true },
-  { name: "LAST NAME", uid: "last_name", sortable: true },
-  { name: "NRC", uid: "nrc", sortable: true },
-  // { name: 'PHONE', uid: 'contact', sortable: true },
-  { name: "SERVICE PROVIDER", uid: "service_provider" },
-  { name: "MNO RRN", uid: "transaction_rrn" },
-  { name: "DESTINATION ACCOUNT", uid: "destination", sortable: true },
-  // { name: "NARRATION", uid: "narration" },
-  { name: "REMARKS", uid: "remarks" },
-  { name: "AMOUNT", uid: "amount", sortable: true },
-  { name: "STATUS", uid: "status", sortable: true },
-  { name: "STATUS DESCRIPTION", uid: "status_description" },
-
-  // { name: 'ACTIONS', uid: 'actions' },
-];

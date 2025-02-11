@@ -4,18 +4,10 @@ import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import Search from "@/components/ui/search";
 import useTransactions from "@/hooks/useTransactions";
 import CustomTable from "@/components/containers/tables/Table";
-import { SingleTransactionColumns } from "@/components/containers/tables/SingleTransactionsTable";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import Tabs from "@/components/elements/tabs";
-
-const transactionColumns = [
-  { name: "DATE", uid: "batch_name" },
-  { name: "DETAILS", uid: "number_of_records" },
-  { name: "SERVICE", uid: "status" },
-  { name: "DESTINATION ACCOUNT TYPE", uid: "status" },
-  { name: "AMOUNT", uid: "amount" },
-];
+import { SINGLE_TRANSACTIONS_COLUMNS } from "@/lib/table-columns";
 
 const SERVICE_TYPES = [
   {
@@ -52,7 +44,7 @@ export default function Transactions() {
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
       key={"transactions"}
-      columns={SingleTransactionColumns}
+      columns={SINGLE_TRANSACTIONS_COLUMNS}
       rows={transactionRows}
       isLoading={isLoading}
       rowsPerPage={10}
@@ -72,7 +64,7 @@ export default function Transactions() {
           }
         />
 
-        <div className="mt-4 flex w-full items-center justify-between gap-8 ">
+        <div className="mt-4 flex w-full items-center justify-between gap-8">
           <Search
             onChange={(e) => {
               setSearchQuery(e.target.value);

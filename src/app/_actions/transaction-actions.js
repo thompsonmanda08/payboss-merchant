@@ -290,48 +290,6 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
   }
 }
 
-// TODO: WILL BE REMOVED
-export async function updateInvalidDirectBulkTransactionDetails(
-  transactionID,
-  transactionData
-) {
-  const { batchID, destination, amount } = transactionData;
-
-  try {
-    const res = await authenticatedService({
-      url: `transaction/direct/payments/bulk/${transactionID}`,
-      method: "PATCH",
-      data: { batchID, destination, amount },
-    });
-
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
-    return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
-      status: res.status,
-      statusText: res?.statusText,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
 // ********************** SUBMIT BATCH TRANSACTION DETAILS ******************** //
 export async function submitBatchForApproval(batchID) {
   // At this point mew records would have been sent to the BE server so we just need to fetch the updated batch
