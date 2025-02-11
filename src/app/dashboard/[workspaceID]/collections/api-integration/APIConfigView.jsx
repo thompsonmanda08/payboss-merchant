@@ -188,7 +188,7 @@ export function API_Authentication({ config, titles }) {
   );
 }
 
-export function ActionResponses({ config, titles }) {
+export function ActionResponses({ config, titles, method }) {
   const { collection, response, url, payload } = config;
   return (
     <div className="flex w-full flex-col gap-8">
@@ -197,23 +197,27 @@ export function ActionResponses({ config, titles }) {
           {titles?.url || "Collection URL"}
         </h4>
         <Snippet hideSymbol className="w-full flex-1">
-          <p className="text-wrap">POST ~ {url}</p>
+          <p className="text-wrap">
+            {method || "POST"} ~ {url}
+          </p>
         </Snippet>
       </div>
-      <div className="flex flex-col gap-2">
-        <h4 className="text-base font-bold text-slate-600">
-          {titles?.payload || "Collection Payload"}
-        </h4>
-        <Snippet hideSymbol className="w-full">
-          <pre
-            dangerouslySetInnerHTML={{
-              __html: syntaxHighlight(
-                JSON.stringify(payload || collection, undefined, 2)
-              ),
-            }}
-          ></pre>
-        </Snippet>
-      </div>
+      {!method === "GET" && (
+        <div className="flex flex-col gap-2">
+          <h4 className="text-base font-bold text-slate-600">
+            {titles?.payload || "Collection Payload"}
+          </h4>
+          <Snippet hideSymbol className="w-full">
+            <pre
+              dangerouslySetInnerHTML={{
+                __html: syntaxHighlight(
+                  JSON.stringify(payload || collection, undefined, 2)
+                ),
+              }}
+            ></pre>
+          </Snippet>
+        </div>
+      )}
 
       <div className="flex flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">

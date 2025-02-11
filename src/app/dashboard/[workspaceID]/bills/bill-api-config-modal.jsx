@@ -94,6 +94,35 @@ const BILLS_API_KEY_DATA = {
     bill_ref: "bill ref | null",
     bill_status_description: "bill transaction status description",
   },
+
+  serviceProviderURL:
+    "https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/serviceproviders",
+
+  serviceProviderResponse: {
+    serviceproviders: [
+      {
+        ID: "string",
+        service_provider: "string",
+        key: "string",
+      },
+    ],
+  },
+
+  providerDetailsURL:
+    "https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/serviceprovider/{key || ID}",
+
+  providerDetailsResponse: {
+    ID: "string",
+    service_provider: "string",
+    key: "string",
+    vouchertype: [
+      {
+        ID: "string",
+        type: "string",
+        key: "string",
+      },
+    ],
+  },
 };
 
 export default function BillPaymentAPIConfigModal({
@@ -133,6 +162,34 @@ export default function BillPaymentAPIConfigModal({
         config={{
           url: configData?.paymentStatusURL,
           response: configData?.paymentStatusResponse,
+        }}
+      />,
+
+      <ActionResponses
+        key={currentStep.name}
+        method={"GET"}
+        config={{
+          url: configData?.serviceProviderURL,
+          response: configData?.serviceProviderResponse,
+        }}
+        titles={{
+          url: "Service Providers URL",
+          payload: "Service Providers Payload Body",
+          response: "Service Providers Response Body",
+        }}
+      />,
+
+      <ActionResponses
+        key={currentStep.name}
+        method={"GET"}
+        config={{
+          url: configData?.providerDetailsURL,
+          response: configData?.providerDetailsResponse,
+        }}
+        titles={{
+          url: "Provider Details URL",
+          payload: "Providers Details Payload Body",
+          response: "Providers Details Response Body",
         }}
       />,
     ]);
