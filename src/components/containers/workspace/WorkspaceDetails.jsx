@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
 import AddUserToWorkspace from "@/components/containers/workspace/AddUserToWorkspace";
 import useWorkspaces from "@/hooks/useWorkspaces";
-import { SETUP_QUERY_KEY, WORKSPACES_QUERY_KEY } from "@/lib/constants";
+import {
+  SETUP_QUERY_KEY,
+  WORKSPACE_TYPES,
+  WORKSPACES_QUERY_KEY,
+} from "@/lib/constants";
 import { cn, notify } from "@/lib/utils";
 import { Switch, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -32,16 +36,15 @@ function WorkspaceDetails({
     onOpen: onOpenAdd,
     onClose: onCloseAdd,
   } = useDisclosure();
-  const [deleteError, setDeleteError] = useState({
+  const [error, setError] = useState({
     status: false,
     message: "",
   });
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteWorkspaceName, setDeleteWorkspaceName] = useState("");
-  const { isUserInWorkspace, activeWorkspace } = useWorkspaces();
-  // const workspace = allWorkspaces.find(
-  //   (workspace) => workspace.ID === workspaceID
-  // );
+  const [callbackURL, setCallbackURL] = useState("");
+  const { activeWorkspace } = useWorkspaces();
+  const [isVisible, setIsVisible] = useState(activeWorkspace?.isVisible);
 
   const [isSandbox, setIsSandbox] = useState(
     activeWorkspace?.workspace?.toLowerCase() == "sandbox"
@@ -52,7 +55,6 @@ function WorkspaceDetails({
     description: activeWorkspace?.description,
   });
 
-  const [isVisible, setIsVisible] = useState(activeWorkspace?.isVisible);
 
   const noChangesToSave =
     !activeWorkspace ||
@@ -104,7 +106,7 @@ function WorkspaceDetails({
 
     if (deleteWorkspaceName !== activeWorkspace?.workspace) {
       setDeleteLoading(false);
-      setDeleteError({
+      setError({
         status: true,
         message: "Type the workspace name to confirm delete",
       });
@@ -147,10 +149,10 @@ function WorkspaceDetails({
 
   // CLEAR ERROR STATE
   useEffect(() => {
-    setDeleteError({ status: false, message: "" });
+    setError({ status: false, message: "" });
 
     return () => {
-      setDeleteError({ status: false, message: "" });
+      setError({ status: false, message: "" });
     };
   }, [deleteWorkspaceName]);
 
@@ -195,66 +197,111 @@ function WorkspaceDetails({
         </div>
       </div>
 
-      {!isSandbox && (
-        <>
-          <hr className="my-6 h-px bg-foreground-900/5" />
-          <div className="flex flex-col gap-8 md:flex-row md:justify-between md:gap-16 xl:gap-24">
-            <div className="flex w-full flex-col items-center justify-between md:flex-row">
-              <div className="flex max-w-4xl flex-col gap-2">
-                <h2 className="text-base font-semibold leading-3 text-foreground">
-                  Add Users to Workspace
-                </h2>
-                <p className="text-sm leading-6 text-gray-400">
-                  Give others access to this workspace
-                </p>
-              </div>
-
-              <Button
-                onClick={onOpenAdd}
-                className="rounded-md px-3 py-2 text-sm font-semibold shadow-sm"
-                endContent={<PlusIcon className="h-5 w-5" />}
-              >
-                Add Members
-              </Button>
-            </div>
-
-            <div className="flex w-full items-center justify-between">
-              <div className="flex max-w-4xl flex-col gap-2">
-                <h2 className="text-base font-semibold leading-3 text-foreground">
-                  Change Workspace Visibility
-                </h2>
-                <p className="text-sm leading-6 text-gray-400">
-                  Change workspace to allow other users to have access
-                </p>
-              </div>
-
-              <Switch isSelected={true} isDisabled></Switch>
-            </div>
+      <hr className="my-6 h-px bg-foreground-900/5" />
+      <div className="flex flex-col gap-8 md:flex-row md:justify-between md:gap-16 xl:gap-24">
+        <div className="flex w-full items-center justify-between md:flex-row">
+          <div className="flex max-w-4xl flex-col gap-2">
+            <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
+              Add Users to Workspace
+            </h2>
+            <p className="text-xs leading-6 text-gray-400 sm:text-sm">
+              Give others access to this workspace
+            </p>
           </div>
-          <hr className="my-6 h-px bg-foreground-900/5" />
-          <div className="flex flex-col gap-8 md:flex-row md:justify-between">
-            <div className="flex max-w-4xl flex-col gap-4">
-              <h2 className="text-base font-semibold leading-7 text-foreground">
-                Deactivate Workspace
+
+          <Button
+            onClick={onOpenAdd}
+            className="rounded-md px-3 py-2 text-sm font-semibold shadow-sm"
+            endContent={<PlusIcon className="h-5 w-5" />}
+          >
+            Add Members
+          </Button>
+        </div>
+      </div>
+
+      {/* DISBURSEMENTS WORKSPACE DOES NOT NEED A CALLBACK-URL */}
+      {activeWorkspace?.workspaceType !== WORKSPACE_TYPES[1]?.ID && (
+        <>
+          <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
+
+          {/* CHANGE WORKSPACE VISIBILITY */}
+          <div className="flex flex-col gap-6">
+            <div className="flex max-w-4xl flex-col gap-2">
+              <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
+                CallbackURL Config
               </h2>
-              <p className="text-sm leading-6 text-gray-400">
-                If you wish to deactivate or delete your workspace. This action
-                can only be reversed by contacting our support team. Please note
-                that all information related to this workspace will be retained
-                for audit purposes in accordance with regulatory requirements.
+              <p className="text-xs leading-6 text-gray-400 sm:text-sm">
+                PayBoss core will send a response to the callback URL provided
+                here complete the transaction
               </p>
             </div>
-
-            <Button
-              color="danger"
-              onClick={onOpen}
-              className="self-end rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400"
+            <form
+              onSubmit={handleUpdateWorkspace}
+              role={"edit-workspace-details"}
+              className="flex w-full flex-col gap-4 sm:items-start md:flex-row md:items-end"
             >
-              Yes, deactivate my workspace
-            </Button>
+              <Input
+                label="Callback URL"
+                defaultValue={activeWorkspace?.callBackURL}
+                isDisabled={loading}
+                value={callbackURL}
+                isInvalid={error?.onCallbackURL}
+                onChange={(e) => setCallbackURL(e.target.value)}
+              />
+
+              <Button
+                type="submit"
+                isDisabled={loading}
+                isLoading={loading}
+                loadingText={"Saving..."}
+              >
+                Save
+              </Button>
+            </form>
           </div>
         </>
       )}
+
+      <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
+
+      {/* CHANGE WORKSPACE VISIBILITY */}
+      <div className="flex w-full items-center justify-between">
+        <div className="flex max-w-4xl flex-col gap-2">
+          <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
+            Change Workspace Visibility
+          </h2>
+          <p className="text-xs leading-6 text-gray-400 sm:text-sm">
+            Change workspace to allow other users to have access
+          </p>
+        </div>
+
+        <Switch isSelected={true} isDisabled></Switch>
+      </div>
+
+      <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
+
+      {/* DELETE A WORKSPACE */}
+      <div className="flex flex-col gap-8 md:flex-row md:justify-between">
+        <div className="flex max-w-4xl flex-col gap-4">
+          <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
+            Deactivate Workspace
+          </h2>
+          <p className="text-xs leading-6 text-gray-400 sm:text-sm">
+            If you wish to deactivate or delete your workspace. This action can
+            only be reversed by contacting our support team. Please note that
+            all information related to this workspace will be retained for audit
+            purposes in accordance with regulatory requirements.
+          </p>
+        </div>
+
+        <Button
+          color="danger"
+          onClick={onOpen}
+          className="w-full self-end rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 sm:w-auto"
+        >
+          Yes, deactivate my workspace
+        </Button>
+      </div>
 
       {/* MODALS */}
       <PromptModal
@@ -282,8 +329,8 @@ function WorkspaceDetails({
         <Input
           label="Confirm Delete"
           isDisabled={deleteLoading}
-          onError={deleteError.status}
-          errorText={deleteError.message}
+          onError={error.status}
+          errorText={error.message}
           onChange={(e) => setDeleteWorkspaceName(e.target.value)}
         />
       </PromptModal>
