@@ -218,9 +218,9 @@ function Wallet({
             }
           )}
         >
-          {/* ONLY THE INITIATOR CAN SEE THIS FORM IN DISBURESEMENT WORKSPACE */}
+          {/* ONLY THE INITIATOR CAN SEE THIS FORM IN DISBURSEMENT WORKSPACE */}
           {workspaceUserRole?.can_initiate &&
-            workspaceType == WORKSPACE_TYPES[1]?.ID && (
+            workspaceType !== WORKSPACE_TYPES[0]?.ID && (
               <div
                 className={cn("flex w-full max-w-md flex-1 flex-col gap-4", {
                   "mx-auto": hideHistory,
