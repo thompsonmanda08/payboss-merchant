@@ -86,10 +86,10 @@ export default function CollectionsReports({ workspaceID }) {
   // RESOLVE DATA FILTERING
   const hasSearchFilter = Boolean(searchQuery);
   const filteredItems = React.useMemo(() => {
-    let filteredrows = [...transactions];
+    let filteredRows = [...transactions];
 
     if (hasSearchFilter) {
-      filteredrows = filteredrows.filter(
+      filteredRows = filteredRows.filter(
         (row) =>
           // row?.narration?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
           row?.transactionID
@@ -99,7 +99,7 @@ export default function CollectionsReports({ workspaceID }) {
       );
     }
 
-    return filteredrows;
+    return filteredRows;
   }, [transactions, searchQuery]);
 
   useEffect(() => {

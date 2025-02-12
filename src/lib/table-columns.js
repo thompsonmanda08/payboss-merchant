@@ -1,13 +1,13 @@
 export const API_KEY_TRANSACTION_COLUMNS = [
   { name: "DATE", uid: "created_at", sortable: true },
-  { name: "SERVICE PROVIDER", uid: "service_provider" },
   { name: "NARRATION", uid: "narration" },
+  { name: "SERVICE PROVIDER", uid: "service_provider" },
   { name: "MNO REF.", uid: "mno_ref" },
-  { name: "MNO STATUS DESCRIPTION", uid: "mno_status_description" },
   { name: "SOURCE ACCOUNT", uid: "destination", sortable: true },
-  { name: "REMARKS", uid: "status_description" },
   { name: "AMOUNT", uid: "amount", sortable: true },
   { name: "STATUS", uid: "status", sortable: true },
+  { name: "REMARKS", uid: "status_description" },
+  { name: "MNO STATUS DESCRIPTION", uid: "mno_status_description" },
   { name: "TRANSACTION ID", uid: "transactionID" },
 ];
 

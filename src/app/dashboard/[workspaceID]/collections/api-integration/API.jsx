@@ -37,6 +37,8 @@ import LoadingPage from "@/app/loading";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 
+import { API_KEY_TRANSACTION_COLUMNS } from "@/lib/table-columns";
+
 const APIIntegration = ({ workspaceID }) => {
   const queryClient = useQueryClient();
   const {
