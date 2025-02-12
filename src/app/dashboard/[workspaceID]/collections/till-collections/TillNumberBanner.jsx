@@ -18,7 +18,7 @@ export const TillBanner = ({ till }) => (
         Pay like a Boss with PayBoss
       </p>
       <div className="font-display flex flex-col items-center justify-center gap-0">
-        <h2 className="text-[clamp(2rem,12vw,4rem)] font-bold">*848#</h2>
+        <h2 className="text-[clamp(2rem,12vw,4rem)] font-bold">*484#</h2>
         <span className="text-[clamp(4rem,3vw,6rem)] font-black text-primary">
           {till}
         </span>
