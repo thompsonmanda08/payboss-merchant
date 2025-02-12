@@ -205,11 +205,15 @@ export async function getWalletPrefunds(workspaceID) {
   }
 }
 
-export async function approveWalletPrefund(prefundData, prefundID) {
-  if (!prefundID) {
+export async function approveWalletPrefund(
+  prefundData,
+  prefundID,
+  workspaceID
+) {
+  if (!prefundID || !workspaceID) {
     return {
       success: false,
-      message: "Prefund ID is required!",
+      message: "Prefund/workspaceID ID is required!",
       data: null,
       status: 400,
       statusText: "Bad Request",
@@ -218,7 +222,7 @@ export async function approveWalletPrefund(prefundData, prefundID) {
 
   try {
     const res = await authenticatedService({
-      url: `merchant/workspace/wallet/prefund/${prefundID}/review`,
+      url: `merchant/workspace/${workspaceID}/wallet/prefund/${prefundID}/review`,
       method: "PATCH",
       data: prefundData,
     });
@@ -297,10 +301,10 @@ export async function getWorkspaceMembers(workspaceID) {
   }
 }
 
-export async function deleteUserFromWorkspace(recordID) {
+export async function deleteUserFromWorkspace(recordID, workspaceID) {
   try {
     const res = await authenticatedService({
-      url: `/merchant/workspace/user/${recordID}`,
+      url: `/merchant/workspace/${workspaceID}/user/${recordID}`,
       method: "DELETE",
     });
 
@@ -336,10 +340,14 @@ export async function deleteUserFromWorkspace(recordID) {
   }
 }
 
-export async function changeUserRoleInWorkspace(mapping, recordID) {
+export async function changeUserRoleInWorkspace(
+  mapping,
+  recordID,
+  workspaceID
+) {
   try {
     const res = await authenticatedService({
-      url: `merchant/workspace/user/role/${recordID}`,
+      url: `merchant/workspace/${workspaceID}/user/role/${recordID}`,
       method: "PATCH",
       data: mapping,
     });

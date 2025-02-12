@@ -38,11 +38,11 @@ const useWorkspaceStore = create((set, get) => ({
 
     // Filter out the user with the matching email, if exists then don't add
     const { addedUsers, existingUsers } = get();
-    const aldreadyAdded = addedUsers.find((u) => u.ID === user.ID);
+    const exitingUser = addedUsers.find((u) => u.ID === user.ID);
     const userExists = existingUsers.find((u) => u.userID === user.ID);
 
-    if (aldreadyAdded) {
-      notify("warning", `${aldreadyAdded?.first_name} is already added!`);
+    if (exitingUser) {
+      notify("warning", `${exitingUser?.first_name} is already added!`);
       return;
     }
 
@@ -161,11 +161,14 @@ const useWorkspaceStore = create((set, get) => ({
     return response?.success;
   },
 
-  handleDeleteFromWorkspace: async () => {
+  handleDeleteFromWorkspace: async (workspaceID) => {
     set({ isLoading: true });
     const { selectedUser } = get();
 
-    const response = await deleteUserFromWorkspace(selectedUser?.ID);
+    const response = await deleteUserFromWorkspace(
+      selectedUser?.ID,
+      workspaceID
+    );
 
     if (response?.success) {
       notify("success", `You Removed ${selectedUser?.first_name}!`);

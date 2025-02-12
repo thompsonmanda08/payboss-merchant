@@ -22,13 +22,12 @@ import {
   createNewUser,
   updateSystemUserData,
 } from "@/app/_actions/user-actions";
-import useNavigation from "@/hooks/useNavigation";
 import useWorkspaceStore from "@/context/workspaces-store";
 import { changeUserRoleInWorkspace } from "@/app/_actions/workspace-actions";
 import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
 import { usePathname } from "next/navigation";
 
-function CreateNewUserModal({ isOpen, onClose }) {
+function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
   const { isEditingRole, selectedUser, setSelectedUser, setIsEditingRole } =
     useWorkspaceStore();
   const queryClient = useQueryClient();
@@ -44,16 +43,7 @@ function CreateNewUserModal({ isOpen, onClose }) {
     password: "PB0484G@#$%Szm",
   });
   const [error, setError] = useState({ status: false, message: "" });
-  const { workspaceRoles, accountRoles } = useAllUsersAndRoles();
-
-  // const [selectedKeys, setSelectedKeys] = useState(
-  //   new Set([ROLES.map((role) => role.label)[0]]),
-  // )
-
-  // const selectedValue = useMemo(
-  //   () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
-  //   [selectedKeys],
-  // )
+  const { workspaceRoles } = useAllUsersAndRoles();
 
   // ON CREATE => NO IDS are needed for now... only the role name
   const USER_ROLES = getUserRoles();
@@ -147,7 +137,11 @@ function CreateNewUserModal({ isOpen, onClose }) {
       recordID,
     };
 
-    let response = await changeUserRoleInWorkspace(userMapping, recordID);
+    let response = await changeUserRoleInWorkspace(
+      userMapping,
+      recordID,
+      workspaceID
+    );
 
     if (response?.success) {
       queryClient.invalidateQueries([USERS]);

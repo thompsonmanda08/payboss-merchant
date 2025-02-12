@@ -164,7 +164,7 @@ function Wallet({
       return;
     }
 
-    if (workspaceType != WORKSPACE_TYPES[1]?.ID) {
+    if (workspaceType == WORKSPACE_TYPES[0]?.ID) {
       notify(
         "error",
         "You are not allowed to prefund your collections wallet!"
@@ -475,16 +475,17 @@ export function WalletTransactionHistory({
 
     const response = await approveWalletPrefund(
       prefundApproval,
-      selectedPrefund?.ID
+      selectedPrefund?.ID,
+      workspaceID
     );
 
     if (!response?.success) {
       setIsLoading(false);
-      notify("error", "Failed to sumbit approval action!");
+      notify("error", "Failed to submit approval action!");
       return;
     }
 
-    // Invalidate all wallet prefunds and transactions
+    // Invalidate all wallet prefund and transactions
     queryClient.invalidateQueries({
       queryKey: [WALLET_HISTORY_QUERY_KEY, workspaceID],
     });
@@ -515,7 +516,7 @@ export function WalletTransactionHistory({
       >
         {formattedActivityData.length > 0 ? (
           formattedActivityData.map((items, index) => {
-            // TRANSACTIONS GROUPPED BY DATE
+            // TRANSACTIONS GROUPED BY DATE
             return (
               <div key={`${index}${items?.title}`} className="pr-6">
                 <p className="text-base font-semibold text-slate-600">
@@ -587,7 +588,7 @@ export function WalletTransactionHistory({
                                       ? "Awaiting fund activation"
                                       : item?.status == "rejected"
                                       ? item?.remarks
-                                      : "Awating admin action"
+                                      : "Awaiting admin action"
                                   }`}
                                 >
                                   <Chip

@@ -174,6 +174,7 @@ function WorkspaceSettings({
         isOpen={isOpen}
         onClose={onClose}
         onOpenChange={onOpenChange}
+        workspaceID={workspaceID}
       />
     </div>
   );

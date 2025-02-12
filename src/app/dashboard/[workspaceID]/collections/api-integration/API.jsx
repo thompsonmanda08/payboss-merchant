@@ -8,8 +8,10 @@ import {
   EyeIcon,
   EyeSlashIcon,
   Cog6ToothIcon,
+  MoonIcon,
+  SunIcon,
 } from "@heroicons/react/24/outline";
-import { Spinner, Tooltip, useDisclosure } from "@heroui/react";
+import { Spinner, Switch, Tooltip, useDisclosure } from "@heroui/react";
 import { formatDate, maskString, notify } from "@/lib/utils";
 import PromptModal from "@/components/base/Prompt";
 import {
@@ -53,6 +55,7 @@ const APIIntegration = ({ workspaceID }) => {
   const [isDelete, setIsDelete] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [isRefresh, setIsRefresh] = useState(false);
+  const [allowPockets, setAllowPockets] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
   const [openViewConfig, setOpenViewConfig] = useState(false);
@@ -188,13 +191,33 @@ const APIIntegration = ({ workspaceID }) => {
                 infoClasses: "!text-sm xl:text-base",
               }}
             />
-            <Button
-              isDisabled={Boolean(apiKey?.key)}
-              endContent={<PlusIcon className="h-5 w-5" />}
-              onClick={() => setIsNew(true)}
-            >
-              Generate Key
-            </Button>
+            {!Boolean(apiKey?.key) && (
+              <Button
+                isDisabled={Boolean(apiKey?.key)}
+                endContent={<PlusIcon className="h-5 w-5" />}
+                onClick={() => setIsNew(true)}
+              >
+                Generate Key
+              </Button>
+            )}
+            <span className="flex gap-2">
+              <Switch
+                defaultSelected
+                endContent={<MoonIcon />}
+                size="lg"
+                startContent={<Off />}
+              >
+                API Pockets
+              </Switch>
+              {/* <Switch
+                size="lg"
+                startContent={<>on</>}
+                endContent={<>off</>}
+                onValueChange={setAllowPockets}
+                // isDisabled
+                isChecked={allowPockets}
+              /> */}
+            </span>
           </div>
 
           <Table removeWrapper aria-label="API KEY TABLE">

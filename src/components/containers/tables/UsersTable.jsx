@@ -419,8 +419,8 @@ export default function UsersTable({
       return;
     }
 
-    // BY DEFFAULT ONLY REMOVE USER FROM WORKSPACE
-    const response = await handleDeleteFromWorkspace();
+    // BY DEFAULT ONLY REMOVE USER FROM WORKSPACE
+    const response = await handleDeleteFromWorkspace(workspaceID);
     if (response) {
       queryClient.invalidateQueries({
         queryKey: [WORKSPACE_MEMBERS_QUERY_KEY, workspaceID],
