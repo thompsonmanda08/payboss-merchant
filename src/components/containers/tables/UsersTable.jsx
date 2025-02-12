@@ -700,6 +700,7 @@ export default function UsersTable({
       <CreateNewUserModal
         isOpen={isEditingRole || createUserModal}
         onClose={closeCreateUserModal}
+        workspaceID={workspaceID}
       />
     </>
   );
