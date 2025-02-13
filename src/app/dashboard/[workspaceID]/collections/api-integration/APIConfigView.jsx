@@ -75,7 +75,7 @@ export default function APIConfigViewModal({
       key={currentStep.title}
       config={{
         url: configData?.collectionURL,
-        collection: configData?.collectionPayload,
+        payload: configData?.collectionPayload,
         response: configData?.collectionResponse,
       }}
     />,
@@ -190,6 +190,7 @@ export function API_Authentication({ config, titles }) {
 
 export function ActionResponses({ config, titles, method }) {
   const { collection, response, url, payload } = config;
+
   return (
     <div className="flex w-full flex-col gap-8">
       <div className="max-w-full">
@@ -202,7 +203,7 @@ export function ActionResponses({ config, titles, method }) {
           </p>
         </Snippet>
       </div>
-      {!method === "GET" && (
+      {method !== "GET" && (
         <div className="flex flex-col gap-2">
           <h4 className="text-base font-bold text-slate-600">
             {titles?.payload || "Collection Payload"}

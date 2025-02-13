@@ -10,6 +10,7 @@ const BASE_URL = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL;
 // const POCKET_BASE_URL =
 //   process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL
 
+//https://payboss-uat-backend.bgsgroup.co.zm/_/#/login
 const POCKET_BASE_URL = "https://payboss-uat-backend.bgsgroup.co.zm";
 
 const AUTH_SESSION = "pb-session";
@@ -84,6 +85,7 @@ const TILL_COLLECTIONS_REPORTS_QUERY_KEY = "till-collection-reports";
 const TILL_COLLECTIONS_QUERY_KEY = "till-transactions";
 const WORKSPACE_TILL_NUMBER_QUERY_KEY = "workspace-till-number";
 const WALLET_STATEMENT_REPORTS_QUERY_KEY = "wallet-statement-report";
+const WORKSPACE_TERMINALS_QUERY_KEY = "workspace-terminals";
 
 // ANIMATION_VARIANTS
 const containerVariants = {
@@ -314,4 +316,5 @@ export {
   TILL_COLLECTIONS_QUERY_KEY,
   WORKSPACE_TILL_NUMBER_QUERY_KEY,
   WALLET_STATEMENT_REPORTS_QUERY_KEY,
+  WORKSPACE_TERMINALS_QUERY_KEY,
 };

@@ -176,34 +176,50 @@ export async function getWalletPrefunds(workspaceID) {
       url: `merchant/workspace/wallet/prefund/${workspaceID}/list`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
   }
 }
+
+/**
+ * Approves a prefund request for the given workspace.
+ *
+ * @param {Object} prefundData - The prefund request data to be approved.
+ * @param {string} prefundID - The ID of the prefund request to be approved.
+ * @param {string} workspaceID - The ID of the workspace for which the prefund
+ * request is being approved.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An object containing the approved prefund request data.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 
 export async function approveWalletPrefund(
   prefundData,
@@ -227,28 +243,26 @@ export async function approveWalletPrefund(
       data: prefundData,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -256,6 +270,21 @@ export async function approveWalletPrefund(
   }
 }
 
+/**
+ * Retrieves a list of all the members of the given workspace.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the members
+ * are being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of member objects.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getWorkspaceMembers(workspaceID) {
   if (!workspaceID) {
     return {
@@ -301,6 +330,16 @@ export async function getWorkspaceMembers(workspaceID) {
   }
 }
 
+/**
+ * Deletes a user from a workspace.
+ *
+ * @param {string} recordID - The ID of the user to delete.
+ * @param {string} workspaceID - The ID of the workspace to delete the user from.
+ *
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ *   If the operation is successful, the APIResponse object will contain the updated workspace details.
+ *   If the operation fails, the APIResponse object will contain a message indicating the error.
+ */
 export async function deleteUserFromWorkspace(recordID, workspaceID) {
   try {
     const res = await authenticatedService({
@@ -340,6 +379,18 @@ export async function deleteUserFromWorkspace(recordID, workspaceID) {
   }
 }
 
+/**
+ * Changes the role of a user within a specified workspace by calling the API endpoint.
+ *
+ * @param {Object} mapping - An object containing the role mapping details.
+ * @param {string} recordID - The ID of the user whose role is to be changed.
+ * @param {string} workspaceID - The ID of the workspace where the user role change is to be applied.
+ *
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ *   If the operation is successful, the APIResponse object will contain the updated user role details.
+ *   If the operation fails, the APIResponse object will contain a message indicating the error.
+ */
+
 export async function changeUserRoleInWorkspace(
   mapping,
   recordID,
@@ -352,28 +403,26 @@ export async function changeUserRoleInWorkspace(
       data: mapping,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -381,6 +430,13 @@ export async function changeUserRoleInWorkspace(
   }
 }
 
+/**
+ * Sets up the API key for the given workspace by calling the API endpoint.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the API key is being set up.
+ *
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ * */
 export async function setupWorkspaceAPIKey(workspaceID) {
   if (!workspaceID) {
     return {
@@ -426,6 +482,21 @@ export async function setupWorkspaceAPIKey(workspaceID) {
   }
 }
 
+/**
+ * Refreshes a workspace's API Key.
+ *
+ * @param {string} workspaceID - The ID of the workspace to refresh the API Key
+ * for.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The newly generated API Key.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function refreshWorkspaceAPIKey(workspaceID) {
   if (!workspaceID) {
     return {
@@ -442,28 +513,26 @@ export async function refreshWorkspaceAPIKey(workspaceID) {
       url: `transaction/collection/generate/api-key/${workspaceID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -471,6 +540,19 @@ export async function refreshWorkspaceAPIKey(workspaceID) {
   }
 }
 
+/**
+ * Retrieves the API key for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the API key is being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The API key for the workspace.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getWorkspaceAPIKey(workspaceID) {
   if (!workspaceID) {
     return {
@@ -487,28 +569,26 @@ export async function getWorkspaceAPIKey(workspaceID) {
       url: `transaction/collection/api-key/${workspaceID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -516,6 +596,19 @@ export async function getWorkspaceAPIKey(workspaceID) {
   }
 }
 
+/**
+ * Generates a new till number for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the till number is being generated.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The generated till number.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function generateWorkspaceTillNumer(workspaceID) {
   if (!workspaceID) {
     return {
@@ -560,6 +653,20 @@ export async function generateWorkspaceTillNumer(workspaceID) {
   }
 }
 
+/**
+ * Retrieves the till number for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the till number is being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The till number for the workspace.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+
 export async function getWorkspaceTillNumber(workspaceID) {
   if (!workspaceID) {
     return {
@@ -575,28 +682,253 @@ export async function getWorkspaceTillNumber(workspaceID) {
       url: `transaction/collection/till-number/${workspaceID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+/**
+ * Activates terminals for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which terminals are being activated.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The data returned by the server.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+export async function activateWorkspaceTerminals(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required!",
+      data: null,
+      status: 400,
+      statusText: "Bad Request",
+    };
+  }
+
+  try {
+    const res = await authenticatedService({
+      url: `merchant/workspace/${workspaceID}/terminal/activation`,
+    });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+/**
+ * Deactivates terminals for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which terminals are being deactivated.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The data returned by the server.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+export async function deactivateWorkspaceTerminals(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required!",
+      data: null,
+      status: 400,
+      statusText: "Bad Request",
+    };
+  }
+
+  try {
+    const res = await authenticatedService({
+      url: `merchant/workspace/${workspaceID}/terminal/deactivation`,
+    });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+/**
+ * Retrieves a list of all terminals in the given workspace.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which terminals are being retrieved.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The list of terminals in the workspace.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+export async function getAllWorkspaceTerminals(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required!",
+      data: null,
+      status: 400,
+      statusText: "Bad Request",
+    };
+  }
+
+  try {
+    const res = await authenticatedService({
+      url: `merchant/workspace/terminals/${workspaceID}`,
+    });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+/**
+ * Registers a new terminal for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the terminal is being registered.
+ * @param {string} terminalUrl - The URL of the terminal being registered.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The data returned by the server.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+export async function registerTerminals(workspaceID, terminalUrl) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required!",
+      data: null,
+      status: 400,
+      statusText: "Bad Request",
+    };
+  }
+
+  try {
+    const res = await authenticatedService({
+      method: "POST",
+      url: `merchant/workspace/${workspaceID}/terminal`,
+      data: { terminalUrl },
+    });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

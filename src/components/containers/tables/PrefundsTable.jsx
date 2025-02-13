@@ -216,7 +216,7 @@ export default function PrefundsTable({
         {(column) => (
           <TableColumn
             key={column.uid}
-            align={column.uid === "statuss" ? "center" : "start"}
+            align={column.uid === "status" ? "center" : "start"}
             allowsSorting={column.sortable}
           >
             {column.name}

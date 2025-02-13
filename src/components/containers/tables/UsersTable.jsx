@@ -236,8 +236,6 @@ export default function UsersTable({
   const renderActionButtons = React.useCallback(
     (user) => {
       if (isUserAdmin) {
-        console.log("USER", user);
-
         return (
           <div className="relative flex items-center justify-center gap-4">
             {/* EDIT USER ROLE */}

@@ -94,8 +94,6 @@ function DashboardAnalytics({
     monthlyBills,
   } = dashboardAnalytics || {};
 
-  console.log("dashboardAnalytics", dashboardAnalytics);
-
   const monthlyTransactionRecords =
     workspaceType == WORKSPACE_TYPES[0]?.ID
       ? monthlyCollections
@@ -146,8 +144,6 @@ function DashboardAnalytics({
   //     : currentCount < previousCount
   //     ? false // decrease
   //     : "none"; // no change
-
-  // console.log(currentCount, previousCount, percentageChange, changeType);
 
   const dataNotReady = !permissions?.ID;
 

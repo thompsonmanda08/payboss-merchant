@@ -37,8 +37,6 @@ function RecordDetailsViewer({ batchID }) {
     ? "All records in this list are valid and ready for the next step."
     : "The records listed here contain errors or missing information. Please update them to proceed with the transaction.";
 
-  console.log(batchDetails?.total);
-
   return (
     <Modal
       isOpen={openModalView}

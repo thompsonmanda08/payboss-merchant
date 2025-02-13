@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   PlusIcon,
@@ -8,11 +8,21 @@ import {
   EyeIcon,
   EyeSlashIcon,
   Cog6ToothIcon,
-  MoonIcon,
-  SunIcon,
+  WrenchScrewdriverIcon,
+  ComputerDesktopIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
-import { Spinner, Switch, Tooltip, useDisclosure } from "@heroui/react";
-import { formatDate, maskString, notify } from "@/lib/utils";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSection,
+  DropdownTrigger,
+  Spinner,
+  Tooltip,
+  useDisclosure,
+} from "@heroui/react";
+import { cn, formatDate, maskString, notify } from "@/lib/utils";
 import PromptModal from "@/components/base/Prompt";
 import {
   Table,
@@ -23,8 +33,13 @@ import {
   TableCell,
 } from "@heroui/react";
 import CustomTable from "@/components/containers/tables/Table";
-import { useWorkspaceAPIKey } from "@/hooks/useQueryHooks";
 import {
+  useWorkspaceAPIKey,
+  useWorkspaceTerminals,
+} from "@/hooks/useQueryHooks";
+import {
+  activateWorkspaceTerminals,
+  deactivateWorkspaceTerminals,
   refreshWorkspaceAPIKey,
   setupWorkspaceAPIKey,
 } from "@/app/_actions/workspace-actions";
@@ -40,30 +55,48 @@ import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 
 import { API_KEY_TRANSACTION_COLUMNS } from "@/lib/table-columns";
+import TerminalsTable from "@/components/containers/tables/terminal-tables";
+import TerminalConfigViewModal from "./TerminalConfigView";
+import useNavigation from "@/hooks/useNavigation";
 
 const APIIntegration = ({ workspaceID }) => {
   const queryClient = useQueryClient();
-  const {
-    data: apiKeyResponse,
-    isFetching,
-    isSuccess,
-  } = useWorkspaceAPIKey(workspaceID);
   const { onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenAddTerminal,
+    onOpen: onAddTerminal,
+    onClose: onCloseTerminal,
+  } = useDisclosure();
+
   const [copiedKey, setCopiedKey] = useState(null);
-  const [apiKey, setApiKey] = useState([]);
-  const [apiKeyData, setApiKeyData] = useState([]);
-  const [isDelete, setIsDelete] = useState(false);
-  const [isNew, setIsNew] = useState(false);
-  const [isRefresh, setIsRefresh] = useState(false);
-  const [allowPockets, setAllowPockets] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
   const [openViewConfig, setOpenViewConfig] = useState(false);
+  const [currentActionIndex, setCurrentActionIndex] = useState(null);
+
+  const handleClosePrompt = () => {
+    onClose();
+    setIsLoading(false);
+    setCurrentActionIndex(null);
+  };
 
   const thirtyDaysAgoDate = new Date();
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
   const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
   const end_date = formatDate(new Date(), "YYYY-MM-DD");
+
+  const { data, isLoading: isLoadingConfig } = useWorkspaceAPIKey(workspaceID);
+  const { data: terminalData, isLoading: isLoadingTerminals } =
+    useWorkspaceTerminals(workspaceID);
+
+  const { dashboardRoute } = useNavigation();
+
+  const configData = data?.data;
+  const terminals =
+    configData?.terminals || terminalData?.data?.terminals || []; //
+
+  const terminalsActive = Boolean(configData?.hasTerminals);
+  const terminalsConfigured = Boolean(terminals.length > 0);
 
   // HANDLE FETCH API COLLECTION LATEST TRANSACTION DATA
   const mutation = useMutation({
@@ -72,45 +105,18 @@ const APIIntegration = ({ workspaceID }) => {
       getAPICollectionLatestTransactions(workspaceID, dateRange),
   });
 
-  const API = useMemo(() => {
-    if (!apiKeyResponse?.success) return [];
-    return {
-      key: apiKeyResponse?.data?.apiKey,
-      username: apiKeyResponse?.data?.username,
-    };
-  }, [apiKeyResponse]);
-
   const copyToClipboard = (key) => {
     navigator.clipboard.writeText(key);
     setCopiedKey(key);
     notify("success", "Copied to clipboard");
   };
 
-  async function handleUserAction() {
+  async function handleGenerateAPIKey() {
     setIsLoading(true);
+
     // THERE CAN ONLY BE ONE API KEY
-    if (apiKey?.key && isNew) {
+    if (configData?.apiKey) {
       notify("error", "You already have an API key for this workspace!");
-      return;
-    }
-
-    // HIT THE BACKEND TO UPDATE THE API KEY
-    if (isRefresh && apiKey?.key) {
-      const response = await refreshWorkspaceAPIKey(workspaceID);
-
-      if (!response?.success) {
-        notify("error", "Failed to refresh API key!");
-        setIsLoading(false);
-        return;
-      }
-
-      queryClient.invalidateQueries({
-        queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
-      });
-
-      notify("success", "API key has been updated!");
-      setIsRefresh(false);
-      setIsLoading(false);
       return;
     }
 
@@ -126,21 +132,134 @@ const APIIntegration = ({ workspaceID }) => {
     queryClient.invalidateQueries({
       queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
     });
-    setApiKeyData(response?.data);
-    setApiKey(response?.data?.API);
+    // setApiKeyData(response?.data);
+    // setApiKey(response?.data?.API);
     notify("success", "API key has been generated!");
     setIsLoading(false);
     setIsNew(false);
+    handleClosePrompt();
+
+    return;
+  }
+  async function handleRefreshAPIKey() {
+    setIsLoading(true);
+
+    if (!configData?.apiKey) {
+      notify("error", "You have no API key!");
+      setIsLoading(false);
+      return;
+    }
+
+    const response = await refreshWorkspaceAPIKey(workspaceID);
+
+    if (!response?.success) {
+      notify("error", "Failed to refresh API key!");
+      console.error(response?.message);
+      setIsLoading(false);
+      return;
+    }
+
+    notify("success", "API key has been updated!");
+    queryClient.invalidateQueries({
+      queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
+    });
+    setIsLoading(false);
+    handleClosePrompt();
+    return;
+  }
+
+  async function handleTerminalActivation() {
+    setIsLoading(true);
+
+    if (configData?.terminals || terminalsActive) {
+      notify("error", "Terminals already activated for this workspace!");
+      setIsLoading(false);
+      handleClosePrompt();
+      return;
+    }
+
+    const response = await activateWorkspaceTerminals(workspaceID);
+
+    if (!response?.success) {
+      notify("error", response?.message);
+      setIsLoading(false);
+      return;
+    }
+
+    queryClient.invalidateQueries({
+      queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
+    });
+
+    notify("success", "Collection Terminals activated!");
+    setIsLoading(false);
+    handleClosePrompt();
 
     return;
   }
 
-  useEffect(() => {
-    if (API) {
-      setApiKeyData(apiKeyResponse?.data);
-      setApiKey(API);
+  async function handleTerminalDeactivation() {
+    setIsLoading(true);
+
+    const response = await deactivateWorkspaceTerminals(workspaceID);
+
+    if (!response?.success) {
+      notify("error", response?.message);
+      setIsLoading(false);
+      return;
     }
-  }, [API]);
+
+    queryClient.invalidateQueries({
+      queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
+    });
+
+    notify("success", "Collection Terminals activated!");
+    setIsLoading(false);
+    handleClosePrompt();
+
+    return;
+  }
+
+  function handleTerminalStatus(actionKey) {
+    if (terminalsActive && actionKey == "activate-terminals") {
+      notify("error", "Terminals already activated for this workspace!");
+      handleClosePrompt();
+      return;
+    }
+
+    // IF ACTIVE AND TERMINALS ARE CURRENTLY UPLOADED THEN NO DEACTIVATE
+    if (
+      terminalsActive &&
+      terminalsConfigured &&
+      actionKey == "deactivate-terminals"
+    ) {
+      notify("error", "Contact support to deactivate terminals!");
+      handleClosePrompt();
+      return;
+    }
+
+    // ALLOW DEACTIVATION IF TERMINALS ARE NOT UPLOADED
+    if (actionKey == "deactivate-terminals") {
+      setCurrentActionIndex(3);
+      return;
+    }
+
+    setCurrentActionIndex(2);
+  }
+
+  function handleManageTerminals(selectedKey) {
+    if (selectedKey == "add-terminal") {
+      onAddTerminal();
+      return;
+    }
+
+    if (
+      selectedKey == "activate-terminals" ||
+      selectedKey == "deactivate-terminals"
+    ) {
+      handleTerminalStatus(selectedKey);
+      return;
+    }
+  }
 
   useEffect(() => {
     let timeoutId;
@@ -165,19 +284,70 @@ const APIIntegration = ({ workspaceID }) => {
 
   const LATEST_TRANSACTIONS = mutation.data?.data?.data || [];
 
-  return isFetching ? (
+  // ACTIONS FOR API COLLECTIONS
+  const USER_PROMPT_ACTIONS = [
+    {
+      title: "Generate API Key",
+      icon: PlusIcon,
+      color: "primary",
+      confirmText: "Generate",
+      onConfirmAction: handleGenerateAPIKey,
+      description: "Generate a new API key for this workspace",
+      promptText: "Are you sure you want to generate a new API key?",
+      promptDescription:
+        "This API key will allow you channel funds to your workspace wallet from 3rd party applications and interfaces.",
+    },
+    {
+      title: "Refresh API Key",
+      icon: ArrowPathIcon,
+      color: "warning",
+      confirmText: "Refresh",
+      onConfirmAction: handleRefreshAPIKey,
+      description: "Refresh the API key for this workspace",
+      promptText: "Are you sure you want to refresh this API key?",
+      promptDescription:
+        "By confirming this, your API key will be changed to a new one and you will not be able to use the old API anymore.",
+    },
+    {
+      title: "Activate Terminals",
+      icon: ComputerDesktopIcon,
+      color: "primary",
+      confirmText: "Activate",
+      onConfirmAction: handleTerminalActivation,
+      description: "Activate Terminals for this workspace",
+      promptText: "Are you sure you want to activate Terminals?",
+      promptDescription:
+        "By confirming this, Terminals will be activated and you will be able to create and manage terminal transactions.",
+    },
+    {
+      title: "Deactivate Terminals",
+      icon: ComputerDesktopIcon,
+      color: "primary",
+      confirmText: "Deactivate",
+      onConfirmAction: handleTerminalDeactivation,
+      description: "Deactivate Terminals for this workspace",
+      promptText: "Are you sure you want to deactivate Terminals?",
+      promptDescription:
+        "By confirming this, Terminals will be deactivated and you will NOT be able to create and manage terminal transactions.",
+    },
+    {
+      title: "Delete API Key",
+      icon: TrashIcon,
+      color: "danger",
+      confirmText: "Delete",
+      onConfirmAction: () => {},
+      description: "Delete the API key for this workspace",
+      promptText: "Are you sure you want to delete this API key?",
+      promptDescription:
+        "This action is not reversible and will result in the non-operation of this key. Make sure you update any application making use of this Key.",
+    },
+  ];
+  const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
+
+  return isLoadingConfig ? (
     <LoadingPage />
   ) : (
     <>
-      <APIConfigViewModal
-        configData={apiKeyData}
-        isLoading={isFetching}
-        isOpen={openViewConfig}
-        onClose={() => {
-          setOpenViewConfig(false);
-          onClose();
-        }}
-      />
       <div className="flex w-full flex-col gap-4">
         <Card className="">
           <div className="mb-8 flex justify-between">
@@ -191,33 +361,13 @@ const APIIntegration = ({ workspaceID }) => {
                 infoClasses: "!text-sm xl:text-base",
               }}
             />
-            {!Boolean(apiKey?.key) && (
-              <Button
-                isDisabled={Boolean(apiKey?.key)}
-                endContent={<PlusIcon className="h-5 w-5" />}
-                onClick={() => setIsNew(true)}
-              >
-                Generate Key
-              </Button>
-            )}
-            <span className="flex gap-2">
-              <Switch
-                defaultSelected
-                endContent={<MoonIcon />}
-                size="lg"
-                startContent={<Off />}
-              >
-                API Pockets
-              </Switch>
-              {/* <Switch
-                size="lg"
-                startContent={<>on</>}
-                endContent={<>off</>}
-                onValueChange={setAllowPockets}
-                // isDisabled
-                isChecked={allowPockets}
-              /> */}
-            </span>
+            <Button
+              isDisabled={Boolean(configData?.apiKey)}
+              endContent={<PlusIcon className="h-5 w-5" />}
+              onClick={() => setCurrentActionIndex(0)}
+            >
+              Generate Key
+            </Button>
           </div>
 
           <Table removeWrapper aria-label="API KEY TABLE">
@@ -228,7 +378,7 @@ const APIIntegration = ({ workspaceID }) => {
               <TableColumn align="center">ACTIONS</TableColumn>
             </TableHeader>
             <TableBody
-              isLoading={isFetching}
+              isLoading={isLoadingConfig}
               loadingContent={
                 <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
                   <span className="flex gap-4 text-sm font-bold capitalize text-primary">
@@ -244,16 +394,16 @@ const APIIntegration = ({ workspaceID }) => {
                 </div>
               }
             >
-              {apiKey && (
+              {configData && (
                 <TableRow key="1">
-                  <TableCell>{apiKey?.username}</TableCell>
+                  <TableCell>{configData?.username}</TableCell>
                   <TableCell className="flex gap-1">
-                    {apiKey.key ? (
+                    {configData?.apiKey ? (
                       <>
                         <span className="flex items-center gap-4 font-medium">
                           {unmaskAPIKey
-                            ? apiKey.key
-                            : maskString(apiKey.key, 0, 20)}
+                            ? configData?.apiKey
+                            : maskString(configData?.apiKey, 0, 20)}
                         </span>
                         <Button
                           className={"h-max max-h-max max-w-max p-1"}
@@ -277,64 +427,176 @@ const APIIntegration = ({ workspaceID }) => {
                       </>
                     )}
                   </TableCell>
-                  {/* FEATURE TO ENABLE AND DISBALE API KEY */}
-                  {/* <TableCell>
-                    <Switch
-                      checked={apiKey?.enabled}
-                      startContent={<XMarkIcon />}
-                      endContent={<CheckIcon />}
-                      onChange={() =>
-                        setApiKey((prev) => ({
-                          ...prev,
-                          enabled: !apiKey?.enabled,
-                        }))
-                      }
-                    />
-                  </TableCell> */}
+
                   <TableCell>
-                    {apiKey.key && (
-                      <>
-                        <div className="flex items-center gap-4">
-                          <Tooltip color="secondary" content="API Config">
-                            <Cog6ToothIcon
-                              onClick={() => setOpenViewConfig(true)}
-                              className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
-                            />
-                          </Tooltip>
-                          <Tooltip
-                            color="default"
-                            content="Copy API Key to clipboard"
-                          >
-                            <Square2StackIcon
-                              className={`h-6 w-6 cursor-pointer ${
-                                copiedKey === apiKey?.key
-                                  ? "text-primary"
-                                  : "text-gray-500"
-                              } hover:text-primary`}
-                              onClick={() => copyToClipboard(apiKey?.key)}
-                            />
-                          </Tooltip>
-                          <Tooltip color="primary" content="Refresh API Key">
-                            <ArrowPathIcon
-                              onClick={() => setIsRefresh(true)}
-                              className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300"
-                            />
-                          </Tooltip>
-                          {/*  FEATURE TO DELETE AN API KEY */}
-                          {/* <Tooltip color="danger" content="Delete API Key">
-                          <TrashIcon
-                            onClick={() => setIsDelete(true)}
-                            className="h-5 w-5 cursor-pointer text-red-500 hover:text-red-300"
+                    {configData?.apiKey && (
+                      <div className="flex items-center gap-4">
+                        <Tooltip color="secondary" content="API Config">
+                          <Cog6ToothIcon
+                            onClick={() => setOpenViewConfig(true)}
+                            className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
                           />
-                        </Tooltip> */}
-                        </div>
-                      </>
+                        </Tooltip>
+                        <Tooltip
+                          color="default"
+                          content="Copy API Key to clipboard"
+                        >
+                          <Square2StackIcon
+                            className={`h-6 w-6 cursor-pointer ${
+                              copiedKey === configData?.apiKey
+                                ? "text-primary"
+                                : "text-gray-500"
+                            } hover:text-primary`}
+                            onClick={() => copyToClipboard(configData?.apiKey)}
+                          />
+                        </Tooltip>
+                        <Tooltip color="primary" content="Refresh API Key">
+                          <ArrowPathIcon
+                            onClick={() => setCurrentActionIndex(1)}
+                            className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300"
+                          />
+                        </Tooltip>
+                      </div>
                     )}
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
+        </Card>
+
+        <Card className="">
+          <div className="mb-8 flex justify-between">
+            <CardHeader
+              title={"Terminals"}
+              infoText={
+                "Activate terminals to manage  multiple collection points like POS machines, tills, etc."
+              }
+              classNames={{
+                titleClasses: "xl:text-2xl lg:text-xl font-bold",
+                infoClasses: "!text-sm xl:text-base",
+              }}
+            />
+
+            <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
+              <Dropdown backdrop="blur">
+                <DropdownTrigger>
+                  <Button
+                    endContent={<WrenchScrewdriverIcon className="h-5 w-5" />}
+                    color="primary"
+                  >
+                    Manage
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Action event example"
+                  onAction={(key) => handleManageTerminals(key)}
+                >
+                  <DropdownItem
+                    key="add-terminal"
+                    startContent={<PlusIcon className={cn(iconClasses)} />}
+                    description="Add new terminals to workspace"
+                  >
+                    Add New Terminal
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="workspace-settings"
+                    href={`${dashboardRoute}/workspace-settings`}
+                    description="Goto your workspace settings"
+                    startContent={<Cog6ToothIcon className={cn(iconClasses)} />}
+                  >
+                    Workspace Settings
+                  </DropdownItem>
+                  <DropdownSection title={terminalsActive ? "" : "Danger zone"}>
+                    {!terminalsActive ? (
+                      <DropdownItem
+                        key="activate-terminals"
+                        color="primary"
+                        variant="solid"
+                        shortcut="⌘⇧A"
+                        startContent={
+                          <ComputerDesktopIcon
+                            className={cn(
+                              iconClasses,
+                              "group-hover:text-white font-bold group-hover:border-white"
+                            )}
+                          />
+                        }
+                        classNames={{
+                          shortcut: "group-hover:text-white",
+                        }}
+                        description="Activate collection terminals"
+                      >
+                        Activate Terminals
+                      </DropdownItem>
+                    ) : (
+                      <DropdownItem
+                        key="deactivate-terminals"
+                        className="text-danger"
+                        color="danger"
+                        description="Deactivate collection terminals"
+                        shortcut="⌘⇧D"
+                        classNames={{
+                          shortcut:
+                            "group-hover:text-white font-bold group-hover:border-white",
+                        }}
+                        href="/support"
+                        startContent={
+                          <TrashIcon
+                            className={cn(
+                              iconClasses,
+                              "text-danger group-hover:text-white"
+                            )}
+                          />
+                        }
+                      >
+                        Deactivate Terminals
+                      </DropdownItem>
+                    )}
+                  </DropdownSection>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          </div>
+
+          {terminalsActive && terminalsConfigured ? (
+            <TerminalsTable
+              isLoading={isLoadingTerminals}
+              rows={terminals}
+              removeWrapper
+            />
+          ) : (
+            <div className="-mt-4 flex h-full min-h-32 flex-1 items-center justify-center rounded-2xl bg-primary-50 text-sm font-medium dark:bg-foreground/5">
+              <Tooltip
+                content="Terminals are like a POS/Till machines that can be used to collect payments from your customers."
+                classNames={{
+                  content: "max-w-96 text-sm leading-6 p-3",
+                }}
+              >
+                <Button
+                  variant="light"
+                  onClick={
+                    !terminalsConfigured ? onAddTerminal : handleTerminalStatus
+                  }
+                  className={
+                    "flex-grow min-h-auto max-h-auto min-h-32 w-full flex-1 font-medium text-primary-600"
+                  }
+                  startContent={
+                    !terminalsConfigured ? (
+                      <ComputerDesktopIcon className={cn(iconClasses)} />
+                    ) : (
+                      <PlusIcon className={cn(iconClasses)} />
+                    )
+                  }
+                >
+                  {!terminalsConfigured
+                    ? "Add Terminals"
+                    : "Activate Terminals"}
+                </Button>
+              </Tooltip>
+            </div>
+          )}
         </Card>
 
         <Card>
@@ -357,64 +619,41 @@ const APIIntegration = ({ workspaceID }) => {
         </Card>
       </div>
 
-      {/* DELETE PROMPS */}
-      <PromptModal
-        isOpen={isNew || isDelete || isRefresh}
-        onOpen={onOpen}
+      <APIConfigViewModal
+        configData={configData}
+        isLoading={isLoadingConfig}
+        isOpen={openViewConfig}
         onClose={() => {
+          setOpenViewConfig(false);
           onClose();
-          setIsNew(false);
-          setIsDelete(false);
-          setIsRefresh(false);
         }}
-        title={
-          isNew
-            ? "Generate New API Key"
-            : isDelete
-            ? "Delete API Key"
-            : isRefresh
-            ? "Refresh API Key"
-            : "API Keys"
-        }
-        onConfirm={handleUserAction}
+      />
+
+      <TerminalConfigViewModal
+        isOpen={isOpenAddTerminal}
+        onClose={onCloseTerminal}
+        workspaceID={workspaceID}
+      />
+
+      {/* DELETE PROMPT MODAL */}
+      <PromptModal
+        isOpen={currentActionIndex !== null}
+        onOpen={onOpen}
+        onClose={handleClosePrompt}
+        title={USER_PROMPT_ACTIONS[currentActionIndex]?.title}
+        onConfirm={USER_PROMPT_ACTIONS[currentActionIndex]?.onConfirmAction}
         confirmText={
-          isNew
-            ? "Generate"
-            : isDelete
-            ? "Delete"
-            : isRefresh
-            ? "Refresh"
-            : "Confirm"
+          USER_PROMPT_ACTIONS[currentActionIndex]?.confirmText || "Confirm"
         }
         isDisabled={isLoading}
         isLoading={isLoading}
         isDismissable={false}
       >
-        {isDelete ? (
-          <>
-            <p className="-mt-4 text-sm leading-6 text-foreground/70">
-              <strong>Are you sure you want to delete this API Key?</strong>{" "}
-              <br />
-              This action is not reversible and will result in the non-operation
-              of this key. Make sure you update any application making use of
-              this Key.
-            </p>
-          </>
-        ) : isNew ? (
-          <p className="-mt-4 text-sm leading-6 text-foreground/70">
-            <strong>Are you sure you want to generate a new API key?</strong>
-            <br />
-            This API key will allow you channel funds to your workspace wallet
-            from 3rd party applications and interfaces.
-          </p>
-        ) : (
-          <p className="-mt-4 text-sm leading-6 text-foreground/70">
-            <strong>Are you sure you want to refresh this API key?</strong>
-            <br />
-            By confirming this, your API key will be changed to a new one and
-            you will not be able to use the old API anymore.
-          </p>
-        )}
+        <p className="-mt-4 text-sm leading-6 text-foreground/70">
+          <strong>{USER_PROMPT_ACTIONS[currentActionIndex]?.promptText}</strong>{" "}
+          <br />
+          {USER_PROMPT_ACTIONS[currentActionIndex]?.promptDescription}
+        </p>
       </PromptModal>
     </>
   );
