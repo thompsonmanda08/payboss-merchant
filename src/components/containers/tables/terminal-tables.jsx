@@ -23,10 +23,10 @@ import Loader from "@/components/ui/loader";
 import { format } from "date-fns";
 
 const columns = [
-  { name: "TERMINAL", uid: "name" },
+  { name: "TERMINAL", uid: "terminal_name" },
   { name: "CREATED BY", uid: "created_by" },
   { name: "DATE CREATED", uid: "created_at" },
-  { name: "ACTION", uid: "action" },
+  // { name: "ACTION", uid: "action" },
 ];
 
 export default function TerminalsTable({
@@ -60,7 +60,7 @@ export default function TerminalsTable({
     const cellValue = item[columnKey];
 
     switch (columnKey) {
-      case "name":
+      case "terminal_name":
         return (
           <Button
             // isDisabled
@@ -75,11 +75,11 @@ export default function TerminalsTable({
           >
             <div className="flex flex-col items-start gap-1">
               <h3 className="mb-1 text-[clamp(1rem,1vw,1.25rem)] font-semibold uppercase text-primary-600">
-                {item?.name || "Terminal #01"}
+                {item?.terminal_name || "Terminal #"}
               </h3>
               <div className="flex max-w-[260px] justify-between gap-2">
                 <p className="truncate text-sm font-medium text-slate-600">
-                  ID: {item?.terminalID || "******2323"}
+                  ID: {item?.terminalID || "******s"}
                 </p>
               </div>
             </div>

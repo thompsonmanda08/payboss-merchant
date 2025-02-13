@@ -18,6 +18,7 @@ import { registerTerminals } from "@/app/_actions/workspace-actions";
 import { uploadTerminalConfigFile } from "@/app/_actions/pocketbase-actions";
 import { motion } from "framer-motion";
 import ProgressStep from "@/components/elements/progress-step";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const CONFIG_VIEWS = [
   {
@@ -41,6 +42,7 @@ export default function TerminalConfigViewModal({
   onOpenChange,
   workspaceID,
 }) {
+  const queryClient = useQueryClient();
   const [terminalUrl, setTerminalUrl] = useState("");
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -93,6 +95,7 @@ export default function TerminalConfigViewModal({
     notify("success", "Config file uploaded!");
     navigateForward();
     setIsLoading(false);
+    queryClient.invalidateQueries();
   }
 
   return (

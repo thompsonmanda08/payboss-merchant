@@ -500,14 +500,14 @@ const APIIntegration = ({ workspaceID }) => {
                     Add New Terminal
                   </DropdownItem>
 
-                  <DropdownItem
+                  {/* <DropdownItem
                     key="workspace-settings"
                     href={`${dashboardRoute}/workspace-settings`}
                     description="Goto your workspace settings"
                     startContent={<Cog6ToothIcon className={cn(iconClasses)} />}
                   >
                     Workspace Settings
-                  </DropdownItem>
+                  </DropdownItem> */}
                   <DropdownSection title={terminalsActive ? "" : "Danger zone"}>
                     {!terminalsActive ? (
                       <DropdownItem

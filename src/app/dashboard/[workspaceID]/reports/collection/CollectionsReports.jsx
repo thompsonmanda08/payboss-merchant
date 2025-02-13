@@ -82,6 +82,10 @@ export default function CollectionsReports({ workspaceID }) {
   // MUTATION RESPONSE DATA
   const report = mutation?.data?.data?.summary || [];
   const transactions = mutation?.data?.data?.data || [];
+  const hasTerminals = Boolean(mutation?.data?.data?.hasTerminal || false);
+  const terminalSummary = mutation?.data?.data?.terminal || [];
+
+  console.log("REPORTS: ", mutation?.data);
 
   // RESOLVE DATA FILTERING
   const hasSearchFilter = Boolean(searchQuery);
