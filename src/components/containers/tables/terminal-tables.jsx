@@ -224,7 +224,7 @@ export default function TerminalsTable({
         align="top"
       >
         {(item) => (
-          <TableRow key={item} isDisabled={item?.isLocked}>
+          <TableRow key={item.terminalID} isDisabled={item?.isLocked}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

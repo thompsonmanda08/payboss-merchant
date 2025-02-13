@@ -58,6 +58,7 @@ import { API_KEY_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 import TerminalsTable from "@/components/containers/tables/terminal-tables";
 import TerminalConfigViewModal from "./TerminalConfigView";
 import useNavigation from "@/hooks/useNavigation";
+import { AnimatePresence, motion } from "framer-motion";
 
 const APIIntegration = ({ workspaceID }) => {
   const queryClient = useQueryClient();
@@ -89,7 +90,7 @@ const APIIntegration = ({ workspaceID }) => {
   const { data: terminalData, isLoading: isLoadingTerminals } =
     useWorkspaceTerminals(workspaceID);
 
-  const { dashboardRoute } = useNavigation();
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const configData = data?.data;
   const terminals =
@@ -342,7 +343,10 @@ const APIIntegration = ({ workspaceID }) => {
         "This action is not reversible and will result in the non-operation of this key. Make sure you update any application making use of this Key.",
     },
   ];
+
   const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
+
+  console.log("TERMINALS: ", terminals);
 
   return isLoadingConfig ? (
     <LoadingPage />
@@ -557,46 +561,77 @@ const APIIntegration = ({ workspaceID }) => {
                   </DropdownSection>
                 </DropdownMenu>
               </Dropdown>
-            </div>
-          </div>
-
-          {terminalsActive && terminalsConfigured ? (
-            <TerminalsTable
-              isLoading={isLoadingTerminals}
-              rows={terminals}
-              removeWrapper
-            />
-          ) : (
-            <div className="-mt-4 flex h-full min-h-32 flex-1 items-center justify-center rounded-2xl bg-primary-50 text-sm font-medium dark:bg-foreground/5">
               <Tooltip
-                content="Terminals are like a POS/Till machines that can be used to collect payments from your customers."
+                content="Show configured terminals"
+                color="secondary"
                 classNames={{
                   content: "max-w-96 text-sm leading-6 p-3",
                 }}
               >
                 <Button
-                  variant="light"
-                  onClick={
-                    !terminalsConfigured ? onAddTerminal : handleTerminalStatus
-                  }
-                  className={
-                    "flex-grow min-h-auto max-h-auto min-h-32 w-full flex-1 font-medium text-primary-600"
-                  }
-                  startContent={
-                    !terminalsConfigured ? (
-                      <ComputerDesktopIcon className={cn(iconClasses)} />
-                    ) : (
-                      <PlusIcon className={cn(iconClasses)} />
-                    )
-                  }
+                  color={"secondary"}
+                  variant="flat"
+                  onPress={() => setIsExpanded(!isExpanded)}
                 >
-                  {!terminalsConfigured
-                    ? "Add Terminals"
-                    : "Activate Terminals"}
+                  {isExpanded ? (
+                    <EyeSlashIcon className="h-5 w-5 text-orange-600" />
+                  ) : (
+                    <ComputerDesktopIcon className="h-5 w-5 text-orange-600" />
+                  )}
                 </Button>
               </Tooltip>
             </div>
-          )}
+          </div>
+
+          <AnimatePresence>
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{
+                height: isExpanded ? "auto" : 0,
+                opacity: isExpanded ? 1 : 0,
+              }}
+            >
+              {terminalsActive && terminalsConfigured ? (
+                <TerminalsTable
+                  isLoading={isLoadingTerminals}
+                  rows={terminals}
+                  removeWrapper
+                />
+              ) : (
+                <div className="-mt-4 flex h-full min-h-32 flex-1 items-center justify-center rounded-2xl bg-primary-50 text-sm font-medium dark:bg-foreground/5">
+                  <Tooltip
+                    content="Terminals are like a POS/Till machines that can be used to collect payments from your customers."
+                    classNames={{
+                      content: "max-w-96 text-sm leading-6 p-3",
+                    }}
+                  >
+                    <Button
+                      variant="light"
+                      onClick={
+                        !terminalsConfigured
+                          ? onAddTerminal
+                          : handleTerminalStatus
+                      }
+                      className={
+                        "flex-grow min-h-auto max-h-auto min-h-32 w-full flex-1 font-medium text-primary-600"
+                      }
+                      startContent={
+                        !terminalsConfigured ? (
+                          <ComputerDesktopIcon className={cn(iconClasses)} />
+                        ) : (
+                          <PlusIcon className={cn(iconClasses)} />
+                        )
+                      }
+                    >
+                      {!terminalsConfigured
+                        ? "Add Terminals"
+                        : "Activate Terminals"}
+                    </Button>
+                  </Tooltip>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </Card>
 
         <Card>
