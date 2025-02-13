@@ -183,7 +183,8 @@ export const useWorkspaceTerminals = (workspaceID) =>
   useQuery({
     queryKey: [WORKSPACE_TERMINALS_QUERY_KEY, workspaceID],
     queryFn: async () => await getAllWorkspaceTerminals(workspaceID),
-    staleTime: Infinity,
+    staleTime: 30 * 1000,
+    refetchOnMount: true,
   });
 
 export const useTillNumber = (workspaceID) =>

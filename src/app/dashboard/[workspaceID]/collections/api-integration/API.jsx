@@ -93,8 +93,9 @@ const APIIntegration = ({ workspaceID }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const configData = data?.data;
-  const terminals =
-    configData?.terminals || terminalData?.data?.terminals || []; //
+  const terminals = terminalData?.data?.terminals || []; //
+
+  console.log("TERMINALS: ", terminalData);
 
   const terminalsActive = Boolean(configData?.hasTerminals);
   const terminalsConfigured = Boolean(terminals.length > 0);
@@ -345,8 +346,6 @@ const APIIntegration = ({ workspaceID }) => {
   ];
 
   const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
-
-  console.log("TERMINALS: ", terminals);
 
   return isLoadingConfig ? (
     <LoadingPage />
