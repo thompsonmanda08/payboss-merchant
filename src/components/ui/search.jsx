@@ -39,7 +39,7 @@ export default function Search({
         // isClearable={isClearable}
         containerClasses={"max-w-xl"}
         className={cn(
-          "h-12 w-full max-w-xl  pl-10 text-base placeholder:font-normal placeholder:text-slate-400",
+          "w-full max-w-xl  pl-10 text-base placeholder:font-normal placeholder:text-slate-400 border-none h-10",
           base,
           input
         )}

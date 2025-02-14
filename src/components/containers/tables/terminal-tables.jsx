@@ -17,7 +17,7 @@ import {
   ListBulletIcon,
   PlusIcon,
 } from "@heroicons/react/24/outline";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import SoftBoxIcon from "@/components/base/SoftBoxIcon";
 import Loader from "@/components/ui/loader";
 import { format } from "date-fns";
@@ -62,28 +62,10 @@ export default function TerminalsTable({
     switch (columnKey) {
       case "terminal_name":
         return (
-          <Button
-            // isDisabled
-            className={cn(
-              "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100"
-            )}
-            startContent={
-              <SoftBoxIcon className={"h-12 w-12"}>
-                <ComputerDesktopIcon />
-              </SoftBoxIcon>
-            }
-          >
-            <div className="flex flex-col items-start gap-1">
-              <h3 className="mb-1 text-[clamp(1rem,1vw,1.25rem)] font-semibold uppercase text-primary-600">
-                {item?.terminal_name || "Terminal #"}
-              </h3>
-              <div className="flex max-w-[260px] justify-between gap-2">
-                <p className="truncate text-sm font-medium text-slate-600">
-                  ID: {item?.terminalID || "******s"}
-                </p>
-              </div>
-            </div>
-          </Button>
+          <TerminalInfo
+            terminalName={item?.terminal_name}
+            terminalID={item?.terminalID}
+          />
         );
 
       case "created_by":
@@ -171,7 +153,7 @@ export default function TerminalsTable({
           }
           startContent={<PlusIcon className="h-5 w-5 cursor-pointer" />}
         >
-          Add Terminalssssssss
+          Add Terminal
         </Button>
       </div>
     );
@@ -232,5 +214,74 @@ export default function TerminalsTable({
         )}
       </TableBody>
     </Table>
+  );
+}
+
+export function TerminalInfo({
+  onClick,
+  terminalName,
+  terminalID,
+  count,
+  value,
+  className,
+  ...props
+}) {
+  return (
+    <Button
+      className={cn(
+        "flex h-auto w-full justify-start gap-2  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100 max-w-xs",
+        className
+      )}
+      onPress={onClick}
+      startContent={
+        <SoftBoxIcon className={"h-12 w-12"}>
+          <ComputerDesktopIcon />
+        </SoftBoxIcon>
+      }
+      {...props}
+    >
+      <div className="flex w-full justify-between">
+        <div className="flex flex-col items-start gap-1">
+          <h3 className="ml-1 font-bold uppercase text-primary-600">
+            {terminalName || "Terminal #"}
+          </h3>
+          <Chip
+            size="sm"
+            color="secondary"
+            variant="flat"
+            className="truncate text-xs font-medium text-orange-600"
+          >
+            ID: {terminalID || "******"}
+          </Chip>
+        </div>
+        {count && value && (
+          <Tooltip
+            color="success"
+            content="Successful Transactions"
+            classNames={{
+              content: "text-white",
+            }}
+          >
+            <div className="ml-auto flex flex-col items-end gap-px">
+              <div className="flex max-w-[260px] justify-between gap-2">
+                <p className="truncate text-sm font-medium text-slate-600">
+                  {Number(count) == 1
+                    ? `${count} Transaction`
+                    : `${count} Transactions`}
+                </p>
+              </div>
+              <Chip
+                color="success"
+                size="sm"
+                variant="flat"
+                className="text-[clamp(0.8rem,1vw,1rem)] !font-bold uppercase text-success-600"
+              >
+                {value ? formatCurrency(value) : "ZMW 0.00"}
+              </Chip>
+            </div>
+          </Tooltip>
+        )}
+      </div>
+    </Button>
   );
 }

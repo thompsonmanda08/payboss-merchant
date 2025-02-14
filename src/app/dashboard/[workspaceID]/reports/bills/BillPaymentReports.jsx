@@ -40,6 +40,7 @@ export default function BillPaymentReports({ workspaceID }) {
   const [dateRange, setDateRange] = useState();
   const [isExpanded, setIsExpanded] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentTab, setCurrentTab] = useState(0);
 
   // HANDLE FETCH FILTERED TRANSACTION REPORT DATA
   const mutation = useMutation({
@@ -79,10 +80,10 @@ export default function BillPaymentReports({ workspaceID }) {
   // RESOLVE DATA FILTERING
   const hasSearchFilter = Boolean(searchQuery);
   const filteredItems = React.useMemo(() => {
-    let filteredrows = [...transactions];
+    let filteredRows = [...transactions];
 
     if (hasSearchFilter) {
-      filteredrows = filteredrows.filter(
+      filteredRows = filteredRows.filter(
         (row) =>
           // row?.narration?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
           row?.transactionID
@@ -92,7 +93,7 @@ export default function BillPaymentReports({ workspaceID }) {
       );
     }
 
-    return filteredrows;
+    return filteredRows;
   }, [transactions, searchQuery]);
 
   useEffect(() => {
@@ -109,8 +110,6 @@ export default function BillPaymentReports({ workspaceID }) {
       });
     }
   }
-
-  const [currentTab, setCurrentTab] = useState(0);
 
   useEffect(() => {
     runAsyncMutation(dateRange);
@@ -187,7 +186,7 @@ export default function BillPaymentReports({ workspaceID }) {
             </Button>
           </div>
         </div>
-        {/* TODO:  THIS CAN BE ONCE SINGLE COMPONENT */}
+
         {
           <AnimatePresence>
             <motion.div
@@ -197,6 +196,7 @@ export default function BillPaymentReports({ workspaceID }) {
                 opacity: isExpanded ? 1 : 0,
               }}
             >
+              {/* OVERALL SUMMARY */}
               <Card className={"mb-4 mt-2 shadow-none"}>
                 {Object.keys(report).length > 0 ? (
                   <div className="flex flex-col gap-4 md:flex-row md:justify-between">

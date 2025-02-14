@@ -19,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
 import Loader from "@/components/ui/loader";
 import { EyeIcon } from "@heroicons/react/24/outline";
-import Search from "@/components/ui/search";
 import SelectField from "@/components/ui/select-field";
 import EmptyLogs from "@/components/base/EmptyLogs";
 import { format } from "date-fns";

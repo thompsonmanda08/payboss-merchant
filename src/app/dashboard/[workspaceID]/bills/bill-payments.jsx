@@ -39,7 +39,7 @@ import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import BillPaymentAPIConfigModal from "./bill-api-config-modal";
 
-
+import { BILLS_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 
 const BillPayments = ({ workspaceID }) => {
   const queryClient = useQueryClient();
