@@ -129,8 +129,10 @@ export default function CollectionsReports({ workspaceID }) {
     if (hasTerminalFilter) {
       terminals = terminals.filter(
         (terminal) =>
-          // row?.narration?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
           terminal?.terminal_name
+            ?.toLowerCase()
+            .includes(debouncedTerminalQuery?.toLowerCase()) ||
+          terminal?.terminalName
             ?.toLowerCase()
             .includes(debouncedTerminalQuery?.toLowerCase()) ||
           terminal?.terminalID
