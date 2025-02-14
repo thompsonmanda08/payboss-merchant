@@ -54,10 +54,12 @@ import LoadingPage from "@/app/loading";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 
-import { API_KEY_TRANSACTION_COLUMNS } from "@/lib/table-columns";
+import {
+  API_KEY_TERMINAL_TRANSACTION_COLUMNS,
+  API_KEY_TRANSACTION_COLUMNS,
+} from "@/lib/table-columns";
 import TerminalsTable from "@/components/containers/tables/terminal-tables";
 import TerminalConfigViewModal from "./TerminalConfigView";
-import useNavigation from "@/hooks/useNavigation";
 import { AnimatePresence, motion } from "framer-motion";
 
 const APIIntegration = ({ workspaceID }) => {
@@ -95,9 +97,7 @@ const APIIntegration = ({ workspaceID }) => {
   const configData = data?.data;
   const terminals = terminalData?.data?.terminals || []; //
 
-  console.log("TERMINALS: ", terminalData);
-
-  const terminalsActive = Boolean(configData?.hasTerminals);
+  const hasTerminals = Boolean(configData?.hasTerminals);
   const terminalsConfigured = Boolean(terminals.length > 0);
 
   // HANDLE FETCH API COLLECTION LATEST TRANSACTION DATA
@@ -173,7 +173,7 @@ const APIIntegration = ({ workspaceID }) => {
   async function handleTerminalActivation() {
     setIsLoading(true);
 
-    if (configData?.terminals || terminalsActive) {
+    if (configData?.terminals || hasTerminals) {
       notify("error", "Terminals already activated for this workspace!");
       setIsLoading(false);
       handleClosePrompt();
@@ -188,9 +188,7 @@ const APIIntegration = ({ workspaceID }) => {
       return;
     }
 
-    queryClient.invalidateQueries({
-      queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
-    });
+    queryClient.invalidateQueries();
 
     notify("success", "Collection Terminals activated!");
     setIsLoading(false);
@@ -222,7 +220,7 @@ const APIIntegration = ({ workspaceID }) => {
   }
 
   function handleTerminalStatus(actionKey) {
-    if (terminalsActive && actionKey == "activate-terminals") {
+    if (hasTerminals && actionKey == "activate-terminals") {
       notify("error", "Terminals already activated for this workspace!");
       handleClosePrompt();
       return;
@@ -230,7 +228,7 @@ const APIIntegration = ({ workspaceID }) => {
 
     // IF ACTIVE AND TERMINALS ARE CURRENTLY UPLOADED THEN NO DEACTIVATE
     if (
-      terminalsActive &&
+      hasTerminals &&
       terminalsConfigured &&
       actionKey == "deactivate-terminals"
     ) {
@@ -511,8 +509,8 @@ const APIIntegration = ({ workspaceID }) => {
                   >
                     Workspace Settings
                   </DropdownItem> */}
-                  <DropdownSection title={terminalsActive ? "" : "Danger zone"}>
-                    {!terminalsActive ? (
+                  <DropdownSection title={hasTerminals ? "" : "Danger zone"}>
+                    {!hasTerminals ? (
                       <DropdownItem
                         key="activate-terminals"
                         color="primary"
@@ -590,7 +588,7 @@ const APIIntegration = ({ workspaceID }) => {
                 opacity: isExpanded ? 1 : 0,
               }}
             >
-              {terminalsActive && terminalsConfigured ? (
+              {hasTerminals && terminalsConfigured ? (
                 <TerminalsTable
                   isLoading={isLoadingTerminals}
                   rows={terminals}
@@ -606,6 +604,9 @@ const APIIntegration = ({ workspaceID }) => {
                   >
                     <Button
                       variant="light"
+                      isDisabled={isLoadingConfig || mutation?.isPending}
+                      isLoading={isLoadingConfig || mutation?.isPending}
+                      loadingText={"Getting Configuration..."}
                       onClick={
                         !terminalsConfigured
                           ? onAddTerminal
@@ -646,7 +647,11 @@ const APIIntegration = ({ workspaceID }) => {
           <CustomTable
             // removeWrapper
             classNames={{ wrapper: "shadow-none px-0 mx-0" }}
-            columns={API_KEY_TRANSACTION_COLUMNS}
+            columns={
+              hasTerminals && terminalsConfigured
+                ? API_KEY_TERMINAL_TRANSACTION_COLUMNS
+                : API_KEY_TRANSACTION_COLUMNS
+            }
             rows={LATEST_TRANSACTIONS}
             isLoading={mutation.isPending}
           />

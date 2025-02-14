@@ -29,19 +29,7 @@ import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import TillNumberBanner from "./TillNumberBanner";
 import SoftBoxIcon from "@/components/base/SoftBoxIcon";
-
-export const TILL_TRANSACTION_COLUMNS = [
-  { name: "DATE", uid: "created_at", sortable: true },
-  { name: "NARRATION", uid: "narration" },
-  { name: "PROVIDER", uid: "service_provider", sortable: true },
-  { name: "SOURCE ACCOUNT", uid: "destination", sortable: true },
-  { name: "MNO REF.", uid: "mno_ref" },
-  // { name: 'MNO STATUS DESCRIPTION', uid: 'mno_status_description' },
-  { name: "REMARKS", uid: "status_description" },
-  { name: "AMOUNT", uid: "amount", sortable: true },
-  { name: "TRANSACTION ID", uid: "transactionID" },
-  { name: "STATUS", uid: "status", sortable: true },
-];
+import { TILL_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 
 export default function TillPaymentCollections({ workspaceID }) {
   const queryClient = useQueryClient();
@@ -213,10 +201,7 @@ export default function TillPaymentCollections({ workspaceID }) {
                     <>
                       <div className="flex items-center gap-4">
                         {/* BANNER DISPLAY */}
-                        <Tooltip
-                          color="secondary"
-                          content="Till Number Banner Download"
-                        >
+                        <Tooltip color="secondary" content="View Till Banner">
                           <span
                             className="cursor-pointer rounded-md bg-secondary/10 p-2 text-secondary transition-all duration-300 ease-in-out hover:bg-secondary hover:text-white"
                             onClick={() => setOpenViewConfig(true)}
@@ -227,8 +212,8 @@ export default function TillPaymentCollections({ workspaceID }) {
 
                         {/* BANNER DOWNLOAD */}
                         <Tooltip
-                          color="default"
-                          content="View Till Number Banner"
+                          color="primary"
+                          content="Download Till Banner "
                         >
                           <span className="cursor-pointer rounded-md bg-primary p-2 text-white transition-all duration-300 ease-in-out hover:bg-primary/80">
                             <ArrowDownTrayIcon

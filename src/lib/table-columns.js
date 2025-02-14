@@ -1,7 +1,7 @@
 export const API_KEY_TRANSACTION_COLUMNS = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "NARRATION", uid: "narration" },
-  { name: "SERVICE PROVIDER", uid: "service_provider" },
+  { name: "PROVIDER", uid: "service_provider" },
   { name: "MNO REF.", uid: "mno_ref" },
   { name: "SOURCE ACCOUNT", uid: "destination", sortable: true },
   { name: "AMOUNT", uid: "amount", sortable: true },
@@ -9,6 +9,32 @@ export const API_KEY_TRANSACTION_COLUMNS = [
   { name: "REMARKS", uid: "status_description" },
   { name: "MNO STATUS DESCRIPTION", uid: "mno_status_description" },
   { name: "TRANSACTION ID", uid: "transactionID" },
+];
+export const API_KEY_TERMINAL_TRANSACTION_COLUMNS = [
+  { name: "DATE", uid: "created_at", sortable: true },
+  { name: "TERMINAL ID", uid: "terminalID", sortable: true },
+  { name: "NARRATION", uid: "narration" },
+  { name: "PROVIDER", uid: "service_provider" },
+  { name: "MNO REF.", uid: "mno_ref" },
+  { name: "SOURCE ACCOUNT", uid: "destination", sortable: true },
+  { name: "AMOUNT", uid: "amount", sortable: true },
+  { name: "STATUS", uid: "status", sortable: true },
+  { name: "REMARKS", uid: "status_description" },
+  { name: "MNO STATUS DESCRIPTION", uid: "mno_status_description" },
+  { name: "TRANSACTION ID", uid: "transactionID" },
+];
+
+export const TILL_TRANSACTION_COLUMNS = [
+  { name: "DATE", uid: "created_at", sortable: true },
+  { name: "NARRATION", uid: "narration" },
+  { name: "PROVIDER", uid: "service_provider", sortable: true },
+  { name: "SOURCE ACCOUNT", uid: "destination", sortable: true },
+  { name: "MNO REF.", uid: "mno_ref" },
+  // { name: 'MNO STATUS DESCRIPTION', uid: 'mno_status_description' },
+  { name: "REMARKS", uid: "status_description" },
+  { name: "AMOUNT", uid: "amount", sortable: true },
+  { name: "TRANSACTION ID", uid: "transactionID" },
+  { name: "STATUS", uid: "status", sortable: true },
 ];
 
 export const BULK_REPORTS_COLUMNS = [
@@ -36,8 +62,8 @@ export const BULK_TRANSACTIONS_COLUMN = [
 
 export const BILLS_TRANSACTION_COLUMNS = [
   { name: "DATE", uid: "created_at", sortable: true },
-  { name: "SERVICE PROVIDER", uid: "service_provider" },
-  { name: "VOUCHER TYPE", uid: "voucher_type" },
+  { name: "PROVIDER", uid: "service_provider", sortable: true },
+  { name: "VOUCHER TYPE", uid: "voucher_type", sortable: true },
   { name: "NARRATION", uid: "narration" },
   { name: "BILL REF.", uid: "bill_ref" },
   { name: "BILL STATUS DESCRIPTION", uid: "bill_status_description" },
@@ -67,7 +93,7 @@ export const SINGLE_TRANSACTIONS_COLUMNS = [
   { name: "LAST NAME", uid: "last_name", sortable: true },
   { name: "NRC", uid: "nrc", sortable: true },
   { name: "SERVICE", uid: "service" },
-  { name: "SERVICE PROVIDER", uid: "service_provider" },
+  { name: "PROVIDER", uid: "service_provider" },
   { name: "DESTINATION ACCOUNT", uid: "destination", sortable: true },
   { name: "LAST MODIFIED", uid: "updated_at", sortable: true },
   { name: "AMOUNT", uid: "amount", sortable: true },
@@ -80,11 +106,20 @@ export const SINGLE_TRANSACTION_REPORTS_COLUMNS = [
   { name: "FIRST NAME", uid: "first_name", sortable: true },
   { name: "LAST NAME", uid: "last_name", sortable: true },
   { name: "NRC", uid: "nrc", sortable: true },
-  { name: "SERVICE PROVIDER", uid: "service_provider" },
+  { name: "PROVIDER", uid: "service_provider" },
   { name: "DESTINATION ACCOUNT", uid: "destination", sortable: true },
   { name: "MNO RRN", uid: "transaction_rrn" },
   { name: "REMARKS", uid: "remarks" },
   { name: "AMOUNT", uid: "amount", sortable: true },
   { name: "STATUS", uid: "status", sortable: true },
   { name: "STATUS DESCRIPTION", uid: "status_description" },
+];
+
+export const WALLET_STATEMENT_REPORT_COLUMNS = [
+  { name: "DATE", uid: "created_at", sortable: true },
+  { name: "NARRATION", uid: "narration", sortable: true },
+  { name: "TRANSACTION INITIATOR", uid: "initiator", sortable: true },
+  { name: "AMOUNT", uid: "amount", sortable: true },
+  { name: "STATUS", uid: "status", sortable: true },
+  { name: "REMARKS", uid: "remarks", sortable: true },
 ];

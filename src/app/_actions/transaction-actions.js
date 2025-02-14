@@ -7,6 +7,22 @@ import authenticatedService from "@/lib/api-config";
 // ****************** ******************************** ************************** //
 
 // ********************** GET ALL TRANSACTIONS (PAYMENTS) ******************** //
+
+/**
+ * Retrieves a list of all payment transactions for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the payment
+ * transactions are being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of payment transaction objects.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getAllPaymentTransactions(workspaceID) {
   // const session = await getUserSession()
   // const merchantID = session?.user?.merchantID
@@ -25,28 +41,26 @@ export async function getAllPaymentTransactions(workspaceID) {
       url: `transaction/merchant/payment/transactions/${workspaceID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -55,6 +69,22 @@ export async function getAllPaymentTransactions(workspaceID) {
 }
 
 // ********************** GET ALL TRANSACTIONS (COLLECTIONS) ******************** //
+
+/**
+ * Retrieves a list of all collection transactions for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the collection
+ * transactions are being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of collection transaction objects.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getAllCollectionTransactions(workspaceID) {
   if (!workspaceID) {
     return {
@@ -71,28 +101,26 @@ export async function getAllCollectionTransactions(workspaceID) {
       url: `transaction/merchant/collection/transactions/${workspaceID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -101,6 +129,22 @@ export async function getAllCollectionTransactions(workspaceID) {
 }
 
 // ************* GET ALL BULK TRANSACTIONS (PAYMENTS - DIRECT & VOUCHER) *************** //
+
+/**
+ * Retrieves a list of all bulk transactions for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the bulk
+ * transactions are being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of bulk transaction objects.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getAllBulkTransactions(workspaceID) {
   // const session = await getUserSession()
   // const merchantID = session?.user?.merchantID
@@ -119,28 +163,26 @@ export async function getAllBulkTransactions(workspaceID) {
       url: `transaction/payments/bulk/batches/${workspaceID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -149,6 +191,21 @@ export async function getAllBulkTransactions(workspaceID) {
 }
 
 // ********************** GET BATCH TRANSACTION DETAILS ******************** //
+
+/**
+ * Retrieves the details of a batch transaction for the given batch ID.
+ *
+ * @param {string} batchID - The ID of the batch transaction to retrieve.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An object containing the batch transaction details.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getBatchDetails(batchID) {
   if (!batchID) {
     return {
@@ -165,28 +222,26 @@ export async function getBatchDetails(batchID) {
       url: `transaction/payments/bulk/batch/details/${batchID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -195,6 +250,22 @@ export async function getBatchDetails(batchID) {
 }
 
 // ********************** REVIEW (APPROVE OR REJECT) BATCH TRANSACTION ******************** //
+
+/**
+ * Reviews a batch transaction by submitting a review action (approve or reject).
+ *
+ * @param {string} batchID - The ID of the batch transaction to be reviewed.
+ * @param {Object} reviewDetails - The review details containing the action and any
+ * additional review information.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of response data from the review submission.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function reviewBatch(batchID, reviewDetails) {
   // const { action, review } = reviewDetails
   if (!batchID) {
@@ -213,28 +284,26 @@ export async function reviewBatch(batchID, reviewDetails) {
       data: reviewDetails,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -243,6 +312,25 @@ export async function reviewBatch(batchID, reviewDetails) {
 }
 
 // ********************** INITIALIZE BATCH TRANSACTION******************** //
+
+/**
+ * Initializes a batch transaction by submitting a request containing the required
+ * batch details to the server.
+ *
+ * @param {string} workspaceID - The ID of the workspace in which the batch
+ * transaction is being initialized.
+ * @param {Object} transactionData - An object containing the required batch
+ * details, including the batch name, payment URL and protocol.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of response data from the initialization request.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function initializeBulkTransaction(workspaceID, transactionData) {
   const { batch_name, url, protocol } = transactionData;
   if (!workspaceID) {
@@ -262,27 +350,26 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
       data: transactionData,
     });
 
-    if (res.status == 200 || res.status == 201) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -291,6 +378,22 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
 }
 
 // ********************** SUBMIT BATCH TRANSACTION DETAILS ******************** //
+
+/**
+ * Submits a batch transaction for approval.
+ *
+ * @param {string} batchID - The ID of the batch transaction to be submitted for
+ * approval.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of response data from the submission request.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function submitBatchForApproval(batchID) {
   // At this point mew records would have been sent to the BE server so we just need to fetch the updated batch
   if (!batchID) {
@@ -308,34 +411,49 @@ export async function submitBatchForApproval(batchID) {
       url: `transaction/payments/bulk/review-submission/${batchID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
   }
 }
+
+/**
+ * Retrieves a list of all prefund requests made by the logged-in
+ * merchant for the given workspace.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the prefund
+ * requests are being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of prefund request objects.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 
 export async function getWalletPrefundHistory(workspaceID) {
   if (!workspaceID) {
@@ -353,28 +471,26 @@ export async function getWalletPrefundHistory(workspaceID) {
       url: `merchant/workspace/wallet/prefund/${workspaceID}/history`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -387,6 +503,22 @@ export async function getWalletPrefundHistory(workspaceID) {
 // ****************** ******************************** ************************** //
 
 // ************* GET ALL SINGLE TRANSACTIONS (PAYMENTS - DIRECT & VOUCHER) *************** //
+
+/**
+ * Retrieves a list of all single transactions for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the single
+ * transactions are being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of single transaction objects.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getAllSingleTransactions(workspaceID) {
   if (!workspaceID) {
     return {
@@ -403,28 +535,26 @@ export async function getAllSingleTransactions(workspaceID) {
       url: `transaction/payments/single/transactions/${workspaceID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -433,6 +563,25 @@ export async function getAllSingleTransactions(workspaceID) {
 }
 
 // ********************** INITIALIZE SINGLE TRANSACTION******************** //
+
+/**
+ * Initializes a single transaction by submitting a request containing the required
+ * single transaction details to the server.
+ *
+ * @param {string} workspaceID - The ID of the workspace in which the single
+ * transaction is being initialized.
+ * @param {Object} transactionData - An object containing the required single
+ * transaction details, including the protocol.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of response data from the initialization request.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function initializeSingleTransaction(
   workspaceID,
   transactionData
@@ -456,27 +605,26 @@ export async function initializeSingleTransaction(
       data: transactionData,
     });
 
-    if (res.status == 200 || res.status == 201) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -485,6 +633,22 @@ export async function initializeSingleTransaction(
 }
 
 // ********************** SUBMIT SINGLE TRANSACTION FOR APPROVAL ******************** //
+
+/**
+ * Submits a single transaction for approval.
+ *
+ * @param {string} ID - The ID of the single transaction to be submitted for
+ * approval.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of response data from the submission request.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function submitTransactionForApproval(ID) {
   if (!ID) {
     return {
@@ -501,28 +665,26 @@ export async function submitTransactionForApproval(ID) {
       url: `transaction/payments/single/review-submission/${ID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -531,6 +693,23 @@ export async function submitTransactionForApproval(ID) {
 }
 
 // ********************** REVIEW (APPROVE OR REJECT) SINGLE TRANSACTION ******************** //
+
+/**
+ * Reviews a single transaction by submitting a review action (approve or reject).
+ *
+ * @param {string} transactionID - The ID of the transaction to be reviewed.
+ * @param {Object} reviewDetails - The review details containing the action and any
+ * additional review information.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of response data from the review submission.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+
 export async function reviewSingleTransaction(transactionID, reviewDetails) {
   // const { action, review } = reviewDetails
   if (!transactionID) {
@@ -549,28 +728,26 @@ export async function reviewSingleTransaction(transactionID, reviewDetails) {
       data: reviewDetails,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -583,6 +760,21 @@ export async function reviewSingleTransaction(transactionID, reviewDetails) {
 // ****************** ******************************** ************************** //
 
 // ******************************** BULK REPORTS ****************************** //
+
+/**
+ * Retrieves bulk analytic reports for a specific workspace within a given date range.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the bulk analytic reports are being fetched.
+ * @param {Object} dateFilter - An object containing the date range for filtering reports, with properties `start_date` and `end_date`.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of bulk analytic report data.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getBulkAnalyticReports(workspaceID, dateFilter) {
   // const {
   //     "start_date":"2024-08-01",
@@ -605,28 +797,26 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
       data: dateFilter,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -635,6 +825,22 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
 }
 
 // ************************** API & TILL COLLECTIONS REPORTS ****************************** //
+
+/**
+ * Retrieves a collection report for a specific workspace and service based on the provided date filter.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the report is being fetched.
+ * @param {string} service - The service for which the report is being generated.
+ * @param {Object} dateFilter - An object containing the date range for filtering reports, with properties `start_date` and `end_date`.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array containing the report data.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getCollectionsReport(workspaceID, service, dateFilter) {
   if (!workspaceID || !service) {
     return {
@@ -653,28 +859,26 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
       data: dateFilter,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -683,6 +887,25 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
 }
 
 // *********************** API COLLECTIONS LATEST TRANSACTIONS ************************* //
+
+/**
+ * Retrieves the latest transactions for a specific workspace using the
+ * API collection service based on the provided date filter.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the latest
+ * transactions are being fetched.
+ * @param {Object} dateFilter - An object containing the date range for
+ * filtering transactions, with properties `start_date` and `end_date`.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the
+ * following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array containing the latest transactions.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getAPICollectionLatestTransactions(
   workspaceID,
   dateFilter
@@ -709,28 +932,26 @@ export async function getAPICollectionLatestTransactions(
       data: dateFilter,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -739,6 +960,21 @@ export async function getAPICollectionLatestTransactions(
 }
 
 // *********************** TILL NUMBER LATEST TRANSACTIONS ************************* //
+
+/**
+ * Retrieves the latest transactions for a specific till within a given date range.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the latest transactions are being fetched.
+ * @param {Object} dateFilter - An object containing the date range for filtering reports, with properties `start_date` and `end_date`.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of transaction objects.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getTillCollectionsLatestTransactions(
   workspaceID,
   dateFilter
@@ -787,7 +1023,22 @@ export async function getTillCollectionsLatestTransactions(
   }
 }
 
-// ******************************** BULK REPORTS ****************************** //
+// ********************** WALLET STATEMENT REPORTS **************************** //
+
+/**
+ * Retrieves a wallet statement report for a specific workspace within a given date range.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the report is being fetched.
+ * @param {Object} dateFilter - An object containing the date range for filtering reports, with properties `start_date` and `end_date`.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of report data.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 export async function getWalletStatementReport(workspaceID, dateFilter) {
   // const {
   //     "start_date":"2024-08-01",
@@ -839,6 +1090,25 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
 }
 
 // *********************** BILLS LATEST TRANSACTIONS ************************* //
+
+/**
+ * Retrieves the latest transactions for a specific workspace within a given date range.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the latest
+ * transactions are being fetched.
+ * @param {Object} dateFilter - An object containing the date range for filtering
+ * transactions, with properties `start_date` and `end_date`.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following
+ * properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An array of transaction objects.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+
 export async function getBillsLatestTransactions(workspaceID, dateFilter) {
   if (!workspaceID) {
     return {

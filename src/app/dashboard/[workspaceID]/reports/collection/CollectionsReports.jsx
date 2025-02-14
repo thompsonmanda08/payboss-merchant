@@ -24,7 +24,10 @@ import CardHeader from "@/components/base/CardHeader";
 import Tabs from "@/components/elements/tabs";
 import TotalValueStat from "@/components/elements/total-stats";
 import { apiTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
-import { API_KEY_TRANSACTION_COLUMNS } from "@/lib/table-columns";
+import {
+  API_KEY_TERMINAL_TRANSACTION_COLUMNS,
+  API_KEY_TRANSACTION_COLUMNS,
+} from "@/lib/table-columns";
 import { TerminalInfo } from "@/components/containers/tables/terminal-tables";
 import { useDebounce } from "@/hooks/use-debounce";
 
@@ -156,12 +159,14 @@ export default function CollectionsReports({ workspaceID }) {
       apiTransactionsReportToCSV({
         objArray: transactions,
         fileName: "api_collection_transactions",
+        hasTerminals,
       });
 
     if (currentTab === 1) {
       apiTransactionsReportToCSV({
         objArray: transactions,
         fileName: "till_collection_transactions",
+        hasTerminals: false, //? TILL COLLECTION CANNOT HAVE TERMINALS
       });
     }
   }
@@ -214,21 +219,6 @@ export default function CollectionsReports({ workspaceID }) {
           />
 
           <div className="flex w-full justify-end gap-4">
-            {/* <Search
-              // className={'mt-auto'}
-              placeholder={"Search by name, or type..."}
-              classNames={{ input: "h-10" }}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-              }}
-            />
-            <Button
-              color={"primary"}
-              onPress={() => handleFileExportToCSV()}
-              startContent={<ArrowDownTrayIcon className="h-5 w-5" />}
-            >
-              Export
-            </Button> */}
             <Button
               color={"primary"}
               variant="flat"
@@ -368,12 +358,7 @@ export default function CollectionsReports({ workspaceID }) {
             <Search
               className={"max-w-sm"}
               placeholder={"Search by name, or type..."}
-              classNames={{
-                input: "h-10 border-none ",
-              }}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-              }}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <Button
               color={"primary"}
@@ -387,7 +372,11 @@ export default function CollectionsReports({ workspaceID }) {
 
         {/* CUSTOM TABLE TO RENDER TRANSACTIONS */}
         <CustomTable
-          columns={API_KEY_TRANSACTION_COLUMNS}
+          columns={
+            hasTerminals
+              ? API_KEY_TERMINAL_TRANSACTION_COLUMNS
+              : API_KEY_TRANSACTION_COLUMNS
+          }
           rows={filteredItems || []}
           isLoading={mutation.isPending}
           isError={mutation.isError}

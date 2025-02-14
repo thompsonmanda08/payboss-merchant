@@ -1,8 +1,10 @@
 import {
+  API_KEY_TERMINAL_TRANSACTION_COLUMNS,
   API_KEY_TRANSACTION_COLUMNS,
   BILLS_TRANSACTION_COLUMNS,
   SINGLE_TRANSACTION_REPORTS_COLUMNS,
   SINGLE_TRANSACTIONS_COLUMNS,
+  WALLET_STATEMENT_REPORT_COLUMNS,
 } from "@/lib/table-columns";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
@@ -123,8 +125,12 @@ export const walletStatementReportToCSV = ({
   fileName = "PayBoss_Wallet_Statement_Report",
 }) => {
   const array = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
+
   let str = "";
-  const headers = "Date,Narration,Initiator,Amount,Status,Remarks";
+
+  const headers = WALLET_STATEMENT_REPORT_COLUMNS?.map((col) => col?.name).join(
+    ","
+  );
   str += headers + "\r\n";
 
   for (let i = 0; i < array.length; i++) {
@@ -145,7 +151,7 @@ export const walletStatementReportToCSV = ({
 
 export const apiTransactionsReportToCSV = ({
   objArray = [],
-  columnHeaders = undefined,
+  hasTerminals = false,
   fileName = "PayBoss_Report",
 }) => {
   if (!Array.isArray(objArray) || objArray.length === 0) {
@@ -156,9 +162,13 @@ export const apiTransactionsReportToCSV = ({
   const array = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
   let str = "";
 
-  const headers = API_KEY_TRANSACTION_COLUMNS?.map((col) => col?.name).join(
-    ","
-  );
+  const headers = (
+    hasTerminals
+      ? API_KEY_TERMINAL_TRANSACTION_COLUMNS
+      : API_KEY_TRANSACTION_COLUMNS
+  )
+    ?.map((col) => col?.name)
+    .join(",");
 
   str += headers + "\r\n";
 
@@ -166,9 +176,9 @@ export const apiTransactionsReportToCSV = ({
     let line = "";
     let date = formatDate(array[i]?.created_at);
     line += `"${date || ""}",`;
+    line += hasTerminals ? `"${array[i]?.terminalID || "N/A"}",` : "";
     line += `"${array[i]?.narration || "N/A"}",`;
     line += `"${array[i]?.service_provider || "N/A"}",`;
-    // line += `"${array[i]?.voucher_type || "N/A"}",`;
     line += `"${array[i]?.mno_ref || "N/A"}",`;
     line += `"${`\t\t${array[i]?.destination}` || "N/A"}",`;
     line += `"${array[i]?.amount || "N/A"}",`;

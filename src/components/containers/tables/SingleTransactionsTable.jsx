@@ -27,6 +27,7 @@ import { useSingleTransactions, useWorkspaceInit } from "@/hooks/useQueryHooks";
 import EmptyLogs from "@/components/base/EmptyLogs";
 import { SINGLE_TRANSACTIONS_COLUMNS } from "@/lib/table-columns";
 import { convertSingleTransactionToCSV } from "@/app/_actions/file-conversion-actions";
+import { useDebounce } from "@/hooks/use-debounce";
 
 // DEFINE FILTERABLE SERVICES
 const SERVICE_FILTERS = [
@@ -66,6 +67,8 @@ export default function SingleTransactionsTable({
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
 
   const [filterValue, setFilterValue] = React.useState("");
+  const debouncedSearchQuery = useDebounce(filterValue, 500);
+
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -84,7 +87,7 @@ export default function SingleTransactionsTable({
 
   const [page, setPage] = React.useState(1);
 
-  const hasSearchFilter = Boolean(filterValue);
+  const hasSearchFilter = Boolean(debouncedSearchQuery);
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -100,11 +103,27 @@ export default function SingleTransactionsTable({
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter(
         (row) =>
-          row?.first_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-          row?.last_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-          row?.amount?.toLowerCase().includes(filterValue?.toLowerCase())
+          row?.first_name
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()) ||
+          row?.last_name
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()) ||
+          row?.nrc
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()) ||
+          row?.destination
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()) ||
+          row?.mno_rrn
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()) ||
+          row?.amount
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase())
       );
     }
+
     if (
       serviceProtocolFilter !== "all" &&
       Array.from(serviceProtocolFilter).length !== SERVICE_FILTERS.length
@@ -115,7 +134,7 @@ export default function SingleTransactionsTable({
     }
 
     return filteredRows;
-  }, [rows, filterValue, serviceProtocolFilter]);
+  }, [rows, debouncedSearchQuery, serviceProtocolFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 

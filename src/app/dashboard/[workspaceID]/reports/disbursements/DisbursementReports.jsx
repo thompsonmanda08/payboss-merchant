@@ -30,6 +30,7 @@ import {
   BULK_REPORTS_COLUMNS,
   SINGLE_TRANSACTION_REPORTS_COLUMNS,
 } from "@/lib/table-columns";
+import { useDebounce } from "@/hooks/use-debounce";
 
 const SERVICE_TYPES = [
   {
@@ -44,6 +45,7 @@ const SERVICE_TYPES = [
 
 export default function DisbursementReports({ workspaceID }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const [dateRange, setDateRange] = useState({});
   const [isExpanded, setIsExpanded] = useState(true);
   const [openReportsModal, setOpenReportsModal] = useState(false);
@@ -60,11 +62,46 @@ export default function DisbursementReports({ workspaceID }) {
   const directBatches = report?.directBatches || [];
   const voucherBatches = report?.voucherBatches || [];
 
+  // RESOLVE DATA FILTERING
+  const hasSearchFilter = Boolean(debouncedSearchQuery);
+
+  const filteredDirectBatches = React.useMemo(() => {
+    let filteredRows = [...(report?.directBatches || [])];
+
+    if (hasSearchFilter) {
+      filteredRows = filteredRows.filter(
+        (row) =>
+          row?.transactionID
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()) ||
+          row?.name?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
+      );
+    }
+
+    return filteredRows;
+  }, [report, debouncedSearchQuery]);
+
+  const filteredVoucherBatches = React.useMemo(() => {
+    let filteredRows = [...(report?.voucherBatches || [])];
+
+    if (hasSearchFilter) {
+      filteredRows = filteredRows.filter(
+        (row) =>
+          row?.transactionID
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()) ||
+          row?.name?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
+      );
+    }
+
+    return filteredRows;
+  }, [report, debouncedSearchQuery]);
+
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
       key={`direct-payments-${workspaceID}`}
       columns={BULK_REPORTS_COLUMNS}
-      rows={directBatches || ["1", "2", "3"]}
+      rows={filteredDirectBatches}
       isLoading={mutation.isPending}
       isError={mutation.isError}
       removeWrapper
@@ -73,7 +110,7 @@ export default function DisbursementReports({ workspaceID }) {
     <CustomTable
       key={`voucher-payments-${workspaceID}`}
       columns={BULK_REPORTS_COLUMNS}
-      rows={voucherBatches}
+      rows={filteredVoucherBatches}
       isLoading={mutation.isPending}
       isError={mutation.isError}
       onRowAction={handleBatchSelection}
@@ -88,11 +125,11 @@ export default function DisbursementReports({ workspaceID }) {
   function handleBatchSelection(ID) {
     let batch = null;
     if (currentTabIndex === 0) {
-      batch = directBatches.find((row) => row.ID == ID);
+      batch = filteredDirectBatches.find((row) => row.ID == ID);
     }
 
     if (currentTabIndex === 1) {
-      batch = voucherBatches.find((row) => row.ID == ID);
+      batch = filteredVoucherBatches.find((row) => row.ID == ID);
     }
     setSelectedBatch(batch);
     setOpenReportsModal(true);
@@ -159,9 +196,14 @@ export default function DisbursementReports({ workspaceID }) {
               onPress={() => setIsExpanded(!isExpanded)}
             >
               {isExpanded ? (
-                <EyeSlashIcon className="h-5 w-5" />
+                <>
+                  <EyeSlashIcon className="h-5 w-5" /> Hide Summary
+                </>
               ) : (
-                <PresentationChartBarIcon className="h-5 w-5" />
+                <>
+                  <PresentationChartBarIcon className="h-5 w-5" />
+                  Show Summary
+                </>
               )}
             </Button>
           </div>

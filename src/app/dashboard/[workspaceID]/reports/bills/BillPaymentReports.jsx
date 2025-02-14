@@ -179,9 +179,14 @@ export default function BillPaymentReports({ workspaceID }) {
               onPress={() => setIsExpanded(!isExpanded)}
             >
               {isExpanded ? (
-                <EyeSlashIcon className="h-5 w-5" />
+                <>
+                  <EyeSlashIcon className="h-5 w-5" /> Hide Summary
+                </>
               ) : (
-                <PresentationChartBarIcon className="h-5 w-5" />
+                <>
+                  <PresentationChartBarIcon className="h-5 w-5" />
+                  Show Summary
+                </>
               )}
             </Button>
           </div>

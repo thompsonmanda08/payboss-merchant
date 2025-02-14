@@ -8,17 +8,16 @@ import { WALLET_STATEMENT_REPORTS_QUERY_KEY } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
 import { getWalletStatementReport } from "@/app/_actions/transaction-actions";
 import { WalletTransactionHistory } from "@/components/containers/workspace/Wallet";
-import {
-  convertToCSVString,
-  walletStatementReportToCSV,
-} from "@/app/_actions/file-conversion-actions";
+import { walletStatementReportToCSV } from "@/app/_actions/file-conversion-actions";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
 import Search from "@/components/ui/search";
+import { useDebounce } from "@/hooks/use-debounce";
 
 export default function StatementReport({ workspaceID }) {
   const [dateRange, setDateRange] = useState();
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const mutation = useMutation({
     mutationKey: [WALLET_STATEMENT_REPORTS_QUERY_KEY, workspaceID],
@@ -27,7 +26,7 @@ export default function StatementReport({ workspaceID }) {
 
   const statementTransactions = mutation?.data?.data?.data || [];
 
-  // handle get wallet history asyncronously with a date mutation - date range
+  // handle get wallet history asynchronously with a date mutation - date range
   async function runAsyncMutation(range) {
     if (!range?.start_date && !range?.end_date) {
       return [];
@@ -40,27 +39,31 @@ export default function StatementReport({ workspaceID }) {
     return response || [];
   }
 
-  // Implement mannual CSV export functionality
+  // Implement manual CSV export functionality
   function handleFileExportToCSV() {
     walletStatementReportToCSV({ objArray: statementTransactions });
   }
 
   // RESOLVE DATA FILTERING
-  const hasSearchFilter = Boolean(searchQuery);
+  const hasSearchFilter = Boolean(debouncedSearchQuery);
   const filteredItems = React.useMemo(() => {
     let filteredRows = [...statementTransactions];
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter(
         (row) =>
-          row?.ID?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
-          row?.amount?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
-          row?.type?.toLowerCase().includes(searchQuery?.toLowerCase())
+          row?.ID?.toLowerCase().includes(
+            debouncedSearchQuery?.toLowerCase()
+          ) ||
+          row?.amount
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()) ||
+          row?.type?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
       );
     }
 
     return filteredRows;
-  }, [statementTransactions, searchQuery]);
+  }, [statementTransactions, debouncedSearchQuery]);
 
   useEffect(() => {
     if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
@@ -105,13 +108,10 @@ export default function StatementReport({ workspaceID }) {
             }
           />
 
-          <div className="flex w-full max-w-md gap-4">
+          <div className="flex w-full max-w-sm gap-4">
             <Search
-              placeholder={"Search by type, ID or amount..."}
-              classNames={{ input: "h-10" }}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-              }}
+              placeholder={"Search for transaction..."}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <Button
               onPress={handleFileExportToCSV}

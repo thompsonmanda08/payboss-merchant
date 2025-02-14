@@ -35,10 +35,18 @@ export async function createNewUser(newUser) {
       statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -62,31 +70,27 @@ export async function getAllUsers() {
       url: `merchant/users/${merchantID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || res?.statusText || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.statusText ||
-        "Operation Failed!",
-      data: error?.response,
+        "Error Occurred: See Console for details",
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -112,30 +116,26 @@ export async function assignUsersToWorkspace(users, workspaceID) {
       },
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
-    revalidatePath("/", "page");
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -162,16 +162,22 @@ export async function getUser(userID) {
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.statusText ||
-        "Operation Failed!",
-      data: error?.response,
+        "Error Occurred: See Console for details",
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -206,12 +212,21 @@ export async function updateProfileData(userID, userData) {
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -247,12 +262,21 @@ export async function updateSystemUserData(userID, userData) {
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -270,8 +294,8 @@ export async function updateSystemUserData(userID, userData) {
  */
 
 export async function deleteSystemUserData(userID) {
-  const session = await getUserSession();
-  const merchantID = session?.user?.merchantID;
+  // const session = await getUserSession();
+  // const merchantID = session?.user?.merchantID;
 
   try {
     const res = await authenticatedService({
@@ -286,12 +310,21 @@ export async function deleteSystemUserData(userID) {
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "User Delete Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -324,12 +357,21 @@ export async function unlockSystemUser(userID) {
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -363,12 +405,21 @@ export async function changeUserPassword(password) {
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -404,10 +455,18 @@ export async function adminResetUserPassword(userID, newPasswordData) {
       statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
