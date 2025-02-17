@@ -14,6 +14,7 @@ function SelectField({
   selectedItem,
   defaultValue,
   className,
+  classNames,
   wrapperClassName,
 
   onError,
@@ -24,15 +25,20 @@ function SelectField({
     <div
       className={cn(
         "flex w-full max-w-md flex-col items-start",
-        wrapperClassName
+        wrapperClassName,
+        classNames?.wrapper
       )}
     >
       {label && (
         <label
           htmlFor={name}
-          className={cn("ml-1 text-sm font-medium text-foreground/70", {
-            "opacity-50": props?.isDisabled,
-          })}
+          className={cn(
+            "ml-1 text-sm font-medium text-foreground/70",
+            {
+              "opacity-50": props?.isDisabled,
+            },
+            classNames?.label
+          )}
         >
           {label}{" "}
           {props?.required && <span className="font-bold text-red-500">*</span>}
@@ -44,16 +50,25 @@ function SelectField({
         <Select
           className={cn("font-medium", className)}
           classNames={{
-            base: "text-lg shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium text-foreground placeholder:text-muted-foreground ",
-            value:
+            base: cn(
+              "text-lg shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium text-foreground placeholder:text-muted-foreground",
+              classNames?.base
+            ),
+            value: cn(
               "text-foreground group-data-[has-value=true]:text-foreground font-inter tracking-tight capitalize",
+              classNames?.value
+            ),
             trigger: cn(
-              "focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70"
+              cn(
+                "focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70",
+                classNames?.trigger
+              )
               // {
               //   'border-red-500 focus:border-red-500/70 focus-visible:ring-red-500/30':
               //     onError,
               // },
             ),
+            placeholder: cn("text-muted-foreground", classNames?.placeholder),
             listbox: "font-medium",
             popoverContent: "rounded-md text-foreground-700 font-medium",
             selectorIcon: "w-4 h-4",

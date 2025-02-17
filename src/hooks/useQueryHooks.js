@@ -21,6 +21,7 @@ import {
   getAllWorkspaceTerminals,
   getWalletPrefunds,
   getWorkspaceAPIKey,
+  getWorkspaceCallback,
   getWorkspaceMembers,
   getWorkspaceTillNumber,
   initializeWorkspace,
@@ -45,6 +46,7 @@ import {
   ACTIVE_PREFUND_QUERY_KEY,
   WORKSPACE_TILL_NUMBER_QUERY_KEY,
   WORKSPACE_TERMINALS_QUERY_KEY,
+  WORKSPACE_CALLBACK,
 } from "@/lib/constants";
 
 export const useGeneralConfigOptions = () =>
@@ -198,5 +200,12 @@ export const useActivePrefunds = (workspaceID) =>
   useQuery({
     queryKey: [ACTIVE_PREFUND_QUERY_KEY, workspaceID],
     queryFn: async () => await getWalletPrefunds(workspaceID),
+    staleTime: Infinity,
+  });
+
+export const useWorkspaceCallbackURL = (workspaceID) =>
+  useQuery({
+    queryKey: [WORKSPACE_CALLBACK, workspaceID],
+    queryFn: async () => await getWorkspaceCallback(workspaceID),
     staleTime: Infinity,
   });

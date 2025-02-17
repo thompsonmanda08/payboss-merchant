@@ -12,12 +12,15 @@ import {
   WORKSPACE_TYPES,
   WORKSPACES_QUERY_KEY,
 } from "@/lib/constants";
-import { cn, notify } from "@/lib/utils";
-import { Switch, useDisclosure } from "@heroui/react";
+import { cn, notify, syntaxHighlight } from "@/lib/utils";
+import { Snippet, Switch, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import SelectField from "@/components/ui/select-field";
+import { useWorkspaceCallbackURL } from "@/hooks/useQueryHooks";
+import { updateWorkspaceCallback } from "@/app/_actions/workspace-actions";
 
 function WorkspaceDetails({
   workspaceID,
@@ -41,10 +44,14 @@ function WorkspaceDetails({
     message: "",
   });
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [isLoadingCallback, setIsLoadingCallback] = useState(false);
   const [deleteWorkspaceName, setDeleteWorkspaceName] = useState("");
-  const [callbackURL, setCallbackURL] = useState("");
+  const [callbackURL, setCallbackURL] = useState({ method: "GET", url: "" });
   const { activeWorkspace } = useWorkspaces();
   const [isVisible, setIsVisible] = useState(activeWorkspace?.isVisible);
+
+  const { data: callbackResponse, isLoading: loadingCallback } =
+    useWorkspaceCallbackURL(workspaceID);
 
   const [isSandbox, setIsSandbox] = useState(
     activeWorkspace?.workspace?.toLowerCase() == "sandbox"
@@ -55,12 +62,9 @@ function WorkspaceDetails({
     description: activeWorkspace?.description,
   });
 
-
-  const noChangesToSave =
-    !activeWorkspace ||
-    isSandbox ||
-    (newWorkspace.workspace == activeWorkspace?.workspace &&
-      newWorkspace.description == activeWorkspace?.description);
+  function updateCallbackURL(fields) {
+    setCallbackURL((prev) => ({ ...prev, ...fields }));
+  }
 
   function editWorkspaceField(fields) {
     setNewWorkspace((prev) => {
@@ -100,6 +104,34 @@ function WorkspaceDetails({
     setLoading(false);
   }
 
+  // UPDATE WORKSPACE CALLBACK URL
+  async function handleUpdateWorkspaceCallback(e) {
+    e.preventDefault();
+    setIsLoadingCallback(true);
+
+    const isValidURL = /^(http|https):\/\/[^ "]+$/.test(callbackURL.url);
+
+    // VALIDATE INPUTS
+    if (!callbackURL?.url || !isValidURL) {
+      notify("error", "Provide a valid url!");
+      setError({ onCallbackURL: true, message: "Provide a valid url!" });
+      setIsLoadingCallback(false);
+      return;
+    }
+
+    const response = await updateWorkspaceCallback(workspaceID, callbackURL);
+
+    if (response?.success) {
+      queryClient.invalidateQueries();
+      setIsLoadingCallback(false);
+      notify("success", "Callback URL updated!");
+      return;
+    }
+
+    notify("error", "Failed to Update callback URL!");
+    setIsLoadingCallback(false);
+  }
+
   // DEACTIVATE / DELETE WORKSPACE
   async function handleDeleteWorkspace() {
     setDeleteLoading(true);
@@ -135,16 +167,18 @@ function WorkspaceDetails({
 
   // CHECK IF WORKSPACE IS VISIBLE
   useEffect(() => {
+    // CHECK VISIBILITY OF WORKSPACE
     if (activeWorkspace != undefined && activeWorkspace?.isVisible) {
       setIsVisible(activeWorkspace?.isVisible);
     }
 
-    if (
-      activeWorkspace != undefined &&
-      activeWorkspace?.workspace?.toLowerCase() == "sandbox"
-    ) {
-      setIsSandbox(true);
-    }
+    // CHECK IF WORKSPACE IS A SANDBOX
+    // if (
+    //   activeWorkspace != undefined &&
+    //   activeWorkspace?.workspace?.toLowerCase() == "sandbox"
+    // ) {
+    //   setIsSandbox(true);
+    // }
   }, [activeWorkspace]);
 
   // CLEAR ERROR STATE
@@ -155,6 +189,34 @@ function WorkspaceDetails({
       setError({ status: false, message: "" });
     };
   }, [deleteWorkspaceName]);
+
+  useEffect(() => {
+    setError({ status: false, message: "" });
+
+    // SET CALLBACK URL DATA
+    if (
+      callbackResponse?.data?.method !== "n/a" &&
+      callbackResponse?.data?.url !== "n/a"
+    ) {
+      setCallbackURL((prev) => ({ ...prev, ...callbackResponse?.data }));
+    }
+
+    // SET ACTIVE WORKSPACE IN STATE
+    if (activeWorkspace?.workspace) {
+      setNewWorkspace((prev) => ({ ...prev, ...activeWorkspace }));
+    }
+  }, [callbackResponse?.data, activeWorkspace]);
+
+  const noChangesToSave =
+    isSandbox ||
+    (newWorkspace.workspace == activeWorkspace?.workspace &&
+      newWorkspace.description == activeWorkspace?.description);
+
+  const noCallbackChanges =
+    callbackURL.method == callbackResponse?.data?.method &&
+    callbackURL.url == callbackResponse?.data?.url;
+
+  console.log("callbackURL", callbackURL, callbackResponse);
 
   return (
     <>
@@ -198,6 +260,7 @@ function WorkspaceDetails({
       </div>
 
       <hr className="my-6 h-px bg-foreground-900/5" />
+
       <div className="flex flex-col gap-8 md:flex-row md:justify-between md:gap-16 xl:gap-24">
         <div className="flex w-full items-center justify-between md:flex-row">
           <div className="flex max-w-4xl flex-col gap-2">
@@ -226,38 +289,120 @@ function WorkspaceDetails({
 
           {/* CHANGE WORKSPACE VISIBILITY */}
           <div className="flex flex-col gap-6">
-            <div className="flex max-w-4xl flex-col gap-2">
-              <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
-                CallbackURL Config
-              </h2>
-              <p className="text-xs leading-6 text-gray-400 sm:text-sm">
-                PayBoss core will send a response to the callback URL provided
-                here complete the transaction
-              </p>
-            </div>
-            <form
-              onSubmit={handleUpdateWorkspace}
-              role={"edit-workspace-details"}
-              className="flex w-full flex-col gap-4 sm:items-start md:flex-row md:items-end"
-            >
-              <Input
-                label="Callback URL"
-                defaultValue={activeWorkspace?.callBackURL}
-                isDisabled={loading}
-                value={callbackURL}
-                isInvalid={error?.onCallbackURL}
-                onChange={(e) => setCallbackURL(e.target.value)}
-              />
+            <div className="flex flex-col gap-6">
+              <div className="flex max-w-4xl flex-col gap-2 lg:gap-1">
+                <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
+                  CallbackURL Config
+                </h2>
+                <p className="text-xs text-gray-400 sm:text-sm">
+                  PayBoss core will send a response to the callback URL provided
+                  here complete the transaction
+                </p>
+              </div>
 
-              <Button
-                type="submit"
-                isDisabled={loading}
-                isLoading={loading}
-                loadingText={"Saving..."}
+              <form
+                onSubmit={handleUpdateWorkspaceCallback}
+                role={"edit-workspace-details"}
+                className="flex w-full flex-col gap-1 sm:items-start md:flex-row md:items-end"
               >
-                Save
-              </Button>
-            </form>
+                <SelectField
+                  label="Method"
+                  defaultValue={"GET"}
+                  placeholder={"GET"}
+                  wrapperClassName={cn("max-w-24")}
+                  className={cn(
+                    "max-w-[100px] bg-orange-300 bg-opacity-50 rounded-md",
+                    {
+                      "bg-primary-300 bg-opacity-50 rounded-md ":
+                        callbackURL.method == "POST",
+                    }
+                  )}
+                  classNames={{
+                    value: cn(
+                      "font-bold text-orange-600 group-data-[has-value=true]:text-orange-600",
+                      {
+                        "text-primary-600 group-data-[has-value=true]:text-primary-600":
+                          callbackURL.method == "POST",
+                      }
+                    ),
+                  }}
+                  options={["GET", "POST"]}
+                  isDisabled={isLoadingCallback}
+                  value={callbackURL?.method}
+                  onError={error?.onCallbackURL}
+                  onChange={(e) =>
+                    updateCallbackURL({ method: e.target.value })
+                  }
+                  prefilled={true}
+                />
+
+                <Input
+                  label="URL"
+                  defaultValue={activeWorkspace?.callBackURL}
+                  isDisabled={loading}
+                  value={callbackURL?.url}
+                  onError={error?.onCallbackURL}
+                  required={true}
+                  pattern="https?://.+"
+                  title="https://www.domain-name.com"
+                  onChange={(e) => updateCallbackURL({ url: e.target.value })}
+                />
+
+                <Button
+                  type="submit"
+                  isDisabled={isLoadingCallback || noCallbackChanges}
+                  isLoading={isLoadingCallback}
+                  loadingText={"Saving..."}
+                >
+                  Save
+                </Button>
+              </form>
+            </div>
+            <div className="flex max-w-4xl flex-col gap-2 lg:gap-1">
+              <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
+                Status Response
+              </h2>
+              <p className="text-xs text-gray-400 sm:text-sm">
+                Your callback URL will get the following response
+              </p>
+
+              <div>
+                {callbackURL?.method == "GET" ? (
+                  <Snippet hideSymbol className="w-full flex-1">
+                    <span className="text-wrap">
+                      {"GET"} ~{" "}
+                      {callbackURL?.url +
+                        "?status=&message=&transactionID=&mno_ref=&mno_status_description="}
+                    </span>
+                  </Snippet>
+                ) : (
+                  <Snippet
+                    classNames={{
+                      base: "max-w-sm flex text-wrap",
+                    }}
+                    hideSymbol
+                  >
+                    <pre
+                      dangerouslySetInnerHTML={{
+                        __html: syntaxHighlight(
+                          JSON.stringify(
+                            {
+                              status: "string",
+                              message: "string",
+                              transactionID: "string",
+                              mno_ref: "string | null",
+                              mno_status_description: "string",
+                            },
+                            undefined,
+                            2
+                          )
+                        ),
+                      }}
+                    ></pre>
+                  </Snippet>
+                )}
+              </div>
+            </div>
           </div>
         </>
       )}

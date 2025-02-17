@@ -935,3 +935,106 @@ export async function registerTerminals(workspaceID, terminalUrl) {
     };
   }
 }
+
+/**
+ * Updates the callback URL for the given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the callback URL is being updated.
+ * @param {Object} callbackData - An object containing the callback data to be updated.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The data returned by the server.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+export async function updateWorkspaceCallback(workspaceID, callbackData) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required!",
+      data: null,
+      status: 400,
+      statusText: "Bad Request",
+    };
+  }
+
+  try {
+    const res = await authenticatedService({
+      method: "PATCH",
+      url: `merchant/workspace/callback/${workspaceID}`,
+      data: callbackData,
+    });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+export async function getWorkspaceCallback(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required!",
+      data: null,
+      status: 400,
+      statusText: "Bad Request",
+    };
+  }
+
+  try {
+    const res = await authenticatedService({
+      url: `merchant/workspace/callback/${workspaceID}`,
+    });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}

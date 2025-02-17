@@ -6,23 +6,24 @@ import {
   WalletIcon,
 } from "@heroicons/react/24/outline";
 
-const BASE_URL = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL;
+export const BASE_URL =
+  process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL;
 // const POCKET_BASE_URL =
 //   process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL
 
 //https://payboss-uat-backend.bgsgroup.co.zm/_/#/login
-const POCKET_BASE_URL = "https://payboss-uat-backend.bgsgroup.co.zm";
+export const POCKET_BASE_URL = "https://payboss-uat-backend.bgsgroup.co.zm";
 
-const AUTH_SESSION = "pb-session";
-const USER_SESSION = "pb-next-usr";
-const WORKSPACE_SESSION = "pb-next-workspace";
+export const AUTH_SESSION = "pb-session";
+export const USER_SESSION = "pb-next-usr";
+export const WORKSPACE_SESSION = "pb-next-workspace";
 
-const placeHolderImage = "/images/placeholder-image.webp";
-const DefaultCover = "/images/profile-cover.jpg";
+export const placeHolderImage = "/images/placeholder-image.webp";
+export const DefaultCover = "/images/profile-cover.jpg";
 
 export const MONTHS = [
   "January",
-  "Febuary",
+  "February",
   "March",
   "April",
   "May",
@@ -35,7 +36,7 @@ export const MONTHS = [
   "December",
 ];
 
-const rowsPerPageOptions = [
+export const rowsPerPageOptions = [
   {
     ID: 5,
     label: "5",
@@ -59,36 +60,37 @@ const rowsPerPageOptions = [
 ];
 
 // QUERY KEYS
-const USER_DATA_KEY = "user";
-const CONFIGS_QUERY_KEY = "configs";
-const USER_ROLES_QUERY_KEY = "user-roles";
-const USERS = "workspace-users";
-const SETUP_QUERY_KEY = "setup";
-const WORKSPACES_QUERY_KEY = "workspaces";
-const WORKSPACE_ROLES_QUERY_KEY = "workspace-role";
-const WORKSPACE_DASHBOARD_QUERY_KEY = "dashboard";
-const WORKSPACE_MEMBERS_QUERY_KEY = "members";
-const BULK_TRANSACTIONS_QUERY_KEY = "bulk-transactions";
-const SINGLE_TRANSACTIONS_QUERY_KEY = "single-transactions";
-const BATCH_DETAILS_QUERY_KEY = "batch-details";
-const WALLET_HISTORY_QUERY_KEY = "wallet-history-details";
-const DASHBOARD_ANALYTICS_QUERY_KEY = "dasboard-analytics";
-const PAYMENT_TRANSACTIONS_QUERY_KEY = "payment-transactions";
-const COLLECTION_TRANSACTIONS_QUERY_KEY = "collections-transactions";
-const WORKSPACE_API_KEY_QUERY_KEY = "workspace-api-key";
-const ACTIVE_PREFUND_QUERY_KEY = "active-prefund-key";
-const BULK_REPORTS_QUERY_KEY = "disbursement-analytics-reports";
-const COLLECTION_REPORTS_QUERY_KEY = "collections-analytics-reports";
-const API_COLLECTIONS_REPORTS_QUERY_KEY = "api-collection-reports";
-const API_COLLECTIONS_QUERY_KEY = "api-transactions";
-const TILL_COLLECTIONS_REPORTS_QUERY_KEY = "till-collection-reports";
-const TILL_COLLECTIONS_QUERY_KEY = "till-transactions";
-const WORKSPACE_TILL_NUMBER_QUERY_KEY = "workspace-till-number";
-const WALLET_STATEMENT_REPORTS_QUERY_KEY = "wallet-statement-report";
-const WORKSPACE_TERMINALS_QUERY_KEY = "workspace-terminals";
+export const USER_DATA_KEY = "user";
+export const CONFIGS_QUERY_KEY = "configs";
+export const USER_ROLES_QUERY_KEY = "user-roles";
+export const USERS = "workspace-users";
+export const SETUP_QUERY_KEY = "setup";
+export const WORKSPACES_QUERY_KEY = "workspaces";
+export const WORKSPACE_ROLES_QUERY_KEY = "workspace-role";
+export const WORKSPACE_DASHBOARD_QUERY_KEY = "dashboard";
+export const WORKSPACE_MEMBERS_QUERY_KEY = "members";
+export const BULK_TRANSACTIONS_QUERY_KEY = "bulk-transactions";
+export const SINGLE_TRANSACTIONS_QUERY_KEY = "single-transactions";
+export const BATCH_DETAILS_QUERY_KEY = "batch-details";
+export const WALLET_HISTORY_QUERY_KEY = "wallet-history-details";
+export const DASHBOARD_ANALYTICS_QUERY_KEY = "dasboard-analytics";
+export const PAYMENT_TRANSACTIONS_QUERY_KEY = "payment-transactions";
+export const COLLECTION_TRANSACTIONS_QUERY_KEY = "collections-transactions";
+export const WORKSPACE_API_KEY_QUERY_KEY = "workspace-api-key";
+export const ACTIVE_PREFUND_QUERY_KEY = "active-prefund-key";
+export const BULK_REPORTS_QUERY_KEY = "disbursement-analytics-reports";
+export const COLLECTION_REPORTS_QUERY_KEY = "collections-analytics-reports";
+export const API_COLLECTIONS_REPORTS_QUERY_KEY = "api-collection-reports";
+export const API_COLLECTIONS_QUERY_KEY = "api-transactions";
+export const TILL_COLLECTIONS_REPORTS_QUERY_KEY = "till-collection-reports";
+export const TILL_COLLECTIONS_QUERY_KEY = "till-transactions";
+export const WORKSPACE_TILL_NUMBER_QUERY_KEY = "workspace-till-number";
+export const WALLET_STATEMENT_REPORTS_QUERY_KEY = "wallet-statement-report";
+export const WORKSPACE_TERMINALS_QUERY_KEY = "workspace-terminals";
+export const WORKSPACE_CALLBACK = "workspace-callback";
 
 // ANIMATION_VARIANTS
-const containerVariants = {
+export const containerVariants = {
   hidden: { opacity: 1 },
   show: {
     opacity: 1,
@@ -99,7 +101,7 @@ const containerVariants = {
   exit: { opacity: 0 },
 };
 
-const staggerContainerVariants = {
+export const staggerContainerVariants = {
   hidden: { opacity: 1 },
   show: {
     opacity: 1,
@@ -110,13 +112,13 @@ const staggerContainerVariants = {
   exit: { opacity: 0 },
 };
 
-const staggerContainerItemVariants = {
+export const staggerContainerItemVariants = {
   hidden: { opacity: 0, y: -60 },
   show: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 60 },
 };
 
-const slideDownInView = {
+export const slideDownInView = {
   hidden: {
     opacity: 0,
     y: -100,
@@ -136,19 +138,19 @@ const slideDownInView = {
 };
 
 // REGEX
-const MTN_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/;
-const AIRTEL_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/;
-const ZAMTEL_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/;
+export const MTN_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/;
+export const AIRTEL_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/;
+export const ZAMTEL_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/;
 // const NRC_PASSPORT = /^(ZN[0-9]{6}|[0-9]{6}/[0-9]{2}/[1]{1})$/
 
 // const MTN_NO = /^(?:\+?26|26)?(096|076)\d{7}$/
 // const AIRTEL_NO = /^(?:\+?26|26)?(097|077)\d{7}$/
 // const ZAMTEL_NO = /^(?:\+?26|26)?(095|075)\d{7}$/
 
-const PASSWORD_PATTERN =
+export const PASSWORD_PATTERN =
   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
-const PAYMENT_SERVICE_TYPES = [
+export const PAYMENT_SERVICE_TYPES = [
   {
     name: "Bulk Payments",
     Icon: CircleStackIcon,
@@ -180,9 +182,9 @@ export const WORKSPACE_TYPES = [
   // },
 ];
 
-const PAYMENT_PROTOCOL = ["direct", "voucher"];
+export const PAYMENT_PROTOCOL = ["direct", "voucher"];
 
-const TASK_ICON_BG_COLOR_MAP = {
+export const TASK_ICON_BG_COLOR_MAP = {
   Call: "bg-[#F7F6FF]",
   Task: "bg-[#FFF8F1]",
   Note: "bg-[#92b76229]",
@@ -191,7 +193,7 @@ const TASK_ICON_BG_COLOR_MAP = {
   Deposit: "bg-[#58FF5F]",
 };
 
-const TRANSACTION_STATUS_COLOR_MAP = {
+export const TRANSACTION_STATUS_COLOR_MAP = {
   submitted: "from-primary/10 to-primary-700/10 text-primary-700",
 
   proccessing: "from-secondary/10 to-orange-600/10 text-orange-700",
@@ -210,14 +212,14 @@ const TRANSACTION_STATUS_COLOR_MAP = {
   processed: "from-[#23C760] to-[#23C760] text-white",
 };
 
-const SERVICE_PROVIDER_COLOR_MAP = {
+export const SERVICE_PROVIDER_COLOR_MAP = {
   airtel: "bg-red-500 text-white  ",
   mtn: "bg-yellow-400 text-black",
   zamtel: "bg-green-600 text-white",
   bank: "bg-primary text-white",
 };
 
-const TASK_TYPE = {
+export const TASK_TYPE = {
   // Call: {
   //   icon: <DevicePhoneMobileIcon className="h-5 w-5" />,
   //   color: 'violet-800',
@@ -258,63 +260,4 @@ const TASK_TYPE = {
     color: "green-500",
     label: "Deposit",
   },
-};
-
-// ***************** EXPORTS ******************** //
-
-export {
-  // BASE CONSTANTS
-  BASE_URL,
-  POCKET_BASE_URL,
-  AUTH_SESSION,
-  USER_SESSION,
-  WORKSPACE_SESSION,
-  PAYMENT_SERVICE_TYPES,
-  DefaultCover,
-  MTN_NO,
-  AIRTEL_NO,
-  ZAMTEL_NO,
-  PASSWORD_PATTERN,
-  placeHolderImage,
-  TASK_ICON_BG_COLOR_MAP,
-  TASK_TYPE,
-  TRANSACTION_STATUS_COLOR_MAP,
-  PAYMENT_PROTOCOL,
-  SERVICE_PROVIDER_COLOR_MAP,
-  rowsPerPageOptions,
-
-  // ANIMATIONS
-  staggerContainerItemVariants,
-  staggerContainerVariants,
-  containerVariants,
-  slideDownInView,
-
-  // REACT QUERY KEYS
-  USER_DATA_KEY,
-  CONFIGS_QUERY_KEY,
-  USER_ROLES_QUERY_KEY,
-  USERS,
-  SETUP_QUERY_KEY,
-  WORKSPACES_QUERY_KEY,
-  WORKSPACE_ROLES_QUERY_KEY,
-  WORKSPACE_DASHBOARD_QUERY_KEY,
-  WORKSPACE_MEMBERS_QUERY_KEY,
-  SINGLE_TRANSACTIONS_QUERY_KEY,
-  BULK_TRANSACTIONS_QUERY_KEY,
-  PAYMENT_TRANSACTIONS_QUERY_KEY,
-  COLLECTION_TRANSACTIONS_QUERY_KEY,
-  BATCH_DETAILS_QUERY_KEY,
-  WALLET_HISTORY_QUERY_KEY,
-  DASHBOARD_ANALYTICS_QUERY_KEY,
-  WORKSPACE_API_KEY_QUERY_KEY,
-  BULK_REPORTS_QUERY_KEY,
-  COLLECTION_REPORTS_QUERY_KEY,
-  ACTIVE_PREFUND_QUERY_KEY,
-  API_COLLECTIONS_REPORTS_QUERY_KEY,
-  API_COLLECTIONS_QUERY_KEY,
-  TILL_COLLECTIONS_REPORTS_QUERY_KEY,
-  TILL_COLLECTIONS_QUERY_KEY,
-  WORKSPACE_TILL_NUMBER_QUERY_KEY,
-  WALLET_STATEMENT_REPORTS_QUERY_KEY,
-  WORKSPACE_TERMINALS_QUERY_KEY,
 };
