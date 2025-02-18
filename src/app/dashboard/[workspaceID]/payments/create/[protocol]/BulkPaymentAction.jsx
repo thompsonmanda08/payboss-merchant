@@ -55,7 +55,6 @@ function BulkPaymentAction({ workspaceID, protocol, activePrefunds }) {
     setLoading,
     paymentAction,
     setError,
-    paymentActiona,
   } = usePaymentsStore();
 
   const router = useRouter();
