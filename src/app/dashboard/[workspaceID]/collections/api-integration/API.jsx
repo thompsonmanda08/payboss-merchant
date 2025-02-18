@@ -35,6 +35,7 @@ import {
 import CustomTable from "@/components/containers/tables/Table";
 import {
   useWorkspaceAPIKey,
+  useWorkspaceInit,
   useWorkspaceTerminals,
 } from "@/hooks/useQueryHooks";
 import {
@@ -61,6 +62,7 @@ import {
 import TerminalsTable from "@/components/containers/tables/terminal-tables";
 import TerminalConfigViewModal from "./TerminalConfigView";
 import { AnimatePresence, motion } from "framer-motion";
+import Loader from "@/components/ui/loader";
 
 const APIIntegration = ({ workspaceID }) => {
   const queryClient = useQueryClient();
@@ -71,11 +73,19 @@ const APIIntegration = ({ workspaceID }) => {
     onClose: onCloseTerminal,
   } = useDisclosure();
 
+  const { data, isLoading: isLoadingConfig } = useWorkspaceAPIKey(workspaceID);
+  const { data: terminalData, isLoading: isLoadingTerminals } =
+    useWorkspaceTerminals(workspaceID);
+  const { data: workspaceResponse, isLoading: initLoading } =
+    useWorkspaceInit(workspaceID);
+  const permissions = workspaceResponse?.data;
+
   const [copiedKey, setCopiedKey] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
   const [openViewConfig, setOpenViewConfig] = useState(false);
   const [currentActionIndex, setCurrentActionIndex] = useState(null);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const handleClosePrompt = () => {
     onClose();
@@ -88,15 +98,8 @@ const APIIntegration = ({ workspaceID }) => {
   const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
   const end_date = formatDate(new Date(), "YYYY-MM-DD");
 
-  const { data, isLoading: isLoadingConfig } = useWorkspaceAPIKey(workspaceID);
-  const { data: terminalData, isLoading: isLoadingTerminals } =
-    useWorkspaceTerminals(workspaceID);
-
-  const [isExpanded, setIsExpanded] = useState(true);
-
   const configData = data?.data;
   const terminals = terminalData?.data?.terminals || []; //
-
   const hasTerminals = Boolean(configData?.hasTerminals);
   const terminalsConfigured = Boolean(terminals.length > 0);
 
@@ -115,6 +118,13 @@ const APIIntegration = ({ workspaceID }) => {
 
   async function handleGenerateAPIKey() {
     setIsLoading(true);
+
+    if (!permissions?.update || !permissions?.delete) {
+      notify("error", "Only admins are allowed to generate API keys!");
+      setIsLoading(false);
+      handleClosePrompt();
+      return;
+    }
 
     // THERE CAN ONLY BE ONE API KEY
     if (configData?.apiKey) {
@@ -143,8 +153,16 @@ const APIIntegration = ({ workspaceID }) => {
 
     return;
   }
+
   async function handleRefreshAPIKey() {
     setIsLoading(true);
+
+    if (!permissions?.update || !permissions?.delete) {
+      notify("error", "Only admins are allowed to refresh API keys!");
+      setIsLoading(false);
+      handleClosePrompt();
+      return;
+    }
 
     if (!configData?.apiKey) {
       notify("error", "You have no API key!");
@@ -173,6 +191,13 @@ const APIIntegration = ({ workspaceID }) => {
   async function handleTerminalActivation() {
     setIsLoading(true);
 
+    if (!permissions?.update || !permissions?.delete) {
+      notify("error", "Only admins are allowed to activate terminals!");
+      setIsLoading(false);
+      handleClosePrompt();
+      return;
+    }
+
     if (configData?.terminals || hasTerminals) {
       notify("error", "Terminals already activated for this workspace!");
       setIsLoading(false);
@@ -199,6 +224,13 @@ const APIIntegration = ({ workspaceID }) => {
 
   async function handleTerminalDeactivation() {
     setIsLoading(true);
+
+    if (!permissions?.update || !permissions?.delete) {
+      notify("error", "Only admins are allowed to deactivate terminals!");
+      setIsLoading(false);
+      handleClosePrompt();
+      return;
+    }
 
     const response = await deactivateWorkspaceTerminals(workspaceID);
 
@@ -485,6 +517,8 @@ const APIIntegration = ({ workspaceID }) => {
                   <Button
                     endContent={<WrenchScrewdriverIcon className="h-5 w-5" />}
                     color="primary"
+                    isLoading={initLoading}
+                    loadingText={"Please wait..."}
                   >
                     Manage
                   </Button>
@@ -493,13 +527,15 @@ const APIIntegration = ({ workspaceID }) => {
                   aria-label="Action event example"
                   onAction={(key) => handleManageTerminals(key)}
                 >
-                  <DropdownItem
-                    key="add-terminal"
-                    startContent={<PlusIcon className={cn(iconClasses)} />}
-                    description="Add new terminals to workspace"
-                  >
-                    Add New Terminal
-                  </DropdownItem>
+                  {hasTerminals && (
+                    <DropdownItem
+                      key="add-terminal"
+                      startContent={<PlusIcon className={cn(iconClasses)} />}
+                      description="Add new terminals to workspace"
+                    >
+                      Add New Terminal
+                    </DropdownItem>
+                  )}
 
                   {/* <DropdownItem
                     key="workspace-settings"
@@ -596,38 +632,48 @@ const APIIntegration = ({ workspaceID }) => {
                 />
               ) : (
                 <div className="-mt-4 flex h-full min-h-32 flex-1 items-center justify-center rounded-2xl bg-primary-50 text-sm font-medium dark:bg-foreground/5">
-                  <Tooltip
-                    content="Terminals are like a POS/Till machines that can be used to collect payments from your customers."
-                    classNames={{
-                      content: "max-w-96 text-sm leading-6 p-3",
-                    }}
-                  >
-                    <Button
-                      variant="light"
-                      isDisabled={isLoadingConfig || mutation?.isPending}
-                      isLoading={isLoadingConfig || mutation?.isPending}
-                      loadingText={"Getting Configuration..."}
-                      onClick={
-                        !terminalsConfigured
-                          ? onAddTerminal
-                          : handleTerminalStatus
-                      }
-                      className={
-                        "flex-grow min-h-auto max-h-auto min-h-32 w-full flex-1 font-medium text-primary-600"
-                      }
-                      startContent={
-                        !terminalsConfigured ? (
-                          <ComputerDesktopIcon className={cn(iconClasses)} />
-                        ) : (
-                          <PlusIcon className={cn(iconClasses)} />
-                        )
-                      }
+                  {initLoading || isLoadingTerminals || isLoadingConfig ? (
+                    <Loader
+                      size={60}
+                      loadingText={"Getting configuration..."}
+                      classNames={{
+                        wrapper: "bg-foreground-200/50 rounded-xl h-full",
+                      }}
+                    />
+                  ) : (
+                    <Tooltip
+                      content="Terminals are like a POS/Till machines that can be used to collect payments from your customers."
+                      classNames={{
+                        content: "max-w-96 text-sm leading-6 p-3",
+                      }}
                     >
-                      {!terminalsConfigured
-                        ? "Add Terminals"
-                        : "Activate Terminals"}
-                    </Button>
-                  </Tooltip>
+                      <Button
+                        variant="light"
+                        isDisabled={isLoadingConfig || mutation?.isPending}
+                        isLoading={isLoadingConfig || mutation?.isPending}
+                        loadingText={"Getting Configuration..."}
+                        onClick={
+                          terminalsConfigured && hasTerminals
+                            ? onAddTerminal
+                            : handleTerminalStatus
+                        }
+                        className={
+                          "flex-grow min-h-auto max-h-auto min-h-32 w-full flex-1 font-medium text-primary-600"
+                        }
+                        startContent={
+                          terminalsConfigured && hasTerminals ? (
+                            <PlusIcon className={cn(iconClasses)} />
+                          ) : (
+                            <ComputerDesktopIcon className={cn(iconClasses)} />
+                          )
+                        }
+                      >
+                        {terminalsConfigured && hasTerminals
+                          ? "Add Terminals"
+                          : "Activate Terminals"}
+                      </Button>
+                    </Tooltip>
+                  )}
                 </div>
               )}
             </motion.div>

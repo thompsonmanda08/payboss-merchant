@@ -67,8 +67,6 @@ export async function updateAuthSession(fields) {
       ...fields,
     });
 
-    
-
     if (session) {
       (await cookies()).set(AUTH_SESSION, session, {
         httpOnly: true,
@@ -213,6 +211,6 @@ export async function deleteSession() {
   (await cookies()).delete(USER_SESSION);
 
   if (typeof window !== "undefined") {
-    localStorage.removeItem("pb-config-store");
+    localStorage.clear();
   }
 }

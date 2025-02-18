@@ -18,29 +18,28 @@ export async function getDashboardAnalytics(workspaceID) {
       url: `analytics/merchant/dashboard/workspace/${workspaceID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
-      data: null,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };

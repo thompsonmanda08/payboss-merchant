@@ -19,27 +19,30 @@ export async function getAccountConfigOptions() {
       },
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res?.data,
-        status: res.status,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || res?.message,
-      data: null,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation failed!",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -77,14 +80,25 @@ export async function getUserSetupConfigs() {
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation failed!",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -98,28 +112,30 @@ export async function getUserAccountRoles() {
       url: `merchant/roles`,
     });
 
-    if (res.status !== 200) {
-      const response = res?.data || res;
-      return {
-        success: false,
-        message: response?.error || response?.message,
-        data: null,
-        status: res.status,
-      };
-    }
-
     return {
       success: true,
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation failed!",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -132,28 +148,30 @@ export async function getWorkspaceRoles() {
       url: `merchant/workspace/roles`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
-
-    const response = res?.data || res;
     return {
-      success: false,
-      message: response?.error || response?.message,
-      data: null,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation failed!",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -168,28 +186,30 @@ export async function createUserRole() {
       roleDetails //BODY
     );
 
-    if (res.status !== 201) {
-      const response = res?.data || res;
-      return {
-        success: false,
-        message: response?.error || response?.message,
-        data: null,
-        status: res.status,
-      };
-    }
-
     return {
       success: true,
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -204,28 +224,30 @@ export async function updateUserRole() {
       role // BODY
     );
 
-    if (res.status !== 200) {
-      const response = res?.data || res;
-      return {
-        success: false,
-        message: response?.error || response?.message,
-        data: null,
-        status: res.status,
-      };
-    }
-
     return {
       success: true,
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -243,29 +265,30 @@ export async function changeWorkspaceVisibility(workspaceID, isVisible) {
       },
     });
 
-    if (res.status === 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
-
-    const response = res?.data || res;
-
     return {
-      success: false,
-      message: response?.error || response?.message,
-      data: null,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -281,31 +304,30 @@ export async function createNewWorkspace(newWorkspace) {
       data: { ...newWorkspace, merchantID },
     });
 
-    if (res.status == 201 || res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
-
-    const response = res?.data || res;
-
-    // revalidatePath("/workspaces", "page");
-
     return {
-      success: false,
-      message: response?.error || response?.message,
-      data: null,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Oops! Something went wrong!",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -323,31 +345,33 @@ export async function updateWorkspace({ workspace, description, ID }) {
       data: updatedWorkspace,
     });
 
-    if (res.status == 201 || res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
-
-    const response = res?.data || res;
     revalidatePath("/manage-account/workspaces/[ID]", "page");
     revalidatePath("/dashboard/[workspaceID]/workspace-settings", "page");
 
     return {
-      success: false,
-      message: response?.error || response?.message,
-      data: null,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Oops! Something went wrong!",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -366,13 +390,25 @@ export async function deleteWorkspace(workspaceID) {
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Oops! Something went wrong!",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -385,29 +421,30 @@ export async function getAllWorkspaces() {
       url: `merchant/workspaces/${merchantID}`, //URL
     });
 
-    if (res.status === 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
-
-    const response = res?.data || res;
-
     return {
-      success: false,
-      message: response?.error || response?.message,
-      data: null,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Oops! Error Occurred!",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -420,29 +457,30 @@ export async function getAllKYCData() {
       url: `merchant/${merchantID}`, //URL
     });
 
-    if (res.status === 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-      };
-    }
-
-    const response = res?.data || res;
-
     return {
-      success: false,
-      message: response?.error || response?.message,
-      data: null,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Oops! Error Occurred!",
-      data: null,
-      status: error?.response?.status || error.status,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }

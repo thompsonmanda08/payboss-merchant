@@ -1,11 +1,9 @@
-import { apiClient } from '@/lib/utils'
-import axios from 'axios'
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 const INITIAL_STATE = {
   openMobileMenu: false,
-}
+};
 
 const useNavigationStore = create(
   persist(
@@ -25,9 +23,9 @@ const useNavigationStore = create(
         }),
     }),
     {
-      name: 'navigation',
-    },
-  ),
-)
+      name: "navigation",
+    }
+  )
+);
 
-export default useNavigationStore
+export default useNavigationStore;

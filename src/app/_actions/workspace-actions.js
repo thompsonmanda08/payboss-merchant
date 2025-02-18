@@ -195,8 +195,9 @@ export async function getWalletPrefunds(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -262,8 +263,9 @@ export async function approveWalletPrefund(
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -422,8 +424,9 @@ export async function changeUserRoleInWorkspace(
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -532,8 +535,9 @@ export async function refreshWorkspaceAPIKey(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -588,8 +592,9 @@ export async function getWorkspaceAPIKey(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -701,8 +706,9 @@ export async function getWorkspaceTillNumber(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -757,8 +763,9 @@ export async function activateWorkspaceTerminals(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -813,8 +820,9 @@ export async function deactivateWorkspaceTerminals(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -869,8 +877,9 @@ export async function getAllWorkspaceTerminals(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -928,8 +937,9 @@ export async function registerTerminals(workspaceID, terminalUrl) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -989,7 +999,7 @@ export async function updateWorkspaceCallback(workspaceID, callbackData) {
         error?.response?.data?.error ||
         error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -1031,8 +1041,9 @@ export async function getWorkspaceCallback(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
