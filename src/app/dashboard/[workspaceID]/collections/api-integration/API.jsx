@@ -279,6 +279,12 @@ const APIIntegration = ({ workspaceID }) => {
   }
 
   function handleManageTerminals(selectedKey) {
+    if (!permissions?.update || !permissions?.delete) {
+      notify("error", "NOT ALLOWED!");
+      handleClosePrompt();
+      return;
+    }
+
     if (selectedKey == "add-terminal") {
       onAddTerminal();
       return;
