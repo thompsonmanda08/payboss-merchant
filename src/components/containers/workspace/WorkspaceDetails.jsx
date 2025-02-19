@@ -216,7 +216,6 @@ function WorkspaceDetails({
     callbackURL.method == callbackResponse?.data?.method &&
     callbackURL.url == callbackResponse?.data?.url;
 
-  console.log("callbackURL", callbackURL, callbackResponse);
 
   return (
     <>

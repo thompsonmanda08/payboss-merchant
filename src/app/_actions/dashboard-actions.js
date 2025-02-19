@@ -25,6 +25,7 @@ export async function getDashboardAnalytics(workspaceID) {
       status: res.status,
       statusText: res.statusText,
     };
+    
   } catch (error) {
     console.error({
       status: error?.response?.status,

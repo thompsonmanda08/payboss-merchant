@@ -80,7 +80,7 @@ const APIIntegration = ({ workspaceID }) => {
     useWorkspaceInit(workspaceID);
   const permissions = workspaceResponse?.data;
 
-  const [copiedKey, setCopiedKey] = useState(null);
+  const [copiedKey, setCopiedKey] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
   const [openViewConfig, setOpenViewConfig] = useState(false);
@@ -110,11 +110,17 @@ const APIIntegration = ({ workspaceID }) => {
       getAPICollectionLatestTransactions(workspaceID, dateRange),
   });
 
-  const copyToClipboard = (key) => {
-    navigator.clipboard.writeText(key);
-    setCopiedKey(key);
-    notify("success", "Copied to clipboard");
-  };
+  function copyToClipboard(key) {
+    console.log("COPY THIS: ", key);
+
+    try {
+      navigator?.clipboard?.writeText(key);
+      setCopiedKey(key);
+      notify("success", "Copied to clipboard");
+    } catch (error) {
+      console.error("FAILED", error);
+    }
+  }
 
   async function handleGenerateAPIKey() {
     setIsLoading(true);
