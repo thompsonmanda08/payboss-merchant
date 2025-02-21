@@ -36,7 +36,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
   const [newWorkspace, setNewWorkspace] = useState({
     workspace: "",
     description: "",
-    workspaceType: "collection",
+    workspaceType: "",
   });
 
   function editWorkspaceField(fields) {
@@ -86,14 +86,14 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
 
   return (
     <>
-      <Card className={cn("gap-6", className)}>
+      <Card className={cn("gap-6 min-h-[450px]", className)}>
         {showHeader && (
           <div className="flex justify-between gap-8">
             <div>
               <h2 className="heading-3 !font-bold tracking-tight text-foreground">
                 Choose a Workspace
               </h2>
-              <p className=" text-sm text-slate-600 max-w-4xl">
+              <p className="max-w-4xl text-sm text-slate-600">
                 Access your account through a workspace for the convenience of
                 having all your tools and resources organized in one place.
               </p>
@@ -103,7 +103,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                 onPress={onOpen}
                 size="lg"
                 isDisabled={loading}
-                endContent={<PlusIcon className=" h-5 w-5" />}
+                endContent={<PlusIcon className="h-5 w-5" />}
                 variant="flat"
                 color="primary"
                 className={
@@ -164,7 +164,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                     );
                   })
                 ) : (
-                  <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
+                  <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg text-sm font-semibold text-slate-600">
                     <EmptyLogs
                       className={"my-auto"}
                       title={"Oops! Looks like you have no workspaces yet!"}
@@ -183,7 +183,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                       { "col-span-full": workspaces?.length < 0 }
                     )}
                   >
-                    <PlusIcon className=" h-6 w-6" />
+                    <PlusIcon className="h-6 w-6" />
                     Create Workspace
                   </Button>
                 )}

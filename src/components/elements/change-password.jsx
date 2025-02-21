@@ -40,7 +40,7 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
       return;
     }
 
-    if (PASSWORD_PATTERN.match(passwordFields.newPassword)) {
+    if (PASSWORD_PATTERN.test(passwordFields.newPassword)) {
       setError({
         status: true,
         message: "Passwords should match the policy on the left",

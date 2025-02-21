@@ -6,20 +6,21 @@ import { getAuthSession, getUserDetails } from "../_actions/config-actions";
 import LoadingPage from "../loading";
 import { redirect } from "next/navigation";
 import WorkspacesList from "@/components/containers/workspace/WorkspacesList";
+import { cn } from "@/lib/utils";
 
 async function WorkSpacesPage() {
   const session = await getUserDetails();
   const { user } = session || {};
-  const isLoggedin = await getAuthSession();
+  const authSession = await getAuthSession();
 
-  if (!isLoggedin?.accessToken) redirect("/login");
+  if (!authSession?.accessToken) redirect("/login");
 
   return (
     <Suspense fallback={<LoadingPage />}>
       <main className="flex h-full min-h-screen items-start justify-start overflow-x-clip bg-background text-foreground">
         <div className="flex h-full max-h-screen w-full flex-col">
           <section role="workspace-header">
-            <div className="relative h-[380px] w-full overflow-clip rounded-b-3xl bg-gray-900">
+            <div className="relative h-[280px] w-full overflow-clip rounded-b-3xl bg-gray-900">
               <WorkspaceHeader user={user} />
               <Image
                 className="z-0 h-full w-full object-cover"
@@ -35,7 +36,9 @@ async function WorkSpacesPage() {
 
           <section
             role="workspaces-list"
-            className="z-20 mx-auto -mt-40 mb-20 w-full max-w-[1440px] px-5 md:px-10"
+            className={cn(
+              "z-20 mx-auto mb-20 mt-[-160px] w-full max-w-[1540px] px-4 md:px-6"
+            )}
           >
             <WorkspacesList user={user} showHeader />
           </section>

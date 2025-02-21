@@ -36,7 +36,7 @@ export default function Step2({ updateDetails, backToStart }) {
           >
             <Input
               label="Account Holder Name"
-              plaaceholder="Enter your account holder name"
+              placeholder="Enter your account holder name"
               name="account_name"
               value={step?.account_name}
               required={true}
@@ -52,7 +52,7 @@ export default function Step2({ updateDetails, backToStart }) {
             <Input
               label="Account Number"
               name="account_number"
-              plaaceholder="Enter your account number"
+              placeholder="Enter your account number"
               value={step?.account_number}
               required={true}
               onChange={(e) => {
@@ -79,7 +79,7 @@ export default function Step2({ updateDetails, backToStart }) {
           </motion.div>
         </div>
 
-        <div className="flex w-full flex-1 flex-col gap-2 ">
+        <div className="flex w-full flex-1 flex-col gap-2">
           <motion.div
             className="w-full"
             variants={staggerContainerItemVariants}
@@ -87,7 +87,7 @@ export default function Step2({ updateDetails, backToStart }) {
             <Input
               label="Branch Name"
               name="branch_name"
-              plaaceholder="Enter the branch name"
+              placeholder="Enter the branch name"
               value={step?.branch_name}
               required={true}
               onChange={(e) => {
@@ -102,7 +102,7 @@ export default function Step2({ updateDetails, backToStart }) {
             <Input
               label="Branch Code"
               name="branch_code"
-              plaaceholder="Enter branch code"
+              placeholder="Enter branch code"
               value={step?.branch_code}
               onError={branchCodeError}
               errorText={"Valid Code is required"}

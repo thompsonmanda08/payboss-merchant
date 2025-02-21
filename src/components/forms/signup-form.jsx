@@ -240,11 +240,11 @@ export default function SignUpForm() {
   // FOR REGISTRATION
 
   return (
-    <Card className="mx-auto w-full max-w-sm flex-auto p-6 sm:max-w-[790px]">
-      <div className="flex flex-col ">
+    <Card className="mx-auto w-full flex-auto p-6 sm:max-w-[790px]">
+      <div className="flex flex-col">
         <form
           onSubmit={handleCreateAccount}
-          className="mx-auto flex w-full flex-col items-center justify-center gap-4 "
+          className="mx-auto flex w-full flex-col items-center justify-center gap-4"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -291,7 +291,7 @@ export default function SignUpForm() {
                   !isValidTPIN &&
                   currentTabIndex === 1)
               }
-              className="w-full max-w-xs sm:w-auto"
+              className="w-full"
             >
               {isFirstStep
                 ? "Get Started"

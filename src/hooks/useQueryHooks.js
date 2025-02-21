@@ -47,6 +47,7 @@ import {
   WORKSPACE_TILL_NUMBER_QUERY_KEY,
   WORKSPACE_TERMINALS_QUERY_KEY,
   WORKSPACE_CALLBACK,
+  WORKSPACE_TYPES,
 } from "@/lib/constants";
 
 export const useGeneralConfigOptions = () =>
@@ -207,5 +208,11 @@ export const useWorkspaceCallbackURL = (workspaceID) =>
   useQuery({
     queryKey: [WORKSPACE_CALLBACK, workspaceID],
     queryFn: async () => await getWorkspaceCallback(workspaceID),
+    staleTime: Infinity,
+  });
+export const useWorkspaceTypes = () =>
+  useQuery({
+    queryKey: [WORKSPACE_TYPES],
+    queryFn: async () => await getWorkspaceCallback(),
     staleTime: Infinity,
   });

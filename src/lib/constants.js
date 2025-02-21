@@ -88,6 +88,7 @@ export const WORKSPACE_TILL_NUMBER_QUERY_KEY = "workspace-till-number";
 export const WALLET_STATEMENT_REPORTS_QUERY_KEY = "wallet-statement-report";
 export const WORKSPACE_TERMINALS_QUERY_KEY = "workspace-terminals";
 export const WORKSPACE_CALLBACK = "workspace-callback";
+// export const WORKSPACE_TYPES = "workspace-types";
 
 // ANIMATION_VARIANTS
 export const containerVariants = {
