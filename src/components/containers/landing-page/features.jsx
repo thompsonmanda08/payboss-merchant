@@ -20,8 +20,11 @@ import {
   containerVariants,
 } from "@/lib/constants";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-import { Container } from "@/components/base/Container";
-import Tabs from "@/components/elements/tabs";
+import { Tab, Tabs } from "@heroui/react";
+import {
+  ArrowLeftEndOnRectangleIcon,
+  ArrowLeftStartOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 
 const collections = [
   [
@@ -142,7 +145,7 @@ const spending = [
         "Issue virtual or physical expense cards for your team. Control and track business spending with ease.",
       Icon: {
         name: "Expense Cards",
-        role: "Control Business Spending",
+        role: "Control Business PayoutFeatures",
         element: CreditCardIcon,
       },
     },
@@ -150,14 +153,27 @@ const spending = [
 ];
 
 const TABS = [
-  { name: "GET PAID / REVENUE", index: 0 },
-  { name: "MAKE PAYMENT", index: 1 },
+  {
+    name: "GET PAID / REVENUE",
+    title: "Boost Your Collection Features",
+    description:
+      "Streamline your collections, save time, and grow your business with confidence.",
+    index: 0,
+    Icon: ArrowLeftEndOnRectangleIcon,
+  },
+  {
+    name: "MAKE PAYMENT",
+    title: "Streamline Your Payout Features",
+    description: "Easily make bulk disbursements to your customers.",
+    index: 1,
+    Icon: ArrowLeftStartOnRectangleIcon,
+  },
 ];
 
 export function Features() {
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
-    <Collections key="collections" />,
-    <Spending key="spending" />,
+    <CollectionFeatures key="collections" />,
+    <PayoutFeatures key="spending" />,
   ]);
 
   return (
@@ -166,39 +182,46 @@ export function Features() {
       aria-label="Features payBoss is offering"
       className="bg-background py-20 sm:py-32"
     >
-      <Container>
+      <div className="container flex flex-col justify-center">
         <Tabs
-          className={"mx-auto max-w-max"}
-          classNames={{
-            nav: "items-center justify-center",
-          }}
-          tabs={TABS}
-          navigateTo={navigateTo}
-          currentTab={currentTabIndex}
-        />
-        <div className="mx-auto mt-10 max-w-2xl md:text-center">
-          {TABS[currentTabIndex]?.name === TABS[0]?.name && (
-            <h2 className="font-display text-[clamp(1.5rem,1rem+3vw,3rem)] font-bold text-foreground/90 ">
-              Boost Your Collections
-            </h2>
+          aria-label="Options"
+          size="lg"
+          radius="sm"
+          color="primary"
+          variant="bordered"
+          selectedKey={String(currentTabIndex)}
+          onSelectionChange={navigateTo}
+          items={TABS}
+          className="max-w-max mx-auto"
+        >
+          {(item) => (
+            <Tab
+              key={String(item.index)}
+              title={
+                <div className="flex items-center space-x-2">
+                  <item.Icon className="w-6 h-6 aspect-square" />
+                  <span>{item?.name}</span>
+                </div>
+              }
+            >
+            </Tab>
           )}
-          {TABS[currentTabIndex]?.name === TABS[1]?.name && (
-            <h2 className="font-display text-[clamp(1.5rem,1rem+3vw,3rem)] font-bold text-foreground/90">
-              Streamline Your Spending
-            </h2>
-          )}
+        </Tabs>
+        <div className="mx-auto mt-6 md:text-center">
+          <h2 className="font-display text-[clamp(1.5rem,1rem+3vw,3rem)] font-bold text-foreground/90 text-nowrap">
+            {TABS[currentTabIndex]?.title}
+          </h2>
           <p className="mt-4 text-sm md:text-base text-foreground/70">
-            Streamline your processes, save time, and grow your business with
-            confidence.
+            {TABS[currentTabIndex]?.description}
           </p>
         </div>
         <AnimatePresence mode="wait">{activeTab}</AnimatePresence>
-      </Container>
+      </div>
     </section>
   );
 }
 
-function Collections() {
+function CollectionFeatures() {
   return (
     <motion.ul
       role="list"
@@ -246,7 +269,7 @@ function Collections() {
   );
 }
 
-function Spending() {
+function PayoutFeatures() {
   return (
     <motion.ul
       role="list"

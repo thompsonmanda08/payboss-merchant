@@ -2,7 +2,6 @@ import { getAuthSession } from "./_actions/config-actions";
 import LoadingPage from "./loading";
 import { Suspense } from "react";
 import { Header } from "@/components/containers/landing-page/header";
-import { Hero } from "@/components/containers/landing-page/hero";
 import { PrimaryFeatures } from "@/components/containers/landing-page/primary-features";
 import { Features } from "@/components/containers/landing-page/features";
 import { CallToAction } from "@/components/containers/landing-page/call-to-action";
