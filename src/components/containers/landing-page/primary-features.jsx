@@ -64,12 +64,11 @@ export function PrimaryFeatures() {
       className="relative overflow-hidden bg-primary w-screen pb-28 pt-20 sm:py-32 "
     >
       <Image
-        className="absolute left-1/2 top-1/2 max-w-none object-cover translate-x-[-44%] translate-y-[-42%]"
+        className="absolute left-0 right-0 top-0"
         src={"/images/background-features.jpg"}
         alt="bg-features-image"
-        width={1920}
+        width={2220}
         height={1080}
-        unoptimized
         loading="lazy"
       />
       <div className="relative container w-full gap-8 flex flex-col">
@@ -92,15 +91,16 @@ export function PrimaryFeatures() {
             variant="bordered"
             selectedKey={selectedIndex}
             onSelectionChange={setSelectedIndex}
-            className="max-w-full overflow-auto md:max-w-lg lg:max-w-2xl"
+            className="max-w-full w-full overflow-auto md:max-w-[460px]"
             classNames={{
-              wrapper: "h-full max-h-full flex-1",
+              wrapper: "h-full max-h-full flex-1 w-full",
               // base: "bg-red-300 p-3 h-full max-h-full border-red-500",
 
               cursor: "",
-              tab: "h-full text-left px-0",
+              tab: "h-full w-full text-left px-0",
               tabContent: "text-white/80 w-full",
               tabList: "border-slate-100/10 max-h-full w-full",
+              panel: "",
             }}
           >
             {(feature) => (
@@ -127,31 +127,31 @@ export function PrimaryFeatures() {
                 }
               >
                 {/* IMAGES ON THE RIGHT SIDE */}
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={selectedIndex}
-                    animate={{
-                      opacity: [0, 1],
-                      scaleX: [0.8, 1],
-                      transition: {
-                        type: "spring",
-                        stiffness: 300,
-                        ease: "easeInOut",
-                        duration: 0.5,
-                      },
-                    }}
-                    transition={{
-                      duration: 0.8,
-                    }}
-                    className="flex-1 h-full w-full max-w-6xl items-center justify-center"
-                  >
-                    <NextImage
-                      className="w-full h-full object-fill "
-                      src={feature.image}
-                      alt="feature image"
-                    />
-                  </motion.div>
-                </AnimatePresence>
+                <motion.div
+                  key={selectedIndex}
+                  animate={{
+                    opacity: [0, 1],
+                    scaleX: [0.9, 1],
+                    transition: {
+                      type: "spring",
+                      stiffness: 300,
+                      ease: "easeInOut",
+                      duration: 0.5,
+                    },
+                  }}
+                  transition={{
+                    duration: 0.8,
+                  }}
+                  className="flex-1 w-full h-full max-w-6xl items-center justify-center"
+                >
+                  <NextImage
+                    className="h-full w-full object-fill"
+                    src={feature.image}
+                    width={1280}
+                    height={470}
+                    alt="feature image"
+                  />
+                </motion.div>
               </Tab>
             )}
           </Tabs>

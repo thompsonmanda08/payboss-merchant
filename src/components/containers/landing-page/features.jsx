@@ -154,7 +154,7 @@ const spending = [
 
 const TABS = [
   {
-    name: "GET PAID / REVENUE",
+    name: "COLLECTIONS",
     title: "Boost Your Collection Features",
     description:
       "Streamline your collections, save time, and grow your business with confidence.",
@@ -162,7 +162,7 @@ const TABS = [
     Icon: ArrowLeftEndOnRectangleIcon,
   },
   {
-    name: "MAKE PAYMENT",
+    name: "DISBURSEMENTS",
     title: "Streamline Your Payout Features",
     description: "Easily make bulk disbursements to your customers.",
     index: 1,
@@ -203,8 +203,7 @@ export function Features() {
                   <span>{item?.name}</span>
                 </div>
               }
-            >
-            </Tab>
+            ></Tab>
           )}
         </Tabs>
         <div className="mx-auto mt-6 md:text-center">

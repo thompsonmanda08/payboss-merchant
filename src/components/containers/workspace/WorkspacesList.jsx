@@ -8,7 +8,7 @@ import { createNewWorkspace } from "@/app/_actions/config-actions";
 import { useQueryClient } from "@tanstack/react-query";
 import { SETUP_QUERY_KEY, WORKSPACES_QUERY_KEY } from "@/lib/constants";
 import { usePathname } from "next/navigation";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 import useWorkspace from "@/hooks/useWorkspaces";
 import WorkspaceItem from "./WorkspaceItem";
 import OverlayLoader from "@/components/ui/overlay-loader";
@@ -126,9 +126,10 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
         )}
 
         <div className="flex w-full flex-col items-center justify-center">
-          <ScrollArea
+          {/* SCROLL-AREA */}
+          <div
             className={cn(
-              "max-h-[500px]} flex w-full min-w-[400px] flex-col lg:px-2",
+              "max-h-[600px] overflow-y-auto no-scrollbar flex w-full min-w-[400px]  flex-col lg:px-2",
               { "max-h-auto lg:max-h-max ": isManagePage }
             )}
           >
@@ -189,7 +190,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                 )}
               </div>
             )}
-          </ScrollArea>
+          </div>
         </div>
       </Card>
 

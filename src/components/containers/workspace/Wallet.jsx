@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   capitalize,
   cn,
@@ -41,7 +40,6 @@ import { useState } from "react";
 import { PaperClipIcon } from "@heroicons/react/24/outline";
 import Modal from "@/components/base/custom-modal";
 import useWalletStore from "@/context/wallet-store";
-import useNavigation from "@/hooks/useNavigation";
 
 function Wallet({
   workspaceID,
@@ -55,7 +53,6 @@ function Wallet({
     setOpenAttachmentModal,
     openAttachmentModal,
     setSelectedPrefund,
-    selectedPrefund,
     isLoading,
     setIsLoading,
     walletLoading,
@@ -327,11 +324,11 @@ function Wallet({
               </div>
             )}
           {!hideHistory && (
-            <ScrollArea className="flex h-full max-h-[600px] flex-[2] flex-grow flex-col items-start gap-8">
+            <div className="flex h-full max-h-[600px] overflow-y-auto no-scrollbar flex-[2] flex-grow flex-col items-start gap-8">
               <CardHeader
                 title="Wallet Transaction History"
                 infoText={
-                  "Transaction history logs for every prefunding activity on the wallet"
+                  "Transaction history logs for every activity on the wallet"
                 }
               />
               <WalletTransactionHistory
@@ -340,7 +337,7 @@ function Wallet({
                 openAttachmentModal={openAttachmentModal}
                 setSelectedPrefund={setSelectedPrefund}
               />
-            </ScrollArea>
+            </div>
           )}
         </Card>
 
@@ -506,7 +503,7 @@ export function WalletTransactionHistory({
     <>
       <div
         className={cn(
-          "my-auto flex min-h-96 flex-col py-4",
+          "my-auto flex min-h-96 flex-col py-4 w-full",
           {
             "my-0": formattedActivityData?.length > 0,
           },

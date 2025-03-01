@@ -14,19 +14,22 @@ import {
   DocumentChartBarIcon,
   CalculatorIcon,
   WrenchScrewdriverIcon,
-  ArrowDownOnSquareStackIcon,
-  ArrowUpOnSquareStackIcon,
   WalletIcon,
   ReceiptPercentIcon,
-  ArrowTopRightOnSquareIcon,
   ArrowLeftEndOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
+  BriefcaseIcon,
+  ChevronRightIcon,
 } from "@heroicons/react/24/outline";
+
+import DropdownButton from "@/components/ui/dropdown-button";
+import Spinner from "@/components/ui/Spinner";
+import SoftBoxIcon from "@/components/base/SoftBoxIcon";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import SideNavItems from "./side-nav-items";
 import { Skeleton } from "../ui/skeleton";
-import WorkspaceSelection from "../containers/workspace/WorkspaceOptions";
+
 import useNavigation from "@/hooks/useNavigation";
 import Logo from "../base/Logo";
 import { WORKSPACE_TYPES } from "@/lib/constants";
@@ -248,6 +251,67 @@ function SideNavBar({ workspaceSession }) {
     },
   ];
 
+  // *************** WORKSPACES DROPDOWN ***************** //
+  const WORKSPACES_OPTIONS = [
+    {
+      key: "home",
+      name: "Home",
+      href: "/workspaces",
+      shortcut: "⌘H",
+      description: "Go back Home",
+      Icon: HomeIcon,
+    },
+
+    {
+      key: "workspaces",
+      name: "Workspaces",
+      // shortcut: '>',
+      description: "Change your workspace",
+      Icon: BriefcaseIcon,
+      subMenuItems: workspaces.map((item) => {
+        return {
+          key: item.ID,
+          label: item.workspace,
+          description: item?.description,
+          // href: `/dashboard/${item?.ID}`,
+          onSelect: () => {
+            // setActiveWorkspace(item)
+            // push(`/dashboard/${item?.ID}`)
+            // refresh()
+            window.location.href = `/dashboard/${item?.ID}`;
+          },
+          Icon: BriefcaseIcon,
+        };
+      }),
+    },
+    {
+      key: "settings",
+      name: "Workspace Settings",
+      href: dashboardRoute + "/workspace-settings",
+      shortcut: "⌘S",
+      description: "Workspace preferences",
+      Icon: WrenchScrewdriverIcon,
+    },
+    // {
+    //   key: 'users',
+    //   name: 'Manage Members',
+    //   href: '/dashboard/settings/users',
+    //   shortcut: '⌘M',
+    //   description: 'Manage workspace members',
+    //   Icon: UserGroupIcon,
+    //   showDivider: true,
+    // },
+
+    // {
+    //   key: 'new',
+    //   name: 'New Workspace',
+    //   onClick: '/workspaces/new',
+    //   shortcut: '⌘N',
+    //   description: 'Create a new workspaces',
+    //   Icon: PlusIcon,
+    // },
+  ];
+
   function handleExpand(index) {
     setExpandedSection(expandedSection === index ? null : index);
   }
@@ -310,11 +374,31 @@ function SideNavBar({ workspaceSession }) {
         >
           <Logo href={dashboardRoute} />
           <div className="relative py-2">
-            <WorkspaceSelection
-              dashboardRoute={dashboardRoute}
-              activeWorkspace={activeWorkspace}
-              workspaces={workspaces}
-            />
+            <DropdownButton
+              dropDownItems={WORKSPACES_OPTIONS}
+              backdropBlur={true}
+            >
+              <SoftBoxIcon className={"aspect-square h-9 w-10 p-2"}>
+                <BriefcaseIcon />
+              </SoftBoxIcon>
+              <div className="flex w-full items-center justify-between text-primary">
+                <div className="flex flex-col items-start justify-start gap-0">
+                  <div className="text-base font-semibold uppercase">
+                    {!activeWorkspace || !activeWorkspace?.workspace ? (
+                      <div className="flex gap-2 text-sm font-bold capitalize">
+                        <Spinner size={18} /> Loading workspace...
+                      </div>
+                    ) : (
+                      activeWorkspace?.workspace
+                    )}
+                  </div>
+                  <span className="-mt-1 text-xs font-medium capitalize tracking-wide text-foreground-600">
+                    {`${activeWorkspace?.workspaceType}'s Workspace`}
+                  </span>
+                </div>
+                <ChevronRightIcon className={cn("h-4 w-4 ease-in-out")} />
+              </div>
+            </DropdownButton>
           </div>
           <SideNavItems
             navBarItems={SIDE_BAR_OPTIONS}

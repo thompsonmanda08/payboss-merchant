@@ -27,7 +27,7 @@ export default function WorkspaceMembers({
     <div>
       <CardHeader
         className={"mb-4"}
-        title={"Workspace Memebers"}
+        title={"Workspace Members"}
         infoText={
           "User who are part of the workspace, can be given roles to perform actions"
         }
