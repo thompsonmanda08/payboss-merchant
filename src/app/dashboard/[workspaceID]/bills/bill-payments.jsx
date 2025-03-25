@@ -75,14 +75,22 @@ const BillPayments = ({ workspaceID }) => {
   const copyToClipboard = (key) => {
     navigator.clipboard.writeText(key);
     setCopiedKey(key);
-    notify("success", "Copied to clipboard");
+    notify({
+      color: "success",
+      title: "Success",
+      description: "Copied to clipboard",
+    });
   };
 
   async function handleUserAction() {
     setIsLoading(true);
     // THERE CAN ONLY BE ONE API KEY
     if (apiKey?.key && isNew) {
-      notify("error", "You already have an API key for this workspace!");
+      notify({
+        color: "danger",
+        title: "Failed to generate API key!",
+        description: "You already have an API key for this workspace.",
+      });
       return;
     }
 
@@ -91,7 +99,11 @@ const BillPayments = ({ workspaceID }) => {
       const response = await refreshWorkspaceAPIKey(workspaceID);
 
       if (!response?.success) {
-        notify("error", "Failed to refresh API key!");
+        notify({
+          color: "danger",
+          title: "Failed to refresh API key!",
+          description: response?.message,
+        });
         setIsLoading(false);
         return;
       }
@@ -100,7 +112,11 @@ const BillPayments = ({ workspaceID }) => {
         queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
       });
 
-      notify("success", "API key has been updated!");
+      notify({
+        color: "success",
+        title: "Success",
+        description: "API key has been updated!",
+      });
       setIsRefresh(false);
       setIsLoading(false);
       return;
@@ -110,8 +126,11 @@ const BillPayments = ({ workspaceID }) => {
     const response = await setupWorkspaceAPIKey(workspaceID);
 
     if (!response?.success) {
-      notify("error", "Failed to generate API key!");
-      notify("error", response?.message);
+      notify({
+        color: "danger",
+        title: "Failed to generate API key!",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
@@ -122,7 +141,12 @@ const BillPayments = ({ workspaceID }) => {
 
     setApiKeyData(response?.data);
     setApiKey(response?.data?.API);
-    notify("success", "API key has been generated!");
+
+    notify({
+      color: "success",
+      title: "Success",
+      description: "API key has been generated!",
+    });
     setIsLoading(false);
     setIsNew(false);
 

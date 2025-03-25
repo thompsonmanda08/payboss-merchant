@@ -51,8 +51,9 @@ const INITIAL_STATE = {
     username: "",
     phone_number: "",
     password: "",
+    confirmPassword: "",
     role: "owner",
-    changePassword: true,
+    changePassword: false,
   },
 
   loginDetails: {},
@@ -68,6 +69,7 @@ const useAuthStore = create((set, get) => ({
   setBusinessInfo: (businessInfo) => set({ businessInfo }),
   setMerchantID: (merchantID) => set({ merchantID }),
   setNewAdminUser: (newAdminUser) => set({ newAdminUser }),
+  setBankingDetails: (bankDetails) => set({ bankDetails }),
   setIsValidTPIN: (isValidTPIN) => set({ isValidTPIN }),
   setAccountCreated: (accountCreated) => set({ accountCreated }),
   setIsKYCSent: (isKYCSent) => set({ isKYCSent }),

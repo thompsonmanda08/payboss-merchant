@@ -14,7 +14,7 @@ export default function Step4({ updateDetails, backToStart }) {
   const { newAdminUser, error, setError } = useAuthStore();
 
   useEffect(() => {
-    updateDetails(STEPS[4], { role: "owner", changePassword: false });
+    updateDetails(STEPS[3], { role: "owner", changePassword: false });
   }, []);
 
   return (
@@ -63,7 +63,7 @@ export default function Step4({ updateDetails, backToStart }) {
               value={newAdminUser?.first_name}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[4], { first_name: e.target.value });
+                updateDetails(STEPS[3], { first_name: e.target.value });
               }}
             />
             <Input
@@ -74,7 +74,7 @@ export default function Step4({ updateDetails, backToStart }) {
               value={newAdminUser?.last_name}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[4], { last_name: e.target.value });
+                updateDetails(STEPS[3], { last_name: e.target.value });
               }}
             />
           </motion.div>
@@ -91,7 +91,7 @@ export default function Step4({ updateDetails, backToStart }) {
               required={true}
               value={newAdminUser?.email}
               onChange={(e) => {
-                updateDetails(STEPS[4], { email: e.target.value });
+                updateDetails(STEPS[3], { email: e.target.value });
               }}
             />
           </motion.div>
@@ -107,7 +107,7 @@ export default function Step4({ updateDetails, backToStart }) {
               value={newAdminUser?.phone_number}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[4], { phone_number: e.target.value });
+                updateDetails(STEPS[3], { phone_number: e.target.value });
               }}
             />
             <Input
@@ -118,7 +118,7 @@ export default function Step4({ updateDetails, backToStart }) {
               value={newAdminUser?.username}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[4], { username: e.target.value });
+                updateDetails(STEPS[3], { username: e.target.value });
               }}
             />
           </motion.div>
@@ -136,7 +136,7 @@ export default function Step4({ updateDetails, backToStart }) {
               error={error}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[4], { password: e.target.value });
+                updateDetails(STEPS[3], { password: e.target.value });
               }}
               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               title="Must contain at least 8 characters, including uppercase letters, lowercase letters, and numbers"
@@ -155,7 +155,7 @@ export default function Step4({ updateDetails, backToStart }) {
               onError={error?.onPassword}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[4], { confirmPassword: e.target.value });
+                updateDetails(STEPS[3], { confirmPassword: e.target.value });
               }}
             />
           </motion.div>

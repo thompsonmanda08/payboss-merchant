@@ -15,8 +15,6 @@ const useConfigOptions = () => {
   const companyTypes = response?.data?.company_types || [];
   const otherCountries = response?.data?.countries || [];
 
-  console.log("GEN CONFIG", otherCountries);
-
   const zambia = response?.data?.countries.find(
     (country) =>
       country.country_code === "ZM" ||

@@ -41,7 +41,7 @@ export default function Step2({ updateDetails, backToStart }) {
               value={formData?.account_name}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { account_name: e.target.value });
+                updateDetails(STEPS[2], { account_name: e.target.value });
               }}
             />
           </motion.div>
@@ -56,7 +56,7 @@ export default function Step2({ updateDetails, backToStart }) {
               value={formData?.account_number}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { account_number: e.target.value });
+                updateDetails(STEPS[2], { account_number: e.target.value });
               }}
             />
           </motion.div>
@@ -73,7 +73,7 @@ export default function Step2({ updateDetails, backToStart }) {
               listItemName={"bank_name"}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { bankID: e.target.value });
+                updateDetails(STEPS[2], { bankID: e.target.value });
               }}
             />
           </motion.div>
@@ -91,7 +91,7 @@ export default function Step2({ updateDetails, backToStart }) {
               value={formData?.branch_name}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { branch_name: e.target.value });
+                updateDetails(STEPS[2], { branch_name: e.target.value });
               }}
             />
           </motion.div>
@@ -108,7 +108,7 @@ export default function Step2({ updateDetails, backToStart }) {
               errorText={"Valid Code is required"}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { branch_code: e.target.value });
+                updateDetails(STEPS[2], { branch_code: e.target.value });
               }}
             />
           </motion.div>
@@ -125,7 +125,7 @@ export default function Step2({ updateDetails, backToStart }) {
               required={true}
               prefilled={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { currencyID: e.target.value });
+                updateDetails(STEPS[2], { currencyID: e.target.value });
               }}
             />
           </motion.div>

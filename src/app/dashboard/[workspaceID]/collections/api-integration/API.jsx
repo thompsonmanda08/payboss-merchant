@@ -113,7 +113,11 @@ const APIIntegration = ({ workspaceID }) => {
     try {
       navigator?.clipboard?.writeText(key);
       setCopiedKey(key);
-      notify("success", "Copied to clipboard");
+      notify({
+        color: "success",
+        title: "Success",
+        description: "API key has been updated!",
+      });
     } catch (error) {
       console.error("FAILED", error);
     }
@@ -124,6 +128,7 @@ const APIIntegration = ({ workspaceID }) => {
 
     if (!permissions?.update || !permissions?.delete) {
       notify("error", "Only admins are allowed to generate API keys!");
+      
       setIsLoading(false);
       handleClosePrompt();
       return;

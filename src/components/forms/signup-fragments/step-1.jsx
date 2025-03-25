@@ -13,6 +13,7 @@ import SelectField from "@/components/ui/select-field";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import CardHeader from "@/components/base/CardHeader";
 import { Switch, Tooltip } from "@heroui/react";
+import AutoCompleteField from "@/components/base/auto-complete";
 
 export default function Step1({ updateDetails, backToStart }) {
   const { companyTypes, provinces } = useConfigOptions();
@@ -24,14 +25,11 @@ export default function Step1({ updateDetails, backToStart }) {
     formData?.contact?.length > 9;
 
   const cities = useMemo(() => {
-    if (formData?.provinceID) {
-      return (
-        provinces?.find((province) => province?.ID === formData?.provinceID)
-          ?.cities || provinces[0]?.cities
-      );
-    }
-    return [];
-  }, [formData?.provinceID, provinces]);
+    const selectedProvince = provinces?.find(
+      (province) => province?.id == formData?.provinceID
+    );
+    return selectedProvince?.cities || [];
+  }, [formData?.provinceID]);
 
   return (
     <>
@@ -57,7 +55,7 @@ export default function Step1({ updateDetails, backToStart }) {
               value={formData?.name}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { name: e.target.value });
+                updateDetails(STEPS[1], { name: e.target.value });
               }}
             />
           </motion.div>
@@ -75,7 +73,7 @@ export default function Step1({ updateDetails, backToStart }) {
               prefilled={true}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { companyTypeID: e.target.value });
+                updateDetails(STEPS[1], { companyTypeID: e.target.value });
               }}
             />
           </motion.div>
@@ -94,7 +92,7 @@ export default function Step1({ updateDetails, backToStart }) {
               errorText="Invalid TPIN"
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { tpin: e.target.value });
+                updateDetails(STEPS[1], { tpin: e.target.value });
               }}
             />
           </motion.div>
@@ -111,7 +109,7 @@ export default function Step1({ updateDetails, backToStart }) {
               placeholder="Enter company email"
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { company_email: e.target.value });
+                updateDetails(STEPS[1], { company_email: e.target.value });
               }}
             />
           </motion.div>
@@ -133,7 +131,7 @@ export default function Step1({ updateDetails, backToStart }) {
               required={true}
               maxValue={today(getLocalTimeZone())}
               onChange={(date) => {
-                updateDetails(STEPS[0], {
+                updateDetails(STEPS[1], {
                   date_of_incorporation: formatDate(date, "YYYY-MM-DD"),
                 });
               }}
@@ -146,17 +144,16 @@ export default function Step1({ updateDetails, backToStart }) {
             className="w-full"
             variants={staggerContainerItemVariants}
           >
-            <SelectField
+            <AutoCompleteField
               options={provinces}
               label="Province"
               name="provinceID"
-              defaultValue={provinces[0]?.ID}
+              defaultValue={provinces[0]?.id}
               listItemName={"province"}
               value={formData?.provinceID}
-              prefilled={true}
               required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { provinceID: e.target.value });
+              onChange={(selected) => {
+                updateDetails(STEPS[1], { provinceID: selected });
               }}
             />
           </motion.div>
@@ -164,17 +161,20 @@ export default function Step1({ updateDetails, backToStart }) {
             className="w-full"
             variants={staggerContainerItemVariants}
           >
-            <SelectField
+            <AutoCompleteField
               options={cities}
               label="City/Town"
               name="cityID"
+              placeholder={
+                formData?.provinceID ? "Select city" : "Select a province first"
+              }
               listItemName={"city"}
-              defaultValue={cities[0]?.ID}
+              defaultValue={cities[0]?.id}
               value={formData?.cityID}
               prefilled={true}
               required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { cityID: e.target.value });
+              onChange={(selected) => {
+                updateDetails(STEPS[1], { cityID: selected });
               }}
             />
           </motion.div>
@@ -189,7 +189,7 @@ export default function Step1({ updateDetails, backToStart }) {
               placeholder="Enter physical address"
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { physical_address: e.target.value });
+                updateDetails(STEPS[1], { physical_address: e.target.value });
               }}
             />
           </motion.div>
@@ -210,7 +210,7 @@ export default function Step1({ updateDetails, backToStart }) {
               value={formData?.contact}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { contact: e.target.value });
+                updateDetails(STEPS[1], { contact: e.target.value });
               }}
             />
           </motion.div>
@@ -227,7 +227,7 @@ export default function Step1({ updateDetails, backToStart }) {
               title="https://www.domain-name.com"
               placeholder="Enter website / social media link"
               onChange={(e) => {
-                updateDetails(STEPS[0], { website: e.target.value });
+                updateDetails(STEPS[1], { website: e.target.value });
               }}
             />
           </motion.div>
@@ -245,7 +245,7 @@ export default function Step1({ updateDetails, backToStart }) {
           <Switch
             isSelected={formData?.merchant_type === "super"}
             onValueChange={(isSelected) => {
-              updateDetails(STEPS[0], {
+              updateDetails(STEPS[1], {
                 merchant_type: isSelected ? "super" : "ordinary",
               });
             }}
@@ -293,7 +293,7 @@ export default function Step1({ updateDetails, backToStart }) {
               value={formData?.signatory_name}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], {
+                updateDetails(STEPS[1], {
                   signatory_name: e.target.value,
                 });
               }}
@@ -304,13 +304,12 @@ export default function Step1({ updateDetails, backToStart }) {
               placeholder="0989 XXX XXX"
               name="signatory_contact"
               maxLength={12}
-              pattern="[0-9]{12}"
               onError={phoneNoError}
               errorText="Invalid Mobile Number"
               value={formData?.signatory_contact}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { signatory_contact: e.target.value });
+                updateDetails(STEPS[1], { signatory_contact: e.target.value });
               }}
             />
             <Input
@@ -321,7 +320,7 @@ export default function Step1({ updateDetails, backToStart }) {
               placeholder="Enter Email"
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { signatory_email: e.target.value });
+                updateDetails(STEPS[1], { signatory_email: e.target.value });
               }}
             />
           </motion.div>
@@ -338,7 +337,7 @@ export default function Step1({ updateDetails, backToStart }) {
               value={formData?.cfo_name}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { cfo_name: e.target.value });
+                updateDetails(STEPS[1], { cfo_name: e.target.value });
               }}
             />
             <Input
@@ -347,13 +346,12 @@ export default function Step1({ updateDetails, backToStart }) {
               placeholder="0989 XXX XXX"
               name="cfo_contact"
               maxLength={12}
-              pattern="[0-9]{12}"
               onError={phoneNoError}
               errorText="Invalid Mobile Number"
               value={formData?.cfo_contact}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { cfo_contact: e.target.value });
+                updateDetails(STEPS[1], { cfo_contact: e.target.value });
               }}
             />
             <Input
@@ -364,7 +362,7 @@ export default function Step1({ updateDetails, backToStart }) {
               placeholder="Enter Email"
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { cfo_email: e.target.value });
+                updateDetails(STEPS[1], { cfo_email: e.target.value });
               }}
             />
           </motion.div>
