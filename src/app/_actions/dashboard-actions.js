@@ -51,7 +51,7 @@ export async function fetchDashboardAnalytics(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,

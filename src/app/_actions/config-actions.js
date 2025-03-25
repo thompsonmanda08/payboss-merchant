@@ -46,7 +46,7 @@ export async function getGeneralConfigs() {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,
@@ -109,7 +109,7 @@ export const getUserSetupConfigs = cache(async () => {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,
@@ -127,13 +127,10 @@ export const getUserSetupConfigs = cache(async () => {
  */
 
 export async function getUserAccountRoles() {
-  const session = await getUserSession();
-  const merchantID = session?.user?.merchantID;
+  const url = `merchant/roles`;
 
   try {
-    const res = await authenticatedService({
-      url: `merchant/roles`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -144,6 +141,7 @@ export async function getUserAccountRoles() {
     };
   } catch (error) {
     console.error({
+      endpoint: url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -154,7 +152,7 @@ export async function getUserAccountRoles() {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,
@@ -171,12 +169,9 @@ export async function getUserAccountRoles() {
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
 export async function getWorkspaceRoles() {
-  // const session = await getUserSession()
-  // const merchantID = session?.user?.merchantID
+  const url = `merchant/workspace/roles`;
   try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/roles`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -187,6 +182,7 @@ export async function getWorkspaceRoles() {
     };
   } catch (error) {
     console.error({
+      endpoint: url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -197,7 +193,7 @@ export async function getWorkspaceRoles() {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,
@@ -235,7 +231,7 @@ export async function getWorkspaceRoles() {
 //       success: false,
 //       message:
 //         error?.response?.data?.error ||
-//         error?.response?.config?.data.error ||
+//         error?.response?.config?.data?.error ||
 //         "Error Occurred: See Console for details",
 //       data: error?.response?.data,
 //       status: error?.response?.status,
@@ -273,7 +269,7 @@ export async function getWorkspaceRoles() {
 //       success: false,
 //       message:
 //         error?.response?.data?.error ||
-//         error?.response?.config?.data.error ||
+//         error?.response?.config?.data?.error ||
 //         "Error Occurred: See Console for details",
 //       data: error?.response?.data,
 //       status: error?.response?.status,
@@ -283,9 +279,20 @@ export async function getWorkspaceRoles() {
 // }
 
 export async function changeWorkspaceVisibility(workspaceID, isVisible) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspace/visibility/${workspaceID}`;
   try {
     const res = await authenticatedService({
-      url: `merchant/workspace/visibility/${workspaceID}`,
+      url,
       method: "PATCH",
       data: {
         isVisible,
@@ -301,6 +308,7 @@ export async function changeWorkspaceVisibility(workspaceID, isVisible) {
     };
   } catch (error) {
     console.error({
+      endpoint: url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -311,7 +319,7 @@ export async function changeWorkspaceVisibility(workspaceID, isVisible) {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,
@@ -324,10 +332,22 @@ export async function createNewWorkspace(newWorkspace) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
 
+  if (!merchantID) {
+    return {
+      success: false,
+      message: "MerchantID ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspace/new`;
+
   try {
     const res = await authenticatedService({
       method: "POST",
-      url: `merchant/workspace/new`,
+      url,
       data: { ...newWorkspace, merchantID },
     });
 
@@ -340,6 +360,7 @@ export async function createNewWorkspace(newWorkspace) {
     };
   } catch (error) {
     console.error({
+      endpoint: url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -350,7 +371,7 @@ export async function createNewWorkspace(newWorkspace) {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,
@@ -360,16 +381,26 @@ export async function createNewWorkspace(newWorkspace) {
 }
 
 export async function updateWorkspace({ workspace, description, ID }) {
-  const updatedWorkspace = {
-    workspace,
-    description,
-  };
+  if (!ID) {
+    return {
+      success: false,
+      message: "Workspace ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspace/${ID}`;
 
   try {
     const res = await authenticatedService({
       method: "PATCH",
-      url: `merchant/workspace/${ID}`,
-      data: updatedWorkspace,
+      url,
+      data: {
+        workspace,
+        description,
+      },
     });
 
     revalidatePath("/manage-account/workspaces/[ID]", "page");
@@ -384,6 +415,7 @@ export async function updateWorkspace({ workspace, description, ID }) {
     };
   } catch (error) {
     console.error({
+      endpoint: url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -394,7 +426,7 @@ export async function updateWorkspace({ workspace, description, ID }) {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,
@@ -417,10 +449,21 @@ export async function updateWorkspace({ workspace, description, ID }) {
  */
 
 export async function deleteWorkspace(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspace/${workspaceID}`;
   try {
     const res = await authenticatedService({
+      url,
       method: "DELETE",
-      url: `merchant/workspace/${workspaceID}`, //URL
     });
 
     revalidatePath("/manage-account/workspaces/[ID]", "page");
@@ -434,6 +477,7 @@ export async function deleteWorkspace(workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -444,7 +488,7 @@ export async function deleteWorkspace(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,
@@ -463,10 +507,21 @@ export async function deleteWorkspace(workspaceID) {
 export const getAllWorkspaces = cache(async () => {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+
+  if (!merchantID) {
+    return {
+      success: false,
+      message: "MerchantID ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspaces/${merchantID}`;
+
   try {
-    const res = await authenticatedService({
-      url: `merchant/workspaces/${merchantID}`, //URL
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -477,6 +532,7 @@ export const getAllWorkspaces = cache(async () => {
     };
   } catch (error) {
     console.error({
+      endpoint: url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -487,7 +543,7 @@ export const getAllWorkspaces = cache(async () => {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,
@@ -503,9 +559,21 @@ export const getAllWorkspaces = cache(async () => {
 export const getAllKYCData = cache(async () => {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+
+  if (!merchantID) {
+    return {
+      success: false,
+      message: "MerchantID ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/${merchantID}`;
   try {
     const res = await authenticatedService({
-      url: `merchant/${merchantID}`, //URL
+      url, //URL
     });
 
     return {
@@ -517,6 +585,7 @@ export const getAllKYCData = cache(async () => {
     };
   } catch (error) {
     console.error({
+      endpoint: url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -527,7 +596,7 @@ export const getAllKYCData = cache(async () => {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
       data: error?.response?.data,
       status: error?.response?.status,
