@@ -29,46 +29,44 @@ async function workspaceInit(workspaceID) {
     };
   }
 
+  const url = `merchant/workspace/init/${workspaceID}`;
+
   try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/init/${workspaceID}`,
+    const res = await authenticatedService({ url });
+
+    await updateWorkspaceSession({
+      workspacePermissions: res.data,
+      workspaceType: res.data.workspaceType,
     });
 
-    if (res.status == 200) {
-      await updateWorkspaceSession({
-        workspacePermissions: res.data,
-        workspaceType: res.data.workspaceType,
-      });
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || res?.statusText || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error);
+    console.error({
+      endpoint: url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.statusText ||
-        "Operation Failed!",
-      data: error?.response,
+        "Error Occurred: See Console for details",
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
   }
 }
+
 export const initializeWorkspace = cache(workspaceInit);
 
 /**

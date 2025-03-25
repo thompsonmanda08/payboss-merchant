@@ -1,5 +1,4 @@
 import "./globals.css";
-import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import Providers from "./providers";
 import { getAuthSession, getUserDetails } from "./_actions/config-actions";
@@ -42,13 +41,6 @@ export default async function RootLayout({ children }) {
       >
         <Providers session={session} authSession={authSession}>
           {children}
-          <Toaster
-            toastOptions={{
-              duration: 3000,
-            }}
-            position="top-right"
-            containerClassName="z-[10000!important]"
-          />
         </Providers>
       </body>
     </html>

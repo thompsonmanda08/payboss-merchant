@@ -16,21 +16,22 @@ import { Switch, Tooltip } from "@heroui/react";
 
 export default function Step1({ updateDetails, backToStart }) {
   const { companyTypes, provinces } = useConfigOptions();
-  const step = useAuthStore((state) => state.businessInfo);
+  const formData = useAuthStore((state) => state.businessInfo);
 
-  const TPINError = step?.tpin?.length > 10;
+  const TPINError = formData?.tpin?.length > 10;
   const phoneNoError =
-    !isValidZambianMobileNumber(step?.contact) && step?.contact?.length > 9;
+    !isValidZambianMobileNumber(formData?.contact) &&
+    formData?.contact?.length > 9;
 
   const cities = useMemo(() => {
-    if (step?.provinceID) {
+    if (formData?.provinceID) {
       return (
-        provinces?.find((province) => province?.ID === step?.provinceID)
+        provinces?.find((province) => province?.ID === formData?.provinceID)
           ?.cities || provinces[0]?.cities
       );
     }
     return [];
-  }, [step?.provinceID, provinces]);
+  }, [formData?.provinceID, provinces]);
 
   return (
     <>
@@ -53,7 +54,7 @@ export default function Step1({ updateDetails, backToStart }) {
               label="Business Name"
               name="businessName"
               placeholder="Enter business name"
-              value={step?.name}
+              value={formData?.name}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { name: e.target.value });
@@ -70,7 +71,7 @@ export default function Step1({ updateDetails, backToStart }) {
               label="Company Type"
               name="companyTypeID"
               listItemName={"type"}
-              value={step?.companyTypeID}
+              value={formData?.companyTypeID}
               prefilled={true}
               required={true}
               onChange={(e) => {
@@ -88,7 +89,7 @@ export default function Step1({ updateDetails, backToStart }) {
               placeholder="Enter TPIN"
               name="tpin"
               maxLength={10}
-              value={step?.tpin}
+              value={formData?.tpin}
               onError={TPINError}
               errorText="Invalid TPIN"
               required={true}
@@ -106,7 +107,7 @@ export default function Step1({ updateDetails, backToStart }) {
               type="email"
               label="Company Email"
               name="company_email"
-              value={step?.company_email}
+              value={formData?.company_email}
               placeholder="Enter company email"
               required={true}
               onChange={(e) => {
@@ -122,10 +123,10 @@ export default function Step1({ updateDetails, backToStart }) {
               label={"Date of Incorporation"}
               className="max-w-sm"
               description={"Date the company was registered"}
-              defaultValue={step?.date_of_incorporation}
+              defaultValue={formData?.date_of_incorporation}
               value={
-                step?.date_of_incorporation?.split("").length > 9
-                  ? step?.date_of_incorporation
+                formData?.date_of_incorporation?.split("").length > 9
+                  ? formData?.date_of_incorporation
                   : ""
               }
               labelPlacement={"outside"}
@@ -151,7 +152,7 @@ export default function Step1({ updateDetails, backToStart }) {
               name="provinceID"
               defaultValue={provinces[0]?.ID}
               listItemName={"province"}
-              value={step?.provinceID}
+              value={formData?.provinceID}
               prefilled={true}
               required={true}
               onChange={(e) => {
@@ -169,7 +170,7 @@ export default function Step1({ updateDetails, backToStart }) {
               name="cityID"
               listItemName={"city"}
               defaultValue={cities[0]?.ID}
-              value={step?.cityID}
+              value={formData?.cityID}
               prefilled={true}
               required={true}
               onChange={(e) => {
@@ -184,7 +185,7 @@ export default function Step1({ updateDetails, backToStart }) {
             <Input
               label="Physical Address"
               name="physical_address"
-              value={step?.physical_address}
+              value={formData?.physical_address}
               placeholder="Enter physical address"
               required={true}
               onChange={(e) => {
@@ -206,7 +207,7 @@ export default function Step1({ updateDetails, backToStart }) {
               pattern="[0-9]{12}"
               onError={phoneNoError}
               errorText="Invalid Mobile Number"
-              value={step?.contact}
+              value={formData?.contact}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { contact: e.target.value });
@@ -220,7 +221,7 @@ export default function Step1({ updateDetails, backToStart }) {
             <Input
               label="Website / Social Media"
               name="website"
-              value={step?.website}
+              value={formData?.website}
               required={true}
               pattern="https?://.+"
               title="https://www.domain-name.com"
@@ -242,7 +243,7 @@ export default function Step1({ updateDetails, backToStart }) {
           }}
         >
           <Switch
-            isSelected={step?.merchant_type === "super"}
+            isSelected={formData?.merchant_type === "super"}
             onValueChange={(isSelected) => {
               updateDetails(STEPS[0], {
                 merchant_type: isSelected ? "super" : "ordinary",
@@ -278,7 +279,7 @@ export default function Step1({ updateDetails, backToStart }) {
         </Tooltip>
       </motion.div>
 
-      {step?.merchant_type === "super" && (
+      {formData?.merchant_type === "super" && (
         <div className="flex w-full flex-col items-center justify-center gap-6 lg:flex-row">
           {/* SIGNATORY DETAILS */}
           <motion.div
@@ -289,11 +290,11 @@ export default function Step1({ updateDetails, backToStart }) {
               label="Signatory Full Name"
               name="signatory_full_name"
               placeholder="Enter Full Name"
-              value={step?.signatory_full_name}
+              value={formData?.signatory_name}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], {
-                  signatory_full_name: e.target.value,
+                  signatory_name: e.target.value,
                 });
               }}
             />
@@ -306,7 +307,7 @@ export default function Step1({ updateDetails, backToStart }) {
               pattern="[0-9]{12}"
               onError={phoneNoError}
               errorText="Invalid Mobile Number"
-              value={step?.signatory_contact}
+              value={formData?.signatory_contact}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { signatory_contact: e.target.value });
@@ -316,7 +317,7 @@ export default function Step1({ updateDetails, backToStart }) {
               type="email"
               label="Signatory Email"
               name="signatory_email"
-              value={step?.signatory_email}
+              value={formData?.signatory_email}
               placeholder="Enter Email"
               required={true}
               onChange={(e) => {
@@ -334,10 +335,10 @@ export default function Step1({ updateDetails, backToStart }) {
               label="CFO Full Name"
               name="cfo_full_name"
               placeholder="Enter Full Name"
-              value={step?.cfo_full_name}
+              value={formData?.cfo_name}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { cfo_full_name: e.target.value });
+                updateDetails(STEPS[0], { cfo_name: e.target.value });
               }}
             />
             <Input
@@ -349,7 +350,7 @@ export default function Step1({ updateDetails, backToStart }) {
               pattern="[0-9]{12}"
               onError={phoneNoError}
               errorText="Invalid Mobile Number"
-              value={step?.cfo_contact}
+              value={formData?.cfo_contact}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { cfo_contact: e.target.value });
@@ -359,7 +360,7 @@ export default function Step1({ updateDetails, backToStart }) {
               type="email"
               label="CFO Email"
               name="cfo_email"
-              value={step?.cfo_email}
+              value={formData?.cfo_email}
               placeholder="Enter Email"
               required={true}
               onChange={(e) => {

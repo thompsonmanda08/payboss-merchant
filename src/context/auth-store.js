@@ -14,19 +14,47 @@ const INITIAL_STATE = {
   isValidTPIN: false,
   isKYCSent: false,
   accountCreated: false,
+
   businessInfo: {
-    businessName: "",
-    companyTypeID: "",
+    name: "",
     tpin: "",
-    company_email: "",
     date_of_incorporation: "",
-    provinceID: "",
-    cityID: "",
+    companyTypeID: "",
     physical_address: "",
     contact: "",
+    company_email: "",
     website: "",
+    provinceID: "",
+    cityID: "",
+    merchant_type: "",
+    signatory_name: "",
+    signatory_email: "",
+    signatory_contact: "",
+    cfo_name: "",
+    cfo_email: "",
+    cfo_contact: "",
   },
-  newAdminUser: {},
+
+  bankDetails: {
+    bankID: "",
+    branch_name: "",
+    branch_code: "",
+    account_name: "",
+    account_number: "",
+    currencyID: "",
+  },
+
+  newAdminUser: {
+    first_name: "",
+    last_name: "",
+    email: "",
+    username: "",
+    phone_number: "",
+    password: "",
+    role: "owner",
+    changePassword: true,
+  },
+
   loginDetails: {},
 };
 

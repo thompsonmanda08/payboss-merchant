@@ -13,11 +13,11 @@ import CardHeader from "@/components/base/CardHeader";
 // BUSINESS BANKING DETAILS
 export default function Step2({ updateDetails, backToStart }) {
   const { banks, currencies } = useConfigOptions();
-  const step = useAuthStore((state) => state.businessInfo);
+  const formData = useAuthStore((state) => state.bankDetails);
   const branchCodeError =
-    (step?.branch_code?.length > 1 && step?.branch_code?.length < 6) ||
-    step?.branch_code?.length > 8;
-  const accountNumberError = step?.account_number?.length > 16;
+    (formData?.branch_code?.length > 1 && formData?.branch_code?.length < 6) ||
+    formData?.branch_code?.length > 8;
+  const accountNumberError = formData?.account_number?.length > 16;
 
   return (
     <>
@@ -38,7 +38,7 @@ export default function Step2({ updateDetails, backToStart }) {
               label="Account Holder Name"
               placeholder="Enter your account holder name"
               name="account_name"
-              value={step?.account_name}
+              value={formData?.account_name}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { account_name: e.target.value });
@@ -53,7 +53,7 @@ export default function Step2({ updateDetails, backToStart }) {
               label="Account Number"
               name="account_number"
               placeholder="Enter your account number"
-              value={step?.account_number}
+              value={formData?.account_number}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { account_number: e.target.value });
@@ -68,7 +68,7 @@ export default function Step2({ updateDetails, backToStart }) {
               options={banks}
               label="Bank"
               name="bankID"
-              value={step?.bankID}
+              value={formData?.bankID}
               prefilled={true}
               listItemName={"bank_name"}
               required={true}
@@ -88,7 +88,7 @@ export default function Step2({ updateDetails, backToStart }) {
               label="Branch Name"
               name="branch_name"
               placeholder="Enter the branch name"
-              value={step?.branch_name}
+              value={formData?.branch_name}
               required={true}
               onChange={(e) => {
                 updateDetails(STEPS[0], { branch_name: e.target.value });
@@ -103,7 +103,7 @@ export default function Step2({ updateDetails, backToStart }) {
               label="Branch Code"
               name="branch_code"
               placeholder="Enter branch code"
-              value={step?.branch_code}
+              value={formData?.branch_code}
               onError={branchCodeError}
               errorText={"Valid Code is required"}
               required={true}
@@ -120,7 +120,7 @@ export default function Step2({ updateDetails, backToStart }) {
               options={currencies}
               label="Currency"
               name="currencyID"
-              value={step?.currencyID}
+              value={formData?.currencyID}
               listItemName={"currency"}
               required={true}
               prefilled={true}
