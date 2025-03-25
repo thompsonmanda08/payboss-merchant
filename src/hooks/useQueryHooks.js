@@ -1,5 +1,5 @@
 import {
-  getAccountConfigOptions,
+  getGeneralConfigs,
   getAllKYCData,
   getAllWorkspaces,
   getUserAccountRoles,
@@ -26,47 +26,25 @@ import {
   getWorkspaceTillNumber,
   initializeWorkspace,
 } from "@/app/_actions/workspace-actions";
-import {
-  CONFIGS_QUERY_KEY,
-  USER_ROLES_QUERY_KEY,
-  WORKSPACE_ROLES_QUERY_KEY,
-  SETUP_QUERY_KEY,
-  WORKSPACES_QUERY_KEY,
-  WORKSPACE_DASHBOARD_QUERY_KEY,
-  WORKSPACE_MEMBERS_QUERY_KEY,
-  BULK_TRANSACTIONS_QUERY_KEY,
-  SINGLE_TRANSACTIONS_QUERY_KEY,
-  BATCH_DETAILS_QUERY_KEY,
-  USERS,
-  WALLET_HISTORY_QUERY_KEY,
-  DASHBOARD_ANALYTICS_QUERY_KEY,
-  PAYMENT_TRANSACTIONS_QUERY_KEY,
-  COLLECTION_TRANSACTIONS_QUERY_KEY,
-  WORKSPACE_API_KEY_QUERY_KEY,
-  ACTIVE_PREFUND_QUERY_KEY,
-  WORKSPACE_TILL_NUMBER_QUERY_KEY,
-  WORKSPACE_TERMINALS_QUERY_KEY,
-  WORKSPACE_CALLBACK,
-  WORKSPACE_TYPES,
-} from "@/lib/constants";
+import { QUERY_KEYS } from "@/lib/constants";
 
 export const useGeneralConfigOptions = () =>
   useQuery({
-    queryKey: [CONFIGS_QUERY_KEY],
-    queryFn: async () => await getAccountConfigOptions(),
+    queryKey: [QUERY_KEYS.CONFIGS],
+    queryFn: async () => await getGeneralConfigs(),
     staleTime: Infinity,
   });
 
 export const useSetupConfig = () =>
   useQuery({
-    queryKey: [SETUP_QUERY_KEY],
+    queryKey: [QUERY_KEYS.SETUP],
     queryFn: async () => await getUserSetupConfigs(),
     staleTime: Infinity,
   });
 
 export const useGetWorkspaces = () =>
   useQuery({
-    queryKey: [WORKSPACES_QUERY_KEY],
+    queryKey: [QUERY_KEYS.WORKSPACES],
     queryFn: async () => await getAllWorkspaces(),
     staleTime: Infinity,
   });
@@ -80,14 +58,14 @@ export const useKYCData = () =>
 
 export const useAllUsers = () =>
   useQuery({
-    queryKey: [USERS],
+    queryKey: [QUERY_KEYS.USERS],
     queryFn: async () => await getAllUsers(),
     staleTime: Infinity,
   });
 
 export const useUserDetails = (userID) =>
   useQuery({
-    queryKey: [USERS, userID],
+    queryKey: [QUERY_KEYS.USERS, userID],
     queryFn: async () => await getUser(userID),
     refetchOnMount: true,
     staleTime: 0,
@@ -95,21 +73,21 @@ export const useUserDetails = (userID) =>
 
 export const useAccountRoles = () =>
   useQuery({
-    queryKey: [USER_ROLES_QUERY_KEY],
+    queryKey: [QUERY_KEYS.USER_ROLES],
     queryFn: async () => await getUserAccountRoles(),
     staleTime: Infinity,
   });
 
 export const useWorkspaceRoles = () =>
   useQuery({
-    queryKey: [WORKSPACE_ROLES_QUERY_KEY],
+    queryKey: [QUERY_KEYS.WORKSPACE_ROLES],
     queryFn: async () => await getWorkspaceRoles(),
     staleTime: Infinity,
   });
 
 export const useWorkspaceInit = (workspaceID) =>
   useQuery({
-    queryKey: [WORKSPACE_DASHBOARD_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.WORKSPACE_DASHBOARD, workspaceID],
     queryFn: async () => await initializeWorkspace(workspaceID),
     refetchOnMount: true,
     staleTime: 300,
@@ -117,7 +95,7 @@ export const useWorkspaceInit = (workspaceID) =>
 
 export const useWorkspaceMembers = (workspaceID) =>
   useQuery({
-    queryKey: [WORKSPACE_MEMBERS_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.WORKSPACE_MEMBERS, workspaceID],
     queryFn: async () => await getWorkspaceMembers(workspaceID),
     refetchOnMount: true,
     staleTime: Infinity,
@@ -125,35 +103,35 @@ export const useWorkspaceMembers = (workspaceID) =>
 
 export const useAllPaymentTransactions = (workspaceID) =>
   useQuery({
-    queryKey: [PAYMENT_TRANSACTIONS_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.PAYMENT_TRANSACTIONS, workspaceID],
     queryFn: async () => await getAllPaymentTransactions(workspaceID),
     refetchOnMount: true,
   });
 
 export const useAllCollectionsTransactions = (workspaceID) =>
   useQuery({
-    queryKey: [COLLECTION_TRANSACTIONS_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.COLLECTION_TRANSACTIONS, workspaceID],
     queryFn: async () => await getAllCollectionTransactions(workspaceID),
     refetchOnMount: true,
   });
 
 export const useBulkTransactions = (workspaceID) =>
   useQuery({
-    queryKey: [BULK_TRANSACTIONS_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, workspaceID],
     queryFn: async () => await getAllBulkTransactions(workspaceID),
     refetchOnMount: true,
   });
 
 export const useSingleTransactions = (workspaceID) =>
   useQuery({
-    queryKey: [SINGLE_TRANSACTIONS_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.SINGLE_TRANSACTIONS, workspaceID],
     queryFn: async () => await getAllSingleTransactions(workspaceID),
     refetchOnMount: true,
   });
 
 export const useBatchDetails = (batchID) =>
   useQuery({
-    queryKey: [BATCH_DETAILS_QUERY_KEY, batchID],
+    queryKey: [QUERY_KEYS.BATCH_DETAILS, batchID],
     queryFn: async () => await getBatchDetails(batchID),
     refetchOnMount: true,
     staleTime: Infinity,
@@ -161,7 +139,7 @@ export const useBatchDetails = (batchID) =>
 
 export const useWalletPrefundHistory = (workspaceID) =>
   useQuery({
-    queryKey: [WALLET_HISTORY_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.WALLET_HISTORY, workspaceID],
     queryFn: async () => await getWalletPrefundHistory(workspaceID),
     refetchOnMount: true,
     staleTime: Infinity,
@@ -169,7 +147,7 @@ export const useWalletPrefundHistory = (workspaceID) =>
 
 export const useDashboardAnalytics = (workspaceID) =>
   useQuery({
-    queryKey: [DASHBOARD_ANALYTICS_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.DASHBOARD_ANALYTICS, workspaceID],
     queryFn: async () => await getDashboardAnalytics(workspaceID),
     refetchOnMount: true,
     staleTime: 0,
@@ -177,14 +155,14 @@ export const useDashboardAnalytics = (workspaceID) =>
 
 export const useWorkspaceAPIKey = (workspaceID) =>
   useQuery({
-    queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     queryFn: async () => await getWorkspaceAPIKey(workspaceID),
     staleTime: Infinity,
   });
 
 export const useWorkspaceTerminals = (workspaceID) =>
   useQuery({
-    queryKey: [WORKSPACE_TERMINALS_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.WORKSPACE_TERMINALS, workspaceID],
     queryFn: async () => await getAllWorkspaceTerminals(workspaceID),
     staleTime: 30 * 1000,
     refetchOnMount: true,
@@ -192,27 +170,27 @@ export const useWorkspaceTerminals = (workspaceID) =>
 
 export const useTillNumber = (workspaceID) =>
   useQuery({
-    queryKey: [WORKSPACE_TILL_NUMBER_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.WORKSPACE_TILL_NUMBER, workspaceID],
     queryFn: async () => await getWorkspaceTillNumber(workspaceID),
     staleTime: Infinity,
   });
 
 export const useActivePrefunds = (workspaceID) =>
   useQuery({
-    queryKey: [ACTIVE_PREFUND_QUERY_KEY, workspaceID],
+    queryKey: [QUERY_KEYS.ACTIVE_PREFUND, workspaceID],
     queryFn: async () => await getWalletPrefunds(workspaceID),
     staleTime: Infinity,
   });
 
 export const useWorkspaceCallbackURL = (workspaceID) =>
   useQuery({
-    queryKey: [WORKSPACE_CALLBACK, workspaceID],
+    queryKey: [QUERY_KEYS.WORKSPACE_CALLBACK, workspaceID],
     queryFn: async () => await getWorkspaceCallback(workspaceID),
     staleTime: Infinity,
   });
 export const useWorkspaceTypes = () =>
   useQuery({
-    queryKey: [WORKSPACE_TYPES],
+    queryKey: [QUERY_KEYS.WORKSPACE_TYPES],
     queryFn: async () => await getWorkspaceCallback(),
     staleTime: Infinity,
   });

@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import LoadingPage from "../../loading";
 import InfoBanner from "@/components/base/InfoBanner";
-import DashboardAnalytics from "@/app/dashboard/[workspaceID]/DashboardAnalytics";
+import DashboardAnalytics from "@/app/dashboard/components/DashboardAnalytics";
 import {
   getAllWorkspaces,
   getUserDetails,
@@ -11,10 +11,9 @@ import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
 
 // Next.js will invalidate the cache when a
 // request comes in, at most once every 60 seconds.
-export const revalidate = 60
- 
+export const revalidate = 60;
 
-export const dynamicParams = true // or false, to 404 on unknown paths
+export const dynamicParams = true; // or false, to 404 on unknown paths
 
 // export async function generateStaticParams() {
 //   const workspacesResponse = await getAllWorkspaces();

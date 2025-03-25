@@ -6,7 +6,7 @@ import useTransactions from "@/hooks/useTransactions";
 import CustomTable from "@/components/containers/tables/Table";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
-import Tabs from "@/components/elements/tabs";
+import Tabs from "@/components/tabs";
 import { SINGLE_TRANSACTIONS_COLUMNS } from "@/lib/table-columns";
 
 const SERVICE_TYPES = [

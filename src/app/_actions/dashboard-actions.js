@@ -1,8 +1,22 @@
 "use server";
 
 import authenticatedService from "@/lib/api-config";
+import { cache } from "react";
 
-export async function getDashboardAnalytics(workspaceID) {
+/**
+ * Retrieves the analytics data for a given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the analytics data is being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The analytics data for the given workspace ID.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+export async function fetchDashboardAnalytics(workspaceID) {
   if (!workspaceID) {
     return {
       success: false,
@@ -25,7 +39,6 @@ export async function getDashboardAnalytics(workspaceID) {
       status: res.status,
       statusText: res.statusText,
     };
-    
   } catch (error) {
     console.error({
       status: error?.response?.status,
@@ -46,3 +59,5 @@ export async function getDashboardAnalytics(workspaceID) {
     };
   }
 }
+
+export const getDashboardAnalytics = cache(fetchDashboardAnalytics);

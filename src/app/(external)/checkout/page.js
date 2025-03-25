@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "@/components/base/Logo";
-import { Footer } from "@/components/containers/landing-page/footer";
+import { Footer } from "@/components/landing-sections/footer";
 
 async function CheckoutPage(props) {
   const searchParams = await props.searchParams;

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
-import Spinner from "@/components/ui/Spinner";
+import Spinner from "@/components/ui/spinner";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 
 import { AnimatePresence, motion } from "framer-motion";

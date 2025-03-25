@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-import { Footer } from "@/components/containers/landing-page/footer";
+import { Footer } from "@/components/landing-sections/footer";
 import { DefaultCover } from "@/lib/constants";
 
 async function AuthLayout({ children }) {

@@ -2,10 +2,10 @@ import Image from "next/image";
 import { Suspense } from "react";
 import LoadingPage from "@/app/loading";
 import { DefaultCover } from "@/lib/constants";
-import ProfileBanner from "@/app/manage-account/profile/ProfileBanner";
-import ProfileDetails from "./ProfileDetails";
-import AccountPreferences from "./AccountPreferences";
-import ProfileSecuritySettings from "@/app/manage-account/profile/ProfileSecuritySettings";
+import ProfileBanner from "@/app/manage-account/profile/components/ProfileBanner";
+import ProfileDetails from "./components/ProfileDetails";
+import AccountPreferences from "./components/AccountPreferences";
+import ProfileSecuritySettings from "@/app/manage-account/profile/components/ProfileSecuritySettings";
 
 function AccountSettings() {
   return (

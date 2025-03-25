@@ -11,7 +11,7 @@ import {
 } from "@heroui/react";
 import { syntaxHighlight } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
-import Tabs from "@/components/elements/tabs";
+import Tabs from "@/components/tabs";
 import CardHeader from "@/components/base/CardHeader";
 import {
   ActionResponses,

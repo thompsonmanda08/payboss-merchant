@@ -172,7 +172,7 @@ export function SingleSelectionDropdown({
     <Dropdown
       className={cn("min-w-max", className)}
       classNames={{
-        base: cn("min-w-max bg-red-500", base),
+        base: cn("min-w-max", base),
       }}
     >
       <DropdownTrigger>

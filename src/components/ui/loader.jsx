@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Spinner from "./Spinner";
+import Spinner from "./spinner";
 import { cn } from "@/lib/utils";
 
 function Loader({

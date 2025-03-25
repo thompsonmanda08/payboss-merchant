@@ -50,12 +50,16 @@ export default function SignUpForm() {
       key={STEPS[1]}
       updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
-    />, // BUSINESS INFO
+    />,
+
+    // BUSINESS INFO
     <Step2
       key={STEPS[2]}
       updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
-    />, // BANK DETAILS
+    />,
+
+    // BANK DETAILS
     <Step3
       key={STEPS[3]}
       updateDetails={updateAccountDetails}

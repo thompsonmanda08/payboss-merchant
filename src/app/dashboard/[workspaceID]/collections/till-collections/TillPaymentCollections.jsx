@@ -20,9 +20,9 @@ import {
 } from "@heroui/react";
 import CustomTable from "@/components/containers/tables/Table";
 import { useTillNumber } from "@/hooks/useQueryHooks";
-import { generateWorkspaceTillNumer } from "@/app/_actions/workspace-actions";
+import { generateWorkspaceTillNumber } from "@/app/_actions/workspace-actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { TILL_COLLECTIONS_QUERY_KEY } from "@/lib/constants";
+import { QUERY_KEYS } from "@/lib/constants";
 import { getTillCollectionsLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
 import Card from "@/components/base/Card";
@@ -47,7 +47,7 @@ export default function TillPaymentCollections({ workspaceID }) {
 
   // HANDLE FETCH TILL_NUMBER COLLECTION LATEST TRANSACTION DATA
   const mutation = useMutation({
-    mutationKey: [TILL_COLLECTIONS_QUERY_KEY, workspaceID],
+    mutationKey: [QUERY_KEYS.TILL_COLLECTIONS, workspaceID],
     mutationFn: (dateRange) =>
       getTillCollectionsLatestTransactions(workspaceID, dateRange),
   });
@@ -60,7 +60,7 @@ export default function TillPaymentCollections({ workspaceID }) {
   async function handleUserAction() {
     setIsLoading(true);
 
-    const response = await generateWorkspaceTillNumer(workspaceID);
+    const response = await generateWorkspaceTillNumber(workspaceID);
 
     if (!response?.success) {
       notify("error", "Failed to generate Till Number!");

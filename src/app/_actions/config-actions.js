@@ -9,15 +9,23 @@ import {
   getWorkspaceSessionData,
 } from "@/lib/session";
 import { apiClient } from "@/lib/utils";
+import axios from "axios";
 import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
-export async function getAccountConfigOptions() {
+/**
+ * Retrieves the general configurations from the configuration service.
+ * If the operation is successful, an API response containing the configurations is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @returns {Promise<Object>} A promise that resolves to an object indicating the success or failure of the operation,
+ * including the message, data, status, and statusText.
+ */
+
+export async function getGeneralConfigs() {
+  const CONFIG_URL = process.env.CONFIG_BASE_URL;
   try {
-    const res = await apiClient.get(`/merchant/onboard/dropdowns`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await axios.get(`${CONFIG_URL}/configuration/all-configs`);
 
     return {
       success: true,
@@ -47,7 +55,14 @@ export async function getAccountConfigOptions() {
   }
 }
 
-export async function getUserSetupConfigs() {
+/**
+ * Retrieves the user setup configurations including the logged in user details, permissions, KYC and workspaces.
+ * If the operation is successful, an API response containing the user setup configurations is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ * */
+export const getUserSetupConfigs = cache(async () => {
   try {
     const res = await authenticatedService({
       url: `merchant/user/setup`,
@@ -101,7 +116,15 @@ export async function getUserSetupConfigs() {
       statusText: error?.response?.statusText,
     };
   }
-}
+});
+
+/**
+ * Retrieves the account roles for the current user from the API.
+ * If the operation is successful, an API response containing an array of role objects is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ */
 
 export async function getUserAccountRoles() {
   const session = await getUserSession();
@@ -140,6 +163,13 @@ export async function getUserAccountRoles() {
   }
 }
 
+/**
+ * Retrieves all the roles for a workspace from the API.
+ * If the operation is successful, an API response containing an array of role objects is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ */
 export async function getWorkspaceRoles() {
   // const session = await getUserSession()
   // const merchantID = session?.user?.merchantID
@@ -176,86 +206,83 @@ export async function getWorkspaceRoles() {
   }
 }
 
-export async function createUserRole() {
-  const session = await getServerSession(roleDetails);
-  const merchantID = session?.user?.merchantID;
+// export async function createUserRole(roleDetails) {
+//   const session = await getServerSession();
+//   const merchantID = session?.user?.merchantID;
 
-  try {
-    const res = await apiClient.post(
-      `merchant/${merchantID}/roles/new`, //URL
-      roleDetails //BODY
-    );
+//   try {
+//     const res = await apiClient.post(
+//       `merchant/${merchantID}/roles/new`, //URL
+//       roleDetails //BODY
+//     );
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
-        "Error Occurred: See Console for details",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
+//     return {
+//       success: true,
+//       message: res.message,
+//       data: res.data,
+//       status: res.status,
+//       statusText: res.statusText,
+//     };
+//   } catch (error) {
+//     console.error({
+//       status: error?.response?.status,
+//       statusText: error?.response?.statusText,
+//       headers: error?.response?.headers,
+//       config: error?.response?.config,
+//       data: error?.response?.data || error,
+//     });
+//     return {
+//       success: false,
+//       message:
+//         error?.response?.data?.error ||
+//         error?.response?.config?.data.error ||
+//         "Error Occurred: See Console for details",
+//       data: error?.response?.data,
+//       status: error?.response?.status,
+//       statusText: error?.response?.statusText,
+//     };
+//   }
+// }
 
-export async function updateUserRole() {
-  const session = await getServerSession(role);
-  const merchantID = session?.user?.merchantID;
+// export async function updateUserRole() {
+//   const session = await getServerSession(role);
+//   const merchantID = session?.user?.merchantID;
 
-  try {
-    const res = await apiClient.patch(
-      `merchant/${merchantID}/roles/${role?.ID}`, //URL
-      role // BODY
-    );
+//   try {
+//     const res = await apiClient.patch(
+//       `merchant/${merchantID}/roles/${role?.ID}`, //URL
+//       role // BODY
+//     );
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
-        "Error Occurred: See Console for details",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
+//     return {
+//       success: true,
+//       message: res.message,
+//       data: res.data,
+//       status: res.status,
+//       statusText: res.statusText,
+//     };
+//   } catch (error) {
+//     console.error({
+//       status: error?.response?.status,
+//       statusText: error?.response?.statusText,
+//       headers: error?.response?.headers,
+//       config: error?.response?.config,
+//       data: error?.response?.data || error,
+//     });
+//     return {
+//       success: false,
+//       message:
+//         error?.response?.data?.error ||
+//         error?.response?.config?.data.error ||
+//         "Error Occurred: See Console for details",
+//       data: error?.response?.data,
+//       status: error?.response?.status,
+//       statusText: error?.response?.statusText,
+//     };
+//   }
+// }
 
 export async function changeWorkspaceVisibility(workspaceID, isVisible) {
-  // const session = await getUserSession()
-  // const merchantID = session?.user?.merchantID
-
   try {
     const res = await authenticatedService({
       url: `merchant/workspace/visibility/${workspaceID}`,
@@ -376,6 +403,19 @@ export async function updateWorkspace({ workspace, description, ID }) {
   }
 }
 
+/**
+ * Deletes a workspace by calling the API endpoint.
+ *
+ * @param {string} workspaceID - The ID of the workspace to be deleted.
+ *
+ * @returns {Promise<Object>} A promise resolving to an object with the following properties:
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The server response data.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+
 export async function deleteWorkspace(workspaceID) {
   try {
     const res = await authenticatedService({
@@ -413,7 +453,14 @@ export async function deleteWorkspace(workspaceID) {
   }
 }
 
-export async function getAllWorkspaces() {
+/**
+ * Retrieves all the workspaces for the merchant.
+ * If the operation is successful, an API response containing an array of workspace objects is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ * */
+export const getAllWorkspaces = cache(async () => {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
   try {
@@ -447,9 +494,13 @@ export async function getAllWorkspaces() {
       statusText: error?.response?.statusText,
     };
   }
-}
+});
 
-export async function getAllKYCData() {
+/**
+ * Retrieves all the KYC data for a merchant.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ * */
+export const getAllKYCData = cache(async () => {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
   try {
@@ -483,23 +534,41 @@ export async function getAllKYCData() {
       statusText: error?.response?.statusText,
     };
   }
-}
+});
 
+/**
+ * Retrieves the authentication session for the current user.
+ * If the session is successfully retrieved, it returns the session object;
+ * otherwise, it returns null.
+ *
+ * @returns {Promise<Object|null>} A promise that resolves to the session object if available, or null if not.
+ */
 export async function getAuthSession() {
   const session = await getServerSession();
-
   if (session) return session;
-
   return null;
 }
 
+/**
+ * Retrieves the user details for the currently authenticated user.
+ * If the user is authenticated, it returns the user details object;
+ * otherwise, it returns null.
+ *
+ * @returns {Promise<Object|null>} A promise that resolves to the user details object if available, or null if not.
+ */
 export async function getUserDetails() {
   const session = await getUserSession();
-
   if (session) return session;
-
   return null;
 }
+
+/**
+ * Retrieves the workspace session for the currently authenticated user.
+ * If the workspace session is successfully retrieved, it returns the workspace session object;
+ * otherwise, it returns null.
+ *
+ * @returns {Promise<Object|null>} A promise that resolves to the workspace session object if available, or null if not.
+ */
 
 export async function getWorkspaceSession() {
   const session = await getWorkspaceSessionData();

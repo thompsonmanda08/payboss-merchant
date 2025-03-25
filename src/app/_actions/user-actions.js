@@ -4,6 +4,7 @@ import { USER_SESSION } from "@/lib/constants";
 import { getUserSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 /**
  * Creates a new user for a merchant by calling the API endpoint.
@@ -61,7 +62,7 @@ export async function createNewUser(newUser) {
  *
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  * */
-export async function getAllUsers() {
+export async function fetchAllUsers() {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
 
@@ -96,6 +97,8 @@ export async function getAllUsers() {
     };
   }
 }
+
+export const getAllUsers = cache(fetchAllUsers);
 
 /**
  * Assigns the given users to a workspace by calling the API endpoint.

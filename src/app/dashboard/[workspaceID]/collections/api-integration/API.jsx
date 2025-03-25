@@ -45,10 +45,7 @@ import {
   setupWorkspaceAPIKey,
 } from "@/app/_actions/workspace-actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  API_COLLECTIONS_QUERY_KEY,
-  WORKSPACE_API_KEY_QUERY_KEY,
-} from "@/lib/constants";
+import { QUERY_KEYS } from "@/lib/constants";
 import APIConfigViewModal from "./APIConfigView";
 import { getAPICollectionLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
@@ -105,7 +102,7 @@ const APIIntegration = ({ workspaceID }) => {
 
   // HANDLE FETCH API COLLECTION LATEST TRANSACTION DATA
   const mutation = useMutation({
-    mutationKey: [API_COLLECTIONS_QUERY_KEY, workspaceID],
+    mutationKey: [QUERY_KEYS.API_COLLECTIONS, workspaceID],
     mutationFn: (dateRange) =>
       getAPICollectionLatestTransactions(workspaceID, dateRange),
   });
@@ -148,7 +145,7 @@ const APIIntegration = ({ workspaceID }) => {
     }
 
     queryClient.invalidateQueries({
-      queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
+      queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     });
     // setApiKeyData(response?.data);
     // setApiKey(response?.data?.API);
@@ -187,7 +184,7 @@ const APIIntegration = ({ workspaceID }) => {
 
     notify("success", "API key has been updated!");
     queryClient.invalidateQueries({
-      queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
+      queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     });
     setIsLoading(false);
     handleClosePrompt();
@@ -247,7 +244,7 @@ const APIIntegration = ({ workspaceID }) => {
     }
 
     queryClient.invalidateQueries({
-      queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
+      queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     });
 
     notify("success", "Collection Terminals activated!");

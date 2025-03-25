@@ -1,6 +1,6 @@
 import Logo from "@/components/base/Logo";
 import ThemeSwitcher from "@/components/base/ThemeSwitcher";
-import { Footer } from "@/components/containers/landing-page/footer";
+import { Footer } from "@/components/landing-sections/footer";
 import React from "react";
 
 function CheckoutLayout({ children }) {

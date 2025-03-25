@@ -1,13 +1,13 @@
 import { getAuthSession } from "./_actions/config-actions";
 import LoadingPage from "./loading";
 import { Suspense } from "react";
-import { Header } from "@/components/containers/landing-page/header";
-import { PrimaryFeatures } from "@/components/containers/landing-page/primary-features";
-import { Features } from "@/components/containers/landing-page/features";
-import { CallToAction } from "@/components/containers/landing-page/call-to-action";
-import { Faqs } from "@/components/containers/landing-page/faqs";
-import { Footer } from "@/components/containers/landing-page/footer";
-import { HeroLikeABoss } from "@/components/containers/landing-page/hero-like-a-boss";
+import { Header } from "@/components/landing-sections/header";
+import { PrimaryFeatures } from "@/components/landing-sections/primary-features";
+import { Features } from "@/components/landing-sections/features";
+import { CallToAction } from "@/components/landing-sections/call-to-action";
+import { Faqs } from "@/components/landing-sections/faqs";
+import { Footer } from "@/components/landing-sections/footer";
+import { HeroLikeABoss } from "@/components/landing-sections/hero-like-a-boss";
 
 export default async function LandingPage() {
   const session = await getAuthSession();

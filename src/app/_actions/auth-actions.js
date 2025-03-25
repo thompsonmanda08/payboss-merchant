@@ -11,12 +11,12 @@ import {
 import { apiClient } from "@/lib/utils";
 
 /**
- * Validates a merchant's TPIN, 
+ * Validates a merchant's TPIN,
  * If the TPIN is valid, an API response containing the merchant's information is returned.
  * If the TPIN is invalid, an API response with a message indicating the error is returned.
  * @param {string} tpin - The TPIN to be validated
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object which indicates the success or failure of the operation.
- * 
+ *
  */
 export async function validateTPIN(tpin) {
   try {
@@ -53,7 +53,7 @@ export async function validateTPIN(tpin) {
  * If the operation fails, an API response with a message indicating the error is returned.
  * @param {BusinessInfo} businessInfo - An object containing the business information of the merchant.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object which indicates the success or failure of the operation.
- * 
+ *
  */
 export async function createNewMerchant(businessInfo) {
   try {
@@ -185,7 +185,7 @@ export async function updateMerchantDetails(businessInfo, merchantID) {
  * @param {string} merchantID - The ID of the merchant whose admin user is being created.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  *
-*/
+ */
 
 export async function createMerchantAdminUser(newUser, merchantID) {
   try {
@@ -410,7 +410,7 @@ export async function logUserOut() {
   return false;
 }
 
-export async function lockScrenOnUserIdle(state) {
+export async function lockScreenOnUserIdle(state) {
   const isLoggedIn = await verifySession();
   if (isLoggedIn) {
     await updateAuthSession({ screenLocked: state });

@@ -15,7 +15,7 @@ import { cn, formatCurrency, notify } from "@/lib/utils";
 import Link from "next/link";
 import { Input } from "@/components/ui/input-field";
 import { useQueryClient } from "@tanstack/react-query";
-import AddUserToWorkspace from "@/components/containers/workspace/AddUserToWorkspace";
+import AddUserToWorkspace from "@/components/add-users-workspace-modal";
 import PromptModal from "@/components/base/Prompt";
 import {
   changeWorkspaceVisibility,
@@ -122,8 +122,7 @@ function WorkspaceSummary({
     });
 
     if (response?.success) {
-      queryClient.invalidateQueries({ queryKey: [SETUP_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: [WORKSPACES_QUERY_KEY] });
+      queryClient.invalidateQueries();
       setLoading(false);
       notify("success", "Changes Saved!");
       return;
@@ -150,12 +149,7 @@ function WorkspaceSummary({
     const response = await deleteWorkspace(workspaceID);
 
     if (response?.success) {
-      queryClient.invalidateQueries({
-        queryKey: [WORKSPACES_QUERY_KEY],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [SETUP_QUERY_KEY],
-      });
+      queryClient.invalidateQueries();
       setDeleteLoading(false);
       notify("success", "Workspaces Deactivated successfully!");
       back();

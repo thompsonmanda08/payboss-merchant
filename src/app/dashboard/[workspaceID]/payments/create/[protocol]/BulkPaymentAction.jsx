@@ -2,17 +2,17 @@
 import { useEffect } from "react";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import usePaymentsStore from "@/context/payment-store";
-import UploadCSVFile from "@/components/containers/disbursements/UploadCSVFile";
-import PaymentDetails from "@/components/containers/disbursements/BulkPaymentDetails";
-import ValidationDetails from "@/components/containers/disbursements/ValidationDetails";
-import RecordDetailsViewer from "@/components/containers/disbursements/RecordDetailsViewer";
+import UploadCSVFile from "@/app/dashboard/[workspaceID]/payments/components/UploadCSVFile";
+import PaymentDetails from "@/app/dashboard/[workspaceID]/payments/components/BulkPaymentDetails";
+import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/ValidationDetails";
+import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/RecordDetailsViewer";
 import { useRouter } from "next/navigation";
-import ApproverAction from "@/components/containers/disbursements/ApproverAction";
+import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/ApproverAction";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
-import ProgressStep from "@/components/elements/progress-step";
+import ProgressStep from "@/components/progress-step";
 import LoadingPage from "@/app/loading";
-import SelectPrefund from "@/components/containers/disbursements/SelectPrefund";
+import SelectPrefund from "@/app/dashboard/[workspaceID]/payments/components/SelectPrefund";
 
 export const STEPS = [
   {

@@ -1,11 +1,11 @@
 import React, { Suspense } from "react";
 import Image from "next/image";
 import { DefaultCover } from "@/lib/constants";
-import WorkspaceHeader from "@/components/containers/workspace/WorkspaceListHeader";
+import WorkspaceHeader from "@/components/welcome-header";
 import { getAuthSession, getUserDetails } from "../_actions/config-actions";
 import LoadingPage from "../loading";
 import { redirect } from "next/navigation";
-import WorkspacesList from "@/components/containers/workspace/WorkspacesList";
+import WorkspacesList from "@/components/workspaces-list";
 import { cn } from "@/lib/utils";
 
 async function WorkSpacesPage() {

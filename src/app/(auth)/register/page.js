@@ -4,13 +4,13 @@ import React from "react";
 import SignUpForm from "@/components/forms/signup-form";
 
 import { useRouter } from "next/navigation";
-import Spinner from "@/components/ui/Spinner";
+import Spinner from "@/components/ui/spinner";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import useAuthStore from "@/context/auth-store";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/base/Logo";
 import Card from "@/components/base/Card";
-import EmptyState from "@/components/elements/empty-state";
+import EmptyState from "@/components/empty-state";
 
 export default function Register() {
   const { isLoading, isError } = useConfigOptions();
@@ -18,7 +18,7 @@ export default function Register() {
   const router = useRouter();
 
   return (
-    <div className="relative -mt-[260px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none xl:-mt-[300px]">
+    <div className="relative -mt-[260px] md:-mt-[412px] xl:-mt-[432px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none ">
       {!accountCreated && (
         <div className="pt bg-red-5000 z-10 -mt-16 flex flex-col items-center rounded-t-2xl border-b-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-black/40 via-black/5 to-transparent p-6 pb-10 pt-24">
           <Logo isWhite containerClasses={"scale-[1.5] mb-4"} />

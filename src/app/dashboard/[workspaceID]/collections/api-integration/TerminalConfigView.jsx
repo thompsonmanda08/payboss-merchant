@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { registerTerminals } from "@/app/_actions/workspace-actions";
 import { uploadTerminalConfigFile } from "@/app/_actions/pocketbase-actions";
 import { motion } from "framer-motion";
-import ProgressStep from "@/components/elements/progress-step";
+import ProgressStep from "@/components/progress-step";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const CONFIG_VIEWS = [

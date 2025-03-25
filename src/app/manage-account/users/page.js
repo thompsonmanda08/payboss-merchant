@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import LoadingPage from "@/app/loading";
-import ManagePeople from "@/components/containers/users/ManagePeople";
+import ManagePeople from "@/app/manage-account/users/components/ManagePeople";
 import { getAllUsers } from "@/app/_actions/user-actions";
 import {
   getUserAccountRoles,

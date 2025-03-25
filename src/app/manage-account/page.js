@@ -1,5 +1,5 @@
 import LoadingPage from "@/app/loading";
-import Workspaces from "@/components/containers/workspace/WorkspacesList";
+import Workspaces from "@/components/workspaces-list";
 import React, { Suspense } from "react";
 import { getAllWorkspaces, getUserDetails } from "../_actions/config-actions";
 

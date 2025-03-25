@@ -18,11 +18,11 @@ import { useMutation } from "@tanstack/react-query";
 import { getCollectionsReport } from "@/app/_actions/transaction-actions";
 import { AnimatePresence, motion } from "framer-motion";
 
-import TotalStatsLoader from "@/components/elements/total-stats-loader";
+import TotalStatsLoader from "@/app/dashboard/components/total-stats-loader";
 import Card from "@/components/base/Card";
 import CardHeader from "@/components/base/CardHeader";
-import Tabs from "@/components/elements/tabs";
-import TotalValueStat from "@/components/elements/total-stats";
+import Tabs from "@/components/tabs";
+import TotalValueStat from "@/app/dashboard/components/total-stats";
 import { apiTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
 import {
   API_KEY_TERMINAL_TRANSACTION_COLUMNS,

@@ -5,7 +5,7 @@ import {
   getUserDetails,
   getWorkspaceRoles,
 } from "@/app/_actions/config-actions";
-import WorkspaceSettings from "@/components/containers/workspace/WorkspaceSettings";
+import WorkspaceSettings from "@/app/dashboard/[workspaceID]/workspace-settings/components";
 import { getAllUsers } from "@/app/_actions/user-actions";
 import { getWorkspaceMembers } from "@/app/_actions/workspace-actions";
 

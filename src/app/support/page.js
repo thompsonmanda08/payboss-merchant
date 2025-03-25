@@ -2,7 +2,7 @@ import SupportForm from "@/components/forms/support-form";
 import React from "react";
 import AuthLayout from "../(auth)/layout";
 import Logo from "@/components/base/Logo";
-import WorkspaceHeader from "@/components/containers/workspace/WorkspaceListHeader";
+import WorkspaceHeader from "@/components/welcome-header";
 import { getUserDetails } from "../_actions/config-actions";
 
 async function Support() {

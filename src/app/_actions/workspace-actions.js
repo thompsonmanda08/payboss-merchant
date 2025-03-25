@@ -1,6 +1,7 @@
 "use server";
 import authenticatedService from "@/lib/api-config";
 import { updateWorkspaceSession } from "@/lib/session";
+import { cache } from "react";
 
 /**
  * Initializes a workspace and updates the session with the workspace permissions
@@ -17,7 +18,7 @@ import { updateWorkspaceSession } from "@/lib/session";
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function initializeWorkspace(workspaceID) {
+async function workspaceInit(workspaceID) {
   if (!workspaceID) {
     return {
       success: false,
@@ -68,6 +69,7 @@ export async function initializeWorkspace(workspaceID) {
     };
   }
 }
+export const initializeWorkspace = cache(workspaceInit);
 
 /**
  * Submits a Proof of Payment (POP) for a workspace.
@@ -614,7 +616,7 @@ export async function getWorkspaceAPIKey(workspaceID) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function generateWorkspaceTillNumer(workspaceID) {
+export async function generateWorkspaceTillNumber(workspaceID) {
   if (!workspaceID) {
     return {
       success: false,

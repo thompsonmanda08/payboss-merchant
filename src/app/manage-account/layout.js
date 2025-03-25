@@ -1,4 +1,4 @@
-import SettingsSideBar from "@/components/elements/settings-sidebar";
+import SettingsSideBar from "@/components/settings-sidebar";
 import React from "react";
 import { getAuthSession } from "../_actions/config-actions";
 import { redirect } from "next/navigation";
