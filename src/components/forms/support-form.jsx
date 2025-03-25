@@ -31,7 +31,12 @@ function SupportForm() {
 
       if (response?.ok == true) {
         e.currentTarget?.reset();
-        notify("success", "Message was sent Successfully!");
+
+        notify({
+          color: "success",
+          title: "Success",
+          description: "Message was sent Successfully!",
+        });
       }
     } catch (error) {
     } finally {

@@ -45,7 +45,11 @@ export default function DocumentAttachments() {
     };
 
     if (!isKYCSent) {
-      notify("error", "Checkbox is unmarked");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Checkbox is unmarked",
+      });
       setError({
         message: "Checkbox is unmarked. Agree to the statement below.",
         status: true,
@@ -55,7 +59,11 @@ export default function DocumentAttachments() {
     }
 
     if (Object.keys(documentUrls).length < 5 && isKYCSent) {
-      notify("error", "Provide all required files!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Provide all required files!",
+      });
       setError({
         message: "Provide all required files!",
         status: true,
@@ -70,7 +78,11 @@ export default function DocumentAttachments() {
       response = await updateBusinessDocumentRefs(documentUrls);
 
       if (response?.success) {
-        notify("success", "Documents Updated Successfully!");
+        notify({
+          title: "Success",
+          color: "success",
+          description: "Documents updated successfully!",
+        });
         queryClient.invalidateQueries();
         setIsSubmitting(false);
         return;
@@ -79,7 +91,11 @@ export default function DocumentAttachments() {
       response = await sendBusinessDocumentRefs(documentUrls);
 
       if (response?.success) {
-        notify("success", "Documents Submitted For Approval!");
+        notify({
+          title: "Success",
+          color: "success",
+          description: "Documents submitted successfully!",
+        });
         queryClient.invalidateQueries();
         setIsSubmitting(false);
         return;
@@ -87,7 +103,12 @@ export default function DocumentAttachments() {
     }
 
     setError({ message: response?.message, status: true });
-    notify("error", "Error Submitting Documents");
+
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Failed to submit documents",
+    });
 
     setIsSubmitting(false);
   }
@@ -97,11 +118,20 @@ export default function DocumentAttachments() {
     setError({ message: "", status: "" });
     let response = await uploadBusinessFile(file, merchantID, recordID);
     if (response?.success) {
-      notify("success", response?.message);
+      notify({
+        title: "Success",
+        color: "success",
+        description: response?.message,
+      });
       setIsLoading(false);
       return response?.data;
     }
-    notify("error", response?.message);
+
+    notify({
+      title: "Error",
+      color: "danger",
+      description: response?.message,
+    });
     setIsLoading(false);
   }
 

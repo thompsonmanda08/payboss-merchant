@@ -63,10 +63,9 @@ export async function getGeneralConfigs() {
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  * */
 export const getUserSetupConfigs = cache(async () => {
+  const url = `merchant/user/setup`;
   try {
-    const res = await authenticatedService({
-      url: `merchant/user/setup`,
-    });
+    const res = await authenticatedService({ url });
 
     // CREATE A USER SESSION COOKIE TO STORE THE LOGGED IN USER DATA
     await createUserSession({
@@ -99,6 +98,7 @@ export const getUserSetupConfigs = cache(async () => {
     };
   } catch (error) {
     console.error({
+      endpoint: url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,

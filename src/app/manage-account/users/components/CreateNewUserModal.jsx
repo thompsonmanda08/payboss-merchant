@@ -71,7 +71,11 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
   async function handleCreateUser() {
     setLoading(true);
     if (!isValidData()) {
-      notify("error", "Error: Invalid Details");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Invalid user details.",
+      });
       setLoading(false);
       return;
     }
@@ -85,7 +89,11 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
     let response = await createNewUser(userData);
 
     if (response?.success) {
-      notify("success", "User created successfully!");
+      notify({
+        title: "Success",
+        color: "success",
+        description: "User created successfully!",
+      });
       setError({ status: false, message: "" });
       onClose();
       queryClient.invalidateQueries();
@@ -93,7 +101,11 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
       return;
     }
 
-    notify("error", "Error creating user!");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Problem occurred while creating user.",
+    });
     setError({ status: true, message: response?.message });
     setLoading(false);
   }
@@ -114,14 +126,22 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
 
     if (response?.success) {
       queryClient.invalidateQueries();
-      notify("success", "User updated successfully!");
+      notify({
+        title: "Success",
+        color: "success",
+        description: "User updated successfully!",
+      });
       setError({ status: false, message: "" });
       setLoading(false);
       handleClose();
       return;
     }
 
-    notify("error", "Error updating user!");
+    notify({
+      title: "Error updating user",
+      color: "danger",
+      description: response?.message || "Invalid user details.",
+    });
     setError({ status: true, message: response?.message });
     setLoading(false);
   }
@@ -145,14 +165,22 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
 
     if (response?.success) {
       queryClient.invalidateQueries();
-      notify("success", "User updated successfully!");
+      notify({
+        title: "Success",
+        color: "success",
+        description: "User updated successfully!",
+      });
       setError({ status: false, message: "" });
       setLoading(false);
       handleClose();
       return;
     }
 
-    notify("error", "Error updating user!");
+    notify({
+      title: "Error updating user",
+      color: "danger",
+      description: response?.message || "Failed to update user details.",
+    });
     setError({ status: true, message: response?.message });
     setLoading(false);
   }

@@ -63,15 +63,22 @@ export default function TillPaymentCollections({ workspaceID }) {
     const response = await generateWorkspaceTillNumber(workspaceID);
 
     if (!response?.success) {
-      notify("error", "Failed to generate Till Number!");
-      notify("error", response?.message);
+      notify({
+        color: "danger",
+        title: "Failed to generate Till Number!",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
 
     queryClient.invalidateQueries();
 
-    notify("success", "Till Number has been generated!");
+    notify({
+      color: "success",
+      title: "Success",
+      description: "Till Number has been generated!",
+    });
     setIsLoading(false);
     setIsNew(false);
 

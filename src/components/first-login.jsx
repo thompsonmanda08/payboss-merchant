@@ -37,7 +37,11 @@ export default function FirstLogin({ open }) {
       password.confirmPassword.length < 8 ||
       !PASSWORD_PATTERN.test(password.newPassword)
     ) {
-      notify("error", "Operation Failed! Try again");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Operation Failed! Try again",
+      });
       setIsLoading(false);
       setError({
         status: true,
@@ -54,14 +58,23 @@ export default function FirstLogin({ open }) {
     // If password change success - invalidate query caches - close modals and notify user
     if (res.success) {
       onClose();
-      notify("success", res.message || "Password Changed Successfully");
+
+      notify({
+        color: "success",
+        title: "Success",
+        description: "Password Changed Successfully",
+      });
       queryClient.invalidateQueries();
       setIsLoading(false);
       return;
     }
 
     setIsLoading(false);
-    notify("error", res.message || "Operation Failed! Try again");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: res.message,
+    });
   }
 
   useEffect(() => {

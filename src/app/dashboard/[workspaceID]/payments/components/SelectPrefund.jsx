@@ -39,7 +39,11 @@ const SelectPrefund = ({
     }
 
     setError({ status: true, message: "You need to select a prefund!" });
-    notify("error", "You need to select a prefund!");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "You need to select a prefund!",
+    });
     setIsLoading(false);
   }
 

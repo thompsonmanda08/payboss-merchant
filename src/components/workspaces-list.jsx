@@ -57,7 +57,11 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
       newWorkspace.workspace.length <= 3 &&
       newWorkspace.description.length <= 3
     ) {
-      notify("error", "Provide valid name and description!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Provide valid name and description!",
+      });
       setLoading(false);
     }
 
@@ -68,14 +72,28 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
         queryKey: [QUERY_KEYS.SETUP],
       });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.WORKSPACES] });
-      notify("success", "Workspace Created!");
+
+      notify({
+        color: "success",
+        title: "Success",
+        description: "Workspaces created successfully!",
+      });
       onOpenChange();
       setLoading(false);
       return;
     }
 
-    notify("error", "Failed to Create Workspace!");
-    notify("error", response?.message);
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Failed to create Workspace!",
+    });
+
+    notify({
+      title: "Error",
+      color: "danger",
+      description: response?.message,
+    });
 
     setLoading(false);
     onOpenChange();

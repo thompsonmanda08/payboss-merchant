@@ -57,7 +57,7 @@ function LoginForm() {
       return;
     }
 
-    queryClient.invalidateQueries();
+    // queryClient.invalidateQueries();
     setAuth(response?.data);
     const loginUrl = urlParams.get("callbackUrl") || "/workspaces";
     push(loginUrl);

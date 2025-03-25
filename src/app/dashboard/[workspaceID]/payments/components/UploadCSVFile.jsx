@@ -20,7 +20,11 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
       return;
     }
 
-    notify("error", "A valid file is required!");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "A valid file is required!",
+    });
   }
 
   async function handleFileUpload(file, recordID) {
@@ -29,7 +33,11 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
     let response = await uploadPaymentBatchFile(file, merchantID, recordID);
 
     if (response?.success) {
-      notify("success", "File Added!");
+      notify({
+        color: "success",
+        title: "File Added!",
+        description: "File uploaded successfully!",
+      });
       updatePaymentFields({
         url: response?.data?.file_url,
         recordID: response?.data?.file_record_id,
@@ -38,7 +46,11 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
       return response?.data;
     }
 
-    notify("error", "Failed to add file");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Failed to upload file.",
+    });
     setIsLoading(false);
     return {};
   }

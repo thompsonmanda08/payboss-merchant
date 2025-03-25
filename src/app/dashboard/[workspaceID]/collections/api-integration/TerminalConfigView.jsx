@@ -87,15 +87,23 @@ export default function TerminalConfigViewModal({
     let response = await registerTerminals(workspaceID, terminalUrl);
 
     if (!response?.success) {
-      notify("error", response?.message);
+      notify({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
 
-    notify("success", "Config file uploaded!");
+    queryClient.invalidateQueries();
+    notify({
+      color: "success",
+      title: "Success",
+      description: "Config file uploaded!",
+    });
     navigateForward();
     setIsLoading(false);
-    queryClient.invalidateQueries();
   }
 
   return (
@@ -162,14 +170,21 @@ const UploadTerminalConfigs = ({
     let response = await uploadTerminalConfigFile(file);
 
     if (!response?.success) {
-      notify("error", "Failed: " + response?.message);
+      notify({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
 
-    notify("success", "Config file uploaded!");
+    notify({
+      color: "success",
+      title: "Success",
+      description: "Config file uploaded!",
+    });
     setTerminalUrl(response?.data?.file_url);
-
     setIsLoading(false);
     return response?.data;
   }

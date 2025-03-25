@@ -52,10 +52,14 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     setIsLoading(true);
 
     if (!role?.can_approve) {
-      notify("error", "Unauthorized!");
+      notify({
+        color: "danger",
+        title: "Unauthorized!",
+        description: "You do not have permissions to perform this action",
+      });
       setError({
         status: true,
-        message: "You do not have permissions to perfom this action",
+        message: "You do not have permissions to perform this action",
       });
       setIsLoading(false);
       return;
@@ -69,13 +73,21 @@ const ApproverAction = ({ navigateForward, batchID }) => {
           parseFloat(workspaceWalletBalance))
     ) {
       setIsLoading(false);
-      notify("error", "Insufficient funds in workspace wallet");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Insufficient funds in workspace wallet",
+      });
       return;
     }
 
     if (!approve.review) {
       setIsLoading(false);
-      notify("error", "Review reason is required!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Review reason is required!",
+      });
       return;
     }
 
@@ -86,13 +98,21 @@ const ApproverAction = ({ navigateForward, batchID }) => {
 
     if (!response?.success) {
       setIsLoading(false);
-      notify("error", response?.message);
+      notify({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
       return;
     }
 
     setIsLoading(false);
     let action = isApproval ? "approved" : "rejected";
-    notify("success", `Bulk transaction ${action}!`);
+    notify({
+      title: "Success",
+      color: "success",
+      description: `Bulk transaction ${action}!`,
+    });
 
     // PERFORM QUERY INVALIDATION TO UPDATE THE STATE OF THE UI
     if (openBatchDetailsModal) {

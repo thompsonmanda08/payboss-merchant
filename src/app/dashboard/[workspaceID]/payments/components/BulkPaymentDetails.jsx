@@ -37,15 +37,24 @@ const PaymentDetails = ({
       paymentAction?.batch_name?.length < 3
     ) {
       setLoading(false);
-      notify("error", "A valid filename is required!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "A valid filename is required!",
+      });
       return;
     }
 
     if (!role?.can_initiate) {
-      notify("error", "Unauthorized!");
+      notify({
+        title: "NOT ALLOWED",
+        color: "danger",
+        description: "You do not have permissions to perform this action",
+      });
+
       setError({
         status: true,
-        message: "You do not have permissions to perfom this action",
+        message: "You do not have permissions to perform this action",
       });
       setLoading(false);
       return;
@@ -58,7 +67,12 @@ const PaymentDetails = ({
     );
 
     if (response?.success) {
-      notify("success", "Payment Batch Created!");
+      notify({
+        color: "success",
+        title: "Success",
+        description: "Payment Batch Created!",
+      });
+
       resetPaymentData();
       setBatchDetails(response?.data); // SET VALIDATION DATA INTO STATE
       navigateForward(); // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
@@ -66,7 +80,11 @@ const PaymentDetails = ({
       return;
     }
 
-    notify("error", "Failed to create payment batch!");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Failed to create payment batch!",
+    });
     setError({ status: true, message: response?.message });
     setLoading(false);
     return;

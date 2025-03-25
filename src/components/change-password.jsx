@@ -60,7 +60,11 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
     }
 
     setTimeout(() => {
-      notify("success", "Password Changed Successfully!");
+      notify({
+        color: "success",
+        title: "Success",
+        description: "Password Changed Successfully!",
+      });
       setLoading(false);
       setUpdatePassword(false);
       resetPasswordFields();

@@ -50,7 +50,11 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     if (
       batchDetails?.number_of_records != batchDetails?.number_of_valid_records
     ) {
-      notify("error", "Some records are still invalid!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Some records are still invalid!",
+      });
       setLoading(false);
       return;
     }
@@ -59,16 +63,24 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
       parseFloat(batchDetails?.valid_amount) >
       parseFloat(workspaceWalletBalance)
     ) {
-      notify("error", "Insufficient funds in the wallet!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Insufficient funds in the wallet!",
+      });
       setLoading(false);
       return;
     }
 
     if (!role.can_initiate) {
-      notify("error", "Unauthorized!");
+      notify({
+        title: "NOT ALLOWED",
+        color: "danger",
+        description: "You do not have permissions to perform this action",
+      });
       setError({
         status: true,
-        message: "You do not have permissions to perfom this action",
+        message: "You do not have permissions to perform this action",
       });
       setLoading(false);
       return;
@@ -77,7 +89,11 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     const response = await submitBatchForApproval(batchState?.ID || batchID);
 
     if (!response?.success) {
-      notify("error", response?.message);
+      notify({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
       setLoading(false);
       return;
     }
@@ -92,7 +108,12 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
         queryKey: [QUERY_KEYS.BATCH_DETAILS, queryID],
       });
     }
-    notify("success", "Records submitted successfully!");
+
+    notify({
+      title: "Success",
+      color: "success",
+      description: "Records submitted successfully!",
+    });
     navigateForward();
     setLoading(false);
 

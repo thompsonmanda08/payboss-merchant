@@ -85,12 +85,20 @@ function Wallet({
 
     if (response?.success) {
       setWalletLoading(false);
-      notify("success", response?.message);
+      notify({
+        title: "Success",
+        color: "success",
+        description: response?.message,
+      });
       return response?.data;
     }
 
     setWalletLoading(false);
-    notify("error", response?.message);
+    notify({
+      title: "Error",
+      color: "danger",
+      description: response?.message,
+    });
     return null;
   }
 
@@ -98,7 +106,11 @@ function Wallet({
     setIsLoading(true);
 
     if (!formData.url) {
-      notify("error", "Attach proof of payment!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Attach proof of payment!",
+      });
       setError({
         message: "Verify that you have attached a proof of payment!",
         status: true,
@@ -109,7 +121,11 @@ function Wallet({
     }
 
     if (!formData.bank_rrn) {
-      notify("error", "Enter a valid bank reference number!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Enter a valid bank reference number!",
+      });
       setError({
         message: "Verify that you have entered a valid bank reference number!",
         status: true,
@@ -120,7 +136,11 @@ function Wallet({
     }
 
     if (!formData.date_of_deposit) {
-      notify("error", "Enter a valid date of deposit!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Enter a valid date of deposit!",
+      });
       setError({
         message: "Verify that you have entered a valid date of deposit!",
         status: true,
@@ -131,7 +151,11 @@ function Wallet({
     }
 
     if (!formData.name) {
-      notify("error", "Enter a valid prefund name!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Enter a valid prefund name!",
+      });
       setError({
         message: "Verify that you have entered a valid prefund name!",
         status: true,
@@ -146,7 +170,11 @@ function Wallet({
       formData.amount < 0 ||
       !formData.amount.toString().length > 0
     ) {
-      notify("error", "Enter a valid amount!");
+      notify({
+        title: "Invalid Amount",
+        color: "danger",
+        description: "Verify that you have entered a valid amount!",
+      });
       setError({
         message: "Verify that you have entered a valid amount!",
         status: true,
@@ -157,10 +185,11 @@ function Wallet({
     }
 
     if (workspaceType == WORKSPACE_TYPES[0]?.ID) {
-      notify(
-        "error",
-        "You are not allowed to prefund your collections wallet!"
-      );
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "You are not allowed to prefund your collections wallet!",
+      });
       setError({
         message: "You are not allowed to prefund your collections wallet!",
         status: true,
@@ -175,7 +204,11 @@ function Wallet({
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.WALLET_HISTORY, workspaceID],
       });
-      notify("success", "POP Completed successfully!");
+      notify({
+        title: "Success",
+        color: "success",
+        description: "Proof of payment submitted successfully.",
+      });
       setIsLoading(false);
       setFormData({
         amount: "",
@@ -193,7 +226,11 @@ function Wallet({
       status: true,
       message: response?.message,
     });
-    notify("error", response?.message);
+    notify({
+      title: "Error",
+      color: "danger",
+      description: response?.message,
+    });
     setIsLoading(false);
     return;
   }
@@ -455,13 +492,21 @@ export function WalletTransactionHistory({
 
     if (!prefundApproval.remarks) {
       setIsLoading(false);
-      notify("error", "Review reason is required!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Review reason is required.",
+      });
       return;
     }
 
     if (!prefundApproval?.action) {
       setIsLoading(false);
-      notify("error", "Action is required!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Action is required!",
+      });
       return;
     }
 
@@ -473,7 +518,11 @@ export function WalletTransactionHistory({
 
     if (!response?.success) {
       setIsLoading(false);
-      notify("error", "Failed to submit approval action!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Failed to submit approval action!",
+      });
       return;
     }
 
@@ -486,15 +535,21 @@ export function WalletTransactionHistory({
       queryKey: [QUERY_KEYS.ACTIVE_PREFUND, workspaceID],
     });
     setIsLoading(false);
-    notify("success", "Submitted successfully!");
+    notify({
+      title: "Success",
+      color: "success",
+      description: "Submitted successfully!",
+    });
     handleClosePrompt();
   }
 
   const { wrapper } = classNames || "";
 
-  return isFetching ? (
-    <WalletLHistoryLoader />
-  ) : (
+  if (isFetching) {
+    return <WalletLHistoryLoader />;
+  }
+
+  return (
     <>
       <div
         className={cn(

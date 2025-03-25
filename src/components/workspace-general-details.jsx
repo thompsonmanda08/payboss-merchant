@@ -78,7 +78,11 @@ function WorkspaceDetails({
       newWorkspace.workspace?.length <= 3 ||
       newWorkspace.description?.length <= 3
     ) {
-      notify("error", "Provide valid name and description!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Provide valid name and description!",
+      });
       setLoading(false);
       return;
     }
@@ -97,11 +101,19 @@ function WorkspaceDetails({
       });
 
       setLoading(false);
-      notify("success", "Changes Saved!");
+      notify({
+        color: "success",
+        title: "Success",
+        description: "Changes Saved!",
+      });
       return;
     }
 
-    notify("error", "Failed to Update Workspace!");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Failed to Update Workspace!",
+    });
     setLoading(false);
   }
 
@@ -114,7 +126,11 @@ function WorkspaceDetails({
 
     // VALIDATE INPUTS
     if (!callbackURL?.url || !isValidURL) {
-      notify("error", "Provide a valid url!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Provide valid url!",
+      });
       setError({ onCallbackURL: true, message: "Provide a valid url!" });
       setIsLoadingCallback(false);
       return;
@@ -125,11 +141,19 @@ function WorkspaceDetails({
     if (response?.success) {
       queryClient.invalidateQueries();
       setIsLoadingCallback(false);
-      notify("success", "Callback URL updated!");
+      notify({
+        color: "success",
+        title: "Success",
+        description: "Callback URL updated!",
+      });
       return;
     }
 
-    notify("error", "Failed to Update callback URL!");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Failed to Update callback URL!",
+    });
     setIsLoadingCallback(false);
   }
 
@@ -157,12 +181,21 @@ function WorkspaceDetails({
         queryKey: [QUERY_KEYS.SETUP],
       });
       setDeleteLoading(false);
-      notify("success", "Workspaces Deactivated successfully!");
+
+      notify({
+        color: "success",
+        title: "Success",
+        description: "Workspaces Deactivated successfully!",
+      });
       back();
       return;
     }
 
-    notify("error", "Failed to Deactivate Workspace!");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Failed to Deactivate Workspace!",
+    });
     setDeleteLoading(false);
   }
 

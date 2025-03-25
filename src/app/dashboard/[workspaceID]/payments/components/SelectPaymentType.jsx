@@ -1,5 +1,5 @@
 "use client";
-import { cn, notify } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import usePaymentsStore from "@/context/payment-store";
 import { useRouter } from "next/navigation";
 import useNavigation from "@/hooks/useNavigation";
@@ -46,16 +46,6 @@ const SelectPaymentType = ({ setCreatePaymentLoading }) => {
     setCreatePaymentLoading(true);
     updatePaymentFields({ type: type?.name });
     setSelectedActionType(type);
-
-    if (type?.name === "") {
-      notify("warning", "Selected Service Type");
-      return;
-    }
-
-    if (!setSelectedProtocol) {
-      notify("warning", "Please select a service protocol");
-      return;
-    }
 
     // router.push(`${type.href}/?protocol=${selectedProtocol}`)
     router.push(`payments/create/${selectedProtocol}`);

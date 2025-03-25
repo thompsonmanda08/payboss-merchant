@@ -102,7 +102,11 @@ function WorkspaceSummary({
     if (noChangesToSave) {
       setLoading(false);
       setChangeWorkspaceDetails(false);
-      notify("success", "Changes Saved!");
+      notify({
+        color: "success",
+        title: "Success",
+        description: "Changes Saved!",
+      });
       return;
     }
 
@@ -111,7 +115,11 @@ function WorkspaceSummary({
       newWorkspace.workspace.length <= 3 ||
       newWorkspace.description.length <= 3
     ) {
-      notify("error", "Provide valid name and description!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Provide valid name and description!",
+      });
       setLoading(false);
       return;
     }
@@ -124,11 +132,19 @@ function WorkspaceSummary({
     if (response?.success) {
       queryClient.invalidateQueries();
       setLoading(false);
-      notify("success", "Changes Saved!");
+      notify({
+        color: "success",
+        title: "Success",
+        description: "Changes Saved!",
+      });
       return;
     }
 
-    notify("error", "Failed to Update Workspace!");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Failed to Update Workspace!",
+    });
     setLoading(false);
   }
 
@@ -151,12 +167,21 @@ function WorkspaceSummary({
     if (response?.success) {
       queryClient.invalidateQueries();
       setDeleteLoading(false);
-      notify("success", "Workspaces Deactivated successfully!");
+
+      notify({
+        color: "success",
+        title: "Success",
+        description: "Workspaces Deactivated successfully!",
+      });
       back();
       return;
     }
 
-    notify("error", "Failed to Deactivate Workspace!");
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Failed to Deactivate Workspace!",
+    });
     setDeleteLoading(false);
   }
 
@@ -167,12 +192,22 @@ function WorkspaceSummary({
 
     if (!response?.success) {
       setIsVisible(!isVisible);
-      notify("error", "Failed to update visibility");
+
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Failed to update visibility",
+      });
       return;
     }
 
     queryClient.invalidateQueries();
-    notify("success", "Visibility updated successfully");
+
+    notify({
+      color: "success",
+      title: "Success",
+      description: "Visibility updated successfully",
+    });
   }
 
   return !selectedWorkspace && !isUserInWorkspace ? (

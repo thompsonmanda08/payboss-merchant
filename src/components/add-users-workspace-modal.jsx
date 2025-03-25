@@ -187,12 +187,21 @@ function AddUserToWorkspace({
         status: true,
         message: response?.message,
       });
-      notify("error", response?.message);
+
+      notify({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
 
-    notify("success", `Users were added to ${workspaceName}!`);
+    notify({
+      color: "success",
+      title: "Success",
+      description: `Users were added to ${workspaceName}!`,
+    });
     navigateTo?.(1);
     onClose();
     handleClearAllSelected();

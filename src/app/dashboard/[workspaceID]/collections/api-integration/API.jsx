@@ -127,8 +127,12 @@ const APIIntegration = ({ workspaceID }) => {
     setIsLoading(true);
 
     if (!permissions?.update || !permissions?.delete) {
-      notify("error", "Only admins are allowed to generate API keys!");
-      
+      notify({
+        color: "danger",
+        title: "Error",
+        description: "Only admins are allowed to generate API keys!",
+      });
+
       setIsLoading(false);
       handleClosePrompt();
       return;
@@ -136,15 +140,22 @@ const APIIntegration = ({ workspaceID }) => {
 
     // THERE CAN ONLY BE ONE API KEY
     if (configData?.apiKey) {
-      notify("error", "You already have an API key for this workspace!");
+      notify({
+        color: "danger",
+        title: "Error",
+        description: "You already have an API key for this workspace!",
+      });
       return;
     }
 
     const response = await setupWorkspaceAPIKey(workspaceID);
 
     if (!response?.success) {
-      notify("error", "Failed to generate API key!");
-      notify("error", response?.message);
+      notify({
+        color: "danger",
+        title: "Failed to generate API key",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
@@ -152,13 +163,14 @@ const APIIntegration = ({ workspaceID }) => {
     queryClient.invalidateQueries({
       queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     });
-    // setApiKeyData(response?.data);
-    // setApiKey(response?.data?.API);
-    notify("success", "API key has been generated!");
+    notify({
+      color: "success",
+      title: "Success",
+      description: "API key has been generated",
+    });
     setIsLoading(false);
     setIsNew(false);
     handleClosePrompt();
-
     return;
   }
 
@@ -166,14 +178,22 @@ const APIIntegration = ({ workspaceID }) => {
     setIsLoading(true);
 
     if (!permissions?.update || !permissions?.delete) {
-      notify("error", "Only admins are allowed to refresh API keys!");
+      notify({
+        color: "danger",
+        title: "Error",
+        description: "Only admins are allowed to refresh API keys.",
+      });
       setIsLoading(false);
       handleClosePrompt();
       return;
     }
 
     if (!configData?.apiKey) {
-      notify("error", "You have no API key!");
+      notify({
+        color: "danger",
+        title: "Error",
+        description: "You have no API key.",
+      });
       setIsLoading(false);
       return;
     }
@@ -181,13 +201,21 @@ const APIIntegration = ({ workspaceID }) => {
     const response = await refreshWorkspaceAPIKey(workspaceID);
 
     if (!response?.success) {
-      notify("error", "Failed to refresh API key!");
+      notify({
+        color: "danger",
+        title: "Error",
+        description: "Failed to refresh API key.",
+      });
       console.error(response?.message);
       setIsLoading(false);
       return;
     }
 
-    notify("success", "API key has been updated!");
+    notify({
+      color: "success",
+      title: "Success",
+      description: "API key has been updated",
+    });
     queryClient.invalidateQueries({
       queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     });
@@ -200,14 +228,22 @@ const APIIntegration = ({ workspaceID }) => {
     setIsLoading(true);
 
     if (!permissions?.update || !permissions?.delete) {
-      notify("error", "Only admins are allowed to activate terminals!");
+      notify({
+        color: "danger",
+        title: "Error",
+        description: "Only admins are allowed to activate terminals.",
+      });
       setIsLoading(false);
       handleClosePrompt();
       return;
     }
 
     if (configData?.terminals || hasTerminals) {
-      notify("error", "Terminals already activated for this workspace!");
+      notify({
+        color: "danger",
+        title: "Error",
+        description: "Terminals already activated for this workspace.",
+      });
       setIsLoading(false);
       handleClosePrompt();
       return;
@@ -216,14 +252,22 @@ const APIIntegration = ({ workspaceID }) => {
     const response = await activateWorkspaceTerminals(workspaceID);
 
     if (!response?.success) {
-      notify("error", response?.message);
+      notify({
+        color: "danger",
+        title: "Error",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
 
     queryClient.invalidateQueries();
 
-    notify("success", "Collection Terminals activated!");
+    notify({
+      color: "success",
+      title: "Success",
+      description: "Collection Terminals activated.",
+    });
     setIsLoading(false);
     handleClosePrompt();
 
@@ -234,7 +278,11 @@ const APIIntegration = ({ workspaceID }) => {
     setIsLoading(true);
 
     if (!permissions?.update || !permissions?.delete) {
-      notify("error", "Only admins are allowed to deactivate terminals!");
+      notify({
+        color: "danger",
+        title: "NOT ALLOWED",
+        description: "Only admins are allowed to deactivate terminals.",
+      });
       setIsLoading(false);
       handleClosePrompt();
       return;
@@ -243,7 +291,11 @@ const APIIntegration = ({ workspaceID }) => {
     const response = await deactivateWorkspaceTerminals(workspaceID);
 
     if (!response?.success) {
-      notify("error", response?.message);
+      notify({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
@@ -252,7 +304,11 @@ const APIIntegration = ({ workspaceID }) => {
       queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     });
 
-    notify("success", "Collection Terminals activated!");
+    notify({
+      title: "Success",
+      color: "success",
+      description: "Collection Terminals activated!",
+    });
     setIsLoading(false);
     handleClosePrompt();
 
@@ -261,7 +317,11 @@ const APIIntegration = ({ workspaceID }) => {
 
   function handleTerminalStatus(actionKey) {
     if (hasTerminals && actionKey == "activate-terminals") {
-      notify("error", "Terminals already activated for this workspace!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Terminals already activated for this workspace!",
+      });
       handleClosePrompt();
       return;
     }
@@ -272,7 +332,11 @@ const APIIntegration = ({ workspaceID }) => {
       terminalsConfigured &&
       actionKey == "deactivate-terminals"
     ) {
-      notify("error", "Contact support to deactivate terminals!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Contact support to deactivate terminals!",
+      });
       handleClosePrompt();
       return;
     }
@@ -288,7 +352,11 @@ const APIIntegration = ({ workspaceID }) => {
 
   function handleManageTerminals(selectedKey) {
     if (!permissions?.update || !permissions?.delete) {
-      notify("error", "NOT ALLOWED!");
+      notify({
+        color: "danger",
+        title: "NOT ALLOWED!",
+        description: "You cannot perform this action",
+      });
       handleClosePrompt();
       return;
     }

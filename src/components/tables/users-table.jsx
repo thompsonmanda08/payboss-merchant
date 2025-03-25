@@ -391,7 +391,11 @@ export default function UsersTable({
     if (isUsersRoute) {
       // ONLY OWNER CAN NOT BE REMOVED FROM ACCOUNT
       if (selectedUser?.role == "owner") {
-        notify("error", "Owner cannot be removed!");
+        notify({
+          title: "Error",
+          color: "danger",
+          description: "Owner cannot be removed!",
+        });
         setIsLoading(false);
         return;
       }
@@ -409,7 +413,11 @@ export default function UsersTable({
 
     // The last person cannot be removed from the workspace
     if (users.length == 1) {
-      notify("error", "Workspace cannot be empty!");
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Workspace cannot be empty!",
+      });
       setIsLoading(false);
       return;
     }

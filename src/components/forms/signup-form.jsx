@@ -182,7 +182,6 @@ export default function SignUpForm() {
         setIsLoading(false);
         return;
       } else {
-        // notify("error", "Error Submitting Business Details");
         notify({
           color: "danger",
           title: "Failed",
