@@ -2,7 +2,6 @@
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
-import { Container } from "@/components/base/Container";
 import Link from "next/link";
 
 export function CallToAction() {
@@ -19,7 +18,7 @@ export function CallToAction() {
         height={1244}
         unoptimized
       />
-      <Container className="relative">
+      <div className="relative container">
         <div className="mx-auto max-w-xl text-center">
           <h2 className="font-display heading-1 text-3xl tracking-tight text-white sm:text-4xl">
             Get Started Today
@@ -37,7 +36,7 @@ export function CallToAction() {
             Get Started Now
           </Button>
         </div>
-      </Container>
+      </div>
     </section>
   );
 }

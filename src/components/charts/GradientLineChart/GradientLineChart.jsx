@@ -1,45 +1,45 @@
-'use client'
-import { useRef, useEffect, useState, useMemo } from 'react'
-import configs from './configs'
-import gradientChartLine from '../functions/gradientChartLine'
-import { Line } from 'react-chartjs-2'
-import { cn } from '@/lib/utils'
-import Card from '@/components/base/Card'
+"use client";
+import { useRef, useEffect, useState, useMemo } from "react";
+import configs from "./configs";
+import gradientChartLine from "../functions/gradientChartLine";
+import { Line } from "react-chartjs-2";
+import { cn } from "@/lib/utils";
+import Card from "@/components/base/card";
 
 const chart = {
   labels: [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ],
   datasets: [
     {
-      label: 'Income',
-      color: '#3172d4',
+      label: "Income",
+      color: "#3172d4",
       data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
     {
-      label: 'Payments',
-      color: '#eb7a2e',
+      label: "Payments",
+      color: "#eb7a2e",
       data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
   ],
-}
+};
 
 function GradientLineChart({ title, description, height, chart_ }) {
   // props.chart is the chartData required to render the chart.
-  const chartRef = useRef(null)
-  const [chartData, setChartData] = useState({})
-  const { data, options } = chartData
+  const chartRef = useRef(null);
+  const [chartData, setChartData] = useState({});
+  const { data, options } = chartData;
 
   const chartDatasets = useMemo(() => {
     return chart.datasets?.map((dataset) => ({
@@ -54,20 +54,20 @@ function GradientLineChart({ title, description, height, chart_ }) {
       //   chartRef.current?.children[0],
       //   dataset?.color || '#00000000',
       // ),
-    }))
-  }, [chart.datasets])
+    }));
+  }, [chart.datasets]);
 
   const renderChart = useMemo(() => {
     return (
       <div ref={chartRef} style={{ height }}>
         {data && options && <Line data={data} options={options} />}
       </div>
-    )
-  }, [chartData, height])
+    );
+  }, [chartData, height]);
 
   useEffect(() => {
-    setChartData(configs(chart.labels, chartDatasets))
-  }, [chart.labels, chartDatasets])
+    setChartData(configs(chart.labels, chartDatasets));
+  }, [chart.labels, chartDatasets]);
 
   return (
     <Card>
@@ -85,7 +85,7 @@ function GradientLineChart({ title, description, height, chart_ }) {
       )}
       {renderChart}
     </Card>
-  )
+  );
 }
 
-export default GradientLineChart
+export default GradientLineChart;

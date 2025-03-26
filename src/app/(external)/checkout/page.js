@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "@/components/base/Logo";
+import Logo from "@/components/base/logo";
 import { Footer } from "@/components/landing-sections/footer";
 
 async function CheckoutPage(props) {

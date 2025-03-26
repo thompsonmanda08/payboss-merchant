@@ -12,8 +12,8 @@ import {
 } from "@heroui/react";
 import { WalletIcon } from "@heroicons/react/24/outline";
 import { cn, formatCurrency, formatDate } from "@/lib/utils";
-import SoftBoxIcon from "@/components/base/SoftBoxIcon";
-import EmptyLogs from "@/components/base/EmptyLogs";
+import SoftBoxIcon from "@/components/base/soft-box-icon";
+import EmptyLogs from "@/components/base/empty-logs";
 import Loader from "@/components/ui/loader";
 import { format } from "date-fns";
 

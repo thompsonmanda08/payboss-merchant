@@ -14,9 +14,9 @@ import WorkspaceItem from "./workspace-card-item";
 import OverlayLoader from "@/components/ui/overlay-loader";
 import Loader from "@/components/ui/loader";
 import useAccountProfile from "@/hooks/useProfileDetails";
-import Card from "@/components/base/Card";
-import InfoBanner from "@/components/base/InfoBanner";
-import EmptyLogs from "@/components/base/EmptyLogs";
+import Card from "@/components/base/card";
+import InfoBanner from "@/components/base/info-banner";
+import EmptyLogs from "@/components/base/empty-logs";
 import CreateNewWorkspaceModal from "./create-new-workspace-modal";
 
 function WorkspacesList({ user, showHeader = false, className, workspaces }) {

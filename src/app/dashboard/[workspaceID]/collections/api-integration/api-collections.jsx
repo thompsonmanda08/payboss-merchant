@@ -23,7 +23,7 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { cn, formatDate, maskString, notify } from "@/lib/utils";
-import PromptModal from "@/components/base/Prompt";
+import PromptModal from "@/components/base/prompt";
 import {
   Table,
   TableHeader,
@@ -49,8 +49,8 @@ import { QUERY_KEYS } from "@/lib/constants";
 import APIConfigViewModal from "./APIConfigView";
 import { getAPICollectionLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
-import Card from "@/components/base/Card";
-import CardHeader from "@/components/base/CardHeader";
+import Card from "@/components/base/card";
+import CardHeader from "@/components/base/card-header";
 
 import {
   API_KEY_TERMINAL_TRANSACTION_COLUMNS,

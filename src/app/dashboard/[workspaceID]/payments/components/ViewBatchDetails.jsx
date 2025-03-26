@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/ValidationDetails";
-import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/ApproverAction";
-import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/RecordDetailsViewer";
+import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/approver-action";
+import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer";
 import usePaymentsStore from "@/context/payment-store";
 import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
 
 import { useQueryClient } from "@tanstack/react-query";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import Tabs from "@/components/tabs";
 
 export const BATCH_DETAILS_STEPS = [

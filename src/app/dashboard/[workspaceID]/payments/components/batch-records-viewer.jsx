@@ -3,7 +3,7 @@ import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody } from "@heroui/modal";
 import usePaymentsStore from "@/context/payment-store";
 import { useBatchDetails } from "@/hooks/useQueryHooks";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import SingleTransactionsTable from "../../../../../components/containers/tables/SingleTransactionsTable";
 import { SINGLE_TRANSACTIONS_VALIDATION_COLUMNS } from "@/lib/table-columns";
 

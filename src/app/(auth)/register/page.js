@@ -8,9 +8,9 @@ import Spinner from "@/components/ui/spinner";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import useAuthStore from "@/context/auth-store";
 import { Button } from "@/components/ui/button";
-import Logo from "@/components/base/Logo";
-import Card from "@/components/base/Card";
+import Logo from "@/components/base/logo";
 import EmptyState from "@/components/empty-state";
+import { Card } from "@heroui/react";
 
 export default function Register() {
   const { isLoading, isError } = useConfigOptions();
@@ -37,7 +37,7 @@ export default function Register() {
 
       {/********************* REGISTER FORM *********************/}
       {isLoading ? (
-        <Card className="flex h-[300px] max-w-md items-center justify-center self-center bg-background p-5">
+        <Card className="flex h-[300px] w-full max-w-md items-center justify-center self-center bg-background p-5">
           <Spinner size={100} />
         </Card>
       ) : isError ? (

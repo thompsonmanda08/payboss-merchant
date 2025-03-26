@@ -6,7 +6,7 @@ import React from "react";
 import { getLocalTimeZone, today, parseDate } from "@internationalized/date";
 import { Button } from "@/components/ui/button";
 import useAccountProfile from "@/hooks/useProfileDetails";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 
 function BusinessAccountDetails({
   businessDetails,

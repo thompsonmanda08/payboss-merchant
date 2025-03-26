@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import AuthLayout from "./(auth)/layout";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
-import Logo from "@/components/base/Logo";
+import Logo from "@/components/base/logo";
 
 export default function NotFound() {
   return (

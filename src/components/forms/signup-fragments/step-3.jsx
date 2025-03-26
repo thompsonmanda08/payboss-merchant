@@ -7,7 +7,7 @@ import { staggerContainerItemVariants } from "@/lib/constants";
 import useAuthStore from "@/context/auth-store";
 import { STEPS } from "../signup-form";
 import Image from "next/image";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 
 // CREATE NEW ADMIN USER
 export default function Step4({ updateDetails, backToStart }) {

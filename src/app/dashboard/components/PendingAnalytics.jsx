@@ -1,5 +1,5 @@
-import Card from "@/components/base/Card";
-import CardHeader from "@/components/base/CardHeader";
+import Card from "@/components/base/card";
+import CardHeader from "@/components/base/card-header";
 import Tooltip from "@/components/base/Tooltip";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

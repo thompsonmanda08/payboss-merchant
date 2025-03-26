@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input-field";
 import useWorkspaces from "@/hooks/useWorkspaces";
 import { useQueryClient } from "@tanstack/react-query";
 import { PAYMENT_SERVICE_TYPES, QUERY_KEYS } from "@/lib/constants";
-import PromptModal from "@/components/base/Prompt";
+import PromptModal from "@/components/base/prompt";
 import { useBatchDetails } from "@/hooks/useQueryHooks";
 import useDashboard from "@/hooks/useDashboard";
 import Loader from "@/components/ui/loader";

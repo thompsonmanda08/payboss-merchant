@@ -24,14 +24,14 @@ import {
 
 import DropdownButton from "@/components/ui/dropdown-button";
 import Spinner from "@/components/ui/spinner";
-import SoftBoxIcon from "@/components/base/SoftBoxIcon";
+import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import SideNavItems from "./side-nav-items";
 import { Skeleton } from "./ui/skeleton";
 
 import useNavigation from "@/hooks/useNavigation";
-import Logo from "./base/Logo";
+import Logo from "./base/logo";
 import { WORKSPACE_TYPES } from "@/lib/constants";
 
 function SideNavBar({ workspaceSession }) {

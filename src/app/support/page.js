@@ -1,7 +1,7 @@
 import SupportForm from "@/components/forms/support-form";
 import React from "react";
 import AuthLayout from "../(auth)/layout";
-import Logo from "@/components/base/Logo";
+import Logo from "@/components/base/logo";
 import WorkspaceHeader from "@/components/welcome-header";
 import { getUserDetails } from "../_actions/config-actions";
 

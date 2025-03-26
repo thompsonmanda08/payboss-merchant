@@ -10,7 +10,7 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import { formatDate, maskString, notify } from "@/lib/utils";
-import PromptModal from "@/components/base/Prompt";
+import PromptModal from "@/components/base/prompt";
 import {
   Table,
   TableHeader,
@@ -32,8 +32,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getBillsLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
-import Card from "@/components/base/Card";
-import CardHeader from "@/components/base/CardHeader";
+import Card from "@/components/base/card";
+import CardHeader from "@/components/base/card-header";
 import BillPaymentAPIConfigModal from "./bill-api-config-modal";
 
 import { BILLS_TRANSACTION_COLUMNS } from "@/lib/table-columns";

@@ -1,5 +1,5 @@
 "use client";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import React from "react";
 import { useActivePrefunds } from "@/hooks/useQueryHooks";
 import PrefundsTable from "@/components/tables/prefunds-table";

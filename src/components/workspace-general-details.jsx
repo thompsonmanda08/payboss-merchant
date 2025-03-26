@@ -2,7 +2,7 @@ import {
   deleteWorkspace,
   updateWorkspace,
 } from "@/app/_actions/config-actions";
-import PromptModal from "@/components/base/Prompt";
+import PromptModal from "@/components/base/prompt";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
 import AddUserToWorkspace from "@/components/add-users-workspace-modal";

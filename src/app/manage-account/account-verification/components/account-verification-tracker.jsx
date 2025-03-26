@@ -8,8 +8,8 @@ import {
   ShieldExclamationIcon,
 } from "@heroicons/react/24/outline";
 import useAccountProfile from "@/hooks/useProfileDetails";
-import Card from "@/components/base/Card";
-import CardHeader from "@/components/base/CardHeader";
+import Card from "@/components/base/card";
+import CardHeader from "@/components/base/card-header";
 import TimelineItem from "@/components/base/timeline-item";
 function ProgressStageTracker() {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split("T")[0]);

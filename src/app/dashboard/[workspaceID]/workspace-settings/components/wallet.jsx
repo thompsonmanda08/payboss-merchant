@@ -9,7 +9,7 @@ import {
 } from "@/lib/utils";
 import { QUERY_KEYS, TASK_TYPE, WORKSPACE_TYPES } from "@/lib/constants";
 import { formatActivityData } from "@/lib/utils";
-import PromptModal from "@/components/base/Prompt";
+import PromptModal from "@/components/base/prompt";
 import { Chip, Tooltip, useDisclosure } from "@heroui/react";
 import { uploadPOPDocument } from "@/app/_actions/pocketbase-actions";
 import {
@@ -25,12 +25,12 @@ import {
   useWalletPrefundHistory,
   useWorkspaceInit,
 } from "@/hooks/useQueryHooks";
-import Card from "@/components/base/Card";
-import Balance from "@/components/base/Balance";
+import Card from "@/components/base/card";
+import Balance from "@/components/base/wallet-balance";
 import StatusMessage from "@/components/base/status-message";
-import CardHeader from "@/components/base/CardHeader";
-import EmptyLogs from "@/components/base/EmptyLogs";
-import UploadField from "@/components/base/FileDropZone";
+import CardHeader from "@/components/base/card-header";
+import EmptyLogs from "@/components/base/empty-logs";
+import UploadField from "@/components/base/file-dropzone";
 import { useState } from "react";
 import { PaperClipIcon } from "@heroicons/react/24/outline";
 import Modal from "@/components/base/custom-modal";

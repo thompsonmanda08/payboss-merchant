@@ -18,7 +18,7 @@ import {
   PlusIcon,
 } from "@heroicons/react/24/outline";
 import { cn, formatCurrency } from "@/lib/utils";
-import SoftBoxIcon from "@/components/base/SoftBoxIcon";
+import SoftBoxIcon from "@/components/base/soft-box-icon";
 import Loader from "@/components/ui/loader";
 import { format } from "date-fns";
 

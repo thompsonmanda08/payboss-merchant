@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import Card from "../../../components/base/Card";
+import Card from "../../../components/base/card";
 
 function SimpleStats({
   title,

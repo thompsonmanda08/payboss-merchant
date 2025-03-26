@@ -1,6 +1,6 @@
 import LoadingPage from "@/app/loading";
 import React, { Suspense } from "react";
-import Statement from "./Statement";
+import Statement from "./wallet-statements";
 
 export default async function WalletStatementPage(props) {
   const params = await props.params;

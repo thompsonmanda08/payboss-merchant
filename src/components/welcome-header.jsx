@@ -1,6 +1,6 @@
 "use client";
-import Logo from "@/components/base/Logo";
-import ThemeSwitcher from "@/components/base/ThemeSwitcher";
+import Logo from "@/components/base/logo";
+import ThemeSwitcher from "@/components/base/theme-switcher";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/context/auth-store";
 import { Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/outline";

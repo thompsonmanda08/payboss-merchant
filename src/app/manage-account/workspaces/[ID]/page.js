@@ -1,6 +1,6 @@
 import LoadingPage from "@/app/loading";
 import React, { Suspense } from "react";
-import WorkspaceSummary from "./WorkspaceSummary";
+import WorkspaceSummary from "./workspace-summary-details";
 import {
   getAllWorkspaces,
   getWorkspaceRoles,

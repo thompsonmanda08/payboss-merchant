@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import Tabs from "@/components/tabs";
 import WorkspaceDetails from "../../../../../components/workspace-general-details";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-import CreateNewUserModal from "../../../../manage-account/users/components/CreateNewUserModal";
+import CreateNewUserModal from "../../../../manage-account/users/components/new-user-modal";
 import { useDisclosure } from "@heroui/react";
 import {
   BanknotesIcon,
@@ -15,7 +15,7 @@ import {
 import Wallet from "./wallet";
 import LoadingPage from "@/app/loading";
 import { cn } from "@/lib/utils";
-import Card from "@/components/base/Card";
+import Card from "@/components/base/card";
 import ActivePockets from "./active-pockets-tab";
 import { WORKSPACE_TYPES } from "@/lib/constants";
 import useWorkspaceStore from "@/context/workspaces-store";

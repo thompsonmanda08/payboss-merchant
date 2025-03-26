@@ -1,5 +1,5 @@
-import Logo from "@/components/base/Logo";
-import ThemeSwitcher from "@/components/base/ThemeSwitcher";
+import Logo from "@/components/base/logo";
+import ThemeSwitcher from "@/components/base/theme-switcher";
 import { Footer } from "@/components/landing-sections/footer";
 import React from "react";
 

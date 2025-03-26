@@ -23,17 +23,17 @@ import {
 
 import { cn, getUserInitials, notify } from "@/lib/utils";
 import useWorkspaceStore from "@/context/workspaces-store";
-import PromptModal from "@/components/base/Prompt";
+import PromptModal from "@/components/base/prompt";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS, rowsPerPageOptions } from "@/lib/constants";
 import Loader from "@/components/ui/loader";
-import EmptyLogs from "@/components/base/EmptyLogs";
+import EmptyLogs from "@/components/base/empty-logs";
 import { usePathname } from "next/navigation";
 import SelectField from "@/components/ui/select-field";
 import { Button } from "@/components/ui/button";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import Search from "@/components/ui/search";
-import CreateNewUserModal from "@/app/manage-account/users/components/CreateNewUserModal";
+import CreateNewUserModal from "@/app/manage-account/users/components/new-user-modal";
 
 const ACCOUNT_ROLES = [
   {

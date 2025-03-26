@@ -1,6 +1,6 @@
 "use client";
 
-import Card from "./Card";
+import { Card } from "@heroui/react";
 
 function CardLoader() {
   return (

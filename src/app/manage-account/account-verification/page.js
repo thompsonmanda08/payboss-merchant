@@ -1,5 +1,5 @@
 import LoadingPage from "@/app/loading";
-import AccountVerification from "@/app/manage-account/account-verification/components/AccountVerification";
+import AccountVerification from "@/app/manage-account/account-verification/components";
 import React, { Suspense } from "react";
 
 function ApprovalPage() {

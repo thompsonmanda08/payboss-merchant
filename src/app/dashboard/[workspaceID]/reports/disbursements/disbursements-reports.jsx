@@ -22,8 +22,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import ReportDetailsViewer from "@/components/containers/analytics/ReportDetailsViewer";
 import TotalStatsLoader from "@/app/dashboard/components/total-stats-loader";
 import { bulkTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
-import Card from "@/components/base/Card";
-import CardHeader from "@/components/base/CardHeader";
+import Card from "@/components/base/card";
+import CardHeader from "@/components/base/card-header";
 import Tabs from "@/components/tabs";
 import TotalValueStat from "@/app/dashboard/components/total-stats";
 import {

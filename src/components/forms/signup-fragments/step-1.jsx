@@ -11,7 +11,7 @@ import useAuthStore from "@/context/auth-store";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import SelectField from "@/components/ui/select-field";
 import useConfigOptions from "@/hooks/useConfigOptions";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import { Switch, Tooltip } from "@heroui/react";
 import AutoCompleteField from "@/components/base/auto-complete";
 

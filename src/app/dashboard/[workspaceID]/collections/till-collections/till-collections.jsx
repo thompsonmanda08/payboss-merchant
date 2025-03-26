@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Chip, Spinner, Tooltip, useDisclosure } from "@heroui/react";
 import { cn, formatDate, notify } from "@/lib/utils";
-import PromptModal from "@/components/base/Prompt";
+import PromptModal from "@/components/base/prompt";
 import {
   Table,
   TableHeader,
@@ -25,10 +25,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getTillCollectionsLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
-import Card from "@/components/base/Card";
-import CardHeader from "@/components/base/CardHeader";
-import TillNumberBanner from "./TillNumberBanner";
-import SoftBoxIcon from "@/components/base/SoftBoxIcon";
+import Card from "@/components/base/card";
+import CardHeader from "@/components/base/card-header";
+import TillNumberBanner from "./till-number-banner";
+import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { TILL_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 
 export default function TillPaymentCollections({ workspaceID }) {

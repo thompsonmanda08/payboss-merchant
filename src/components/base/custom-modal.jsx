@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import CardHeader from "./CardHeader";
+import CardHeader from "./card-header";
 
 const modalVariants = {
   hidden: { opacity: 0, y: "-50%", scale: 0.8 },

@@ -9,8 +9,8 @@ import { useMutation } from "@tanstack/react-query";
 import { getWalletStatementReport } from "@/app/_actions/transaction-actions";
 import { WalletTransactionHistory } from "@/app/dashboard/[workspaceID]/workspace-settings/components/wallet";
 import { walletStatementReportToCSV } from "@/app/_actions/file-conversion-actions";
-import Card from "@/components/base/Card";
-import CardHeader from "@/components/base/CardHeader";
+import Card from "@/components/base/card";
+import CardHeader from "@/components/base/card-header";
 import Search from "@/components/ui/search";
 import { useDebounce } from "@/hooks/use-debounce";
 

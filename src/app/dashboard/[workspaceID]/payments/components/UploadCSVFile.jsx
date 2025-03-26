@@ -7,7 +7,7 @@ import Link from "next/link";
 import React from "react";
 import { uploadPaymentBatchFile } from "@/app/_actions/pocketbase-actions";
 import useAccountProfile from "@/hooks/useProfileDetails";
-import { SingleFileDropzone } from "@/components/base/FileDropZone";
+import { SingleFileDropzone } from "@/components/base/file-dropzone";
 
 const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
   const { paymentAction, updatePaymentFields } = usePaymentsStore();

@@ -12,10 +12,10 @@ import {
   updateBusinessDocumentRefs,
 } from "@/app/_actions/auth-actions";
 import { useQueryClient } from "@tanstack/react-query";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import StatusMessage from "@/components/base/status-message";
-import EmptyLogs from "@/components/base/EmptyLogs";
-import UploadField from "@/components/base/FileDropZone";
+import EmptyLogs from "@/components/base/empty-logs";
+import UploadField from "@/components/base/file-dropzone";
 
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function DocumentAttachments() {

@@ -4,13 +4,11 @@ import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Container } from "@/components/base/Container";
 import { NavLink } from "@/components/base/nav-link";
 import { cn } from "@/lib/utils";
-import { UserIcon } from "@heroicons/react/24/solid";
 import useFloatingHeader from "@/hooks/useFloatingHeader";
-import Logo from "@/components/base/Logo";
-import ThemeSwitcher from "@/components/base/ThemeSwitcher";
+import Logo from "@/components/base/logo";
+import ThemeSwitcher from "@/components/base/theme-switcher";
 import {
   ChatBubbleLeftRightIcon,
   Squares2X2Icon,

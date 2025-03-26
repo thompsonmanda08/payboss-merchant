@@ -2,10 +2,10 @@
 import React from "react";
 import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
 import Loader from "@/components/ui/loader";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import { DefaultCover } from "@/lib/constants";
 import Image from "next/image";
-import Logo from "@/components/base/Logo";
+import Logo from "@/components/base/logo";
 import BackgroundSVG from "@/components/base/BackgroundSVG";
 
 // Create Document Component

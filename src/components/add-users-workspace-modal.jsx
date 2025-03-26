@@ -22,7 +22,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import StatusMessage from "@/components/base/status-message";
 import EmptyState from "@/components/empty-state";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import Spinner from "./ui/spinner";
 import { UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import SelectField from "@/components/ui/select-field";

@@ -1,5 +1,5 @@
 "use client";
-import Card from "@/components/base/Card";
+import Card from "@/components/base/card";
 import ChangePasswordField from "@/components/change-password";
 import { Switch } from "@heroui/switch";
 import { useState } from "react";

@@ -19,46 +19,28 @@ import { getCollectionsReport } from "@/app/_actions/transaction-actions";
 import { AnimatePresence, motion } from "framer-motion";
 
 import TotalStatsLoader from "@/app/dashboard/components/total-stats-loader";
-import Card from "@/components/base/Card";
-import CardHeader from "@/components/base/CardHeader";
+import Card from "@/components/base/card";
+import CardHeader from "@/components/base/card-header";
 import Tabs from "@/components/tabs";
 import TotalValueStat from "@/app/dashboard/components/total-stats";
-import { apiTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
-import {
-  API_KEY_TERMINAL_TRANSACTION_COLUMNS,
-  API_KEY_TRANSACTION_COLUMNS,
-} from "@/lib/table-columns";
-import { TerminalInfo } from "@/components/containers/tables/terminal-tables";
-import { useDebounce } from "@/hooks/use-debounce";
+import { billTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
+import { BILLS_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 
 const SERVICE_TYPES = [
   {
-    name: "API Transactions Reports",
+    name: "BIll Payment Reports",
     description:
-      "Reports on API transactions that took place within the date range applied",
+      "Reports on Bill API transactions that took place within the date range applied",
     index: 0,
-    service: "api-integration", // SERVICE TYPE REQUIRED BY API ENDPOINT
-  },
-  {
-    name: "Till Transactions Reports",
-    description:
-      "Reports on till transactions that took place within the date range applied",
-    index: 1,
-    service: "till", // SERVICE TYPE REQUIRED BY API ENDPOINT
+    service: "bill", // SERVICE TYPE REQUIRED BY API ENDPOINT
   },
 ];
 
-export default function CollectionsReports({ workspaceID }) {
-  const [dateRange, setDateRange] = useState(); // DATE RANGE FILTER
-
-  const [isExpanded, setIsExpanded] = useState(true); // SUMMARY EXPANDED STATE
-  const [currentTab, setCurrentTab] = useState(0); // CURRENTLY ACTIVE TAB
-
-  const [searchQuery, setSearchQuery] = useState(""); // TABLE SEARCH FILTER
-  const debouncedSearchQuery = useDebounce(searchQuery, 500);
-
-  const [terminalQuery, setTerminalQuery] = useState(""); // TERMINAL SEARCH FILTER
-  const debouncedTerminalQuery = useDebounce(terminalQuery, 500);
+export default function BillPaymentReports({ workspaceID }) {
+  const [dateRange, setDateRange] = useState();
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentTab, setCurrentTab] = useState(0);
 
   // HANDLE FETCH FILTERED TRANSACTION REPORT DATA
   const mutation = useMutation({
@@ -75,12 +57,12 @@ export default function CollectionsReports({ workspaceID }) {
     return await mutation.mutateAsync(range);
   }
 
-  // FETCH COLLECTIONS REPORT DATA - ASYNC AS HOISTED INTO THE MUTATION FUNCTION
+  // FETCH BILLS REPORT DATA - ASYNC AS HOISTED INTO THE MUTATION FUNCTION
   async function getReportsData(dateRange) {
     let serviceType = SERVICE_TYPES[currentTab]?.service;
 
     if (!serviceType) {
-      serviceType = "api-integration";
+      serviceType = "bill";
     }
 
     const response = await getCollectionsReport(
@@ -94,11 +76,9 @@ export default function CollectionsReports({ workspaceID }) {
   // MUTATION RESPONSE DATA
   const report = mutation?.data?.data?.summary || [];
   const transactions = mutation?.data?.data?.data || [];
-  const hasTerminals = Boolean(mutation?.data?.data?.hasTerminal || false);
-  const terminalSummary = mutation?.data?.data?.terminal || [];
 
   // RESOLVE DATA FILTERING
-  const hasSearchFilter = Boolean(debouncedSearchQuery);
+  const hasSearchFilter = Boolean(searchQuery);
   const filteredItems = React.useMemo(() => {
     let filteredRows = [...transactions];
 
@@ -108,46 +88,14 @@ export default function CollectionsReports({ workspaceID }) {
           // row?.narration?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
           row?.transactionID
             ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.destination
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.amount
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.service_provider
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase())
+            .includes(searchQuery?.toLowerCase()) ||
+          row?.amount?.toLowerCase().includes(searchQuery?.toLowerCase())
       );
     }
 
     return filteredRows;
-  }, [transactions, debouncedSearchQuery]);
+  }, [transactions, searchQuery]);
 
-  // RESOLVE TERMINAL FILTERING
-  const hasTerminalFilter = Boolean(debouncedTerminalQuery);
-  const filteredTerminals = React.useMemo(() => {
-    let terminals = [...terminalSummary];
-
-    if (hasTerminalFilter) {
-      terminals = terminals.filter(
-        (terminal) =>
-          terminal?.terminal_name
-            ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase()) ||
-          terminal?.terminalName
-            ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase()) ||
-          terminal?.terminalID
-            ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase())
-      );
-    }
-
-    return terminals;
-  }, [terminalSummary, debouncedTerminalQuery]);
-
-  // APPLY DATE RANGE FILTERING
   useEffect(() => {
     if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
       runAsyncMutation(dateRange);
@@ -155,18 +103,10 @@ export default function CollectionsReports({ workspaceID }) {
   }, [dateRange]);
 
   function handleFileExportToCSV() {
-    if (currentTab === 0)
-      apiTransactionsReportToCSV({
+    if (currentTab === 0) {
+      billTransactionsReportToCSV({
         objArray: transactions,
-        fileName: "api_collection_transactions",
-        hasTerminals,
-      });
-
-    if (currentTab === 1) {
-      apiTransactionsReportToCSV({
-        objArray: transactions,
-        fileName: "till_collection_transactions",
-        hasTerminals: false, //? TILL COLLECTION CANNOT HAVE TERMINALS
+        fileName: "bill_payment_transactions",
       });
     }
   }
@@ -195,7 +135,6 @@ export default function CollectionsReports({ workspaceID }) {
           </Button>
         </div>
       </div>
-
       {/************************************************************************/}
       <Card className={"w-full gap-3"}>
         <div className="flex items-end justify-between">
@@ -218,7 +157,22 @@ export default function CollectionsReports({ workspaceID }) {
             }}
           />
 
-          <div className="flex w-full justify-end gap-4">
+          <div className="flex w-full max-w-md gap-4">
+            <Search
+              // className={'mt-auto'}
+              placeholder={"Search by name, or type..."}
+              classNames={{ input: "h-10" }}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+            />
+            <Button
+              color={"primary"}
+              onPress={() => handleFileExportToCSV()}
+              startContent={<ArrowDownTrayIcon className="h-5 w-5" />}
+            >
+              Export
+            </Button>
             <Button
               color={"primary"}
               variant="flat"
@@ -246,8 +200,8 @@ export default function CollectionsReports({ workspaceID }) {
                 height: isExpanded ? "auto" : 0,
                 opacity: isExpanded ? 1 : 0,
               }}
-              className="mb-4"
             >
+              {/* OVERALL SUMMARY */}
               <Card className={"mb-4 mt-2 shadow-none"}>
                 {Object.keys(report).length > 0 ? (
                   <div className="flex flex-col gap-4 md:flex-row md:justify-between">
@@ -287,101 +241,20 @@ export default function CollectionsReports({ workspaceID }) {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-8">
-                    <TotalStatsLoader className={"justify-between"} />
-                    <TotalStatsLoader className={"justify-between"} />
-                  </div>
+                  <TotalStatsLoader className={"justify-between"} />
                 )}
               </Card>
-
-              {/* TERMINAL SUMMARY */}
-              {hasTerminals && (
-                <Card className={"max-w-full gap-4 shadow-none"}>
-                  <div className="flex w-full flex-col items-center justify-between gap-8 sm:flex-row">
-                    <CardHeader
-                      title={`Terminal Summary`}
-                      infoText={
-                        "Reports on successful transaction counts and values for each terminal"
-                      }
-                      classNames={{
-                        titleClasses:
-                          "text-base md:text-lg xl:text-xl font-bold",
-                        infoClasses: "text-[clamp(0.8rem,0.8vw,1rem)]",
-                      }}
-                    />
-                    <div className="flex w-full max-w-xs gap-4">
-                      <Search
-                        placeholder={"Find a terminal..."}
-                        className={""}
-                        onChange={(e) => setTerminalQuery(e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div
-                    className={
-                      "my-2 gap-4 flex max-w-full overflow-x-auto shadow-none"
-                    }
-                  >
-                    {filteredTerminals?.length > 0 &&
-                      filteredTerminals?.map((terminal) => (
-                        // Array.from({ length: 8 })?.map((terminal) => (
-                        <TerminalInfo
-                          className={"mb-4 min-w-[300px]"}
-                          key={terminal?.terminalID}
-                          terminalName={terminal?.terminalName}
-                          terminalID={terminal?.terminalID}
-                          count={terminal?.successful_count}
-                          value={terminal?.successful_value}
-                        />
-                      ))}
-                  </div>
-                </Card>
-              )}
             </motion.div>
           </AnimatePresence>
         }
-
-        {/* TABLE HEADER */}
-        <div className="flex w-full items-center justify-between gap-8">
-          <CardHeader
-            title={`Transactions`}
-            infoText={
-              "Transactions that took place within the date range applied"
-            }
-            classNames={{
-              titleClasses: "text-base md:text-lg xl:text-xl font-bold",
-              infoClasses: "text-[clamp(0.8rem,0.8vw,1rem)]",
-            }}
-          />
-          <div className="mb-4 flex w-full items-end justify-end gap-3">
-            <Search
-              className={"max-w-sm"}
-              placeholder={"Search by name, or type..."}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Button
-              color={"primary"}
-              onPress={() => handleFileExportToCSV()}
-              startContent={<ArrowDownTrayIcon className="h-5 w-5" />}
-            >
-              Export
-            </Button>
-          </div>
-        </div>
-
-        {/* CUSTOM TABLE TO RENDER TRANSACTIONS */}
+        {/* {activeTab} */}
         <CustomTable
-          columns={
-            hasTerminals
-              ? API_KEY_TERMINAL_TRANSACTION_COLUMNS
-              : API_KEY_TRANSACTION_COLUMNS
-          }
+          columns={BILLS_TRANSACTION_COLUMNS}
           rows={filteredItems || []}
           isLoading={mutation.isPending}
           isError={mutation.isError}
           removeWrapper
-          // onRowAction={(key) => {}}
+          onRowAction={(key) => {}}
         />
       </Card>
 

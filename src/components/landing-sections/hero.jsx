@@ -1,11 +1,11 @@
 "use client";
 import { Container } from "@/components/base/Container";
-import FrameContainer from "@/components/base/FrameContainer";
+import FrameContainer from "@/components/base/framer-container";
 import { Button } from "@/components/ui/button";
 
 export function Hero() {
   return (
-    <Container className="gap-5 pb-16 pt-20 text-center sm:h-screen lg:pt-32">
+    <div className="gap-5 pb-16 container pt-20 text-center sm:h-screen lg:pt-32">
       <div className="pt-8">
         <h1 className="mx-auto max-w-4xl bg-clip-text font-display text-5xl font-medium tracking-tight text-foreground/90 sm:text-7xl">
           Simplify{" "}
@@ -48,6 +48,6 @@ export function Hero() {
         image={"/images/screenshots/dashboard2.png"}
         description={"Dashboard Screenshot"}
       />
-    </Container>
+    </div>
   );
 }

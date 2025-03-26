@@ -1,7 +1,7 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import Logo from "./Logo";
+import Logo from "./logo";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";

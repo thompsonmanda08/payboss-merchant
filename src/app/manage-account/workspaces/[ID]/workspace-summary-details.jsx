@@ -16,7 +16,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input-field";
 import { useQueryClient } from "@tanstack/react-query";
 import AddUserToWorkspace from "@/components/add-users-workspace-modal";
-import PromptModal from "@/components/base/Prompt";
+import PromptModal from "@/components/base/prompt";
 import {
   changeWorkspaceVisibility,
   deleteWorkspace,

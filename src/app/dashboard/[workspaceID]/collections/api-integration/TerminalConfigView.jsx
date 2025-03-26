@@ -11,8 +11,8 @@ import {
 } from "@heroui/react";
 import { notify } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
-import CardHeader from "@/components/base/CardHeader";
-import { SingleFileDropzone } from "@/components/base/FileDropZone";
+import CardHeader from "@/components/base/card-header";
+import { SingleFileDropzone } from "@/components/base/file-dropzone";
 import { Button } from "@/components/ui/button";
 import { registerTerminals } from "@/app/_actions/workspace-actions";
 import { uploadTerminalConfigFile } from "@/app/_actions/pocketbase-actions";

@@ -1,4 +1,4 @@
-import Logo from "@/components/base/Logo";
+import Logo from "@/components/base/logo";
 import LoginForm from "@/components/forms/login-form";
 import Link from "next/link";
 import React from "react";

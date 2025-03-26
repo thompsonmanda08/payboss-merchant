@@ -12,9 +12,9 @@ import {
 import { formatCurrency } from "@/lib/utils";
 
 import { Chip } from "@heroui/react";
-import Card from "@/components/base/Card";
+import Card from "@/components/base/card";
 import SimpleStats from "@/app/dashboard/components/simple-stats";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import OverlayLoader from "@/components/ui/overlay-loader";
 import { MONTHS, WORKSPACE_TYPES } from "@/lib/constants";
 

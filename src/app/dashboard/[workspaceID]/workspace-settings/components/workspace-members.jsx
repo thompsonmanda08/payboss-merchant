@@ -1,5 +1,5 @@
 "use client";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import useDashboard from "@/hooks/useDashboard";
 import React from "react";
 import { useDisclosure } from "@heroui/react";

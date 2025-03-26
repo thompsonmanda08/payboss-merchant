@@ -8,7 +8,7 @@ import { STEPS } from "../signup-form";
 import useAuthStore from "@/context/auth-store";
 import SelectField from "@/components/ui/select-field";
 import useConfigOptions from "@/hooks/useConfigOptions";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 
 // BUSINESS BANKING DETAILS
 export default function Step2({ updateDetails, backToStart }) {

@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import LoadingPage from "../../loading";
-import InfoBanner from "@/components/base/InfoBanner";
+import InfoBanner from "@/components/base/info-banner";
 import DashboardAnalytics from "@/app/dashboard/components/DashboardAnalytics";
 import {
   getAllWorkspaces,
@@ -9,18 +9,8 @@ import {
 } from "@/app/_actions/config-actions";
 import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
 
-// Next.js will invalidate the cache when a
-// request comes in, at most once every 60 seconds.
 export const revalidate = 60;
-
-export const dynamicParams = true; // or false, to 404 on unknown paths
-
-// export async function generateStaticParams() {
-//   const workspacesResponse = await getAllWorkspaces();
-//   const workspaces = workspacesResponse?.data?.workspaces || [];
-
-//   return workspaces?.map((workspace) => ({ workspaceID: workspace?.ID  }));
-// }
+export const dynamicParams = true;
 
 async function DashboardHome({ params }) {
   const workspaceID = (await params).workspaceID;

@@ -1,12 +1,12 @@
 "use client";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import React, { useEffect } from "react";
-import BusinessAccountDetails from "./BusinessAccountDetails";
-import DocumentAttachments from "./DocumentAttachments";
-import ProgressStageTracker from "./ProgressStageTracker";
+import BusinessAccountDetails from "./business-account-details";
+import DocumentAttachments from "./kyc-document-attachments";
+import ProgressStageTracker from "./account-verification-tracker";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import useAccountProfile from "@/hooks/useProfileDetails";
-import DocumentsViewer from "./DocumentsViewer";
+import DocumentsViewer from "@/components/base/document-viewer";
 import Tabs from "@/components/tabs";
 
 function AccountVerification() {
@@ -14,6 +14,7 @@ function AccountVerification() {
     user,
     businessDetails,
     businessDocs,
+    signedContractDoc,
     allowUserToSubmitKYC,
     KYCStageID,
     KYCApprovalStatus,
@@ -36,7 +37,8 @@ function AccountVerification() {
   ) : (
     <DocumentsViewer
       key={"documents"}
-      businessDocs={businessDocs}
+      documents={businessDocs}
+      contractDocument={signedContractDoc}
       navigateToPage={navigateToPage}
     />
   );

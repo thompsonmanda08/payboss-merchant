@@ -4,7 +4,7 @@ import React from "react";
 import { ArrowRightIcon, BriefcaseIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import SoftBoxIcon from "@/components/base/SoftBoxIcon";
+import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { Button } from "@/components/ui/button";
 
 function WorkspaceItem({ name, description, href, isVisible, onClick }) {

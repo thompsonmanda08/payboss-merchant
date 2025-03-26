@@ -6,18 +6,16 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import useAccountProfile from "@/hooks/useProfileDetails";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import Modal from "@/components/base/custom-modal";
 
-const DocumentsViewer = () => {
-  const { businessDocs, signedContractDoc } = useAccountProfile();
-
-  const [selectedDoc, setSelectedDoc] = useState(businessDocs[0]);
+const DocumentsViewer = ({ documents, contractDocument }) => {
+  const [selectedDoc, setSelectedDoc] = useState(documents[0]);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (businessDocs?.length) {
-      setSelectedDoc(businessDocs[0]);
+    if (documents?.length) {
+      setSelectedDoc(documents[0]);
     }
   }, []);
 
@@ -37,7 +35,7 @@ const DocumentsViewer = () => {
 
       <div className="flex w-full flex-col gap-2 md:flex-row">
         <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-5">
-          {businessDocs?.map((document, index) => (
+          {documents?.map((document, index) => (
             <Button
               key={index}
               variant="light"
@@ -66,16 +64,16 @@ const DocumentsViewer = () => {
             </Button>
           ))}
 
-          {signedContractDoc && (
+          {contractDocument && (
             <Button
               variant="light"
               className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border dark:hover:bg-primary/30 border-primary-100 dark:bg-primary/10 dark:border-primary-600/20 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
               onClick={() => {
-                setSelectedDoc(signedContractDoc);
+                setSelectedDoc(contractDocument);
                 setIsOpen(true);
               }}
             >
-              <Link href={signedContractDoc?.url} target="_blank">
+              <Link href={contractDocument?.url} target="_blank">
                 <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 z-50 h-5 w-5 text-foreground/20 hover:text-primary" />
               </Link>
               <div className="h-[65%]">
@@ -89,7 +87,7 @@ const DocumentsViewer = () => {
                 />
               </div>
               <span className="text-[13px] text-foreground/90">
-                {signedContractDoc?.name}
+                {contractDocument?.name}
               </span>
             </Button>
           )}

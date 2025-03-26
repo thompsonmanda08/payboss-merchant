@@ -18,7 +18,7 @@ import Search from "@/components/ui/search";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import SelectField from "@/components/ui/select-field";
 import { useBulkTransactions, useWorkspaceInit } from "@/hooks/useQueryHooks";
-import EmptyLogs from "@/components/base/EmptyLogs";
+import EmptyLogs from "@/components/base/empty-logs";
 import { format } from "date-fns";
 import { BULK_TRANSACTIONS_COLUMN } from "@/lib/table-columns";
 

@@ -20,7 +20,7 @@ import usePaymentsStore from "@/context/payment-store";
 import Loader from "@/components/ui/loader";
 import { EyeIcon } from "@heroicons/react/24/outline";
 import SelectField from "@/components/ui/select-field";
-import EmptyLogs from "@/components/base/EmptyLogs";
+import EmptyLogs from "@/components/base/empty-logs";
 import { format } from "date-fns";
 
 export default function CustomTable({

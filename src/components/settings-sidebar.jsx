@@ -19,7 +19,7 @@ import { motion } from "framer-motion";
 import useAuthStore from "@/context/auth-store";
 import useNavigation from "@/hooks/useNavigation";
 import NavIconButton from "./ui/nav-icon-button";
-import Logo from "./base/Logo";
+import Logo from "./base/logo";
 
 function SettingsSideBar({
   title,

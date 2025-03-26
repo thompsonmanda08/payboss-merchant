@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { NavLink } from "@/components/base/nav-link";
-import Logo from "@/components/base/Logo";
-import { Container } from "@/components/base/Container";
-import ThemeSwitcher from "@/components/base/ThemeSwitcher";
+import Logo from "@/components/base/logo";
+import ThemeSwitcher from "@/components/base/theme-switcher";
+import { cn } from "@/lib/utils";
 
 export function Footer({ showLogo = true, showLinks = true }) {
   return (
     <footer className="bg-background">
-      <Container>
+      <div className={cn("mx-auto container px-4 sm:px-6 lg:px-8")}>
         {(showLogo || showLinks) && (
           <div className="py-16">
             {showLogo && (
@@ -63,7 +63,7 @@ export function Footer({ showLogo = true, showLinks = true }) {
             reserved.
           </p>
         </div>
-      </Container>
+      </div>
     </footer>
   );
 }
