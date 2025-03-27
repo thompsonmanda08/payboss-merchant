@@ -3,9 +3,7 @@ import { notify } from "@/lib/utils";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import Card from "../base/card";
-import CardHeader from "../base/card-header";
 import { Input } from "../ui/input-field";
-import Logo from "../base/logo";
 
 function SupportForm() {
   const [isLoading, setIsLoading] = useState(false);

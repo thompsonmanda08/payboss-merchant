@@ -14,7 +14,7 @@ import {
   SERVICE_PROVIDER_COLOR_MAP,
   TRANSACTION_STATUS_COLOR_MAP,
 } from "@/lib/constants";
-import { cn, formatDate } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
 import Loader from "@/components/ui/loader";

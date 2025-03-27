@@ -31,7 +31,7 @@ export async function validateTPIN(tpin) {
     };
   } catch (error) {
     console.error({
-      endpoint: url,
+      endpoint: "GET | TPIN VALIDATION ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -72,7 +72,7 @@ export async function createNewMerchant(businessInfo) {
     };
   } catch (error) {
     console.error({
-      endpoint: url,
+      endpoint: "POST | NEW MERCHANT ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -126,7 +126,7 @@ export async function submitMerchantBankDetails(data, merchantID) {
     };
   } catch (error) {
     console.error({
-      endpoint: url,
+      endpoint: "POST | MERCHANT BANK DATA ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -178,7 +178,7 @@ export async function updateMerchantDetails(businessInfo, merchantID) {
     };
   } catch (error) {
     console.error({
-      endpoint: url,
+      endpoint: "PATCH | MERCHANT KYC DATA ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -232,7 +232,7 @@ export async function createMerchantAdminUser(newUser, merchantID) {
     };
   } catch (error) {
     console.error({
-      endpoint: url,
+      endpoint: "POST | NEW MERCHANT ADMIN USER ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -262,7 +262,7 @@ export async function createMerchantAdminUser(newUser, merchantID) {
 export async function sendBusinessDocumentRefs(payloadUrls) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
-  const url = `merchant/onboard/documents/${merchantID}`;
+  const url = `merchant/${merchantID}/document/submission`;
   try {
     const res = await authenticatedService({
       url,
@@ -279,7 +279,7 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
     };
   } catch (error) {
     console.error({
-      endpoint: url,
+      endpoint: "POST | MERCHANT BUSINESS DOCS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -309,7 +309,7 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
 export async function updateBusinessDocumentRefs(payloadUrls) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
-  const url = `merchant/onboard/update/documents/${merchantID}`;
+  const url = `merchant/${merchantID}/document/submission`;
 
   try {
     const res = await authenticatedService({
@@ -327,7 +327,7 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
     };
   } catch (error) {
     console.error({
-      endpoint: url,
+      endpoint: "PATCH | BUSINESS DOC ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,

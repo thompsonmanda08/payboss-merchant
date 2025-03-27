@@ -17,7 +17,6 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import StatusMessage from "@/components/base/status-message";
 import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS, USERS } from "@/lib/constants";
 import {
   createNewUser,
   updateSystemUserData,

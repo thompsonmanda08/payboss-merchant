@@ -3,7 +3,6 @@ import Image from "next/image";
 import { now, getLocalTimeZone } from "@internationalized/date";
 import { cn, formatDate } from "@/lib/utils";
 import {
-  ChatBubbleOvalLeftEllipsisIcon,
   ClipboardDocumentCheckIcon,
   ShieldExclamationIcon,
 } from "@heroicons/react/24/outline";
@@ -11,6 +10,7 @@ import useAccountProfile from "@/hooks/useProfileDetails";
 import Card from "@/components/base/card";
 import CardHeader from "@/components/base/card-header";
 import TimelineItem from "@/components/base/timeline-item";
+
 function ProgressStageTracker() {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split("T")[0]);
   const date = formatDate(fullDate).replaceAll("-", " ");
@@ -32,15 +32,9 @@ function ProgressStageTracker() {
         "Your account and your KYC data is being reviewed by the PayBoss support team. This process usually takes up to 24 hours, You will receive an email notification when your application has been reviewed",
       Icon: ShieldExclamationIcon,
     },
+
     {
       ID: 3,
-      name: "Review & Negotiation",
-      infoText:
-        "Review & Negotiation all you to reach an understanding with the PayBoss team, on the PayBoss services and pricing as well as commission information",
-      Icon: ChatBubbleOvalLeftEllipsisIcon,
-    },
-    {
-      ID: 4,
       name: "Account Approved",
       infoText:
         "Congratulations! Your account has been approved, enjoy the PayBoss services to the fullest",
@@ -72,11 +66,11 @@ function ProgressStageTracker() {
         </div>
         <div
           className={cn(
-            "flex w-full min-w-80 select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9"
+            "flex w-full select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9"
           )}
         >
           <Image
-            className="aspect-square max-w-80 object-contain"
+            className="aspect-square object-contain"
             src={"/images/illustrations/approval.svg"}
             width={200}
             height={200}

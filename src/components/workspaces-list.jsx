@@ -4,7 +4,7 @@ import { capitalize, cn, notify } from "@/lib/utils";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import { useDisclosure } from "@heroui/react";
-import { createNewWorkspace } from "@/app/_actions/config-actions";
+import { createNewWorkspace } from "@/app/_actions/merchant-actions";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants";
 import { usePathname } from "next/navigation";
@@ -19,7 +19,13 @@ import InfoBanner from "@/components/base/info-banner";
 import EmptyLogs from "@/components/base/empty-logs";
 import CreateNewWorkspaceModal from "./create-new-workspace-modal";
 
-function WorkspacesList({ user, showHeader = false, className, workspaces }) {
+function WorkspacesList({
+  user,
+  permissions,
+  showHeader = false,
+  className,
+  workspaces,
+}) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
   const { KYCStageID } = useAccountProfile();
@@ -29,8 +35,8 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
   const { workspaces: activeWorkspaces, isLoading } = useWorkspace();
 
   const canCreateWorkspace =
-    (user?.role?.toLowerCase() == "admin" ||
-      user?.role?.toLowerCase() == "owner") &&
+    (permissions?.role?.toLowerCase() == "admin" ||
+      permissions?.role?.toLowerCase() == "owner") &&
     KYCStageID == 4;
 
   const [newWorkspace, setNewWorkspace] = useState({

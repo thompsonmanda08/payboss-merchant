@@ -9,7 +9,7 @@ import useAccountProfile from "@/hooks/useProfileDetails";
 import DocumentsViewer from "@/components/base/document-viewer";
 import Tabs from "@/components/tabs";
 
-function AccountVerification() {
+function AccountVerification({ session }) {
   const {
     user,
     businessDetails,

@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 
 const useNavigationStore = create(
   persist(
-    (set, get) => ({
+    (set) => ({
       ...INITIAL_STATE,
 
       //SETTERS

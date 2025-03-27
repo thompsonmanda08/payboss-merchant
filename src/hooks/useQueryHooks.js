@@ -1,11 +1,11 @@
+import { getGeneralConfigs } from "@/app/_actions/config-actions";
 import {
-  getGeneralConfigs,
   getAllKYCData,
   getAllWorkspaces,
   getUserAccountRoles,
   getUserSetupConfigs,
   getWorkspaceRoles,
-} from "@/app/_actions/config-actions";
+} from "@/app/_actions/merchant-actions";
 import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -14,7 +14,6 @@ import {
   getAllPaymentTransactions,
   getBatchDetails,
   getWalletPrefundHistory,
-  getAllCollectionTransactions,
 } from "@/app/_actions/transaction-actions";
 import { getAllUsers, getUser } from "@/app/_actions/user-actions";
 import {
@@ -105,13 +104,6 @@ export const useAllPaymentTransactions = (workspaceID) =>
   useQuery({
     queryKey: [QUERY_KEYS.PAYMENT_TRANSACTIONS, workspaceID],
     queryFn: async () => await getAllPaymentTransactions(workspaceID),
-    refetchOnMount: true,
-  });
-
-export const useAllCollectionsTransactions = (workspaceID) =>
-  useQuery({
-    queryKey: [QUERY_KEYS.COLLECTION_TRANSACTIONS, workspaceID],
-    queryFn: async () => await getAllCollectionTransactions(workspaceID),
     refetchOnMount: true,
   });
 

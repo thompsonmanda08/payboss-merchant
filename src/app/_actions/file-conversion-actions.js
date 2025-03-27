@@ -3,10 +3,9 @@ import {
   API_KEY_TRANSACTION_COLUMNS,
   BILLS_TRANSACTION_COLUMNS,
   SINGLE_TRANSACTION_REPORTS_COLUMNS,
-  SINGLE_TRANSACTIONS_COLUMNS,
   WALLET_STATEMENT_REPORT_COLUMNS,
 } from "@/lib/table-columns";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 export function downloadCSV(data, fileName) {
   const csvData = new Blob([data], { type: "text/csv" });

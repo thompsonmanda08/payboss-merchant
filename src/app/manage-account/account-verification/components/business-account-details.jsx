@@ -1,9 +1,8 @@
 import DateSelectField from "@/components/ui/date-select-field";
 import { Input } from "@/components/ui/input-field";
 import SelectField from "@/components/ui/select-field";
-import { isValidZambianMobileNumber } from "@/lib/utils";
 import React from "react";
-import { getLocalTimeZone, today, parseDate } from "@internationalized/date";
+import { getLocalTimeZone, today } from "@internationalized/date";
 import { Button } from "@/components/ui/button";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import CardHeader from "@/components/base/card-header";
@@ -17,19 +16,6 @@ function BusinessAccountDetails({
 }) {
   const { allowUserToSubmitKYC } = useAccountProfile();
 
-  const branchCodeError =
-    (businessDetails?.branch_code?.length > 1 &&
-      businessDetails?.branch_code?.length < 6) ||
-    businessDetails?.branch_code?.length > 8;
-
-  const accountNumberError = businessDetails?.account_number?.length > 16;
-
-  const TPINError = businessDetails?.tpin?.length > 10;
-  const phoneNoError =
-    !isValidZambianMobileNumber(businessDetails?.contact) &&
-    businessDetails?.contact?.length > 1;
-
-  //TODO => FETCH ALL KYC DATA - INPUT FIELDS TO BE DISABLED
   return (
     <div className="mr-auto flex flex-col gap-y-10">
       <div className="flex flex-col gap-6">
@@ -53,9 +39,6 @@ function BusinessAccountDetails({
               isDisabled
               value={businessDetails?.name}
               required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { name: e.target.value });
-              }}
             />
 
             <div className="flex w-full gap-4">
@@ -67,10 +50,6 @@ function BusinessAccountDetails({
                 listItemName={"type"}
                 prefilled={true}
                 value={businessDetails?.companytypeID}
-                // required={true}
-                // onChange={(e) => {
-                //   updateDetails(STEPS[0], { companyTypeID: e.target.value })
-                // }}
               />
               <Input
                 type="number"
@@ -79,11 +58,6 @@ function BusinessAccountDetails({
                 maxLength={10}
                 isDisabled
                 value={businessDetails?.tpin}
-                onError={TPINError}
-                errorText="Invalid TPIN"
-                onChange={(e) => {
-                  updateDetails(STEPS[0], { tpin: e.target.value });
-                }}
               />
             </div>
 
@@ -95,11 +69,6 @@ function BusinessAccountDetails({
               value={businessDetails?.date_of_incorporation?.split("T")[0]}
               maxValue={today(getLocalTimeZone())}
               labelPlacement={"outside"}
-              onChange={(date) => {
-                updateDetails(STEPS[0], {
-                  date_of_incorporation: formatDate(date, "YYYY-MM-DD"),
-                });
-              }}
             />
           </div>
 
@@ -110,10 +79,6 @@ function BusinessAccountDetails({
               name="physical_address"
               isDisabled
               value={businessDetails?.physical_address}
-              // required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { physical_address: e.target.value });
-              }}
             />
 
             <div className="flex w-full gap-4">
@@ -128,19 +93,12 @@ function BusinessAccountDetails({
                 errorText="Invalid Mobile Number"
                 // required={true}
                 pattern="[0-9]{12}"
-                onChange={(e) => {
-                  updateDetails(STEPS[0], { contact: e.target.value });
-                }}
               />
               <Input
                 label="Website"
                 name="website"
                 isDisabled
                 value={businessDetails?.website}
-                // pattern="https?://.+"
-                onChange={(e) => {
-                  updateDetails(STEPS[0], { website: e.target.value });
-                }}
               />
             </div>
 
@@ -150,10 +108,6 @@ function BusinessAccountDetails({
               name="company_email"
               isDisabled
               value={businessDetails?.company_email}
-              // required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { company_email: e.target.value });
-              }}
             />
           </div>
         </div>
@@ -179,9 +133,6 @@ function BusinessAccountDetails({
               isDisabled
               value={businessDetails?.account_name}
               required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { account_name: e.target.value });
-              }}
             />
             <Input
               label="Account Number"
@@ -189,9 +140,6 @@ function BusinessAccountDetails({
               isDisabled
               value={businessDetails?.account_number}
               required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { account_number: e.target.value });
-              }}
             />
             <SelectField
               options={banks}
@@ -202,9 +150,6 @@ function BusinessAccountDetails({
               prefilled={true}
               listItemName={"bank_name"}
               required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { bankID: e.target.value });
-              }}
             />
           </div>
           <div className="flex w-full flex-1 flex-col gap-2">
@@ -214,16 +159,12 @@ function BusinessAccountDetails({
               isDisabled
               value={businessDetails?.branch_name}
               required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { branch_name: e.target.value });
-              }}
             />
             <Input
               label="Branch Code"
               name="branch_code"
               isDisabled
               value={businessDetails?.branch_code}
-              onError={branchCodeError}
               errorText={"Valid Code is required"}
               required={true}
               onChange={(e) => {
@@ -239,9 +180,6 @@ function BusinessAccountDetails({
               value={businessDetails?.currencyID}
               listItemName={"currency"}
               required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { currencyID: e.target.value });
-              }}
             />
           </div>
         </div>

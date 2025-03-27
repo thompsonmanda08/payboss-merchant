@@ -10,10 +10,12 @@ import { cn } from "@/lib/utils";
 
 async function WorkSpacesPage() {
   const session = await getUserDetails();
-  const { user } = session || {};
-  const authSession = await getAuthSession();
+  const { user, userPermissions } = session || {};
 
-  if (!authSession?.accessToken) redirect("/login");
+  const auth = await getAuthSession();
+  const { accessToken } = auth || "";
+
+  if (!accessToken) redirect("/login");
 
   return (
     <Suspense fallback={<LoadingPage />}>
@@ -21,7 +23,7 @@ async function WorkSpacesPage() {
         <div className="flex h-full max-h-screen w-full flex-col">
           <section role="workspace-header">
             <div className="relative h-[280px] w-full overflow-clip rounded-b-3xl bg-gray-900">
-              <WorkspaceHeader user={user} />
+              <WorkspaceHeader permissions={userPermissions} />
               <Image
                 className="z-0 h-full w-full object-cover"
                 src={DefaultCover}
@@ -40,7 +42,11 @@ async function WorkSpacesPage() {
               "z-20 mx-auto mb-20 mt-[-160px] w-full max-w-[1540px] px-4 md:px-6"
             )}
           >
-            <WorkspacesList user={user} showHeader />
+            <WorkspacesList
+              user={user}
+              permissions={userPermissions}
+              showHeader
+            />
           </section>
         </div>
       </main>

@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
 import React from "react";
-import { useActivePrefunds } from "@/hooks/useQueryHooks";
 import PrefundsTable from "../../../../../components/containers/tables/PrefundsTable";
 import { useEffect } from "react";
 import { notify } from "@/lib/utils";

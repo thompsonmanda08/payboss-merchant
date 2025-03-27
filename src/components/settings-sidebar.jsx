@@ -5,7 +5,6 @@ import {
   Bars3BottomLeftIcon,
   BriefcaseIcon,
   CheckBadgeIcon,
-  LockClosedIcon,
   PowerIcon,
   UserCircleIcon,
   UserGroupIcon,
@@ -13,8 +12,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import useAuthStore from "@/context/auth-store";
 import useNavigation from "@/hooks/useNavigation";

@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useMemo, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Switch, useDisclosure } from "@heroui/react";
 import {
   ArrowRightStartOnRectangleIcon,
@@ -33,6 +33,7 @@ function WorkspaceSummary({
 }) {
   const queryClient = useQueryClient();
   const pathname = usePathname();
+  const router = useRouter();
 
   const isUserInWorkspace =
     pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
@@ -88,7 +89,7 @@ function WorkspaceSummary({
   ]);
 
   useEffect(() => {
-    // UPDATE EXISITING USERS LIST
+    // UPDATE EXISTING USERS LIST
     if (workspaceMembers && !existingUsers.length) {
       setExistingUsers(workspaceMembers);
     }
@@ -173,7 +174,7 @@ function WorkspaceSummary({
         title: "Success",
         description: "Workspaces Deactivated successfully!",
       });
-      back();
+      router.back();
       return;
     }
 

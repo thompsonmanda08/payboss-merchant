@@ -56,7 +56,7 @@ function Providers({ session, authSession, children }) {
             <ScreenLock open={authSession?.screenLocked} />
           )}
 
-          <ToastProvider />
+          <ToastProvider placement={"top-right"} toastOffset={8} />
         </HeroUIProvider>
       </NextThemesProvider>
 

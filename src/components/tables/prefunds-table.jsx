@@ -11,7 +11,7 @@ import {
   Pagination,
 } from "@heroui/react";
 import { WalletIcon } from "@heroicons/react/24/outline";
-import { cn, formatCurrency, formatDate } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import EmptyLogs from "@/components/base/empty-logs";
 import Loader from "@/components/ui/loader";

@@ -1,6 +1,5 @@
 "use client";
 import useAccountProfile from "@/hooks/useProfileDetails";
-import { useSetupConfig } from "@/hooks/useQueryHooks";
 import { DefaultCover } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Chip } from "@heroui/react";

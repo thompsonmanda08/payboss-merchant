@@ -4,12 +4,11 @@ import ThemeSwitcher from "@/components/base/theme-switcher";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/context/auth-store";
 import { Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/outline";
-import { Chip } from "@heroui/react";
 import Link from "next/link";
 import React from "react";
 import EnvironmentMode from "./environment-mode";
 
-function WorkspaceHeader({ user }) {
+function WorkspaceHeader({ permissions }) {
   const { handleUserLogOut } = useAuthStore((state) => state);
 
   return (
@@ -17,8 +16,8 @@ function WorkspaceHeader({ user }) {
       <Logo isWhite className="absolute left-5 top-5 z-30 md:left-10 " />
       <div className="absolute right-5 top-5 flex gap-2 md:right-10 items-center">
         <EnvironmentMode />
-        {(user?.role?.toLowerCase() == "admin" ||
-          user?.role?.toLowerCase() == "owner") && (
+        {(permissions?.role?.toLowerCase() == "admin" ||
+          permissions?.role?.toLowerCase() == "owner") && (
           <Button
             as={Link}
             href={"/manage-account"}

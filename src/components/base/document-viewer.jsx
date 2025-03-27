@@ -5,7 +5,6 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import useAccountProfile from "@/hooks/useProfileDetails";
 import CardHeader from "@/components/base/card-header";
 import Modal from "@/components/base/custom-modal";
 

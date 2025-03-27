@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import { Input } from "@/components/ui/input-field";
 import Search from "@/components/ui/search";
-import React from "react";
+import React, { useState } from "react";
 
 function SearchOrInviteUsers({ setSearchQuery, resolveAddToWorkspace }) {
   const [selectedKeys, setSelectedKeys] = useState(
-    new Set([ROLES.map((role) => role.label)[0]])
+    new Set([["admin"].map((role) => role.label)[0]])
   );
 
   const selectedValue = React.useMemo(
@@ -44,7 +44,7 @@ function SearchOrInviteUsers({ setSearchQuery, resolveAddToWorkspace }) {
             trigger:
               "rounded-none border-px h-auto border border-input bg-transparent p-2 px-3 min-w-[110px]",
           }}
-          dropdownItems={ROLES}
+          dropdownItems={["admin"]}
           selectedKeys={selectedKeys}
           selectedValue={selectedValue}
           setSelectedKeys={setSelectedKeys}

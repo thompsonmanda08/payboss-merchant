@@ -28,8 +28,7 @@ import { UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import SelectField from "@/components/ui/select-field";
 import useWorkspaceStore from "@/context/workspaces-store";
 import { useRouter } from "next/navigation";
-import { UserAvatarComponent } from "./tables/users-table";
-// import { UserAvatarComponent } from "./tables/UsersTable";
+import { roleColorMap, UserAvatarComponent } from "./tables/users-table";
 
 const columns = [
   { name: "NAME", uid: "name" },
@@ -176,7 +175,6 @@ function AddUserToWorkspace({
       default:
         return cellValue;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function submitAddedUsers() {
@@ -213,12 +211,10 @@ function AddUserToWorkspace({
     return () => {
       handleClearAllSelected();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setError({ status: false, message: "" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addedUsers]);
 
   useEffect(() => {

@@ -57,7 +57,7 @@ export default function DropdownButton({
       <DropdownMenu
         aria-label="Dynamic Actions"
         variant={variant || "faded"}
-        items={dropDownItems || items}
+        items={dropDownItems}
         className={innerWrapper}
         classNames={{
           base: "overflow-visible", // REQUIRED FOR SUB MENU ITEMS

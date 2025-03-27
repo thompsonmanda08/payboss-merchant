@@ -6,8 +6,6 @@ import authenticatedService from "@/lib/api-config";
 // ****************** BULK TRANSACTION API ENDPOINTS ************************** //
 // ****************** ******************************** ************************** //
 
-// ********************** GET ALL TRANSACTIONS (PAYMENTS) ******************** //
-
 /**
  * Retrieves a list of all payment transactions for the given workspace ID.
  *
@@ -24,8 +22,6 @@ import authenticatedService from "@/lib/api-config";
  * - `statusText`: The HTTP status text for the operation.
  */
 export async function getAllPaymentTransactions(workspaceID) {
-  // const session = await getUserSession()
-  // const merchantID = session?.user?.merchantID
   if (!workspaceID) {
     return {
       success: false,
@@ -35,11 +31,10 @@ export async function getAllPaymentTransactions(workspaceID) {
       statusText: "BAD_REQUEST",
     };
   }
+  const url = `transaction/merchant/payment/transactions/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({
-      url: `transaction/merchant/payment/transactions/${workspaceID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -50,66 +45,7 @@ export async function getAllPaymentTransactions(workspaceID) {
     };
   } catch (error) {
     console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-// ********************** GET ALL TRANSACTIONS (COLLECTIONS) ******************** //
-
-/**
- * Retrieves a list of all collection transactions for the given workspace ID.
- *
- * @param {string} workspaceID - The ID of the workspace for which the collection
- * transactions are being fetched.
- *
- * @returns {Promise<Object>} - A promise resolving to an object with the
- * following properties:
- *
- * - `success`: A boolean indicating whether the operation was successful.
- * - `message`: A string providing a message about the result of the operation.
- * - `data`: An array of collection transaction objects.
- * - `status`: The HTTP status code for the operation.
- * - `statusText`: The HTTP status text for the operation.
- */
-export async function getAllCollectionTransactions(workspaceID) {
-  if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
-  }
-
-  try {
-    const res = await authenticatedService({
-      url: `transaction/merchant/collection/transactions/${workspaceID}`,
-    });
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
+      endpoint: "GET | BULK TRANSACTIONS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -158,10 +94,10 @@ export async function getAllBulkTransactions(workspaceID) {
     };
   }
 
+  const url = `transaction/payments/bulk/batches/${workspaceID}`;
+
   try {
-    const res = await authenticatedService({
-      url: `transaction/payments/bulk/batches/${workspaceID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -172,6 +108,7 @@ export async function getAllBulkTransactions(workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | BULK TRANSACTION DATA ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -217,10 +154,10 @@ export async function getBatchDetails(batchID) {
     };
   }
 
+  const url = `transaction/payments/bulk/batch/details/${batchID}`;
+
   try {
-    const res = await authenticatedService({
-      url: `transaction/payments/bulk/batch/details/${batchID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -231,6 +168,7 @@ export async function getBatchDetails(batchID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | BATCH DETAILS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -277,9 +215,11 @@ export async function reviewBatch(batchID, reviewDetails) {
       statusText: "BAD_REQUEST",
     };
   }
+
+  const url = `transaction/payments/bulk/review-submission/${batchID}`;
   try {
     const res = await authenticatedService({
-      url: `transaction/payments/bulk/review-submission/${batchID}`,
+      url,
       method: "POST",
       data: reviewDetails,
     });
@@ -293,6 +233,7 @@ export async function reviewBatch(batchID, reviewDetails) {
     };
   } catch (error) {
     console.error({
+      endpoint: "POST | REVIEW BATCH ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -332,7 +273,7 @@ export async function reviewBatch(batchID, reviewDetails) {
  * - `statusText`: The HTTP status text for the operation.
  */
 export async function initializeBulkTransaction(workspaceID, transactionData) {
-  const { batch_name, url, protocol } = transactionData;
+  const { protocol } = transactionData;
   if (!workspaceID) {
     return {
       success: false,
@@ -343,9 +284,11 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
     };
   }
 
+  const url = `transaction/${protocol}/payments/bulk/${workspaceID}`;
+
   try {
     const res = await authenticatedService({
-      url: `transaction/${protocol}/payments/bulk/${workspaceID}`,
+      url,
       method: "POST",
       data: transactionData,
     });
@@ -359,6 +302,7 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
     };
   } catch (error) {
     console.error({
+      endpoint: "POST | INITIALIZE BATCH TRANSACTION ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -406,10 +350,10 @@ export async function submitBatchForApproval(batchID) {
     };
   }
 
+  const url = `transaction/payments/bulk/review-submission/${batchID}`;
+
   try {
-    const res = await authenticatedService({
-      url: `transaction/payments/bulk/review-submission/${batchID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -420,6 +364,7 @@ export async function submitBatchForApproval(batchID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | SUBMIT BATCH TRANSACTION ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -466,10 +411,9 @@ export async function getWalletPrefundHistory(workspaceID) {
     };
   }
 
+  const url = `merchant/workspace/wallet/prefund/${workspaceID}/history`;
   try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/wallet/prefund/${workspaceID}/history`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -480,6 +424,7 @@ export async function getWalletPrefundHistory(workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | WALLET PREFUND HISTORY ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -530,10 +475,10 @@ export async function getAllSingleTransactions(workspaceID) {
     };
   }
 
+  const url = `transaction/payments/single/transactions/${workspaceID}`;
+
   try {
-    const res = await authenticatedService({
-      url: `transaction/payments/single/transactions/${workspaceID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -544,199 +489,7 @@ export async function getAllSingleTransactions(workspaceID) {
     };
   } catch (error) {
     console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-// ********************** INITIALIZE SINGLE TRANSACTION******************** //
-
-/**
- * Initializes a single transaction by submitting a request containing the required
- * single transaction details to the server.
- *
- * @param {string} workspaceID - The ID of the workspace in which the single
- * transaction is being initialized.
- * @param {Object} transactionData - An object containing the required single
- * transaction details, including the protocol.
- *
- * @returns {Promise<Object>} - A promise resolving to an object with the
- * following properties:
- *
- * - `success`: A boolean indicating whether the operation was successful.
- * - `message`: A string providing a message about the result of the operation.
- * - `data`: An array of response data from the initialization request.
- * - `status`: The HTTP status code for the operation.
- * - `statusText`: The HTTP status text for the operation.
- */
-export async function initializeSingleTransaction(
-  workspaceID,
-  transactionData
-) {
-  const { protocol } = transactionData;
-
-  if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
-  }
-
-  try {
-    const res = await authenticatedService({
-      url: `transaction/${protocol}/payments/single/${workspaceID}`,
-      method: "POST",
-      data: transactionData,
-    });
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-// ********************** SUBMIT SINGLE TRANSACTION FOR APPROVAL ******************** //
-
-/**
- * Submits a single transaction for approval.
- *
- * @param {string} ID - The ID of the single transaction to be submitted for
- * approval.
- *
- * @returns {Promise<Object>} - A promise resolving to an object with the
- * following properties:
- *
- * - `success`: A boolean indicating whether the operation was successful.
- * - `message`: A string providing a message about the result of the operation.
- * - `data`: An array of response data from the submission request.
- * - `status`: The HTTP status code for the operation.
- * - `statusText`: The HTTP status text for the operation.
- */
-export async function submitTransactionForApproval(ID) {
-  if (!ID) {
-    return {
-      success: false,
-      message: "Transaction ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
-  }
-
-  try {
-    const res = await authenticatedService({
-      url: `transaction/payments/single/review-submission/${ID}`,
-    });
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-// ********************** REVIEW (APPROVE OR REJECT) SINGLE TRANSACTION ******************** //
-
-/**
- * Reviews a single transaction by submitting a review action (approve or reject).
- *
- * @param {string} transactionID - The ID of the transaction to be reviewed.
- * @param {Object} reviewDetails - The review details containing the action and any
- * additional review information.
- *
- * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
- *
- * - `success`: A boolean indicating whether the operation was successful.
- * - `message`: A string providing a message about the result of the operation.
- * - `data`: An array of response data from the review submission.
- * - `status`: The HTTP status code for the operation.
- * - `statusText`: The HTTP status text for the operation.
- */
-
-export async function reviewSingleTransaction(transactionID, reviewDetails) {
-  // const { action, review } = reviewDetails
-  if (!transactionID) {
-    return {
-      success: false,
-      message: "batch ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
-  }
-  try {
-    const res = await authenticatedService({
-      url: `transaction/payments/single/review-submission/${transactionID}`,
-      method: "POST",
-      data: reviewDetails,
-    });
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
+      endpoint: "GET | SINGLE TRANSACTIONS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -776,11 +529,6 @@ export async function reviewSingleTransaction(transactionID, reviewDetails) {
  * - `statusText`: The HTTP status text for the operation.
  */
 export async function getBulkAnalyticReports(workspaceID, dateFilter) {
-  // const {
-  //     "start_date":"2024-08-01",
-  //     "end_date":"2014-10-01"
-  //  } = dateFilter
-
   if (!workspaceID) {
     return {
       success: false,
@@ -790,9 +538,11 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
       statusText: "BAD_REQUEST",
     };
   }
+
+  const url = `analytics/merchant/workspace/${workspaceID}/bulk/payments`;
   try {
     const res = await authenticatedService({
-      url: `analytics/merchant/workspace/${workspaceID}/bulk/payments`,
+      url,
       method: "POST",
       data: dateFilter,
     });
@@ -806,6 +556,7 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
     };
   } catch (error) {
     console.error({
+      endpoint: "POST | BULK DISBURSEMENT REPORTS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -852,9 +603,11 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
     };
   }
 
+  const url = `analytics/merchant/workspace/${workspaceID}/${service}/report`;
+
   try {
     const res = await authenticatedService({
-      url: `analytics/merchant/workspace/${workspaceID}/${service}/report`,
+      url,
       method: "POST",
       data: dateFilter,
     });
@@ -868,6 +621,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
     };
   } catch (error) {
     console.error({
+      endpoint: "POST | COLLECTIONS REPORT ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -910,11 +664,6 @@ export async function getAPICollectionLatestTransactions(
   workspaceID,
   dateFilter
 ) {
-  // const {
-  //     "start_date":"2024-08-01",
-  //     "end_date":"2014-10-01"
-  //  } = dateFilter
-
   if (!workspaceID) {
     return {
       success: false,
@@ -925,9 +674,11 @@ export async function getAPICollectionLatestTransactions(
     };
   }
 
+  const url = `transaction/merchant/collection/api-integration/${workspaceID}`;
+
   try {
     const res = await authenticatedService({
-      url: `transaction/merchant/collection/api-integration/${workspaceID}`,
+      url,
       method: "POST",
       data: dateFilter,
     });
@@ -941,6 +692,7 @@ export async function getAPICollectionLatestTransactions(
     };
   } catch (error) {
     console.error({
+      endpoint: "POST | API COLLECTION TRANSACTIONS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -988,9 +740,10 @@ export async function getTillCollectionsLatestTransactions(
       statusText: "BAD_REQUEST",
     };
   }
+  const url = `transaction/merchant/collection/till/${workspaceID}`;
   try {
     const res = await authenticatedService({
-      url: `transaction/merchant/collection/till/${workspaceID}`,
+      url,
       method: "POST",
       data: dateFilter,
     });
@@ -1004,6 +757,7 @@ export async function getTillCollectionsLatestTransactions(
     };
   } catch (error) {
     console.error({
+      endpoint: "POST | TILL COLLECTION TRANSACTIONS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -1054,9 +808,10 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
       statusText: "BAD_REQUEST",
     };
   }
+  const url = `merchant/workspace/wallet/prefund/${workspaceID}/history`;
   try {
     const res = await authenticatedService({
-      url: `merchant/workspace/wallet/prefund/${workspaceID}/history`,
+      url,
       method: "POST",
       data: dateFilter,
     });
@@ -1070,6 +825,7 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
     };
   } catch (error) {
     console.error({
+      endpoint: "POST | WALLET TRANSACTIONS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -1120,9 +876,11 @@ export async function getBillsLatestTransactions(workspaceID, dateFilter) {
     };
   }
 
+  const url = `transaction/merchant/bills/${workspaceID}`;
+
   try {
     const res = await authenticatedService({
-      url: `transaction/merchant/bills/${workspaceID}`,
+      url,
       method: "POST",
       data: dateFilter,
     });
@@ -1136,6 +894,7 @@ export async function getBillsLatestTransactions(workspaceID, dateFilter) {
     };
   } catch (error) {
     console.error({
+      endpoint: "POST | BILL PAYMENTS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,

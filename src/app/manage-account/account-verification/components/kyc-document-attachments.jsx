@@ -20,7 +20,7 @@ import UploadField from "@/components/base/file-dropzone";
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function DocumentAttachments() {
   const queryClient = useQueryClient();
-  const { merchantID, refDocsExist, isOwner, isAccountAdmin } =
+  const { merchantID, refDocsExist, isOwner, isAccountAdmin, merchantKYC } =
     useAccountProfile();
   const { isKYCSent, setIsKYCSent } = useAuthStore((state) => state);
   const [docFiles, setDocFiles] = useState({});
@@ -42,6 +42,8 @@ export default function DocumentAttachments() {
       share_holder_url: docFiles["SHAREHOLDER_AGREEMENT"]?.file_url,
       tax_clearance_certificate_url: docFiles["TAX_CLEARANCE"]?.file_url,
       articles_of_association_url: docFiles["ARTICLES_ASSOCIATION"]?.file_url,
+      organisation_structure_url: docFiles["COMPANY_STRUCTURE"]?.file_url,
+      professional_license_url: docFiles["PROFESSIONAL_LICENSE"]?.file_url,
     };
 
     if (!isKYCSent) {
@@ -154,6 +156,7 @@ export default function DocumentAttachments() {
           <UploadField
             label={"Business Incorporation Certificate"}
             isLoading={isLoading}
+            required
             handleFile={async (file) =>
               updateDocs({
                 CERTIFICATE_INC: await handleFileUpload(
@@ -166,6 +169,7 @@ export default function DocumentAttachments() {
           <UploadField
             label={"Articles of Association"}
             isLoading={isLoading}
+            required
             handleFile={async (file) =>
               updateDocs({
                 ARTICLES_ASSOCIATION: await handleFileUpload(
@@ -178,6 +182,7 @@ export default function DocumentAttachments() {
           <UploadField
             label={"Shareholders Agreement"}
             isLoading={isLoading}
+            required
             handleFile={async (file) =>
               updateDocs({
                 SHAREHOLDER_AGREEMENT: await handleFileUpload(
@@ -187,12 +192,28 @@ export default function DocumentAttachments() {
               })
             }
           />
+          {merchantKYC?.merchant_type == "super" && (
+            <UploadField
+              label={"Professional License"}
+              isLoading={isLoading}
+              required
+              handleFile={async (file) =>
+                updateDocs({
+                  PROFESSIONAL_LICENSE: await handleFileUpload(
+                    file,
+                    docFiles["PROFESSIONAL_LICENSE"]?.file_record_id
+                  ),
+                })
+              }
+            />
+          )}
         </div>
 
         <div className="flex w-full flex-1 flex-col gap-2">
           <UploadField
             label={"Tax Clearance Certificate"}
             isLoading={isLoading}
+            required
             handleFile={async (file) =>
               updateDocs({
                 TAX_CLEARANCE: await handleFileUpload(
@@ -206,6 +227,7 @@ export default function DocumentAttachments() {
           <UploadField
             label={"Company Profile"}
             isLoading={isLoading}
+            required
             handleFile={async (file) =>
               updateDocs({
                 COMPANY_PROFILE: await handleFileUpload(
@@ -215,6 +237,22 @@ export default function DocumentAttachments() {
               })
             }
           />
+
+          {merchantKYC?.merchant_type == "super" && (
+            <UploadField
+              label={"Company Structure"}
+              required
+              isLoading={isLoading}
+              handleFile={async (file) =>
+                updateDocs({
+                  COMPANY_STRUCTURE: await handleFileUpload(
+                    file,
+                    docFiles["COMPANY_STRUCTURE"]?.file_record_id
+                  ),
+                })
+              }
+            />
+          )}
         </div>
       </div>
       {error.status && (

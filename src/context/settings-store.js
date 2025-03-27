@@ -1,12 +1,11 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from "zustand";
 
 const INITIAL_STATE = {
   openCreateUserModal: false,
   openEditUserModal: false,
-}
+};
 
-const useSettingsStore = create((set, get) => ({
+const useSettingsStore = create((set) => ({
   ...INITIAL_STATE,
 
   //SETTERS
@@ -15,11 +14,11 @@ const useSettingsStore = create((set, get) => ({
   // METHODS
   toggleCreateUserModal: () =>
     set((state) => {
-      openCreateUserModal: !state.openCreateUserModal
+      openCreateUserModal: !state.openCreateUserModal;
     }),
   toggleEditUserModal: () =>
     set((state) => {
-      openCreateUserModal: !state.openEditUserModal
+      openCreateUserModal: !state.openEditUserModal;
     }),
 
   // CLear & Reset
@@ -27,6 +26,6 @@ const useSettingsStore = create((set, get) => ({
     set({
       ...INITIAL_STATE,
     }),
-}))
+}));
 
-export default useSettingsStore
+export default useSettingsStore;

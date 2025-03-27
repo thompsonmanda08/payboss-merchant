@@ -1,123 +1,178 @@
 "use server";
+
 import authenticatedService from "@/lib/api-config";
-import { USER_SESSION } from "@/lib/constants";
-import { getUserSession } from "@/lib/session";
-import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import {
+  createUserSession,
+  createWorkspaceSession,
+  getUserSession,
+} from "@/lib/session";
 import { cache } from "react";
 
 /**
- * Creates a new user for a merchant by calling the API endpoint.
- * If the operation is successful, an API response containing the new user's details is returned.
+ * Retrieves the user setup configurations including the logged in user details, permissions, KYC and workspaces.
+ * If the operation is successful, an API response containing the user setup configurations is returned.
  * If the operation fails, an API response with a message indicating the error is returned.
  *
- * @param {Object} newUser - An object containing the new user's details.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ * */
+export const getUserSetupConfigs = cache(async () => {
+  const url = `merchant/user/setup`;
+  try {
+    const res = await authenticatedService({ url });
+
+    // CREATE A USER SESSION COOKIE TO STORE THE LOGGED IN USER DATA
+    await createUserSession({
+      user: res.data?.userDetails,
+      merchantID: res.data?.merchantID,
+      userPermissions: res.data?.userPermissions,
+      kyc: res.data?.kyc,
+    });
+
+    let workspaceIDs = res.data?.workspaces?.map((item) => item?.ID);
+    let workspaces = res.data?.workspaces;
+
+    // Create a workspace session for the logged in user -
+    // This is used to get the active workspace and workspace user as well as permissions
+    if (workspaces) {
+      await createWorkspaceSession({
+        workspaces: workspaces,
+        workspaceIDs: workspaceIDs,
+        activeWorkspace: workspaces?.[0] || null,
+        workspacePermissions: null,
+      });
+    }
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "GET | SETUP CONFIG ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+});
+
+/**
+ * Retrieves the account roles for the current user from the API.
+ * If the operation is successful, an API response containing an array of role objects is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
  *
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
-export async function createNewUser(newUser) {
-  const session = await getUserSession();
-  const merchantID = session?.user?.merchantID;
-  const url = `merchant/${merchantID}/user/other/new`;
+
+export async function getUserAccountRoles() {
+  const url = `merchant/roles`;
 
   try {
+    const res = await authenticatedService({ url });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "GET | SYSTEM ROLES ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+/**
+ * Retrieves all the roles for a workspace from the API.
+ * If the operation is successful, an API response containing an array of role objects is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ */
+export async function getWorkspaceRoles() {
+  const url = `merchant/workspace/roles`;
+  try {
+    const res = await authenticatedService({ url });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "GET | WORKSPACE ROLES ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+export async function changeWorkspaceVisibility(workspaceID, isVisible) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspace/visibility/${workspaceID}`;
+  try {
     const res = await authenticatedService({
-      method: "POST",
       url,
-      data: newUser,
-    });
-
-    revalidatePath("/manage-account/users", "page");
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      endpoint: "POST USER DATA ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-/**
- * Retrieves all users for a merchant from the API.
- * If the operation is successful, an API response containing an array of user objects is returned.
- * If the operation fails, an API response with a message indicating the error is returned.
- *
- * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
- * */
-export async function fetchAllUsers() {
-  const session = await getUserSession();
-  const merchantID = session?.user?.merchantID;
-
-  try {
-    const res = await authenticatedService({
-      url: `merchant/users/${merchantID}`,
-    });
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-export const getAllUsers = cache(fetchAllUsers);
-
-/**
- * Assigns the given users to a workspace by calling the API endpoint.
- * If the operation is successful, an API response containing the updated workspace details is returned.
- * If the operation fails, an API response with a message indicating the error is returned.
- *
- * @param {Object[]} users - An array of objects containing the user IDs to assign to the workspace.
- * @param {string} workspaceID - The ID of the workspace to assign the users to.
- * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
- * */
-export async function assignUsersToWorkspace(users, workspaceID) {
-  try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/user/mapping/${workspaceID}`,
-      method: "POST",
+      method: "PATCH",
       data: {
-        users,
+        isVisible,
       },
     });
 
@@ -130,6 +185,7 @@ export async function assignUsersToWorkspace(users, workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "PATCH | WORKSPACE VISIBILITY ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -140,8 +196,116 @@ export async function assignUsersToWorkspace(users, workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+export async function createNewWorkspace(newWorkspace) {
+  const session = await getUserSession();
+  const merchantID = session?.user?.merchantID;
+
+  if (!merchantID) {
+    return {
+      success: false,
+      message: "MerchantID ID is required",
       data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspace/new`;
+
+  try {
+    const res = await authenticatedService({
+      method: "POST",
+      url,
+      data: { ...newWorkspace, merchantID },
+    });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "POST | NEW WORKSPACE ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+export async function updateWorkspace({ workspace, description, ID }) {
+  if (!ID) {
+    return {
+      success: false,
+      message: "Workspace ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspace/${ID}`;
+
+  try {
+    const res = await authenticatedService({
+      method: "PATCH",
+      url,
+      data: {
+        workspace,
+        description,
+      },
+    });
+
+    revalidatePath("/manage-account/workspaces/[ID]", "page");
+    revalidatePath("/dashboard/[workspaceID]/workspace-settings", "page");
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "PATCH | WORKSPACE ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -149,69 +313,92 @@ export async function assignUsersToWorkspace(users, workspaceID) {
 }
 
 /**
- * Retrieves a user by calling the API endpoint.
- * If the operation is successful, an API response containing the user's details is returned.
+ * Deletes a workspace by calling the API endpoint.
+ *
+ * @param {string} workspaceID - The ID of the workspace to be deleted.
+ *
+ * @returns {Promise<Object>} A promise resolving to an object with the following properties:
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The server response data.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+
+export async function deleteWorkspace(workspaceID) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspace/${workspaceID}`;
+  try {
+    const res = await authenticatedService({
+      url,
+      method: "DELETE",
+    });
+
+    revalidatePath("/manage-account/workspaces/[ID]", "page");
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "DELETE | WORKSPACE ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+/**
+ * Retrieves all the workspaces for the merchant.
+ * If the operation is successful, an API response containing an array of workspace objects is returned.
  * If the operation fails, an API response with a message indicating the error is returned.
  *
- * @param {string} userID - The ID of the user to retrieve.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  * */
-export async function getUser(userID) {
-  try {
-    const res = await authenticatedService({
-      url: `merchant/user/${userID}`,
-    });
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-/**
- * Updates a user's profile data by sending a PATCH request to the API.
- * If the update is successful, an API response containing the updated user details is returned.
- * If the update fails, an API response with a message indicating the error is returned.
- *
- * @param {string} userID - The ID of the user whose profile is being updated.
- * @param {Object} userData - An object containing the new profile data for the user.
- * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
- */
-
-export async function updateProfileData(userID, userData) {
+export const getAllWorkspaces = cache(async () => {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
-  const url = `merchant/${merchantID}/user/${userID}`;
+
+  if (!merchantID) {
+    return {
+      success: false,
+      message: "MerchantID ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspaces/${merchantID}`;
 
   try {
-    const res = await authenticatedService({
-      url,
-      method: "PATCH",
-      data: userData,
-    });
-
-    revalidatePath("/manage-account/profile", "page");
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -222,7 +409,7 @@ export async function updateProfileData(userID, userData) {
     };
   } catch (error) {
     console.error({
-      endpoint: "PATCH PROFILE ~ " + url,
+      endpoint: "GET | ALL WORKSPACES ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -233,37 +420,36 @@ export async function updateProfileData(userID, userData) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
   }
-}
+});
 
 /**
- * Updates a system user's data by sending a PATCH request to the API.
- * If the update is successful, an API response containing the updated user details is returned.
- * If the update fails, an API response with a message indicating the error is returned.
- *
- * @param {string} userID - The ID of the user whose data is being updated.
- * @param {Object} userData - An object containing the new data for the user.
+ * Retrieves all the KYC data for a merchant.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
- */
-
-export async function updateSystemUserData(userID, userData) {
+ * */
+export const getAllKYCData = cache(async () => {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
-  const url = `merchant/${merchantID}/user/${userID}`;
 
+  if (!merchantID) {
+    return {
+      success: false,
+      message: "MerchantID ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/${merchantID}/details`;
   try {
-    const res = await authenticatedService({
-      url,
-      method: "PATCH",
-      data: userData,
-    });
-
-    revalidatePath("/manage-account/users", "page");
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -274,7 +460,7 @@ export async function updateSystemUserData(userID, userData) {
     };
   } catch (error) {
     console.error({
-      endpoint: "PATCH SYSTEM USER ~ " + url,
+      endpoint: "GET | KYC DATA ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -285,202 +471,11 @@ export async function updateSystemUserData(userID, userData) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
   }
-}
-
-/**
- * Deletes a system user by sending a DELETE request to the API.
- * If the deletion is successful, an API response containing a success message is returned.
- * If the deletion fails, an API response with a message indicating the error is returned.
- *
- * @param {string} userID - The ID of the system user to delete.
- * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
- */
-
-export async function deleteSystemUserData(userID) {
-  // const session = await getUserSession();
-  // const merchantID = session?.user?.merchantID;
-
-  try {
-    const res = await authenticatedService({
-      method: "DELETE",
-      url: `merchant/user/${userID}`,
-    });
-
-    revalidatePath("/manage-account/users", "page");
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-/**
- * Unlocks a system user by calling the API endpoint.
- * If the operation is successful, an API response containing the user's details is returned.
- * If the operation fails, an API response with a message indicating the error is returned.
- *
- * @param {string} userID - The ID of the user to unlock.
- * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
- */
-
-export async function unlockSystemUser(userID) {
-  const session = await getUserSession();
-  const merchantID = session?.user?.merchantID;
-  const url = `merchant/${merchantID}/user/${userID}`;
-
-  try {
-    const res = await authenticatedService({
-      url,
-    });
-
-    revalidatePath("/manage-account/users", "page");
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      endpoint: "GET | UNLOCK SYSTEM USER ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-/**
- * Changes the password of a user by calling the API endpoint.
- * If the operation is successful, an API response containing the result of the change is returned.
- * If the operation fails, an API response with a message indicating the error is returned.
- *
- * @param {string} password - The new password to be set for the user.
- * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
- */
-
-export async function changeUserPassword(password) {
-  (await cookies()).delete(USER_SESSION);
-
-  try {
-    const res = await authenticatedService({
-      url: `merchant/user/change/password `,
-      method: "PATCH",
-      data: { password },
-    });
-
-    revalidatePath("/manage-account/profile", "page");
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-/**
- * Resets a user's password by calling the API endpoint.
- * If the operation is successful, an API response containing the result of the password reset is returned.
- * If the operation fails, an API response with a message indicating the error is returned.
- *
- * @param {string} userID - The ID of the user whose password is to be reset.
- * @param {Object} newPasswordData - An object containing the new password details.
- * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
- */
-
-export async function adminResetUserPassword(userID, newPasswordData) {
-  try {
-    const res = await authenticatedService({
-      url: `merchant/user/reset/password/${userID}`,
-      method: "PATCH",
-      data: newPasswordData,
-    });
-
-    revalidatePath("/manage-account/users", "page");
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
+});

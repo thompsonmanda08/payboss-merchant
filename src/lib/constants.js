@@ -3,7 +3,6 @@ import {
   ArrowRightCircleIcon,
   ArrowRightStartOnRectangleIcon,
   CircleStackIcon,
-  WalletIcon,
 } from "@heroicons/react/24/outline";
 
 export const BASE_URL =
