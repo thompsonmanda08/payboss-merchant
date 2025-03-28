@@ -8,8 +8,6 @@ export default async function AccountVerificationPage() {
   const session = await getUserDetails();
   const { accessToken } = await getAuthSession();
 
-  console.log(session);
-
   if (!accessToken) redirect("/login");
 
   return (

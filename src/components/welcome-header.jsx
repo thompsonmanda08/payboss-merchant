@@ -7,15 +7,17 @@ import { Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React from "react";
 import EnvironmentMode from "./environment-mode";
+import { useQueryClient } from "@tanstack/react-query";
 
-function WorkspaceHeader({ permissions }) {
+function WorkspaceHeader({ permissions, accountState }) {
   const { handleUserLogOut } = useAuthStore((state) => state);
+  const queryClient = useQueryClient();
 
   return (
     <>
       <Logo isWhite className="absolute left-5 top-5 z-30 md:left-10 " />
       <div className="absolute right-5 top-5 flex gap-2 md:right-10 items-center">
-        <EnvironmentMode />
+        {accountState && <EnvironmentMode mode={accountState} />}
         {(permissions?.role?.toLowerCase() == "admin" ||
           permissions?.role?.toLowerCase() == "owner") && (
           <Button
@@ -29,7 +31,10 @@ function WorkspaceHeader({ permissions }) {
           </Button>
         )}
         <Button
-          onClick={() => handleUserLogOut("/workspaces")}
+          onClick={() => {
+            queryClient.invalidateQueries();
+            handleUserLogOut();
+          }}
           variant="light"
           className="data[hover=true]:bg-foreground-900/30 z-30 aspect-square min-w-[120px] rounded-full bg-foreground-900/50 text-white"
           startContent={<PowerIcon className=" h-5 w-5" />}

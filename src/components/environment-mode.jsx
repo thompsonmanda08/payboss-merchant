@@ -1,14 +1,14 @@
 import { Chip } from "@heroui/react";
 import React from "react";
 
-export default function EnvironmentMode({ mode = process.env.NODE_ENV }) {
+export default function EnvironmentMode({ mode = "UAT" }) {
   return (
     <Chip
       variant="solid"
-      color={false ? "success" : "primary"}
+      color={mode == "prod" ? "success" : "warning"}
       className="text-white capitalize z-30"
     >
-      {mode} Mode
+      {mode == "prod" ? "Active Mode" : "Staging Mode"}
     </Chip>
   );
 }

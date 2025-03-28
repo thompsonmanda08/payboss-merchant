@@ -6,6 +6,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Checkbox,
 } from "@heroui/react";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
@@ -13,10 +14,12 @@ import SelectField from "@/components/ui/select-field";
 import { WORKSPACE_TYPES } from "@/lib/constants";
 
 export default function CreateNewWorkspaceModal({
+  workspaceTypes,
   handleCreateWorkspace,
   isOpen,
   onOpenChange,
   editWorkspaceField,
+  formData,
   handleClose,
   loading,
 }) {
@@ -35,15 +38,18 @@ export default function CreateNewWorkspaceModal({
                 placeholder="Commercial Team"
                 className="mt-px"
                 required={true}
+                value={formData?.workspace}
                 onChange={(e) => {
                   editWorkspaceField({ workspace: e.target.value });
                 }}
               />
               <SelectField
-                options={WORKSPACE_TYPES}
+                options={workspaceTypes}
                 label="Workspace Type"
                 name="workspaceType"
+                listItemName={"workspace_type"}
                 required={true}
+                value={formData?.workspaceType}
                 onChange={(e) => {
                   editWorkspaceField({ workspaceType: e.target.value });
                 }}
@@ -52,11 +58,23 @@ export default function CreateNewWorkspaceModal({
               <Input
                 label="Description"
                 placeholder="Describe the workspace"
+                value={formData?.description}
                 onChange={(e) => {
                   editWorkspaceField({ description: e.target.value });
                 }}
-                className="mt-px"
+                className="my-px"
               />
+
+              <Checkbox
+                size="md"
+                defaultSelected={false}
+                isSelected={formData?.isMerchantWorkspace}
+                onValueChange={(isSelected) =>
+                  editWorkspaceField({ isMerchantWorkspace: isSelected })
+                }
+              >
+                Is Merchant Workspace
+              </Checkbox>
             </ModalBody>
             <ModalFooter>
               <Button

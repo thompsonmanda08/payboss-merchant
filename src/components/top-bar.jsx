@@ -138,6 +138,7 @@ export default function TopNavBar({ user }) {
 }
 
 export function AvatarDropdown({ user, isProfile }) {
+  const queryClient = useQueryClient();
   const { handleUserLogOut } = useAuthStore((state) => state);
   const { dashboardRoute, pathname } = useNavigation();
   const { workspaceUserRole: role } = useDashboard();
@@ -221,16 +222,6 @@ export function AvatarDropdown({ user, isProfile }) {
 
           <DropdownItem
             isReadOnly
-            key="ops-mode"
-            className="flex cursor-default justify-between"
-          >
-            <div className="flex w-full cursor-default items-center justify-between">
-              <span>Mode: </span>
-              <EnvironmentMode />
-            </div>
-          </DropdownItem>
-          <DropdownItem
-            isReadOnly
             key="theme"
             className="flex cursor-default justify-between"
           >
@@ -267,11 +258,20 @@ export function AvatarDropdown({ user, isProfile }) {
               </NavIconButton>
             </div>
           </DropdownItem>
-          <DropdownItem key="logout" onPress={handleUserLogOut}>
+          <DropdownItem
+            key="logout"
+            onPress={() => {
+              queryClient.invalidateQueries();
+              handleUserLogOut();
+            }}
+          >
             <div className="flex items-center justify-between">
               <span>Log Out</span>{" "}
               <NavIconButton
-                onClick={handleUserLogOut}
+                onClick={() => {
+                  queryClient.invalidateQueries();
+                  handleUserLogOut();
+                }}
                 className={"scale-80 bg-primary"}
               >
                 <PowerIcon className="h-5 w-5 text-white" />

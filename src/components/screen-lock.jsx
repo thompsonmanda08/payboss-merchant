@@ -47,7 +47,10 @@ function ScreenLock({ open }) {
       setSeconds((x) => x - 1);
     }, 1000);
 
-    if (seconds == 0) handleUserLogOut();
+    if (seconds == 0) {
+      queryClient.invalidateQueries();
+      handleUserLogOut();
+    }
 
     return () => {
       clearInterval(interval);
@@ -112,7 +115,10 @@ function ScreenLock({ open }) {
             color="danger"
             variant="light"
             isDisabled={isLoading}
-            onPress={handleUserLogOut}
+            onPress={() => {
+              queryClient.invalidateQueries();
+              handleUserLogOut();
+            }}
           >
             Log out
           </Button>

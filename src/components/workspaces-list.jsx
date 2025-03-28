@@ -18,6 +18,12 @@ import Card from "@/components/base/card";
 import InfoBanner from "@/components/base/info-banner";
 import EmptyLogs from "@/components/base/empty-logs";
 import CreateNewWorkspaceModal from "./create-new-workspace-modal";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Tooltip,
+} from "@heroui/react";
 
 function WorkspacesList({
   user,
@@ -28,21 +34,24 @@ function WorkspacesList({
 }) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
-  const { KYCStageID } = useAccountProfile();
+  const { merchantKYC, isAccountAdmin, isOwner } = useAccountProfile();
   const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const isManagePage = pathname.split("/").includes("manage-account");
-  const { workspaces: activeWorkspaces, isLoading } = useWorkspace();
+  const {
+    workspaces: activeWorkspaces,
+    isLoading,
+    workspaceTypes,
+  } = useWorkspace();
 
   const canCreateWorkspace =
-    (permissions?.role?.toLowerCase() == "admin" ||
-      permissions?.role?.toLowerCase() == "owner") &&
-    KYCStageID == 4;
+    (isAccountAdmin || isOwner) && merchantKYC?.stageID == 3;
 
   const [newWorkspace, setNewWorkspace] = useState({
     workspace: "",
     description: "",
     workspaceType: "",
+    isMerchantWorkspace: merchantKYC?.merchant_type == "super",
   });
 
   function editWorkspaceField(fields) {
@@ -189,14 +198,67 @@ function WorkspacesList({
                     );
                   })
                 ) : (
-                  <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg text-sm font-semibold text-slate-600">
+                  <div className="flex flex-col aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg text-sm font-semibold text-slate-600">
                     <EmptyLogs
-                      className={"my-auto"}
-                      title={"Oops! Looks like you have no workspaces yet!"}
+                      className={"my-8"}
+                      title={
+                        merchantKYC?.stage.toLowerCase() == "review"
+                          ? "KYC Under Review"
+                          : "Oops! Looks like you have no workspaces yet!"
+                      }
                       subTitle={
-                        "Only the admin or account owner can create a workspace."
+                        merchantKYC?.stage.toLowerCase() == "review"
+                          ? "Your KYC application is under review. Once approved, you will be able to create a workspace."
+                          : "Only the admin or account owner can create a workspace."
                       }
                     />
+                    <>
+                      {/* ONLY ON EMPTY STATES */}
+                      {merchantKYC?.stage.toLowerCase() == "review" && (
+                        <Popover placement="top">
+                          <PopoverTrigger>
+                            <Button
+                              endContent={<PlusIcon className="h-5 w-5" />}
+                              variant="flat"
+                              color="primary"
+                              className={"p-8 min-w-[300px] bg-primary-50"}
+                            >
+                              Create Workspace
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <div className="px-1 py-2">
+                              <div className="text-small font-bold">
+                                KYC Pending
+                              </div>
+                              <div className="text-tiny max-w-sm">
+                                Your KYC application is under review. You will
+                                receive an email notification when your
+                                application has been reviewed
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      )}
+
+                      {canCreateWorkspace &&
+                        merchantKYC?.stage.toLowerCase() == "approved" && (
+                          <Button
+                            onPress={onOpen}
+                            size="lg"
+                            isDisabled={loading}
+                            endContent={<PlusIcon className="h-5 w-5" />}
+                            variant="flat"
+                            color="primary"
+                            className={
+                              "bg-primary-50 p-8 min-w-[300px] dark:bg-primary dark:text-primary-foreground px-4"
+                            }
+                          >
+                            Create New Workspace
+                          </Button>
+                        )}
+                    </>
+                    {/* ONLY ON EMPTY STATES */}
                   </div>
                 )}
 
@@ -223,11 +285,13 @@ function WorkspacesList({
 
       <CreateNewWorkspaceModal
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        handleCreateWorkspace={handleCreateWorkspace}
-        handleClose={handleClose}
-        editWorkspaceField={editWorkspaceField}
         loading={loading}
+        onOpenChange={onOpenChange}
+        handleClose={handleClose}
+        formData={newWorkspace}
+        editWorkspaceField={editWorkspaceField}
+        handleCreateWorkspace={handleCreateWorkspace}
+        workspaceTypes={workspaceTypes}
       />
     </>
   );

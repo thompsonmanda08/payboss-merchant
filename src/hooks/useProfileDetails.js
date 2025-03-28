@@ -6,6 +6,9 @@ const useAccountProfile = () => {
   const { data: setup } = useSetupConfig();
   const { data: kycData } = useKYCData();
 
+  console.log("kycData", kycData);
+  console.log("setup", setup);
+
   const user = setup?.data?.userDetails || [];
   const permissions = setup?.data?.userPermissions;
   const merchantKYC = setup?.data?.kyc;
@@ -38,7 +41,7 @@ const useAccountProfile = () => {
 
   /* ****** SET STATE VARIABLES**************** */
   const isApprovedUser =
-    businessDetails?.stageID == 4 &&
+    merchantKYC?.stageID == 3 &&
     businessDetails?.isCompleteKYC &&
     businessDetails?.kyc_approval_status?.toLowerCase() == "approved";
 

@@ -5,7 +5,6 @@ import { uploadBusinessFile } from "@/app/_actions/pocketbase-actions";
 
 import { notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@heroui/react";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import {
   sendBusinessDocumentRefs,
@@ -32,7 +31,7 @@ export default function MerchantDocumentAttachments() {
     setDocFiles({ ...docFiles, ...fields });
   }
 
-  async function submitKYCDocuments() {
+  async function submitMerchantKYCDocuments() {
     setIsSubmitting(true);
     setError({ message: "", status: "" });
 
@@ -135,7 +134,8 @@ export default function MerchantDocumentAttachments() {
     setIsLoading(false);
   }
 
-  return isOwner || isAccountAdmin ? (
+  // ONLY ADMIN CAN SUBMIT KYC DOCUMENTATION
+  return isWorkspaceAdmin ? (
     <>
       <CardHeader
         className={"py-0"}
@@ -223,42 +223,28 @@ export default function MerchantDocumentAttachments() {
         </div>
       )}
 
-      <div className="mt-4 flex w-full flex-col items-start gap-4">
-        <Checkbox
-          className="flex items-start"
-          classNames={{
-            label: "flex flex-col items-start -mt-1",
-          }}
-          isSelected={isKYCSent}
-          onValueChange={setIsKYCSent}
-        >
-          <span className="max-w-xl text-xs font-medium italic text-foreground/70 md:text-sm">
-            Yes, I confirm that the details provided accurately represent my
-            business. I understand that any misrepresentation of my business may
-            result in the rejection of my application.
-          </span>
-        </Checkbox>
-        {
-          <Button
-            isLoading={isSubmitting}
-            isDisabled={isSubmitting}
-            loadingText={"Submitting..."}
-            onPress={submitKYCDocuments}
-          >
-            Submit for Approval
-          </Button>
-        }
-      </div>
+      <Button
+        isLoading={isSubmitting}
+        isDisabled={isSubmitting}
+        loadingText={"Submitting..."}
+        className="my-4"
+        onPress={submitMerchantKYCDocuments}
+      >
+        Submit for Approval
+      </Button>
     </>
   ) : (
-    <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
-      <EmptyLogs
-        className={"my-auto"}
-        title={"Oops! Looks like your are not an Admin"}
-        subTitle={
-          "Only the admin or account owner can submit company documentation."
-        }
-      />
+      /* IF NOT AN ADMIN || THE USER IS A VIEW */
+    <div>
+      <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
+        <EmptyLogs
+          className={"my-auto"}
+          title={"Oops! Looks like your are not an Admin"}
+          subTitle={
+            "Only the admin of the workspace can submit company documentation."
+          }
+        />
+      </div>
     </div>
   );
 }

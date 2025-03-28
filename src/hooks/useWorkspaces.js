@@ -9,6 +9,7 @@ const useWorkspaces = (query) => {
 
   const { data: setup, isFetching, isLoading } = useSetupConfig();
   const workspaces = setup?.data?.workspaces || [];
+  const workspaceTypes = setup?.data?.workspace_type || [];
 
   const isUserInWorkspace =
     pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
@@ -44,6 +45,7 @@ const useWorkspaces = (query) => {
     isLoading,
     activeWorkspace,
     workspaces,
+    workspaceTypes,
     workspaceID: activeWorkspace?.ID,
     workspaceWalletBalance,
     isUserInWorkspace,

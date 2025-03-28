@@ -8,6 +8,7 @@ import { PowerIcon } from "@heroicons/react/24/solid";
 import useAuthStore from "@/context/auth-store";
 import useNavigation from "@/hooks/useNavigation";
 import NavItemIcon from "./base/nav-item-icon";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function SideNavItems({
   // pathname,
@@ -17,6 +18,7 @@ export default function SideNavItems({
   handleLinkClick,
   navBarItems,
 }) {
+  const queryClient = useQueryClient();
   const { handleUserLogOut } = useAuthStore((state) => state);
   const { pathname, pathArr } = useNavigation((state) => state);
 
@@ -136,7 +138,10 @@ export default function SideNavItems({
       </ul>
       <hr className="mt-auto" />
       <div
-        onClick={() => handleUserLogOut(pathname)}
+        onClick={() => {
+          queryClient.invalidateQueries();
+          handleUserLogOut();
+        }}
         className={cn(
           `group flex cursor-pointer items-center gap-3 rounded-lg bg-transparent p-3 text-sm font-bold text-slate-600 shadow-none transition-all duration-200 ease-in-out hover:text-primary`
         )}
@@ -145,7 +150,10 @@ export default function SideNavItems({
           isSelected={true}
           activeLayer={false}
           Icon={PowerIcon}
-          onIconPress={() => handleUserLogOut(pathname)}
+          onIconPress={() => {
+            queryClient.invalidateQueries();
+            handleUserLogOut();
+          }}
         />
         Log out
       </div>

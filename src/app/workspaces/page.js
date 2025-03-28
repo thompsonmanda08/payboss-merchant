@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 async function WorkSpacesPage() {
   const session = await getUserDetails();
-  const { user, userPermissions } = session || {};
+  const { user, userPermissions, kyc: merchantKYC } = session || {};
 
   const auth = await getAuthSession();
   const { accessToken } = auth || "";
@@ -23,7 +23,10 @@ async function WorkSpacesPage() {
         <div className="flex h-full max-h-screen w-full flex-col">
           <section role="workspace-header">
             <div className="relative h-[280px] w-full overflow-clip rounded-b-3xl bg-gray-900">
-              <WorkspaceHeader permissions={userPermissions} />
+              <WorkspaceHeader
+                permissions={userPermissions}
+                accountState={merchantKYC?.state}
+              />
               <Image
                 className="z-0 h-full w-full object-cover"
                 src={DefaultCover}

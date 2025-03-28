@@ -3,28 +3,14 @@ import { withSentryConfig } from "@sentry/nextjs";
 const nextConfig = {
   output: "standalone",
   distDir: "build",
-
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-        port: "",
-        pathname: "/**",
-      },
-    ],
-  },
-
+  reactStrictMode: true,
   experimental: {
-    serverActions: {
-      bodySizeLimit: "5mb",
-    },
     turbo: {
       rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
+        // "*.svg": {
+        //   loaders: ["@svgr/webpack"],
+        //   as: "*.js",
+        // },
       },
     },
   },

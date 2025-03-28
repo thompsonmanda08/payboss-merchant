@@ -69,12 +69,8 @@
 }
 
 @layer base {
-  /* * {
+  * {
     @apply border-border;
-  } */
-
-  body {
-    /* @apply bg-background font-inter text-foreground; */
   }
 
   select {
@@ -147,7 +143,7 @@
   @apply text-sm leading-6 text-foreground/70;
 }
 
-/* CODE JOSN SNIPPETS */
+/* CODE JSON SNIPPETS */
 
 .string {
   color: rgb(0, 55, 173);

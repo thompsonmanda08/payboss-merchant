@@ -1,7 +1,8 @@
 import LoadingPage from "@/app/loading";
 import Workspaces from "@/components/workspaces-list";
 import React, { Suspense } from "react";
-import { getAllWorkspaces, getUserDetails } from "../_actions/config-actions";
+import { getUserDetails } from "../_actions/config-actions";
+import { getAllWorkspaces } from "../_actions/merchant-actions";
 
 async function AllWorkspacesPage() {
   const session = await getUserDetails();

@@ -30,9 +30,10 @@ export default async function ManageWorkspacePage({ params }) {
     isOwner: session?.user?.role?.toLowerCase() == "owner",
     isAccountAdmin: session?.user?.role?.toLowerCase() == "admin",
     isApprovedUser:
-      kyc?.stageID == 4 &&
+      kyc?.stageID == 3 &&
       user?.isCompleteKYC &&
       kyc?.kyc_approval_status?.toLowerCase() == "approved",
+    ...session?.userPermissions,
   };
 
   return (

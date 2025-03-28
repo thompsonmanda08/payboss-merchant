@@ -19,22 +19,15 @@ import useAuthStore from "@/context/auth-store";
 import useNavigation from "@/hooks/useNavigation";
 import NavIconButton from "./ui/nav-icon-button";
 import Logo from "./base/logo";
+import { useQueryClient } from "@tanstack/react-query";
 
-function SettingsSideBar({
-  title,
-  backButtonText,
-  // isProfile,
-  session,
-}) {
+function SettingsSideBar({ title, backButtonText, session }) {
   const pathname = usePathname();
+  const queryClient = useQueryClient();
   const [openSettingsSideBar, setOpenSettingsSideBar] = useState(false);
-  const handleUserLogOut = useAuthStore((state) => state.handleUserLogOut);
-  const {
-    settingsPathname,
-    isProfile,
-    currentPath,
-    isAccountLevelSettingsRoute,
-  } = useNavigation();
+  const { handleUserLogOut } = useAuthStore();
+  const { settingsPathname, isProfile, isAccountLevelSettingsRoute } =
+    useNavigation();
 
   function toggleSideBar() {
     setOpenSettingsSideBar(!openSettingsSideBar);
@@ -42,6 +35,7 @@ function SettingsSideBar({
 
   const dashboardHome = settingsPathname?.split("/")?.slice(0, 3)?.join("/");
   const homeRoute = dashboardHome || "/workspaces";
+  const systemState = session?.kyc?.state;
 
   // SETTINGS OPTIONS
   const SETTINGS_LINKS = [
@@ -51,16 +45,10 @@ function SettingsSideBar({
       href: "/manage-account",
     },
     {
-      name: "People",
+      name: "Users",
       Icon: UserGroupIcon,
       href: "/manage-account/users",
     },
-
-    // {
-    //   name: 'Security & Permissions',
-    //   Icon: LockClosedIcon,
-    //   href: '/manage-account/security',
-    // },
     {
       name: "Profile Settings",
       Icon: UserCircleIcon,
@@ -162,11 +150,22 @@ function SettingsSideBar({
           </div>
 
           {/* ************************************************************* */}
+          <Chip
+            radius="sm"
+            color={systemState == "prod" ? "success" : "warning"}
+            variant="dot"
+          >
+            {systemState == "prod" ? "Active Mode" : "Staging Mode"}
+          </Chip>
+          {/* ************************************************************* */}
           <hr className="mt-auto dark:border-primary/20" />
           <div className="flex items-center gap-2 px-5 pt-2">
             <NavIconButton
               className={"bg-primary"}
-              onClick={() => handleUserLogOut()}
+              onClick={() => {
+                queryClient.invalidateQueries();
+                handleUserLogOut();
+              }}
             >
               <PowerIcon className="h-5 w-5 text-white" />
             </NavIconButton>
@@ -174,7 +173,10 @@ function SettingsSideBar({
               variant="light"
               // size="sm"
               className="my-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
-              onClick={() => handleUserLogOut()}
+              onClick={() => {
+                queryClient.invalidateQueries();
+                handleUserLogOut();
+              }}
             >
               Log out
             </Button>
