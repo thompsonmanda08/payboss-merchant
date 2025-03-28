@@ -20,6 +20,17 @@ export async function middleware(request) {
   const urlRouteParams = pathname.match(/^\/dashboard\/([^\/]+)\/?$/);
   const accessToken = session?.accessToken || "";
 
+  // Exclude public assets like icons, manifest, and images
+  if (
+    pathname.startsWith("/web-app-manifest") ||
+    pathname.startsWith("/favicon") ||
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/static") ||
+    pathname.startsWith("/public")
+  ) {
+    return NextResponse.next();
+  }
+
   // CHECK FOR  ROUTES
   const isAuthPage =
     pathname.startsWith("/login") || pathname.startsWith("/register");
@@ -64,5 +75,7 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|images|favicon.ico).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|images|favicon.ico|web-app-manifest-192x192.png|web-app-manifest-512x512.png|manifest.json).*)",
+  ],
 };
