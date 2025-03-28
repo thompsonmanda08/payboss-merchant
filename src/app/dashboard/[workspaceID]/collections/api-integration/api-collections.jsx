@@ -108,8 +108,6 @@ const APIIntegration = ({ workspaceID }) => {
   });
 
   function copyToClipboard(key) {
-    console.log("COPY THIS: ", key);
-
     try {
       navigator?.clipboard?.writeText(key);
       setCopiedKey(key);

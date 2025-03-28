@@ -89,7 +89,6 @@ function BusinessAccountDetails({
                 name="contact"
                 maxLength={12}
                 value={businessDetails?.contact}
-                onError={phoneNoError}
                 errorText="Invalid Mobile Number"
                 // required={true}
                 pattern="[0-9]{12}"
@@ -185,7 +184,9 @@ function BusinessAccountDetails({
         </div>
 
         {allowUserToSubmitKYC && (
-          <Button onPress={() => navigateToPage(2)}>Proceed</Button>
+          <Button className={"my-4"} onPress={() => navigateToPage(2)}>
+            Submit Documentation
+          </Button>
         )}
       </div>
     </div>

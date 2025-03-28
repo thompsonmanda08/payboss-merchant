@@ -6,6 +6,7 @@ import {
   getWorkspaceSessionData,
 } from "@/lib/session";
 import axios from "axios";
+import { cache } from "react";
 
 /**
  * Retrieves the general configurations from the configuration service.
@@ -16,7 +17,7 @@ import axios from "axios";
  * including the message, data, status, and statusText.
  */
 
-export async function getGeneralConfigs() {
+export const getGeneralConfigs = cache(async () => {
   const CONFIG_URL = process.env.CONFIG_BASE_URL;
   const url = `${CONFIG_URL}/configuration/all-configs`;
   try {
@@ -49,7 +50,7 @@ export async function getGeneralConfigs() {
       statusText: error?.response?.statusText,
     };
   }
-}
+});
 
 /**
  * Retrieves the authentication session for the current user.
@@ -58,11 +59,11 @@ export async function getGeneralConfigs() {
  *
  * @returns {Promise<Object|null>} A promise that resolves to the session object if available, or null if not.
  */
-export async function getAuthSession() {
+export const getAuthSession = cache(async () => {
   const session = await getServerSession();
   if (session) return session;
   return null;
-}
+});
 
 /**
  * Retrieves the user details for the currently authenticated user.
@@ -71,11 +72,17 @@ export async function getAuthSession() {
  *
  * @returns {Promise<Object|null>} A promise that resolves to the user details object if available, or null if not.
  */
-export async function getUserDetails() {
+// export async function getUserDetails() {
+//   const session = await getUserSession();
+//   if (session) return session;
+//   return null;
+// }
+
+export const getUserDetails = cache(async () => {
   const session = await getUserSession();
   if (session) return session;
   return null;
-}
+});
 
 /**
  * Retrieves the workspace session for the currently authenticated user.

@@ -357,11 +357,9 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
  *
  */
 export async function authenticateUser(loginCredentials) {
+  const url = `merchant/user/authentication`;
   try {
-    const res = await apiClient.post(
-      `merchant/user/authentication`,
-      loginCredentials
-    );
+    const res = await apiClient.post(url, loginCredentials);
 
     const response = res.data;
 
@@ -380,7 +378,7 @@ export async function authenticateUser(loginCredentials) {
     };
   } catch (error) {
     console.error({
-      endpoint: url,
+      endpoint: `POST | LOGIN ~ ${url}`,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
