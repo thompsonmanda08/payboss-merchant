@@ -1,22 +1,20 @@
 import LoadingPage from "@/app/loading";
 import React, { Suspense } from "react";
-import {
-  getAllWorkspaces,
-  getUserDetails,
-  getWorkspaceRoles,
-} from "@/app/_actions/config-actions";
+
 import WorkspaceSettings from "@/app/dashboard/[workspaceID]/workspace-settings/components";
 import { getAllUsers } from "@/app/_actions/user-actions";
 import { getWorkspaceMembers } from "@/app/_actions/workspace-actions";
+import {
+  getWorkspaceDetails,
+  getWorkspaceRoles,
+} from "@/app/_actions/merchant-actions";
+import { getUserDetails } from "@/app/_actions/config-actions";
 
 export default async function ManageWorkspacePage({ params }) {
   const workspaceID = (await params).workspaceID;
 
-  const workspacesResponse = await getAllWorkspaces();
-  const workspaces = workspacesResponse?.data?.workspaces || [];
-  const activeWorkspace = await workspaces?.find(
-    (workspace) => workspace?.ID == workspaceID
-  );
+  const workspaceResponse = await getWorkspaceDetails();
+  const activeWorkspace = workspaceResponse?.data || {};
 
   const allUsersData = await getAllUsers();
   const workspaceMembers = await getWorkspaceMembers(workspaceID);

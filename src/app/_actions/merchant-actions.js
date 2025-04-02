@@ -6,6 +6,7 @@ import {
   createWorkspaceSession,
   getUserSession,
 } from "@/lib/session";
+import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
 /**
@@ -15,7 +16,7 @@ import { cache } from "react";
  *
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  * */
-export const getUserSetupConfigs = cache(async () => {
+export const setupAccountConfig = cache(async () => {
   const url = `merchant/user/setup`;
   try {
     const res = await authenticatedService({ url });
@@ -395,7 +396,7 @@ export const getAllWorkspaces = cache(async () => {
     };
   }
 
-  const url = `merchant/workspaces/${merchantID}`;
+  const url = `merchant/${merchantID}/workspaces`;
 
   try {
     const res = await authenticatedService({ url });
@@ -461,6 +462,51 @@ export const getAllKYCData = cache(async () => {
   } catch (error) {
     console.error({
       endpoint: "GET | KYC DATA ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+});
+
+export const getWorkspaceDetails = cache(async (workspaceID) => {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "workspace ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `merchant/workspace/${workspaceID}/details`;
+
+  try {
+    const res = await authenticatedService({ url });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "GET | ALL WORKSPACES ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,

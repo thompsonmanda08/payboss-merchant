@@ -18,7 +18,7 @@ import {
   TableRow,
   TableCell,
 } from "@heroui/react";
-import CustomTable from "@/components/containers/tables/Table";
+import CustomTable from "@/components/tables/table";
 import { useTillNumber } from "@/hooks/useQueryHooks";
 import { generateWorkspaceTillNumber } from "@/app/_actions/workspace-actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

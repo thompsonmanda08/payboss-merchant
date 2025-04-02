@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
 import React from "react";
-import PrefundsTable from "../../../../../components/containers/tables/PrefundsTable";
 import { useEffect } from "react";
 import { notify } from "@/lib/utils";
 import StatusMessage from "@/components/base/status-message";
+import PrefundsTable from "@/components/tables/prefunds-table";
 
 const SelectPrefund = ({
   navigateForward,

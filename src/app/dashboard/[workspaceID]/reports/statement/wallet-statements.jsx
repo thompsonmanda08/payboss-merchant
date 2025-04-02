@@ -4,7 +4,7 @@ import { ArrowDownTrayIcon, FunnelIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
 
 import { DateRangePickerField } from "@/components/ui/date-select-field";
-import { WALLET_STATEMENT_REPORTS_QUERY_KEY } from "@/lib/constants";
+import { QUERY_KEYS } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
 import { getWalletStatementReport } from "@/app/_actions/transaction-actions";
 import { WalletTransactionHistory } from "@/app/dashboard/[workspaceID]/workspace-settings/components/wallet";
@@ -20,7 +20,7 @@ export default function StatementReport({ workspaceID }) {
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const mutation = useMutation({
-    mutationKey: [WALLET_STATEMENT_REPORTS_QUERY_KEY, workspaceID],
+    mutationKey: [QUERY_KEYS.WALLET_STATEMENT_REPORTS, workspaceID],
     mutationFn: (filterDates) => getReportsData(filterDates),
   });
 

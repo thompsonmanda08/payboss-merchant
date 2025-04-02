@@ -8,7 +8,6 @@ export default function Tabs({
   currentTab,
   className,
   classNames,
-  Icon,
 }) {
   const { innerWrapper, button, nav, icon } = classNames || "";
   return (

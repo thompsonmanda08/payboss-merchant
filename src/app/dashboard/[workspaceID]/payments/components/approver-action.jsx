@@ -3,10 +3,7 @@ import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, notify } from "@/lib/utils";
 import Image from "next/image";
-import {
-  reviewBatch,
-  reviewSingleTransaction,
-} from "@/app/_actions/transaction-actions";
+import { reviewBatch } from "@/app/_actions/transaction-actions";
 import usePaymentsStore from "@/context/payment-store";
 import { useDisclosure } from "@heroui/react";
 import { Input } from "@/components/ui/input-field";
@@ -91,10 +88,11 @@ const ApproverAction = ({ navigateForward, batchID }) => {
       return;
     }
 
-    const response =
-      selectedActionType.name == PAYMENT_SERVICE_TYPES[0].name
-        ? await reviewBatch(queryID, approve)
-        : await reviewSingleTransaction(queryID, approve);
+    const response = await reviewBatch(queryID, approve);
+
+    // selectedActionType.name == PAYMENT_SERVICE_TYPES[0].name
+    //   ? await reviewBatch(queryID, approve)
+    //   : await reviewSingleTransaction(queryID, approve);
 
     if (!response?.success) {
       setIsLoading(false);
@@ -136,10 +134,10 @@ const ApproverAction = ({ navigateForward, batchID }) => {
   }
 
   function handleClosePrompt() {
-    setApprove((prev) => ({
+    setApprove({
       action: "approve", //approve or reject
       review: "",
-    }));
+    });
     setIsApproval(true);
     setIsLoading(false);
     onClose();

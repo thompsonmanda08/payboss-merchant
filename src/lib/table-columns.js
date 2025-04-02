@@ -59,6 +59,18 @@ export const BULK_TRANSACTIONS_COLUMN = [
   { name: "STATUS", uid: "status", sortable: true },
   { name: "ACTIONS", uid: "actions" },
 ];
+export const INVOICE_COLUMNS = [
+  { name: "DATE", uid: "created_at", sortable: true },
+  { name: "NAME", uid: "customer_name", sortable: true },
+  { name: "CUSTOMER EMAIL", uid: "customer_email", sortable: true },
+
+  { name: "DESCRIPTION", uid: "description" },
+  { name: "ISSUE DATE", uid: "invoice_date", sortable: true },
+  { name: "DUE DATE", uid: "due_date", sortable: true },
+  { name: "INVOICE ID", uid: "invoiceID", sortable: true },
+  { name: "AMOUNT", uid: "amount", sortable: true },
+  { name: "STATUS", uid: "status", sortable: true },
+];
 
 export const BILLS_TRANSACTION_COLUMNS = [
   { name: "DATE", uid: "created_at", sortable: true },

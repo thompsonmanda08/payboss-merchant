@@ -15,6 +15,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { Chip } from "@heroui/react";
 import useAuthStore from "@/context/auth-store";
 import useNavigation from "@/hooks/useNavigation";
 import NavIconButton from "./ui/nav-icon-button";
@@ -148,17 +149,20 @@ function SettingsSideBar({ title, backButtonText, session }) {
               );
             })}
           </div>
+          {/* ************************************************************* */}
+          <hr className="mt-auto mb-4 dark:border-primary/20" />
 
           {/* ************************************************************* */}
-          <Chip
+          {/* <Chip
             radius="sm"
             color={systemState == "prod" ? "success" : "warning"}
             variant="dot"
           >
-            {systemState == "prod" ? "Active Mode" : "Staging Mode"}
+            {systemState == "prod" ? "System Live Environment" : "Staging Mode"}
           </Chip>
-          {/* ************************************************************* */}
-          <hr className="mt-auto dark:border-primary/20" />
+
+          <hr className="my-4 dark:border-primary/20" /> */}
+
           <div className="flex items-center gap-2 px-5 pt-2">
             <NavIconButton
               className={"bg-primary"}

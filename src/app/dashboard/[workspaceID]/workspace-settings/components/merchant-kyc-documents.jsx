@@ -17,10 +17,9 @@ import EmptyLogs from "@/components/base/empty-logs";
 import UploadField from "@/components/base/file-dropzone";
 
 // BUSINESS DOCUMENTS AND ATTACHMENTS
-export default function MerchantDocumentAttachments() {
+export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
   const queryClient = useQueryClient();
-  const { merchantID, refDocsExist, isOwner, isAccountAdmin } =
-    useAccountProfile();
+  const { merchantID, refDocsExist } = useAccountProfile();
   const { isKYCSent, setIsKYCSent } = useAuthStore((state) => state);
   const [docFiles, setDocFiles] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -234,7 +233,7 @@ export default function MerchantDocumentAttachments() {
       </Button>
     </>
   ) : (
-      /* IF NOT AN ADMIN || THE USER IS A VIEW */
+    /* IF NOT AN ADMIN || THE USER IS A VIEW */
     <div>
       <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
         <EmptyLogs

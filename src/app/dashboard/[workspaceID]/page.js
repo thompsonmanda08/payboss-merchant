@@ -3,32 +3,31 @@ import LoadingPage from "../../loading";
 import InfoBanner from "@/components/base/info-banner";
 import DashboardAnalytics from "@/app/dashboard/components/DashboardAnalytics";
 import {
-  getAllWorkspaces,
   getUserDetails,
   getWorkspaceSession,
 } from "@/app/_actions/config-actions";
 import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
+import {
+  getAllWorkspaces,
+  getWorkspaceDetails,
+} from "@/app/_actions/merchant-actions";
 
 export const revalidate = 60;
 export const dynamicParams = true;
 
 async function DashboardHome({ params }) {
   const workspaceID = (await params).workspaceID;
-
-  const workspacesResponse = await getAllWorkspaces();
-
-  const workspaces = workspacesResponse?.data?.workspaces || [];
-  const activeWorkspace = await workspaces?.find(
-    (workspace) => workspace?.ID == workspaceID
-  );
-
   const workspaceSession = (await getWorkspaceSession()) || [];
+
+  const workspaceResponse = await getWorkspaceDetails();
+
+  const activeWorkspace = workspaceResponse?.data || {};
 
   const session = await getUserDetails();
   const dashboardAnalytics = await getDashboardAnalytics(workspaceID);
 
   return (
-    <Suspense fallback={<LoadingPage />}>
+    <>
       {session?.user?.isCompleteKYC && (
         <InfoBanner
           buttonText="Submit Documents"
@@ -44,7 +43,7 @@ async function DashboardHome({ params }) {
         dashboardAnalytics={dashboardAnalytics?.data}
         workspaceWalletBalance={activeWorkspace?.balance}
       />
-    </Suspense>
+    </>
   );
 }
 

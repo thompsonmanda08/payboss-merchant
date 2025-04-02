@@ -1,7 +1,3 @@
-import {
-  deleteWorkspace,
-  updateWorkspace,
-} from "@/app/_actions/config-actions";
 import PromptModal from "@/components/base/prompt";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
@@ -17,6 +13,10 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import SelectField from "@/components/ui/select-field";
 import { useWorkspaceCallbackURL } from "@/hooks/useQueryHooks";
 import { updateWorkspaceCallback } from "@/app/_actions/workspace-actions";
+import {
+  deleteWorkspace,
+  updateWorkspace,
+} from "@/app/_actions/merchant-actions";
 
 function WorkspaceDetails({
   workspaceID,
@@ -46,8 +46,7 @@ function WorkspaceDetails({
   const { activeWorkspace } = useWorkspaces();
   const [isVisible, setIsVisible] = useState(activeWorkspace?.isVisible);
 
-  const { data: callbackResponse, isLoading: loadingCallback } =
-    useWorkspaceCallbackURL(workspaceID);
+  const { data: callbackResponse } = useWorkspaceCallbackURL(workspaceID);
 
   const [isSandbox, setIsSandbox] = useState(
     activeWorkspace?.workspace?.toLowerCase() == "sandbox"
@@ -272,7 +271,9 @@ function WorkspaceDetails({
               label="Description"
               isDisabled={loading || isSandbox}
               defaultValue={activeWorkspace?.description}
-              containerClasses={cn("", { "w-full max-w-[700px]": isSandbox })}
+              classNames={{
+                wrapper: cn("", { "w-full max-w-[700px]": isSandbox }),
+              }}
               onChange={(e) => {
                 editWorkspaceField({ description: e.target.value });
               }}

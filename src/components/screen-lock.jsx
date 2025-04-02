@@ -21,6 +21,7 @@ import {
 } from "@/app/_actions/auth-actions";
 import useAuthStore from "@/context/auth-store";
 import { useIdleTimer } from "react-idle-timer/legacy";
+import { usePathname } from "next/navigation";
 
 function ScreenLock({ open }) {
   const queryClient = useQueryClient();
@@ -137,9 +138,12 @@ function ScreenLock({ open }) {
 }
 
 export function IdleTimerContainer({ authSession }) {
+  const pathname = usePathname();
+
   const [state, setState] = useState("Active");
   const [count, setCount] = useState(0);
   const [remaining, setRemaining] = useState(0);
+
   const loggedIn = authSession?.accessToken;
 
   const onIdle = async () => {
@@ -183,6 +187,9 @@ export function IdleTimerContainer({ authSession }) {
       clearInterval(interval);
     };
   });
+
+  /* NO TIMER ON EXTERNAL ROUTES */
+  if (pathname.startsWith("/checkout")) return null;
 
   return (
     <>

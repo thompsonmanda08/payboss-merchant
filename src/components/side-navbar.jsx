@@ -20,6 +20,8 @@ import {
   ArrowRightStartOnRectangleIcon,
   BriefcaseIcon,
   ChevronRightIcon,
+  NewspaperIcon,
+  CreditCardIcon,
 } from "@heroicons/react/24/outline";
 
 import DropdownButton from "@/components/ui/dropdown-button";
@@ -35,7 +37,7 @@ import Logo from "./base/logo";
 import { WORKSPACE_TYPES } from "@/lib/constants";
 
 function SideNavBar({ workspaceSession }) {
-  const { dashboardRoute, pathname, activeWorkspace, workspaces } =
+  const { dashboardRoute, pathname, activeWorkspace, workspaces, isLoading } =
     useNavigation();
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore();
   const [expandedSection, setExpandedSection] = useState(null);
@@ -48,22 +50,21 @@ function SideNavBar({ workspaceSession }) {
       name: "Manage Income",
       Icon: InboxArrowDownIcon,
       subMenuItems: [
-        // {
-        //   name: 'Invoicing',
-        //   href: `${dashboardRoute}/collections/invoicing`,
-        //   Icon: NewspaperIcon,
-        // },
-
-        // {
-        //   name: 'Payment Forms',
-        //   href: `${dashboardRoute}/collections/payment-forms`,
-        //   Icon: ClipboardDocumentIcon,
-        // },
-        // {
-        //   name: 'Payment Links',
-        //   href: `${dashboardRoute}/collections/payment-links`,
-        //   Icon: LinkIcon,
-        // },
+        {
+          name: "Till Payments",
+          href: `${dashboardRoute}/collections/till-collections`,
+          Icon: CalculatorIcon,
+        },
+        {
+          name: "API Integration",
+          href: `${dashboardRoute}/collections/api-integration`,
+          Icon: AdjustmentsVerticalIcon,
+        },
+        {
+          name: "Checkout & Invoicing",
+          href: `${dashboardRoute}/collections/invoicing`,
+          Icon: CreditCardIcon,
+        },
 
         // {
         //   name: 'Subscriptions',
@@ -76,16 +77,6 @@ function SideNavBar({ workspaceSession }) {
         //   href: `${dashboardRoute}/collections/store`,
         //   Icon: BuildingStorefrontIcon,
         // },
-        {
-          name: "Till Payments",
-          href: `${dashboardRoute}/collections/till-collections`,
-          Icon: CalculatorIcon,
-        },
-        {
-          name: "API Integration",
-          href: `${dashboardRoute}/collections/api-integration`,
-          Icon: AdjustmentsVerticalIcon,
-        },
       ],
     },
   ];
@@ -188,6 +179,7 @@ function SideNavBar({ workspaceSession }) {
     // },
   ];
 
+  // BASED ON WORKSPACE TYPE, SELECT SERVICES
   const SERVICES =
     workspaceType == WORKSPACE_TYPES[0].ID // "collection"
       ? COLLECTION_SERVICES
@@ -201,6 +193,7 @@ function SideNavBar({ workspaceSession }) {
           ...BILL_PAYMENT_SERVICES,
         ];
 
+  // BASED ON WORKSPACE TYPE, SELECT REPORTS
   const REPORTS =
     workspaceType == WORKSPACE_TYPES[0].ID
       ? COLLECTION_REPORTS
@@ -339,14 +332,12 @@ function SideNavBar({ workspaceSession }) {
     });
   }, [pathname]);
 
-  const isLoading = !workspaceType || !activeWorkspace?.workspace;
-
-  return isLoading ? (
+  return isLoading || !workspaceType ? (
     <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
       <Skeleton className="mb-4 h-16 w-full rounded-xl" />
       <div className="h-full space-y-4">
         {Array.from({ length: 9 }).map((_, index) => (
-          <Skeleton className="h-10 w-full rounded-lg" key={index} />
+          <Skeleton className="h-9 w-full rounded-lg" key={index} />
         ))}
       </div>
       <Skeleton className="mt-auto h-[50px] w-full rounded-xl" />

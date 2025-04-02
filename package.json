@@ -15,7 +15,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@heroui/react": "^2.7.5",
-    "@sentry/nextjs": "^9.9.0",
+    "@sentry/nextjs": "^9.10.1",
     "@tailwindcss/forms": "^0.5.10",
     "@tanstack/react-query": "^5.69.0",
     "autoprefixer": "^10.4.21",

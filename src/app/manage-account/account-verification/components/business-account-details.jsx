@@ -159,17 +159,7 @@ function BusinessAccountDetails({
               value={businessDetails?.branch_name}
               required={true}
             />
-            <Input
-              label="Branch Code"
-              name="branch_code"
-              isDisabled
-              value={businessDetails?.branch_code}
-              errorText={"Valid Code is required"}
-              required={true}
-              onChange={(e) => {
-                updateDetails(STEPS[0], { branch_code: e.target.value });
-              }}
-            />
+
             <SelectField
               options={currencies}
               label="Currency"

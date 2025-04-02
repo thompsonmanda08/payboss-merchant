@@ -5,12 +5,12 @@ import React, { useEffect, useState } from "react";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { PAYMENT_SERVICE_TYPES } from "@/lib/constants";
 import { useDisclosure } from "@heroui/react";
-import BatchDetailsPage from "./components/ViewBatchDetails";
-import BulkTransactionsTable from "@/components/containers/tables/BulkTransactionsTable";
 import Card from "@/components/base/card";
 import CardHeader from "@/components/base/card-header";
 import SelectPaymentType from "@/app/dashboard/[workspaceID]/payments/components/SelectPaymentType";
 import OverlayLoader from "@/components/ui/overlay-loader";
+import BatchDetailsPage from "./ViewBatchDetails";
+import BulkTransactionsTable from "@/components/tables/bulk-transactions-table";
 
 export default function DisbursementsWrapper({
   workspaceID,

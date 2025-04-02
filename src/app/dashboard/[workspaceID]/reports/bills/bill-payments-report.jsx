@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Search from "@/components/ui/search";
-import CustomTable from "@/components/containers/tables/Table";
+import CustomTable from "@/components/tables/table";
 import {
   ArrowDownTrayIcon,
   EyeSlashIcon,
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 
 import { DateRangePickerField } from "@/components/ui/date-select-field";
-import { COLLECTION_REPORTS_QUERY_KEY } from "@/lib/constants";
+import { QUERY_KEYS } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
 import { getCollectionsReport } from "@/app/_actions/transaction-actions";
 import { AnimatePresence, motion } from "framer-motion";
@@ -44,7 +44,7 @@ export default function BillPaymentReports({ workspaceID }) {
 
   // HANDLE FETCH FILTERED TRANSACTION REPORT DATA
   const mutation = useMutation({
-    mutationKey: [COLLECTION_REPORTS_QUERY_KEY, workspaceID],
+    mutationKey: [QUERY_KEYS.COLLECTION_REPORTS, workspaceID],
     mutationFn: (filterDates) => getReportsData(filterDates),
   });
 

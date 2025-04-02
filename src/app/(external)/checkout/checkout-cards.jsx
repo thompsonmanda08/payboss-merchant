@@ -2,7 +2,7 @@
 import {
   Card,
   CardBody,
-  CardHeader,
+  CardHeader as HeroCardHeader,
   Tabs,
   Tab,
   Table,
@@ -34,8 +34,9 @@ import {
   CreditCardIcon,
   DevicePhoneMobileIcon,
 } from "@heroicons/react/24/outline";
+import CardHeader from "@/components/base/card-header";
 
-export function Checkout() {
+export function Checkout({ checkoutData }) {
   const [formData, setFormData] = React.useState({});
 
   function handleChange(e) {
@@ -47,17 +48,23 @@ export function Checkout() {
     setFormData((prev) => ({ ...prev, ...fields }));
   }
   return (
-    <div className="container mx-auto grid place-items-center h-full  py-8 sm:py-12 md:py-16 lg:py-24">
+    <div className="container mx-auto grid place-items-center py-8 ">
       <PaymentMethods
         formData={formData}
         handleChange={handleChange}
         updateFormData={updateFormData}
+        checkoutData={checkoutData}
       />
     </div>
   );
 }
 
-function PaymentMethods({ formData, handleChange, updateFormData }) {
+function PaymentMethods({
+  formData,
+  handleChange,
+  updateFormData,
+  checkoutData,
+}) {
   const [selected, setSelected] = React.useState("mobile");
   const [operatorLogo, setOperatorLogo] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
@@ -202,21 +209,21 @@ function PaymentMethods({ formData, handleChange, updateFormData }) {
     <>
       <Card
         className={cn(
-          "border-1 px-1 py-2 pb-6 shadow-xl hover:shadow-2xl hover:shadow-primary/20 shadow-primary/10 transition-all duration-300 ease-in-out max-w-md mx-auto"
+          "border-1 px-1 py-2 pb-6 shadow-xl hover:shadow-2xl hover:shadow-primary/20 shadow-primary/10 transition-all duration-300 ease-in-out max-w-lg w-full mx-auto"
         )}
       >
-        <CardHeader className="flex-col items-start px-4 pb-0 pt-2">
-          <h4 className="text-large font-bold">Payment Method</h4>
-          <small className="text-default-500">
-            Select a payment method and provide payment information
+        <HeroCardHeader className="flex-col items-start px-4 pb-0 pt-2">
+          <h4 className="text-large font-bold">Checkout Payment </h4>
+          <small className="text-default-500 text-xs">
+            Verify payment details and proceed to make a payment
           </small>
-        </CardHeader>
+        </HeroCardHeader>
         <CardBody className="overflow-visible gap-3 pb-0">
           <Table
             hideHeader
             removeWrapper
             isStriped
-            aria-label="order-summary"
+            aria-label="checkout-summary"
             radius="sm"
             // className="bg-red-500"
           >
@@ -225,27 +232,67 @@ function PaymentMethods({ formData, handleChange, updateFormData }) {
               <TableColumn>VALUE</TableColumn>
             </TableHeader>
             <TableBody>
-              <TableRow key="items">
-                <TableCell>Item @ ZMW 5</TableCell>
-                <TableCell className="text-right font-bold">{100}</TableCell>
-              </TableRow>
-
-              <TableRow key="total" className="h-12 bg-stone-100 !rounded-lg">
-                <TableCell className="font-bold">Total</TableCell>
+              {checkoutData?.logo && (
+                <TableRow key="merchant-logo">
+                  <TableCell colSpan={2} className="text-right font-bold">
+                    <Logo
+                      src={checkoutData?.logo}
+                      className={"ml-auto -mr-4"}
+                    />
+                  </TableCell>
+                </TableRow>
+              )}
+              <TableRow key="merchant-display-name">
+                <TableCell className="">Payment To:</TableCell>
                 <TableCell className="text-right font-bold">
-                  {formatCurrency("1000")}
+                  {checkoutData?.displayName || "BGS PayBoss"}
+                </TableCell>
+              </TableRow>
+              {checkoutData?.physicalAddress && (
+                <TableRow key="physical-address">
+                  <TableCell className="">Physical Address:</TableCell>
+                  <TableCell className="text-right font-bold">
+                    {checkoutData?.physicalAddress || "87A Kabulonga Rd."}
+                  </TableCell>
+                </TableRow>
+              )}
+              {checkoutData?.city && (
+                <TableRow key="city-country">
+                  <TableCell>CIty,Country</TableCell>
+                  <TableCell className="text-right font-bold">
+                    {checkoutData?.city || "Lusaka, ZM"}
+                  </TableCell>
+                </TableRow>
+              )}
+
+              <TableRow
+                key="total-amount"
+                className="h-12 bg-stone-100 !rounded-lg"
+              >
+                <TableCell className="font-bold">Total Amount</TableCell>
+                <TableCell className="text-right font-bold">
+                  {formatCurrency(checkoutData?.amount || "00")}
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
-          <div className="flex w-full flex-col h-full">
+          <div className="flex w-full flex-col h-full gap-2">
+            <CardHeader
+              title={"Payment Method"}
+              infoText={
+                "Select a payment method and provide payment information"
+              }
+              classNames={{
+                infoClasses: "!text-xs xl:text-sm",
+              }}
+            />
             <Tabs
               aria-label="payment-methods"
               color="primary"
               radius="sm"
               size="lg"
               variant="bordered"
-              className="max-w-md w-full"
+              className="max-w-lg w-full "
               classNames={{
                 tabList: "w-full p-0.5 ",
               }}
@@ -315,20 +362,7 @@ function PaymentMethods({ formData, handleChange, updateFormData }) {
                 }
                 className="gap-2  flex flex-col"
               >
-                {/* {!isLoading ? (
-                  <div className="flex h-[200px] flex-col w-full max-w-md items-center justify-center self-center bg-background rounded-lg p-5">
-                    <Spinner size={60} />
-                    <div className="flex flex-col items-center mt-4 justify-center">
-                      <h4 className="text-large font-bold">Please Wait...</h4>
-                      <small className="text-default-500">
-                        Initializing payment fields...
-                      </small>
-                    </div>
-                  </div>
-                ) : (
-                  
-                )} */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3 my-1">
                   <div className="flex flex-col sm:flex-row flex-1 gap-2">
                     <Input
                       required
@@ -419,27 +453,27 @@ function BankCard({ formData }) {
   return (
     <Card
       isBlurred
-      className="max-w-md bg-gradient-to-tr from-black to-blue-800 text-white"
+      className="max-w-md mx-8 my-2 bg-gradient-to-tr from-black to-blue-800 text-white"
       shadow="md"
     >
-      <CardHeader className="flex justify-between">
+      <HeroCardHeader className="flex justify-between">
         <Logo isWhite />
         <Chip
           color="warning"
           variant="solid"
           className="bg-gradient-to-r  from-orange-400 via-orange-300 to-orange-400 "
           classNames={{
-            content: "text-black font-semibold",
+            content: "text-black font-bold",
           }}
         >
           GOLD
         </Chip>
-      </CardHeader>
+      </HeroCardHeader>
 
       <CardBody>
         <div className="pb-2">
           <p className="text-small opacity-70">Card Number</p>
-          <p className="text-xl tracking-widest">**** **** **** 1234</p>
+          <p className="text-xl tracking-widest">**** **** **** 4848</p>
         </div>
 
         <div className="flex justify-between pb-2">

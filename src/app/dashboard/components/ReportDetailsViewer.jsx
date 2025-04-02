@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import SingleTransactionsTable from "../tables/SingleTransactionsTable";
 import Modal from "@/components/base/custom-modal";
+import SingleTransactionsTable from "@/components/tables/single-transaction-table";
 
 function ReportDetailsViewer({
   columns,

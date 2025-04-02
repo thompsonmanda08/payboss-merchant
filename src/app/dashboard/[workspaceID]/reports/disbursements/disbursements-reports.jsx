@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import Search from "@/components/ui/search";
-import CustomTable from "@/components/containers/tables/Table";
+import CustomTable from "@/components/tables/table";
 import {
   ArrowDownTrayIcon,
   EyeSlashIcon,
@@ -15,12 +15,10 @@ import { formatCurrency } from "@/lib/utils";
 
 import { DateRangePickerField } from "@/components/ui/date-select-field";
 import { useDateFormatter } from "@react-aria/i18n";
-import { BULK_REPORTS_QUERY_KEY } from "@/lib/constants";
+import { QUERY_KEYS } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
 import { getBulkAnalyticReports } from "@/app/_actions/transaction-actions";
 import { AnimatePresence, motion } from "framer-motion";
-import ReportDetailsViewer from "@/components/containers/analytics/ReportDetailsViewer";
-import TotalStatsLoader from "@/app/dashboard/components/total-stats-loader";
 import { bulkTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
 import Card from "@/components/base/card";
 import CardHeader from "@/components/base/card-header";
@@ -31,6 +29,8 @@ import {
   SINGLE_TRANSACTION_REPORTS_COLUMNS,
 } from "@/lib/table-columns";
 import { useDebounce } from "@/hooks/use-debounce";
+import ReportDetailsViewer from "@/app/dashboard/components/ReportDetailsViewer";
+import TotalStatsLoader from "@/app/dashboard/components/total-stats-loader";
 
 const SERVICE_TYPES = [
   {
@@ -54,7 +54,7 @@ export default function DisbursementReports({ workspaceID }) {
 
   // HANDLE FETCH BULK REPORT DATA
   const mutation = useMutation({
-    mutationKey: [BULK_REPORTS_QUERY_KEY, workspaceID],
+    mutationKey: [QUERY_KEYS.BULK_REPORTS, workspaceID],
     mutationFn: (dateRange) => getBulkAnalyticReports(workspaceID, dateRange),
   });
 

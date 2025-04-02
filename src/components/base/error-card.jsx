@@ -1,3 +1,4 @@
+"use client";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -14,6 +15,7 @@ export function ErrorCard({
   handleReload,
   className,
   buttonText,
+  goBack,
 }) {
   const router = useRouter();
   return (
@@ -24,7 +26,11 @@ export function ErrorCard({
       )}
     >
       <CardHeader>
-        <Logo href="/" className="mx-auto" containerClasses={"mx-auto"} />
+        <Logo
+          href="/"
+          className="mx-auto"
+          classNames={{ wrapper: "mx-auto" }}
+        />
       </CardHeader>
       <CardBody className="flex cursor-pointer select-none flex-col items-center justify-center p-0">
         <p className="text-[clamp(32px,5vw,60px)] font-bold leading-normal text-primary-700">
@@ -49,9 +55,13 @@ export function ErrorCard({
           >
             {buttonText || "Reload"}
           </Button>
+        ) : goBack ? (
+          <Button onPress={() => router.back()} className="w-full">
+            Go back
+          </Button>
         ) : (
           <Button as={Link} href={href || "/"} className="w-full">
-            Go back home
+            Go home
           </Button>
         )}
       </CardFooter>

@@ -145,8 +145,6 @@ function DashboardAnalytics({
   //     ? false // decrease
   //     : "none"; // no change
 
-  const dataNotReady = !permissions?.ID;
-
   const CardIcon =
     workspaceType == WORKSPACE_TYPES[0]?.ID // COLLECTIONS
       ? ArrowLeftEndOnRectangleIcon
@@ -156,9 +154,13 @@ function DashboardAnalytics({
       ? ReceiptPercentIcon
       : ListBulletIcon; // HYBRID
 
+  const isLoadingDashboardData = !permissions?.role && !workspaceType;
+
   return (
     <>
-      {dataNotReady && <OverlayLoader show={dataNotReady} />}
+      {isLoadingDashboardData && (
+        <OverlayLoader show={isLoadingDashboardData} />
+      )}
 
       <div className="flex w-full flex-col gap-4 md:gap-4">
         {/* TOP ROW - WALLET BALANCE && OVERALL VALUES */}

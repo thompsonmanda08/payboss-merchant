@@ -3,8 +3,8 @@ import CardHeader from "@/components/base/card-header";
 import useDashboard from "@/hooks/useDashboard";
 import React from "react";
 import { useDisclosure } from "@heroui/react";
-import AddUserToWorkspace from "../../../../../components/add-users-workspace-modal";
 import UsersTable from "@/components/tables/users-table";
+import AddUserToWorkspace from "@/components/add-users-workspace-modal";
 
 export default function WorkspaceMembers({
   workspaceID,

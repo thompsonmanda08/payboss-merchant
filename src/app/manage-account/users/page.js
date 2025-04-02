@@ -20,16 +20,15 @@ async function UsersSettingsPage() {
       kyc?.stageID == 4 &&
       user?.isCompleteKYC &&
       kyc?.kyc_approval_status?.toLowerCase() == "approved",
+    ...session?.userPermissions,
   };
   return (
     <Suspense fallback={<LoadingPage />}>
-      <div>
-        <ManagePeople
-          users={allUsers?.data?.users}
-          roles={userRoles?.data?.roles}
-          permissions={permissions}
-        />
-      </div>
+      <ManagePeople
+        users={allUsers?.data?.users}
+        roles={userRoles?.data?.roles}
+        permissions={permissions}
+      />
     </Suspense>
   );
 }

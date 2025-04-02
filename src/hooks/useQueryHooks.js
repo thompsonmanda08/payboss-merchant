@@ -3,7 +3,7 @@ import {
   getAllKYCData,
   getAllWorkspaces,
   getUserAccountRoles,
-  getUserSetupConfigs,
+  setupAccountConfig,
   getWorkspaceRoles,
 } from "@/app/_actions/merchant-actions";
 import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
@@ -26,6 +26,7 @@ import {
   initializeWorkspace,
 } from "@/app/_actions/workspace-actions";
 import { QUERY_KEYS } from "@/lib/constants";
+import { getCheckoutURL } from "@/app/_actions/vas-actions";
 
 export const useGeneralConfigOptions = () =>
   useQuery({
@@ -37,7 +38,7 @@ export const useGeneralConfigOptions = () =>
 export const useSetupConfig = () =>
   useQuery({
     queryKey: [QUERY_KEYS.SETUP],
-    queryFn: async () => await getUserSetupConfigs(),
+    queryFn: async () => await setupAccountConfig(),
     staleTime: Infinity,
   });
 
@@ -184,5 +185,11 @@ export const useWorkspaceTypes = () =>
   useQuery({
     queryKey: [QUERY_KEYS.WORKSPACE_TYPES],
     queryFn: async () => await getWorkspaceCallback(),
+    staleTime: Infinity,
+  });
+export const useWorkspaceCheckout = (workspaceID) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.WORKSPACE_CHECKOUT],
+    queryFn: async () => await getCheckoutURL(workspaceID),
     staleTime: Infinity,
   });

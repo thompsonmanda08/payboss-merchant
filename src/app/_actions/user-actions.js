@@ -18,7 +18,7 @@ import { cache } from "react";
 export async function createNewUser(newUser) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
-  const url = `merchant/${merchantID}/user/other/new`;
+  const url = `merchant/${merchantID}/user/other`;
 
   try {
     const res = await authenticatedService({

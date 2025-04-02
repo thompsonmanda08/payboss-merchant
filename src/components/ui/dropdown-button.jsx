@@ -65,7 +65,7 @@ export default function DropdownButton({
         onClose
         {...props}
       >
-        {(item, onClose) => (
+        {(item) => (
           <DropdownItem
             key={item?.key}
             color={item?.key === "new" ? "primary" : "default"}
@@ -202,7 +202,7 @@ export function SingleSelectionDropdown({
         className={innerWrapper}
         {...props}
       >
-        {dropdownItems.map((item, index) => {
+        {dropdownItems.map((item) => {
           let ItemLabel = capitalize(
             item.name || item.label || item?.[listItemName] || item
           );

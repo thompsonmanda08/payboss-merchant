@@ -90,6 +90,7 @@ export const QUERY_KEYS = {
   WORKSPACE_TERMINALS: "workspace-terminals",
   WORKSPACE_TYPES: "workspace-types",
   WORKSPACE_CALLBACK: "workspace-callback",
+  WORKSPACE_CHECKOUT: "workspace-checkout",
 };
 
 // ANIMATION_VARIANTS

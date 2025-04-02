@@ -22,16 +22,9 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Tooltip,
 } from "@heroui/react";
 
-function WorkspacesList({
-  user,
-  permissions,
-  showHeader = false,
-  className,
-  workspaces,
-}) {
+function WorkspacesList({ user, showHeader = false, className, workspaces }) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
   const { merchantKYC, isAccountAdmin, isOwner } = useAccountProfile();

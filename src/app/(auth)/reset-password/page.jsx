@@ -14,15 +14,12 @@ export default function PasswordReset() {
   const urlParams = useSearchParams();
   const role = urlParams.get("role");
   0;
-  const [passwordReset, setPasswordReset] =
-    useState <
-    ResetDetail >
-    {
-      email: "",
-      otp: "",
-      password: "",
-      confirmPassword: "",
-    };
+  const [passwordReset, setPasswordReset] = useState({
+    email: "",
+    otp: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   function updatePasswordResetFields(fields) {
     setPasswordReset({ ...passwordReset, ...fields });

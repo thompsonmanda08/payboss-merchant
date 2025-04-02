@@ -17,12 +17,13 @@ import { Input } from "@/components/ui/input-field";
 import { useQueryClient } from "@tanstack/react-query";
 import AddUserToWorkspace from "@/components/add-users-workspace-modal";
 import PromptModal from "@/components/base/prompt";
+
+import NavIconButton from "@/components/ui/nav-icon-button";
 import {
   changeWorkspaceVisibility,
   deleteWorkspace,
   updateWorkspace,
-} from "@/app/_actions/config-actions";
-import NavIconButton from "@/components/ui/nav-icon-button";
+} from "@/app/_actions/merchant-actions";
 
 function WorkspaceSummary({
   workspaceID,
@@ -247,7 +248,9 @@ function WorkspaceSummary({
                 label="Description"
                 isDisabled={loading || isSandbox}
                 defaultValue={selectedWorkspace?.description}
-                containerClasses={cn("", { "w-full max-w-[700px]": isSandbox })}
+                classNames={{
+                  wrapper: cn("", { "w-full max-w-[700px]": isSandbox }),
+                }}
                 onChange={(e) => {
                   editWorkspaceField({ description: e.target.value });
                 }}

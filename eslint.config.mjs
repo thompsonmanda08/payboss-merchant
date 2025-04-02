@@ -23,7 +23,6 @@ const eslintConfig = [
     rules: {
       "no-undef": "error", // Errors on undefined variables
       "import/no-unresolved": "error", // Errors on unresolved imports
-      "no-unused-imports/no-unused-imports": "warn", // Warns on unused imports
       "no-unused-vars": [
         "warn",
         { args: "after-used", ignoreRestSiblings: true },

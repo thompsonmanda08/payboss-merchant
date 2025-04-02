@@ -29,7 +29,6 @@ import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 import { useQueryClient } from "@tanstack/react-query";
 import NavIconButton from "./ui/nav-icon-button";
 import { useTheme } from "next-themes";
-import EnvironmentMode from "./environment-mode";
 
 export default function TopNavBar({ user }) {
   const queryClient = useQueryClient();
@@ -52,7 +51,7 @@ export default function TopNavBar({ user }) {
   return (
     <nav
       className={cn(
-        `__TOPBAR rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center rounded-xl bg-background/80 py-3 pr-5 shadow-sm backdrop-blur-md transition-all md:pl-2 lg:sticky lg:top-0 lg:justify-start lg:shadow-none`,
+        `rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center rounded-xl bg-background/80 py-3 pr-5 shadow-sm backdrop-blur-md transition-all md:pl-2 lg:sticky lg:top-0 lg:justify-start lg:shadow-none`,
         {
           "bg-transparent lg:static px-10 pl-20 pr-10 text-white backdrop-blur-none":
             isProfile,
@@ -140,7 +139,7 @@ export default function TopNavBar({ user }) {
 export function AvatarDropdown({ user, isProfile }) {
   const queryClient = useQueryClient();
   const { handleUserLogOut } = useAuthStore((state) => state);
-  const { dashboardRoute, pathname } = useNavigation();
+  const { dashboardRoute } = useNavigation();
   const { workspaceUserRole: role } = useDashboard();
   const { theme, setTheme } = useTheme();
   const [isSelected, setIsSelected] = React.useState(

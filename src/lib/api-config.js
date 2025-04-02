@@ -3,7 +3,6 @@
 import { getAuthSession } from "@/app/_actions/config-actions";
 
 import { apiClient } from "./utils";
-import { redirect } from "next/navigation";
 import { getRefreshToken } from "@/app/_actions/auth-actions";
 import { deleteSession } from "./session";
 

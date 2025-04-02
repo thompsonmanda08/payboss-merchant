@@ -158,7 +158,7 @@ const PaymentDetails = ({
           className="mb-auto"
           required={true}
           placeholder={"Enter a batch name"}
-          containerClasses="w-full col-span-1 max-w-lg"
+          classNames={{ wrapper: "w-full col-span-1 max-w-lg" }}
           value={paymentAction?.batch_name}
           onError={error?.status}
           onChange={(e) => {

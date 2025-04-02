@@ -21,7 +21,7 @@ export default function Register() {
     <div className="relative -mt-[260px] md:-mt-[412px] xl:-mt-[432px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none ">
       {!accountCreated && (
         <div className="pt bg-red-5000 z-10 -mt-16 flex flex-col items-center rounded-t-2xl border-b-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-black/40 via-black/5 to-transparent p-6 pb-10 pt-24">
-          <Logo isWhite containerClasses={"scale-[1.5] mb-4"} />
+          <Logo isWhite classNames={{ wrapper: "scale-[1.5] mb-4" }} />
           <h2
             className={
               "w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-transparent text-white"

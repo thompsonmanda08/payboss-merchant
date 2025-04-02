@@ -89,7 +89,7 @@ export function PrimaryFeatures() {
             items={features}
             isVertical={isVertical}
             variant="bordered"
-            selectedKey={selectedIndex}
+            selectedKey={String(selectedIndex)}
             onSelectionChange={setSelectedIndex}
             className="max-w-full w-full overflow-auto md:max-w-[460px]"
             classNames={{
@@ -105,7 +105,7 @@ export function PrimaryFeatures() {
           >
             {(feature) => (
               <Tab
-                key={String(feature.index)}
+                key={String(feature.index || 0)}
                 /* TAB TITLE */
                 title={
                   <div className={cn("group relative rounded-full p-4 ")}>

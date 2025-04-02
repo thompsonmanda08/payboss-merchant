@@ -22,7 +22,7 @@ import {
   Tooltip,
   useDisclosure,
 } from "@heroui/react";
-import CustomTable from "@/components/containers/tables/Table";
+import CustomTable from "@/components/tables/table";
 import { useWorkspaceAPIKey } from "@/hooks/useQueryHooks";
 import {
   refreshWorkspaceAPIKey,

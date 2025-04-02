@@ -118,12 +118,14 @@ const useAccountProfile = () => {
         type: "SIGNED_CONTRACT",
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kycData]);
 
   useEffect(() => {
     if (businessDetails?.name && merchant == "") {
       setMerchant(businessDetails?.name);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [businessDetails]);
 
   return {

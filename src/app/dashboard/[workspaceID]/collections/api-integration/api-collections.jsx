@@ -21,10 +21,6 @@ import {
   Spinner,
   Tooltip,
   useDisclosure,
-} from "@heroui/react";
-import { cn, formatDate, maskString, notify } from "@/lib/utils";
-import PromptModal from "@/components/base/prompt";
-import {
   Table,
   TableHeader,
   TableColumn,
@@ -32,7 +28,10 @@ import {
   TableRow,
   TableCell,
 } from "@heroui/react";
-import CustomTable from "@/components/containers/tables/Table";
+import { cn, formatDate, maskString, notify } from "@/lib/utils";
+import PromptModal from "@/components/base/prompt";
+
+import CustomTable from "@/components/tables/table";
 import {
   useWorkspaceAPIKey,
   useWorkspaceInit,
@@ -56,7 +55,7 @@ import {
   API_KEY_TERMINAL_TRANSACTION_COLUMNS,
   API_KEY_TRANSACTION_COLUMNS,
 } from "@/lib/table-columns";
-import TerminalsTable from "@/components/containers/tables/terminal-tables";
+import TerminalsTable from "@/components/tables/terminal-tables";
 import TerminalConfigViewModal from "./TerminalConfigView";
 import { AnimatePresence, motion } from "framer-motion";
 import Loader from "@/components/ui/loader";
@@ -114,9 +113,14 @@ const APIIntegration = ({ workspaceID }) => {
       notify({
         color: "success",
         title: "Success",
-        description: "API key has been updated!",
+        description: "API key copied to clipboard!",
       });
     } catch (error) {
+      notify({
+        color: "danger",
+        title: "Error",
+        description: "Failed to copy API key!",
+      });
       console.error("FAILED", error);
     }
   }
@@ -167,7 +171,6 @@ const APIIntegration = ({ workspaceID }) => {
       description: "API key has been generated",
     });
     setIsLoading(false);
-    setIsNew(false);
     handleClosePrompt();
     return;
   }

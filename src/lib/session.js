@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import "server-only";
 
 import { SignJWT, jwtVerify } from "jose";
@@ -23,6 +24,7 @@ export async function decrypt(session) {
     });
     return payload;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }
