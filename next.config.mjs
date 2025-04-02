@@ -17,11 +17,9 @@ const nextConfig = {
 };
 
 export default withSentryConfig(
-  withSentryConfig(nextConfig,
-  
+  nextConfig,
 
   /* PRODUCTION SENTRY MONITORING */
-
   {
     // For all available options, see:
     // https://www.npmjs.com/package/@sentry/webpack-plugin#options
