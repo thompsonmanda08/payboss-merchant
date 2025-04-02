@@ -1,5 +1,6 @@
 "use server";
 
+import { BASE_URL } from "@/lib/constants";
 import {
   getServerSession,
   getUserSession,
@@ -18,7 +19,7 @@ import { cache } from "react";
  */
 
 export const getGeneralConfigs = cache(async () => {
-  const CONFIG_URL = process.env.CONFIG_BASE_URL;
+  const CONFIG_URL = process.env.CONFIG_BASE_URL || BASE_URL;
   const url = `${CONFIG_URL}/configuration/all-configs`;
   try {
     const res = await axios.get(url);
