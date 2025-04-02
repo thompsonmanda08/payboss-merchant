@@ -5,7 +5,7 @@ import useWorkspaces from "./useWorkspaces";
 const useNavigation = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const { workspaceID, activeWorkspace, workspaces } = useWorkspaces();
+  const { workspaceID, activeWorkspace, workspaces, isLoading } = useWorkspaces();
 
   const dashboardRoute = `/dashboard/${workspaceID}`;
   const settingsPathname = `${dashboardRoute}/settings`;
@@ -44,6 +44,7 @@ const useNavigation = () => {
     workspaceID,
     activeWorkspace,
     workspaces,
+    isLoading,
   };
 };
 

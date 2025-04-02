@@ -1,13 +1,11 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { HeroUIProvider } from "@heroui/react";
+import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { useNetwork } from "@/hooks/useNetwork";
 import { motion } from "framer-motion";
-import ScreenLock, {
-  IdleTimerContainer,
-} from "@/components/elements/screen-lock";
-import FirstLogin from "@/components/elements/first-login";
+import ScreenLock, { IdleTimerContainer } from "@/components/screen-lock";
+import FirstLogin from "@/components/first-login";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -57,6 +55,8 @@ function Providers({ session, authSession, children }) {
           {authSession?.screenLocked && (
             <ScreenLock open={authSession?.screenLocked} />
           )}
+
+          <ToastProvider placement={"top-right"} toastOffset={8} />
         </HeroUIProvider>
       </NextThemesProvider>
 

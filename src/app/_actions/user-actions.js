@@ -4,6 +4,7 @@ import { USER_SESSION } from "@/lib/constants";
 import { getUserSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 /**
  * Creates a new user for a merchant by calling the API endpoint.
@@ -17,11 +18,12 @@ import { cookies } from "next/headers";
 export async function createNewUser(newUser) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+  const url = `merchant/${merchantID}/user/other`;
 
   try {
     const res = await authenticatedService({
       method: "POST",
-      url: `merchant/${merchantID}/user/other/new`,
+      url,
       data: newUser,
     });
 
@@ -36,6 +38,7 @@ export async function createNewUser(newUser) {
     };
   } catch (error) {
     console.error({
+      endpoint: "POST USER DATA ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -61,7 +64,7 @@ export async function createNewUser(newUser) {
  *
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  * */
-export async function getAllUsers() {
+export async function fetchAllUsers() {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
 
@@ -96,6 +99,8 @@ export async function getAllUsers() {
     };
   }
 }
+
+export const getAllUsers = cache(fetchAllUsers);
 
 /**
  * Assigns the given users to a workspace by calling the API endpoint.
@@ -197,10 +202,11 @@ export async function getUser(userID) {
 export async function updateProfileData(userID, userData) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+  const url = `merchant/${merchantID}/user/${userID}`;
 
   try {
     const res = await authenticatedService({
-      url: `merchant/${merchantID}/user/${userID}`,
+      url,
       method: "PATCH",
       data: userData,
     });
@@ -216,6 +222,7 @@ export async function updateProfileData(userID, userData) {
     };
   } catch (error) {
     console.error({
+      endpoint: "PATCH PROFILE ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -247,10 +254,11 @@ export async function updateProfileData(userID, userData) {
 export async function updateSystemUserData(userID, userData) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+  const url = `merchant/${merchantID}/user/${userID}`;
 
   try {
     const res = await authenticatedService({
-      url: `merchant/${merchantID}/user/${userID}`,
+      url,
       method: "PATCH",
       data: userData,
     });
@@ -266,6 +274,7 @@ export async function updateSystemUserData(userID, userData) {
     };
   } catch (error) {
     console.error({
+      endpoint: "PATCH SYSTEM USER ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -344,10 +353,11 @@ export async function deleteSystemUserData(userID) {
 export async function unlockSystemUser(userID) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+  const url = `merchant/${merchantID}/user/${userID}`;
 
   try {
     const res = await authenticatedService({
-      url: `/merchant/${merchantID}/user/${userID}`,
+      url,
     });
 
     revalidatePath("/manage-account/users", "page");
@@ -361,6 +371,7 @@ export async function unlockSystemUser(userID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | UNLOCK SYSTEM USER ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,

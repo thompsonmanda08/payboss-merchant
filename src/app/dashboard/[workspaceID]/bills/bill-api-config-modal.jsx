@@ -6,17 +6,14 @@ import {
   ModalContent,
   ModalBody,
   ModalHeader,
-  Snippet,
   ModalFooter,
 } from "@heroui/react";
-import { syntaxHighlight } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
-import Tabs from "@/components/elements/tabs";
-import CardHeader from "@/components/base/CardHeader";
+import Tabs from "@/components/tabs";
+import CardHeader from "@/components/base/card-header";
 import {
   ActionResponses,
   API_Authentication,
-  CollectionResponses,
   StatusResponses,
 } from "../collections/api-integration/APIConfigView";
 

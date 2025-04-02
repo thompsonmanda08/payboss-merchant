@@ -2,10 +2,8 @@
 import { notify } from "@/lib/utils";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import Card from "../base/Card";
-import CardHeader from "../base/CardHeader";
+import Card from "../base/card";
 import { Input } from "../ui/input-field";
-import Logo from "../base/Logo";
 
 function SupportForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +29,12 @@ function SupportForm() {
 
       if (response?.ok == true) {
         e.currentTarget?.reset();
-        notify("success", "Message was sent Successfully!");
+
+        notify({
+          color: "success",
+          title: "Success",
+          description: "Message was sent Successfully!",
+        });
       }
     } catch (error) {
     } finally {

@@ -1,10 +1,10 @@
-import SideNavBar from "@/components/elements/side-navbar";
+import SideNavBar from "@/components/side-navbar";
 import {
   getAuthSession,
   getUserDetails,
   getWorkspaceSession,
 } from "../_actions/config-actions";
-import TopNavBar from "@/components/elements/top-bar";
+import TopNavBar from "@/components/top-bar";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({ children }) {

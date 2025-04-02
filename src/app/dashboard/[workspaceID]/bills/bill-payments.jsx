@@ -10,7 +10,6 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import { formatDate, maskString, notify } from "@/lib/utils";
-import PromptModal from "@/components/base/Prompt";
 import {
   Table,
   TableHeader,
@@ -22,24 +21,22 @@ import {
   Tooltip,
   useDisclosure,
 } from "@heroui/react";
-import CustomTable from "@/components/containers/tables/Table";
+import CustomTable from "@/components/tables/table";
 import { useWorkspaceAPIKey } from "@/hooks/useQueryHooks";
 import {
   refreshWorkspaceAPIKey,
   setupWorkspaceAPIKey,
 } from "@/app/_actions/workspace-actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  API_COLLECTIONS_QUERY_KEY,
-  WORKSPACE_API_KEY_QUERY_KEY,
-} from "@/lib/constants";
+import { QUERY_KEYS } from "@/lib/constants";
 import { getBillsLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
-import Card from "@/components/base/Card";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 import BillPaymentAPIConfigModal from "./bill-api-config-modal";
 
 import { BILLS_TRANSACTION_COLUMNS } from "@/lib/table-columns";
+import PromptModal from "@/components/base/prompt";
+import Card from "@/components/base/card";
 
 const BillPayments = ({ workspaceID }) => {
   const queryClient = useQueryClient();
@@ -62,7 +59,7 @@ const BillPayments = ({ workspaceID }) => {
 
   // HANDLE FETCH API COLLECTION LATEST TRANSACTION DATA
   const mutation = useMutation({
-    mutationKey: [API_COLLECTIONS_QUERY_KEY, workspaceID],
+    mutationKey: [QUERY_KEYS.API_COLLECTIONS, workspaceID],
     mutationFn: (dateRange) =>
       getBillsLatestTransactions(workspaceID, dateRange),
   });
@@ -78,14 +75,22 @@ const BillPayments = ({ workspaceID }) => {
   const copyToClipboard = (key) => {
     navigator.clipboard.writeText(key);
     setCopiedKey(key);
-    notify("success", "Copied to clipboard");
+    notify({
+      color: "success",
+      title: "Success",
+      description: "Copied to clipboard",
+    });
   };
 
   async function handleUserAction() {
     setIsLoading(true);
     // THERE CAN ONLY BE ONE API KEY
     if (apiKey?.key && isNew) {
-      notify("error", "You already have an API key for this workspace!");
+      notify({
+        color: "danger",
+        title: "Failed to generate API key!",
+        description: "You already have an API key for this workspace.",
+      });
       return;
     }
 
@@ -94,16 +99,24 @@ const BillPayments = ({ workspaceID }) => {
       const response = await refreshWorkspaceAPIKey(workspaceID);
 
       if (!response?.success) {
-        notify("error", "Failed to refresh API key!");
+        notify({
+          color: "danger",
+          title: "Failed to refresh API key!",
+          description: response?.message,
+        });
         setIsLoading(false);
         return;
       }
 
       queryClient.invalidateQueries({
-        queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
+        queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
       });
 
-      notify("success", "API key has been updated!");
+      notify({
+        color: "success",
+        title: "Success",
+        description: "API key has been updated!",
+      });
       setIsRefresh(false);
       setIsLoading(false);
       return;
@@ -113,19 +126,27 @@ const BillPayments = ({ workspaceID }) => {
     const response = await setupWorkspaceAPIKey(workspaceID);
 
     if (!response?.success) {
-      notify("error", "Failed to generate API key!");
-      notify("error", response?.message);
+      notify({
+        color: "danger",
+        title: "Failed to generate API key!",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
 
     queryClient.invalidateQueries({
-      queryKey: [WORKSPACE_API_KEY_QUERY_KEY, workspaceID],
+      queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     });
 
     setApiKeyData(response?.data);
     setApiKey(response?.data?.API);
-    notify("success", "API key has been generated!");
+
+    notify({
+      color: "success",
+      title: "Success",
+      description: "API key has been generated!",
+    });
     setIsLoading(false);
     setIsNew(false);
 

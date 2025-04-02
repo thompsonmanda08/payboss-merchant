@@ -1,8 +1,22 @@
 "use server";
 
 import authenticatedService from "@/lib/api-config";
+import { cache } from "react";
 
-export async function getDashboardAnalytics(workspaceID) {
+/**
+ * Retrieves the analytics data for a given workspace ID.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the analytics data is being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The analytics data for the given workspace ID.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
+export async function fetchDashboardAnalytics(workspaceID) {
   if (!workspaceID) {
     return {
       success: false,
@@ -18,31 +32,32 @@ export async function getDashboardAnalytics(workspaceID) {
       url: `analytics/merchant/dashboard/workspace/${workspaceID}`,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
-      data: null,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
   }
 }
+
+export const getDashboardAnalytics = cache(fetchDashboardAnalytics);

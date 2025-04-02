@@ -14,19 +14,48 @@ const INITIAL_STATE = {
   isValidTPIN: false,
   isKYCSent: false,
   accountCreated: false,
+
   businessInfo: {
-    businessName: "",
-    companyTypeID: "",
+    name: "",
     tpin: "",
-    company_email: "",
     date_of_incorporation: "",
-    provinceID: "",
-    cityID: "",
+    companyTypeID: "",
     physical_address: "",
     contact: "",
+    company_email: "",
     website: "",
+    provinceID: "",
+    cityID: "",
+    merchant_type: "",
+    signatory_name: "",
+    signatory_email: "",
+    signatory_contact: "",
+    cfo_name: "",
+    cfo_email: "",
+    cfo_contact: "",
   },
-  newAdminUser: {},
+
+  bankDetails: {
+    bankID: "",
+    branch_name: "",
+    branch_code: "",
+    account_name: "",
+    account_number: "",
+    currencyID: "",
+  },
+
+  newAdminUser: {
+    first_name: "",
+    last_name: "",
+    email: "",
+    username: "",
+    phone_number: "",
+    password: "",
+    confirmPassword: "",
+    role: "owner",
+    changePassword: false,
+  },
+
   loginDetails: {},
 };
 
@@ -40,6 +69,7 @@ const useAuthStore = create((set, get) => ({
   setBusinessInfo: (businessInfo) => set({ businessInfo }),
   setMerchantID: (merchantID) => set({ merchantID }),
   setNewAdminUser: (newAdminUser) => set({ newAdminUser }),
+  setBankingDetails: (bankDetails) => set({ bankDetails }),
   setIsValidTPIN: (isValidTPIN) => set({ isValidTPIN }),
   setAccountCreated: (accountCreated) => set({ accountCreated }),
   setIsKYCSent: (isKYCSent) => set({ isKYCSent }),
@@ -59,11 +89,9 @@ const useAuthStore = create((set, get) => ({
     }),
 
   // METHODS AND ACTIONS
-  handleUserLogOut: async (pathname) => {
+  handleUserLogOut: async () => {
     const isLoggedOut = await logUserOut();
     if (isLoggedOut) {
-      window.location.href = `/login`
-
       get().resetAuthData();
       return isLoggedOut;
     }

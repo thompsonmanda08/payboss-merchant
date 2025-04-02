@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import "server-only";
 
 import { SignJWT, jwtVerify } from "jose";
@@ -23,6 +24,7 @@ export async function decrypt(session) {
     });
     return payload;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }
@@ -66,8 +68,6 @@ export async function updateAuthSession(fields) {
       ...oldSession,
       ...fields,
     });
-
-    
 
     if (session) {
       (await cookies()).set(AUTH_SESSION, session, {
@@ -213,6 +213,6 @@ export async function deleteSession() {
   (await cookies()).delete(USER_SESSION);
 
   if (typeof window !== "undefined") {
-    localStorage.removeItem("pb-config-store");
+    localStorage.clear();
   }
 }

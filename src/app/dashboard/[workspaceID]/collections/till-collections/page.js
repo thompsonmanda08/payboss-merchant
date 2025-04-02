@@ -1,6 +1,6 @@
 import LoadingPage from '@/app/loading'
 import React, { Suspense } from 'react'
-import TillPaymentCollections from './TillPaymentCollections'
+import TillPaymentCollections from './till-collections'
 
 export default async function TillPaymentCollectionsPage(props) {
   const params = await props.params;

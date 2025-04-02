@@ -6,7 +6,7 @@ import useAuthStore from "@/context/auth-store";
 import { authenticateUser } from "@/app/_actions/auth-actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import Card from "../base/Card";
+import Card from "../base/card";
 import StatusMessage from "../base/status-message";
 import Link from "next/link";
 
@@ -57,7 +57,7 @@ function LoginForm() {
       return;
     }
 
-    queryClient.invalidateQueries();
+    // queryClient.invalidateQueries();
     setAuth(response?.data);
     const loginUrl = urlParams.get("callbackUrl") || "/workspaces";
     push(loginUrl);

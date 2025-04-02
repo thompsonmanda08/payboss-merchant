@@ -1,7 +1,6 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { cn } from "@/lib/utils";
 import useWorkspaces from "@/hooks/useWorkspaces";

@@ -1,8 +1,8 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import toast from "react-hot-toast";
 import axios from "axios";
 import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from "./constants";
+import { addToast } from "@heroui/react";
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -12,16 +12,18 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-export const notify = (type, message, isLoading) => {
-  // WARNING ALERT
-  if (type == "warning") {
-    return toast(message, {
-      icon: "⚠️",
-    });
-  }
-
-  // DEFAULT
-  return toast[type](message);
+export const notify = ({
+  title,
+  description,
+  color = "default",
+  ...config
+}) => {
+  return addToast({
+    title,
+    description,
+    color,
+    ...config,
+  });
 };
 
 export function formatCurrency(amount) {

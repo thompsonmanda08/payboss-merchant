@@ -11,13 +11,13 @@ import {
 } from "@heroui/react";
 import { notify } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
-import CardHeader from "@/components/base/CardHeader";
-import { SingleFileDropzone } from "@/components/base/FileDropZone";
+import CardHeader from "@/components/base/card-header";
+import { SingleFileDropzone } from "@/components/base/file-dropzone";
 import { Button } from "@/components/ui/button";
 import { registerTerminals } from "@/app/_actions/workspace-actions";
 import { uploadTerminalConfigFile } from "@/app/_actions/pocketbase-actions";
 import { motion } from "framer-motion";
-import ProgressStep from "@/components/elements/progress-step";
+import ProgressStep from "@/components/progress-step";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const CONFIG_VIEWS = [
@@ -87,15 +87,23 @@ export default function TerminalConfigViewModal({
     let response = await registerTerminals(workspaceID, terminalUrl);
 
     if (!response?.success) {
-      notify("error", response?.message);
+      notify({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
 
-    notify("success", "Config file uploaded!");
+    queryClient.invalidateQueries();
+    notify({
+      color: "success",
+      title: "Success",
+      description: "Config file uploaded!",
+    });
     navigateForward();
     setIsLoading(false);
-    queryClient.invalidateQueries();
   }
 
   return (
@@ -162,14 +170,21 @@ const UploadTerminalConfigs = ({
     let response = await uploadTerminalConfigFile(file);
 
     if (!response?.success) {
-      notify("error", "Failed: " + response?.message);
+      notify({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
       setIsLoading(false);
       return;
     }
 
-    notify("success", "Config file uploaded!");
+    notify({
+      color: "success",
+      title: "Success",
+      description: "Config file uploaded!",
+    });
     setTerminalUrl(response?.data?.file_url);
-
     setIsLoading(false);
     return response?.data;
   }

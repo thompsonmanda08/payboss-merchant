@@ -1,28 +1,27 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from "zustand";
 
 export const POP_INIT = {
-  amount: '',
-  bank_rrn: '',
-  date_of_deposit: '',
-  url: '',
-  name: '',
-}
+  amount: "",
+  bank_rrn: "",
+  date_of_deposit: "",
+  url: "",
+  name: "",
+};
 
 const INITIAL_STATE = {
   selectedPrefund: null,
   prefundApproval: {
-    action: '',
-    remarks: '',
+    action: "",
+    remarks: "",
   },
   openAttachmentModal: false,
   walletLoading: false,
   isLoading: false,
 
   formData: POP_INIT,
-}
+};
 
-const useWalletStore = create((set, get) => ({
+const useWalletStore = create((set) => ({
   ...INITIAL_STATE,
 
   //SETTERS
@@ -55,6 +54,6 @@ const useWalletStore = create((set, get) => ({
     set({
       ...INITIAL_STATE,
     }),
-}))
+}));
 
-export default useWalletStore
+export default useWalletStore;

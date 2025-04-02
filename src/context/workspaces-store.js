@@ -42,21 +42,30 @@ const useWorkspaceStore = create((set, get) => ({
     const userExists = existingUsers.find((u) => u.userID === user.ID);
 
     if (exitingUser) {
-      notify("warning", `${exitingUser?.first_name} is already added!`);
+      notify({
+        title: "Warning",
+        color: "warning",
+        description: `${exitingUser?.first_name} is already added!`,
+      });
       return;
     }
 
     if (userExists) {
-      notify(
-        "warning",
-        `${userExists?.first_name} already exists in workspace!`
-      );
+      notify({
+        title: "Warning",
+        color: "warning",
+        description: `${userExists?.first_name} already exists in workspace!`,
+      });
       return;
     }
 
     // Filter out the user with role == "owner", if exists then don't add
     // if (user?.role?.toLowerCase() == 'owner') {
-    //   notify('warning', 'Owner is already part of the workspace!')
+    // notify({
+    //   title: "Warning",
+    //   color: "warning",
+    //   description: 'Owner is already part of the workspace!',
+    // });
     //   return
     // }
 
@@ -66,7 +75,11 @@ const useWorkspaceStore = create((set, get) => ({
       };
     });
 
-    notify("success", `You Added ${user?.first_name}!`);
+    notify({
+      color: "success",
+      title: "Success",
+      description: `You added ${user?.first_name}!`,
+    });
   },
 
   handleRemoveFromWorkspace: (user) => {
@@ -85,7 +98,11 @@ const useWorkspaceStore = create((set, get) => ({
       };
     });
 
-    notify("success", `You Removed ${user?.first_name}!`);
+    notify({
+      color: "success",
+      title: "Success",
+      description: `You removed ${user?.first_name}!`,
+    });
   },
 
   handleUserRoleChange: (user, roleID) => {
@@ -153,11 +170,19 @@ const useWorkspaceStore = create((set, get) => ({
     );
 
     if (response?.success) {
-      notify("success", `You Reset ${selectedUser?.first_name}'s Password!`);
+      notify({
+        color: "success",
+        title: "Success",
+        description: `You Reset ${selectedUser?.first_name}'s Password!`,
+      });
       return response?.success;
     }
 
-    notify("error", response?.message);
+    notify({
+      title: "Error",
+      color: "danger",
+      description: response?.message,
+    });
     return response?.success;
   },
 
@@ -171,11 +196,19 @@ const useWorkspaceStore = create((set, get) => ({
     );
 
     if (response?.success) {
-      notify("success", `You Removed ${selectedUser?.first_name}!`);
+      notify({
+        color: "success",
+        title: "Success",
+        description: `You Removed ${selectedUser?.first_name}!`,
+      });
       return response?.success;
     }
 
-    notify("error", response?.message);
+    notify({
+      title: "Error",
+      color: "danger",
+      description: response?.message,
+    });
     return response?.success;
   },
 
@@ -186,11 +219,19 @@ const useWorkspaceStore = create((set, get) => ({
     const response = await unlockSystemUser(selectedUser?.ID);
 
     if (response?.success) {
-      notify("success", `You unlocked ${selectedUser?.first_name}!`);
+      notify({
+        color: "success",
+        title: "Success",
+        description: `You unlocked ${selectedUser?.first_name}!`,
+      });
       return response?.success;
     }
 
-    notify("error", response?.message);
+    notify({
+      title: "Error",
+      color: "danger",
+      description: response?.message,
+    });
     set({ isLoading: false });
     return response?.success;
   },
@@ -202,11 +243,19 @@ const useWorkspaceStore = create((set, get) => ({
     const response = await deleteSystemUserData(selectedUser?.ID);
 
     if (response?.success) {
-      notify("success", `You Removed ${selectedUser?.first_name}!`);
+      notify({
+        color: "success",
+        title: "Success",
+        description: `You Removed ${selectedUser?.first_name}!`,
+      });
       return response?.success;
     }
 
-    notify("error", response?.message);
+    notify({
+      title: "Error",
+      color: "danger",
+      description: response?.message,
+    });
 
     set({ isLoading: false });
     return response?.success;

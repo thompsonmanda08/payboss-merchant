@@ -6,10 +6,15 @@ const useAccountProfile = () => {
   const { data: setup } = useSetupConfig();
   const { data: kycData } = useKYCData();
 
-  const user = setup?.data?.userDetails || [];
+  console.log("kycData", kycData);
+  console.log("setup", setup);
 
-  const isOwner = user?.role?.toLowerCase() == "owner";
-  const isAccountAdmin = user?.role?.toLowerCase() == "admin";
+  const user = setup?.data?.userDetails || [];
+  const permissions = setup?.data?.userPermissions;
+  const merchantKYC = setup?.data?.kyc;
+
+  const isOwner = permissions?.role?.toLowerCase() == "owner";
+  const isAccountAdmin = permissions?.role?.toLowerCase() == "admin";
 
   const businessDetails = kycData?.data?.details || {};
   const documents = kycData?.data?.documents || {};
@@ -30,11 +35,13 @@ const useAccountProfile = () => {
     documents?.cert_of_incorporation_url ||
     documents?.share_holder_url ||
     documents?.tax_clearance_certificate_url ||
+    documents?.organisation_structure_url ||
+    documents?.professional_license_url ||
     documents?.articles_of_association_url;
 
   /* ****** SET STATE VARIABLES**************** */
   const isApprovedUser =
-    businessDetails?.stageID == 4 &&
+    merchantKYC?.stageID == 3 &&
     businessDetails?.isCompleteKYC &&
     businessDetails?.kyc_approval_status?.toLowerCase() == "approved";
 
@@ -47,15 +54,30 @@ const useAccountProfile = () => {
       setKYCStageID(businessDetails?.stageID);
       setKYCApprovalStatus(businessDetails?.kyc_approval_status?.toLowerCase());
       setAllowUserToSubmitKYC(
-        businessDetails?.stageID < 1 ||
-          businessDetails?.stage?.toLowerCase() == "new" ||
-          !businessDetails?.isCompleteKYC ||
-          businessDetails?.kyc_approval_status?.toLowerCase() == "rejected"
+        merchantKYC?.stageID < 3 &&
+          merchantKYC?.can_edit &&
+          (isOwner || isAccountAdmin)
       );
     }
 
     //  Check Business Documents if they exist
     if (Object.keys(documents).length > 0) {
+      const EXTRA_DOCS =
+        merchantKYC?.merchant_type == "super"
+          ? [
+              {
+                name: "Organizational Structure",
+                url: documents?.organisation_structure_url || "#",
+                type: "COMPANY STRUCTURE",
+              },
+              {
+                name: "Professional License",
+                url: documents?.professional_license_url || "#",
+                type: "PROFESSIONAL_LICENSE",
+              },
+            ]
+          : [];
+
       let attachments = [
         {
           name: "Company Profile",
@@ -82,6 +104,7 @@ const useAccountProfile = () => {
           url: documents?.articles_of_association_url || "#",
           type: "ARTICLES_ASSOCIATION",
         },
+        ...EXTRA_DOCS,
       ];
 
       // Set Business Documents in state variable
@@ -95,12 +118,14 @@ const useAccountProfile = () => {
         type: "SIGNED_CONTRACT",
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kycData]);
 
   useEffect(() => {
     if (businessDetails?.name && merchant == "") {
       setMerchant(businessDetails?.name);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [businessDetails]);
 
   return {
@@ -109,6 +134,7 @@ const useAccountProfile = () => {
     businessDocs,
     merchantID,
     merchant,
+    merchantKYC,
     isCompleteKYC,
     KYCStage,
     KYCStageID,

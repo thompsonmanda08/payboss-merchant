@@ -1,6 +1,6 @@
 import LoadingPage from "@/app/loading";
 import React, { Suspense } from "react";
-import CollectionsReports from "./CollectionsReports";
+import CollectionsReports from "./collection-reports";
 
 export default async function CollectionsReportsPage(props) {
   const params = await props.params;

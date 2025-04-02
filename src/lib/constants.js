@@ -3,7 +3,6 @@ import {
   ArrowRightCircleIcon,
   ArrowRightStartOnRectangleIcon,
   CircleStackIcon,
-  WalletIcon,
 } from "@heroicons/react/24/outline";
 
 export const BASE_URL =
@@ -60,34 +59,39 @@ export const rowsPerPageOptions = [
 ];
 
 // QUERY KEYS
-export const USER_DATA_KEY = "user";
-export const CONFIGS_QUERY_KEY = "configs";
-export const USER_ROLES_QUERY_KEY = "user-roles";
-export const USERS = "workspace-users";
-export const SETUP_QUERY_KEY = "setup";
-export const WORKSPACES_QUERY_KEY = "workspaces";
-export const WORKSPACE_ROLES_QUERY_KEY = "workspace-role";
-export const WORKSPACE_DASHBOARD_QUERY_KEY = "dashboard";
-export const WORKSPACE_MEMBERS_QUERY_KEY = "members";
-export const BULK_TRANSACTIONS_QUERY_KEY = "bulk-transactions";
-export const SINGLE_TRANSACTIONS_QUERY_KEY = "single-transactions";
-export const BATCH_DETAILS_QUERY_KEY = "batch-details";
-export const WALLET_HISTORY_QUERY_KEY = "wallet-history-details";
-export const DASHBOARD_ANALYTICS_QUERY_KEY = "dasboard-analytics";
-export const PAYMENT_TRANSACTIONS_QUERY_KEY = "payment-transactions";
-export const COLLECTION_TRANSACTIONS_QUERY_KEY = "collections-transactions";
-export const WORKSPACE_API_KEY_QUERY_KEY = "workspace-api-key";
-export const ACTIVE_PREFUND_QUERY_KEY = "active-prefund-key";
-export const BULK_REPORTS_QUERY_KEY = "disbursement-analytics-reports";
-export const COLLECTION_REPORTS_QUERY_KEY = "collections-analytics-reports";
-export const API_COLLECTIONS_REPORTS_QUERY_KEY = "api-collection-reports";
-export const API_COLLECTIONS_QUERY_KEY = "api-transactions";
-export const TILL_COLLECTIONS_REPORTS_QUERY_KEY = "till-collection-reports";
-export const TILL_COLLECTIONS_QUERY_KEY = "till-transactions";
-export const WORKSPACE_TILL_NUMBER_QUERY_KEY = "workspace-till-number";
-export const WALLET_STATEMENT_REPORTS_QUERY_KEY = "wallet-statement-report";
-export const WORKSPACE_TERMINALS_QUERY_KEY = "workspace-terminals";
-export const WORKSPACE_CALLBACK = "workspace-callback";
+export const QUERY_KEYS = {
+  USER_DATA: "user",
+  USERS: "users",
+  CONFIGS: "configs",
+  USER_ROLES: "user-roles",
+  WORKSPACE_USERS: "workspace-users",
+  SETUP: "setup",
+  WORKSPACES: "workspaces",
+  WORKSPACE_ROLES: "workspace-role",
+  WORKSPACE_DASHBOARD: "dashboard",
+  WORKSPACE_MEMBERS: "members",
+  BULK_TRANSACTIONS: "bulk-transactions",
+  SINGLE_TRANSACTIONS: "single-transactions",
+  BATCH_DETAILS: "batch-details",
+  WALLET_HISTORY: "wallet-history-details",
+  DASHBOARD_ANALYTICS: "dashboard-analytics",
+  PAYMENT_TRANSACTIONS: "payment-transactions",
+  COLLECTION_TRANSACTIONS: "collections-transactions",
+  WORKSPACE_API_KEY: "workspace-api-key",
+  ACTIVE_PREFUND: "active-prefund-key",
+  BULK_REPORTS: "disbursement-analytics-reports",
+  COLLECTION_REPORTS: "collections-analytics-reports",
+  API_COLLECTIONS_REPORTS: "api-collection-reports",
+  API_COLLECTIONS: "api-transactions",
+  TILL_COLLECTIONS_REPORTS: "till-collection-reports",
+  TILL_COLLECTIONS: "till-transactions",
+  WORKSPACE_TILL_NUMBER: "workspace-till-number",
+  WALLET_STATEMENT_REPORTS: "wallet-statement-report",
+  WORKSPACE_TERMINALS: "workspace-terminals",
+  WORKSPACE_TYPES: "workspace-types",
+  WORKSPACE_CALLBACK: "workspace-callback",
+  WORKSPACE_CHECKOUT: "workspace-checkout",
+};
 
 // ANIMATION_VARIANTS
 export const containerVariants = {

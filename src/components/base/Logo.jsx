@@ -14,7 +14,7 @@ function Logo({
   isWhite = false,
   isCollapsedNavBar,
   className,
-  containerClasses,
+  classNames,
   href,
 }) {
   const { theme } = useTheme();
@@ -37,7 +37,8 @@ function Logo({
         href={href || "/"}
         className={cn(
           "flex aspect-square min-w-fit items-center justify-center ",
-          containerClasses,
+
+          classNames?.wrapper,
           {
             "mx-auto max-h-[48px] min-h-12 max-w-10": isCollapsedNavBar,
             "max-h-[50px] w-full": !isCollapsedNavBar,
@@ -60,7 +61,7 @@ function Logo({
         href={href || "/"}
         className={cn(
           "aspect-auto max-h-[50px] min-h-12 min-w-fit",
-          containerClasses,
+          classNames?.wrapper,
           {
             // 'mx-auto max-h-[48px] min-h-12 max-w-10': isCollapsedNavBar,
             // 'max-h-[50px] w-full': !isCollapsedNavBar,

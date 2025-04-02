@@ -8,7 +8,9 @@ const useWorkspaces = (query) => {
   const [isSandboxVisible, setIsSandboxVisible] = useState(false);
 
   const { data: setup, isFetching, isLoading } = useSetupConfig();
+
   const workspaces = setup?.data?.workspaces || [];
+  const workspaceTypes = setup?.data?.workspace_type || [];
 
   const isUserInWorkspace =
     pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
@@ -37,13 +39,14 @@ const useWorkspaces = (query) => {
     if (sandbox != undefined) {
       setIsSandboxVisible(true);
     }
-  }, []);
+  }, [sandbox]);
 
   return {
     isFetching,
     isLoading,
     activeWorkspace,
     workspaces,
+    workspaceTypes,
     workspaceID: activeWorkspace?.ID,
     workspaceWalletBalance,
     isUserInWorkspace,

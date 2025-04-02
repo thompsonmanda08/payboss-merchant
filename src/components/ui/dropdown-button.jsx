@@ -57,7 +57,7 @@ export default function DropdownButton({
       <DropdownMenu
         aria-label="Dynamic Actions"
         variant={variant || "faded"}
-        items={dropDownItems || items}
+        items={dropDownItems}
         className={innerWrapper}
         classNames={{
           base: "overflow-visible", // REQUIRED FOR SUB MENU ITEMS
@@ -65,7 +65,7 @@ export default function DropdownButton({
         onClose
         {...props}
       >
-        {(item, onClose) => (
+        {(item) => (
           <DropdownItem
             key={item?.key}
             color={item?.key === "new" ? "primary" : "default"}
@@ -172,7 +172,7 @@ export function SingleSelectionDropdown({
     <Dropdown
       className={cn("min-w-max", className)}
       classNames={{
-        base: cn("min-w-max bg-red-500", base),
+        base: cn("min-w-max", base),
       }}
     >
       <DropdownTrigger>
@@ -202,7 +202,7 @@ export function SingleSelectionDropdown({
         className={innerWrapper}
         {...props}
       >
-        {dropdownItems.map((item, index) => {
+        {dropdownItems.map((item) => {
           let ItemLabel = capitalize(
             item.name || item.label || item?.[listItemName] || item
           );

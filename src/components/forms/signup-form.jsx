@@ -31,9 +31,11 @@ export default function SignUpForm() {
   const {
     businessInfo,
     newAdminUser,
+    bankDetails,
     error,
     updateErrorStatus,
     setBusinessInfo,
+    setBankingDetails,
     setNewAdminUser,
     isLoading,
     setIsLoading,
@@ -46,36 +48,39 @@ export default function SignUpForm() {
   } = useAuthStore();
 
   const NEW_REGISTRATION = [
+    // BUSINESS INFO
     <Step1
-      key={STEPS[1]}
+      key={STEPS[1] + "_NEW"}
       updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
-    />, // BUSINESS INFO
+    />,
+
     <Step2
-      key={STEPS[2]}
+      key={STEPS[2]} // BANK DETAILS
       updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
-    />, // BANK DETAILS
+    />,
+
     <Step3
-      key={STEPS[3]}
+      key={STEPS[3]} // ADMIN USER (OWNER)
       updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
-    />, // BUSINESS ADMIN USER
+    />,
   ];
 
   const CONTINUE_REGISTRATION = [
     <Step1_TPIN
-      key={STEPS[1]}
+      key={STEPS[1] + "_CONTINUE"} // GET ACCOUNT DETAILS BY TPIN
       updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
-    />, // GET ACCOUNT DETAILS BY TPIN
+    />,
     <Step2
-      key={STEPS[2]}
+      key={STEPS[2]} // BANK DETAILS
       updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
-    />, // BANK DETAILS
+    />,
     <Step3
-      key={STEPS[3]}
+      key={STEPS[3]} // ADMIN USER (OWNER)
       updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
     />,
@@ -112,13 +117,18 @@ export default function SignUpForm() {
 
   function updateAccountDetails(step, fields) {
     // BUSINESS INFO
-    if (STEPS[0] == step) {
+    if (STEPS[0] == step || STEPS[1] == step) {
       setBusinessInfo({ ...businessInfo, ...fields });
       return;
     }
 
+    if (STEPS[2] == step) {
+      setBankingDetails({ ...bankDetails, ...fields });
+      return;
+    }
+
     // NEW ADMIN USER
-    if (STEPS[4] == step) {
+    if (STEPS[3] == step) {
       setNewAdminUser({ ...newAdminUser, ...fields });
     }
   }
@@ -163,12 +173,20 @@ export default function SignUpForm() {
       }
 
       if (response?.success && (response?.data?.merchantID || merchantID)) {
-        notify("success", "Business Details Submitted!");
+        notify({
+          color: "success",
+          title: "Success",
+          description: "Business Details Submitted!",
+        });
         navigateForward();
         setIsLoading(false);
         return;
       } else {
-        notify("error", "Error Submitting Business Details");
+        notify({
+          color: "danger",
+          title: "Failed",
+          description: "Error Submitting Business Details",
+        });
         updateErrorStatus({ status: true, message: response?.message });
         setIsLoading(false);
         return;
@@ -178,18 +196,23 @@ export default function SignUpForm() {
 
     // ************** STEP: 2 ==>  APPEND MERCHANT ACCOUNT BANK DETAILS *************************** //
     if (currentTabIndex === 2 && STEPS[currentTabIndex] === STEPS[2]) {
-      const response = await submitMerchantBankDetails(
-        businessInfo,
-        merchantID
-      );
+      const response = await submitMerchantBankDetails(bankDetails, merchantID);
 
       if (response?.success) {
-        notify("success", "Bank information Submitted!");
+        notify({
+          color: "success",
+          title: "Success",
+          description: "Bank information Submitted!",
+        });
         navigateForward();
         setIsLoading(false);
         return;
       } else {
-        notify("error", "Error Submitting Bank information!");
+        notify({
+          color: "error",
+          title: "Failed",
+          description: "Error Submitting Bank information!",
+        });
         updateErrorStatus({ status: true, message: response?.message });
         setIsLoading(false);
         return;
@@ -212,12 +235,20 @@ export default function SignUpForm() {
       let response = await createMerchantAdminUser(newAdminUser, merchantID);
 
       if (response?.success) {
-        notify("success", "Account Created Successfully");
+        notify({
+          color: "success",
+          title: "Success",
+          description: "Account Created Successfully",
+        });
         setAccountCreated(true);
         setIsLoading(false);
         return;
       } else {
-        notify("error", "Error Creating Account!");
+        notify({
+          color: "error",
+          title: "Failed",
+          description: "Error Creating Account!",
+        });
         updateErrorStatus({ status: true, message: response?.message });
         setIsLoading(false);
         return;
@@ -240,11 +271,11 @@ export default function SignUpForm() {
   // FOR REGISTRATION
 
   return (
-    <Card className="mx-auto w-full max-w-sm flex-auto p-6 sm:max-w-[790px]">
-      <div className="flex flex-col ">
+    <Card className="mx-auto w-full flex-auto p-6 sm:max-w-[790px]">
+      <div className="flex flex-col">
         <form
           onSubmit={handleCreateAccount}
-          className="mx-auto flex w-full flex-col items-center justify-center gap-4 "
+          className="mx-auto flex w-full flex-col items-center justify-center gap-4"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -291,7 +322,7 @@ export default function SignUpForm() {
                   !isValidTPIN &&
                   currentTabIndex === 1)
               }
-              className="w-full max-w-xs sm:w-auto"
+              className="w-full"
             >
               {isFirstStep
                 ? "Get Started"

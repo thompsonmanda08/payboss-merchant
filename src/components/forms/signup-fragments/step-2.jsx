@@ -8,16 +8,16 @@ import { STEPS } from "../signup-form";
 import useAuthStore from "@/context/auth-store";
 import SelectField from "@/components/ui/select-field";
 import useConfigOptions from "@/hooks/useConfigOptions";
-import CardHeader from "@/components/base/CardHeader";
+import CardHeader from "@/components/base/card-header";
 
 // BUSINESS BANKING DETAILS
 export default function Step2({ updateDetails, backToStart }) {
   const { banks, currencies } = useConfigOptions();
-  const step = useAuthStore((state) => state.businessInfo);
+  const formData = useAuthStore((state) => state.bankDetails);
   const branchCodeError =
-    (step?.branch_code?.length > 1 && step?.branch_code?.length < 6) ||
-    step?.branch_code?.length > 8;
-  const accountNumberError = step?.account_number?.length > 16;
+    (formData?.branch_code?.length > 1 && formData?.branch_code?.length < 6) ||
+    formData?.branch_code?.length > 8;
+  const accountNumberError = formData?.account_number?.length > 16;
 
   return (
     <>
@@ -36,12 +36,12 @@ export default function Step2({ updateDetails, backToStart }) {
           >
             <Input
               label="Account Holder Name"
-              plaaceholder="Enter your account holder name"
+              placeholder="Enter your account holder name"
               name="account_name"
-              value={step?.account_name}
+              value={formData?.account_name}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { account_name: e.target.value });
+                updateDetails(STEPS[2], { account_name: e.target.value });
               }}
             />
           </motion.div>
@@ -52,11 +52,11 @@ export default function Step2({ updateDetails, backToStart }) {
             <Input
               label="Account Number"
               name="account_number"
-              plaaceholder="Enter your account number"
-              value={step?.account_number}
+              placeholder="Enter your account number"
+              value={formData?.account_number}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { account_number: e.target.value });
+                updateDetails(STEPS[2], { account_number: e.target.value });
               }}
             />
           </motion.div>
@@ -68,18 +68,18 @@ export default function Step2({ updateDetails, backToStart }) {
               options={banks}
               label="Bank"
               name="bankID"
-              value={step?.bankID}
+              value={formData?.bankID}
               prefilled={true}
               listItemName={"bank_name"}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { bankID: e.target.value });
+                updateDetails(STEPS[2], { bankID: e.target.value });
               }}
             />
           </motion.div>
         </div>
 
-        <div className="flex w-full flex-1 flex-col gap-2 ">
+        <div className="flex w-full flex-1 flex-col gap-2">
           <motion.div
             className="w-full"
             variants={staggerContainerItemVariants}
@@ -87,11 +87,11 @@ export default function Step2({ updateDetails, backToStart }) {
             <Input
               label="Branch Name"
               name="branch_name"
-              plaaceholder="Enter the branch name"
-              value={step?.branch_name}
+              placeholder="Enter the branch name"
+              value={formData?.branch_name}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { branch_name: e.target.value });
+                updateDetails(STEPS[2], { branch_name: e.target.value });
               }}
             />
           </motion.div>
@@ -102,13 +102,13 @@ export default function Step2({ updateDetails, backToStart }) {
             <Input
               label="Branch Code"
               name="branch_code"
-              plaaceholder="Enter branch code"
-              value={step?.branch_code}
+              placeholder="Enter branch code"
+              value={formData?.branch_code}
               onError={branchCodeError}
               errorText={"Valid Code is required"}
               required={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { branch_code: e.target.value });
+                updateDetails(STEPS[2], { branch_code: e.target.value });
               }}
             />
           </motion.div>
@@ -120,12 +120,12 @@ export default function Step2({ updateDetails, backToStart }) {
               options={currencies}
               label="Currency"
               name="currencyID"
-              value={step?.currencyID}
+              value={formData?.currencyID}
               listItemName={"currency"}
               required={true}
               prefilled={true}
               onChange={(e) => {
-                updateDetails(STEPS[0], { currencyID: e.target.value });
+                updateDetails(STEPS[2], { currencyID: e.target.value });
               }}
             />
           </motion.div>

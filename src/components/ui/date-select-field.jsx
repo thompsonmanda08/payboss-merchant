@@ -9,9 +9,8 @@ export const dateInputClassNames = {
   label: "ml-1 text-sm font-medium text-foreground/70 mb-0",
   base: "gap-0",
   inputWrapper: cn(
-    "focus:border-1 bg-red-500 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[focus=true]:border-primary hover:border-primary/60 focus-within:hover:border-primary/60 focus-within:border-primary/60"
+    "focus:border-1 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[focus=true]:border-primary hover:border-primary/60 focus-within:hover:border-primary/60 focus-within:border-primary/60"
   ),
-  input: "focus:border-none",
 };
 
 export const datePickerClasses = {
@@ -22,31 +21,56 @@ export const datePickerClasses = {
 function DateSelectField({
   label,
   className,
+  classNames,
   description,
   labelPlacement,
+  onError,
   onChange,
   defaultValue,
   value,
   ...props
 }) {
   return (
-    <DatePicker
-      label={label}
-      key={label}
-      variant="bordered"
-      value={value ? parseDate(value) : undefined}
-      // hideTimeZone
-      showMonthAndYearPickers
-      defaultValue={defaultValue}
-      onChange={onChange}
-      className={cn("max-w-sm ", className)}
-      classNames={datePickerClasses}
-      dateInputClassNames={{ ...dateInputClassNames }}
-      description={description}
-      labelPlacement={labelPlacement || "outside"}
-      isRequired={props?.required}
-      {...props}
-    />
+    <div
+      className={cn("flex w-full max-w-md flex-col", classNames?.wrapper, {
+        "cursor-not-allowed opacity-50": props?.disabled || props?.isDisabled,
+      })}
+    >
+      {label && (
+        <label
+          className={cn("pl-1 text-sm font-medium text-foreground/70", {
+            "text-red-500": onError,
+          })}
+        >
+          {label}{" "}
+          {props?.required && (
+            <span className="font-bold text-red-500"> *</span>
+          )}
+        </label>
+      )}
+      <DatePicker
+        // label={label}
+        key={label}
+        inert={false}
+        variant="bordered"
+        value={value ? parseDate(value) : undefined}
+        // hideTimeZone
+        showMonthAndYearPickers
+        defaultValue={defaultValue}
+        onChange={onChange}
+        className={cn("max-w-sm", className)}
+        classNames={{
+          label: cn(classNames?.label),
+          inputWrapper: cn(
+            "focus:border-1 gap-0 bg-red-500 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary/70 focus:outline-none focus-visible:outline-primary/10 focus-visible:ring-1 focus:ring-primary/10 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[focus=true]:border-primary hover:border-primary/60 focus-within:hover:border-primary/60 focus-within:border-primary/60"
+          ),
+        }}
+        description={description}
+        labelPlacement={labelPlacement || "outside"}
+        isRequired={props?.required}
+        {...props}
+      />
+    </div>
   );
 }
 
@@ -98,7 +122,7 @@ export function DateRangePickerField({
   return (
     // <HeroUIProvider locale="es-GB">
     // {/* </HeroUIProvider> */}
-    (<DateRangePicker
+    <DateRangePicker
       label={label}
       showMonthAndYearPickers
       defaultValue={defaultValue}
@@ -139,7 +163,7 @@ export function DateRangePickerField({
         },
       }}
       {...props}
-    />)
+    />
   );
 }
 

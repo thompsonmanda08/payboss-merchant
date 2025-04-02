@@ -1,57 +1,64 @@
-'use server'
+"use server";
 
-import { getAuthSession } from '@/app/_actions/config-actions'
+import { getAuthSession } from "@/app/_actions/config-actions";
 
-import { apiClient } from './utils'
+import { apiClient } from "./utils";
+import { getRefreshToken } from "@/app/_actions/auth-actions";
+import { deleteSession } from "./session";
 
 const authenticatedService = async (request) => {
-  const session = await getAuthSession()
-  return await apiClient({
-    method: 'GET',
+  const session = await getAuthSession();
+
+  const response = await apiClient({
+    method: "GET",
     headers: {
-      'Content-type': request.contentType
+      "Content-type": request.contentType
         ? request.contentType
-        : 'application/json',
+        : "application/json",
       Authorization: `Bearer ${session?.accessToken}`,
     },
     withCredentials: true,
     ...request,
-  })
-}
+  });
 
-// Function to set up the interceptors
-// export const setupInterceptors = (auth, refresh) => {
-//   // Request Interceptor
-//   const requestIntercept = apiClient.interceptors.request.use(
-//     (config) => {
-//       if (!config.headers['Authorization']) {
-//         config.headers['Authorization'] = `Bearer ${auth?.accessToken}`
-//       }
-//       return config
-//     },
-//     (error) => Promise.reject(error),
-//   )
+  return response;
+};
 
-//   // Response Interceptor
-//   const responseIntercept = apiClient.interceptors.response.use(
-//     (response) => response,
-//     async (error) => {
-//       const prevRequest = error?.config
-//       if (error?.response?.status === 403 && !prevRequest?.sent) {
-//         prevRequest.sent = true
-//         const newAccessToken = await refresh()
-//         prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
-//         return apiClient(prevRequest)
-//       }
-//       return Promise.reject(error)
-//     },
-//   )
+// API INTERCEPTOR FOR REFRESHING TOKEN
+apiClient.interceptors.response.use(
+  (response) => {
+    console.log("INTERCEPTOR....", response?.data);
+    return response;
+  },
 
-//   // Return a cleanup function to remove interceptors if needed
-//   return () => {
-//     apiClient.interceptors.request.eject(requestIntercept)
-//     apiClient.interceptors.response.eject(responseIntercept)
-//   }
-// }
+  /* IF ERRORS */
+  async (error) => {
+    const prevRequest = error?.config;
+    if (error?.response?.status === 403 && !prevRequest?.sent) {
+      prevRequest.sent = true;
+      const res = await getRefreshToken();
+      const newAccessToken = res?.data?.accessToken;
+      prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
-export default authenticatedService
+      // Retry 3 Times only
+      if (prevRequest?.retryCount < 3) {
+        prevRequest.retryCount = prevRequest.retryCount || 0;
+        prevRequest.retryCount += 1;
+        return await apiClient(prevRequest);
+      }
+
+      await deleteSession();
+
+      return {
+        success: false,
+        message: "Access Token Expired",
+        data: null,
+        status: 403,
+        statusText: "Forbidden",
+      };
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default authenticatedService;

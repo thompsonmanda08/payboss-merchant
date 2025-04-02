@@ -11,8 +11,8 @@ import {
 } from "@heroui/react";
 import { syntaxHighlight } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
-import Tabs from "@/components/elements/tabs";
-import CardHeader from "@/components/base/CardHeader";
+import Tabs from "@/components/tabs";
+import CardHeader from "@/components/base/card-header";
 
 export const API_CONFIG_VIEWS = [
   {

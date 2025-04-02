@@ -3,13 +3,13 @@
 // import useCustomTabsHook from '@/hooks/useCustomTabsHook'
 // import usePaymentsStore from '@/context/paymentsStore'
 // import { redirect, useSearchParams } from 'next/navigation'
-// import ApproverAction from '@/components/containers/disbursements/ApproverAction'
+// import ApproverAction from '@/components/disbursements/ApproverAction'
 // import { PAYMENT_SERVICE_TYPES } from '@/lib/constants'
-// import SinglePaymentDetails from '@/components/containers/disbursements/SinglePaymentDetails'
+// import SinglePaymentDetails from '@/components/disbursements/SinglePaymentDetails'
 // import Card from '@/components/base/Card'
 // import CardHeader from '@/components/base/CardHeader'
 // import ProgressStep from '@/components/elements/ProgressStep'
-// import InitiatorsLog from '@/components/containers/disbursements/InitiatorsLog'
+// import InitiatorsLog from '@/components/disbursements/InitiatorsLog'
 // import { MissingConfigurationError } from '@/components/base/ErrorCard'
 
 // export const STEPS = [

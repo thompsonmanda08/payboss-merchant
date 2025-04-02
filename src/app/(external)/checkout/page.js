@@ -1,31 +1,62 @@
 import React from "react";
-import Logo from "@/components/base/Logo";
-import { Footer } from "@/components/containers/landing-page/footer";
+import Logo from "@/components/base/logo";
+import { Checkout } from "./checkout-cards";
+import { getCheckoutInfo } from "@/app/_actions/vas-actions";
 
 async function CheckoutPage(props) {
   const searchParams = await props.searchParams;
+
+  let checkoutData = {
+    workspaceID: searchParams?.workspace_id || "",
+    checkoutID: searchParams?.checkout_id || "",
+    checkoutSecret: searchParams?.checkout_secret || "",
+    amount: searchParams?.amount || "",
+    transactionID: searchParams?.transaction_id || "",
+    serviceID: searchParams?.service_id || "",
+  };
+
+  const response = await getCheckoutInfo(checkoutData?.checkoutID);
+
+  // if (!response?.success) {
+  //   return (
+  //     <>
+  //       <ErrorCard
+  //         className={"max-h-fit m-auto"}
+  //         title={"Checkout not found"}
+  //         message={"The checkout you are looking for does not exist"}
+  //         goBack={true}
+  //       ></ErrorCard>
+  //     </>
+  //   );
+  // }
+
+  checkoutData = {
+    ...checkoutData,
+    ...response.data,
+  };
+
   return (
     <>
-      <Logo />
-      <div className="my-2 flex w-full flex-col px-2">
-        <h2
-          className={
-            "w-full text-[clamp(18px,18px+1vw,1.5rem)] text-foreground font-bold"
-          }
-        >
-          Checkout
-        </h2>
-        <p className="text-foreground">Complete the checkout process here</p>
+      <div className="flex w-full container items-center justify-between px-8 mb-4 max-h-[100px]">
+        <div>
+          <h2
+            className={
+              "w-full text-[clamp(18px,18px+1vw,1.25rem)] text-foreground font-bold"
+            }
+          >
+            Checkout
+          </h2>
+          <p className="text-foreground text-xs xl:text-sm">
+            Complete the checkout process here
+          </p>
+        </div>
+        <span className="font-medium italic flex gap-2 items-center">
+          Powered by <Logo />
+        </span>
       </div>
+      <hr className="mb-4 bg-transparent border-slate-200" />
 
-      <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <iframe
-          src={"https://payboss-merchants.bgsgroup.co.zm/"}
-          title={"PayBoss Checkout"}
-          className="flex w-full flex-1"
-          style={{ border: "none" }}
-        />
-      </div>
+      <Checkout checkoutData={checkoutData} />
     </>
   );
 }

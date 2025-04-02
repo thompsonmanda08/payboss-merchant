@@ -9,7 +9,7 @@ const Input = React.forwardRef(
       type,
       label,
       name,
-      containerClasses,
+      classNames,
       onError,
       error,
       maxLength,
@@ -23,16 +23,24 @@ const Input = React.forwardRef(
   ) => {
     return (
       <div
-        className={cn("flex w-full max-w-md flex-col", containerClasses, {
-          "cursor-not-allowed opacity-50": isDisabled,
-        })}
+        className={cn(
+          "flex w-full max-w-lg flex-col",
+
+          classNames?.wrapper,
+          {
+            "cursor-not-allowed opacity-50": isDisabled,
+          }
+        )}
       >
         {label && (
           <label
             htmlFor={name}
-            className={cn("pl-1 text-sm font-medium text-foreground/70", {
-              "text-red-500": onError,
-            })}
+            className={cn(
+              "pl-1 text-sm font-medium text-nowrap text-foreground/70",
+              {
+                "text-red-500": onError,
+              }
+            )}
           >
             {label}{" "}
             {props?.required && (
@@ -66,7 +74,7 @@ const Input = React.forwardRef(
               opacity: [0, 1],
               transition: { duration: 0.3 },
             }}
-            className="ml-1 text-xs text-red-500 "
+            className="ml-1 text-xs text-red-500"
           >
             {errorText}
           </motion.span>

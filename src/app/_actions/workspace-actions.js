@@ -1,23 +1,10 @@
 "use server";
 import authenticatedService from "@/lib/api-config";
 import { updateWorkspaceSession } from "@/lib/session";
+import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
-/**
- * Initializes a workspace and updates the session with the workspace permissions
- * and type.
- *
- * @param {string} workspaceID - The ID of the workspace to initialize.
- *
- * @returns {Promise<Object>} - A promise resolving to an object with the following
- * properties:
- *
- * - `success`: A boolean indicating whether the operation was successful.
- * - `message`: A string providing a message about the result of the operation.
- * - `data`: An object containing the workspace permissions and type.
- * - `status`: The HTTP status code for the operation.
- * - `statusText`: The HTTP status text for the operation.
- */
-export async function initializeWorkspace(workspaceID) {
+export const initializeWorkspace = cache(async (workspaceID) => {
   if (!workspaceID) {
     return {
       success: false,
@@ -28,46 +15,45 @@ export async function initializeWorkspace(workspaceID) {
     };
   }
 
+  const url = `merchant/workspace/${workspaceID}/init`;
+
   try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/init/${workspaceID}`,
+    const res = await authenticatedService({ url });
+
+    await updateWorkspaceSession({
+      workspacePermissions: res.data,
+      workspaceType: res.data.workspaceType,
     });
 
-    if (res.status == 200) {
-      await updateWorkspaceSession({
-        workspacePermissions: res.data,
-        workspaceType: res.data.workspaceType,
-      });
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
+    revalidatePath("/dashboard/[workspaceID]", "layout");
 
     return {
-      success: false,
-      message: res?.data?.error || res?.statusText || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error);
+    console.error({
+      endpoint: "GET | INITIALIZE WORKSPACE ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.statusText ||
-        "Operation Failed!",
-      data: error?.response,
+        "Error Occurred: See Console for details",
+      data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
   }
-}
+});
 
 /**
  * Submits a Proof of Payment (POP) for a workspace.
@@ -104,40 +90,38 @@ export async function submitPOP(popDetails, workspaceID) {
     };
   }
 
+  const url = `merchant/workspace/wallet/prefund/${workspaceID}`;
+
   try {
     const res = await authenticatedService({
-      url: `merchant/workspace/wallet/prefund/${workspaceID}`,
+      url,
       method: "POST",
       data: popDetails,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || res?.statusText || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error);
+    console.error({
+      endpoint: "POST | PREFUND POP ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.data?.error ||
-        error?.response?.statusText ||
-        "Operation Failed!",
-      data: error?.response,
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -171,10 +155,10 @@ export async function getWalletPrefunds(workspaceID) {
     };
   }
 
+  const url = `merchant/workspace/wallet/prefund/${workspaceID}/list`;
+
   try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/wallet/prefund/${workspaceID}/list`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -185,6 +169,7 @@ export async function getWalletPrefunds(workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | WALLET PREFUND LIST ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -195,8 +180,9 @@ export async function getWalletPrefunds(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -236,9 +222,11 @@ export async function approveWalletPrefund(
     };
   }
 
+  const url = `merchant/workspace/${workspaceID}/wallet/prefund/${prefundID}/review`;
+
   try {
     const res = await authenticatedService({
-      url: `merchant/workspace/${workspaceID}/wallet/prefund/${prefundID}/review`,
+      url,
       method: "PATCH",
       data: prefundData,
     });
@@ -252,6 +240,7 @@ export async function approveWalletPrefund(
     };
   } catch (error) {
     console.error({
+      endpoint: "PATCH | APPROVE PREFUND ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -262,8 +251,9 @@ export async function approveWalletPrefund(
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -296,34 +286,34 @@ export async function getWorkspaceMembers(workspaceID) {
     };
   }
 
-  try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/users/${workspaceID}`,
-    });
+  const url = `merchant/workspace/${workspaceID}/users`;
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
+  try {
+    const res = await authenticatedService({ url });
 
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      endpoint: "PATCH | WORKSPACE USERS ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
-      data: null,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -341,38 +331,50 @@ export async function getWorkspaceMembers(workspaceID) {
  *   If the operation fails, the APIResponse object will contain a message indicating the error.
  */
 export async function deleteUserFromWorkspace(recordID, workspaceID) {
+  if (!workspaceID || !recordID) {
+    return {
+      success: false,
+      message: "Workspace/Record ID is required!",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `/merchant/workspace/${workspaceID}/user/${recordID}`;
+
   try {
     const res = await authenticatedService({
-      url: `/merchant/workspace/${workspaceID}/user/${recordID}`,
+      url,
       method: "DELETE",
     });
-
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
 
     revalidatePath("/manage-account/workspaces/[ID]", "page");
     revalidatePath("/dashboard/[workspaceID]/workspace-settings", "page");
 
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      endpoint: "DELETE | USER ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
-      data: null,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -396,9 +398,21 @@ export async function changeUserRoleInWorkspace(
   recordID,
   workspaceID
 ) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required!",
+      data: null,
+      status: 400,
+      statusText: "Bad Request",
+    };
+  }
+
+  const url = `merchant/workspace/${workspaceID}/user/role/${recordID}`;
+
   try {
     const res = await authenticatedService({
-      url: `merchant/workspace/${workspaceID}/user/role/${recordID}`,
+      url,
       method: "PATCH",
       data: mapping,
     });
@@ -412,6 +426,7 @@ export async function changeUserRoleInWorkspace(
     };
   } catch (error) {
     console.error({
+      endpoint: "PATCH | USER ROLE ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -422,8 +437,9 @@ export async function changeUserRoleInWorkspace(
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -448,34 +464,34 @@ export async function setupWorkspaceAPIKey(workspaceID) {
     };
   }
 
-  try {
-    const res = await authenticatedService({
-      url: `transaction/collection/create/api-key/${workspaceID}`,
-    });
+  const url = `transaction/collection/create/api-key/${workspaceID}`;
 
-    if (res.status == 200 || res.status == 201) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
+  try {
+    const res = await authenticatedService({ url });
 
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      endpoint: "GET | SETUP API KEY ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
-      data: null,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -508,10 +524,10 @@ export async function refreshWorkspaceAPIKey(workspaceID) {
     };
   }
 
+  const url = `transaction/collection/generate/api-key/${workspaceID}`;
+
   try {
-    const res = await authenticatedService({
-      url: `transaction/collection/generate/api-key/${workspaceID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -522,6 +538,7 @@ export async function refreshWorkspaceAPIKey(workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | REFRESH API KEY ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -532,8 +549,9 @@ export async function refreshWorkspaceAPIKey(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -564,10 +582,10 @@ export async function getWorkspaceAPIKey(workspaceID) {
     };
   }
 
+  const url = `transaction/collection/api-key/${workspaceID}`;
+
   try {
-    const res = await authenticatedService({
-      url: `transaction/collection/api-key/${workspaceID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -578,6 +596,7 @@ export async function getWorkspaceAPIKey(workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | API KEY ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -588,8 +607,9 @@ export async function getWorkspaceAPIKey(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -609,7 +629,7 @@ export async function getWorkspaceAPIKey(workspaceID) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function generateWorkspaceTillNumer(workspaceID) {
+export async function generateWorkspaceTillNumber(workspaceID) {
   if (!workspaceID) {
     return {
       success: false,
@@ -619,34 +639,34 @@ export async function generateWorkspaceTillNumer(workspaceID) {
       statusText: "BAD_REQUEST",
     };
   }
-  try {
-    const res = await authenticatedService({
-      url: `transaction/collection/create/till-number/${workspaceID}`,
-    });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res.data,
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
+  const url = `transaction/collection/create/till-number/${workspaceID}`;
+  try {
+    const res = await authenticatedService({ url });
 
     return {
-      success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      endpoint: "GET | GENERATE TILL NUMBER ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
-      data: null,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -677,10 +697,10 @@ export async function getWorkspaceTillNumber(workspaceID) {
       statusText: "BAD_REQUEST",
     };
   }
+
+  const url = `transaction/collection/till-number/${workspaceID}`;
   try {
-    const res = await authenticatedService({
-      url: `transaction/collection/till-number/${workspaceID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -691,6 +711,7 @@ export async function getWorkspaceTillNumber(workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | TILL NUMBER ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -701,8 +722,9 @@ export async function getWorkspaceTillNumber(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -733,10 +755,10 @@ export async function activateWorkspaceTerminals(workspaceID) {
     };
   }
 
+  const url = `merchant/workspace/${workspaceID}/terminal/activation`;
+
   try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/${workspaceID}/terminal/activation`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -747,6 +769,7 @@ export async function activateWorkspaceTerminals(workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "POST | TERMINAL ACTIVATION ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -757,8 +780,9 @@ export async function activateWorkspaceTerminals(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -813,8 +837,9 @@ export async function deactivateWorkspaceTerminals(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -845,10 +870,10 @@ export async function getAllWorkspaceTerminals(workspaceID) {
     };
   }
 
+  const url = `merchant/workspace/${workspaceID}/terminals`;
+
   try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/terminals/${workspaceID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -859,6 +884,7 @@ export async function getAllWorkspaceTerminals(workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | WORKSPACE TERMINALS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -869,8 +895,9 @@ export async function getAllWorkspaceTerminals(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -902,10 +929,12 @@ export async function registerTerminals(workspaceID, terminalUrl) {
     };
   }
 
+  const url = `merchant/workspace/${workspaceID}/terminal`;
+
   try {
     const res = await authenticatedService({
       method: "POST",
-      url: `merchant/workspace/${workspaceID}/terminal`,
+      url,
       data: { terminalUrl },
     });
 
@@ -918,6 +947,7 @@ export async function registerTerminals(workspaceID, terminalUrl) {
     };
   } catch (error) {
     console.error({
+      endpoint: "POST | REGISTER TERMINALS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -928,8 +958,9 @@ export async function registerTerminals(workspaceID, terminalUrl) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -961,10 +992,12 @@ export async function updateWorkspaceCallback(workspaceID, callbackData) {
     };
   }
 
+  const url = `merchant/workspace/callback/${workspaceID}`;
+
   try {
     const res = await authenticatedService({
       method: "PATCH",
-      url: `merchant/workspace/callback/${workspaceID}`,
+      url,
       data: callbackData,
     });
 
@@ -977,6 +1010,7 @@ export async function updateWorkspaceCallback(workspaceID, callbackData) {
     };
   } catch (error) {
     console.error({
+      endpoint: "PATCH | CALLBACK URL ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -987,9 +1021,9 @@ export async function updateWorkspaceCallback(workspaceID, callbackData) {
       success: false,
       message:
         error?.response?.data?.error ||
-        error?.response?.config?.data.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };
@@ -1007,10 +1041,10 @@ export async function getWorkspaceCallback(workspaceID) {
     };
   }
 
+  const url = `merchant/workspace/${workspaceID}/callback`;
+
   try {
-    const res = await authenticatedService({
-      url: `merchant/workspace/callback/${workspaceID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -1021,6 +1055,7 @@ export async function getWorkspaceCallback(workspaceID) {
     };
   } catch (error) {
     console.error({
+      endpoint: "GET | CALLBACK URL ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -1031,8 +1066,9 @@ export async function getWorkspaceCallback(workspaceID) {
       success: false,
       message:
         error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
+      data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
     };

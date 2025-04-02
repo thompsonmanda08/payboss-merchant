@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 import configs from "./configs";
 import { Progress } from "@heroui/react";
-import Card from "@/components/base/Card";
+import Card from "@/components/base/card";
 import { cn } from "@/lib/utils";
 
 function ReportsBarChart({ color, title, description, chart, items }) {

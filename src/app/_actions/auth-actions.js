@@ -11,38 +11,41 @@ import {
 import { apiClient } from "@/lib/utils";
 
 /**
- * Validates a merchant's TPIN, 
+ * Validates a merchant's TPIN,
  * If the TPIN is valid, an API response containing the merchant's information is returned.
  * If the TPIN is invalid, an API response with a message indicating the error is returned.
  * @param {string} tpin - The TPIN to be validated
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object which indicates the success or failure of the operation.
- * 
  */
 export async function validateTPIN(tpin) {
+  const url = `merchant/onboard/continue/${tpin}`;
   try {
-    const res = await apiClient.get(
-      `merchant/onboard/continue/${tpin}`,
-
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const res = await apiClient.get(url);
 
     return {
       success: true,
       message: res.message,
-      data: res?.data,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response?.data);
+    console.error({
+      endpoint: "GET | TPIN VALIDATION ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Oops! Error Occurred!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
-      status: error?.response?.status || error.status,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -53,28 +56,37 @@ export async function validateTPIN(tpin) {
  * If the operation fails, an API response with a message indicating the error is returned.
  * @param {BusinessInfo} businessInfo - An object containing the business information of the merchant.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object which indicates the success or failure of the operation.
- * 
+ *
  */
 export async function createNewMerchant(businessInfo) {
+  const url = `merchant/onboard/new`;
+
   try {
-    const res = await apiClient.post(`merchant/onboard/new`, businessInfo, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await apiClient.post(url, businessInfo);
     return {
       success: true,
       message: res.message,
-      data: res?.data,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response);
+    console.error({
+      endpoint: "POST | NEW MERCHANT ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Oops! Error Occurred!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
-      status: error?.response?.status || error.status,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -90,40 +102,45 @@ export async function createNewMerchant(businessInfo) {
  */
 
 export async function submitMerchantBankDetails(data, merchantID) {
-  try {
-    const res = await apiClient.post(
-      `merchant/onboard/bank-details/${merchantID}`,
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (res.status == 201 || res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res?.data,
-        status: res.status,
-      };
-    }
-
+  if (!merchantID) {
     return {
       success: false,
-      message: res?.data?.error || res?.message,
+      message: "Merchant ID is required",
       data: null,
+      status: 400,
+      statusText: "Bad Request",
+    };
+  }
+
+  const url = `merchant/onboard/bank-details/${merchantID}`;
+
+  try {
+    const res = await apiClient.post(url, data);
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response?.data);
-    console.error(error?.response);
+    console.error({
+      endpoint: "POST | MERCHANT BANK DATA ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Oops! Error Occurred!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
-      status: error?.response?.status || error.status,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -139,39 +156,43 @@ export async function submitMerchantBankDetails(data, merchantID) {
  */
 
 export async function updateMerchantDetails(businessInfo, merchantID) {
-  try {
-    const res = await apiClient.patch(
-      `kyc/merchant/${merchantID}`,
-      businessInfo,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+  if (!merchantID) {
+    return {
+      success: false,
+      message: "Merchant ID is required",
+      data: null,
+      status: 400,
+    };
+  }
 
-    if (res.status !== 200) {
-      const response = res?.data || res;
-      return {
-        success: false,
-        message: response?.error || response?.message,
-        data: null,
-        status: res.status,
-      };
-    }
+  const url = `kyc/merchant/${merchantID}`;
+  try {
+    const res = await apiClient.patch(url, businessInfo);
 
     return {
       success: true,
       message: res.message,
       data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
+    console.error({
+      endpoint: "PATCH | MERCHANT KYC DATA ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "No Server Response",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
-      status: error?.response?.status || error.status,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -185,41 +206,44 @@ export async function updateMerchantDetails(businessInfo, merchantID) {
  * @param {string} merchantID - The ID of the merchant whose admin user is being created.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  *
-*/
+ */
 
 export async function createMerchantAdminUser(newUser, merchantID) {
-  try {
-    const res = await apiClient.post(
-      `/merchant/${merchantID}/user/new`,
-      newUser,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (res.status == 201) {
-      return {
-        success: true,
-        message: res.message,
-        data: res?.data,
-        status: res.status,
-      };
-    }
-
+  if (!merchantID) {
     return {
       success: false,
-      message: res?.data?.error || "Operation Failed!",
-      data: res?.data || res,
+      message: "Merchant ID is required",
+      data: null,
+      status: 400,
+    };
+  }
+
+  const url = `merchant/${merchantID}/user/owner`;
+
+  try {
+    const res = await apiClient.post(url, newUser);
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
-      statusText: res?.statusText,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error?.response?.data);
+    console.error({
+      endpoint: "POST | NEW MERCHANT ADMIN USER ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -227,41 +251,49 @@ export async function createMerchantAdminUser(newUser, merchantID) {
   }
 }
 
+/**
+ * Sends the business document references by sending a POST request to the API.
+ * If the operation is successful, an API response containing the updated document references is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @param {array} payloadUrls - An array of URLs containing the updated document references.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ */
 export async function sendBusinessDocumentRefs(payloadUrls) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+  const url = `merchant/${merchantID}/document/submission`;
   try {
     const res = await authenticatedService({
-      url: `merchant/onboard/documents/${merchantID}`,
+      url,
       method: "POST",
       data: payloadUrls,
     });
 
-    if (res.status == 201) {
-      return {
-        success: true,
-        message: res.message,
-        data: res?.data,
-        status: res.status,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || res?.message,
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error);
+    console.error({
+      endpoint: "POST | MERCHANT BUSINESS DOCS ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "Operation failed!",
-      data:
+      message:
         error?.response?.data?.error ||
-        error?.response?.data ||
-        error?.response,
-      status: error?.response?.status || error.status,
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -277,39 +309,39 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
 export async function updateBusinessDocumentRefs(payloadUrls) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+  const url = `merchant/${merchantID}/document/submission`;
+
   try {
     const res = await authenticatedService({
-      url: `merchant/onboard/update/documents/${merchantID}`,
+      url,
       method: "PATCH",
       data: payloadUrls,
     });
 
-    if (res.status == 200) {
-      return {
-        success: true,
-        message: res.message,
-        data: res?.data,
-        status: res.status,
-      };
-    }
-
     return {
-      success: false,
-      message: res?.data?.error || res?.message,
-      data: res?.data || res,
+      success: true,
+      message: res.message,
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error);
-
+    console.error({
+      endpoint: "PATCH | BUSINESS DOC ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data:
+      message:
         error?.response?.data?.error ||
-        error?.response?.data ||
-        error?.response,
-      status: error?.response?.status || error.status,
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }
@@ -325,11 +357,9 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
  *
  */
 export async function authenticateUser(loginCredentials) {
+  const url = `merchant/user/authentication`;
   try {
-    const res = await apiClient.post(
-      `merchant/user/authentication`,
-      loginCredentials
-    );
+    const res = await apiClient.post(url, loginCredentials);
 
     const response = res.data;
 
@@ -342,58 +372,23 @@ export async function authenticateUser(loginCredentials) {
     return {
       success: true,
       message: res.message,
-      data: { accessToken, expiresIn },
+      data: res.data,
       status: res.status,
+      statusText: res.statusText,
     };
   } catch (error) {
-    console.error(error);
-
+    console.error({
+      endpoint: `POST | LOGIN ~ ${url}`,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
     return {
       success: false,
       message:
-        error?.response?.data?.error || "Oops! Login Failed, Try Again!.",
-      data: null,
-      status: error?.response?.status || error.status,
-    };
-  }
-}
-
-export async function getRefreshToken() {
-  try {
-    const res = await authenticatedService({
-      url: `/merchant/user/refresh/token`,
-    });
-
-    if (res.status == 200) {
-      const response = res.data;
-
-      const accessToken = response?.token;
-      const refreshToken = response?.refreshToken;
-      const expiresIn = response?.expires_in;
-
-      await createAuthSession(accessToken, expiresIn, refreshToken);
-
-      return {
-        success: true,
-        message: res.message,
-        data: { accessToken },
-        status: res.status,
-        statusText: res.statusText,
-      };
-    }
-
-    return {
-      success: false,
-      message: res?.data?.error || res?.statusText || "Operation Failed!",
-      data: res?.data || res,
-      status: res.status,
-      statusText: res?.statusText,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      message: error?.response?.data?.error || "Operation Failed!",
+        error?.response?.data?.error || "Login Failed: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -401,6 +396,66 @@ export async function getRefreshToken() {
   }
 }
 
+/**
+ * Refreshes the authentication token by sending a request to the refresh token endpoint.
+ * If the operation is successful, a new access token is obtained and a session is created.
+ * In case of an error, an appropriate message is returned.
+ *
+ * @returns {Promise<Object>} A promise that resolves to an object indicating the success or failure of the operation.
+ * The object includes:
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: An object containing the new access token if successful, otherwise null.
+ * - `status`: The HTTP status code of the response.
+ * - `statusText`: The HTTP status text of the response.
+ */
+export async function getRefreshToken() {
+  const url = `merchant/user/refresh/token`;
+  try {
+    const res = await authenticatedService({ url });
+
+    const response = res.data;
+
+    const accessToken = response?.token;
+    const refreshToken = response?.refreshToken;
+    const expiresIn = response?.expires_in;
+
+    await createAuthSession(accessToken, expiresIn, refreshToken);
+
+    return {
+      success: true,
+      message: res.message,
+      data: { accessToken },
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+    return {
+      success: false,
+      message: error?.response?.data?.error || "Error Refreshing Token",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+/**
+ * Logs the user out of the system by deleting the session and
+ * returning true if the logout is successful. If the user is not
+ * logged in, the function returns false.
+ *
+ * @returns {Promise<boolean>} - A promise that resolves to a boolean value
+ * indicating whether the logout is successful.
+ */
 export async function logUserOut() {
   const isLoggedIn = await verifySession();
   if (isLoggedIn) {
@@ -410,7 +465,18 @@ export async function logUserOut() {
   return false;
 }
 
-export async function lockScrenOnUserIdle(state) {
+/**
+ * Locks or unlocks the screen based on the user's idle state.
+ * Updates the authentication session with the screen lock status
+ * if the user is currently logged in.
+ *
+ * @param {boolean} state - The state indicating whether the screen
+ * should be locked (true) or unlocked (false).
+ * @returns {Promise<boolean>} A promise that resolves to a boolean
+ * value indicating whether the operation was successful.
+ */
+
+export async function lockScreenOnUserIdle(state) {
   const isLoggedIn = await verifySession();
   if (isLoggedIn) {
     await updateAuthSession({ screenLocked: state });

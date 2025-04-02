@@ -11,8 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@heroui/react";
 import { validateTPIN } from "@/app/_actions/auth-actions";
 import { BriefcaseIcon } from "@heroicons/react/24/outline";
-import CardHeader from "@/components/base/CardHeader";
-import SoftBoxIcon from "@/components/base/SoftBoxIcon";
+import CardHeader from "@/components/base/card-header";
+import SoftBoxIcon from "@/components/base/soft-box-icon";
 
 export default function Step1_TPIN({ updateDetails, backToStart }) {
   const {

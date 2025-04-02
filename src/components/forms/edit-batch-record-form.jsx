@@ -4,7 +4,7 @@ import usePaymentsStore from "@/context/payment-store";
 import { Button } from "../ui/button";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { BATCH_DETAILS_QUERY_KEY } from "@/lib/constants";
+import { QUERY_KEYS } from "@/lib/constants";
 import StatusMessage from "../base/status-message";
 
 export default function EditBatchRecordForm({ onClose }) {
@@ -27,7 +27,7 @@ export default function EditBatchRecordForm({ onClose }) {
 
     if (response?.success) {
       queryClient.invalidateQueries({
-        queryKey: [BATCH_DETAILS_QUERY_KEY, selectedRecord?.batchID],
+        queryKey: [QUERY_KEYS?.BATCH_DETAILS, selectedRecord?.batchID],
       });
       onClose();
     }

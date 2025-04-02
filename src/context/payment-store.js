@@ -30,7 +30,7 @@ const INITIAL_STATE = {
   dateFilter: "",
 };
 
-const usePaymentsStore = create((set, get) => ({
+const usePaymentsStore = create((set) => ({
   ...INITIAL_STATE,
 
   // METHODS AND ACTIONS
@@ -111,7 +111,7 @@ const usePaymentsStore = create((set, get) => ({
 
   // Clear & Reset
   resetPaymentData: () =>
-    set((state) => {
+    set(() => {
       return {
         ...INITIAL_STATE,
       };
