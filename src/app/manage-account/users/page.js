@@ -6,8 +6,11 @@ import { getUserAccountRoles } from "@/app/_actions/merchant-actions";
 import { getUserDetails } from "@/app/_actions/config-actions";
 
 async function UsersSettingsPage() {
-  const userRoles = await getUserAccountRoles();
-  const allUsers = await getAllUsers();
+  const userRolesResponse = await getUserAccountRoles();
+  const roles = await userRolesResponse?.data?.roles;
+
+  const usersResponse = await getAllUsers();
+  const users = usersResponse?.data?.users;
 
   const session = await getUserDetails();
   const user = session?.user;
@@ -24,13 +27,10 @@ async function UsersSettingsPage() {
   };
   return (
     <Suspense fallback={<LoadingPage />}>
-      <ManagePeople
-        users={allUsers?.data?.users}
-        roles={userRoles?.data?.roles}
-        permissions={permissions}
-      />
+      <ManagePeople users={users} roles={roles} permissions={permissions} />
     </Suspense>
   );
 }
 
+export const dynamic = "force-dynamic";
 export default UsersSettingsPage;
