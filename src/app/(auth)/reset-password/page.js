@@ -7,12 +7,9 @@ import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
 export default function PasswordReset() {
-  const urlParams = useSearchParams();
-  const role = urlParams.get("role");
   0;
   const [passwordReset, setPasswordReset] = useState({
     email: "",
@@ -28,7 +25,6 @@ export default function PasswordReset() {
   const {
     currentTabIndex,
     activeTab,
-    navigateTo,
     navigateForward,
     navigateBackwards,
     isLoading,

@@ -29,7 +29,6 @@ import {
   TableCell,
 } from "@heroui/react";
 import { cn, formatDate, maskString, notify } from "@/lib/utils";
-import PromptModal from "@/components/base/prompt";
 
 import CustomTable from "@/components/tables/table";
 import {
@@ -59,6 +58,7 @@ import TerminalsTable from "@/components/tables/terminal-tables";
 import TerminalConfigViewModal from "./TerminalConfigView";
 import { AnimatePresence, motion } from "framer-motion";
 import Loader from "@/components/ui/loader";
+import PromptModal from "@/components/base/prompt";
 
 const APIIntegration = ({ workspaceID }) => {
   const queryClient = useQueryClient();

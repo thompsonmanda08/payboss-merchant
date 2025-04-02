@@ -27,7 +27,6 @@ import React, { useRef } from "react";
 import { Input } from "@/components/ui/input-field";
 import { cn, formatCurrency, notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import Logo from "@/components/base/logo";
 
 import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
 import {
@@ -35,6 +34,7 @@ import {
   DevicePhoneMobileIcon,
 } from "@heroicons/react/24/outline";
 import CardHeader from "@/components/base/card-header";
+import Logo from "@/components/base/logo";
 
 export function Checkout({ checkoutData }) {
   const [formData, setFormData] = React.useState({});
