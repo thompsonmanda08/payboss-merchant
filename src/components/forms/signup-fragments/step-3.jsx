@@ -1,13 +1,15 @@
 //BUSINESS REGISTRATION STATUS
 "use client";
-import React, { useEffect } from "react";
-import { Input } from "@/components/ui/input-field";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
+
+import { Input } from "@/components/ui/input-field";
 import { staggerContainerItemVariants } from "@/lib/constants";
 import useAuthStore from "@/context/auth-store";
-import { STEPS } from "../signup-form";
-import Image from "next/image";
 import CardHeader from "@/components/base/card-header";
+
+import { STEPS } from "../signup-form";
 
 // CREATE NEW ADMIN USER
 export default function Step4({ updateDetails, backToStart }) {
@@ -21,8 +23,8 @@ export default function Step4({ updateDetails, backToStart }) {
     <>
       <CardHeader
         handleClose={() => backToStart()}
-        title="Create New Admin User"
         infoText={"Create a new admin user to manage your business on PayBoss."}
+        title="Create New Admin User"
       />
 
       <div className="flex w-full flex-col gap-4 md:flex-row">
@@ -33,11 +35,11 @@ export default function Step4({ updateDetails, backToStart }) {
           >
             <div className="mx-auto aspect-square w-60 ">
               <Image
-                className="w-fit object-contain"
-                src={"/images/auth-img.png"}
                 alt={"image"}
-                width={440}
+                className="w-fit object-contain"
                 height={320}
+                src={"/images/auth-img.png"}
+                width={440}
               />
             </div>
             <div className="mx-auto flex flex-col items-center justify-center">
@@ -55,24 +57,24 @@ export default function Step4({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <Input
-              type="text"
+              autoFocus
               label="First Name"
               name="firstName"
               placeholder="Enter first name"
-              autoFocus
-              value={newAdminUser?.first_name}
               required={true}
+              type="text"
+              value={newAdminUser?.first_name}
               onChange={(e) => {
                 updateDetails(STEPS[3], { first_name: e.target.value });
               }}
             />
             <Input
-              type="text"
               label="Last Name"
-              placeholder="Enter last name"
               name="lastName"
-              value={newAdminUser?.last_name}
+              placeholder="Enter last name"
               required={true}
+              type="text"
+              value={newAdminUser?.last_name}
               onChange={(e) => {
                 updateDetails(STEPS[3], { last_name: e.target.value });
               }}
@@ -84,11 +86,11 @@ export default function Step4({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <Input
-              type="text"
               label="Email"
               name="new-email"
               placeholder="Enter user email address"
               required={true}
+              type="text"
               value={newAdminUser?.email}
               onChange={(e) => {
                 updateDetails(STEPS[3], { email: e.target.value });
@@ -100,23 +102,23 @@ export default function Step4({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <Input
-              type="number"
               label="Mobile Number"
               name="phone_number"
               placeholder="Enter mobile number"
-              value={newAdminUser?.phone_number}
               required={true}
+              type="number"
+              value={newAdminUser?.phone_number}
               onChange={(e) => {
                 updateDetails(STEPS[3], { phone_number: e.target.value });
               }}
             />
             <Input
-              type="text"
               label="Username"
               name="username"
               placeholder="Create username"
-              value={newAdminUser?.username}
               required={true}
+              type="text"
+              value={newAdminUser?.username}
               onChange={(e) => {
                 updateDetails(STEPS[3], { username: e.target.value });
               }}
@@ -127,19 +129,19 @@ export default function Step4({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <Input
-              label="Password"
-              type="password"
-              name="new-password"
-              placeholder="Create New password"
-              value={newAdminUser?.password}
-              onError={error?.onPassword}
               error={error}
+              label="Password"
+              name="new-password"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              placeholder="Create New password"
               required={true}
+              title="Must contain at least 8 characters, including uppercase letters, lowercase letters, and numbers"
+              type="password"
+              value={newAdminUser?.password}
               onChange={(e) => {
                 updateDetails(STEPS[3], { password: e.target.value });
               }}
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-              title="Must contain at least 8 characters, including uppercase letters, lowercase letters, and numbers"
+              onError={error?.onPassword}
             />
           </motion.div>
           <motion.div
@@ -148,15 +150,15 @@ export default function Step4({ updateDetails, backToStart }) {
           >
             <Input
               label="Confirm Password"
-              placeholder="Confirm New password"
-              type="password"
               name="password2"
-              value={newAdminUser?.confirmPassword}
-              onError={error?.onPassword}
+              placeholder="Confirm New password"
               required={true}
+              type="password"
+              value={newAdminUser?.confirmPassword}
               onChange={(e) => {
                 updateDetails(STEPS[3], { confirmPassword: e.target.value });
               }}
+              onError={error?.onPassword}
             />
           </motion.div>
         </div>

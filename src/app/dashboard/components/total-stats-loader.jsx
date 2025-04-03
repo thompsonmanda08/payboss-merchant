@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import React from "react";
+
 import { Skeleton } from "../../../components/ui/skeleton";
 
 function TotalStatsLoader({ length, className }) {
@@ -7,7 +7,7 @@ function TotalStatsLoader({ length, className }) {
     <div
       className={cn(
         "flex flex-col gap-4 md:flex-row md:justify-evenly",
-        className
+        className,
       )}
     >
       {Array.from({ length: length || 4 }).map((_, index) => (

@@ -1,3 +1,9 @@
+import { Snippet, Switch, useDisclosure } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { PlusIcon } from "@heroicons/react/24/outline";
+
 import PromptModal from "@/components/base/prompt";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
@@ -5,11 +11,6 @@ import AddUserToWorkspace from "@/components/add-users-workspace-modal";
 import useWorkspaces from "@/hooks/useWorkspaces";
 import { QUERY_KEYS, WORKSPACE_TYPES } from "@/lib/constants";
 import { cn, notify, syntaxHighlight } from "@/lib/utils";
-import { Snippet, Switch, useDisclosure } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { PlusIcon } from "@heroicons/react/24/outline";
 import SelectField from "@/components/ui/select-field";
 import { useWorkspaceCallbackURL } from "@/hooks/useQueryHooks";
 import { updateWorkspaceCallback } from "@/app/_actions/workspace-actions";
@@ -49,7 +50,7 @@ function WorkspaceDetails({
   const { data: callbackResponse } = useWorkspaceCallbackURL(workspaceID);
 
   const [isSandbox, setIsSandbox] = useState(
-    activeWorkspace?.workspace?.toLowerCase() == "sandbox"
+    activeWorkspace?.workspace?.toLowerCase() == "sandbox",
   );
 
   const [newWorkspace, setNewWorkspace] = useState({
@@ -83,6 +84,7 @@ function WorkspaceDetails({
         description: "Provide valid name and description!",
       });
       setLoading(false);
+
       return;
     }
 
@@ -105,6 +107,7 @@ function WorkspaceDetails({
         title: "Success",
         description: "Changes Saved!",
       });
+
       return;
     }
 
@@ -132,6 +135,7 @@ function WorkspaceDetails({
       });
       setError({ onCallbackURL: true, message: "Provide a valid url!" });
       setIsLoadingCallback(false);
+
       return;
     }
 
@@ -145,6 +149,7 @@ function WorkspaceDetails({
         title: "Success",
         description: "Callback URL updated!",
       });
+
       return;
     }
 
@@ -187,6 +192,7 @@ function WorkspaceDetails({
         description: "Workspaces Deactivated successfully!",
       });
       back();
+
       return;
     }
 
@@ -254,36 +260,36 @@ function WorkspaceDetails({
       <div className="flex w-full flex-1 flex-col gap-4">
         <div className="flex flex-col gap-6">
           <form
-            onSubmit={handleUpdateWorkspace}
-            role={"edit-workspace-details"}
             className="flex w-full flex-col gap-4 sm:items-start md:flex-row md:items-end"
+            role={"edit-workspace-details"}
+            onSubmit={handleUpdateWorkspace}
           >
             <Input
-              label="Workspace Name"
               defaultValue={activeWorkspace?.workspace}
               isDisabled={loading || isSandbox}
+              label="Workspace Name"
               onChange={(e) => {
                 editWorkspaceField({ workspace: e.target.value });
               }}
             />
 
             <Input
-              label="Description"
-              isDisabled={loading || isSandbox}
-              defaultValue={activeWorkspace?.description}
               classNames={{
                 wrapper: cn("", { "w-full max-w-[700px]": isSandbox }),
               }}
+              defaultValue={activeWorkspace?.description}
+              isDisabled={loading || isSandbox}
+              label="Description"
               onChange={(e) => {
                 editWorkspaceField({ description: e.target.value });
               }}
             />
             {!isSandbox && (
               <Button
-                type="submit"
                 isDisabled={loading || noChangesToSave}
                 isLoading={loading}
                 loadingText={"Saving..."}
+                type="submit"
               >
                 Save Changes
               </Button>
@@ -306,9 +312,9 @@ function WorkspaceDetails({
           </div>
 
           <Button
-            onClick={onOpenAdd}
             className="rounded-md px-3 py-2 text-sm font-semibold shadow-sm"
             endContent={<PlusIcon className="h-5 w-5" />}
+            onClick={onOpenAdd}
           >
             Add Members
           </Button>
@@ -334,21 +340,17 @@ function WorkspaceDetails({
               </div>
 
               <form
-                onSubmit={handleUpdateWorkspaceCallback}
-                role={"edit-workspace-details"}
                 className="flex w-full flex-col gap-1 sm:items-start md:flex-row md:items-end"
+                role={"edit-workspace-details"}
+                onSubmit={handleUpdateWorkspaceCallback}
               >
                 <SelectField
-                  label="Method"
-                  defaultValue={"GET"}
-                  placeholder={"GET"}
-                  wrapperClassName={cn("max-w-24")}
                   className={cn(
                     "max-w-[100px] bg-orange-300 bg-opacity-50 rounded-md",
                     {
                       "bg-primary-300 bg-opacity-50 rounded-md ":
                         callbackURL.method == "POST",
-                    }
+                    },
                   )}
                   classNames={{
                     value: cn(
@@ -356,36 +358,40 @@ function WorkspaceDetails({
                       {
                         "text-primary-600 group-data-[has-value=true]:text-primary-600":
                           callbackURL.method == "POST",
-                      }
+                      },
                     ),
                   }}
-                  options={["GET", "POST"]}
+                  defaultValue={"GET"}
                   isDisabled={isLoadingCallback}
+                  label="Method"
+                  options={["GET", "POST"]}
+                  placeholder={"GET"}
+                  prefilled={true}
                   value={callbackURL?.method}
-                  onError={error?.onCallbackURL}
+                  wrapperClassName={cn("max-w-24")}
                   onChange={(e) =>
                     updateCallbackURL({ method: e.target.value })
                   }
-                  prefilled={true}
+                  onError={error?.onCallbackURL}
                 />
 
                 <Input
-                  label="URL"
                   defaultValue={activeWorkspace?.callBackURL}
                   isDisabled={loading}
-                  value={callbackURL?.url}
-                  onError={error?.onCallbackURL}
-                  required={true}
+                  label="URL"
                   pattern="https?://.+"
+                  required={true}
                   title="https://www.domain-name.com"
+                  value={callbackURL?.url}
                   onChange={(e) => updateCallbackURL({ url: e.target.value })}
+                  onError={error?.onCallbackURL}
                 />
 
                 <Button
-                  type="submit"
                   isDisabled={isLoadingCallback || noCallbackChanges}
                   isLoading={isLoadingCallback}
                   loadingText={"Saving..."}
+                  type="submit"
                 >
                   Save
                 </Button>
@@ -410,10 +416,10 @@ function WorkspaceDetails({
                   </Snippet>
                 ) : (
                   <Snippet
+                    hideSymbol
                     classNames={{
                       base: "max-w-sm flex text-wrap",
                     }}
-                    hideSymbol
                   >
                     <pre
                       dangerouslySetInnerHTML={{
@@ -427,11 +433,11 @@ function WorkspaceDetails({
                               mno_status_description: "string",
                             },
                             undefined,
-                            2
-                          )
+                            2,
+                          ),
                         ),
                       }}
-                    ></pre>
+                    />
                   </Snippet>
                 )}
               </div>
@@ -453,7 +459,7 @@ function WorkspaceDetails({
           </p>
         </div>
 
-        <Switch isSelected={true} isDisabled></Switch>
+        <Switch isDisabled isSelected={true} />
       </div>
 
       <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
@@ -473,9 +479,9 @@ function WorkspaceDetails({
         </div>
 
         <Button
+          className="w-full self-end rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 sm:w-auto"
           color="danger"
           onClick={onOpen}
-          className="w-full self-end rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 sm:w-auto"
         >
           Yes, deactivate my workspace
         </Button>
@@ -483,15 +489,15 @@ function WorkspaceDetails({
 
       {/* MODALS */}
       <PromptModal
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        title="Delete/Deactivate Workspace"
-        onConfirm={handleDeleteWorkspace}
         confirmText="Deactivate"
         isDisabled={deleteLoading}
-        isLoading={deleteLoading}
         isDismissable={false}
+        isLoading={deleteLoading}
+        isOpen={isOpen}
+        title="Delete/Deactivate Workspace"
+        onClose={onClose}
+        onConfirm={handleDeleteWorkspace}
+        onOpen={onOpen}
       >
         <p className="leading-2 m-0">
           <strong>Are you sure you want to perform this action?</strong>
@@ -505,24 +511,24 @@ function WorkspaceDetails({
         </p>
 
         <Input
-          label="Confirm Delete"
-          isDisabled={deleteLoading}
-          onError={error.status}
           errorText={error.message}
+          isDisabled={deleteLoading}
+          label="Confirm Delete"
           onChange={(e) => setDeleteWorkspaceName(e.target.value)}
+          onError={error.status}
         />
       </PromptModal>
 
       <AddUserToWorkspace
-        isOpen={openAdd}
-        onOpen={onOpenAdd}
-        onClose={onCloseAdd}
-        workspaceID={workspaceID}
-        workspaceName={workspaceName}
-        navigateTo={navigateTo}
-        workspaceMembers={workspaceMembers}
-        workspaceRoles={workspaceRoles}
         allUsers={allUsers}
+        isOpen={openAdd}
+        navigateTo={navigateTo}
+        workspaceID={workspaceID}
+        workspaceMembers={workspaceMembers}
+        workspaceName={workspaceName}
+        workspaceRoles={workspaceRoles}
+        onClose={onCloseAdd}
+        onOpen={onOpenAdd}
       />
     </>
   );

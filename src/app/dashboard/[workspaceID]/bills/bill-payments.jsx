@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
   PlusIcon,
   Square2StackIcon,
@@ -9,7 +8,6 @@ import {
   EyeSlashIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
-import { formatDate, maskString, notify } from "@/lib/utils";
 import {
   Table,
   TableHeader,
@@ -21,22 +19,25 @@ import {
   Tooltip,
   useDisclosure,
 } from "@heroui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { Button } from "@/components/ui/button";
+import { formatDate, maskString, notify } from "@/lib/utils";
 import CustomTable from "@/components/tables/table";
 import { useWorkspaceAPIKey } from "@/hooks/useQueryHooks";
 import {
   refreshWorkspaceAPIKey,
   setupWorkspaceAPIKey,
 } from "@/app/_actions/workspace-actions";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getBillsLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
 import CardHeader from "@/components/base/card-header";
-import BillPaymentAPIConfigModal from "./bill-api-config-modal";
-
 import { BILLS_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 import PromptModal from "@/components/base/prompt";
 import Card from "@/components/base/card";
+
+import BillPaymentAPIConfigModal from "./bill-api-config-modal";
 
 const BillPayments = ({ workspaceID }) => {
   const queryClient = useQueryClient();
@@ -53,6 +54,7 @@ const BillPayments = ({ workspaceID }) => {
   const [openViewConfig, setOpenViewConfig] = useState(false);
 
   const thirtyDaysAgoDate = new Date();
+
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
   const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
   const end_date = formatDate(new Date(), "YYYY-MM-DD");
@@ -66,6 +68,7 @@ const BillPayments = ({ workspaceID }) => {
 
   const API = useMemo(() => {
     if (!apiKeyResponse?.success) return [];
+
     return {
       key: apiKeyResponse?.data?.apiKey,
       username: apiKeyResponse?.data?.username,
@@ -91,6 +94,7 @@ const BillPayments = ({ workspaceID }) => {
         title: "Failed to generate API key!",
         description: "You already have an API key for this workspace.",
       });
+
       return;
     }
 
@@ -105,6 +109,7 @@ const BillPayments = ({ workspaceID }) => {
           description: response?.message,
         });
         setIsLoading(false);
+
         return;
       }
 
@@ -119,6 +124,7 @@ const BillPayments = ({ workspaceID }) => {
       });
       setIsRefresh(false);
       setIsLoading(false);
+
       return;
     }
 
@@ -132,6 +138,7 @@ const BillPayments = ({ workspaceID }) => {
         description: response?.message,
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -191,18 +198,18 @@ const BillPayments = ({ workspaceID }) => {
         <Card className="">
           <div className="mb-8 flex justify-between">
             <CardHeader
-              title={"Bills API Key"}
-              infoText={
-                "Use the API keys to collect payments to your workspace wallet."
-              }
               classNames={{
                 titleClasses: "xl:text-2xl lg:text-xl font-bold",
                 infoClasses: "!text-sm xl:text-base",
               }}
+              infoText={
+                "Use the API keys to collect payments to your workspace wallet."
+              }
+              title={"Bills API Key"}
             />
             <Button
-              isDisabled={Boolean(apiKey?.key)}
               endContent={<PlusIcon className="h-5 w-5" />}
+              isDisabled={Boolean(apiKey?.key)}
               onClick={() => setIsNew(true)}
             >
               Generate Key
@@ -217,18 +224,18 @@ const BillPayments = ({ workspaceID }) => {
               <TableColumn align="center">ACTIONS</TableColumn>
             </TableHeader>
             <TableBody
+              emptyContent={
+                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
+                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70">
+                    You have no API keys generated
+                  </span>
+                </div>
+              }
               isLoading={isFetching}
               loadingContent={
                 <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
                   <span className="flex gap-4 text-sm font-bold capitalize text-primary">
                     <Spinner size="sm" /> Loading API key...
-                  </span>
-                </div>
-              }
-              emptyContent={
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
-                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70">
-                    You have no API keys generated
                   </span>
                 </div>
               }
@@ -247,8 +254,8 @@ const BillPayments = ({ workspaceID }) => {
                         <Button
                           className={"h-max max-h-max max-w-max p-1"}
                           color="default"
-                          variant="light"
                           size="sm"
+                          variant="light"
                           onClick={() => setUnmaskAPIKey(!unmaskAPIKey)}
                         >
                           {unmaskAPIKey ? (
@@ -286,8 +293,8 @@ const BillPayments = ({ workspaceID }) => {
                         <div className="flex items-center gap-4">
                           <Tooltip color="secondary" content="API Config">
                             <Cog6ToothIcon
-                              onClick={() => setOpenViewConfig(true)}
                               className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
+                              onClick={() => setOpenViewConfig(true)}
                             />
                           </Tooltip>
                           <Tooltip
@@ -305,8 +312,8 @@ const BillPayments = ({ workspaceID }) => {
                           </Tooltip>
                           <Tooltip color="primary" content="Refresh API Key">
                             <ArrowPathIcon
-                              onClick={() => setIsRefresh(true)}
                               className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300"
+                              onClick={() => setIsRefresh(true)}
                             />
                           </Tooltip>
                           {/*  FEATURE TO DELETE AN API KEY */}
@@ -330,18 +337,18 @@ const BillPayments = ({ workspaceID }) => {
           <div className="flex w-full items-center justify-between gap-4">
             <CardHeader
               className={"mb-4"}
-              title={"Recent Bill Transactions"}
               infoText={
                 "Transactions made to your workspace wallet in the last 30days."
               }
+              title={"Recent Bill Transactions"}
             />
           </div>
           <CustomTable
             // removeWrapper
             classNames={{ wrapper: "shadow-none px-0 mx-0" }}
             columns={BILLS_TRANSACTION_COLUMNS}
-            rows={LATEST_TRANSACTIONS}
             isLoading={mutation.isPending}
+            rows={LATEST_TRANSACTIONS}
           />
         </Card>
       </div>
@@ -358,36 +365,36 @@ const BillPayments = ({ workspaceID }) => {
 
       {/* DELETE PROMPTS */}
       <PromptModal
+        confirmText={
+          isNew
+            ? "Generate"
+            : isDelete
+              ? "Delete"
+              : isRefresh
+                ? "Refresh"
+                : "Confirm"
+        }
+        isDisabled={isLoading}
+        isDismissable={false}
+        isLoading={isLoading}
         isOpen={isNew || isDelete || isRefresh}
-        onOpen={onOpen}
+        title={
+          isNew
+            ? "Generate New API Key"
+            : isDelete
+              ? "Delete API Key"
+              : isRefresh
+                ? "Refresh API Key"
+                : "API Keys"
+        }
         onClose={() => {
           onClose();
           setIsNew(false);
           setIsDelete(false);
           setIsRefresh(false);
         }}
-        title={
-          isNew
-            ? "Generate New API Key"
-            : isDelete
-            ? "Delete API Key"
-            : isRefresh
-            ? "Refresh API Key"
-            : "API Keys"
-        }
         onConfirm={handleUserAction}
-        confirmText={
-          isNew
-            ? "Generate"
-            : isDelete
-            ? "Delete"
-            : isRefresh
-            ? "Refresh"
-            : "Confirm"
-        }
-        isDisabled={isLoading}
-        isLoading={isLoading}
-        isDismissable={false}
+        onOpen={onOpen}
       >
         {isDelete ? (
           <>

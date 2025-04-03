@@ -10,6 +10,8 @@ import {
   Pagination,
   Tooltip,
 } from "@heroui/react";
+import { ArrowDownTrayIcon, PlusIcon } from "@heroicons/react/24/outline";
+
 import {
   SERVICE_PROVIDER_COLOR_MAP,
   TRANSACTION_STATUS_COLOR_MAP,
@@ -18,11 +20,9 @@ import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
 import Loader from "@/components/ui/loader";
-import { ArrowDownTrayIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Search from "@/components/ui/search";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import SelectField from "@/components/ui/select-field";
-
 import { useSingleTransactions, useWorkspaceInit } from "@/hooks/useQueryHooks";
 import EmptyLogs from "@/components/base/empty-logs";
 import { SINGLE_TRANSACTIONS_COLUMNS } from "@/lib/table-columns";
@@ -72,7 +72,7 @@ export default function SingleTransactionsTable({
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS),
   );
 
   const [serviceProtocolFilter, setServiceProtocolFilter] =
@@ -93,7 +93,7 @@ export default function SingleTransactionsTable({
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -120,7 +120,7 @@ export default function SingleTransactionsTable({
             .includes(debouncedSearchQuery?.toLowerCase()) ||
           row?.amount
             ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase())
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -129,7 +129,7 @@ export default function SingleTransactionsTable({
       Array.from(serviceProtocolFilter).length !== SERVICE_FILTERS.length
     ) {
       filteredRows = filteredRows.filter((row) =>
-        Array.from(serviceProtocolFilter).includes(row?.service)
+        Array.from(serviceProtocolFilter).includes(row?.service),
       );
     }
 
@@ -157,6 +157,7 @@ export default function SingleTransactionsTable({
 
   const renderCell = React.useCallback((row, columnKey) => {
     const cellValue = row[columnKey];
+
     switch (columnKey) {
       case "created_at":
         return (
@@ -185,16 +186,16 @@ export default function SingleTransactionsTable({
       case "status":
         return (
           <Button
+            className={cn(
+              "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
+              TRANSACTION_STATUS_COLOR_MAP[row.status],
+            )}
             size="sm"
             variant="light"
             onPress={() => {
               setTransactionDetails(row);
               setOpenTransactionDetailsModal(true);
             }}
-            className={cn(
-              "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
-              TRANSACTION_STATUS_COLOR_MAP[row.status]
-            )}
           >
             {cellValue}
           </Button>
@@ -202,22 +203,24 @@ export default function SingleTransactionsTable({
       case "service_provider":
         return (
           <Tooltip
+            closeDelay={500}
             color="default"
-            placement="right"
             content={row?.remarks}
             delay={500}
-            closeDelay={500}
+            placement="right"
             showArrow={true}
           >
             <Chip
-              color="primary"
               className={cn(
                 "mx-auto self-center capitalize",
-                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider?.toLowerCase()]
+                SERVICE_PROVIDER_COLOR_MAP[
+                  row?.service_provider?.toLowerCase()
+                ],
               )}
               classNames={{
                 content: "font-semibold",
               }}
+              color="primary"
               variant="flat"
             >
               {cellValue}
@@ -274,10 +277,10 @@ export default function SingleTransactionsTable({
     return (
       <div className="mt-24 flex flex-1 items-center rounded-lg">
         <Loader
-          size={100}
           classNames={{
             wrapper: "bg-foreground-200/50 rounded-xl mt-8 h-full",
           }}
+          size={100}
         />
       </div>
     );
@@ -289,8 +292,8 @@ export default function SingleTransactionsTable({
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
-          title={"No transaction data records!"}
           subTitle={""}
+          title={"No transaction data records!"}
         />
       </div>
     );
@@ -343,27 +346,27 @@ export default function SingleTransactionsTable({
           />
           <div className="relative flex gap-3">
             <SingleSelectionDropdown
-              name={"Type"}
-              className={"min-w-[160px]"}
-              disallowEmptySelection={true}
-              closeOnSelect={false}
               buttonVariant="flat"
-              selectionMode="multiple"
-              selectedKeys={serviceProtocolFilter}
+              className={"min-w-[160px]"}
+              closeOnSelect={false}
+              disallowEmptySelection={true}
               dropdownItems={SERVICE_FILTERS}
+              name={"Type"}
+              selectedKeys={serviceProtocolFilter}
+              selectionMode="multiple"
               onSelectionChange={setServiceProtocolFilter}
             />
             <SingleSelectionDropdown
-              name={"Columns"}
+              buttonVariant="flat"
               className={"min-w-[160px]"}
               closeOnSelect={false}
-              buttonVariant="flat"
-              selectionMode="multiple"
               disallowEmptySelection={true}
-              onSelectionChange={setVisibleColumns}
               dropdownItems={columns}
+              name={"Columns"}
               selectedKeys={visibleColumns}
+              selectionMode="multiple"
               setSelectedKeys={setSelectedKeys}
+              onSelectionChange={setVisibleColumns}
             />
 
             <Button
@@ -395,10 +398,10 @@ export default function SingleTransactionsTable({
             Rows per page:{" "}
             <SelectField
               className="-mb-1 h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
-              onChange={onRowsPerPageChange}
-              placeholder={rowsPerPage.toString()}
-              options={["5", "8", "10", "20"]}
               defaultValue={8}
+              options={["5", "8", "10", "20"]}
+              placeholder={rowsPerPage.toString()}
+              onChange={onRowsPerPageChange}
             />
           </label>
         </div>
@@ -416,8 +419,10 @@ export default function SingleTransactionsTable({
 
   return (
     <Table
-      removeWrapper={removeWrapper}
+      isHeaderSticky
+      isStriped
       aria-label="Transactions table with custom cells"
+      bottomContent={bottomContent}
       className="max-h-[780px]"
       classNames={{
         table: cn("align-top min-h-[300px] items-center justify-center", {
@@ -426,39 +431,37 @@ export default function SingleTransactionsTable({
         }),
         // wrapper: cn('min-h-max', { 'min-h-max': pages <= 1 }),
       }}
-      sortDescriptor={sortDescriptor}
+      removeWrapper={removeWrapper}
       selectedKeys={selectedKeys}
-      onSelectionChange={setSelectedKeys}
-      isStriped
-      isHeaderSticky
+      sortDescriptor={sortDescriptor}
       topContent={topContent}
-      bottomContent={bottomContent}
-      onSortChange={setSortDescriptor}
       onRowAction={
         onRowAction ? (key, value) => onRowAction(key, value) : undefined
       }
+      onSelectionChange={setSelectedKeys}
+      onSortChange={setSortDescriptor}
     >
-      <TableHeader columns={headerColumns} className="fixed">
+      <TableHeader className="fixed" columns={headerColumns}>
         {(column) => (
           <TableColumn
             key={column.uid}
-            allowsSorting={column.sortable}
             align={
               column.uid === "actions" || column.uid === "status"
                 ? "center"
                 : "start"
             }
+            allowsSorting={column.sortable}
           >
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
       <TableBody
-        items={isLoading ? [] : sortedItems}
-        isLoading={isLoading}
-        loadingContent={loadingContent}
-        emptyContent={emptyContent}
         align="top"
+        emptyContent={emptyContent}
+        isLoading={isLoading}
+        items={isLoading ? [] : sortedItems}
+        loadingContent={loadingContent}
       >
         {(item) => (
           <TableRow

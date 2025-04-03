@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Search from "@/components/ui/search";
-import CustomTable from "@/components/tables/table";
 import {
   ArrowDownTrayIcon,
   EyeSlashIcon,
@@ -9,15 +7,16 @@ import {
   ListBulletIcon,
   PresentationChartBarIcon,
 } from "@heroicons/react/24/outline";
-import { Button } from "@/components/ui/button";
-import { formatCurrency } from "@/lib/utils";
-
-import { DateRangePickerField } from "@/components/ui/date-select-field";
-import { QUERY_KEYS } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
-import { getCollectionsReport } from "@/app/_actions/transaction-actions";
 import { AnimatePresence, motion } from "framer-motion";
 
+import Search from "@/components/ui/search";
+import CustomTable from "@/components/tables/table";
+import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/utils";
+import { DateRangePickerField } from "@/components/ui/date-select-field";
+import { QUERY_KEYS } from "@/lib/constants";
+import { getCollectionsReport } from "@/app/_actions/transaction-actions";
 import TotalStatsLoader from "@/app/dashboard/components/total-stats-loader";
 import Card from "@/components/base/card";
 import CardHeader from "@/components/base/card-header";
@@ -72,6 +71,7 @@ export default function CollectionsReports({ workspaceID }) {
     if (!range?.start_date && !range?.end_date) {
       return [];
     }
+
     return await mutation.mutateAsync(range);
   }
 
@@ -86,8 +86,9 @@ export default function CollectionsReports({ workspaceID }) {
     const response = await getCollectionsReport(
       workspaceID,
       serviceType,
-      dateRange
+      dateRange,
     );
+
     return response || [];
   }
 
@@ -117,7 +118,7 @@ export default function CollectionsReports({ workspaceID }) {
             .includes(debouncedSearchQuery?.toLowerCase()) ||
           row?.service_provider
             ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase())
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -140,7 +141,7 @@ export default function CollectionsReports({ workspaceID }) {
             .includes(debouncedTerminalQuery?.toLowerCase()) ||
           terminal?.terminalID
             ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase())
+            .includes(debouncedTerminalQuery?.toLowerCase()),
       );
     }
 
@@ -180,16 +181,16 @@ export default function CollectionsReports({ workspaceID }) {
       <div className="mb-4 flex w-full items-start justify-start pb-2">
         <div className="flex items-center gap-2">
           <DateRangePickerField
-            label={"Reports Date Range"}
-            description={"Dates to generate reports"}
-            visibleMonths={2}
             autoFocus
             dateRange={dateRange}
+            description={"Dates to generate reports"}
+            label={"Reports Date Range"}
             setDateRange={setDateRange}
+            visibleMonths={2}
           />{" "}
           <Button
-            onPress={() => runAsyncMutation(dateRange)}
             endContent={<FunnelIcon className="h-5 w-5" />}
+            onPress={() => runAsyncMutation(dateRange)}
           >
             Apply
           </Button>
@@ -201,21 +202,21 @@ export default function CollectionsReports({ workspaceID }) {
         <div className="flex items-end justify-between">
           <Tabs
             className={"mb-2 mr-auto"}
-            tabs={SERVICE_TYPES}
             currentTab={currentTab}
             navigateTo={setCurrentTab}
+            tabs={SERVICE_TYPES}
           />
         </div>
         <div className="flex w-full items-center justify-between gap-8">
           <CardHeader
-            title={`${SERVICE_TYPES[currentTab].name} (${
-              dateRange?.range || "--"
-            })`}
-            infoText={SERVICE_TYPES[currentTab].description}
             classNames={{
               titleClasses: "xl:text-[clamp(1.125rem,1vw,1.75rem)] font-bold",
               infoClasses: "text-[clamp(0.8rem,0.8vw,1rem)]",
             }}
+            infoText={SERVICE_TYPES[currentTab].description}
+            title={`${SERVICE_TYPES[currentTab].name} (${
+              dateRange?.range || "--"
+            })`}
           />
 
           <div className="flex w-full justify-end gap-4">
@@ -241,47 +242,47 @@ export default function CollectionsReports({ workspaceID }) {
         {
           <AnimatePresence>
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
               animate={{
                 height: isExpanded ? "auto" : 0,
                 opacity: isExpanded ? 1 : 0,
               }}
               className="mb-4"
+              initial={{ height: 0, opacity: 0 }}
             >
               <Card className={"mb-4 mt-2 shadow-none"}>
                 {Object.keys(report).length > 0 ? (
                   <div className="flex flex-col gap-4 md:flex-row md:justify-between">
                     <div className="flex-1">
                       <TotalValueStat
-                        label={"Total Transactions"}
+                        count={transactions.length || 0}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "primary",
                         }}
-                        count={transactions.length || 0}
+                        label={"Total Transactions"}
                         value={""}
                       />
                     </div>
                     <div className="flex-1">
                       <TotalValueStat
-                        label={"Successful Transactions"}
+                        count={report?.successful_count || 0}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "success",
                         }}
-                        count={report?.successful_count || 0}
+                        label={"Successful Transactions"}
                         value={formatCurrency(report?.successful_value)}
                       />
                     </div>
 
                     <div className="flex-1">
                       <TotalValueStat
-                        label={"Failed Transactions"}
+                        count={report?.failed_count || 0}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "danger",
                         }}
-                        count={report?.failed_count || 0}
+                        label={"Failed Transactions"}
                         value={formatCurrency(report?.failed_value || 0)}
                       />
                     </div>
@@ -299,20 +300,20 @@ export default function CollectionsReports({ workspaceID }) {
                 <Card className={"max-w-full gap-4 shadow-none"}>
                   <div className="flex w-full flex-col items-center justify-between gap-8 sm:flex-row">
                     <CardHeader
-                      title={`Terminal Summary`}
-                      infoText={
-                        "Reports on successful transaction counts and values for each terminal"
-                      }
                       classNames={{
                         titleClasses:
                           "text-base md:text-lg xl:text-xl font-bold",
                         infoClasses: "text-[clamp(0.8rem,0.8vw,1rem)]",
                       }}
+                      infoText={
+                        "Reports on successful transaction counts and values for each terminal"
+                      }
+                      title={`Terminal Summary`}
                     />
                     <div className="flex w-full max-w-xs gap-4">
                       <Search
-                        placeholder={"Find a terminal..."}
                         className={""}
+                        placeholder={"Find a terminal..."}
                         onChange={(e) => setTerminalQuery(e.target.value)}
                       />
                     </div>
@@ -327,11 +328,11 @@ export default function CollectionsReports({ workspaceID }) {
                       filteredTerminals?.map((terminal) => (
                         // Array.from({ length: 8 })?.map((terminal) => (
                         <TerminalInfo
-                          className={"mb-4 min-w-[300px]"}
                           key={terminal?.terminalID}
-                          terminalName={terminal?.terminalName}
-                          terminalID={terminal?.terminalID}
+                          className={"mb-4 min-w-[300px]"}
                           count={terminal?.successful_count}
+                          terminalID={terminal?.terminalID}
+                          terminalName={terminal?.terminalName}
                           value={terminal?.successful_value}
                         />
                       ))}
@@ -345,14 +346,14 @@ export default function CollectionsReports({ workspaceID }) {
         {/* TABLE HEADER */}
         <div className="flex w-full items-center justify-between gap-8">
           <CardHeader
-            title={`Transactions`}
-            infoText={
-              "Transactions that took place within the date range applied"
-            }
             classNames={{
               titleClasses: "text-base md:text-lg xl:text-xl font-bold",
               infoClasses: "text-[clamp(0.8rem,0.8vw,1rem)]",
             }}
+            infoText={
+              "Transactions that took place within the date range applied"
+            }
+            title={`Transactions`}
           />
           <div className="mb-4 flex w-full items-end justify-end gap-3">
             <Search
@@ -362,8 +363,8 @@ export default function CollectionsReports({ workspaceID }) {
             />
             <Button
               color={"primary"}
-              onPress={() => handleFileExportToCSV()}
               startContent={<ArrowDownTrayIcon className="h-5 w-5" />}
+              onPress={() => handleFileExportToCSV()}
             >
               Export
             </Button>
@@ -377,9 +378,9 @@ export default function CollectionsReports({ workspaceID }) {
               ? API_KEY_TERMINAL_TRANSACTION_COLUMNS
               : API_KEY_TRANSACTION_COLUMNS
           }
-          rows={filteredItems || []}
-          isLoading={mutation.isPending}
           isError={mutation.isError}
+          isLoading={mutation.isPending}
+          rows={filteredItems || []}
           removeWrapper
           // onRowAction={(key) => {}}
         />

@@ -1,6 +1,8 @@
+import { Suspense } from "react";
+
 import LoadingPage from "@/app/loading";
 import Workspaces from "@/components/workspaces-list";
-import React, { Suspense } from "react";
+
 import { getUserDetails } from "../_actions/config-actions";
 import { getAllWorkspaces } from "../_actions/merchant-actions";
 
@@ -23,9 +25,9 @@ async function AllWorkspacesPage() {
         </div>
 
         <Workspaces
+          className={"m-0 border-none bg-transparent p-0 shadow-none"}
           user={session?.user}
           workspaces={workspaces}
-          className={"m-0 border-none bg-transparent p-0 shadow-none"}
         />
       </div>
     </Suspense>

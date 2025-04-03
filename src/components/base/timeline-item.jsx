@@ -1,7 +1,8 @@
-import React from "react";
-import SoftBoxIcon from "./soft-box-icon";
-import { cn } from "@/lib/utils";
 import { CheckBadgeIcon } from "@heroicons/react/24/outline";
+
+import { cn } from "@/lib/utils";
+
+import SoftBoxIcon from "./soft-box-icon";
 
 function TimelineItem({ stage, isLastItem, isCompleted, isPending, Icon }) {
   return (

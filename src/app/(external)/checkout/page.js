@@ -1,7 +1,7 @@
-import React from "react";
 import Logo from "@/components/base/logo";
-import { Checkout } from "./checkout-cards";
 import { getCheckoutInfo } from "@/app/_actions/vas-actions";
+
+import { Checkout } from "./checkout-cards";
 
 async function CheckoutPage(props) {
   const searchParams = await props.searchParams;

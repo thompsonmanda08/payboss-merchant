@@ -20,15 +20,15 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { useQueryClient } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 
 import { cn, getUserInitials, notify } from "@/lib/utils";
 import useWorkspaceStore from "@/context/workspaces-store";
 import PromptModal from "@/components/base/prompt";
-import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS, rowsPerPageOptions } from "@/lib/constants";
 import Loader from "@/components/ui/loader";
 import EmptyLogs from "@/components/base/empty-logs";
-import { usePathname } from "next/navigation";
 import SelectField from "@/components/ui/select-field";
 import { Button } from "@/components/ui/button";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
@@ -129,7 +129,7 @@ export default function UsersTable({
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS),
   );
 
   const [roleFilter, setRoleFilter] = React.useState("all");
@@ -147,7 +147,7 @@ export default function UsersTable({
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -162,7 +162,7 @@ export default function UsersTable({
           row?.first_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.last_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.email?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-          row?.username?.toLowerCase().includes(filterValue?.toLowerCase())
+          row?.username?.toLowerCase().includes(filterValue?.toLowerCase()),
       );
     }
 
@@ -239,11 +239,11 @@ export default function UsersTable({
             {!isUsersRoute && (
               <Tooltip color="default" content="Edit user">
                 <span
+                  className="cursor-pointer text-lg text-primary active:opacity-50"
                   onClick={() => {
                     setSelectedUser(user);
                     setIsEditingRole(true);
                   }}
-                  className="cursor-pointer text-lg text-primary active:opacity-50"
                 >
                   <PencilSquareIcon className="h-5 w-5" />
                 </span>
@@ -256,30 +256,30 @@ export default function UsersTable({
                 {user?.isLockedOut && (
                   <Tooltip color="default" content="Unlock User">
                     <span
+                      className="cursor-pointer text-lg font-bold text-green-600 active:opacity-50"
                       onClick={() => {
                         setSelectedUser(user);
                         setOpenUnlockUserPrompt(true);
                       }}
-                      className="cursor-pointer text-lg font-bold text-green-600 active:opacity-50"
                     >
                       <LockOpenIcon className="h-5 w-5" />
                     </span>
                   </Tooltip>
                 )}
                 <Tooltip
-                  color="secondary"
-                  content="Reset User Password"
                   classNames={{
                     base: "text-white",
                     content: "bg-secondary text-white",
                   }}
+                  color="secondary"
+                  content="Reset User Password"
                 >
                   <span
+                    className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
                     onClick={() => {
                       setSelectedUser(user);
                       setOpenResetPasswordPrompt(true);
                     }}
-                    className="cursor-pointer text-lg font-bold text-orange-600 active:opacity-50"
                   >
                     <ArrowPathIcon className="h-5 w-5" />
                   </span>
@@ -290,11 +290,11 @@ export default function UsersTable({
             {/* DELETE USER BY ACCOUNT ADMIN OR REMOVE USER FROM WORKSPACE */}
             <Tooltip color="danger" content="Delete user">
               <span
+                className="cursor-pointer text-lg text-danger active:opacity-50"
                 onClick={() => {
                   setSelectedUser(user);
                   onOpen();
                 }}
-                className="cursor-pointer text-lg text-danger active:opacity-50"
               >
                 <TrashIcon className="h-5 w-5" />
               </span>
@@ -309,7 +309,7 @@ export default function UsersTable({
         </Tooltip>
       );
     },
-    [isUserAdmin]
+    [isUserAdmin],
   );
 
   // TABLE CELL RENDERER
@@ -322,8 +322,8 @@ export default function UsersTable({
           return (
             <UserAvatarComponent
               key={cellValue}
-              firstName={user?.first_name}
-              lastName={user?.last_name}
+              isBordered
+              className="rounded-md"
               email={
                 <span className="flex items-center gap-1">
                   {user?.email}{" "}
@@ -332,11 +332,11 @@ export default function UsersTable({
                   )}
                 </span>
               }
-              size="sm"
-              className="rounded-md"
-              src={user?.image}
-              isBordered
+              firstName={user?.first_name}
+              lastName={user?.last_name}
               radius="md"
+              size="sm"
+              src={user?.image}
             />
           );
         case "username":
@@ -372,11 +372,12 @@ export default function UsersTable({
           return cellValue;
       }
     },
-    [isUsersRoute]
+    [isUsersRoute],
   );
 
   async function resetUserPassword() {
     const response = await handleResetUserPassword();
+
     if (response) {
       onClose();
       setOpenResetPasswordPrompt(false);
@@ -397,13 +398,16 @@ export default function UsersTable({
           description: "Owner cannot be removed!",
         });
         setIsLoading(false);
+
         return;
       }
 
       const response = await handleDeleteFromAccount();
+
       if (response) {
         onClose();
         setIsLoading(false);
+
         return;
       }
 
@@ -419,11 +423,13 @@ export default function UsersTable({
         description: "Workspace cannot be empty!",
       });
       setIsLoading(false);
+
       return;
     }
 
     // BY DEFAULT ONLY REMOVE USER FROM WORKSPACE
     const response = await handleDeleteFromWorkspace(workspaceID);
+
     if (response) {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.WORKSPACE_MEMBERS, workspaceID],
@@ -443,27 +449,27 @@ export default function UsersTable({
           />
           <div className="relative flex gap-3">
             <SingleSelectionDropdown
-              name={"Role"}
-              className={"min-w-[160px]"}
-              disallowEmptySelection={true}
-              closeOnSelect={false}
               buttonVariant="flat"
-              selectionMode="multiple"
-              selectedKeys={roleFilter}
+              className={"min-w-[160px]"}
+              closeOnSelect={false}
+              disallowEmptySelection={true}
               dropdownItems={ROLE_FILTERS}
+              name={"Role"}
+              selectedKeys={roleFilter}
+              selectionMode="multiple"
               onSelectionChange={setRoleFilter}
             />
             <SingleSelectionDropdown
-              name={"Columns"}
+              buttonVariant="flat"
               className={"min-w-[160px]"}
               closeOnSelect={false}
-              buttonVariant="flat"
-              selectionMode="multiple"
               disallowEmptySelection={true}
-              onSelectionChange={setVisibleColumns}
               dropdownItems={columns}
+              name={"Columns"}
               selectedKeys={visibleColumns}
+              selectionMode="multiple"
               setSelectedKeys={setSelectedKeys}
+              onSelectionChange={setVisibleColumns}
             />
 
             {allowUserCreation && isApprovedUser && isUsersRoute && (
@@ -494,11 +500,11 @@ export default function UsersTable({
             Rows per page:{" "}
             <SelectField
               className="-mb-1 h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
-              onChange={onRowsPerPageChange}
-              value={rowsPerPage}
-              placeholder={rowsPerPage.toString()}
-              options={rowsPerPageOptions}
               defaultValue={8}
+              options={rowsPerPageOptions}
+              placeholder={rowsPerPage.toString()}
+              value={rowsPerPage}
+              onChange={onRowsPerPageChange}
             />
           </label>
         </div>
@@ -559,8 +565,8 @@ export default function UsersTable({
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
-          title={"No users to display."}
           subTitle={"you have no users to be displayed here."}
+          title={"No users to display."}
         />
       </div>
     );
@@ -570,8 +576,8 @@ export default function UsersTable({
     return (
       <div className="mt-32 flex flex-1 items-center rounded-lg">
         <Loader
-          size={100}
           classNames={{ wrapper: "bg-foreground-200/50 rounded-xl h-full" }}
+          size={100}
         />
       </div>
     );
@@ -580,42 +586,42 @@ export default function UsersTable({
   return (
     <>
       <Table
+        isHeaderSticky
+        isStriped
         aria-label="Users table with custom cells"
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
         className="max-h-[980px]"
         classNames={{
           table: cn("align-top items-center justify-center", {}),
         }}
         removeWrapper={removeWrapper}
+        selectedKeys={selectedKeys}
         sortDescriptor={sortDescriptor}
         topContent={topContent}
-        bottomContent={bottomContent}
-        onSortChange={setSortDescriptor}
-        selectedKeys={selectedKeys}
         onSelectionChange={setSelectedKeys}
-        isStriped
-        isHeaderSticky
-        bottomContentPlacement="outside"
+        onSortChange={setSortDescriptor}
       >
-        <TableHeader columns={headerColumns} className="fixed">
+        <TableHeader className="fixed" columns={headerColumns}>
           {(column) => (
             <TableColumn
               key={column.uid}
-              allowsSorting={column.sortable}
               align={
                 column.uid === "actions" || column.uid === "status"
                   ? "center"
                   : "start"
               }
+              allowsSorting={column.sortable}
             >
               {column.name}
             </TableColumn>
           )}
         </TableHeader>
         <TableBody
-          isLoading={tableLoading}
-          loadingContent={loadingContent}
           emptyContent={emptyContent}
+          isLoading={tableLoading}
           items={tableLoading ? [] : sortedItems}
+          loadingContent={loadingContent}
         >
           {(item) => (
             <TableRow key={item?.ID}>
@@ -630,16 +636,16 @@ export default function UsersTable({
 
       {/* PROMPT TO UNLOCK A LOCKED USER ACCOUNT */}
       <PromptModal
+        isDisabled={isLoading}
+        isDismissable={false}
+        isLoading={isLoading}
         isOpen={openUnlockUserPrompt}
-        onOpen={setOpenUnlockUserPrompt}
+        title="Unlock User Account"
         onClose={() => {
           setOpenUnlockUserPrompt(false);
         }}
-        title="Unlock User Account"
         onConfirm={handleUnlockSystemUser}
-        isDisabled={isLoading}
-        isLoading={isLoading}
-        isDismissable={false}
+        onOpen={setOpenUnlockUserPrompt}
       >
         <p className="-mt-4 text-sm leading-5 text-foreground/70">
           By unlocking{" "}
@@ -653,18 +659,18 @@ export default function UsersTable({
 
       {/* PROMPT TO RESET USER PASSWORD */}
       <PromptModal
+        confirmText="Reset"
+        isDisabled={isLoading}
+        isDismissable={false}
+        isLoading={isLoading}
         isOpen={openResetPasswordPrompt}
-        onOpen={onOpen}
+        title="Reset User Password"
         onClose={() => {
           onClose();
           setOpenResetPasswordPrompt(false);
         }}
-        title="Reset User Password"
         onConfirm={resetUserPassword}
-        confirmText="Reset"
-        isDisabled={isLoading}
-        isLoading={isLoading}
-        isDismissable={false}
+        onOpen={onOpen}
       >
         <p className="-mt-4 text-sm leading-5 text-foreground/70">
           Are you sure you want to reset{" "}
@@ -677,18 +683,18 @@ export default function UsersTable({
 
       {/* PROMPT TO DELETE USER FROM ACCOUNT OR WORKSPACE */}
       <PromptModal
+        confirmText="Remove"
+        isDisabled={isLoading}
+        isDismissable={false}
+        isLoading={isLoading}
         isOpen={isOpen}
-        onOpen={onOpen}
+        title="Remove Workspace User"
         onClose={() => {
           onClose();
           setSelectedUser(null);
         }}
-        title="Remove Workspace User"
         onConfirm={handleRemoveUser}
-        confirmText="Remove"
-        isDisabled={isLoading}
-        isLoading={isLoading}
-        isDismissable={false}
+        onOpen={onOpen}
       >
         <p className="-mt-4 text-sm leading-6 text-foreground/70">
           Are you sure you want to remove{" "}
@@ -702,8 +708,8 @@ export default function UsersTable({
       {/* CREATE  A NEW USER  */}
       <CreateNewUserModal
         isOpen={isEditingRole || createUserModal}
-        onClose={closeCreateUserModal}
         workspaceID={workspaceID}
+        onClose={closeCreateUserModal}
       />
     </>
   );
@@ -720,11 +726,12 @@ export function UserAvatarComponent({
   ...props
 }) {
   const { wrapper, avatar } = classNames || "";
+
   return (
     <div
       className={cn(
         "flex max-w-max cursor-pointer items-center justify-start gap-4 transition-all duration-200 ease-in-out",
-        wrapper
+        wrapper,
       )}
       onClick={(e) => {
         e.stopPropagation();
@@ -733,11 +740,11 @@ export function UserAvatarComponent({
     >
       {src ? (
         <Avatar
-          className={cn("h-9 w-9 flex-none rounded-xl bg-gray-50", avatar)}
-          src={src}
           alt={`Image - ${firstName} ${lastName}`}
-          width={200}
+          className={cn("h-9 w-9 flex-none rounded-xl bg-gray-50", avatar)}
           height={200}
+          src={src}
+          width={200}
           {...props}
         />
       ) : (
@@ -749,7 +756,7 @@ export function UserAvatarComponent({
         <p
           className={cn(
             "text-base font-semibold leading-6 text-foreground/80",
-            {}
+            {},
           )}
         >{`${firstName} ${lastName}`}</p>
         <p className={cn("text-[11px] font-medium text-foreground/50", {})}>

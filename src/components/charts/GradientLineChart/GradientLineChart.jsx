@@ -1,9 +1,11 @@
 "use client";
 import { useRef, useEffect, useState, useMemo } from "react";
-import configs from "./configs";
 import { Line } from "react-chartjs-2";
+
 import { cn } from "@/lib/utils";
 import Card from "@/components/base/card";
+
+import configs from "./configs";
 
 const chart = {
   labels: [

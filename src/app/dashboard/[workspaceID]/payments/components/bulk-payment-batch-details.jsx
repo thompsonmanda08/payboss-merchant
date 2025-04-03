@@ -1,10 +1,10 @@
 "use client";
-import React from "react";
+import { BanknotesIcon, WalletIcon } from "@heroicons/react/24/outline";
+
 import usePaymentsStore from "@/context/payment-store";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, notify } from "@/lib/utils";
-import { BanknotesIcon, WalletIcon } from "@heroicons/react/24/outline";
 import useDashboard from "@/hooks/useDashboard";
 import { initializeBulkTransaction } from "@/app/_actions/transaction-actions";
 import StatusMessage from "@/components/base/status-message";
@@ -42,6 +42,7 @@ const PaymentDetails = ({
         color: "danger",
         description: "A valid filename is required!",
       });
+
       return;
     }
 
@@ -57,13 +58,14 @@ const PaymentDetails = ({
         message: "You do not have permissions to perform this action",
       });
       setLoading(false);
+
       return;
     }
 
     // Create payment batch here if user is create access
     const response = await initializeBulkTransaction(
       workspaceID,
-      paymentAction
+      paymentAction,
     );
 
     if (response?.success) {
@@ -77,6 +79,7 @@ const PaymentDetails = ({
       setBatchDetails(response?.data); // SET VALIDATION DATA INTO STATE
       navigateForward(); // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
       setLoading(false);
+
       return;
     }
 
@@ -87,6 +90,7 @@ const PaymentDetails = ({
     });
     setError({ status: true, message: response?.message });
     setLoading(false);
+
     return;
   }
 
@@ -154,16 +158,16 @@ const PaymentDetails = ({
           </li>
         </ul>
         <Input
-          label={"Batch Name"}
           className="mb-auto"
-          required={true}
-          placeholder={"Enter a batch name"}
           classNames={{ wrapper: "w-full col-span-1 max-w-lg" }}
+          label={"Batch Name"}
+          placeholder={"Enter a batch name"}
+          required={true}
           value={paymentAction?.batch_name}
-          onError={error?.status}
           onChange={(e) => {
             updatePaymentFields({ batch_name: e.target.value, protocol });
           }}
+          onError={error?.status}
         />
       </div>
 
@@ -171,9 +175,9 @@ const PaymentDetails = ({
         <Button
           className={"bg-primary/10 font-medium text-primary"}
           color={"primary"}
+          isDisabled={loading}
           variant="light"
           onClick={handleBackwardsNavigation}
-          isDisabled={loading}
         >
           Back
         </Button>

@@ -1,18 +1,20 @@
+import React, { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import { Input } from "@/components/ui/input-field";
 import Search from "@/components/ui/search";
-import React, { useState } from "react";
 
 function SearchOrInviteUsers({ setSearchQuery, resolveAddToWorkspace }) {
   const [selectedKeys, setSelectedKeys] = useState(
-    new Set([["admin"].map((role) => role.label)[0]])
+    new Set([["admin"].map((role) => role.label)[0]]),
   );
 
   const selectedValue = React.useMemo(
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-    [selectedKeys]
+    [selectedKeys],
   );
+
   return (
     <div className="relative flex min-h-20 w-full flex-col justify-between gap-4 py-8 md:flex-row">
       {/*  USER SEARCH */}
@@ -25,8 +27,8 @@ function SearchOrInviteUsers({ setSearchQuery, resolveAddToWorkspace }) {
       {/******** ADD USER TO WORKSPACE ************/}
 
       <form
-        onSubmit={resolveAddToWorkspace}
         className={"group relative flex h-fit w-full flex-grow-0 justify-end"}
+        onSubmit={resolveAddToWorkspace}
       >
         <Input
           className={
@@ -50,7 +52,7 @@ function SearchOrInviteUsers({ setSearchQuery, resolveAddToWorkspace }) {
           setSelectedKeys={setSelectedKeys}
         />
 
-        <Button type="submit" className={"h-12 rounded-l-none px-8"}>
+        <Button className={"h-12 rounded-l-none px-8"} type="submit">
           Invite
         </Button>
       </form>

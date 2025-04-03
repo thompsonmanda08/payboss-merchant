@@ -1,11 +1,13 @@
 "use client";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import React from "react";
-import Logo from "./logo";
-import { Button } from "../ui/button";
 import Link from "next/link";
+
 import { cn } from "@/lib/utils";
+
+import { Button } from "../ui/button";
+
+import Logo from "./logo";
 
 export function ErrorCard({
   title,
@@ -18,18 +20,19 @@ export function ErrorCard({
   goBack,
 }) {
   const router = useRouter();
+
   return (
     <Card
       className={cn(
         "mx-auto aspect-square w-full max-w-sm flex-1 p-6 font-inter",
-        className
+        className,
       )}
     >
       <CardHeader>
         <Logo
-          href="/"
           className="mx-auto"
           classNames={{ wrapper: "mx-auto" }}
+          href="/"
         />
       </CardHeader>
       <CardBody className="flex cursor-pointer select-none flex-col items-center justify-center p-0">
@@ -56,11 +59,11 @@ export function ErrorCard({
             {buttonText || "Reload"}
           </Button>
         ) : goBack ? (
-          <Button onPress={() => router.back()} className="w-full">
+          <Button className="w-full" onPress={() => router.back()}>
             Go back
           </Button>
         ) : (
-          <Button as={Link} href={href || "/"} className="w-full">
+          <Button as={Link} className="w-full" href={href || "/"}>
             Go home
           </Button>
         )}
@@ -75,11 +78,11 @@ export function PermissionDenied() {
   return (
     <div className="flex-2 m-auto flex min-h-[50svh] w-full flex-1 items-center justify-center">
       <ErrorCard
+        buttonText={"Go back"}
+        handleReload={() => router.back()}
+        message={"You do have the permissions to view this page"}
         status={"401"}
         title={"Permission Denied"}
-        message={"You do have the permissions to view this page"}
-        handleReload={() => router.back()}
-        buttonText={"Go back"}
       />
     </div>
   );
@@ -91,13 +94,13 @@ export function MissingConfigurationError() {
   return (
     <div className="flex-2 m-auto flex min-h-[50svh] w-full flex-1 items-center justify-center">
       <ErrorCard
-        status={"Error"}
-        title={"Missing Configuration"}
+        buttonText={"Go back"}
+        handleReload={() => router.back()}
         message={
           "Start the action again to correctly set the configuration variables"
         }
-        handleReload={() => router.back()}
-        buttonText={"Go back"}
+        status={"Error"}
+        title={"Missing Configuration"}
       />
     </div>
   );

@@ -1,18 +1,20 @@
 "use client";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
-import React from "react";
 import { motion } from "framer-motion";
+
+import { cn } from "@/lib/utils";
 
 function Card({ className, classObject, href, children }) {
   const cardClasses = cn(
     "flex w-full flex-col rounded-2xl bg-card p-5 shadow-lg dark:shadow-background shadow-neutral-400/10 border border-border transition-all duration-300 overflow-clip",
     className,
-    classObject
+    classObject,
   );
+
   return href ? (
     <Link href={href}>
       <motion.div
+        className={cardClasses}
         whileInView={{
           opacity: [0, 1],
           transition: {
@@ -22,7 +24,6 @@ function Card({ className, classObject, href, children }) {
             duration: 0.4,
           },
         }}
-        className={cardClasses}
       >
         {children}
       </motion.div>

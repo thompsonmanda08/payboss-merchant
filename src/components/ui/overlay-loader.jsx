@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
-
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
 import { cn } from "@/lib/utils";
+
 import Spinner from "./spinner";
 
 const modalVariants = {
@@ -34,30 +35,30 @@ function OverlayLoader({ show, className, classNames }) {
     isOpen && (
       <AnimatePresence>
         <motion.div
-          initial="hidden"
           animate="visible"
-          exit="exit"
-          variants={overlayVariants}
-          transition={{ duration: 0.25 }}
           className={cn(
             "absolute inset-0 z-[9999999] flex h-screen w-full items-center justify-center bg-black/50 backdrop-blur-sm",
-            wrapper
+            wrapper,
           )}
+          exit="exit"
+          initial="hidden"
+          transition={{ duration: 0.25 }}
+          variants={overlayVariants}
         >
           <motion.div
-            initial="hidden"
             animate="visible"
-            exit="exit"
-            variants={modalVariants}
-            transition={{ duration: 0.2 }}
-            onClick={(e) => e.stopPropagation()}
             className={cn(
               "grid h-full w-full place-content-center place-items-center",
               className,
-              conatiner
+              conatiner,
             )}
+            exit="exit"
+            initial="hidden"
+            transition={{ duration: 0.2 }}
+            variants={modalVariants}
+            onClick={(e) => e.stopPropagation()}
           >
-            <Spinner size={150} color="#ffffff" className={spinner} />
+            <Spinner className={spinner} color="#ffffff" size={150} />
           </motion.div>
         </motion.div>
       </AnimatePresence>

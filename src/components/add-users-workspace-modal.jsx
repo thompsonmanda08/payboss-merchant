@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -15,19 +15,19 @@ import {
   Chip,
   Tooltip,
 } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 
 import { notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useQueryClient } from "@tanstack/react-query";
-
 import StatusMessage from "@/components/base/status-message";
 import EmptyState from "@/components/empty-state";
 import CardHeader from "@/components/base/card-header";
-import Spinner from "./ui/spinner";
-import { UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import SelectField from "@/components/ui/select-field";
 import useWorkspaceStore from "@/context/workspaces-store";
-import { useRouter } from "next/navigation";
+
+import Spinner from "./ui/spinner";
 import { roleColorMap, UserAvatarComponent } from "./tables/users-table";
 
 const columns = [
@@ -76,36 +76,36 @@ function AddUserToWorkspace({
         return (
           <UserAvatarComponent
             key={cellValue}
-            firstName={user?.first_name}
-            lastName={user?.last_name}
-            email={user?.email}
-            size="sm"
-            className="rounded-md"
-            src={user?.image}
             isBordered
-            radius="md"
+            className="rounded-md"
+            email={user?.email}
+            firstName={user?.first_name}
             handleOnSelect={
               !user?.isAdded
                 ? () => handleAddToWorkspace(user) // IF USER NOT ADDED THEN ADD THE USER
                 : undefined // ELSE NO FUNCTION TO TRIGGER
             }
+            lastName={user?.last_name}
+            radius="md"
+            size="sm"
+            src={user?.image}
           />
         );
       case "added_name": // LAST NAME IDENTIFIES THE ADDED_USERS TABLE
         return (
           <UserAvatarComponent
             key={cellValue}
-            firstName={user?.first_name}
-            lastName={user?.last_name}
-            email={user?.email}
-            size="sm"
-            className="rounded-md"
-            src={user?.image}
             isBordered
-            radius="md"
+            className="rounded-md"
+            email={user?.email}
+            firstName={user?.first_name}
             handleOnSelect={
               user?.isAdded ? () => handleRemoveFromWorkspace(user) : undefined // ELSE NO FUNCTION TO TRIGGER
             }
+            lastName={user?.last_name}
+            radius="md"
+            size="sm"
+            src={user?.image}
           />
         );
 
@@ -113,8 +113,8 @@ function AddUserToWorkspace({
         return (
           <Chip
             key={cellValue}
-            color={roleColorMap[user?.role?.toLowerCase()]}
             className="capitalize"
+            color={roleColorMap[user?.role?.toLowerCase()]}
             size="sm"
             variant="flat"
           >
@@ -127,10 +127,10 @@ function AddUserToWorkspace({
           <SelectField
             key={user?.ID}
             className={"max-w-[200px]"}
-            options={workspaceRoles}
             listItemName={"role"}
-            placeholder={"Select Role"}
             name="role"
+            options={workspaceRoles}
+            placeholder={"Select Role"}
             value={user?.workspaceRole}
             onChange={(e) => handleUserRoleChange(user, e.target.value)}
           />
@@ -140,11 +140,11 @@ function AddUserToWorkspace({
         return (
           <Button
             isIconOnly
-            variant="light"
-            color="primary"
-            size="sm"
             className="relative"
+            color="primary"
             isDisabled={user?.role == "owner"}
+            size="sm"
+            variant="light"
             onPress={() => handleAddToWorkspace(user)}
           >
             <Tooltip color="primary" content="Add User">
@@ -158,11 +158,11 @@ function AddUserToWorkspace({
         return (
           <Button
             isIconOnly
-            variant="light"
-            color="danger"
-            size="sm"
             className="relative"
+            color="danger"
             isDisabled={user?.role == "owner"}
+            size="sm"
+            variant="light"
             onPress={() => handleRemoveFromWorkspace(user)}
           >
             <Tooltip color="danger" content="Remove User">
@@ -192,6 +192,7 @@ function AddUserToWorkspace({
         description: response?.message,
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -204,6 +205,7 @@ function AddUserToWorkspace({
     onClose();
     handleClearAllSelected();
     queryClient.invalidateQueries();
+
     return;
   }
 
@@ -244,11 +246,11 @@ function AddUserToWorkspace({
                 {workspaceName && <span>{workspaceName}</span>}
               </ModalHeader>
               <ModalBody>
-                <section role="user-section" className="flex w-full gap-8">
+                <section className="flex w-full gap-8" role="user-section">
                   {/**** A LIST OF ALL USERS THAT CAN BE ADDED TO A WORKSPACE ******/}
                   <div className="flex flex-1 flex-col">
                     <CardHeader title="All Users" />
-                    <div role="ALL_USERS_LIST" className="">
+                    <div className="" role="ALL_USERS_LIST">
                       <Table
                         aria-label="Table with dynamic content"
                         className="max-h-[720px] shadow-none"
@@ -266,8 +268,8 @@ function AddUserToWorkspace({
                           ))}
                         </TableHeader>
                         <TableBody
-                          items={allUsers}
                           emptyContent={"No Users to display."}
+                          items={allUsers}
                         >
                           {(user) => (
                             <TableRow
@@ -291,7 +293,7 @@ function AddUserToWorkspace({
                   {/**** A LIST OF ADDED USERS TO A WORKSPACE ******/}
                   <div className="flex flex-1 flex-col">
                     <CardHeader title="Added Users" />
-                    <div role="ADDED_USERS_LIST" className="flex flex-col">
+                    <div className="flex flex-col" role="ADDED_USERS_LIST">
                       {error && error.status && (
                         <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center gap-4">
                           <StatusMessage
@@ -319,10 +321,10 @@ function AddUserToWorkspace({
                           ))}
                         </TableHeader>
                         <TableBody
-                          items={addedUsers || []}
                           emptyContent={
                             "You have not selected any all Users to add to this workspace"
                           }
+                          items={addedUsers || []}
                         >
                           {(user) => (
                             <TableRow key={user?.ID}>
@@ -337,9 +339,9 @@ function AddUserToWorkspace({
                       </Table>
 
                       <Button
-                        variant="light"
-                        color="primary"
                         className={"ml-auto mt-5"}
+                        color="primary"
+                        variant="light"
                         onPress={handleClearAllSelected}
                       >
                         Clear All
@@ -355,8 +357,8 @@ function AddUserToWorkspace({
                 </Button>
                 <Button
                   color="primary"
-                  isLoading={isLoading}
                   isDisabled={isLoading || addedUsers.length == 0}
+                  isLoading={isLoading}
                   onPress={submitAddedUsers}
                 >
                   Add Selected Users
@@ -375,9 +377,9 @@ function AddUserToWorkspace({
                     <Spinner size={64} />
                   </div>
                 ) : (
-                  <section role="user-section" className="flex gap-8">
+                  <section className="flex gap-8" role="user-section">
                     <EmptyState
-                      title={"NO USERS ADDED"}
+                      buttonText={"Add New Users"}
                       classNames={{
                         heading: "md:text-[40px] tracking-tight leading-3",
                         paragraph: "text-[18px] text-slate-600",
@@ -385,7 +387,7 @@ function AddUserToWorkspace({
                       message={
                         "Add allUsers to your workspace to start assigning them."
                       }
-                      buttonText={"Add New Users"}
+                      title={"NO USERS ADDED"}
                       onButtonClick={() => {
                         router.push("/manage-account/users");
                         onClose();

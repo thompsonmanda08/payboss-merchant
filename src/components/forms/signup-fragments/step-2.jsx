@@ -1,14 +1,15 @@
 //BUSINESS REGISTRATION STATUS
 "use client";
-import React from "react";
-import { Input } from "@/components/ui/input-field";
 import { motion } from "framer-motion";
+
+import { Input } from "@/components/ui/input-field";
 import { staggerContainerItemVariants } from "@/lib/constants";
-import { STEPS } from "../signup-form";
 import useAuthStore from "@/context/auth-store";
 import SelectField from "@/components/ui/select-field";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import CardHeader from "@/components/base/card-header";
+
+import { STEPS } from "../signup-form";
 
 // BUSINESS BANKING DETAILS
 export default function Step2({ updateDetails, backToStart }) {
@@ -22,11 +23,11 @@ export default function Step2({ updateDetails, backToStart }) {
   return (
     <>
       <CardHeader
-        title="Banking Details"
+        handleClose={() => backToStart()}
         infoText={
           "Please provide your banking details to receive your payments."
         }
-        handleClose={() => backToStart()}
+        title="Banking Details"
       />
       <div className="flex w-full flex-col items-start justify-start gap-6 md:flex-row">
         <div className="flex w-full flex-1 flex-col gap-2">
@@ -36,10 +37,10 @@ export default function Step2({ updateDetails, backToStart }) {
           >
             <Input
               label="Account Holder Name"
-              placeholder="Enter your account holder name"
               name="account_name"
-              value={formData?.account_name}
+              placeholder="Enter your account holder name"
               required={true}
+              value={formData?.account_name}
               onChange={(e) => {
                 updateDetails(STEPS[2], { account_name: e.target.value });
               }}
@@ -53,8 +54,8 @@ export default function Step2({ updateDetails, backToStart }) {
               label="Account Number"
               name="account_number"
               placeholder="Enter your account number"
-              value={formData?.account_number}
               required={true}
+              value={formData?.account_number}
               onChange={(e) => {
                 updateDetails(STEPS[2], { account_number: e.target.value });
               }}
@@ -65,13 +66,13 @@ export default function Step2({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <SelectField
-              options={banks}
               label="Bank"
-              name="bankID"
-              value={formData?.bankID}
-              prefilled={true}
               listItemName={"bank_name"}
+              name="bankID"
+              options={banks}
+              prefilled={true}
               required={true}
+              value={formData?.bankID}
               onChange={(e) => {
                 updateDetails(STEPS[2], { bankID: e.target.value });
               }}
@@ -88,8 +89,8 @@ export default function Step2({ updateDetails, backToStart }) {
               label="Branch Name"
               name="branch_name"
               placeholder="Enter the branch name"
-              value={formData?.branch_name}
               required={true}
+              value={formData?.branch_name}
               onChange={(e) => {
                 updateDetails(STEPS[2], { branch_name: e.target.value });
               }}
@@ -100,16 +101,16 @@ export default function Step2({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <Input
+              errorText={"Valid Code is required"}
               label="Branch Code"
               name="branch_code"
               placeholder="Enter branch code"
-              value={formData?.branch_code}
-              onError={branchCodeError}
-              errorText={"Valid Code is required"}
               required={true}
+              value={formData?.branch_code}
               onChange={(e) => {
                 updateDetails(STEPS[2], { branch_code: e.target.value });
               }}
+              onError={branchCodeError}
             />
           </motion.div>
           <motion.div
@@ -117,13 +118,13 @@ export default function Step2({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <SelectField
-              options={currencies}
               label="Currency"
-              name="currencyID"
-              value={formData?.currencyID}
               listItemName={"currency"}
-              required={true}
+              name="currencyID"
+              options={currencies}
               prefilled={true}
+              required={true}
+              value={formData?.currencyID}
               onChange={(e) => {
                 updateDetails(STEPS[2], { currencyID: e.target.value });
               }}

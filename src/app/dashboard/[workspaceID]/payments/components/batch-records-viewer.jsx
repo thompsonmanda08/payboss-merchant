@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody } from "@heroui/modal";
+
 import usePaymentsStore from "@/context/payment-store";
 import { useBatchDetails } from "@/hooks/useQueryHooks";
 import CardHeader from "@/components/base/card-header";
@@ -28,54 +28,54 @@ function RecordDetailsViewer({ batchID }) {
   const title = openInvalidRecordsModal
     ? "Invalid Records"
     : openValidRecordsModal
-    ? "Valid Records"
-    : "All Records";
+      ? "Valid Records"
+      : "All Records";
 
   const infoText = openAllRecordsModal
     ? "This list includes all the records that have been processed. Review them carefully."
     : openValidRecordsModal
-    ? "All records in this list are valid and ready for the next step."
-    : "The records listed here contain errors or missing information. Please update them to proceed with the transaction.";
+      ? "All records in this list are valid and ready for the next step."
+      : "The records listed here contain errors or missing information. Please update them to proceed with the transaction.";
 
   return (
     <Modal
+      isDismissable={false}
       isOpen={openModalView}
       onClose={closeRecordsModal}
       // onConfirm={handleConfirmationClose}
       classNames={{ overlay: "z-[55]", base: "max-w-[1440px]" }}
-      isDismissable={false}
     >
       <ModalContent>
         {() => (
           <>
             <ModalHeader className="tracking-tight">
-              <CardHeader title={title} infoText={infoText} />
+              <CardHeader infoText={infoText} title={title} />
             </ModalHeader>
             <ModalBody className="gap-0">
               {/* IF MODAL OPENED AND TOTAL RECORDS ARRAY IS NOT EMPTY */}
               {openAllRecordsModal && batchDetails?.total && (
                 <SingleTransactionsTable
+                  removeWrapper
                   columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
                   rowData={batchDetails?.total}
-                  removeWrapper
                 />
               )}
 
               {/* IF MODAL OPENED AND TOTAL VALID RECORDS ARRAY IS NOT EMPTY */}
               {openValidRecordsModal && batchDetails?.valid && (
                 <SingleTransactionsTable
+                  removeWrapper
                   columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
                   rowData={batchDetails?.valid}
-                  removeWrapper
                 />
               )}
 
               {/* IF MODAL OPENED AND TOTAL INVALID RECORDS ARRAY IS NOT EMPTY */}
               {openInvalidRecordsModal && batchDetails?.invalid?.length && (
                 <SingleTransactionsTable
+                  removeWrapper
                   columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
                   rowData={batchDetails?.invalid}
-                  removeWrapper
                 />
               )}
             </ModalBody>

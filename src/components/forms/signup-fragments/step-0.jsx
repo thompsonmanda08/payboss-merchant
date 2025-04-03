@@ -1,11 +1,13 @@
 //BUSINESS REGISTRATION STATUS
 "use client";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { RadioGroup } from "@heroui/react";
 import { motion } from "framer-motion";
+
 import { staggerContainerItemVariants } from "@/lib/constants";
-import { STEPS } from "../signup-form";
 import CustomRadioButton from "@/components/ui/radio-button";
+
+import { STEPS } from "../signup-form";
 export default function Step0({ updateDetails }) {
   useEffect(() => {
     // Set Default  Registration STAGE
@@ -13,13 +15,14 @@ export default function Step0({ updateDetails }) {
       registration: "NEW",
     });
   }, []);
+
   return (
     <div className="max-w-">
       <RadioGroup
-        label="How would you like to proceed?"
         className="flex w-full"
-        description="PayBoss gives you the tools to simplify money management, no matter your business size or structure."
         defaultValue={"NEW"}
+        description="PayBoss gives you the tools to simplify money management, no matter your business size or structure."
+        label="How would you like to proceed?"
         onChange={(e) =>
           updateDetails(STEPS[0], {
             registration: e.target.value,
@@ -41,14 +44,14 @@ export default function Step0({ updateDetails }) {
           </motion.div>
 
           <motion.div
-            className="w-full"
             key={"step-0-2"}
+            className="w-full"
             variants={staggerContainerItemVariants}
           >
             <CustomRadioButton
               description="Pick up from where you left off creating your account."
-              value="CONTINUE"
               disabled={true}
+              value="CONTINUE"
             >
               <p className="mb-1 font-semibold">Continue Registration</p>
             </CustomRadioButton>

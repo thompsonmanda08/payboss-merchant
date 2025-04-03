@@ -1,15 +1,16 @@
 "use client";
-import { cn } from "@/lib/utils";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import React from "react";
+
+import { cn } from "@/lib/utils";
 
 function CardHeader({ title, infoText, handleClose, className, classNames }) {
   const { titleClasses, infoClasses, innerWrapper } = classNames || "";
+
   return (
     <div
       className={cn(
         "relative flex w-full items-center justify-between ",
-        className
+        className,
       )}
     >
       {title && (
@@ -17,7 +18,7 @@ function CardHeader({ title, infoText, handleClose, className, classNames }) {
           <h3
             className={cn(
               "font-semibold leading-8 tracking-tight text-foreground/80",
-              titleClasses
+              titleClasses,
             )}
           >
             {title}
@@ -31,8 +32,8 @@ function CardHeader({ title, infoText, handleClose, className, classNames }) {
       )}
       {handleClose && (
         <div
-          onClick={handleClose}
           className="absolute -right-1 -top-2 cursor-pointer rounded-full p-2 text-primary/30 transition-all duration-300 ease-in-out hover:bg-primary/5 hover:text-primary"
+          onClick={handleClose}
         >
           <XMarkIcon className="aspect-square w-5" />
         </div>

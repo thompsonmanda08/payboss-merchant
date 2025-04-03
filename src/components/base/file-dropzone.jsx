@@ -9,15 +9,17 @@ import {
 } from "@heroicons/react/24/outline";
 import { useDropzone } from "react-dropzone";
 import { twMerge } from "tailwind-merge";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
 import { Progress } from "@heroui/react";
 import { motion } from "framer-motion";
+
+import { cn } from "@/lib/utils";
 import { staggerContainerItemVariants } from "@/lib/constants";
+
+import { Button } from "../ui/button";
 
 const variants = {
   base: cn(
-    "relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out"
+    "relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out",
   ),
   image:
     "border-0 p-0 min-h-0 min-w-0 relative shadow-md bg-foreground-200 dark:bg-foreground-900 rounded-md",
@@ -58,7 +60,7 @@ export const SingleFileDropzone = React.forwardRef(
       isLandscape,
       isLoading = false,
     },
-    ref
+    ref,
   ) => {
     const imageUrl = React.useMemo(() => {
       if (typeof value === "string") {
@@ -68,6 +70,7 @@ export const SingleFileDropzone = React.forwardRef(
         // in case a file is passed in, create a base64 url to display the image
         return URL.createObjectURL(value);
       }
+
       return null;
     }, [value]);
 
@@ -92,6 +95,7 @@ export const SingleFileDropzone = React.forwardRef(
       disabled,
       onDrop: (acceptedFiles) => {
         const file = acceptedFiles[0];
+
         if (file) {
           void onChange?.(file);
         }
@@ -109,7 +113,7 @@ export const SingleFileDropzone = React.forwardRef(
           imageUrl && variants.image,
           (isDragReject ?? fileRejections[0]) && variants.reject,
           isDragAccept && variants.accept,
-          className
+          className,
         ).trim(),
       [
         isFocused,
@@ -119,13 +123,14 @@ export const SingleFileDropzone = React.forwardRef(
         isDragReject,
         disabled,
         className,
-      ]
+      ],
     );
 
     // error validation messages
     const errorMessage = React.useMemo(() => {
       if (fileRejections[0]) {
         const { errors } = fileRejections[0];
+
         if (errors[0]?.code === "file-too-large") {
           return ERROR_MESSAGES.fileTooLarge(dropzoneOptions?.maxSize ?? 0);
         } else if (errors[0]?.code === "file-invalid-type") {
@@ -136,11 +141,12 @@ export const SingleFileDropzone = React.forwardRef(
           return ERROR_MESSAGES.fileNotSupported();
         }
       }
+
       return undefined;
     }, [fileRejections, dropzoneOptions]);
 
     return (
-      (<div>
+      <div>
         <div
           {...getRootProps({
             className: dropZoneClassName,
@@ -155,12 +161,12 @@ export const SingleFileDropzone = React.forwardRef(
 
           {isLoading ? (
             // Image Preview
-            (<Progress
+            <Progress
               // size="sm"
               isIndeterminate
               aria-label="Loading..."
               className="w-full max-w-md"
-            />)
+            />
           ) : // <img
           //   className="h-full w-full rounded-md object-cover"
           //   src={imageUrl}
@@ -168,12 +174,12 @@ export const SingleFileDropzone = React.forwardRef(
           // />
           acceptedFiles[0] ? (
             // ********************* FILE UPLOAD PREVIEW ******************* //
-            (<div
+            <div
               className={cn(
                 "bg-red-60 relative flex flex-col items-center gap-4 py-2",
                 {
                   "w-full flex-row items-center justify-between ": isLandscape,
-                }
+                },
               )}
             >
               <DocumentArrowUpIcon
@@ -186,14 +192,15 @@ export const SingleFileDropzone = React.forwardRef(
                   "relative z-10 flex flex-col items-center gap-4",
                   {
                     "bg-red-10 w-full gap-0": isLandscape,
-                  }
+                  },
                 )}
               >
                 {!isLandscape && (
                   // ONLY SHOWS ON THE UPRIGHT COMPONENT
-                  (<p className="flex items-center gap-2 font-bold uppercase">
-                    <CheckCircleIcon className="h-7 w-7 font-bold text-green-500" />Your file is ready
-                                      </p>)
+                  <p className="flex items-center gap-2 font-bold uppercase">
+                    <CheckCircleIcon className="h-7 w-7 font-bold text-green-500" />
+                    Your file is ready
+                  </p>
                 )}
                 <span className="flex gap-2 font-bold text-primary">
                   {isLandscape && (
@@ -211,15 +218,15 @@ export const SingleFileDropzone = React.forwardRef(
                   <XMarkIcon className="absolute -right-0 aspect-square w-5 rounded-md bg-red-100 p-0.5 text-red-500 hover:text-red-500" />
                 )}
               </div>
-            </div>)
+            </div>
           ) : (
             // ********************* FILE UPLOAD ICON ******************* //
-            (<div
+            <div
               className={cn(
                 "flex flex-col items-center justify-center text-xs text-gray-400",
                 {
                   "w-full flex-row items-center justify-between ": isLandscape,
-                }
+                },
               )}
             >
               <div
@@ -234,13 +241,13 @@ export const SingleFileDropzone = React.forwardRef(
               </div>
               {!isLandscape && (
                 // ONLY SHOWS ON THE UPRIGHT COMPONENT
-                (<div className={cn("mt-3", { "m-0": isLandscape })}>
+                <div className={cn("mt-3", { "m-0": isLandscape })}>
                   <Button isDisabled className={"opacity-100"}>
                     Upload
                   </Button>
-                </div>)
+                </div>
               )}
-            </div>)
+            </div>
           )}
 
           {/* Remove Image Icon */}
@@ -255,8 +262,8 @@ export const SingleFileDropzone = React.forwardRef(
               <div className="flex h-5 w-5 items-center justify-center rounded-md border border-solid border-gray-500 bg-background transition-all duration-300 hover:h-6 hover:w-6 dark:border-gray-400 dark:bg-black">
                 <XMarkIcon
                   className="text-gray-500 dark:text-gray-400"
-                  width={16}
                   height={16}
+                  width={16}
                 />
               </div>
             </div>
@@ -264,9 +271,9 @@ export const SingleFileDropzone = React.forwardRef(
         </div>
         {/* Error Text */}
         <div className="mt-1 text-sm text-red-500">{errorMessage}</div>
-      </div>)
+      </div>
     );
-  }
+  },
 );
 SingleFileDropzone.displayName = "SingleFileDropzone";
 
@@ -282,12 +289,13 @@ function formatFileSize(bytes) {
   const dm = 2;
   const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
+
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
 export default function UploadField(
   { label, isLoading, handleFile, acceptedFiles, ...props },
-  ref
+  ref,
 ) {
   return (
     <motion.div
@@ -303,8 +311,8 @@ export default function UploadField(
         ref={ref}
         isLandscape
         className={" min-h-8 px-2"}
-        isLoading={isLoading}
         disabled={isLoading}
+        isLoading={isLoading}
         otherAcceptedFiles={{
           "application/pdf": [],
           ...acceptedFiles,

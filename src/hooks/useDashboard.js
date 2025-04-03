@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { useDashboardAnalytics, useWorkspaceInit } from './useQueryHooks'
-import useWorkspaces from './useWorkspaces'
+import { useDashboardAnalytics, useWorkspaceInit } from "./useQueryHooks";
+import useWorkspaces from "./useWorkspaces";
 
 const useDashboard = () => {
   const {
@@ -9,18 +9,18 @@ const useDashboard = () => {
     activeWorkspace,
     workspaceID,
     isLoading: workspaceLoading,
-  } = useWorkspaces()
+  } = useWorkspaces();
 
   const { data: workspaceResponse, isLoading: initLoading } =
-    useWorkspaceInit(workspaceID)
-  const workspaceUserRole = workspaceResponse?.data
+    useWorkspaceInit(workspaceID);
+  const workspaceUserRole = workspaceResponse?.data;
 
   const { data: analyticsResponse, isLoading: analyticsLoading } =
-    useDashboardAnalytics(workspaceID)
+    useDashboardAnalytics(workspaceID);
 
-  const dashboardAnalytics = analyticsResponse?.data
+  const dashboardAnalytics = analyticsResponse?.data;
 
-  const isLoading = workspaceLoading || analyticsLoading || initLoading
+  const isLoading = workspaceLoading || analyticsLoading || initLoading;
 
   return {
     workspaceUserRole,
@@ -29,7 +29,7 @@ const useDashboard = () => {
     userInSandbox,
     activeWorkspace,
     workspaceID,
-  }
-}
+  };
+};
 
-export default useDashboard
+export default useDashboard;

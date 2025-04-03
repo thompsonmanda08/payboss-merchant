@@ -1,11 +1,4 @@
 "use client";
-import { Input } from "@/components/ui/input-field";
-import SelectField from "@/components/ui/select-field";
-import {
-  generateRandomString,
-  isValidZambianMobileNumber,
-  notify,
-} from "@/lib/utils";
 import {
   Modal,
   ModalContent,
@@ -14,9 +7,18 @@ import {
   ModalFooter,
 } from "@heroui/react";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
+
+import { Input } from "@/components/ui/input-field";
+import SelectField from "@/components/ui/select-field";
+import {
+  generateRandomString,
+  isValidZambianMobileNumber,
+  notify,
+} from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import StatusMessage from "@/components/base/status-message";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   createNewUser,
   updateSystemUserData,
@@ -24,7 +26,6 @@ import {
 import useWorkspaceStore from "@/context/workspaces-store";
 import { changeUserRoleInWorkspace } from "@/app/_actions/workspace-actions";
 import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
-import { usePathname } from "next/navigation";
 
 function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
   const { isEditingRole, selectedUser, setSelectedUser, setIsEditingRole } =
@@ -76,6 +77,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
         description: "Invalid user details.",
       });
       setLoading(false);
+
       return;
     }
 
@@ -97,6 +99,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
       onClose();
       queryClient.invalidateQueries();
       setLoading(false);
+
       return;
     }
 
@@ -133,6 +136,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
       setError({ status: false, message: "" });
       setLoading(false);
       handleClose();
+
       return;
     }
 
@@ -159,7 +163,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
     let response = await changeUserRoleInWorkspace(
       userMapping,
       recordID,
-      workspaceID
+      workspaceID,
     );
 
     if (response?.success) {
@@ -172,6 +176,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
       setError({ status: false, message: "" });
       setLoading(false);
       handleClose();
+
       return;
     }
 
@@ -196,6 +201,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
 
   function isValidData() {
     let valid = true;
+
     if (!isValidZambianMobileNumber(newUser?.phone_number)) {
       valid = false;
       setError((prev) => ({
@@ -260,11 +266,13 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
   function onConfirmAction() {
     if (isEditingRole && isUsersRoute) {
       handleUpdateSystemUser();
+
       return;
     }
 
     if (isEditingRole && !isUsersRoute) {
       handleUpdateWorkspaceUserRole();
+
       return;
     }
 
@@ -287,8 +295,8 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
   return (
     <Modal
       isOpen={isOpen || isEditingRole}
-      onClose={handleClose}
       placement="center"
+      onClose={handleClose}
     >
       <ModalContent>
         {(onClose) => (
@@ -297,92 +305,92 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
               {isEditingRole && !isUsersRoute
                 ? "Update Workspace User"
                 : isEditingRole && isUsersRoute
-                ? "Update System User"
-                : "Create New User"}
+                  ? "Update System User"
+                  : "Create New User"}
             </ModalHeader>
             <ModalBody>
               <SelectField
+                required
+                className="mt-px"
                 label={
                   isEditingRole && !isUsersRoute
                     ? "Workspace Role"
                     : "System Role"
                 }
-                required
-                onError={error?.onRole}
-                value={newUser?.role || "Choose a role"}
+                listItemName={"role"}
                 options={USER_ROLES}
                 placeholder={isEditingRole ? newUser?.role : "Choose a role"}
-                listItemName={"role"}
-                className="mt-px"
+                value={newUser?.role || "Choose a role"}
                 onChange={(e) => {
                   updateDetails({
                     role: e.target.value,
                     roleID: e.target.value,
                   });
                 }}
+                onError={error?.onRole}
               />
 
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Input
                   autoFocus
-                  label="First Name"
-                  value={newUser?.first_name}
-                  required={!isEditingRole}
-                  onError={error?.onFName}
                   errorText="Invalid First Name"
                   isDisabled={isEditingRole}
+                  label="First Name"
+                  required={!isEditingRole}
+                  value={newUser?.first_name}
                   onChange={(e) => {
                     updateDetails({ first_name: e.target.value });
                   }}
+                  onError={error?.onFName}
                 />
                 <Input
-                  label="Last Name"
-                  value={newUser?.last_name}
-                  required={!isEditingRole}
-                  isDisabled={isEditingRole}
-                  onError={error?.onLName}
                   errorText="Invalid Last Name"
+                  isDisabled={isEditingRole}
+                  label="Last Name"
+                  required={!isEditingRole}
+                  value={newUser?.last_name}
                   onChange={(e) => {
                     updateDetails({ last_name: e.target.value });
                   }}
+                  onError={error?.onLName}
                 />
               </div>
               <Input
-                label="Username"
-                value={newUser?.username}
-                required={!isEditingRole}
-                isDisabled={isEditingRole}
-                onError={error?.onUsername}
                 errorText="Username is required"
+                isDisabled={isEditingRole}
+                label="Username"
+                required={!isEditingRole}
+                value={newUser?.username}
                 onChange={(e) => {
                   updateDetails({ username: e.target.value });
                 }}
+                onError={error?.onUsername}
               />
               <Input
+                errorText="Invalid Mobile Number"
+                isDisabled={isEditingRole}
                 label="Mobile Number"
-                type="number"
                 maxLength={12}
                 pattern="[0-9]{12}"
-                onError={phoneNoError || error?.onMobileNo}
-                errorText="Invalid Mobile Number"
-                value={newUser?.phone_number}
                 required={!isEditingRole}
-                isDisabled={isEditingRole}
+                type="number"
+                value={newUser?.phone_number}
                 onChange={(e) => {
                   updateDetails({ phone_number: e.target.value });
                 }}
+                onError={phoneNoError || error?.onMobileNo}
               />
               <Input
-                label="Email Address"
-                type="email"
-                onError={error?.onEmail}
                 errorText="Invalid Email Address"
-                value={newUser?.email}
-                required={!isEditingRole}
                 isDisabled={isEditingRole}
+                label="Email Address"
+                required={!isEditingRole}
+                type="email"
+                value={newUser?.email}
                 onChange={(e) => {
                   updateDetails({ email: e.target.value });
                 }}
+                onError={error?.onEmail}
               />
 
               {isEditingRole ? (
@@ -405,14 +413,14 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
               )}
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" onPress={handleClose} isDisabled={loading}>
+              <Button color="danger" isDisabled={loading} onPress={handleClose}>
                 Cancel
               </Button>
               {
                 <Button
                   color="primary"
-                  isLoading={loading}
                   isDisabled={loading}
+                  isLoading={loading}
                   onPress={onConfirmAction}
                 >
                   {isEditingRole ? "Save" : "Create User"}

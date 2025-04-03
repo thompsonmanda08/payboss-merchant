@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
 import useAuthStore from "@/context/auth-store";
 import { uploadBusinessFile } from "@/app/_actions/pocketbase-actions";
-
 import { notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import useAccountProfile from "@/hooks/useProfileDetails";
@@ -10,7 +11,6 @@ import {
   sendBusinessDocumentRefs,
   updateBusinessDocumentRefs,
 } from "@/app/_actions/auth-actions";
-import { useQueryClient } from "@tanstack/react-query";
 import CardHeader from "@/components/base/card-header";
 import StatusMessage from "@/components/base/status-message";
 import EmptyLogs from "@/components/base/empty-logs";
@@ -53,6 +53,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
         status: true,
       });
       setIsSubmitting(false);
+
       return;
     }
 
@@ -67,11 +68,13 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
         status: true,
       });
       setIsSubmitting(false);
+
       return;
     }
 
     // SAVE FILES TO PAYBOSS BACKEND
     let response;
+
     if (refDocsExist) {
       response = await updateBusinessDocumentRefs(documentUrls);
 
@@ -83,6 +86,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
         });
         queryClient.invalidateQueries();
         setIsSubmitting(false);
+
         return;
       }
     } else {
@@ -96,6 +100,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
         });
         queryClient.invalidateQueries();
         setIsSubmitting(false);
+
         return;
       }
     }
@@ -115,6 +120,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
     setIsLoading(true);
     setError({ message: "", status: "" });
     let response = await uploadBusinessFile(file, merchantID, recordID);
+
     if (response?.success) {
       notify({
         title: "Success",
@@ -122,6 +128,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
         description: response?.message,
       });
       setIsLoading(false);
+
       return response?.data;
     }
 
@@ -142,77 +149,77 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
           infoClasses: "mb-0",
           innerWrapper: "gap-0",
         }}
-        title="Business Documents and Attachments"
         infoText={
           "Documents that prove your company registrations and compliance with regulatory bodies."
         }
+        title="Business Documents and Attachments"
       />
 
       <div className="flex w-full flex-col gap-2 md:flex-row">
         <div className="flex w-full flex-1 flex-col gap-2">
           <UploadField
-            label={"Business Incorporation Certificate"}
-            isLoading={isLoading}
             handleFile={async (file) =>
               updateDocs({
                 CERTIFICATE_INC: await handleFileUpload(
                   file,
-                  docFiles["CERTIFICATE_INC"]?.file_record_id
+                  docFiles["CERTIFICATE_INC"]?.file_record_id,
                 ),
               })
             }
+            isLoading={isLoading}
+            label={"Business Incorporation Certificate"}
           />
           <UploadField
-            label={"Articles of Association"}
-            isLoading={isLoading}
             handleFile={async (file) =>
               updateDocs({
                 ARTICLES_ASSOCIATION: await handleFileUpload(
                   file,
-                  docFiles["ARTICLES_ASSOCIATION"]?.file_record_id
+                  docFiles["ARTICLES_ASSOCIATION"]?.file_record_id,
                 ),
               })
             }
+            isLoading={isLoading}
+            label={"Articles of Association"}
           />
           <UploadField
-            label={"Shareholders Agreement"}
-            isLoading={isLoading}
             handleFile={async (file) =>
               updateDocs({
                 SHAREHOLDER_AGREEMENT: await handleFileUpload(
                   file,
-                  docFiles["SHAREHOLDER_AGREEMENT"]?.file_record_id
+                  docFiles["SHAREHOLDER_AGREEMENT"]?.file_record_id,
                 ),
               })
             }
+            isLoading={isLoading}
+            label={"Shareholders Agreement"}
           />
         </div>
 
         <div className="flex w-full flex-1 flex-col gap-2">
           <UploadField
-            label={"Tax Clearance Certificate"}
-            isLoading={isLoading}
             handleFile={async (file) =>
               updateDocs({
                 TAX_CLEARANCE: await handleFileUpload(
                   file,
-                  docFiles["TAX_CLEARANCE"]?.file_record_id
+                  docFiles["TAX_CLEARANCE"]?.file_record_id,
                 ),
               })
             }
+            isLoading={isLoading}
+            label={"Tax Clearance Certificate"}
           />
 
           <UploadField
-            label={"Company Profile"}
-            isLoading={isLoading}
             handleFile={async (file) =>
               updateDocs({
                 COMPANY_PROFILE: await handleFileUpload(
                   file,
-                  docFiles["COMPANY_PROFILE"]?.file_record_id
+                  docFiles["COMPANY_PROFILE"]?.file_record_id,
                 ),
               })
             }
+            isLoading={isLoading}
+            label={"Company Profile"}
           />
         </div>
       </div>
@@ -223,10 +230,10 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
       )}
 
       <Button
-        isLoading={isSubmitting}
-        isDisabled={isSubmitting}
-        loadingText={"Submitting..."}
         className="my-4"
+        isDisabled={isSubmitting}
+        isLoading={isSubmitting}
+        loadingText={"Submitting..."}
         onPress={submitMerchantKYCDocuments}
       >
         Submit for Approval
@@ -238,10 +245,10 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
       <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
         <EmptyLogs
           className={"my-auto"}
-          title={"Oops! Looks like your are not an Admin"}
           subTitle={
             "Only the admin of the workspace can submit company documentation."
           }
+          title={"Oops! Looks like your are not an Admin"}
         />
       </div>
     </div>

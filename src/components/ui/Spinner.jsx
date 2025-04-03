@@ -1,14 +1,14 @@
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils";
 
-function Spinner({ size = 18, color = '#1B64CE', className }) {
+function Spinner({ size = 18, color = "#1B64CE", className }) {
   return (
     <div className="flex flex-1 items-center justify-center">
       <svg
-        className={cn('animate-spin text-current', className)}
-        width={size}
-        hanging={size}
+        className={cn("animate-spin text-current", className)}
         fill="none"
+        hanging={size}
         viewBox="0 0 24 24"
+        width={size}
         xmlns="http://www.w3.org/2000/svg"
       >
         <circle
@@ -26,7 +26,7 @@ function Spinner({ size = 18, color = '#1B64CE', className }) {
         />
       </svg>
     </div>
-  )
+  );
 }
 
-export default Spinner
+export default Spinner;

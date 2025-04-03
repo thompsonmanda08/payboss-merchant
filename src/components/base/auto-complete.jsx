@@ -1,7 +1,7 @@
 "use client";
-import { cn } from "@/lib/utils";
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
-import React from "react";
+
+import { cn } from "@/lib/utils";
 
 function AutoCompleteField({
   options,
@@ -19,19 +19,19 @@ function AutoCompleteField({
     <div
       className={cn(
         "flex w-full max-w-md flex-col items-start",
-        classNames?.wrapper
+        classNames?.wrapper,
       )}
     >
       {label && (
         <label
-          htmlFor={label}
           className={cn(
             "ml-1 text-sm font-medium text-foreground/70",
             {
               "opacity-50": props?.isDisabled,
             },
-            classNames?.label
+            classNames?.label,
           )}
+          htmlFor={label}
         >
           {label}{" "}
           {props?.required && <span className="font-bold text-red-500">*</span>}
@@ -40,17 +40,13 @@ function AutoCompleteField({
       <Autocomplete
         // label={label}
         // labelPlacement="outside"
-        placeholder={placeholder}
-        selectedKey={value}
-        onSelectionChange={onChange}
-        defaultItems={options}
-        variant="bordered"
         classNames={{
           base: cn("outline-none border-none", classNames?.base),
           listbox: "",
           popoverContent: "rounded-md text-foreground-700 font-medium",
           selectorIcon: "w-4 h-4",
         }}
+        defaultItems={options}
         inputProps={{
           classNames: {
             input:
@@ -58,10 +54,14 @@ function AutoCompleteField({
 
             inputWrapper: cn(
               "focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70",
-              classNames?.trigger
+              classNames?.trigger,
             ),
           },
         }}
+        placeholder={placeholder}
+        selectedKey={value}
+        variant="bordered"
+        onSelectionChange={onChange}
         {...props}
       >
         {(item) => (

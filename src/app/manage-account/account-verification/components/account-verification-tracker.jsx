@@ -1,11 +1,11 @@
-import React from "react";
 import Image from "next/image";
 import { now, getLocalTimeZone } from "@internationalized/date";
-import { cn, formatDate } from "@/lib/utils";
 import {
   ClipboardDocumentCheckIcon,
   ShieldExclamationIcon,
 } from "@heroicons/react/24/outline";
+
+import { cn, formatDate } from "@/lib/utils";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import Card from "@/components/base/card";
 import CardHeader from "@/components/base/card-header";
@@ -44,10 +44,10 @@ function ProgressStageTracker() {
   return (
     <Card className={"w-full gap-5 pb-5"}>
       <CardHeader
-        title="Account Verification Status"
         infoText={
           "Your account is under review! We will notify you when your account is approved."
         }
+        title="Account Verification Status"
       />
       <div className="flex w-full items-center lg:px-10">
         <div className="flex w-full flex-col gap-4">
@@ -56,25 +56,25 @@ function ProgressStageTracker() {
               <TimelineItem
                 key={index + 1}
                 Icon={stage.Icon}
-                stage={stage}
-                isPending={KYCStageID === stage?.ID}
                 isCompleted={KYCStageID > stage?.ID || KYCStageID == 4}
                 isLastItem={index == STAGES.length - 1}
+                isPending={KYCStageID === stage?.ID}
+                stage={stage}
               />
             );
           })}
         </div>
         <div
           className={cn(
-            "flex w-full select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9"
+            "flex w-full select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9",
           )}
         >
           <Image
+            alt="Account Approval Process"
             className="aspect-square object-contain"
+            height={200}
             src={"/images/illustrations/approval.svg"}
             width={200}
-            height={200}
-            alt="Account Approval Process"
           />
           <div className="flex flex-col items-center justify-center gap-2">
             <h3 className="text-[clamp(16px,11px+0.5vw,1.5rem)] font-bold">

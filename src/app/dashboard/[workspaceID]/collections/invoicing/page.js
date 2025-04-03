@@ -1,7 +1,9 @@
+import { Suspense } from "react";
+
 import LoadingPage from "@/app/loading";
-import React, { Suspense } from "react";
-import CheckoutAndInvoicing from "./invoicing";
 import { getUserDetails } from "@/app/_actions/config-actions";
+
+import CheckoutAndInvoicing from "./invoicing";
 
 export default async function CheckoutAndInvoicingPage(props) {
   const params = await props.params;
@@ -10,8 +12,8 @@ export default async function CheckoutAndInvoicingPage(props) {
   return (
     <Suspense fallback={<LoadingPage />}>
       <CheckoutAndInvoicing
-        workspaceID={params.workspaceID}
         permissions={session?.userPermissions}
+        workspaceID={params.workspaceID}
       />
     </Suspense>
   );

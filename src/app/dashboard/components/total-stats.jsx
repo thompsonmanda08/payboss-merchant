@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import React from "react";
+
 import { Button } from "../../../components/ui/button";
 
 function TotalValueStat({ label, icon, count, value }) {
@@ -22,7 +22,6 @@ function TotalValueStat({ label, icon, count, value }) {
       </div>
       {value && (
         <Button
-          size="sm"
           className={cn(
             "h-max min-h-max max-w-max cursor-pointer rounded-lg bg-primary-50 p-2 text-[13px] font-semibold capitalize text-primary",
 
@@ -30,8 +29,9 @@ function TotalValueStat({ label, icon, count, value }) {
               "bg-red-50 text-red-500": icon?.color === "danger",
               "bg-green-50 text-green-600": icon?.color === "success",
               "bg-secondary/10 text-orange-600": icon?.color === "secondary",
-            }
+            },
           )}
+          size="sm"
         >
           {value}
         </Button>

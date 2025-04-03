@@ -1,9 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import usePaymentsStore from "@/context/payment-store";
 import React from "react";
 import { useEffect } from "react";
+
+import { Button } from "@/components/ui/button";
+import usePaymentsStore from "@/context/payment-store";
 import { notify } from "@/lib/utils";
 import StatusMessage from "@/components/base/status-message";
 import PrefundsTable from "@/components/tables/prefunds-table";
@@ -25,7 +26,7 @@ const SelectPrefund = ({
 
     if (paymentAction?.prefundID !== "" || selectedKeys.size !== 0) {
       let prefund = walletActivePrefunds.find(
-        (prefund) => prefund.ID === paymentAction?.prefundID
+        (prefund) => prefund.ID === paymentAction?.prefundID,
       );
 
       if (prefund) {
@@ -34,6 +35,7 @@ const SelectPrefund = ({
       }
 
       setIsLoading(false);
+
       return;
     }
 
@@ -54,15 +56,15 @@ const SelectPrefund = ({
     <>
       <div className="mt-4 flex h-full w-full flex-col gap-5">
         <PrefundsTable
-          removeWrapper={true}
-          rows={walletActivePrefunds}
-          selectedKeys={selectedKeys}
-          setSelectedKeys={setSelectedKeys}
-          selectionBehavior={"multiple"}
-          emptyTitleText={"Unavailable Prefunds"}
           emptyDescriptionText={
             "You have no active prefunds available at this moment"
           }
+          emptyTitleText={"Unavailable Prefunds"}
+          removeWrapper={true}
+          rows={walletActivePrefunds}
+          selectedKeys={selectedKeys}
+          selectionBehavior={"multiple"}
+          setSelectedKeys={setSelectedKeys}
         />
         {error?.status && (
           <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
@@ -72,9 +74,9 @@ const SelectPrefund = ({
 
         <div className="mt-auto flex w-full items-end justify-end gap-4">
           <Button
-            size="lg"
-            isLoading={isLoading}
             isDisabled={isLoading || selectedKeys.size === 0}
+            isLoading={isLoading}
+            size="lg"
             onClick={handleProceed}
           >
             Next

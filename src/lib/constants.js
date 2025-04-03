@@ -140,16 +140,12 @@ export const slideDownInView = {
     },
   },
 };
-
-// REGEX
-export const MTN_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/;
-export const AIRTEL_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/;
-export const ZAMTEL_NO = /^0(95|96|97|76|77|75)[0-9]{7}$/;
 // const NRC_PASSPORT = /^(ZN[0-9]{6}|[0-9]{6}/[0-9]{2}/[1]{1})$/
 
-// const MTN_NO = /^(?:\+?26|26)?(096|076)\d{7}$/
-// const AIRTEL_NO = /^(?:\+?26|26)?(097|077)\d{7}$/
-// const ZAMTEL_NO = /^(?:\+?26|26)?(095|075)\d{7}$/
+// REGEX
+export const MTN_NO = /^(?:\+?26|26)?0(96|76)\d{7}$/;
+export const AIRTEL_NO = /^(?:\+?26|26)?0(97|77)\d{7}$/;
+export const ZAMTEL_NO = /^(?:\+?26|26)?0(95|75)\d{7}$/;
 
 export const PASSWORD_PATTERN =
   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;

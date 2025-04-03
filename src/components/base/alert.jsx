@@ -12,7 +12,7 @@ const CustomAlert = React.forwardRef(
       classNames = {},
       ...props
     },
-    ref
+    ref,
   ) => {
     const colorClass = React.useMemo(() => {
       switch (color) {
@@ -48,7 +48,7 @@ const CustomAlert = React.forwardRef(
               colorClass,
             ],
             classNames.base,
-            className
+            className,
           ),
           mainWrapper: cn("pt-1", classNames.mainWrapper),
           iconWrapper: cn("dark:bg-transparent", classNames.iconWrapper),
@@ -61,7 +61,7 @@ const CustomAlert = React.forwardRef(
         {children}
       </Alert>
     );
-  }
+  },
 );
 
 CustomAlert.displayName = "CustomAlert";

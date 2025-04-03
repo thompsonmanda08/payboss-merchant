@@ -1,16 +1,18 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useDisclosure } from "@heroui/react";
+
 import usePaymentsStore from "@/context/payment-store";
-import React, { useEffect, useState } from "react";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { PAYMENT_SERVICE_TYPES } from "@/lib/constants";
-import { useDisclosure } from "@heroui/react";
 import Card from "@/components/base/card";
 import CardHeader from "@/components/base/card-header";
 import SelectPaymentType from "@/app/dashboard/[workspaceID]/payments/components/SelectPaymentType";
 import OverlayLoader from "@/components/ui/overlay-loader";
-import BatchDetailsPage from "./ViewBatchDetails";
 import BulkTransactionsTable from "@/components/tables/bulk-transactions-table";
+
+import BatchDetailsPage from "./ViewBatchDetails";
 
 export default function DisbursementsWrapper({
   workspaceID,
@@ -28,8 +30,8 @@ export default function DisbursementsWrapper({
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <BulkTransactionsTable
       key={PAYMENT_SERVICE_TYPES[0]?.name}
-      workspaceID={workspaceID}
       rows={bulkTransactions}
+      workspaceID={workspaceID}
     />,
     // <SingleTransactionsTable
     //   key={PAYMENT_SERVICE_TYPES[1]?.name}
@@ -54,14 +56,14 @@ export default function DisbursementsWrapper({
       <Card className={"mb-8 w-full gap-4"}>
         <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
           <CardHeader
-            title={"Disbursement Transfers"}
-            infoText={
-              "Make payments to your clients or multiple recipients simultaneously with direct/voucher transfers"
-            }
             classNames={{
               titleClasses: "xl:text-2xl lg:text-xl font-bold",
               infoClasses: "text-[15px] xl:text-base",
             }}
+            infoText={
+              "Make payments to your clients or multiple recipients simultaneously with direct/voucher transfers"
+            }
+            title={"Disbursement Transfers"}
           />
         </div>
 
@@ -82,8 +84,8 @@ export default function DisbursementsWrapper({
       {/* MODALS && OVERLAYS */}
       {openPaymentsModal && (
         <SelectPaymentType
-          setCreatePaymentLoading={setCreatePaymentLoading}
           protocol={"direct"}
+          setCreatePaymentLoading={setCreatePaymentLoading}
         />
       )}
 
@@ -92,8 +94,8 @@ export default function DisbursementsWrapper({
       {openBatchDetailsModal && (
         <BatchDetailsPage
           isOpen={openBatchDetailsModal}
-          onClose={onClose}
           protocol={"direct"}
+          onClose={onClose}
         />
       )}
 

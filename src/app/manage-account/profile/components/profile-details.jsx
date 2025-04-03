@@ -1,7 +1,8 @@
 "use client";
 
-import useSettingsStore from "@/context/settings-store";
 import { useState } from "react";
+
+import useSettingsStore from "@/context/settings-store";
 import CardLoader from "@/components/base/card-loader";
 import { Input } from "@/components/ui/input-field";
 import useWorkspaces from "@/hooks/useWorkspaces";
@@ -66,9 +67,9 @@ function ProfileDetails() {
                 {openEditModal ? (
                   <Input
                     autoFocus
+                    className="mt-px"
                     defaultValue={user?.first_name}
                     value={newUserDetails.first_name}
-                    className="mt-px"
                     onChange={(e) => {
                       editUserField({ first_name: e.target.value });
                     }}
@@ -85,9 +86,9 @@ function ProfileDetails() {
               <span className="mt-1 flex justify-between gap-x-4 sm:mt-0 sm:flex-auto">
                 {openEditModal ? (
                   <Input
+                    className="mt-px"
                     defaultValue={user?.last_name}
                     value={newUserDetails.last_name}
-                    className="mt-px"
                     onChange={(e) => {
                       editUserField({ last_name: e.target.value });
                     }}

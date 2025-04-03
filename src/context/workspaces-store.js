@@ -1,3 +1,5 @@
+import { create } from "zustand";
+
 import {
   adminResetUserPassword,
   assignUsersToWorkspace,
@@ -6,7 +8,6 @@ import {
 } from "@/app/_actions/user-actions";
 import { deleteUserFromWorkspace } from "@/app/_actions/workspace-actions";
 import { generateRandomString, notify } from "@/lib/utils";
-import { create } from "zustand";
 
 const INITIAL_STATE = {
   addedUsers: [],
@@ -47,6 +48,7 @@ const useWorkspaceStore = create((set, get) => ({
         color: "warning",
         description: `${exitingUser?.first_name} is already added!`,
       });
+
       return;
     }
 
@@ -56,6 +58,7 @@ const useWorkspaceStore = create((set, get) => ({
         color: "warning",
         description: `${userExists?.first_name} already exists in workspace!`,
       });
+
       return;
     }
 
@@ -87,6 +90,7 @@ const useWorkspaceStore = create((set, get) => ({
 
     if (!user || !user.ID) {
       console.error("Invalid user or user ID");
+
       return;
     }
 
@@ -123,6 +127,7 @@ const useWorkspaceStore = create((set, get) => ({
 
   handleSubmitAddedUsers: async (workspaceID) => {
     const { addedUsers } = get();
+
     set({
       isLoading: true,
       error: { status: false, message: "" },
@@ -133,6 +138,7 @@ const useWorkspaceStore = create((set, get) => ({
       set({
         isLoading: false,
       });
+
       return { status: true, message: "Please select at least one user" };
     }
 
@@ -143,6 +149,7 @@ const useWorkspaceStore = create((set, get) => ({
       set({
         isLoading: false,
       });
+
       return { status: true, message: "Please assign a role to all users" };
     }
 
@@ -166,7 +173,7 @@ const useWorkspaceStore = create((set, get) => ({
 
     const response = await adminResetUserPassword(
       selectedUser?.ID,
-      passwordInfo
+      passwordInfo,
     );
 
     if (response?.success) {
@@ -175,6 +182,7 @@ const useWorkspaceStore = create((set, get) => ({
         title: "Success",
         description: `You Reset ${selectedUser?.first_name}'s Password!`,
       });
+
       return response?.success;
     }
 
@@ -183,6 +191,7 @@ const useWorkspaceStore = create((set, get) => ({
       color: "danger",
       description: response?.message,
     });
+
     return response?.success;
   },
 
@@ -192,7 +201,7 @@ const useWorkspaceStore = create((set, get) => ({
 
     const response = await deleteUserFromWorkspace(
       selectedUser?.ID,
-      workspaceID
+      workspaceID,
     );
 
     if (response?.success) {
@@ -201,6 +210,7 @@ const useWorkspaceStore = create((set, get) => ({
         title: "Success",
         description: `You Removed ${selectedUser?.first_name}!`,
       });
+
       return response?.success;
     }
 
@@ -209,6 +219,7 @@ const useWorkspaceStore = create((set, get) => ({
       color: "danger",
       description: response?.message,
     });
+
     return response?.success;
   },
 
@@ -224,6 +235,7 @@ const useWorkspaceStore = create((set, get) => ({
         title: "Success",
         description: `You unlocked ${selectedUser?.first_name}!`,
       });
+
       return response?.success;
     }
 
@@ -233,6 +245,7 @@ const useWorkspaceStore = create((set, get) => ({
       description: response?.message,
     });
     set({ isLoading: false });
+
     return response?.success;
   },
 
@@ -248,6 +261,7 @@ const useWorkspaceStore = create((set, get) => ({
         title: "Success",
         description: `You Removed ${selectedUser?.first_name}!`,
       });
+
       return response?.success;
     }
 
@@ -258,6 +272,7 @@ const useWorkspaceStore = create((set, get) => ({
     });
 
     set({ isLoading: false });
+
     return response?.success;
   },
 

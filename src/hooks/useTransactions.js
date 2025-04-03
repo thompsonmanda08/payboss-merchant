@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 // TODO: TO BE DELETED
 import {
@@ -8,11 +8,11 @@ import {
   useSingleTransactions,
   // useWalletPrefundHistory,
   // useWorkspaceTransactions,
-} from './useQueryHooks'
-import useWorkspaces from './useWorkspaces'
+} from "./useQueryHooks";
+import useWorkspaces from "./useWorkspaces";
 
 const useTransactions = (query) => {
-  const { workspaceID } = useWorkspaces()
+  const { workspaceID } = useWorkspaces();
 
   // const {
   //   data: paymentTransactionsResponse,
@@ -30,18 +30,18 @@ const useTransactions = (query) => {
     data: bulkTransactionsResponse,
     isFetching: bulkFetching,
     isLoading: bulkLoading,
-  } = useBulkTransactions(workspaceID || query?.workspaceID)
-  const bulkTransactions = bulkTransactionsResponse?.data?.batches || []
+  } = useBulkTransactions(workspaceID || query?.workspaceID);
+  const bulkTransactions = bulkTransactionsResponse?.data?.batches || [];
 
   const {
     data: transactionsResponse,
     isLoading: singleLoading,
     isFetching: singleFetching,
-  } = useSingleTransactions(workspaceID || query?.workspaceID)
-  const singleTransactions = transactionsResponse?.data?.data || []
+  } = useSingleTransactions(workspaceID || query?.workspaceID);
+  const singleTransactions = transactionsResponse?.data?.data || [];
 
-  const isLoading = bulkLoading || bulkFetching || singleLoading
-  const isFetching = singleFetching
+  const isLoading = bulkLoading || bulkFetching || singleLoading;
+  const isFetching = singleFetching;
 
   // const allPaymentTransactions = paymentTransactionsResponse?.data?.data || []
   // const allCollectionsTransactions =
@@ -54,7 +54,7 @@ const useTransactions = (query) => {
     singleTransactions,
     // allPaymentTransactions,
     // allCollectionsTransactions,
-  }
-}
+  };
+};
 
-export default useTransactions
+export default useTransactions;

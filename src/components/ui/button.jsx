@@ -1,4 +1,5 @@
 import { Button as NextUIButton } from "@heroui/react";
+
 import { cn } from "@/lib/utils";
 
 export function Button({ children, loadingText, size, className, ...props }) {
@@ -7,6 +8,7 @@ export function Button({ children, loadingText, size, className, ...props }) {
 
   return (
     <NextUIButton
+      className={cn("min-w-max font-semibold", className)}
       radius="sm"
       size={size}
       spinner={
@@ -31,7 +33,6 @@ export function Button({ children, loadingText, size, className, ...props }) {
           />
         </svg>
       }
-      className={cn("min-w-max font-semibold", className)}
       {...props}
     >
       {props.isLoading ? loadingText || "" : children}

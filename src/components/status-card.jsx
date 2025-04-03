@@ -1,6 +1,7 @@
-import { cn, formatCurrency } from "@/lib/utils";
 import { Chip, CircularProgress, Tooltip } from "@heroui/react";
-import React from "react";
+
+import { cn, formatCurrency } from "@/lib/utils";
+
 import Card from "./base/card";
 
 function StatusCard({
@@ -26,6 +27,7 @@ function StatusCard({
   const totalPercentage = ((totalValue / totalValue) * 100).toFixed(0);
   const totalValidPercentage = ((validValue / totalValue) * 100).toFixed(0);
   const totalInvalidPercentage = ((invalidValue / totalValue) * 100).toFixed(0);
+
   return (
     <>
       <Card className="relative flex w-full min-w-[300px] flex-1 flex-col pt-10 shadow-none">
@@ -36,7 +38,6 @@ function StatusCard({
               {totalTitle}
             </p>
             <CircularProgress
-              onClick={viewAllRecords}
               classNames={{
                 base: "cursor-pointer",
                 svg: "w-36 h-36 drop-shadow-md ",
@@ -44,29 +45,30 @@ function StatusCard({
                 track: "stroke-primary/10",
                 value: "text-2xl font-semibold text-primary",
               }}
-              value={totalPercentage}
-              strokeWidth={4}
               showValueLabel={true}
+              strokeWidth={4}
+              value={totalPercentage}
+              onClick={viewAllRecords}
             />
 
             <Tooltip
-              color="primary"
-              placement="right"
               classNames={{
                 content: "text-nowrap bg-primary/10 text-primary-600",
               }}
+              color="primary"
               content={totalInfo}
               delay={1000}
+              placement="right"
               closeDelay={1000}
               // showArrow={true}
             >
               <Chip
-                onClick={viewAllRecords}
                 classNames={{
                   base: "border-1 border-primary/30 mt-4 cursor-pointer",
                   content: "text-primary text-small font-semibold",
                 }}
                 variant="bordered"
+                onClick={viewAllRecords}
               >
                 {totalValue} Records in total
               </Chip>
@@ -80,7 +82,6 @@ function StatusCard({
             </p>
 
             <CircularProgress
-              onClick={viewValidRecords}
               classNames={{
                 base: "cursor-pointer",
                 svg: "w-36 h-36 drop-shadow-md ",
@@ -88,29 +89,30 @@ function StatusCard({
                 track: "stroke-green-500/10",
                 value: "text-2xl font-semibold text-green-500",
               }}
-              value={totalValidPercentage}
-              strokeWidth={4}
               showValueLabel={true}
+              strokeWidth={4}
+              value={totalValidPercentage}
+              onClick={viewValidRecords}
             />
 
             <Tooltip
-              color="success"
-              placement="right"
               classNames={{
                 content: "text-nowrap bg-success/10 text-green-600",
               }}
+              color="success"
               content={validInfo}
               delay={1000}
+              placement="right"
               closeDelay={1000}
               // showArrow={true}
             >
               <Chip
-                onClick={viewValidRecords}
                 classNames={{
                   base: "border-1 border-green-500/30 mt-4 cursor-pointer",
                   content: "text-green-500 text-small font-semibold",
                 }}
                 variant="bordered"
+                onClick={viewValidRecords}
               >
                 {validValue} Records in total
               </Chip>
@@ -124,7 +126,6 @@ function StatusCard({
             </p>
 
             <CircularProgress
-              onClick={viewInvalidRecords}
               classNames={{
                 base: "cursor-pointer",
                 svg: "w-36 h-36 drop-shadow-md ",
@@ -132,29 +133,30 @@ function StatusCard({
                 track: "stroke-red-500/10",
                 value: "text-2xl font-semibold text-red-500",
               }}
-              value={totalInvalidPercentage}
-              strokeWidth={4}
               showValueLabel={true}
+              strokeWidth={4}
+              value={totalInvalidPercentage}
+              onClick={viewInvalidRecords}
             />
 
             <Tooltip
-              color="danger"
-              placement="left"
               classNames={{
                 content: "text-nowrap bg-red-500/10 text-red-600",
               }}
+              color="danger"
               content={invalidInfo}
               delay={1000}
+              placement="left"
               closeDelay={1000}
               // showArrow={true}
             >
               <Chip
-                onClick={viewInvalidRecords}
                 classNames={{
                   base: "border-1 border-red-500/30 mt-4 cursor-pointer",
                   content: "text-red-500 text-small font-semibold",
                 }}
                 variant="bordered"
+                onClick={viewInvalidRecords}
               >
                 {invalidValue} Records in total
               </Chip>
@@ -164,13 +166,13 @@ function StatusCard({
 
         <div className="mt-2 flex w-full items-center justify-center">
           <Chip
-            onClick={viewValidRecords}
             classNames={{
               base: "p-2 py-4 cursor-pointer",
               content: "text-green-500 text-base font-bold",
             }}
-            variant="flat"
             color="success"
+            variant="flat"
+            onClick={viewValidRecords}
           >
             {formatCurrency(validAmount)}
           </Chip>
@@ -191,7 +193,7 @@ function StatusCard({
                 // color={IconColor}
                 className={cn(
                   "my-auto ml-4 aspect-square h-6 w-6",
-                  `text-${IconColor}`
+                  `text-${IconColor}`,
                 )}
               />
             </Tooltip>

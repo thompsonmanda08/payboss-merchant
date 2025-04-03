@@ -1,13 +1,13 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
 import Spinner from "@/components/ui/spinner";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-
-import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
-import React, { useState } from "react";
 
 export default function PasswordReset() {
   0;
@@ -89,11 +89,11 @@ export default function PasswordReset() {
         <AnimatePresence mode="sync">
           <motion.div
             key={currentTabIndex}
-            initial={{ opacity: 0, x: 200 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -200 }}
-            transition={{ duration: 0.5 }}
             className="mt-8 flex max-w-sm flex-col gap-4"
+            exit={{ opacity: 0, x: -200 }}
+            initial={{ opacity: 0, x: 200 }}
+            transition={{ duration: 0.5 }}
           >
             {isLoading ? (
               <div className="my-10 flex items-center justify-center">
@@ -124,8 +124,8 @@ function ResetMyPassword({
       <Input
         required
         label={"Email Address"}
-        type={"email"}
         name={"email"}
+        type={"email"}
         onChange={(e) =>
           updatePasswordResetFields({
             email: e.target.value,
@@ -134,9 +134,9 @@ function ResetMyPassword({
       />
       <Button
         className={"w-full"}
-        size="lg"
         color="primary"
         disabled={!passwordReset?.email.includes("@")}
+        size="lg"
         onClick={handleRequest6DigitCode}
       >
         Request Code
@@ -159,6 +159,7 @@ function ValidatePassCode({
       {/* OTP FIELD */}
       <Input
         label={"OTP"}
+        name={"Pass-code"}
         type="text"
         value={passwordReset?.otp}
         onChange={(e) =>
@@ -166,13 +167,12 @@ function ValidatePassCode({
             otp: e.target.value,
           })
         }
-        name={"Pass-code"}
       />
       <Button
         className={"w-full"}
-        size="lg"
         color="primary"
         disabled={passwordReset?.otp.length < 6}
+        size="lg"
         onClick={() => {
           if (passwordReset?.otp.length < 6) {
             return;
@@ -193,6 +193,7 @@ function CreateNewPassword({
   passwordReset,
 }) {
   const [confirmPassword, setConfirmPassword] = useState("");
+
   return (
     <>
       <p className="-mt-5 text-sm leading-5 tracking-tight text-foreground/50 xl:text-base">
@@ -202,6 +203,8 @@ function CreateNewPassword({
       {/* Create Password */}
       <Input
         label={"New Password"}
+        name={"password"}
+        type={"password"}
         value={passwordReset.password}
         onChange={(e) =>
           updatePasswordResetFields({
@@ -209,17 +212,15 @@ function CreateNewPassword({
             otp: "",
           })
         }
-        name={"password"}
-        type={"password"}
       />
       {/* Confirm Password */}
 
       <Input
         label={"Confirm Password"}
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
         name={"confirmPassword"}
         type={"password"}
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
       />
       {/* ERROR MESSAGE */}
       {passwordReset.password !== confirmPassword &&
@@ -230,12 +231,12 @@ function CreateNewPassword({
       {/* Previous and Next Page Buttons */}
       <Button
         className={"w-full"}
-        size="lg"
         color="primary"
         disabled={
           passwordReset.password !== confirmPassword ||
           passwordReset.password.length <= 4
         }
+        size="lg"
         onClick={() => {
           if (passwordReset.password !== confirmPassword) {
             return;
@@ -260,7 +261,7 @@ function Success({}) {
         </p>
 
         <div className="grid w-full gap-4">
-          <Button as={Link} href={"/login"} className={"w-full flex-1"}>
+          <Button as={Link} className={"w-full flex-1"} href={"/login"}>
             Login
           </Button>
         </div>

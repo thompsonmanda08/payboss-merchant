@@ -1,22 +1,22 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export function CallToAction() {
   return (
     <section
-      id="get-started-today"
       className="relative overflow-hidden bg-blue-600 py-32"
+      id="get-started-today"
     >
       <Image
-        className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 opacity-50"
-        src={"/images/background-call-to-action.jpg"}
-        alt="background image"
-        width={2347}
-        height={1244}
         unoptimized
+        alt="background image"
+        className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 opacity-50"
+        height={1244}
+        src={"/images/background-call-to-action.jpg"}
+        width={2347}
       />
       <div className="relative container">
         <div className="mx-auto max-w-xl text-center">
@@ -29,9 +29,9 @@ export function CallToAction() {
           </p>
           <Button
             as={Link}
+            className="mt-10 bg-white text-primary"
             href="/register"
             size={"lg"}
-            className="mt-10 bg-white text-primary"
           >
             Get Started Now
           </Button>

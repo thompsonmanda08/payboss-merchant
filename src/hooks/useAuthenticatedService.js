@@ -1,7 +1,9 @@
 import { useEffect } from "react";
-import useRefreshToken from "./useRefreshToken";
+
 import useAuthStore from "@/context/auth-store";
 import { apiClient } from "@/lib/utils";
+
+import useRefreshToken from "./useRefreshToken";
 
 const useAuthenticatedService = () => {
   const refresh = useRefreshToken();
@@ -13,9 +15,10 @@ const useAuthenticatedService = () => {
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
         }
+
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => Promise.reject(error),
     );
 
     // Response Interceptor
@@ -23,14 +26,18 @@ const useAuthenticatedService = () => {
       (response) => response,
       async (error) => {
         const prevRequest = error?.config;
+
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
           const newAccessToken = await refresh();
+
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
           return apiClient(prevRequest);
         }
+
         return Promise.reject(error);
-      }
+      },
     );
 
     // Return a cleanup function to remove interceptors if needed

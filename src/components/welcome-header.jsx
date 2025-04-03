@@ -1,13 +1,14 @@
 "use client";
+import { Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { useQueryClient } from "@tanstack/react-query";
+
 import Logo from "@/components/base/logo";
 import ThemeSwitcher from "@/components/base/theme-switcher";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/context/auth-store";
-import { Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import React from "react";
+
 import EnvironmentMode from "./environment-mode";
-import { useQueryClient } from "@tanstack/react-query";
 
 function WorkspaceHeader({ permissions, accountState }) {
   const { handleUserLogOut } = useAuthStore((state) => state);
@@ -22,22 +23,22 @@ function WorkspaceHeader({ permissions, accountState }) {
           permissions?.role?.toLowerCase() == "owner") && (
           <Button
             as={Link}
-            href={"/manage-account"}
-            variant="light"
             className="data[hover=true]:bg-foreground-900/30 z-30 aspect-square min-w-[120px] rounded-full bg-foreground-900/50 text-white"
+            href={"/manage-account"}
             startContent={<Cog6ToothIcon className=" h-5 w-5" />}
+            variant="light"
           >
             Manage
           </Button>
         )}
         <Button
+          className="data[hover=true]:bg-foreground-900/30 z-30 aspect-square min-w-[120px] rounded-full bg-foreground-900/50 text-white"
+          startContent={<PowerIcon className=" h-5 w-5" />}
+          variant="light"
           onClick={() => {
             queryClient.invalidateQueries();
             handleUserLogOut();
           }}
-          variant="light"
-          className="data[hover=true]:bg-foreground-900/30 z-30 aspect-square min-w-[120px] rounded-full bg-foreground-900/50 text-white"
-          startContent={<PowerIcon className=" h-5 w-5" />}
         >
           Sign out
         </Button>

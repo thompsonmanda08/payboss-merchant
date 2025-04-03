@@ -17,10 +17,11 @@ import {
   ListBulletIcon,
   PlusIcon,
 } from "@heroicons/react/24/outline";
+import { format } from "date-fns";
+
 import { cn, formatCurrency } from "@/lib/utils";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import Loader from "@/components/ui/loader";
-import { format } from "date-fns";
 
 const columns = [
   { name: "TERMINAL", uid: "terminal_name" },
@@ -63,8 +64,8 @@ export default function TerminalsTable({
       case "terminal_name":
         return (
           <TerminalInfo
-            terminalName={item?.terminal_name}
             terminalID={item?.terminalID}
+            terminalName={item?.terminal_name}
           />
         );
 
@@ -146,12 +147,12 @@ export default function TerminalsTable({
     return (
       <div className="mb-2 mt-4 flex h-full flex-1 items-center justify-center rounded-2xl bg-slate-50 text-sm font-medium dark:bg-foreground/5">
         <Button
-          variant="light"
-          onPress={handleAddTerminal}
           className={
             "max-h-auto h-full w-full flex-1 font-medium text-primary-600"
           }
           startContent={<PlusIcon className="h-5 w-5 cursor-pointer" />}
+          variant="light"
+          onPress={handleAddTerminal}
         >
           Add Terminal
         </Button>
@@ -163,8 +164,8 @@ export default function TerminalsTable({
     return (
       <div className="-mt-8 flex flex-1 items-center rounded-lg">
         <Loader
-          size={100}
           classNames={{ wrapper: "bg-foreground-200/50 rounded-xl h-full" }}
+          size={100}
         />
       </div>
     );
@@ -172,10 +173,8 @@ export default function TerminalsTable({
 
   return (
     <Table
-      aria-label="Terminals table with custom cells"
       isHeaderSticky
-      color="primary"
-      removeWrapper={removeWrapper}
+      aria-label="Terminals table with custom cells"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
@@ -183,8 +182,10 @@ export default function TerminalsTable({
           "min-h-[400px]": isLoading || !rows,
         }),
       }}
-      onSortChange={setSortDescriptor}
+      color="primary"
+      removeWrapper={removeWrapper}
       onRowAction={(key) => onRowAction(key)}
+      onSortChange={setSortDescriptor}
     >
       <TableHeader columns={columns}>
         {(column) => (
@@ -199,11 +200,11 @@ export default function TerminalsTable({
         )}
       </TableHeader>
       <TableBody
-        isLoading={isLoading}
-        loadingContent={loadingContent}
-        emptyContent={emptyContent}
-        items={items}
         align="top"
+        emptyContent={emptyContent}
+        isLoading={isLoading}
+        items={items}
+        loadingContent={loadingContent}
       >
         {(item) => (
           <TableRow key={item.terminalID} isDisabled={item?.isLocked}>
@@ -230,14 +231,14 @@ export function TerminalInfo({
     <Button
       className={cn(
         "flex h-auto w-full justify-start gap-2  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100 max-w-xs",
-        className
+        className,
       )}
-      onPress={onClick}
       startContent={
         <SoftBoxIcon className={"h-12 w-12"}>
           <ComputerDesktopIcon />
         </SoftBoxIcon>
       }
+      onPress={onClick}
       {...props}
     >
       <div className="flex w-full justify-between">
@@ -246,21 +247,21 @@ export function TerminalInfo({
             {terminalName || "Terminal #"}
           </h3>
           <Chip
-            size="sm"
-            color="secondary"
-            variant="flat"
             className="truncate text-xs font-medium text-orange-600"
+            color="secondary"
+            size="sm"
+            variant="flat"
           >
             ID: {terminalID || "******"}
           </Chip>
         </div>
         {count && value && (
           <Tooltip
-            color="success"
-            content="Successful Transactions"
             classNames={{
               content: "text-white",
             }}
+            color="success"
+            content="Successful Transactions"
           >
             <div className="ml-auto flex flex-col items-end gap-px">
               <div className="flex max-w-[260px] justify-between gap-2">
@@ -271,10 +272,10 @@ export function TerminalInfo({
                 </p>
               </div>
               <Chip
+                className="text-[clamp(0.8rem,1vw,1rem)] !font-bold uppercase text-success-600"
                 color="success"
                 size="sm"
                 variant="flat"
-                className="text-[clamp(0.8rem,1vw,1rem)] !font-bold uppercase text-success-600"
               >
                 {value ? formatCurrency(value) : "ZMW 0.00"}
               </Chip>

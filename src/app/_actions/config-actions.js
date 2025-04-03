@@ -1,13 +1,14 @@
 "use server";
 
+import axios from "axios";
+import { cache } from "react";
+
 import { BASE_URL } from "@/lib/constants";
 import {
   getServerSession,
   getUserSession,
   getWorkspaceSessionData,
 } from "@/lib/session";
-import axios from "axios";
-import { cache } from "react";
 
 /**
  * Retrieves the general configurations from the configuration service.
@@ -21,6 +22,7 @@ import { cache } from "react";
 export const getGeneralConfigs = cache(async () => {
   const CONFIG_URL = process.env.CONFIG_BASE_URL || BASE_URL;
   const url = `${CONFIG_URL}/configuration/all-configs`;
+
   try {
     const res = await axios.get(url);
 
@@ -40,6 +42,7 @@ export const getGeneralConfigs = cache(async () => {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -62,7 +65,9 @@ export const getGeneralConfigs = cache(async () => {
  */
 export const getAuthSession = async () => {
   const session = await getServerSession();
+
   if (session) return session;
+
   return null;
 };
 
@@ -81,7 +86,9 @@ export const getAuthSession = async () => {
 
 export const getUserDetails = async () => {
   const session = await getUserSession();
+
   if (session) return session;
+
   return null;
 };
 
@@ -95,6 +102,8 @@ export const getUserDetails = async () => {
 
 export async function getWorkspaceSession() {
   const session = await getWorkspaceSessionData();
+
   if (session) return session;
+
   return null;
 }

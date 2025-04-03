@@ -1,6 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Switch, useDisclosure } from "@heroui/react";
 import {
@@ -9,15 +8,16 @@ import {
   PlusIcon,
   WalletIcon,
 } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { useQueryClient } from "@tanstack/react-query";
+
 import useWorkspaceStore from "@/context/workspaces-store";
 import LoadingPage from "@/app/loading";
 import { cn, formatCurrency, notify } from "@/lib/utils";
-import Link from "next/link";
 import { Input } from "@/components/ui/input-field";
-import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import AddUserToWorkspace from "@/components/add-users-workspace-modal";
 import PromptModal from "@/components/base/prompt";
-
 import NavIconButton from "@/components/ui/nav-icon-button";
 import {
   changeWorkspaceVisibility,
@@ -40,7 +40,7 @@ function WorkspaceSummary({
     pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
 
   const selectedWorkspace = workspaces.find(
-    (workspace) => workspace.ID === workspaceID
+    (workspace) => workspace.ID === workspaceID,
   );
   const isSandbox = selectedWorkspace?.workspace?.toLowerCase() == "sandbox";
 
@@ -109,6 +109,7 @@ function WorkspaceSummary({
         title: "Success",
         description: "Changes Saved!",
       });
+
       return;
     }
 
@@ -123,6 +124,7 @@ function WorkspaceSummary({
         description: "Provide valid name and description!",
       });
       setLoading(false);
+
       return;
     }
 
@@ -139,6 +141,7 @@ function WorkspaceSummary({
         title: "Success",
         description: "Changes Saved!",
       });
+
       return;
     }
 
@@ -176,6 +179,7 @@ function WorkspaceSummary({
         description: "Workspaces Deactivated successfully!",
       });
       router.back();
+
       return;
     }
 
@@ -200,6 +204,7 @@ function WorkspaceSummary({
         color: "danger",
         description: "Failed to update visibility",
       });
+
       return;
     }
 
@@ -231,26 +236,26 @@ function WorkspaceSummary({
         {changeWorkspaceDetails ? (
           <div className="flex flex-col gap-6 ">
             <form
-              onSubmit={handleUpdateWorkspace}
-              role={"edit-workspace-details"}
               className="flex w-full flex-col gap-4 sm:items-start md:flex-row md:items-end"
+              role={"edit-workspace-details"}
+              onSubmit={handleUpdateWorkspace}
             >
               <Input
-                label="Workspace Name"
                 defaultValue={selectedWorkspace?.workspace}
                 isDisabled={loading || isSandbox}
+                label="Workspace Name"
                 onChange={(e) => {
                   editWorkspaceField({ workspace: e.target.value });
                 }}
               />
 
               <Input
-                label="Description"
-                isDisabled={loading || isSandbox}
-                defaultValue={selectedWorkspace?.description}
                 classNames={{
                   wrapper: cn("", { "w-full max-w-[700px]": isSandbox }),
                 }}
+                defaultValue={selectedWorkspace?.description}
+                isDisabled={loading || isSandbox}
+                label="Description"
                 onChange={(e) => {
                   editWorkspaceField({ description: e.target.value });
                 }}
@@ -258,10 +263,10 @@ function WorkspaceSummary({
               {!isSandbox && (
                 <div className="flex gap-2">
                   <Button
-                    type="button"
+                    color="danger"
                     isDisabled={loading}
                     isLoading={loading}
-                    color="danger"
+                    type="button"
                     onPress={() => {
                       setChangeWorkspaceDetails(false);
                       setNewWorkspace({
@@ -273,10 +278,10 @@ function WorkspaceSummary({
                     Cancel
                   </Button>
                   <Button
-                    type="submit"
                     isDisabled={loading}
                     isLoading={loading}
                     loadingText={"Saving..."}
+                    type="submit"
                   >
                     Save
                   </Button>
@@ -291,8 +296,8 @@ function WorkspaceSummary({
                 {selectedWorkspace?.workspace}
               </h2>
               <NavIconButton
-                onClick={() => setChangeWorkspaceDetails(true)}
                 className="!bg-primary/10 ml-2 "
+                onClick={() => setChangeWorkspaceDetails(true)}
               >
                 <PencilIcon className="h-4 w-4" />
               </NavIconButton>
@@ -307,7 +312,7 @@ function WorkspaceSummary({
         <div className="flex w-full justify-between gap-4">
           <div
             className={cn(
-              "flex group select-none items-start gap-2 text-slate-600"
+              "flex group select-none items-start gap-2 text-slate-600",
             )}
           >
             <WalletIcon className="h-12 w-12 dark:text-foreground text-primary" />{" "}
@@ -322,9 +327,9 @@ function WorkspaceSummary({
           </div>
           <Button
             as={Link}
-            href={`/dashboard/${workspaceID}`}
             className={"sm:w-auto sm:max-w-fit"}
             endContent={<ArrowRightStartOnRectangleIcon className="h-5 w-5" />}
+            href={`/dashboard/${workspaceID}`}
           >
             Go to Dashboard
           </Button>
@@ -364,9 +369,9 @@ function WorkspaceSummary({
               </div>
 
               <Button
-                onClick={onOpenAdd}
                 className="self-end rounded-md px-3 py-2 text-sm font-semibold  shadow-sm"
                 endContent={<PlusIcon className="h-5 w-5" />}
+                onClick={onOpenAdd}
               >
                 Add Workspace Members
               </Button>
@@ -387,9 +392,9 @@ function WorkspaceSummary({
               </div>
 
               <Button
+                className="self-end rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400"
                 color="danger"
                 onClick={onOpen}
-                className="self-end rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400"
               >
                 Yes, deactivate my workspace
               </Button>
@@ -401,15 +406,15 @@ function WorkspaceSummary({
       {/* *******************OVERLAYS AND MODALS**************************** */}
 
       <PromptModal
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        title="Delete/Deactivate Workspace"
-        onConfirm={handleDeleteWorkspace}
         confirmText="Deactivate"
         isDisabled={deleteLoading}
-        isLoading={deleteLoading}
         isDismissable={false}
+        isLoading={deleteLoading}
+        isOpen={isOpen}
+        title="Delete/Deactivate Workspace"
+        onClose={onClose}
+        onConfirm={handleDeleteWorkspace}
+        onOpen={onOpen}
       >
         <p className="leading-2 m-0">
           <strong>Are you sure you want to perform this action?</strong>
@@ -423,23 +428,23 @@ function WorkspaceSummary({
         </p>
 
         <Input
-          label="Confirm Delete"
-          isDisabled={deleteLoading}
-          onError={deleteError.status}
           errorText={deleteError.message}
+          isDisabled={deleteLoading}
+          label="Confirm Delete"
           onChange={(e) => setDeleteWorkspaceName(e.target.value)}
+          onError={deleteError.status}
         />
       </PromptModal>
 
       <AddUserToWorkspace
-        isOpen={openAdd}
-        onOpen={onOpenAdd}
-        onClose={onCloseAdd}
-        workspaceID={workspaceID}
-        workspaceName={selectedWorkspace?.workspace}
-        workspaceMembers={workspaceMembers}
-        workspaceRoles={workspaceRoles}
         allUsers={allUsers}
+        isOpen={openAdd}
+        workspaceID={workspaceID}
+        workspaceMembers={workspaceMembers}
+        workspaceName={selectedWorkspace?.workspace}
+        workspaceRoles={workspaceRoles}
+        onClose={onCloseAdd}
+        onOpen={onOpenAdd}
       />
     </div>
   );

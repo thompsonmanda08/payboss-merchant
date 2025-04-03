@@ -1,10 +1,12 @@
 "use client";
-import { Input } from "@/components/ui/input-field";
-import usePaymentsStore from "@/context/payment-store";
-import { Button } from "../ui/button";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+
+import { Input } from "@/components/ui/input-field";
+import usePaymentsStore from "@/context/payment-store";
 import { QUERY_KEYS } from "@/lib/constants";
+
+import { Button } from "../ui/button";
 import StatusMessage from "../base/status-message";
 
 export default function EditBatchRecordForm({ onClose }) {
@@ -38,78 +40,78 @@ export default function EditBatchRecordForm({ onClose }) {
   }, [selectedRecord]);
 
   return (
-    <form action="#" onSubmit={onSubmit} className="flex flex-col gap-2">
+    <form action="#" className="flex flex-col gap-2" onSubmit={onSubmit}>
       <div className="flex w-full flex-col gap-4 md:flex-row">
         <Input
+          required
+          autoComplete="given-name"
           label="First Name"
           name="first_name"
           type="text"
-          autoComplete="given-name"
           value={selectedRecord?.first_name}
-          required
           onChange={(e) => updateSelectedRecord({ first_name: e.target.value })}
         />
         <Input
+          required
+          autoComplete="family-name"
           label="Last Name"
           name="last_name"
           type="text"
-          autoComplete="family-name"
           value={selectedRecord?.last_name}
-          required
           onChange={(e) => updateSelectedRecord({ last_name: e.target.value })}
         />
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row">
         <Input
+          required
+          autoComplete="email"
           label="Email"
           name="email"
           type="email"
-          autoComplete="email"
           value={selectedRecord?.email}
-          required
           onChange={(e) => updateSelectedRecord({ email: e.target.value })}
         />
         <Input
+          required
+          autoComplete="tel"
           label="Mobile No"
           name="contact"
           type="tel"
-          autoComplete="tel"
           value={selectedRecord?.contact}
-          required
           onChange={(e) => updateSelectedRecord({ contact: e.target.value })}
         />
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row">
         <Input
+          required
+          autoComplete="nrc"
           label="NRC"
           name="nrc"
           type="text"
-          onChange={(e) => updateSelectedRecord({ nrc: e.target.value })}
-          autoComplete="nrc"
           value={selectedRecord?.nrc}
-          required
+          onChange={(e) => updateSelectedRecord({ nrc: e.target.value })}
         />
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row">
         <Input
+          required
+          autoComplete="account_number"
           label="Destination Account No."
           name="destination"
           type="text"
-          autoComplete="account_number"
           value={selectedRecord?.destination}
-          required
           onChange={(e) =>
             updateSelectedRecord({ destination: e.target.value })
           }
         />
         <Input
+          isDisabled
+          required
+          autoComplete="amount"
           label="Amount"
           name="amount"
           type="text"
-          autoComplete="amount"
           value={selectedRecord?.amount}
-          isDisabled
-          required
           onChange={(e) => updateSelectedRecord({ amount: e.target.value })}
         />
       </div>
@@ -123,10 +125,10 @@ export default function EditBatchRecordForm({ onClose }) {
       <div className="mt-4 flex w-full flex-col gap-4 md:justify-end">
         <Button
           aria-label="save"
-          type={"submit"}
           color="primary"
-          isLoading={loading}
           isDisabled={loading}
+          isLoading={loading}
+          type={"submit"}
           className="w-full  "
           // onClick={saveSelectedRecord}
         >
@@ -134,10 +136,10 @@ export default function EditBatchRecordForm({ onClose }) {
         </Button>
         <Button
           aria-label="back"
-          color="danger"
-          variant="light"
           className={"w-full bg-red-50"}
+          color="danger"
           disabled={loading}
+          variant="light"
           onClick={onClose}
         >
           Cancel

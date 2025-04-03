@@ -1,13 +1,14 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import { cache } from "react";
+
 import authenticatedService from "@/lib/api-config";
 import {
   createUserSession,
   createWorkspaceSession,
   getUserSession,
 } from "@/lib/session";
-import { revalidatePath } from "next/cache";
-import { cache } from "react";
 
 /**
  * Retrieves the user setup configurations including the logged in user details, permissions, KYC and workspaces.
@@ -18,6 +19,7 @@ import { cache } from "react";
  * */
 export const setupAccountConfig = cache(async () => {
   const url = `merchant/user/setup`;
+
   try {
     const res = await authenticatedService({ url });
 
@@ -59,6 +61,7 @@ export const setupAccountConfig = cache(async () => {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -102,6 +105,7 @@ export async function getUserAccountRoles() {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -124,6 +128,7 @@ export async function getUserAccountRoles() {
  */
 export async function getWorkspaceRoles() {
   const url = `merchant/workspace/roles`;
+
   try {
     const res = await authenticatedService({ url });
 
@@ -143,6 +148,7 @@ export async function getWorkspaceRoles() {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -168,6 +174,7 @@ export async function changeWorkspaceVisibility(workspaceID, isVisible) {
   }
 
   const url = `merchant/workspace/visibility/${workspaceID}`;
+
   try {
     const res = await authenticatedService({
       url,
@@ -193,6 +200,7 @@ export async function changeWorkspaceVisibility(workspaceID, isVisible) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -245,6 +253,7 @@ export async function createNewWorkspace(newWorkspace) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -300,6 +309,7 @@ export async function updateWorkspace({ workspace, description, ID }) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -338,6 +348,7 @@ export async function deleteWorkspace(workspaceID) {
   }
 
   const url = `merchant/workspace/${workspaceID}`;
+
   try {
     const res = await authenticatedService({
       url,
@@ -362,6 +373,7 @@ export async function deleteWorkspace(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -417,6 +429,7 @@ export const getAllWorkspaces = cache(async () => {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -449,6 +462,7 @@ export const getAllKYCData = cache(async () => {
   }
 
   const url = `merchant/${merchantID}/details`;
+
   try {
     const res = await authenticatedService({ url });
 
@@ -468,6 +482,7 @@ export const getAllKYCData = cache(async () => {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -513,6 +528,7 @@ export const getWorkspaceDetails = cache(async (workspaceID) => {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:

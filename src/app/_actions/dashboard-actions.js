@@ -1,7 +1,8 @@
 "use server";
 
-import authenticatedService from "@/lib/api-config";
 import { cache } from "react";
+
+import authenticatedService from "@/lib/api-config";
 
 /**
  * Retrieves the analytics data for a given workspace ID.
@@ -47,6 +48,7 @@ export async function fetchDashboardAnalytics(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:

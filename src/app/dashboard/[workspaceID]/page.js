@@ -1,5 +1,3 @@
-import React, { Suspense } from "react";
-import LoadingPage from "../../loading";
 import InfoBanner from "@/components/base/info-banner";
 import DashboardAnalytics from "@/app/dashboard/components/DashboardAnalytics";
 import {
@@ -7,10 +5,7 @@ import {
   getWorkspaceSession,
 } from "@/app/_actions/config-actions";
 import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
-import {
-  getAllWorkspaces,
-  getWorkspaceDetails,
-} from "@/app/_actions/merchant-actions";
+import { getWorkspaceDetails } from "@/app/_actions/merchant-actions";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -31,16 +26,16 @@ async function DashboardHome({ params }) {
       {session?.user?.isCompleteKYC && (
         <InfoBanner
           buttonText="Submit Documents"
-          infoText="Just one more step, please submit your business documents to aid us with the approval process"
           href={"manage-account/account-verification"}
+          infoText="Just one more step, please submit your business documents to aid us with the approval process"
           user={session?.user}
         />
       )}
       <DashboardAnalytics
+        dashboardAnalytics={dashboardAnalytics?.data}
         permissions={workspaceSession?.workspacePermissions}
         workspaceID={workspaceID}
         workspaceType={workspaceSession?.workspaceType}
-        dashboardAnalytics={dashboardAnalytics?.data}
         workspaceWalletBalance={activeWorkspace?.balance}
       />
     </>

@@ -1,9 +1,10 @@
 "use client";
+import { Chip } from "@heroui/react";
+import Image from "next/image";
+
 import useAccountProfile from "@/hooks/useProfileDetails";
 import { DefaultCover } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { Chip } from "@heroui/react";
-import Image from "next/image";
 
 export default function ProfileBanner({ className }) {
   const { user, merchant } = useAccountProfile();
@@ -14,18 +15,18 @@ export default function ProfileBanner({ className }) {
     <div
       className={cn(
         "absolute left-0 right-0 top-[24%] z-20 m-7 rounded-2xl border border-input/40 bg-background/10 p-4 backdrop-blur-md",
-        className
+        className,
       )}
     >
       <div className="flex w-full items-center gap-4">
         <div className="mr-auto flex items-center gap-4">
           <div className="h-20 w-20 overflow-clip rounded-lg">
             <Image
-              className="z-0 h-full w-full object-cover"
-              src={DefaultCover}
               alt="banner"
-              width={1024}
+              className="z-0 h-full w-full object-cover"
               height={300}
+              src={DefaultCover}
+              width={1024}
             />
           </div>
           <div className="flex flex-col gap-0">
@@ -35,9 +36,9 @@ export default function ProfileBanner({ className }) {
             <div className="heading-5 font-semibold capitalize text-slate-200">
               {merchant}{" "}
               <Chip
+                className="ml-2 text-sm text-green-500 font-bold"
                 color={"success"}
                 variant="flat"
-                className="ml-2 text-sm text-green-500 font-bold"
               >
                 <strong>{user?.role}</strong>
               </Chip>
@@ -54,15 +55,15 @@ function ProfileBannerLoader({ className }) {
     <div
       className={cn(
         "absolute left-0 right-0 top-[24%] z-20 m-7 rounded-2xl border border-input/40 bg-background/10 p-4 backdrop-blur-md",
-        className
+        className,
       )}
     >
       <div className="flex w-full items-center gap-4">
         <div className="mr-auto flex items-center gap-4">
-          <div className="h-20 w-20 overflow-clip rounded-lg bg-foreground-500/30"></div>
+          <div className="h-20 w-20 overflow-clip rounded-lg bg-foreground-500/30" />
           <div className="flex flex-col gap-1">
-            <div className="h-8 w-[200px] rounded-lg bg-foreground-500/30"></div>
-            <div className="h-8 w-[100px] rounded-lg bg-foreground-500/30"></div>
+            <div className="h-8 w-[200px] rounded-lg bg-foreground-500/30" />
+            <div className="h-8 w-[100px] rounded-lg bg-foreground-500/30" />
           </div>
         </div>
       </div>

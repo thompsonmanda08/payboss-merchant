@@ -1,8 +1,8 @@
+import { getLocalTimeZone, today } from "@internationalized/date";
+
 import DateSelectField from "@/components/ui/date-select-field";
 import { Input } from "@/components/ui/input-field";
 import SelectField from "@/components/ui/select-field";
-import React from "react";
-import { getLocalTimeZone, today } from "@internationalized/date";
 import { Button } from "@/components/ui/button";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import CardHeader from "@/components/base/card-header";
@@ -25,87 +25,87 @@ function BusinessAccountDetails({
             infoClasses: "mb-0",
             innerWrapper: "gap-0",
           }}
-          title="Business Details"
           infoText={
             "Information about your business to help us verify your identity."
           }
+          title="Business Details"
         />
         <div className="flex w-full flex-col items-center justify-center gap-6 lg:flex-row">
           <div className="flex w-full flex-1 flex-col gap-2">
             <Input
-              type="text"
+              isDisabled
               label="Business Name"
               name="businessName"
-              isDisabled
-              value={businessDetails?.name}
               required={true}
+              type="text"
+              value={businessDetails?.name}
             />
 
             <div className="flex w-full gap-4">
               <SelectField
-                options={companyTypes}
                 isDisabled
                 label="Company Type"
-                name="companyTypeID"
                 listItemName={"type"}
+                name="companyTypeID"
+                options={companyTypes}
                 prefilled={true}
                 value={businessDetails?.companytypeID}
               />
               <Input
-                type="number"
-                label="TPIN"
-                name="tpin"
-                maxLength={10}
                 isDisabled
+                label="TPIN"
+                maxLength={10}
+                name="tpin"
+                type="number"
                 value={businessDetails?.tpin}
               />
             </div>
 
             <DateSelectField
-              label={"Date of Incorporation"}
               isDisabled
               className="max-w-sm"
               description={"Date the company was registered"}
-              value={businessDetails?.date_of_incorporation?.split("T")[0]}
-              maxValue={today(getLocalTimeZone())}
+              label={"Date of Incorporation"}
               labelPlacement={"outside"}
+              maxValue={today(getLocalTimeZone())}
+              value={businessDetails?.date_of_incorporation?.split("T")[0]}
             />
           </div>
 
           {/* ADDRESS AND CONTACT INFORMATION */}
           <div className="mb-5 flex w-full flex-1 flex-col gap-2">
             <Input
+              isDisabled
               label="Physical Address"
               name="physical_address"
-              isDisabled
               value={businessDetails?.physical_address}
             />
 
             <div className="flex w-full gap-4">
               <Input
-                type="number"
-                label="Mobile Number"
                 isDisabled
-                name="contact"
+                label="Mobile Number"
                 maxLength={12}
+                name="contact"
+                type="number"
                 value={businessDetails?.contact}
                 errorText="Invalid Mobile Number"
                 // required={true}
                 pattern="[0-9]{12}"
               />
               <Input
+                isDisabled
                 label="Website"
                 name="website"
-                isDisabled
                 value={businessDetails?.website}
               />
             </div>
 
             <Input
-              type="email"
+              isDisabled
               label="Company Email"
               name="company_email"
-              isDisabled
+              type="email"
               value={businessDetails?.company_email}
             />
           </div>
@@ -119,56 +119,56 @@ function BusinessAccountDetails({
             infoClasses: "mb-0",
             innerWrapper: "gap-0",
           }}
-          title="Banking Details"
           infoText={
             "Please provide your banking details to receive your payments."
           }
+          title="Banking Details"
         />
         <div className="flex w-full flex-col items-start justify-start gap-6 md:flex-row">
           <div className="flex w-full flex-1 flex-col gap-2">
             <Input
+              isDisabled
               label="Account Holder Name"
               name="account_name"
-              isDisabled
-              value={businessDetails?.account_name}
               required={true}
+              value={businessDetails?.account_name}
             />
             <Input
+              isDisabled
               label="Account Number"
               name="account_number"
-              isDisabled
-              value={businessDetails?.account_number}
               required={true}
+              value={businessDetails?.account_number}
             />
             <SelectField
-              options={banks}
-              label="Bank"
-              name="bankID"
-              value={businessDetails?.bankID}
               isDisabled
-              prefilled={true}
+              label="Bank"
               listItemName={"bank_name"}
+              name="bankID"
+              options={banks}
+              prefilled={true}
               required={true}
+              value={businessDetails?.bankID}
             />
           </div>
           <div className="flex w-full flex-1 flex-col gap-2">
             <Input
+              isDisabled
               label="Branch Name"
               name="branch_name"
-              isDisabled
-              value={businessDetails?.branch_name}
               required={true}
+              value={businessDetails?.branch_name}
             />
 
             <SelectField
-              options={currencies}
-              label="Currency"
-              name="currencyID"
               isDisabled
-              prefilled={true}
-              value={businessDetails?.currencyID}
+              label="Currency"
               listItemName={"currency"}
+              name="currencyID"
+              options={currencies}
+              prefilled={true}
               required={true}
+              value={businessDetails?.currencyID}
             />
           </div>
         </div>

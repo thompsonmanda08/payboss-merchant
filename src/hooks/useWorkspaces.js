@@ -1,6 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+
 import { useSetupConfig } from "./useQueryHooks";
 
 const useWorkspaces = (query) => {
@@ -20,13 +21,13 @@ const useWorkspaces = (query) => {
     : query?.workspaceID || "";
 
   const activeWorkspace = workspaces?.find(
-    (workspace) => workspace?.ID == workspaceID
+    (workspace) => workspace?.ID == workspaceID,
   );
 
   const userInSandbox = activeWorkspace?.workspace?.toLowerCase() === "sandbox";
 
   const sandbox = workspaces?.find(
-    (item) => item?.workspace?.toLowerCase() === "sandbox"
+    (item) => item?.workspace?.toLowerCase() === "sandbox",
   );
 
   const workspaceWalletBalance =

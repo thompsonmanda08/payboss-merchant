@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
 import { ArrowRightIcon, BriefcaseIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+
 import { cn } from "@/lib/utils";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { Button } from "@/components/ui/button";
@@ -11,22 +11,22 @@ function WorkspaceItem({ name, description, href, isVisible, onClick }) {
   return (
     <Button
       as={Link}
-      href={href}
-      onPress={onClick}
       className={cn(
         "flex h-auto w-full justify-start gap-4 border-[1px] dark:border-primary/5 border-primary-100 bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100 dark:bg-primary-400/5 dark:hover:border-primary-300 dark:hover:bg-primary-300/5",
         {
           "opacity-50 hover:opacity-90": !isVisible,
-        }
+        },
       )}
+      endContent={
+        <ArrowRightIcon className="ml-auto mr-4 h-6 w-6 self-center text-primary-600" />
+      }
+      href={href}
       startContent={
         <SoftBoxIcon className={"w-18 h-20"}>
           <BriefcaseIcon />
         </SoftBoxIcon>
       }
-      endContent={
-        <ArrowRightIcon className="ml-auto mr-4 h-6 w-6 self-center text-primary-600" />
-      }
+      onPress={onClick}
     >
       <div className="flex flex-col items-start gap-2">
         <h3 className="heading-4 mb-1 capitalize text-primary !font-bold">

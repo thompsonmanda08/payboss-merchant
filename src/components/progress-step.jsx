@@ -1,13 +1,13 @@
-import { cn } from "@/lib/utils";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
-import React from "react";
+
+import { cn } from "@/lib/utils";
 
 function ProgressStep({ STEPS, currentTabIndex, className, classNames }) {
   return (
     <div
       className={cn(
         "before:content[''] relative z-0 my-8 flex flex-row items-center justify-between gap-4 text-base before:absolute before:left-0 before:right-0  before:top-1/2 before:z-10 before:h-[2px] before:bg-foreground/10 ",
-        className
+        className,
       )}
     >
       {/* CTA STEP */}
@@ -15,16 +15,16 @@ function ProgressStep({ STEPS, currentTabIndex, className, classNames }) {
         return (
           <div
             key={index}
+            className={cn(
+              "z-10 flex cursor-pointer flex-row items-center justify-center gap-4 bg-card px-6 text-sm font-medium",
+              classNames?.content,
+            )}
             onClick={(e) => {
               e.stopPropagation();
               // NEEDS NAVIGATION VALIDATION
               // Only users completed on each step can navigate directly to the next
               // navigateTo(index);
             }}
-            className={cn(
-              "z-10 flex cursor-pointer flex-row items-center justify-center gap-4 bg-card px-6 text-sm font-medium",
-              classNames?.content
-            )}
           >
             <span
               className={cn(
@@ -32,7 +32,7 @@ function ProgressStep({ STEPS, currentTabIndex, className, classNames }) {
                 {
                   "bg-primary before:bg-primary/20": currentTabIndex >= index,
                 },
-                classNames?.contentItem
+                classNames?.contentItem,
               )}
             >
               {currentTabIndex >= index + 1 ? (

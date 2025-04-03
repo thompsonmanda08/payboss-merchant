@@ -1,6 +1,8 @@
+import { Suspense } from "react";
+
 import LoadingPage from "@/app/loading";
-import React, { Suspense } from "react";
 import { getAllBulkTransactions } from "@/app/_actions/transaction-actions";
+
 import DisbursementsWrapper from "./components";
 
 export default async function DisbursementsPage(props) {
@@ -11,8 +13,8 @@ export default async function DisbursementsPage(props) {
   return (
     <Suspense fallback={<LoadingPage />}>
       <DisbursementsWrapper
-        workspaceID={workspaceID}
         bulkTransactions={bulkTransactions?.data?.batches || []}
+        workspaceID={workspaceID}
       />
     </Suspense>
   );

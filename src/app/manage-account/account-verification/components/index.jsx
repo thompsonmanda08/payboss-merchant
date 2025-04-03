@@ -1,13 +1,15 @@
 "use client";
+import { useEffect } from "react";
+
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-import React, { useEffect } from "react";
-import BusinessAccountDetails from "./business-account-details";
-import DocumentAttachments from "./kyc-document-attachments";
-import ProgressStageTracker from "./account-verification-tracker";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import DocumentsViewer from "@/components/base/document-viewer";
 import Tabs from "@/components/tabs";
+
+import ProgressStageTracker from "./account-verification-tracker";
+import BusinessAccountDetails from "./business-account-details";
+import DocumentAttachments from "./kyc-document-attachments";
 
 function AccountVerification({ session }) {
   const {
@@ -37,8 +39,8 @@ function AccountVerification({ session }) {
   ) : (
     <DocumentsViewer
       key={"documents"}
-      documents={businessDocs}
       contractDocument={signedContractDoc}
+      documents={businessDocs}
       navigateToPage={navigateToPage}
     />
   );
@@ -47,12 +49,12 @@ function AccountVerification({ session }) {
     <ProgressStageTracker key={"verification-status"} />,
     <BusinessAccountDetails
       key={"business-details"}
-      user={user}
+      banks={banks}
       businessDetails={businessDetails}
       companyTypes={companyTypes}
-      banks={banks}
       currencies={currencies}
       navigateToPage={navigateToPage}
+      user={user}
     />,
     DOCUMENT_COMPONENTS,
   ];
@@ -70,8 +72,8 @@ function AccountVerification({ session }) {
   return (
     <div className="flex w-full flex-col">
       <section
-        role="account-verification-header"
         className="flex w-full flex-col"
+        role="account-verification-header"
       >
         <h2 className="heading-3 !font-bold tracking-tight text-foreground ">
           Account Verification
@@ -84,17 +86,17 @@ function AccountVerification({ session }) {
         <div className="flex items-center justify-between gap-8">
           <Tabs
             className={"my-4"}
-            tabs={TABS}
-            navigateTo={navigateTo}
             currentTab={currentTabIndex}
+            navigateTo={navigateTo}
+            tabs={TABS}
           />
         </div>
-        <div className="mb-4"></div>
+        <div className="mb-4" />
       </section>
 
       <section
-        role="profile-content"
         className="grid w-full place-items-center gap-4 "
+        role="profile-content"
       >
         {activeTab}
       </section>

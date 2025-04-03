@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { capitalize, cn, formatCurrency } from "@/lib/utils";
-import Avatar from "./ui/avatar";
 import {
   Dropdown,
   DropdownTrigger,
@@ -12,10 +10,6 @@ import {
   Button,
   Switch,
 } from "@heroui/react";
-import useAuthStore from "@/context/auth-store";
-import { Skeleton } from "./ui/skeleton";
-import useNavigation from "@/hooks/useNavigation";
-import useWorkspaces from "@/hooks/useWorkspaces";
 import {
   ChatBubbleLeftRightIcon,
   MoonIcon,
@@ -23,12 +17,20 @@ import {
   SunIcon,
   WalletIcon,
 } from "@heroicons/react/24/outline";
-import useDashboard from "@/hooks/useDashboard";
-import BreadCrumbLinks from "./base/BreadCrumbLinks";
-import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 import { useQueryClient } from "@tanstack/react-query";
-import NavIconButton from "./ui/nav-icon-button";
 import { useTheme } from "next-themes";
+
+import { capitalize, cn, formatCurrency } from "@/lib/utils";
+import useAuthStore from "@/context/auth-store";
+import useNavigation from "@/hooks/useNavigation";
+import useWorkspaces from "@/hooks/useWorkspaces";
+import useDashboard from "@/hooks/useDashboard";
+import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+
+import BreadCrumbLinks from "./base/BreadCrumbLinks";
+import { Skeleton } from "./ui/skeleton";
+import Avatar from "./ui/avatar";
+import NavIconButton from "./ui/nav-icon-button";
 
 export default function TopNavBar({ user }) {
   const queryClient = useQueryClient();
@@ -55,7 +57,7 @@ export default function TopNavBar({ user }) {
         {
           "bg-transparent lg:static px-10 pl-20 pr-10 text-white backdrop-blur-none":
             isProfile,
-        }
+        },
         // { 'bg-red-600 ': isFloating },
       )}
     >
@@ -64,14 +66,14 @@ export default function TopNavBar({ user }) {
         <div
           className={cn(
             "relative left-16 hidden transition-all duration-300 ease-in-out lg:left-0 lg:block",
-            { "pl-5": isProfile }
+            { "pl-5": isProfile },
           )}
         >
           <BreadCrumbLinks isProfile={isProfile} />
           <h2
             className={cn(
               "pl-2 text-lg font-bold uppercase leading-8 text-foreground/80",
-              { "text-white": isProfile }
+              { "text-white": isProfile },
             )}
           >
             {currentPath}
@@ -84,7 +86,7 @@ export default function TopNavBar({ user }) {
             "relative z-50 ml-auto flex  items-center justify-center rounded-full",
             {
               "bg-card/5 pl-4 pr-1 py-0.5": isProfile,
-            }
+            },
           )}
         >
           <div
@@ -93,13 +95,13 @@ export default function TopNavBar({ user }) {
             })}
           >
             <Link
-              href={dashboardRoute + "/workspace-settings?wallet=true"}
               className={cn(
                 "mr-4 flex group cursor-pointer items-start gap-3 text-foreground-600",
                 {
                   "text-white": isProfile,
-                }
+                },
               )}
+              href={dashboardRoute + "/workspace-settings?wallet=true"}
             >
               <NavIconButton className={"bg-primary"}>
                 <WalletIcon className="h-5 w-5 text-white" />
@@ -128,7 +130,7 @@ export default function TopNavBar({ user }) {
                 <BellIcon className="h-5 w-5 text-white" />
               </NavIconButton>
             </div> */}
-            <AvatarDropdown user={user} isProfile={isProfile} />
+            <AvatarDropdown isProfile={isProfile} user={user} />
           </div>
         </div>
       </div>
@@ -143,29 +145,29 @@ export function AvatarDropdown({ user, isProfile }) {
   const { workspaceUserRole: role } = useDashboard();
   const { theme, setTheme } = useTheme();
   const [isSelected, setIsSelected] = React.useState(
-    theme == "dark" ? true : false
+    theme == "dark" ? true : false,
   );
 
   return (
     <Dropdown
       // showArrow
-      radius="sm"
       classNames={{
         base: "before:bg-default-200 mr-5 min-w-60 dark:shadow-foreground ", // change arrow background
         content: cn(
           "p-0 border-sm border-divider bg-card border-[1px] border-border",
           {
             "bg-card/80 backdrop-blur-md": isProfile,
-          }
+          },
         ),
       }}
+      radius="sm"
     >
       <DropdownTrigger>
         <Button
-          isIconOnly
-          variant="light"
           disableRipple
+          isIconOnly
           className="rounded-full"
+          variant="light"
         >
           <Avatar
             isProfile
@@ -192,18 +194,18 @@ export function AvatarDropdown({ user, isProfile }) {
           ],
         }}
       >
-        <DropdownSection aria-label="Profile & Actions" showDivider>
+        <DropdownSection showDivider aria-label="Profile & Actions">
           <DropdownItem
-            isReadOnly
             key="profile"
-            href={dashboardRoute + "/profile"}
+            isReadOnly
             className="h-12 gap-2 px-1"
+            href={dashboardRoute + "/profile"}
           >
             <Avatar
+              showUserInfo
+              email={capitalize(role?.role || user?.role)}
               firstName={user?.first_name}
               lastName={user?.last_name}
-              email={capitalize(role?.role || user?.role)}
-              showUserInfo
             />
           </DropdownItem>
           {/* <DropdownItem key="Home" href="/workspaces">
@@ -214,14 +216,14 @@ export function AvatarDropdown({ user, isProfile }) {
           </DropdownItem> */}
         </DropdownSection>
 
-        <DropdownSection aria-label="Preferences" showDivider>
+        <DropdownSection showDivider aria-label="Preferences">
           {/* <DropdownItem key="quick_search" shortcut="⌘K">
             Quick search
           </DropdownItem> */}
 
           <DropdownItem
-            isReadOnly
             key="theme"
+            isReadOnly
             className="flex cursor-default justify-between"
           >
             <div className="flex w-full cursor-default items-center justify-between">
@@ -229,15 +231,15 @@ export function AvatarDropdown({ user, isProfile }) {
               {/* <ThemeSwitcher /> */}
               <Switch
                 defaultSelected
+                color="primary"
+                endContent={<MoonIcon />}
                 isSelected={isSelected}
+                size="md"
+                startContent={<SunIcon />}
                 onValueChange={(value) => {
                   setIsSelected(value);
                   setTheme(value ? "dark" : "light");
                 }}
-                size="md"
-                color="primary"
-                startContent={<SunIcon />}
-                endContent={<MoonIcon />}
               >
                 {/* Dark mode */}
               </Switch>
@@ -267,11 +269,11 @@ export function AvatarDropdown({ user, isProfile }) {
             <div className="flex items-center justify-between">
               <span>Log Out</span>{" "}
               <NavIconButton
+                className={"scale-80 bg-primary"}
                 onClick={() => {
                   queryClient.invalidateQueries();
                   handleUserLogOut();
                 }}
-                className={"scale-80 bg-primary"}
               >
                 <PowerIcon className="h-5 w-5 text-white" />
               </NavIconButton>
@@ -292,7 +294,7 @@ export function NavbarLoader({ isProfile }) {
             "mb-2 aspect-square h-[8px] w-full max-w-xl rounded-lg",
             {
               "bg-foreground-200 p-4 backdrop-blur-md": isProfile,
-            }
+            },
           )}
         />
         <Skeleton

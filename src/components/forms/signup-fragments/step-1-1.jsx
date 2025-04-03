@@ -1,18 +1,20 @@
 //BUSINESS REGISTRATION STATUS
 "use client";
 import React, { useEffect } from "react";
-import { Input } from "@/components/ui/input-field";
 import { motion } from "framer-motion";
-import { staggerContainerItemVariants } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { STEPS } from "../signup-form";
+import { Checkbox } from "@heroui/react";
+import { BriefcaseIcon } from "@heroicons/react/24/outline";
+
 import useAuthStore from "@/context/auth-store";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@heroui/react";
 import { validateTPIN } from "@/app/_actions/auth-actions";
-import { BriefcaseIcon } from "@heroicons/react/24/outline";
+import { cn } from "@/lib/utils";
+import { staggerContainerItemVariants } from "@/lib/constants";
+import { Input } from "@/components/ui/input-field";
 import CardHeader from "@/components/base/card-header";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
+
+import { STEPS } from "../signup-form";
 
 export default function Step1_TPIN({ updateDetails, backToStart }) {
   const {
@@ -39,6 +41,7 @@ export default function Step1_TPIN({ updateDetails, backToStart }) {
     if (!tpin || tpin?.length > 10) {
       updateErrorStatus({ onTPIN: true, message: "Invalid TPIN" });
       setLoading(false);
+
       return;
     }
 
@@ -51,6 +54,7 @@ export default function Step1_TPIN({ updateDetails, backToStart }) {
         message: response?.message,
       });
       setLoading(false);
+
       return;
     }
 
@@ -60,6 +64,7 @@ export default function Step1_TPIN({ updateDetails, backToStart }) {
       setMerchantID(response?.data?.ID);
       setIsValidTPIN(response?.success);
       setLoading(false);
+
       return;
     }
   }
@@ -73,8 +78,8 @@ export default function Step1_TPIN({ updateDetails, backToStart }) {
     <>
       <CardHeader
         handleClose={() => backToStart()}
-        title="Verify your identity"
         infoText={"Enter your TPIN to retrieve your business information."}
+        title="Verify your identity"
       />
       <div className="flex w-full flex-col items-center justify-center gap-6">
         <div className="flex w-full flex-1 flex-col gap-2 md:flex-row">
@@ -83,24 +88,24 @@ export default function Step1_TPIN({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <Input
-              type="number"
-              label="TPIN"
-              name="tpin"
-              maxLength={10}
-              isDisabled={loading}
-              value={step?.tpin}
-              onError={TPINError || error?.onTPIN}
               errorText="Invalid TPIN"
+              isDisabled={loading}
+              label="TPIN"
+              maxLength={10}
+              name="tpin"
+              type="number"
+              value={step?.tpin}
               onChange={(e) => {
                 updateDetails(STEPS[0], { tpin: e.target.value });
               }}
+              onError={TPINError || error?.onTPIN}
             />
             <Button
-              onPress={handleTPINValidation}
               className={cn("flex-[1]", { "mb-4": TPINError || error?.status })}
               isDisabled={TPINError || loading || step?.tpin?.length < 10}
               isLoading={loading}
               loadingText={"Validating..."}
+              onPress={handleTPINValidation}
             >
               Validate TPIN
             </Button>
@@ -109,6 +114,7 @@ export default function Step1_TPIN({ updateDetails, backToStart }) {
 
         {merchant && (
           <motion.div
+            className="flex w-full flex-col gap-4 rounded-lg dark:bg-foreground/5 bg-slate-50 p-4"
             whileInView={{
               y: [-100, 0],
               opacity: [0, 1],
@@ -117,7 +123,6 @@ export default function Step1_TPIN({ updateDetails, backToStart }) {
                 ease: "easeInOut",
               },
             }}
-            className="flex w-full flex-col gap-4 rounded-lg dark:bg-foreground/5 bg-slate-50 p-4"
           >
             <div className="flex items-start gap-4">
               <SoftBoxIcon>

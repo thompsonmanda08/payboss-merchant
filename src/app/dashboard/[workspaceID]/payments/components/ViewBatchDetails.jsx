@@ -1,13 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
+
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/ValidationDetails";
 import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/approver-action";
 import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer";
 import usePaymentsStore from "@/context/payment-store";
-import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
-
-import { useQueryClient } from "@tanstack/react-query";
 import CardHeader from "@/components/base/card-header";
 import Tabs from "@/components/tabs";
 
@@ -48,7 +48,7 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
       batchID={batchID}
       navigateForward={goForward}
     />,
-    <ApproverAction batchID={batchID} key={"step-5"} />,
+    <ApproverAction key={"step-5"} batchID={batchID} />,
   ];
 
   const TABS = [
@@ -85,7 +85,7 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
         selectedBatch.status?.toLowerCase() != "submitted"
           ? COMPONENT_LIST_RENDERER.length - 1
           : currentTabIndex
-      ]
+      ],
     );
   }, [currentTabIndex]);
 
@@ -114,15 +114,16 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
       {/*********************************************************************** */}
       {/************************* COMPONENT RENDERER *************************/}
       <Modal
-        size={"5xl"}
-        isOpen={isOpen}
-        onClose={handleClose}
         isDismissable={false}
+        isOpen={isOpen}
+        size={"5xl"}
+        onClose={handleClose}
       >
         <ModalContent>
           <>
             <ModalHeader className="flex gap-1">
               <CardHeader
+                infoText={currentStep.infoText}
                 title={
                   <>
                     {currentStep.title}
@@ -136,13 +137,12 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
                     }
                   </>
                 }
-                infoText={currentStep.infoText}
               />
               <Tabs
                 className={"mr-8 w-fit"}
-                tabs={TABS}
                 currentTab={currentTabIndex}
                 navigateTo={navigateTo}
+                tabs={TABS}
               />
             </ModalHeader>
 

@@ -1,8 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-import Search from "@/components/ui/search";
-import CustomTable from "@/components/tables/table";
 import {
   ArrowDownTrayIcon,
   EyeSlashIcon,
@@ -10,15 +7,18 @@ import {
   ListBulletIcon,
   PresentationChartBarIcon,
 } from "@heroicons/react/24/outline";
+import { useDateFormatter } from "@react-aria/i18n";
+import { useMutation } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
+
+import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import Search from "@/components/ui/search";
+import CustomTable from "@/components/tables/table";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
-
 import { DateRangePickerField } from "@/components/ui/date-select-field";
-import { useDateFormatter } from "@react-aria/i18n";
 import { QUERY_KEYS } from "@/lib/constants";
-import { useMutation } from "@tanstack/react-query";
 import { getBulkAnalyticReports } from "@/app/_actions/transaction-actions";
-import { AnimatePresence, motion } from "framer-motion";
 import { bulkTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
 import Card from "@/components/base/card";
 import CardHeader from "@/components/base/card-header";
@@ -74,7 +74,9 @@ export default function DisbursementReports({ workspaceID }) {
           row?.transactionID
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.name?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
+          row?.name
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -90,7 +92,9 @@ export default function DisbursementReports({ workspaceID }) {
           row?.transactionID
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.name?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
+          row?.name
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -100,21 +104,21 @@ export default function DisbursementReports({ workspaceID }) {
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
     <CustomTable
       key={`direct-payments-${workspaceID}`}
-      columns={BULK_REPORTS_COLUMNS}
-      rows={filteredDirectBatches}
-      isLoading={mutation.isPending}
-      isError={mutation.isError}
       removeWrapper
+      columns={BULK_REPORTS_COLUMNS}
+      isError={mutation.isError}
+      isLoading={mutation.isPending}
+      rows={filteredDirectBatches}
       onRowAction={handleBatchSelection}
     />,
     <CustomTable
       key={`voucher-payments-${workspaceID}`}
-      columns={BULK_REPORTS_COLUMNS}
-      rows={filteredVoucherBatches}
-      isLoading={mutation.isPending}
-      isError={mutation.isError}
-      onRowAction={handleBatchSelection}
       removeWrapper
+      columns={BULK_REPORTS_COLUMNS}
+      isError={mutation.isError}
+      isLoading={mutation.isPending}
+      rows={filteredVoucherBatches}
+      onRowAction={handleBatchSelection}
     />,
   ]);
 
@@ -124,6 +128,7 @@ export default function DisbursementReports({ workspaceID }) {
 
   function handleBatchSelection(ID) {
     let batch = null;
+
     if (currentTabIndex === 0) {
       batch = filteredDirectBatches.find((row) => row.ID == ID);
     }
@@ -141,6 +146,7 @@ export default function DisbursementReports({ workspaceID }) {
         objArray: directBatches,
         fileName: "direct_bulk_transactions",
       });
+
       return;
     }
     if (currentTabIndex === 1) {
@@ -164,16 +170,16 @@ export default function DisbursementReports({ workspaceID }) {
       <div className="mb-4 flex w-full items-start justify-start pb-2">
         <div className="flex items-center gap-2">
           <DateRangePickerField
-            label={"Reports Date Range"}
-            description={"Dates to generate transactional reports"}
-            visibleMonths={2}
             autoFocus
             dateRange={dateRange}
+            description={"Dates to generate transactional reports"}
+            label={"Reports Date Range"}
             setDateRange={setDateRange}
+            visibleMonths={2}
           />{" "}
           <Button
-            onPress={() => getBulkReportData(dateRange)}
             endContent={<FunnelIcon className="h-5 w-5" />}
+            onPress={() => getBulkReportData(dateRange)}
           >
             Apply
           </Button>
@@ -183,10 +189,10 @@ export default function DisbursementReports({ workspaceID }) {
       <Card className={"mb-8 w-full"}>
         <div className="flex items-end justify-between">
           <CardHeader
-            title={`Bulk Transactions History (${dateRange?.range || "--"})`}
             infoText={
               "Transactions logs to keep track of your workspace activity"
             }
+            title={`Bulk Transactions History (${dateRange?.range || "--"})`}
           />
 
           <div className="flex gap-4">
@@ -211,11 +217,11 @@ export default function DisbursementReports({ workspaceID }) {
 
         <AnimatePresence>
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
             animate={{
               height: isExpanded ? "auto" : 0,
               opacity: isExpanded ? 1 : 0,
             }}
+            initial={{ height: 0, opacity: 0 }}
           >
             <Card className={"mt-4 gap-5 shadow-none"}>
               {Object.keys(report).length > 0 ? (
@@ -223,34 +229,34 @@ export default function DisbursementReports({ workspaceID }) {
                   <div className="flex flex-col flex-wrap sm:flex-row md:justify-between">
                     <div className="flex flex-1 flex-col gap-4">
                       <TotalValueStat
-                        label={"Total Batches"}
+                        count={report?.batches?.count || 0}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "primary",
                         }}
-                        count={report?.batches?.count || 0}
+                        label={"Total Batches"}
                         value={formatCurrency(report?.batches?.value || 0)}
                       />
                     </div>
                     <div className="flex flex-1 flex-col gap-4">
                       <TotalValueStat
-                        label={"Total Direct Batches"}
+                        count={report?.direct?.all?.count || 0}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "primary-800",
                         }}
-                        count={report?.direct?.all?.count || 0}
+                        label={"Total Direct Batches"}
                         value={formatCurrency(report?.direct?.all?.value || 0)}
                       />
                     </div>
                     <div className="flex flex-1 flex-col gap-4">
                       <TotalValueStat
-                        label={"Total Voucher Batches"}
+                        count={report?.voucher?.all?.count || 0}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "secondary",
                         }}
-                        count={report?.voucher?.all?.count || 0}
+                        label={"Total Voucher Batches"}
                         value={formatCurrency(report?.voucher?.all?.value || 0)}
                       />
                     </div>
@@ -259,86 +265,86 @@ export default function DisbursementReports({ workspaceID }) {
                   <div className="flex flex-col flex-wrap sm:flex-row md:justify-evenly">
                     <div className="flex flex-1 flex-col gap-4">
                       <TotalValueStat
-                        label={"Processed Direct Transactions"}
+                        count={report?.direct?.proccessed?.count || 0}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "primary-800",
                         }}
-                        count={report?.direct?.proccessed?.count || 0}
+                        label={"Processed Direct Transactions"}
                         value={formatCurrency(
-                          report?.direct?.proccessed?.value || 0
+                          report?.direct?.proccessed?.value || 0,
                         )}
                       />
                       <TotalValueStat
-                        label={"Processed Voucher Transactions"}
+                        count={report?.voucher?.proccessed?.count || 0}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "secondary",
                         }}
-                        count={report?.voucher?.proccessed?.count || 0}
+                        label={"Processed Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucher?.proccessed?.value || 0
+                          report?.voucher?.proccessed?.value || 0,
                         )}
                       />
                     </div>
 
                     <div className="flex flex-1 flex-col gap-4">
                       <TotalValueStat
-                        label={"Successful Direct Transactions"}
-                        icon={{
-                          component: <ListBulletIcon className="h-5 w-5" />,
-                          color: "success",
-                        }}
                         count={
                           report?.directTransactions?.successful?.count || 0
                         }
+                        icon={{
+                          component: <ListBulletIcon className="h-5 w-5" />,
+                          color: "success",
+                        }}
+                        label={"Successful Direct Transactions"}
                         value={formatCurrency(
-                          report?.directTransactions?.successful?.value || 0
+                          report?.directTransactions?.successful?.value || 0,
                         )}
                       />
                       <TotalValueStat
-                        label={"Failed Direct Transactions"}
+                        count={report?.directTransactions?.failed?.count || 0}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "danger",
                         }}
-                        count={report?.directTransactions?.failed?.count || 0}
+                        label={"Failed Direct Transactions"}
                         value={formatCurrency(
-                          report?.directTransactions?.failed?.value || 0
+                          report?.directTransactions?.failed?.value || 0,
                         )}
                       />
                     </div>
 
                     <div className="flex flex-1 flex-col gap-4">
                       <TotalValueStat
-                        label={"Successful Voucher Transactions"}
+                        count={
+                          report?.voucherTransactions?.successful?.count || 0
+                        }
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "success",
                         }}
-                        count={
-                          report?.voucherTransactions?.successful?.count || 0
-                        }
+                        label={"Successful Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucherTransactions?.successful?.value || 0
+                          report?.voucherTransactions?.successful?.value || 0,
                         )}
                       />
                       <TotalValueStat
-                        label={"Failed Voucher Transactions"}
+                        count={report?.voucherTransactions?.failed?.count || 0}
                         icon={{
                           component: <ListBulletIcon className="h-5 w-5" />,
                           color: "danger",
                         }}
-                        count={report?.voucherTransactions?.failed?.count || 0}
+                        label={"Failed Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucherTransactions?.failed?.value || 0
+                          report?.voucherTransactions?.failed?.value || 0,
                         )}
                       />
                     </div>
                   </div>
                 </>
               ) : (
-                <TotalStatsLoader length={8} className={"flex-wrap"} />
+                <TotalStatsLoader className={"flex-wrap"} length={8} />
               )}
             </Card>
           </motion.div>
@@ -349,22 +355,22 @@ export default function DisbursementReports({ workspaceID }) {
         <div className="mb-4 flex w-full items-center justify-between gap-8">
           <Tabs
             className={"my-2 mr-auto max-w-md"}
-            tabs={SERVICE_TYPES}
             currentTab={currentTabIndex}
             navigateTo={navigateTo}
+            tabs={SERVICE_TYPES}
           />
           <div className="flex w-full max-w-md gap-4">
             <Search
               // className={'mt-auto'}
-              placeholder={"Search by name, or type..."}
               classNames={{ input: "h-10" }}
+              placeholder={"Search by name, or type..."}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
               }}
             />
             <Button
-              onPress={handleFileExportToCSV}
               startContent={<ArrowDownTrayIcon className="h-5 w-5" />}
+              onPress={handleFileExportToCSV}
             >
               Export
             </Button>
@@ -376,11 +382,11 @@ export default function DisbursementReports({ workspaceID }) {
       {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
       {openReportsModal && (
         <ReportDetailsViewer
-          setOpenReportsModal={setOpenReportsModal}
-          openReportsModal={openReportsModal}
-          setSelectedBatch={setSelectedBatch}
-          columns={SINGLE_TRANSACTION_REPORTS_COLUMNS}
           batch={selectedBatch}
+          columns={SINGLE_TRANSACTION_REPORTS_COLUMNS}
+          openReportsModal={openReportsModal}
+          setOpenReportsModal={setOpenReportsModal}
+          setSelectedBatch={setSelectedBatch}
         />
       )}
       {/************************************************************************/}

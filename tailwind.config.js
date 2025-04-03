@@ -1,9 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 
-const formsPlugin = require("@tailwindcss/forms");
+// const formsPlugin = require("@tailwindcss/forms");
 const tailwindAnimate = require("tailwindcss-animate");
-
 const { heroui } = require("@heroui/theme");
+
 export const darkMode = ["class"];
 export const content = [
   "./src/**/*.{js,jsx,ts,tsx}",
@@ -80,7 +80,7 @@ export const theme = {
 
 export const plugins = [
   tailwindAnimate,
-  formsPlugin,
+  // formsPlugin,
   heroui({
     addCommonColors: true,
     themes: {

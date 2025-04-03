@@ -1,10 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+
 import { notify } from "@/lib/utils";
+import { PASSWORD_PATTERN, slideDownInView } from "@/lib/constants";
+
 import { Input } from "./ui/input-field";
 import { Button } from "./ui/button";
-import { PASSWORD_PATTERN, slideDownInView } from "@/lib/constants";
 
 function ChangePasswordField({ updatePassword, setUpdatePassword }) {
   const [isValidPassword, setIsValidPassword] = useState(false);
@@ -37,6 +39,7 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
         message: "Provide your current password!",
       });
       setLoading(false);
+
       return;
     }
 
@@ -46,6 +49,7 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
         message: "Passwords should match the policy on the left",
       });
       setLoading(false);
+
       return;
     }
 
@@ -56,6 +60,7 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
         message: "Passwords do not match",
       });
       setLoading(false);
+
       return;
     }
 
@@ -79,38 +84,38 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
     updatePassword && (
       <AnimatePresence mode="wait">
         <motion.div
-          variants={slideDownInView}
-          initial={"hidden"}
           animate={"visible"}
-          exit={"hidden"}
           className="flex w-full gap-4 py-4"
+          exit={"hidden"}
+          initial={"hidden"}
+          variants={slideDownInView}
         >
           <div className="flex w-full flex-col gap-3">
             <Input
+              errorText={error.message}
               id="old_password"
               label="Current Password"
               placeholder="Enter current password"
               type="password"
-              onError={error?.noPassword}
-              errorText={error.message}
               value={passwordFields.currentPassword}
               onChange={(e) =>
                 updatePasswordField({ currentPassword: e.target.value })
               }
+              onError={error?.noPassword}
             />
             {/* ERROR MESSAGE */}
             {passwordFields.currentPassword && passwordFields.newPassword && (
               <AnimatePresence>
                 <motion.div
+                  animate="visible"
+                  className="flex justify-start"
+                  exit="exit"
+                  initial="hidden"
                   variants={{
                     hidden: { opacity: 0, x: -50 },
                     visible: { opacity: 1, x: 0 },
                     exit: { opacity: 0, x: 100 },
                   }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="flex justify-start"
                 >
                   <ul className="-mt-1 flex list-disc flex-col pl-8 text-[10px] tracking-tight text-foreground/70 sm:text-xs xl:text-sm">
                     <li>Your New Password must have at least 8 characters</li>
@@ -127,48 +132,48 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
             <Input
               id="new_password"
               label="New Password"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               placeholder="Enter new password"
+              title="Your password must include letters numbers and symbols!"
               type="password"
-              onError={error.status}
               value={passwordFields.newPassword}
               onChange={(e) =>
                 updatePasswordField({ newPassword: e.target.value })
               }
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-              title="Your password must include letters numbers and symbols!"
+              onError={error.status}
             />
             <Input
+              errorText={error.message}
               id="confirm_password"
               label="Confirm Password"
               placeholder="Confirm new password"
               type="password"
               value={passwordFields.confirmPassword}
+              onChange={(e) =>
+                updatePasswordField({ confirmPassword: e.target.value })
+              }
               onError={
                 passwordFields.confirmPassword.length > 6 &&
                 error.status &&
                 error?.noMatch
               }
-              errorText={error.message}
-              onChange={(e) =>
-                updatePasswordField({ confirmPassword: e.target.value })
-              }
             />
 
             <div className="mt-2 flex justify-end gap-2">
               <Button
-                size="sm"
                 className="h-10 px-6 text-sm"
                 color="danger"
                 disabled={loading}
+                size="sm"
                 onClick={async () => setUpdatePassword(false)}
               >
                 Cancel
               </Button>
               <Button
-                size="sm"
                 className="h-10 px-8 text-sm"
-                isLoading={loading}
                 disabled={loading || isValidPassword}
+                isLoading={loading}
+                size="sm"
                 onClick={async () => await handleChangePassword()}
               >
                 Save

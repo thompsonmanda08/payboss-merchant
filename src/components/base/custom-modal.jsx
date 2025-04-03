@@ -1,8 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "../ui/button";
+
 import { cn } from "@/lib/utils";
+
+import { Button } from "../ui/button";
+
 import CardHeader from "./card-header";
 
 const modalVariants = {
@@ -37,7 +40,7 @@ function Modal({
 }) {
   const [isOpen, setIsOpen] = useState(show || false);
   const [noCallToAction, setNoCallToAction] = useState(
-    removeCallToAction || false
+    removeCallToAction || false,
   );
 
   useEffect(() => {
@@ -62,61 +65,61 @@ function Modal({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial="hidden"
           animate="visible"
-          exit="exit"
-          variants={overlayVariants}
-          transition={{ duration: 0.25 }}
-          onClick={dismissModal}
           className={cn(
             "absolute inset-0 z-50 flex h-screen w-full items-center justify-center bg-foreground-800/50",
-            overlay
+            overlay,
           )}
+          exit="exit"
+          initial="hidden"
+          transition={{ duration: 0.25 }}
+          variants={overlayVariants}
+          onClick={dismissModal}
         >
           <motion.div
-            initial="hidden"
             animate="visible"
+            className={cn(
+              "z-50 flex w-full flex-col items-center justify-start gap-1 rounded-lg bg-[#ffffff] p-4",
+              className,
+              base,
+              card,
+            )}
             exit="exit"
-            variants={modalVariants}
-            transition={{ duration: 0.25 }}
+            initial="hidden"
             style={{
               maxWidth: width ? `${width}px` : "380px",
               minHeight: height ? `${height}px` : "180px",
               // height: height ? `${height}px` : 'auto',
             }}
+            transition={{ duration: 0.25 }}
+            variants={modalVariants}
             onClick={(e) => e.stopPropagation()}
-            className={cn(
-              "z-50 flex w-full flex-col items-center justify-start gap-1 rounded-lg bg-[#ffffff] p-4",
-              className,
-              base,
-              card
-            )}
           >
             <CardHeader
-              title={title}
-              infoText={infoText}
               handleClose={handleClose}
+              infoText={infoText}
+              title={title}
             />
             {/* MODAL CONTENT */}
             <div
-              onClick={(e) => e.stopPropagation()}
               className={cn(
                 "mb-2 mt-5 flex h-full w-full flex-grow flex-col",
-                container
+                container,
               )}
+              onClick={(e) => e.stopPropagation()}
             >
               {children}
             </div>
             {!noCallToAction && (
               <div className="mt-auto flex w-full justify-end gap-3">
-                <Button onClick={handleClose} color="danger" className="">
+                <Button className="" color="danger" onClick={handleClose}>
                   {cancelText || "Cancel"}
                 </Button>
                 <Button
+                  className=" px-6"
+                  disabled={loading || disableAction}
                   isLoading={loading}
                   onClick={onConfirm}
-                  disabled={loading || disableAction}
-                  className=" px-6"
                 >
                   {confirmText || "Done"}
                 </Button>

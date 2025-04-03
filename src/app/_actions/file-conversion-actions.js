@@ -2,6 +2,7 @@ import {
   API_KEY_TERMINAL_TRANSACTION_COLUMNS,
   API_KEY_TRANSACTION_COLUMNS,
   BILLS_TRANSACTION_COLUMNS,
+  BULK_REPORTS_COLUMNS,
   SINGLE_TRANSACTION_REPORTS_COLUMNS,
   WALLET_STATEMENT_REPORT_COLUMNS,
 } from "@/lib/table-columns";
@@ -11,6 +12,7 @@ export function downloadCSV(data, fileName) {
   const csvData = new Blob([data], { type: "text/csv" });
   const csvURL = URL.createObjectURL(csvData);
   const link = document.createElement("a");
+
   link.href = csvURL;
   link.download = `${fileName}.csv`;
   document.body.appendChild(link);
@@ -34,6 +36,7 @@ export function convertToCSVString({
 }) {
   if (!Array.isArray(objArray) || objArray.length === 0) {
     console.error("Invalid or empty data provided for CSV conversion.");
+
     return;
   }
 
@@ -103,6 +106,7 @@ export const bulkTransactionsReportToCSV = ({
   for (let i = 0; i < array.length; i++) {
     let line = "";
     let date = formatDate(array[i]?.created_at);
+
     line += `"${date || ""}",`;
     line += `"${array[i]?.name || "N/A"}",`;
     line += `"${array[i]?.allRecords || "N/A"}",`;
@@ -128,13 +132,15 @@ export const walletStatementReportToCSV = ({
   let str = "";
 
   const headers = WALLET_STATEMENT_REPORT_COLUMNS?.map((col) => col?.name).join(
-    ","
+    ",",
   );
+
   str += headers + "\r\n";
 
   for (let i = 0; i < array.length; i++) {
     let line = "";
     let date = formatDate(array[i]?.created_at);
+
     line += `"${date || ""}",`;
     line += `"${array[i]?.content || ""}",`;
     line += `"${array[i]?.created_by || ""}",`;
@@ -155,6 +161,7 @@ export const apiTransactionsReportToCSV = ({
 }) => {
   if (!Array.isArray(objArray) || objArray.length === 0) {
     console.error("Invalid or empty data provided for CSV conversion.");
+
     return;
   }
 
@@ -174,6 +181,7 @@ export const apiTransactionsReportToCSV = ({
   for (let i = 0; i < array.length; i++) {
     let line = "";
     let date = formatDate(array[i]?.created_at);
+
     line += `"${date || ""}",`;
     line += hasTerminals ? `"${array[i]?.terminalID || "N/A"}",` : "";
     line += `"${array[i]?.narration || "N/A"}",`;
@@ -198,6 +206,7 @@ export const billTransactionsReportToCSV = ({
 }) => {
   if (!Array.isArray(objArray) || objArray.length === 0) {
     console.error("Invalid or empty data provided for CSV conversion.");
+
     return;
   }
 
@@ -211,6 +220,7 @@ export const billTransactionsReportToCSV = ({
   for (let i = 0; i < array.length; i++) {
     let line = "";
     let date = formatDate(array[i]?.created_at);
+
     line += `"${date || ""}",`;
     line += `"${array[i]?.service_provider || "N/A"}",`;
     line += `"${array[i]?.voucher_type || "N/A"}",`;
@@ -231,11 +241,11 @@ export const billTransactionsReportToCSV = ({
 
 export const convertSingleTransactionToCSV = ({
   objArray = [],
-  columnHeaders = undefined,
   fileName = "PayBoss_Transactions_Report",
 }) => {
   if (!Array.isArray(objArray) || objArray.length === 0) {
     console.error("Invalid or empty data provided for CSV conversion.");
+
     return;
   }
 
@@ -244,7 +254,7 @@ export const convertSingleTransactionToCSV = ({
   let str = "";
 
   const headers = SINGLE_TRANSACTION_REPORTS_COLUMNS?.map(
-    (col) => col?.name
+    (col) => col?.name,
   ).join(",");
 
   str += headers + "\r\n";
@@ -254,6 +264,7 @@ export const convertSingleTransactionToCSV = ({
     let date = array[i]?.created_at
       ? formatDate(array[i]?.created_at)
       : undefined;
+
     line += `"${date || "--/--/----"}",`;
     line += `"${array[i]?.first_name || "N/A"}",`;
     line += `"${array[i]?.last_name || "N/A"}",`;

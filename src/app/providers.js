@@ -2,12 +2,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
-import { useNetwork } from "@/hooks/useNetwork";
 import { motion } from "framer-motion";
-import ScreenLock, { IdleTimerContainer } from "@/components/screen-lock";
-import FirstLogin from "@/components/first-login";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useEffect, useState } from "react";
+
+import { useNetwork } from "@/hooks/useNetwork";
+import ScreenLock, { IdleTimerContainer } from "@/components/screen-lock";
+import FirstLogin from "@/components/first-login";
 
 const queryClient = new QueryClient();
 
@@ -24,14 +25,15 @@ function Providers({ session, authSession, children }) {
   return (
     <QueryClientProvider client={queryClient}>
       <NextThemesProvider
+        disableTransitionOnChange
+        enableSystem
         attribute="class"
         defaultTheme="light"
-        enableSystem
-        disableTransitionOnChange
       >
         <HeroUIProvider locale="en-GB">
           {!online && (
             <motion.div
+              className="relative -top-1 left-0 right-0 z-[999] mb-4 bg-red-500 p-2 py-2 text-xs font-bold capitalize text-white"
               whileInView={{
                 y: [-20, 1],
                 opacity: [0, 1],
@@ -44,7 +46,6 @@ function Providers({ session, authSession, children }) {
                   },
                 },
               }}
-              className="relative -top-1 left-0 right-0 z-[999] mb-4 bg-red-500 p-2 py-2 text-xs font-bold capitalize text-white"
             >
               NETWORK ERROR: Check your internet connection and try again!
             </motion.div>

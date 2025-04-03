@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import Modal from "@/components/base/custom-modal";
 import SingleTransactionsTable from "@/components/tables/single-transaction-table";
 
@@ -13,27 +12,27 @@ function ReportDetailsViewer({
 }) {
   return (
     <Modal
-      show={openReportsModal}
+      classNames={{ overlay: "z-[55]", container: "px-2" }}
       onClose={() => {
         setOpenReportsModal(false);
         setSelectedBatch(null);
       }}
       // onConfirm={handleConfirmationClose}
-      title={"Transaction Report Details"}
-      infoText={"Track each transactions status throughout the payment process"}
-      classNames={{ overlay: "z-[55]", container: "px-2" }}
-      isDismissible={false}
       disableAction={true}
-      removeCallToAction={true}
-      loading={isLoading}
-      width={1440}
       height={400}
+      infoText={"Track each transactions status throughout the payment process"}
+      isDismissible={false}
+      loading={isLoading}
+      removeCallToAction={true}
+      show={openReportsModal}
+      title={"Transaction Report Details"}
+      width={1440}
     >
       <SingleTransactionsTable
-        columnData={columns}
-        rowData={batch?.transactions}
-        isLoading={isLoading}
         removeWrapper
+        columnData={columns}
+        isLoading={isLoading}
+        rowData={batch?.transactions}
       />
     </Modal>
   );

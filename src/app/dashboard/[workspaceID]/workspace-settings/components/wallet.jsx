@@ -1,3 +1,10 @@
+import { Chip, Tooltip, useDisclosure } from "@heroui/react";
+import { getLocalTimeZone, today } from "@internationalized/date";
+import { useQueryClient } from "@tanstack/react-query";
+import { formatDistance } from "date-fns";
+import { useState } from "react";
+import { PaperClipIcon } from "@heroicons/react/24/outline";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
 import {
@@ -10,17 +17,13 @@ import {
 import { QUERY_KEYS, TASK_TYPE, WORKSPACE_TYPES } from "@/lib/constants";
 import { formatActivityData } from "@/lib/utils";
 import PromptModal from "@/components/base/prompt";
-import { Chip, Tooltip, useDisclosure } from "@heroui/react";
 import { uploadPOPDocument } from "@/app/_actions/pocketbase-actions";
 import {
   approveWalletPrefund,
   submitPOP,
 } from "@/app/_actions/workspace-actions";
 import DateSelectField from "@/components/ui/date-select-field";
-import { getLocalTimeZone, today } from "@internationalized/date";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useQueryClient } from "@tanstack/react-query";
-import { formatDistance } from "date-fns";
 import {
   useWalletPrefundHistory,
   useWorkspaceInit,
@@ -31,8 +34,6 @@ import StatusMessage from "@/components/base/status-message";
 import CardHeader from "@/components/base/card-header";
 import EmptyLogs from "@/components/base/empty-logs";
 import UploadField from "@/components/base/file-dropzone";
-import { useState } from "react";
-import { PaperClipIcon } from "@heroicons/react/24/outline";
 import Modal from "@/components/base/custom-modal";
 import useWalletStore from "@/context/wallet-store";
 
@@ -90,6 +91,7 @@ function Wallet({
         color: "success",
         description: response?.message,
       });
+
       return response?.data;
     }
 
@@ -99,6 +101,7 @@ function Wallet({
       color: "danger",
       description: response?.message,
     });
+
     return null;
   }
 
@@ -117,6 +120,7 @@ function Wallet({
       });
       setIsLoading(false);
       onClose();
+
       return;
     }
 
@@ -132,6 +136,7 @@ function Wallet({
       });
       setIsLoading(false);
       onClose();
+
       return;
     }
 
@@ -147,6 +152,7 @@ function Wallet({
       });
       setIsLoading(false);
       onClose();
+
       return;
     }
 
@@ -162,6 +168,7 @@ function Wallet({
       });
       setIsLoading(false);
       onClose();
+
       return;
     }
 
@@ -181,6 +188,7 @@ function Wallet({
       });
       setIsLoading(false);
       onClose();
+
       return;
     }
 
@@ -195,6 +203,7 @@ function Wallet({
         status: true,
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -219,6 +228,7 @@ function Wallet({
       });
       onClose();
       setIsLoading(false);
+
       return;
     }
 
@@ -232,19 +242,20 @@ function Wallet({
       description: response?.message,
     });
     setIsLoading(false);
+
     return;
   }
 
   return (
     <>
-      <section role="wallet-section" className="flex w-full items-center">
+      <section className="flex w-full items-center" role="wallet-section">
         <Card
           className={cn(
             "flex w-full flex-col items-start justify-center gap-8 md:flex-row",
             {
               "items-center justify-center gap-x-0": hideHistory,
               "rounded-none border-none p-0 shadow-none": removeWrapper,
-            }
+            },
           )}
         >
           {/* ONLY THE INITIATOR CAN SEE THIS FORM IN DISBURSEMENT WORKSPACE */}
@@ -256,58 +267,58 @@ function Wallet({
                 })}
               >
                 <Balance
-                  title={`${workspaceName} Wallet Balance`}
-                  amount={balance}
                   isLandscape
+                  amount={balance}
+                  title={`${workspaceName} Wallet Balance`}
                 />
                 <div
                   className={cn(
                     "flex w-full flex-col gap-y-4 p-[25px] lg:border lg:border-y-0 lg:border-l-0 lg:border-border",
                     {
                       "lg:border-r-0": hideHistory,
-                    }
+                    },
                   )}
                 >
-                  <div role="pre-fund-wallet" className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4" role="pre-fund-wallet">
                     <p className="text-[14px] font-semibold text-foreground/80">
                       Deposit funds into your PayBoss Wallet
                     </p>
 
                     <Input
-                      label="Amount"
-                      type="number"
                       required
-                      value={formData?.amount}
+                      label="Amount"
+                      name="amount"
                       placeholder="Enter an amount"
+                      type="number"
+                      value={formData?.amount}
                       onChange={(e) =>
                         updateFormData({ amount: e.target.value })
                       }
-                      name="amount"
                     />
 
                     <Input
-                      placeholder="Bank Reference No. "
                       required
                       label="Reference Number"
+                      name="bank_rrn"
+                      placeholder="Bank Reference No. "
                       value={formData.bank_rrn}
                       onChange={(e) =>
                         updateFormData({ bank_rrn: e.target.value })
                       }
-                      name="bank_rrn"
                     />
                     <DateSelectField
-                      label={"Date of Deposit"}
-                      className="max-w-md"
                       required
-                      description={"Date the funds were deposited"}
+                      className="max-w-md"
                       defaultValue={formData?.date_of_deposit}
+                      description={"Date the funds were deposited"}
+                      label={"Date of Deposit"}
+                      labelPlacement={"outside"}
+                      maxValue={today(getLocalTimeZone())}
                       value={
                         formData?.date_of_deposit?.split("").length > 9
                           ? formData?.date_of_deposit
                           : undefined
                       }
-                      maxValue={today(getLocalTimeZone())}
-                      labelPlacement={"outside"}
                       onChange={(date) => {
                         updateFormData({
                           date_of_deposit: formatDate(date, "YYYY-MM-DD"),
@@ -316,22 +327,23 @@ function Wallet({
                     />
 
                     <UploadField
-                      label="Proof of Payment"
-                      isLoading={walletLoading}
                       required
-                      handleFile={async (file) => {
-                        const file_record = await handleFileUpload(
-                          file,
-                          formData.file?.file_record_id
-                        );
-                        updateFormData({ url: file_record?.file_url });
-                      }}
                       acceptedFiles={{
                         "application/pdf": [],
                         "image/png": [],
                         "image/jpeg": [],
                         "image/jpg": [],
                       }}
+                      handleFile={async (file) => {
+                        const file_record = await handleFileUpload(
+                          file,
+                          formData.file?.file_record_id,
+                        );
+
+                        updateFormData({ url: file_record?.file_url });
+                      }}
+                      isLoading={walletLoading}
+                      label="Proof of Payment"
                     />
                     {error.status && (
                       <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
@@ -358,30 +370,30 @@ function Wallet({
           {!hideHistory && (
             <div className="flex h-full max-h-[600px] overflow-y-auto no-scrollbar flex-[2] flex-grow flex-col items-start gap-8">
               <CardHeader
-                title="Wallet Transaction History"
                 infoText={
                   "Transaction history logs for every activity on the wallet"
                 }
+                title="Wallet Transaction History"
               />
               <WalletTransactionHistory
-                workspaceID={workspaceID}
-                setOpenAttachmentModal={setOpenAttachmentModal}
                 openAttachmentModal={openAttachmentModal}
+                setOpenAttachmentModal={setOpenAttachmentModal}
                 setSelectedPrefund={setSelectedPrefund}
+                workspaceID={workspaceID}
               />
             </div>
           )}
         </Card>
 
         <PromptModal
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          onClose={onClose}
-          onConfirm={handleWalletPreFund}
-          title="Confirm POP Submission"
           confirmText="Confirm"
           isDisabled={isLoading}
           isLoading={isLoading}
+          isOpen={isOpen}
+          title="Confirm POP Submission"
+          onClose={onClose}
+          onConfirm={handleWalletPreFund}
+          onOpenChange={onOpenChange}
         >
           <p className="-mt-4 mb-4 text-[15px] leading-7 text-foreground/80">
             Your wallet will be credited with the amount{" "}
@@ -395,10 +407,10 @@ function Wallet({
 
           <Input
             label="Prefund Name/Label"
-            value={formData?.name}
-            placeholder="Enter a prefund name"
-            onChange={(e) => updateFormData({ name: e.target.value })}
             name="name"
+            placeholder="Enter a prefund name"
+            value={formData?.name}
+            onChange={(e) => updateFormData({ name: e.target.value })}
           />
         </PromptModal>
       </section>
@@ -439,7 +451,7 @@ export function WalletTransactionHistory({
   const walletData = transactionData || walletHistoryResponse?.data?.data || [];
 
   const walletHistory = walletData.sort(
-    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    (a, b) => new Date(b.created_at) - new Date(a.created_at),
   );
 
   const data = [
@@ -497,6 +509,7 @@ export function WalletTransactionHistory({
         color: "danger",
         description: "Review reason is required.",
       });
+
       return;
     }
 
@@ -507,13 +520,14 @@ export function WalletTransactionHistory({
         color: "danger",
         description: "Action is required!",
       });
+
       return;
     }
 
     const response = await approveWalletPrefund(
       prefundApproval,
       selectedPrefund?.ID,
-      workspaceID
+      workspaceID,
     );
 
     if (!response?.success) {
@@ -523,6 +537,7 @@ export function WalletTransactionHistory({
         color: "danger",
         description: "Failed to submit approval action!",
       });
+
       return;
     }
 
@@ -558,7 +573,7 @@ export function WalletTransactionHistory({
             "my-0": formattedActivityData?.length > 0,
           },
           className,
-          wrapper
+          wrapper,
         )}
       >
         {formattedActivityData.length > 0 ? (
@@ -585,13 +600,13 @@ export function WalletTransactionHistory({
 
                   return (
                     <div
-                      className="flex flex-col gap-y-4 py-2"
                       key={`${itemIndex}${index}${item?.created_by}`}
+                      className="flex flex-col gap-y-4 py-2"
                     >
                       <div className="flex items-start space-x-4">
                         <LogTaskType
-                          type={item?.type}
                           classNames={{ wrapper: "" }}
+                          type={item?.type}
                         />
 
                         <div className="w-full items-start">
@@ -606,7 +621,7 @@ export function WalletTransactionHistory({
                                 ...
                                 {formatDistance(
                                   new Date(item?.created_at),
-                                  new Date()
+                                  new Date(),
                                 )}{" "}
                                 ago
                               </span>
@@ -614,7 +629,6 @@ export function WalletTransactionHistory({
                             <div className="flex max-w-max flex-col items-end">
                               <div className="flex gap-2">
                                 <Tooltip
-                                  placement="left"
                                   classNames={{
                                     content: cn(
                                       "text-nowrap bg-primary text-white",
@@ -623,20 +637,21 @@ export function WalletTransactionHistory({
                                         "bg-secondary/10 text-secondary":
                                           isYellow,
                                         "bg-danger/10 text-danger": isRed,
-                                      }
+                                      },
                                     ),
                                   }}
                                   content={`${capitalize(item?.status)}: ${
                                     item?.isPrefunded && !item?.isExpired
                                       ? "Active funds"
                                       : item?.isExpired
-                                      ? "Expired funds"
-                                      : item?.status == "approved"
-                                      ? "Awaiting fund activation"
-                                      : item?.status == "rejected"
-                                      ? item?.remarks
-                                      : "Awaiting admin action"
+                                        ? "Expired funds"
+                                        : item?.status == "approved"
+                                          ? "Awaiting fund activation"
+                                          : item?.status == "rejected"
+                                            ? item?.remarks
+                                            : "Awaiting admin action"
                                   }`}
+                                  placement="left"
                                 >
                                   <Chip
                                     classNames={{
@@ -649,7 +664,7 @@ export function WalletTransactionHistory({
                                           "bg-secondary/10 text-secondary":
                                             isYellow,
                                           "bg-danger/10 text-danger": isRed,
-                                        }
+                                        },
                                       ),
                                       content: cn("text-base font-bold", {}),
                                     }}
@@ -660,15 +675,15 @@ export function WalletTransactionHistory({
                                 </Tooltip>
                                 {item?.type?.toLowerCase() == "deposit" && (
                                   <Tooltip
-                                    placement="top"
                                     content={"View Proof of payment"}
+                                    placement="top"
                                   >
                                     <span
+                                      className="'h-6 hover:bg-foreground-300' cursor-pointer self-start rounded-md bg-foreground-200 p-[6px] text-lg font-bold text-slate-600 active:opacity-50"
                                       onClick={() => {
                                         setSelectedPrefund(item);
                                         setOpenAttachmentModal(true);
                                       }}
-                                      className="'h-6 hover:bg-foreground-300' cursor-pointer self-start rounded-md bg-foreground-200 p-[6px] text-lg font-bold text-slate-600 active:opacity-50"
                                     >
                                       <PaperClipIcon className="aspect-square w-5" />
                                     </span>
@@ -681,16 +696,16 @@ export function WalletTransactionHistory({
                                 workspaceUserRole?.can_approve && (
                                   <div className="mb-4 ml-auto mt-2 flex max-w-max gap-2">
                                     <Button
-                                      size="sm"
-                                      color={"danger"}
                                       className={"h-8"}
+                                      color={"danger"}
+                                      size="sm"
                                       onClick={() => reject(item)}
                                     >
                                       Reject
                                     </Button>
                                     <Button
-                                      size="sm"
                                       className={"h-8"}
+                                      size="sm"
                                       onClick={() => approve(item)}
                                     >
                                       Approve
@@ -705,7 +720,7 @@ export function WalletTransactionHistory({
                   );
                 })}
                 {index != formattedActivityData?.length - 1 && (
-                  <hr className="my-4 h-px border-0 bg-foreground-100"></hr>
+                  <hr className="my-4 h-px border-0 bg-foreground-100" />
                 )}
               </div>
             );
@@ -714,8 +729,8 @@ export function WalletTransactionHistory({
           <div className="flex flex-1 items-center rounded-lg bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
             <EmptyLogs
               className={"my-auto"}
-              title={"No Wallet Transactions"}
               subTitle={"You have not made any wallet transactions yet."}
+              title={"No Wallet Transactions"}
             />
           </div>
         )}
@@ -723,14 +738,14 @@ export function WalletTransactionHistory({
 
       {/* **************************************************** */}
       <ApprovalStatusPrompt
-        onOpen={onOpen}
-        isOpen={isOpen}
-        isLoading={loadingPrefund}
         handleApproval={handleApproval}
-        prefundApproval={prefundApproval}
         handleClosePrompt={handleClosePrompt}
+        isLoading={loadingPrefund}
+        isOpen={isOpen}
+        prefundApproval={prefundApproval}
         selectedPrefund={selectedPrefund}
         updatePrefundApproval={updatePrefundApproval}
+        onOpen={onOpen}
       />
       {/* **************************************************** */}
       {/* {pathname != `${dashboardRoute}/workspace-settings` && (
@@ -753,7 +768,7 @@ export function LogTaskType({ type, classNames }) {
           `inline-flex h-8 w-fit items-center justify-center gap-2 text-nowrap rounded-[4px]  px-2 py-1.5`,
           `cursor-pointer px-4`,
           `bg-${taskType?.color}/10`,
-          wrapper
+          wrapper,
         )}
       >
         <span className={cn(`text-${taskType?.color}`, icon)}>
@@ -763,7 +778,7 @@ export function LogTaskType({ type, classNames }) {
           className={cn(
             `text-sm font-medium leading-6`,
             `text-${taskType?.color}`,
-            text
+            text,
           )}
         >
           {taskType?.label}
@@ -771,6 +786,7 @@ export function LogTaskType({ type, classNames }) {
       </div>
     );
   }
+
   return null;
 }
 
@@ -784,25 +800,25 @@ export function AttachmentModal() {
 
   return (
     <Modal
+      removeCallToAction
+      cancelText="Close"
+      height={800}
+      infoText="Ensure the document aligns with the submitted details"
+      isDismissible={true}
       show={openAttachmentModal}
+      title={`${capitalize(selectedPrefund?.name)} - Proof of payment document`}
+      width={1200}
       onClose={() => {
         setOpenAttachmentModal(false);
         setSelectedPrefund(null);
       }}
-      cancelText="Close"
-      isDismissible={true}
-      title={`${capitalize(selectedPrefund?.name)} - Proof of payment document`}
-      infoText="Ensure the document aligns with the submitted details"
-      width={1200}
-      height={800}
-      removeCallToAction
     >
       {selectedPrefund?.url && (
         <iframe
-          src={selectedPrefund?.url}
-          title={selectedPrefund?.name}
           className="h-full min-h-[60vh] w-full flex-1"
+          src={selectedPrefund?.url}
           style={{ border: "none" }}
+          title={selectedPrefund?.name}
         />
       )}
     </Modal>
@@ -844,15 +860,15 @@ function ApprovalStatusPrompt({
 }) {
   return (
     <PromptModal
-      isOpen={isOpen}
-      onOpen={onOpen}
-      onClose={handleClosePrompt}
-      title="Approve Wallet Deposit Transaction"
-      onConfirm={handleApproval}
       confirmText="Confirm"
       isDisabled={isLoading}
-      isLoading={isLoading}
       isDismissable={false}
+      isLoading={isLoading}
+      isOpen={isOpen}
+      title="Approve Wallet Deposit Transaction"
+      onClose={handleClosePrompt}
+      onConfirm={handleApproval}
+      onOpen={onOpen}
     >
       <p className="-mt-4 mb-2 text-sm leading-6 text-foreground/70">
         Are you sure you want to <strong>{prefundApproval?.action}</strong> the
@@ -862,9 +878,9 @@ function ApprovalStatusPrompt({
         </code>{" "}
       </p>
       <Input
+        isDisabled={isLoading}
         label="Review/Remarks"
         placeholder="Enter a review remark"
-        isDisabled={isLoading}
         onChange={(e) =>
           updatePrefundApproval({
             remarks: e.target.value,

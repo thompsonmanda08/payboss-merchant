@@ -1,8 +1,9 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
-import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from "./constants";
 import { addToast } from "@heroui/react";
+
+import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from "./constants";
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -32,6 +33,7 @@ export function formatCurrency(amount) {
     currency: "ZMW",
     minimumFractionDigits: 2,
   });
+
   return amount ? currencyFormat.format(amount) : "";
 }
 
@@ -97,6 +99,7 @@ export function maskString(string, firstCharacters = 0, lastCharacters = 6) {
 
   const first = string?.slice(0, firstCharacters);
   const last = string?.slice(string.length - lastCharacters);
+
   return `${first} *****${last}`;
 }
 
@@ -113,6 +116,7 @@ export function capitalize(str = "") {
 
 export function isValidZambianMobileNumber(mobileNumber) {
   let number = mobileNumber?.replaceAll(/\D/g, "").toString();
+
   if (number?.length < 10 || number?.length > 12) {
     return false;
   }
@@ -134,6 +138,7 @@ export function getFormattedZambianMobileNumber(mobileNumber) {
   }
 
   let provider = null;
+
   if (MTN_NO.test(mobileNumber)) {
     provider = "MTN ";
   } else if (AIRTEL_NO.test(mobileNumber)) {
@@ -141,6 +146,7 @@ export function getFormattedZambianMobileNumber(mobileNumber) {
   } else if (ZAMTEL_NO.test(mobileNumber)) {
     provider = "Zamtel";
   }
+
   return {
     provider,
     mobileNumber: mobileNumber.replace("+", ""),
@@ -187,10 +193,12 @@ export function syntaxHighlight(json) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
+
   return json.replace(
     /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
     function (match) {
       var cls = "number";
+
       if (/^"/.test(match)) {
         if (/:$/.test(match)) {
           cls = "key";
@@ -202,8 +210,9 @@ export function syntaxHighlight(json) {
       } else if (/null/.test(match)) {
         cls = "null";
       }
+
       return '<span class="' + cls + '">' + match + "</span>";
-    }
+    },
   );
 }
 
@@ -214,6 +223,7 @@ export function generateRandomString(length = 10) {
 
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
+
     randomString += characters[randomIndex];
   }
 

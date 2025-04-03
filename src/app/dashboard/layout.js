@@ -1,11 +1,13 @@
+import { redirect } from "next/navigation";
+
 import SideNavBar from "@/components/side-navbar";
+import TopNavBar from "@/components/top-bar";
+
 import {
   getAuthSession,
   getUserDetails,
   getWorkspaceSession,
 } from "../_actions/config-actions";
-import TopNavBar from "@/components/top-bar";
-import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({ children }) {
   const authSession = await getAuthSession();

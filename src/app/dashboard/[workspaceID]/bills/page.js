@@ -1,5 +1,7 @@
+import { Suspense } from "react";
+
 import LoadingPage from "@/app/loading";
-import React, { Suspense } from "react";
+
 import BillPayments from "./bill-payments";
 
 export default async function BillPaymentsPage(props) {

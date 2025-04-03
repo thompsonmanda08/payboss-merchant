@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Tabs, Tab } from "@heroui/react";
 import { Image as NextImage } from "@heroui/react";
+
 import { cn } from "@/lib/utils";
 
 const features = [
@@ -59,17 +60,17 @@ export function PrimaryFeatures() {
 
   return (
     <section
-      id="why-pay-boss"
       aria-label="why pay-boss"
       className="relative overflow-hidden bg-primary w-screen pb-28 pt-20 sm:py-32 "
+      id="why-pay-boss"
     >
       <Image
-        className="absolute left-0 right-0 top-0"
-        src={"/images/background-features.jpg"}
         alt="bg-features-image"
-        width={2220}
+        className="absolute left-0 right-0 top-0"
         height={1080}
         loading="lazy"
+        src={"/images/background-features.jpg"}
+        width={2220}
       />
       <div className="relative container w-full gap-8 flex flex-col">
         <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
@@ -86,11 +87,6 @@ export function PrimaryFeatures() {
         <div className="flex flex-col gap-2 md:gap-4 md:flex-row w-full">
           <Tabs
             aria-label="PayBoss Features"
-            items={features}
-            isVertical={isVertical}
-            variant="bordered"
-            selectedKey={String(selectedIndex)}
-            onSelectionChange={setSelectedIndex}
             className="max-w-full w-full overflow-auto md:max-w-[460px]"
             classNames={{
               wrapper: "h-full max-h-full flex-1 w-full",
@@ -102,6 +98,11 @@ export function PrimaryFeatures() {
               tabList: "border-slate-100/10 max-h-full w-full",
               panel: "",
             }}
+            isVertical={isVertical}
+            items={features}
+            selectedKey={String(selectedIndex)}
+            variant="bordered"
+            onSelectionChange={setSelectedIndex}
           >
             {(feature) => (
               <Tab
@@ -111,14 +112,14 @@ export function PrimaryFeatures() {
                   <div className={cn("group relative rounded-full p-4 ")}>
                     <h3
                       className={cn(
-                        "font-semibold text-sm lg:text-[clamp(1rem,1rem+0.25vw,1.25rem)]"
+                        "font-semibold text-sm lg:text-[clamp(1rem,1rem+0.25vw,1.25rem)]",
                       )}
                     >
                       {feature.title}
                     </h3>
                     <p
                       className={cn(
-                        "mt-2 hidden text-sm lg:block w-full text-wrap"
+                        "mt-2 hidden text-sm lg:block w-full text-wrap",
                       )}
                     >
                       {feature.description}
@@ -139,17 +140,17 @@ export function PrimaryFeatures() {
                       duration: 0.5,
                     },
                   }}
+                  className="flex-1 w-full h-full max-w-6xl items-center justify-center"
                   transition={{
                     duration: 0.8,
                   }}
-                  className="flex-1 w-full h-full max-w-6xl items-center justify-center"
                 >
                   <NextImage
+                    alt="feature image"
                     className="h-full w-full object-fill"
+                    height={470}
                     src={feature.image}
                     width={1280}
-                    height={470}
-                    alt="feature image"
                   />
                 </motion.div>
               </Tab>

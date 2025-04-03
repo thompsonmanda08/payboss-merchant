@@ -1,7 +1,8 @@
-import SettingsSideBar from "@/components/settings-sidebar";
-import React from "react";
-import { getAuthSession, getUserDetails } from "../_actions/config-actions";
 import { redirect } from "next/navigation";
+
+import SettingsSideBar from "@/components/settings-sidebar";
+
+import { getAuthSession, getUserDetails } from "../_actions/config-actions";
 
 async function AccountSettingsLayout({ children }) {
   const authSession = await getAuthSession();
@@ -11,7 +12,7 @@ async function AccountSettingsLayout({ children }) {
 
   return (
     <main className="flex h-screen items-start justify-start overflow-hidden bg-background text-foreground">
-      <SettingsSideBar session={session} options={"account_settings"} />
+      <SettingsSideBar options={"account_settings"} session={session} />
       <div className="relative flex max-h-screen w-full flex-col overflow-y-auto p-8 pt-20 lg:static lg:pt-8">
         {children}
       </div>

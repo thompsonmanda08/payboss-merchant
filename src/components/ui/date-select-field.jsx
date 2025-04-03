@@ -1,15 +1,16 @@
 "use client";
-import { cn, formatDate } from "@/lib/utils";
 import { DatePicker, DateRangePicker } from "@heroui/react";
 import React, { useEffect } from "react";
 import { parseDate, today, getLocalTimeZone } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
 
+import { cn, formatDate } from "@/lib/utils";
+
 export const dateInputClassNames = {
   label: "ml-1 text-sm font-medium text-foreground/70 mb-0",
   base: "gap-0",
   inputWrapper: cn(
-    "focus:border-1 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[focus=true]:border-primary hover:border-primary/60 focus-within:hover:border-primary/60 focus-within:border-primary/60"
+    "focus:border-1 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[focus=true]:border-primary hover:border-primary/60 focus-within:hover:border-primary/60 focus-within:border-primary/60",
   ),
 };
 
@@ -51,23 +52,23 @@ function DateSelectField({
       <DatePicker
         // label={label}
         key={label}
-        inert={false}
-        variant="bordered"
-        value={value ? parseDate(value) : undefined}
-        // hideTimeZone
-        showMonthAndYearPickers
-        defaultValue={defaultValue}
-        onChange={onChange}
         className={cn("max-w-sm", className)}
         classNames={{
           label: cn(classNames?.label),
           inputWrapper: cn(
-            "focus:border-1 gap-0 bg-red-500 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary/70 focus:outline-none focus-visible:outline-primary/10 focus-visible:ring-1 focus:ring-primary/10 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[focus=true]:border-primary hover:border-primary/60 focus-within:hover:border-primary/60 focus-within:border-primary/60"
+            "focus:border-1 gap-0 bg-red-500 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary/70 focus:outline-none focus-visible:outline-primary/10 focus-visible:ring-1 focus:ring-primary/10 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[focus=true]:border-primary hover:border-primary/60 focus-within:hover:border-primary/60 focus-within:border-primary/60",
           ),
         }}
+        defaultValue={defaultValue}
         description={description}
-        labelPlacement={labelPlacement || "outside"}
+        inert={false}
         isRequired={props?.required}
+        labelPlacement={labelPlacement || "outside"}
+        variant="bordered"
+        onChange={onChange}
+        value={value ? parseDate(value) : undefined}
+        // hideTimeZone
+        showMonthAndYearPickers
         {...props}
       />
     </div>
@@ -87,6 +88,7 @@ export function DateRangePickerField({
 }) {
   const thisMonth = formatDate(new Date(), "YYYY-MM-DD");
   const thirtyDaysAgoDate = new Date();
+
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
   const thirtyDaysAgo = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
 
@@ -101,19 +103,20 @@ export function DateRangePickerField({
     if (value?.start && value?.end) {
       let start_date = formatDate(
         value?.start.toDate(getLocalTimeZone()),
-        "YYYY-MM-DD"
+        "YYYY-MM-DD",
       );
 
       let end_date = formatDate(
         value?.end.toDate(getLocalTimeZone()),
-        "YYYY-MM-DD"
+        "YYYY-MM-DD",
       );
+
       setDateRange({
         start_date,
         end_date,
         range: formatter.formatRange(
           value?.start.toDate(getLocalTimeZone()),
-          value?.end.toDate(getLocalTimeZone())
+          value?.end.toDate(getLocalTimeZone()),
         ),
       });
     }
@@ -123,23 +126,7 @@ export function DateRangePickerField({
     // <HeroUIProvider locale="es-GB">
     // {/* </HeroUIProvider> */}
     <DateRangePicker
-      label={label}
       showMonthAndYearPickers
-      defaultValue={defaultValue}
-      visibleMonths={visibleMonths}
-      value={value}
-      radius="md"
-      description={description}
-      labelPlacement={labelPlacement || "outside"}
-      isRequired={props?.required || props.isRequired}
-      maxValue={today(getLocalTimeZone())}
-      onChange={setValue}
-      variant="bordered"
-      className={cn("max-w-sm ", className)}
-      classNames={{
-        ...datePickerClasses,
-        ...dateInputClassNames,
-      }}
       calendarProps={{
         classNames: {
           base: "bg-background",
@@ -162,6 +149,22 @@ export function DateRangePickerField({
           ],
         },
       }}
+      className={cn("max-w-sm ", className)}
+      classNames={{
+        ...datePickerClasses,
+        ...dateInputClassNames,
+      }}
+      defaultValue={defaultValue}
+      description={description}
+      isRequired={props?.required || props.isRequired}
+      label={label}
+      labelPlacement={labelPlacement || "outside"}
+      maxValue={today(getLocalTimeZone())}
+      radius="md"
+      value={value}
+      variant="bordered"
+      visibleMonths={visibleMonths}
+      onChange={setValue}
       {...props}
     />
   );
