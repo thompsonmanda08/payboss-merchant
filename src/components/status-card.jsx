@@ -2,7 +2,7 @@ import { Chip, CircularProgress, Tooltip } from "@heroui/react";
 
 import { cn, formatCurrency } from "@/lib/utils";
 
-import Card from "./base/card";
+import Card from "./base/custom-card";
 
 function StatusCard({
   totalTitle,
@@ -193,7 +193,7 @@ function StatusCard({
                 // color={IconColor}
                 className={cn(
                   "my-auto ml-4 aspect-square h-6 w-6",
-                  `text-${IconColor}`,
+                  `text-${IconColor}`
                 )}
               />
             </Tooltip>

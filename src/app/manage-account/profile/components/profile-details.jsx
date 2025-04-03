@@ -7,7 +7,7 @@ import CardLoader from "@/components/base/card-loader";
 import { Input } from "@/components/ui/input-field";
 import useWorkspaces from "@/hooks/useWorkspaces";
 import useAccountProfile from "@/hooks/useProfileDetails";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 
 function ProfileDetails() {
   const { user } = useAccountProfile();

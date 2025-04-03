@@ -9,7 +9,7 @@ import { QUERY_KEYS } from "@/lib/constants";
 import { getWalletStatementReport } from "@/app/_actions/transaction-actions";
 import { WalletTransactionHistory } from "@/app/dashboard/[workspaceID]/workspace-settings/components/wallet";
 import { walletStatementReportToCSV } from "@/app/_actions/file-conversion-actions";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import Search from "@/components/ui/search";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -54,14 +54,12 @@ export default function StatementReport({ workspaceID }) {
       filteredRows = filteredRows.filter(
         (row) =>
           row?.ID?.toLowerCase().includes(
-            debouncedSearchQuery?.toLowerCase(),
+            debouncedSearchQuery?.toLowerCase()
           ) ||
           row?.amount
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.type
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()),
+          row?.type?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
       );
     }
 

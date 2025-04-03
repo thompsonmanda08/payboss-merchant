@@ -4,7 +4,7 @@ import { useState } from "react";
 import { notify } from "@/lib/utils";
 
 import { Button } from "../ui/button";
-import Card from "../base/card";
+import Card from "../base/custom-card";
 import { Input } from "../ui/input-field";
 
 function SupportForm() {

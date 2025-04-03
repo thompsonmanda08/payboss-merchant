@@ -6,7 +6,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-import BackgroundSVG from "@/components/base/BackgroundSVG";
+import BackgroundSVG from "@/components/base/background-svg";
 import { Button } from "@/components/ui/button";
 import { DefaultCover } from "@/lib/constants";
 import { cn } from "@/lib/utils";

@@ -5,6 +5,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
 import { AUTH_SESSION, USER_SESSION, WORKSPACE_SESSION } from "./constants";
+import { revalidatePath } from "next/cache";
 
 const secretKey =
   process.env.NEXT_PUBLIC_AUTH_SECRET || process.env.AUTH_SECRET;
@@ -26,8 +27,6 @@ export async function decrypt(session) {
 
     return payload;
   } catch (error) {
-    console.error(error);
-
     return null;
   }
 }
@@ -35,7 +34,7 @@ export async function decrypt(session) {
 export async function createAuthSession(
   accessToken,
   expiresIn = 3600,
-  refreshToken = "",
+  refreshToken = ""
 ) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // AFTER 1 HOUR
 
@@ -212,10 +211,21 @@ export async function getWorkspaceSessionData() {
 
 // DELETE THE SESSION
 export async function deleteSession() {
-  (await cookies()).delete(AUTH_SESSION);
-  (await cookies()).delete(USER_SESSION);
+  const cookieStore = await cookies();
+  const allCookies = cookieStore.getAll();
+
+  allCookies.forEach(({ name }) => {
+    cookieStore.set(name, "", {
+      expires: new Date(0),
+      path: "/",
+    });
+  });
 
   if (typeof window !== "undefined") {
     localStorage.clear();
   }
+
+  revalidatePath("/", "layout");
+
+  return { success: true, message: "Logout Success" };
 }

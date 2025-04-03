@@ -13,7 +13,7 @@ import Tabs from "@/components/tabs";
 import { Button } from "@/components/ui/button";
 import LoadingPage from "@/app/loading";
 import { cn } from "@/lib/utils";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import { WORKSPACE_TYPES } from "@/lib/constants";
 import useWorkspaceStore from "@/context/workspaces-store";
 

@@ -51,8 +51,6 @@ apiClient.interceptors.response.use(
         return await apiClient(prevRequest);
       }
 
-      await deleteSession();
-
       return {
         success: false,
         message: "Access Token Expired",
@@ -63,7 +61,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 export default authenticatedService;

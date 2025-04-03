@@ -1,7 +1,7 @@
 "use client";
 import { Switch } from "@heroui/switch";
 
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 
 function AccountPreferences() {
   const APPLICATION_CONFIG = [

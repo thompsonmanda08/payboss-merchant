@@ -3,7 +3,7 @@ import { Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
 
-import Logo from "@/components/base/logo";
+import Logo from "@/components/base/payboss-logo";
 import ThemeSwitcher from "@/components/base/theme-switcher";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/context/auth-store";

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
-import PromptModal from "@/components/base/prompt";
+import PromptModal from "@/components/base/prompt-modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
 import AddUserToWorkspace from "@/components/add-users-workspace-modal";
@@ -50,7 +50,7 @@ function WorkspaceDetails({
   const { data: callbackResponse } = useWorkspaceCallbackURL(workspaceID);
 
   const [isSandbox, setIsSandbox] = useState(
-    activeWorkspace?.workspace?.toLowerCase() == "sandbox",
+    activeWorkspace?.workspace?.toLowerCase() == "sandbox"
   );
 
   const [newWorkspace, setNewWorkspace] = useState({
@@ -350,7 +350,7 @@ function WorkspaceDetails({
                     {
                       "bg-primary-300 bg-opacity-50 rounded-md ":
                         callbackURL.method == "POST",
-                    },
+                    }
                   )}
                   classNames={{
                     value: cn(
@@ -358,7 +358,7 @@ function WorkspaceDetails({
                       {
                         "text-primary-600 group-data-[has-value=true]:text-primary-600":
                           callbackURL.method == "POST",
-                      },
+                      }
                     ),
                   }}
                   defaultValue={"GET"}
@@ -433,8 +433,8 @@ function WorkspaceDetails({
                               mno_status_description: "string",
                             },
                             undefined,
-                            2,
-                          ),
+                            2
+                          )
                         ),
                       }}
                     />

@@ -19,14 +19,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { cn, formatDate, notify } from "@/lib/utils";
-import PromptModal from "@/components/base/prompt";
+import PromptModal from "@/components/base/prompt-modal";
 import CustomTable from "@/components/tables/table";
 import { useTillNumber } from "@/hooks/useQueryHooks";
 import { generateWorkspaceTillNumber } from "@/app/_actions/workspace-actions";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getTillCollectionsLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { TILL_TRANSACTION_COLUMNS } from "@/lib/table-columns";
@@ -163,7 +163,7 @@ export default function TillPaymentCollections({ workspaceID }) {
                     <Button
                       isDisabled
                       className={cn(
-                        "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100",
+                        "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100"
                       )}
                       startContent={
                         <SoftBoxIcon className={"h-12 w-12"}>
@@ -183,7 +183,7 @@ export default function TillPaymentCollections({ workspaceID }) {
                         "m-0 flex flex-row items-center justify-center rounded-md text-[clamp(1.25rem,1vw,2rem)]",
                         {
                           "-mb-3 mt-1": !TILL_NUMBER,
-                        },
+                        }
                       )}
                       color="primary"
                     >

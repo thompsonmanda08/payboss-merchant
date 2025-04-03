@@ -1,4 +1,4 @@
-import Logo from "@/components/base/logo";
+import Logo from "@/components/base/payboss-logo";
 import { getCheckoutInfo } from "@/app/_actions/vas-actions";
 
 import { Checkout } from "./checkout-cards";

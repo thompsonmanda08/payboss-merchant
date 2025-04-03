@@ -47,7 +47,7 @@ import {
 import { QUERY_KEYS } from "@/lib/constants";
 import { getAPICollectionLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import {
   API_KEY_TERMINAL_TRANSACTION_COLUMNS,
@@ -55,7 +55,7 @@ import {
 } from "@/lib/table-columns";
 import TerminalsTable from "@/components/tables/terminal-tables";
 import Loader from "@/components/ui/loader";
-import PromptModal from "@/components/base/prompt";
+import PromptModal from "@/components/base/prompt-modal";
 
 import TerminalConfigViewModal from "./TerminalConfigView";
 import APIConfigViewModal from "./APIConfigView";
@@ -662,7 +662,7 @@ const APIIntegration = ({ workspaceID }) => {
                           <ComputerDesktopIcon
                             className={cn(
                               iconClasses,
-                              "group-hover:text-white font-bold group-hover:border-white",
+                              "group-hover:text-white font-bold group-hover:border-white"
                             )}
                           />
                         }
@@ -686,7 +686,7 @@ const APIIntegration = ({ workspaceID }) => {
                           <TrashIcon
                             className={cn(
                               iconClasses,
-                              "text-danger group-hover:text-white",
+                              "text-danger group-hover:text-white"
                             )}
                           />
                         }

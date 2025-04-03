@@ -20,7 +20,7 @@ import { DateRangePickerField } from "@/components/ui/date-select-field";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getBulkAnalyticReports } from "@/app/_actions/transaction-actions";
 import { bulkTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import Tabs from "@/components/tabs";
 import TotalValueStat from "@/app/dashboard/components/total-stats";
@@ -74,9 +74,7 @@ export default function DisbursementReports({ workspaceID }) {
           row?.transactionID
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.name
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()),
+          row?.name?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
       );
     }
 
@@ -92,9 +90,7 @@ export default function DisbursementReports({ workspaceID }) {
           row?.transactionID
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.name
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()),
+          row?.name?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
       );
     }
 
@@ -272,7 +268,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Processed Direct Transactions"}
                         value={formatCurrency(
-                          report?.direct?.proccessed?.value || 0,
+                          report?.direct?.proccessed?.value || 0
                         )}
                       />
                       <TotalValueStat
@@ -283,7 +279,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Processed Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucher?.proccessed?.value || 0,
+                          report?.voucher?.proccessed?.value || 0
                         )}
                       />
                     </div>
@@ -299,7 +295,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Successful Direct Transactions"}
                         value={formatCurrency(
-                          report?.directTransactions?.successful?.value || 0,
+                          report?.directTransactions?.successful?.value || 0
                         )}
                       />
                       <TotalValueStat
@@ -310,7 +306,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Failed Direct Transactions"}
                         value={formatCurrency(
-                          report?.directTransactions?.failed?.value || 0,
+                          report?.directTransactions?.failed?.value || 0
                         )}
                       />
                     </div>
@@ -326,7 +322,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Successful Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucherTransactions?.successful?.value || 0,
+                          report?.voucherTransactions?.successful?.value || 0
                         )}
                       />
                       <TotalValueStat
@@ -337,7 +333,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Failed Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucherTransactions?.failed?.value || 0,
+                          report?.voucherTransactions?.failed?.value || 0
                         )}
                       />
                     </div>

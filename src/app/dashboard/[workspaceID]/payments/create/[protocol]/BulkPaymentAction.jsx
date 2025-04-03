@@ -9,7 +9,7 @@ import PaymentDetails from "@/app/dashboard/[workspaceID]/payments/components/bu
 import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/ValidationDetails";
 import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer";
 import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/approver-action";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import ProgressStep from "@/components/progress-step";
 import LoadingPage from "@/app/loading";

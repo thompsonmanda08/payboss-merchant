@@ -5,8 +5,8 @@ import Image from "next/image";
 import Loader from "@/components/ui/loader";
 import CardHeader from "@/components/base/card-header";
 import { DefaultCover } from "@/lib/constants";
-import Logo from "@/components/base/logo";
-import BackgroundSVG from "@/components/base/BackgroundSVG";
+import Logo from "@/components/base/payboss-logo";
+import BackgroundSVG from "@/components/base/background-svg";
 
 // Create Document Component
 export const TillBanner = ({ till }) => (

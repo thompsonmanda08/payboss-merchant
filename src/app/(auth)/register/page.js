@@ -8,7 +8,7 @@ import Spinner from "@/components/ui/spinner";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import useAuthStore from "@/context/auth-store";
 import { Button } from "@/components/ui/button";
-import Logo from "@/components/base/logo";
+import Logo from "@/components/base/payboss-logo";
 import EmptyState from "@/components/empty-state";
 
 export default function Register() {

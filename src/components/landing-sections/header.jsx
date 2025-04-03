@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/base/nav-link";
 import { cn } from "@/lib/utils";
 import useFloatingHeader from "@/hooks/useFloatingHeader";
-import Logo from "@/components/base/logo";
+import Logo from "@/components/base/payboss-logo";
 import ThemeSwitcher from "@/components/base/theme-switcher";
 import NavIconButton from "@/components/ui/nav-icon-button";
 
@@ -41,7 +41,7 @@ function MobileNavIcon({ open }) {
       <path
         className={cn(
           "origin-center transition",
-          !open && "scale-90 opacity-0",
+          !open && "scale-90 opacity-0"
         )}
         d="M2 2L12 12M12 2L2 12"
       />
@@ -120,7 +120,7 @@ export function Header({ session }) {
         {
           "top-2 mx-10 rounded-xl bg-background/80": isFloating,
           "z-50 pt-5": pathname === "/" && !isFloating,
-        },
+        }
       )}
     >
       <nav className="relative z-50 flex w-full justify-between container">

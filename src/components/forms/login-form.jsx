@@ -9,7 +9,7 @@ import useAuthStore from "@/context/auth-store";
 import { authenticateUser } from "@/app/_actions/auth-actions";
 
 import { Button } from "../ui/button";
-import Card from "../base/card";
+import Card from "../base/custom-card";
 import StatusMessage from "../base/status-message";
 
 function LoginForm() {

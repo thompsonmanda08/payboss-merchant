@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import Logo from "@/components/base/logo";
+import Logo from "@/components/base/payboss-logo";
 import LoginForm from "@/components/forms/login-form";
 
 function LoginPage() {

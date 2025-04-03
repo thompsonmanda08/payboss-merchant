@@ -7,7 +7,7 @@ import {
 
 import { cn, formatDate } from "@/lib/utils";
 import useAccountProfile from "@/hooks/useProfileDetails";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import TimelineItem from "@/components/base/timeline-item";
 
@@ -66,7 +66,7 @@ function ProgressStageTracker() {
         </div>
         <div
           className={cn(
-            "flex w-full select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9",
+            "flex w-full select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9"
           )}
         >
           <Image

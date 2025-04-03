@@ -37,14 +37,14 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import CustomTable from "@/components/tables/table";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import { INVOICE_COLUMNS } from "@/lib/table-columns";
 import InvoiceForm from "@/components/forms/invoice-form";
 import { QUERY_KEYS, slideDownInView } from "@/lib/constants";
 import { cn, maskString, notify } from "@/lib/utils";
 import { uploadCheckoutLogoFile } from "@/app/_actions/pocketbase-actions";
-import PromptModal from "@/components/base/prompt";
+import PromptModal from "@/components/base/prompt-modal";
 import { generateCheckoutURL } from "@/app/_actions/vas-actions";
 import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
 import { Input } from "@/components/ui/input-field";
