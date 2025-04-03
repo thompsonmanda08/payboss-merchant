@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -9,6 +8,8 @@ import {
   Snippet,
   ModalFooter,
 } from "@heroui/react";
+
+import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { syntaxHighlight } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
 import Tabs from "@/components/tabs";
@@ -108,22 +109,22 @@ export default function APIConfigViewModal({
     <>
       <Modal
         // size={'lg'}
+        className="max-w-[768px]"
+        isDismissable={false}
         isOpen={isOpen}
         onClose={handleClose}
-        isDismissable={false}
-        className="max-w-[768px]"
       >
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-4">
               <CardHeader
-                title={currentStep.title}
                 infoText={currentStep.infoText}
+                title={currentStep.title}
               />
               <Tabs
-                tabs={TABS}
                 currentTab={currentTabIndex}
                 navigateTo={navigateTo}
+                tabs={TABS}
               />
             </ModalHeader>
 
@@ -165,10 +166,10 @@ export function API_Authentication({ config, titles }) {
           <pre
             dangerouslySetInnerHTML={{
               __html: syntaxHighlight(
-                JSON.stringify(payload || authentication, undefined, 2)
+                JSON.stringify(payload || authentication, undefined, 2),
               ),
             }}
-          ></pre>
+          />
         </Snippet>
       </div>
 
@@ -181,7 +182,7 @@ export function API_Authentication({ config, titles }) {
             dangerouslySetInnerHTML={{
               __html: syntaxHighlight(JSON.stringify(response, undefined, 2)),
             }}
-          ></pre>
+          />
         </Snippet>
       </div>
     </div>
@@ -212,10 +213,10 @@ export function ActionResponses({ config, titles, method }) {
             <pre
               dangerouslySetInnerHTML={{
                 __html: syntaxHighlight(
-                  JSON.stringify(payload || collection, undefined, 2)
+                  JSON.stringify(payload || collection, undefined, 2),
                 ),
               }}
-            ></pre>
+            />
           </Snippet>
         </div>
       )}
@@ -229,7 +230,7 @@ export function ActionResponses({ config, titles, method }) {
             dangerouslySetInnerHTML={{
               __html: syntaxHighlight(JSON.stringify(response, undefined, 2)),
             }}
-          ></pre>
+          />
         </Snippet>
       </div>
     </div>
@@ -238,6 +239,7 @@ export function ActionResponses({ config, titles, method }) {
 
 export function StatusResponses({ config, titles }) {
   const { response, url } = config;
+
   return (
     <div className="flex w-full flex-col gap-8">
       <div className="max-w-full">
@@ -258,7 +260,7 @@ export function StatusResponses({ config, titles }) {
             dangerouslySetInnerHTML={{
               __html: syntaxHighlight(JSON.stringify(response, undefined, 2)),
             }}
-          ></pre>
+          />
         </Snippet>
       </div>
     </div>

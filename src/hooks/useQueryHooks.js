@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+
 import { getGeneralConfigs } from "@/app/_actions/config-actions";
 import {
   getAllKYCData,
@@ -7,7 +9,6 @@ import {
   getWorkspaceRoles,
 } from "@/app/_actions/merchant-actions";
 import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
-import { useQuery } from "@tanstack/react-query";
 import {
   getAllBulkTransactions,
   getAllSingleTransactions,

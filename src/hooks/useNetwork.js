@@ -23,5 +23,6 @@ export const useNetwork = () => {
       window.removeEventListener("offline", handleStatusChange);
     };
   }, [online]);
+
   return { online, goneOffline };
 };

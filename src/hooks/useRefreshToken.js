@@ -10,14 +10,17 @@ const useRefreshToken = () => {
 
     if (response.success) {
       let accessToken = response?.data?.accessToken;
+
       setAuth((prev) => {
         return { ...prev, accessToken };
       });
+
       return accessToken;
     }
 
     return null;
   };
+
   return refresh;
 };
 

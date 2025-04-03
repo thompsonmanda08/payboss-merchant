@@ -1,14 +1,16 @@
 "use client";
-import React, { useEffect } from "react";
-import { Input } from "@/components/ui/input-field";
-import { Button } from "../ui/button";
-import useAuthStore from "@/context/auth-store";
-import { authenticateUser } from "@/app/_actions/auth-actions";
+import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
+
+import { Input } from "@/components/ui/input-field";
+import useAuthStore from "@/context/auth-store";
+import { authenticateUser } from "@/app/_actions/auth-actions";
+
+import { Button } from "../ui/button";
 import Card from "../base/card";
 import StatusMessage from "../base/status-message";
-import Link from "next/link";
 
 function LoginForm() {
   const { push } = useRouter();
@@ -43,6 +45,7 @@ function LoginForm() {
         message: "Provide login credentials",
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -54,12 +57,14 @@ function LoginForm() {
         message: response?.message,
       });
       setIsLoading(false);
+
       return;
     }
 
     // queryClient.invalidateQueries();
     setAuth(response?.data);
     const loginUrl = urlParams.get("callbackUrl") || "/workspaces";
+
     push(loginUrl);
   }
 
@@ -76,45 +81,45 @@ function LoginForm() {
 
   return (
     <Card className="mx-auto w-full max-w-sm flex-auto p-6 ">
-      <form role="form" onSubmit={handleLogin} className="flex flex-col gap-2">
+      <form className="flex flex-col gap-2" role="form" onSubmit={handleLogin}>
         <Input
-          placeholder="Enter your email or username"
-          aria-label="Email"
-          name={"emailusername"}
-          label="Email or Username"
           aria-describedby="email-addon"
-          onError={error?.onFields}
+          aria-label="Email"
+          label="Email or Username"
+          name={"emailusername"}
+          placeholder="Enter your email or username"
           onChange={(e) => {
             updateLoginDetails({ emailusername: e.target.value });
           }}
+          onError={error?.onFields}
         />
 
         <Input
-          type="password"
-          name="password"
-          placeholder="Enter Password"
+          aria-describedby="password-addon"
           aria-label="Password"
           label="Password"
-          aria-describedby="password-addon"
-          onError={error?.onFields}
+          name="password"
+          placeholder="Enter Password"
+          type="password"
           onChange={(e) => {
             updateLoginDetails({ password: e.target.value });
           }}
+          onError={error?.onFields}
         />
         <p className="-mt-1 ml-1 text-xs font-medium text-foreground/60 xl:text-sm">
           Forgot password?{" "}
           <Link
-            href={"/support"}
             className="text-primary hover:text-primary/80"
+            href={"/support"}
           >
             Contact Support
           </Link>
         </p>
         <Button
-          type="submit"
+          className={"mt-4 w-full"}
           isLoading={isLoading}
           loadingText={"Signing In..."}
-          className={"mt-4 w-full"}
+          type="submit"
         >
           Sign in
         </Button>

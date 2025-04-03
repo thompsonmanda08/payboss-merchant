@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -12,16 +12,17 @@ import {
   CardFooter,
   Chip,
 } from "@heroui/react";
-
-import { Button } from "./ui/button";
 import { useQueryClient } from "@tanstack/react-query";
+import { useIdleTimer } from "react-idle-timer/legacy";
+import { usePathname } from "next/navigation";
+
 import {
   getRefreshToken,
   lockScreenOnUserIdle,
 } from "@/app/_actions/auth-actions";
 import useAuthStore from "@/context/auth-store";
-import { useIdleTimer } from "react-idle-timer/legacy";
-import { usePathname } from "next/navigation";
+
+import { Button } from "./ui/button";
 
 function ScreenLock({ open }) {
   const queryClient = useQueryClient();
@@ -61,11 +62,11 @@ function ScreenLock({ open }) {
   return (
     <Modal
       backdrop="blur"
-      isOpen={open || isOpen}
-      onClose={onClose}
+      hideCloseButton={true}
       isDismissable={false}
       isKeyboardDismissDisabled={true}
-      hideCloseButton={true}
+      isOpen={open || isOpen}
+      onClose={onClose}
     >
       <ModalContent>
         <ModalBody className="flex flex-col gap-y-2">
@@ -81,9 +82,6 @@ function ScreenLock({ open }) {
                   track: "stroke-white/10",
                   value: "text-3xl font-semibold text-white",
                 }}
-                value={seconds}
-                strokeWidth={4}
-                showValueLabel={true}
                 formatOptions={
                   {
                     // style: 'unit',
@@ -91,6 +89,9 @@ function ScreenLock({ open }) {
                     // unitDisplay: 'short',
                   }
                 }
+                showValueLabel={true}
+                strokeWidth={4}
+                value={seconds}
               />
             </CardBody>
             <CardFooter className="flex-col items-center justify-center gap-4 pt-0">
@@ -114,8 +115,8 @@ function ScreenLock({ open }) {
         <ModalFooter>
           <Button
             color="danger"
-            variant="light"
             isDisabled={isLoading}
+            variant="light"
             onPress={() => {
               queryClient.invalidateQueries();
               handleUserLogOut();
@@ -125,8 +126,8 @@ function ScreenLock({ open }) {
           </Button>
           <Button
             color="primary"
-            isLoading={isLoading}
             isDisabled={isLoading}
+            isLoading={isLoading}
             onPress={handleRefreshAuthToken}
           >
             Am still here
@@ -156,9 +157,12 @@ export function IdleTimerContainer({ authSession }) {
 
     // REFRESH TOKEN IF THE USER IS ACTIVE WITHIN THE IDLE TIMEOUT
     // IN INTERVALS
-    setInterval(async () => {
-      await getRefreshToken();
-    }, 1000 * 60 * 4.5);
+    setInterval(
+      async () => {
+        await getRefreshToken();
+      },
+      1000 * 60 * 4.5,
+    );
   };
 
   const onAction = async () => {

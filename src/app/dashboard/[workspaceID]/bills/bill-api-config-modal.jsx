@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -8,9 +7,12 @@ import {
   ModalHeader,
   ModalFooter,
 } from "@heroui/react";
+
+import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import Loader from "@/components/ui/loader";
 import Tabs from "@/components/tabs";
 import CardHeader from "@/components/base/card-header";
+
 import {
   ActionResponses,
   API_Authentication,
@@ -164,11 +166,11 @@ export default function BillPaymentAPIConfigModal({
 
       <ActionResponses
         key={currentStep.name}
-        method={"GET"}
         config={{
           url: configData?.serviceProviderURL,
           response: configData?.serviceProviderResponse,
         }}
+        method={"GET"}
         titles={{
           url: "Service Providers URL",
           payload: "Service Providers Payload Body",
@@ -178,11 +180,11 @@ export default function BillPaymentAPIConfigModal({
 
       <ActionResponses
         key={currentStep.name}
-        method={"GET"}
         config={{
           url: configData?.providerDetailsURL,
           response: configData?.providerDetailsResponse,
         }}
+        method={"GET"}
         titles={{
           url: "Provider Details URL",
           payload: "Providers Details Payload Body",
@@ -200,8 +202,8 @@ export default function BillPaymentAPIConfigModal({
   return (
     <>
       <Modal
-        size={"4xl"}
         isOpen={isOpen}
+        size={"4xl"}
         onClose={handleClose}
         isDismissable={false}
         // className="max-w-[768px]"
@@ -210,13 +212,13 @@ export default function BillPaymentAPIConfigModal({
           <>
             <ModalHeader className="flex flex-col gap-4">
               <CardHeader
-                title={currentStep.name}
                 infoText={currentStep.infoText}
+                title={currentStep.name}
               />
               <Tabs
-                tabs={API_CONFIG_VIEWS}
                 currentTab={currentTabIndex}
                 navigateTo={navigateTo}
+                tabs={API_CONFIG_VIEWS}
               />
             </ModalHeader>
 

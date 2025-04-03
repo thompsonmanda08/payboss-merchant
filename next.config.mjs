@@ -2,7 +2,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-  distDir: "build",
+  // distDir: "build",
 
   experimental: {
     turbo: {
@@ -49,5 +49,5 @@ export default withSentryConfig(
     disableLogger: true,
 
     automaticVercelMonitors: true,
-  }
+  },
 );

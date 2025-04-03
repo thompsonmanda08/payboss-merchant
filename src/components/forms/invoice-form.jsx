@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input-field";
-import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader, CardFooter } from "@heroui/react";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { formatCurrency, formatDate, notify } from "@/lib/utils";
 import { getLocalTimeZone, today } from "@internationalized/date";
 
+import { formatCurrency, formatDate, notify } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input-field";
 import DateSelectField from "@/components/ui/date-select-field";
 
 const INIT_INVOICE = {
@@ -34,12 +34,14 @@ export default function InvoiceForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   const thirtyDaysAgoDate = new Date();
+
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
   const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
   const end_date = formatDate(new Date(), "YYYY-MM-DD");
 
   function handleChange(e) {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
@@ -50,7 +52,7 @@ export default function InvoiceForm() {
   const calculateSubtotal = () => {
     return formData.lineItems.reduce(
       (total, item) => total + item.quantity * item.unitPrice,
-      0
+      0,
     );
   };
 
@@ -78,10 +80,12 @@ export default function InvoiceForm() {
   const removeLineItem = (index) => {
     if (lineItems.length > 1) {
       const updatedItems = [...lineItems];
+
       updatedItems.splice(index, 1);
       setLineItems(updatedItems);
 
       const formLineItems = [...formData?.lineItems];
+
       formLineItems.splice(index, 1);
       updateFormData({ lineItems: formLineItems });
     }
@@ -105,7 +109,7 @@ export default function InvoiceForm() {
   }, []);
 
   return (
-    <form onSubmit={onSubmit} className="space-y-8">
+    <form className="space-y-8" onSubmit={onSubmit}>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         <Card className="shadow-none bg-transparent">
           <CardHeader className="flex-col items-start px-4 pb-0 pt-2">
@@ -120,16 +124,16 @@ export default function InvoiceForm() {
               <Input
                 required
                 label={"Customer Name"}
-                placeholder={"Brick Enterprise"}
                 name={"customerName"}
+                placeholder={"Brick Enterprise"}
                 value={formData?.customerName}
                 onChange={handleChange}
               />
               <Input
                 required
                 label={"Customer Email"}
-                placeholder={"brick@enterprise.com"}
                 name={"customerEmail"}
+                placeholder={"brick@enterprise.com"}
                 value={formData?.customerEmail}
                 onChange={handleChange}
               />
@@ -138,16 +142,16 @@ export default function InvoiceForm() {
               <Input
                 required
                 label={"Phone Number"}
-                placeholder={"0977 XXX XXX"}
                 name={"customerPhone"}
+                placeholder={"0977 XXX XXX"}
                 value={formData?.customerPhone}
                 onChange={handleChange}
               />
               <Input
                 required
                 label={"Address"}
-                placeholder={"87A Main Street, Ibex hill"}
                 name={"customerAddress"}
+                placeholder={"87A Main Street, Ibex hill"}
                 value={formData?.customerAddress}
                 onChange={handleChange}
               />
@@ -162,22 +166,22 @@ export default function InvoiceForm() {
                 onChange={handleChange}
               />
               <DateSelectField
-                label={"Invoice Date"}
                 className="max-w-sm"
+                defaultValue={formData?.invoiceDate}
                 classNames={{
                   label: "-mt-1.5",
                 }}
                 // description={"Date the invoice was issued"}
-                defaultValue={formData?.invoiceDate}
+                label={"Invoice Date"}
+                labelPlacement={"outside"}
+                maxValue={today(getLocalTimeZone())}
+                required={true}
                 value={
                   formData?.invoiceDate &&
                   `${formData?.invoiceDate}`?.split("").length > 9
                     ? formData?.invoiceDate
                     : ""
                 }
-                labelPlacement={"outside"}
-                required={true}
-                maxValue={today(getLocalTimeZone())}
                 onChange={(date) => {
                   updateFormData({
                     invoiceDate: formatDate(date, "YYYY-MM-DD"),
@@ -185,22 +189,22 @@ export default function InvoiceForm() {
                 }}
               />
               <DateSelectField
-                label={"Due Date"}
                 className="max-w-sm"
+                defaultValue={formData?.dueDate}
                 classNames={{
                   label: "-mt-1.5",
                 }}
                 // description={"Date the invoice is due"}
-                defaultValue={formData?.dueDate}
+                label={"Due Date"}
+                labelPlacement={"outside"}
+                minValue={today(getLocalTimeZone())}
+                required={true}
                 value={
                   formData?.dueDate &&
                   String(formData?.dueDate)?.split("").length > 9
                     ? formData?.dueDate
                     : ""
                 }
-                labelPlacement={"outside"}
-                required={true}
-                minValue={today(getLocalTimeZone())}
                 onChange={(date) => {
                   updateFormData({
                     dueDate: formatDate(date, "YYYY-MM-DD"),
@@ -212,18 +216,18 @@ export default function InvoiceForm() {
             {/* INVOICE NOTES - VISIBLE FOR XL SCREENS ONLY */}
             <div className="hidden xl:block">
               <label
-                htmlFor="message"
                 className="block text-sm font-medium leading-6 text-foreground/50 "
+                htmlFor="message"
               >
                 Notes
               </label>
               <div className="mt-2">
                 <textarea
-                  rows={3}
-                  name="notes"
-                  placeholder="Additional notes or payment instructions"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary/80 sm:text-sm sm:leading-6"
+                  name="notes"
+                  placeholder="Additional notes or payment instructions"
+                  rows={3}
                   value={formData?.notes}
                   onChange={handleChange}
                 />
@@ -237,12 +241,12 @@ export default function InvoiceForm() {
             <h4 className="text-large font-bold">Line Items</h4>
 
             <Button
+              className={"bg-primary/10"}
+              size="sm"
+              startContent={<PlusIcon className="h-4 w-4" />}
               type="button"
               variant="flat"
-              size="sm"
               onClick={addLineItem}
-              startContent={<PlusIcon className="h-4 w-4" />}
-              className={"bg-primary/10"}
             >
               Add Item
             </Button>
@@ -255,12 +259,12 @@ export default function InvoiceForm() {
               >
                 <Input
                   required
-                  label="Description"
-                  placeholder="Item description"
                   classNames={{
                     wrapper: "col-span-5",
                   }}
+                  label="Description"
                   name={`lineItems.${index}.description`}
+                  placeholder="Item description"
                   value={formData?.lineItems[index]?.description}
                   onChange={(e) => {
                     updateFormData({
@@ -277,13 +281,13 @@ export default function InvoiceForm() {
                 />
                 <Input
                   required
-                  label="Qty"
-                  type="number"
                   classNames={{
                     wrapper: "col-span-1",
                   }}
+                  label="Qty"
                   min={1}
                   name={`lineItems.${index}.description`}
+                  type="number"
                   value={formData?.lineItems[index]?.quantity}
                   onChange={(e) => {
                     updateFormData({
@@ -300,12 +304,12 @@ export default function InvoiceForm() {
                 />
                 <Input
                   required
-                  label="Unit Price"
-                  type="number"
                   classNames={{
                     wrapper: "col-span-2",
                   }}
+                  label="Unit Price"
                   name={`lineItems.${index}.unitPrice`}
+                  type="number"
                   value={formData?.lineItems[index]?.unitPrice}
                   onChange={(e) => {
                     updateFormData({
@@ -321,13 +325,13 @@ export default function InvoiceForm() {
                   }}
                 />
                 <Button
+                  isIconOnly
+                  className={"col-span-1"}
+                  color="danger"
+                  disabled={lineItems.length === 1}
                   type="button"
                   variant="flat"
-                  color="danger"
-                  className={"col-span-1"}
-                  isIconOnly
                   onClick={() => removeLineItem(index)}
-                  disabled={lineItems.length === 1}
                 >
                   <TrashIcon className="h-4 w-4" />
                 </Button>
@@ -339,18 +343,18 @@ export default function InvoiceForm() {
         {/* INVOICE NOTES - VISIBLE ON ANY SCREEN THE IS IS NOT XL */}
         <div className="xl:hidden">
           <label
-            htmlFor="message"
             className="block text-sm font-medium leading-6 text-foreground/50 "
+            htmlFor="message"
           >
             Notes
           </label>
           <div className="mt-2">
             <textarea
-              rows={3}
-              name="notes"
-              placeholder="Additional notes or payment instructions"
               required
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary/80 sm:text-sm sm:leading-6"
+              name="notes"
+              placeholder="Additional notes or payment instructions"
+              rows={3}
               value={formData?.notes}
               onChange={handleChange}
             />
@@ -386,7 +390,7 @@ export default function InvoiceForm() {
           </div>
         </CardBody>
         <CardFooter>
-          <Button type="submit" className="w-full">
+          <Button className="w-full" type="submit">
             Create Invoice
           </Button>
         </CardFooter>

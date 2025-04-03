@@ -1,4 +1,5 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
+
 import LoadingPage from "@/app/loading";
 import ManagePeople from "@/app/manage-account/users/components/manage-users";
 import { getAllUsers } from "@/app/_actions/user-actions";
@@ -25,9 +26,10 @@ async function UsersSettingsPage() {
       kyc?.kyc_approval_status?.toLowerCase() == "approved",
     ...session?.userPermissions,
   };
+
   return (
     <Suspense fallback={<LoadingPage />}>
-      <ManagePeople users={users} roles={roles} permissions={permissions} />
+      <ManagePeople permissions={permissions} roles={roles} users={users} />
     </Suspense>
   );
 }

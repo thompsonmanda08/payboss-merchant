@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { cn } from "@/lib/utils";
 import UsersTable from "@/components/tables/users-table";
 
@@ -35,11 +34,11 @@ function ManagePeople({ users, roles, permissions }) {
       {activeTab} */}
       <UsersTable
         key={"all-users"}
-        users={users}
         accountRoles={roles}
-        isUserAdmin={isOwner || isAccountAdmin}
         allowUserCreation={allowUserCreation}
         isApprovedUser={isApprovedUser}
+        isUserAdmin={isOwner || isAccountAdmin}
+        users={users}
       />
     </div>
   );

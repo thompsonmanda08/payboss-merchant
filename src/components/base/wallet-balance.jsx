@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
 
-import SoftBoxIcon from "./soft-box-icon";
 import { WalletIcon } from "@heroicons/react/24/outline";
+
 import { cn, formatCurrency } from "@/lib/utils";
 import useWorkspaces from "@/hooks/useWorkspaces";
+
+import SoftBoxIcon from "./soft-box-icon";
 import Card from "./card";
 
 function Balance({ title, amount, isLandscape }) {
@@ -14,7 +15,7 @@ function Balance({ title, amount, isLandscape }) {
     <Card
       className={cn(
         "w-fit min-w-[180px] max-w-xs items-start gap-4 rounded-2xl p-4 pr-5 shadow-none",
-        { "w-full max-w-full flex-row": isLandscape }
+        { "w-full max-w-full flex-row": isLandscape },
       )}
     >
       <SoftBoxIcon className={"-mt-1 scale-80 p-0"}>
@@ -30,13 +31,13 @@ function Balance({ title, amount, isLandscape }) {
           {title
             ? title
             : activeWorkspace?.workspace
-            ? `${activeWorkspace?.workspace} Wallet Balance`
-            : "Wallet Balance"}
+              ? `${activeWorkspace?.workspace} Wallet Balance`
+              : "Wallet Balance"}
         </h2>
 
         <div
           className={cn(
-            "my-2 h-px w-full bg-gradient-to-l from-transparent via-gray-200 to-transparent"
+            "my-2 h-px w-full bg-gradient-to-l from-transparent via-gray-200 to-transparent",
           )}
         />
 

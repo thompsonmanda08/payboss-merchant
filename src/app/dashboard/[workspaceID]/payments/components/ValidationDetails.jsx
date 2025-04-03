@@ -1,12 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { useQueryClient } from "@tanstack/react-query";
+
 import usePaymentsStore from "@/context/payment-store";
 import { Button } from "@/components/ui/button";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { useBatchDetails } from "@/hooks/useQueryHooks";
 import { submitBatchForApproval } from "@/app/_actions/transaction-actions";
 import { notify } from "@/lib/utils";
-import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants";
 import useWorkspaces from "@/hooks/useWorkspaces";
 import Loader from "@/components/ui/loader";
@@ -32,7 +33,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
   const { workspaceID, workspaceWalletBalance } = useWorkspaces();
 
   const [queryID, setQueryID] = useState(
-    batchID || selectedBatch?.ID || batchState?.ID
+    batchID || selectedBatch?.ID || batchState?.ID,
   );
 
   const {
@@ -56,6 +57,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
         description: "Some records are still invalid!",
       });
       setLoading(false);
+
       return;
     }
 
@@ -69,6 +71,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
         description: "Insufficient funds in the wallet!",
       });
       setLoading(false);
+
       return;
     }
 
@@ -83,6 +86,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
         message: "You do not have permissions to perform this action",
       });
       setLoading(false);
+
       return;
     }
 
@@ -95,6 +99,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
         description: response?.message,
       });
       setLoading(false);
+
       return;
     }
 
@@ -139,29 +144,29 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     <>
       <div className="flex h-full w-full flex-col justify-between">
         <StatusCard
-          totalValue={batchDetails?.number_of_records || "0"}
-          validValue={batchDetails?.number_of_valid_records || "0"}
-          invalidValue={batchDetails?.number_of_invalid_records || "0"}
-          validAmount={batchDetails?.valid_amount || "0"}
-          totalTitle={"Total Records"}
-          validTitle={"Valid Records"}
-          invalidTitle={"Invalid Records"}
-          totalInfo={"Records in total"}
-          validInfo={"View Valid Records"}
-          invalidInfo={"View Invalid Records"}
-          tooltipText={"All records must be valid to proceed"}
           Icon={QuestionMarkCircleIcon}
           IconColor="secondary"
+          invalidInfo={"View Invalid Records"}
+          invalidTitle={"Invalid Records"}
+          invalidValue={batchDetails?.number_of_invalid_records || "0"}
+          tooltipText={"All records must be valid to proceed"}
+          totalInfo={"Records in total"}
+          totalTitle={"Total Records"}
+          totalValue={batchDetails?.number_of_records || "0"}
+          validAmount={batchDetails?.valid_amount || "0"}
+          validInfo={"View Valid Records"}
+          validTitle={"Valid Records"}
+          validValue={batchDetails?.number_of_valid_records || "0"}
           viewAllRecords={
             batchDetails?.total ? () => openRecordsModal("all") : undefined
-          }
-          viewValidRecords={
-            batchDetails?.valid ? () => openRecordsModal("valid") : undefined
           }
           viewInvalidRecords={
             batchDetails?.invalid
               ? () => openRecordsModal("invalid")
               : undefined
+          }
+          viewValidRecords={
+            batchDetails?.valid ? () => openRecordsModal("valid") : undefined
           }
         />
         {error?.status && (

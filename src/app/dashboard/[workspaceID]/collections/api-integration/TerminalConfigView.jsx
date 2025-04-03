@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import {
   Modal,
   ModalContent,
@@ -9,6 +8,10 @@ import {
   Link,
   Image,
 } from "@heroui/react";
+import { motion } from "framer-motion";
+import { useQueryClient } from "@tanstack/react-query";
+
+import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { notify } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
 import CardHeader from "@/components/base/card-header";
@@ -16,9 +19,7 @@ import { SingleFileDropzone } from "@/components/base/file-dropzone";
 import { Button } from "@/components/ui/button";
 import { registerTerminals } from "@/app/_actions/workspace-actions";
 import { uploadTerminalConfigFile } from "@/app/_actions/pocketbase-actions";
-import { motion } from "framer-motion";
 import ProgressStep from "@/components/progress-step";
-import { useQueryClient } from "@tanstack/react-query";
 
 export const CONFIG_VIEWS = [
   {
@@ -55,18 +56,18 @@ export default function TerminalConfigViewModal({
   } = useCustomTabsHook([
     <UploadTerminalConfigs
       key={"upload"}
-      workspaceID={workspaceID}
+      handleProceed={handleTerminalRegistration}
+      navigateBackwards={goBack}
+      navigateForward={goForward}
       setTerminalUrl={setTerminalUrl}
       terminalUrl={terminalUrl}
-      navigateForward={goForward}
-      navigateBackwards={goBack}
-      handleProceed={handleTerminalRegistration}
+      workspaceID={workspaceID}
     />,
     <CompleteConfig
       key={"complete"}
       handleClose={handleClose}
-      navigateForward={goForward}
       navigateBackwards={goBack}
+      navigateForward={goForward}
     />,
   ]);
 
@@ -93,6 +94,7 @@ export default function TerminalConfigViewModal({
         description: response?.message,
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -109,17 +111,17 @@ export default function TerminalConfigViewModal({
   return (
     <>
       <Modal
-        size={"2xl"}
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        onClose={handleClose}
         isDismissable={false}
+        isOpen={isOpen}
+        size={"2xl"}
+        onClose={handleClose}
+        onOpenChange={onOpenChange}
       >
         <ModalContent>
           <ModalHeader className="flex flex-col gap-4">
             <CardHeader
-              title={CONFIG_VIEWS[currentTabIndex].title}
               infoText={CONFIG_VIEWS[currentTabIndex].infoText}
+              title={CONFIG_VIEWS[currentTabIndex].title}
             />
             {/* <Tabs
               tabs={CONFIG_VIEWS}
@@ -130,18 +132,18 @@ export default function TerminalConfigViewModal({
 
           <ModalBody className="mb-6">
             <ProgressStep
-              className="-mt-1"
               STEPS={CONFIG_VIEWS}
+              className="-mt-1"
               currentTabIndex={currentTabIndex}
             />
             {isLoading ? (
               <div className="flex flex-1 items-center rounded-lg">
                 <Loader
-                  size={100}
-                  loadingText={"Running Configurations..."}
                   classNames={{
                     wrapper: "bg-primary-100/20 rounded-xl h-full",
                   }}
+                  loadingText={"Running Configurations..."}
+                  size={100}
                 />
               </div>
             ) : (
@@ -176,6 +178,7 @@ const UploadTerminalConfigs = ({
         description: response?.message,
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -186,6 +189,7 @@ const UploadTerminalConfigs = ({
     });
     setTerminalUrl(response?.data?.file_url);
     setIsLoading(false);
+
     return response?.data;
   }
 
@@ -206,9 +210,9 @@ const UploadTerminalConfigs = ({
           <p className="mt-2 text-sm font-medium text-gray-500">
             Having trouble with the file upload? Download
             <Link
-              href={"/terminal_config_template.xlsx"}
-              download={"terminal_config_template.xlsx"}
               className="mx-1 text-sm font-semibold text-primary hover:underline hover:underline-offset-2"
+              download={"terminal_config_template.xlsx"}
+              href={"/terminal_config_template.xlsx"}
             >
               Terminal Configuration
             </Link>
@@ -243,10 +247,10 @@ const UploadTerminalConfigs = ({
             Cancel
           </Button> */}
           <Button
-            size="lg"
             className={"w-full"}
-            isLoading={isLoading}
             isDisabled={isLoading}
+            isLoading={isLoading}
+            size="lg"
             onClick={handleProceed}
           >
             Submit
@@ -261,6 +265,7 @@ export function CompleteConfig({ handleClose }) {
   return (
     <>
       <motion.div
+        className="relative z-0 mx-auto flex w-full max-w-[412px] flex-col gap-4"
         whileInView={{
           opacity: [0, 1],
           scaleX: [0.8, 1],
@@ -271,7 +276,6 @@ export function CompleteConfig({ handleClose }) {
             duration: 0.25,
           },
         }}
-        className="relative z-0 mx-auto flex w-full max-w-[412px] flex-col gap-4"
       >
         <span className="mx-auto max-w-max rounded-full border border-primary/20 p-1 px-4 font-semibold text-primary">
           Terminal Configuration Complete!
@@ -282,15 +286,15 @@ export function CompleteConfig({ handleClose }) {
         </span>
         <div className="relative mx-auto flex max-w-sm object-contain">
           <Image
-            className="mx-auto"
-            src={`/images/illustrations/terminals.svg`}
-            alt="Complete Application Illustration"
             unoptimized
-            width={300}
+            alt="Complete Application Illustration"
+            className="mx-auto"
             height={200}
+            src={`/images/illustrations/terminals.svg`}
+            width={300}
           />
         </div>
-        <Button onClick={handleClose} className={"mb-5 w-full"}>
+        <Button className={"mb-5 w-full"} onClick={handleClose}>
           Done
         </Button>
       </motion.div>

@@ -1,9 +1,10 @@
 import "./globals.css";
+import localFont from "next/font/local";
+
 import { cn } from "@/lib/utils";
+
 import Providers from "./providers";
 import { getAuthSession, getUserDetails } from "./_actions/config-actions";
-
-import localFont from "next/font/local";
 
 const inter = localFont({
   src: "font/Inter-VariableFont_slnt,wght.ttf",
@@ -25,22 +26,22 @@ export default async function RootLayout({ children }) {
 
   return (
     <html
-      lang="en"
       className={cn("h-screen scroll-smooth bg-background antialiased light")}
+      lang="en"
     >
       <head>
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="msapplication-TileColor" content="#da532c" />
-        <meta name="theme-color" content="#ffffff" />
+        <link href="/manifest.json" rel="manifest" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <meta content="#da532c" name="msapplication-TileColor" />
+        <meta content="#ffffff" name="theme-color" />
       </head>
       <body
         className={cn(
           "flex min-h-screen flex-col bg-background font-inter overflow-x-hidden",
-          inter.variable
+          inter.variable,
         )}
       >
-        <Providers session={session} authSession={authSession}>
+        <Providers authSession={authSession} session={session}>
           {children}
         </Providers>
       </body>

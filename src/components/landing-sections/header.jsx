@@ -1,7 +1,13 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
+import {
+  ChatBubbleLeftRightIcon,
+  Squares2X2Icon,
+  UserCircleIcon,
+  UserPlusIcon,
+} from "@heroicons/react/24/outline";
 
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/base/nav-link";
@@ -9,17 +15,11 @@ import { cn } from "@/lib/utils";
 import useFloatingHeader from "@/hooks/useFloatingHeader";
 import Logo from "@/components/base/logo";
 import ThemeSwitcher from "@/components/base/theme-switcher";
-import {
-  ChatBubbleLeftRightIcon,
-  Squares2X2Icon,
-  UserCircleIcon,
-  UserPlusIcon,
-} from "@heroicons/react/24/outline";
 import NavIconButton from "@/components/ui/nav-icon-button";
 
 function MobileNavLink({ href, className, children }) {
   return (
-    <Button as={Link} variant="light" href={href} className={cn("w-full p-2")}>
+    <Button as={Link} className={cn("w-full p-2")} href={href} variant="light">
       {children}
     </Button>
   );
@@ -31,19 +31,19 @@ function MobileNavIcon({ open }) {
       aria-hidden="true"
       className="h-3.5 w-3.5 overflow-visible stroke-primary"
       fill="none"
-      strokeWidth={2}
       strokeLinecap="round"
+      strokeWidth={2}
     >
       <path
-        d="M0 1H14M0 7H14M0 13H14"
         className={cn("origin-center transition", open && "scale-90 opacity-0")}
+        d="M0 1H14M0 7H14M0 13H14"
       />
       <path
-        d="M2 2L12 12M12 2L2 12"
         className={cn(
           "origin-center transition",
-          !open && "scale-90 opacity-0"
+          !open && "scale-90 opacity-0",
         )}
+        d="M2 2L12 12M12 2L2 12"
       />
     </svg>
   );
@@ -51,6 +51,7 @@ function MobileNavIcon({ open }) {
 
 function MobileNavigation({ session }) {
   const [open, setOpen] = useState(false);
+
   return (
     <>
       {open && (
@@ -61,10 +62,10 @@ function MobileNavigation({ session }) {
       )}
       <div className="">
         <Button
+          aria-label="Toggle Navigation"
+          className="relative z-10 flex h-8 w-8 items-center justify-center ui-not-focus-visible:outline-none"
           variant="light"
           onPress={() => setOpen(!open)}
-          className="relative z-10 flex h-8 w-8 items-center justify-center ui-not-focus-visible:outline-none"
-          aria-label="Toggle Navigation"
         >
           <MobileNavIcon open={open} />
         </Button>
@@ -91,7 +92,7 @@ function MobileNavigation({ session }) {
                     </NavIconButton>
                     <span>Sign in</span>
                   </NavLink>
-                  <NavLink href="/register" className="hidden :flex">
+                  <NavLink className="hidden :flex" href="/register">
                     <NavIconButton>
                       <UserPlusIcon className="h-5 w-5 " />
                     </NavIconButton>
@@ -119,7 +120,7 @@ export function Header({ session }) {
         {
           "top-2 mx-10 rounded-xl bg-background/80": isFloating,
           "z-50 pt-5": pathname === "/" && !isFloating,
-        }
+        },
       )}
     >
       <nav className="relative z-50 flex w-full justify-between container">
@@ -140,7 +141,7 @@ export function Header({ session }) {
                 </NavIconButton>
                 <span className="hidden md:flex">Sign in</span>
               </NavLink>
-              <NavLink href="/register" className="hidden gap-2 lg:flex">
+              <NavLink className="hidden gap-2 lg:flex" href="/register">
                 <NavIconButton>
                   <UserPlusIcon className="h-5 w-5 " />
                 </NavIconButton>

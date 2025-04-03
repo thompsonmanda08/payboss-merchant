@@ -24,8 +24,8 @@ const useNavigationStore = create(
     }),
     {
       name: "navigation",
-    }
-  )
+    },
+  ),
 );
 
 export default useNavigationStore;

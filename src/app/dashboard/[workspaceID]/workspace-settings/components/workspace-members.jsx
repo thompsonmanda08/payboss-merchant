@@ -1,8 +1,8 @@
 "use client";
+import { useDisclosure } from "@heroui/react";
+
 import CardHeader from "@/components/base/card-header";
 import useDashboard from "@/hooks/useDashboard";
-import React from "react";
-import { useDisclosure } from "@heroui/react";
 import UsersTable from "@/components/tables/users-table";
 import AddUserToWorkspace from "@/components/add-users-workspace-modal";
 
@@ -27,29 +27,29 @@ export default function WorkspaceMembers({
     <div>
       <CardHeader
         className={"mb-4"}
-        title={"Workspace Members"}
         infoText={
           "User who are part of the workspace, can be given roles to perform actions"
         }
+        title={"Workspace Members"}
       />
       <UsersTable
-        users={workspaceMembers}
-        workspaceID={workspaceID}
+        removeWrapper
         isUserAdmin={canUpdate}
         tableLoading={isLoading}
+        users={workspaceMembers}
+        workspaceID={workspaceID}
         onAddUser={onOpenAdd}
-        removeWrapper
       />
       <AddUserToWorkspace
-        isOpen={openAdd}
-        onOpen={onOpenAdd}
-        onClose={onCloseAdd}
-        workspaceID={workspaceID}
-        workspaceName={workspaceName}
-        isLoading={isLoading}
-        workspaceMembers={workspaceMembers}
-        workspaceRoles={workspaceRoles}
         allUsers={allUsers}
+        isLoading={isLoading}
+        isOpen={openAdd}
+        workspaceID={workspaceID}
+        workspaceMembers={workspaceMembers}
+        workspaceName={workspaceName}
+        workspaceRoles={workspaceRoles}
+        onClose={onCloseAdd}
+        onOpen={onOpenAdd}
       />
     </div>
   );

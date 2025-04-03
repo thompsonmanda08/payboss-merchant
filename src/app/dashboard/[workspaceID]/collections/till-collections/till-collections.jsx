@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
   PlusIcon,
   QrCodeIcon,
@@ -8,8 +7,6 @@ import {
   ComputerDesktopIcon,
 } from "@heroicons/react/24/outline";
 import { Chip, Spinner, Tooltip, useDisclosure } from "@heroui/react";
-import { cn, formatDate, notify } from "@/lib/utils";
-import PromptModal from "@/components/base/prompt";
 import {
   Table,
   TableHeader,
@@ -18,18 +15,23 @@ import {
   TableRow,
   TableCell,
 } from "@heroui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { Button } from "@/components/ui/button";
+import { cn, formatDate, notify } from "@/lib/utils";
+import PromptModal from "@/components/base/prompt";
 import CustomTable from "@/components/tables/table";
 import { useTillNumber } from "@/hooks/useQueryHooks";
 import { generateWorkspaceTillNumber } from "@/app/_actions/workspace-actions";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getTillCollectionsLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
 import Card from "@/components/base/card";
 import CardHeader from "@/components/base/card-header";
-import TillNumberBanner from "./till-number-banner";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { TILL_TRANSACTION_COLUMNS } from "@/lib/table-columns";
+
+import TillNumberBanner from "./till-number-banner";
 
 export default function TillPaymentCollections({ workspaceID }) {
   const queryClient = useQueryClient();
@@ -41,6 +43,7 @@ export default function TillPaymentCollections({ workspaceID }) {
   const [openViewConfig, setOpenViewConfig] = useState(false);
 
   const thirtyDaysAgoDate = new Date();
+
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
   const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
   const end_date = formatDate(new Date(), "YYYY-MM-DD");
@@ -54,6 +57,7 @@ export default function TillPaymentCollections({ workspaceID }) {
 
   const TILL_NUMBER = useMemo(() => {
     if (!tillNumberResponse?.success) return [];
+
     return tillNumberResponse?.data?.til || tillNumberResponse?.data?.till;
   }, [tillNumberResponse]);
 
@@ -69,6 +73,7 @@ export default function TillPaymentCollections({ workspaceID }) {
         description: response?.message,
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -99,9 +104,9 @@ export default function TillPaymentCollections({ workspaceID }) {
   ) : (
     <>
       <TillNumberBanner
-        tillNumber={TILL_NUMBER}
         isLoading={isFetching}
         isOpen={openViewConfig}
+        tillNumber={TILL_NUMBER}
         onClose={() => {
           setOpenViewConfig(false);
           onClose();
@@ -111,18 +116,18 @@ export default function TillPaymentCollections({ workspaceID }) {
         <Card className="">
           <div className="mb-8 flex justify-between">
             <CardHeader
-              title={"Till Number Collections"}
-              infoText={
-                "Use the till number to collect payments to your workspace wallet."
-              }
               classNames={{
                 titleClasses: "xl:text-2xl lg:text-xl font-bold",
                 infoClasses: "!text-sm xl:text-base",
               }}
+              infoText={
+                "Use the till number to collect payments to your workspace wallet."
+              }
+              title={"Till Number Collections"}
             />
             <Button
-              isDisabled={Boolean(TILL_NUMBER)}
               endContent={<PlusIcon className="h-5 w-5" />}
+              isDisabled={Boolean(TILL_NUMBER)}
               onClick={() => setIsNew(true)}
             >
               Generate Till Number
@@ -136,18 +141,18 @@ export default function TillPaymentCollections({ workspaceID }) {
               <TableColumn align="center">ACTIONS</TableColumn>
             </TableHeader>
             <TableBody
+              emptyContent={
+                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
+                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70">
+                    You have no till number generated
+                  </span>
+                </div>
+              }
               isLoading={isFetching}
               loadingContent={
                 <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
                   <span className="flex gap-4 text-sm font-bold capitalize text-primary">
                     <Spinner size="sm" /> Loading till number...
-                  </span>
-                </div>
-              }
-              emptyContent={
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
-                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70">
-                    You have no till number generated
                   </span>
                 </div>
               }
@@ -158,7 +163,7 @@ export default function TillPaymentCollections({ workspaceID }) {
                     <Button
                       isDisabled
                       className={cn(
-                        "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100"
+                        "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100",
                       )}
                       startContent={
                         <SoftBoxIcon className={"h-12 w-12"}>
@@ -174,13 +179,13 @@ export default function TillPaymentCollections({ workspaceID }) {
 
                   <TableCell align="center">
                     <Chip
-                      color="primary"
                       className={cn(
                         "m-0 flex flex-row items-center justify-center rounded-md text-[clamp(1.25rem,1vw,2rem)]",
                         {
                           "-mb-3 mt-1": !TILL_NUMBER,
-                        }
+                        },
                       )}
+                      color="primary"
                     >
                       <span>*</span> 484 <span>*</span>
                       <span className="text-[clamp(1rem,1vw,1.5rem)] font-bold">{` ${
@@ -242,10 +247,10 @@ export default function TillPaymentCollections({ workspaceID }) {
           <div className="flex w-full items-center justify-between">
             <CardHeader
               className={"mb-4"}
-              title={"Recent Transactions"}
               infoText={
                 "Transactions made to your workspace wallet in the last 30days."
               }
+              title={"Recent Transactions"}
             />
           </div>
           <CustomTable
@@ -260,18 +265,18 @@ export default function TillPaymentCollections({ workspaceID }) {
       </div>
       {/* MODALS */}
       <PromptModal
+        confirmText={"Generate"}
+        isDisabled={isLoading}
+        isDismissable={false}
+        isLoading={isLoading}
         isOpen={isNew}
-        onOpen={onOpen}
+        title={"Generate New Till Number "}
         onClose={() => {
           onClose();
           setIsNew(false);
         }}
-        title={"Generate New Till Number "}
         onConfirm={handleUserAction}
-        confirmText={"Generate"}
-        isDisabled={isLoading}
-        isLoading={isLoading}
-        isDismissable={false}
+        onOpen={onOpen}
       >
         <p className="-mt-4 text-sm leading-6 text-foreground/70">
           <strong>Are you sure you want to generate a new Till number?</strong>

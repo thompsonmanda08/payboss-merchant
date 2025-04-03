@@ -1,7 +1,8 @@
 "use client";
 
-import { cn, getUserInitials } from "@/lib/utils";
 import { Avatar as NextAvatar } from "@heroui/react";
+
+import { cn, getUserInitials } from "@/lib/utils";
 
 function Avatar({ firstName, lastName, src, email, showUserInfo, isProfile }) {
   return (
@@ -12,11 +13,11 @@ function Avatar({ firstName, lastName, src, email, showUserInfo, isProfile }) {
       <span className="sr-only">Open user menu</span>
       {src ? (
         <NextAvatar
-          className="h-9 w-9 flex-none rounded-xl bg-gray-50"
-          src={src}
           alt={`Image - ${firstName} ${lastName}`}
-          width={200}
+          className="h-9 w-9 flex-none rounded-xl bg-gray-50"
           height={200}
+          src={src}
+          width={200}
         />
       ) : (
         <div className="ml-px grid h-9 w-9 flex-none scale-90 place-items-center items-center justify-center rounded-full bg-primary-800 font-medium uppercase text-white ring-2  ring-primary ring-offset-1">
@@ -37,7 +38,7 @@ function Avatar({ firstName, lastName, src, email, showUserInfo, isProfile }) {
                 "-mt-1 ml-0.5 text-sm font-medium text-foreground-400",
                 {
                   "text-white": isProfile,
-                }
+                },
               )}
             >
               {email}

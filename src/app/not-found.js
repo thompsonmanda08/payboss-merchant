@@ -1,21 +1,24 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import AuthLayout from "./(auth)/layout";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
-import Logo from "@/components/base/logo";
 import { useRouter } from "next/navigation";
+
+import Logo from "@/components/base/logo";
+import { Button } from "@/components/ui/button";
+
+import AuthLayout from "./(auth)/layout";
 
 export default function NotFound({ title, message, goBack }) {
   const router = useRouter();
+
   return (
     <AuthLayout>
       <Card className="mx-auto -mt-40 aspect-square w-full max-w-sm flex-auto p-6 font-inter">
         <CardHeader>
           <Logo
-            href="/"
             className="mx-auto"
             classNames={{ wrapper: "mx-auto" }}
+            href="/"
           />
         </CardHeader>
         <CardBody className="flex cursor-pointer select-none flex-col items-center justify-center p-0">
@@ -32,11 +35,11 @@ export default function NotFound({ title, message, goBack }) {
 
         <CardFooter>
           {goBack ? (
-            <Button onPress={() => router.back()} className="w-full">
+            <Button className="w-full" onPress={() => router.back()}>
               Go back
             </Button>
           ) : (
-            <Button as={Link} href="/" className="w-full">
+            <Button as={Link} className="w-full" href="/">
               Go back home
             </Button>
           )}

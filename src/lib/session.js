@@ -3,6 +3,7 @@ import "server-only";
 
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+
 import { AUTH_SESSION, USER_SESSION, WORKSPACE_SESSION } from "./constants";
 
 const secretKey =
@@ -22,9 +23,11 @@ export async function decrypt(session) {
     const { payload } = await jwtVerify(session, key, {
       algorithms: ["HS256"],
     });
+
     return payload;
   } catch (error) {
     console.error(error);
+
     return null;
   }
 }
@@ -32,7 +35,7 @@ export async function decrypt(session) {
 export async function createAuthSession(
   accessToken,
   expiresIn = 3600,
-  refreshToken = ""
+  refreshToken = "",
 ) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // AFTER 1 HOUR
 

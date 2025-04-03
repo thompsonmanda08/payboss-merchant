@@ -10,6 +10,9 @@ import {
   Tooltip,
   Chip,
 } from "@heroui/react";
+import { EyeIcon } from "@heroicons/react/24/outline";
+import { format } from "date-fns";
+
 import {
   SERVICE_PROVIDER_COLOR_MAP,
   TRANSACTION_STATUS_COLOR_MAP,
@@ -18,10 +21,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
 import Loader from "@/components/ui/loader";
-import { EyeIcon } from "@heroicons/react/24/outline";
 import SelectField from "@/components/ui/select-field";
 import EmptyLogs from "@/components/base/empty-logs";
-import { format } from "date-fns";
 
 export default function CustomTable({
   columns,
@@ -68,6 +69,7 @@ export default function CustomTable({
 
   const renderCell = React.useCallback((row, columnKey) => {
     const cellValue = row[columnKey];
+
     switch (columnKey) {
       case "name":
         return (
@@ -84,16 +86,16 @@ export default function CustomTable({
       case "status":
         return (
           <Button
-            size="sm"
+            className={cn(
+              "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
+              TRANSACTION_STATUS_COLOR_MAP[row.status],
+            )}
             variant="light"
             // onPress={() => {
             //   setSelectedBatch(row)
             //   setOpenBatchDetailsModal(true)
             // }}
-            className={cn(
-              "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
-              TRANSACTION_STATUS_COLOR_MAP[row.status]
-            )}
+            size="sm"
           >
             {cellValue}
           </Button>
@@ -101,26 +103,28 @@ export default function CustomTable({
       case "service_provider":
         return (
           <Tooltip
+            closeDelay={500}
             color="default"
-            placement="right"
             content={
               row?.mno_status_description ||
               row?.status_description ||
               "No description"
             }
             delay={500}
-            closeDelay={500}
+            placement="right"
             showArrow={true}
           >
             <Chip
-              color="primary"
               className={cn(
                 "mx-auto self-center capitalize",
-                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider?.toLowerCase()]
+                SERVICE_PROVIDER_COLOR_MAP[
+                  row?.service_provider?.toLowerCase()
+                ],
               )}
               classNames={{
                 content: "font-semibold",
               }}
+              color="primary"
               variant="flat"
             >
               {cellValue}
@@ -130,9 +134,9 @@ export default function CustomTable({
       case "link":
         return (
           <Button
-            variant="light"
-            className={"max-w-fit p-2"}
             isIconOnly
+            className={"max-w-fit p-2"}
+            variant="light"
             onPress={() => {
               setSelectedBatch(row);
               setOpenBatchDetailsModal(true);
@@ -156,8 +160,8 @@ export default function CustomTable({
     return (
       <div className="-mt-8 flex flex-1 items-center rounded-lg">
         <Loader
-          size={100}
           classNames={{ wrapper: "bg-foreground-200/50 rounded-xl h-full" }}
+          size={100}
         />
       </div>
     );
@@ -183,10 +187,10 @@ export default function CustomTable({
             Rows per page:{" "}
             <SelectField
               className="h-8 min-w-max bg-transparent text-sm text-foreground-400 outline-none"
-              onChange={onRowsPerPageChange}
-              placeholder={rowsPerPage.toString()}
-              options={["5", "8", "10", "16", "20"]}
               defaultValue={8}
+              options={["5", "8", "10", "16", "20"]}
+              placeholder={rowsPerPage.toString()}
+              onChange={onRowsPerPageChange}
             />
           </label>
         </div>
@@ -200,10 +204,10 @@ export default function CustomTable({
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
-          title={emptyTitleText || "No data to display."}
           subTitle={
             emptyDescriptionText || "you have no data to be displayed here."
           }
+          title={emptyTitleText || "No data to display."}
         />
       </div>
     );
@@ -211,55 +215,55 @@ export default function CustomTable({
 
   return (
     <Table
+      isHeaderSticky
+      isStriped
       aria-label="Example table with custom cells"
-      className="max-h-[1080px]"
-      removeWrapper={removeWrapper}
       classNames={{
         table: cn(
           "align-top items-start justify-start",
           {
             "min-h-[400px]": isLoading || !rows,
           },
-          classNames?.table
+          classNames?.table,
         ),
 
         base: cn(
           "min-h-[200px] overflow-x-auto",
           { "min-h-max": pages <= 1 },
-          classNames?.wrapper
+          classNames?.wrapper,
         ),
       }}
       // classNames={}
       // showSelectionCheckboxes
       // selectionMode="multiple"
-      selectionMode="single"
-      selectedKeys={selectedKeys}
-      onSelectionChange={setSelectedKeys}
-      selectionBehavior={selectionBehavior}
-      isStriped
-      isHeaderSticky
-      onRowAction={(key) => onRowAction(key)}
       bottomContent={bottomContent}
+      className="max-h-[1080px]"
+      removeWrapper={removeWrapper}
+      selectedKeys={selectedKeys}
+      selectionBehavior={selectionBehavior}
+      selectionMode="single"
       sortDescriptor={sortDescriptor}
+      onRowAction={(key) => onRowAction(key)}
+      onSelectionChange={setSelectedKeys}
       onSortChange={setSortDescriptor}
     >
-      <TableHeader columns={columns} className="fixed">
+      <TableHeader className="fixed" columns={columns}>
         {(column) => (
           <TableColumn
             key={column.uid}
-            allowsSorting={column.sortable}
             align={column.uid === "status" ? "center" : "start"}
+            allowsSorting={column.sortable}
           >
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
       <TableBody
-        items={sortedItems}
-        isLoading={isLoading}
-        loadingContent={loadingContent}
-        emptyContent={emptyContent}
         align="top"
+        emptyContent={emptyContent}
+        isLoading={isLoading}
+        items={sortedItems}
+        loadingContent={loadingContent}
       >
         {(item) => (
           <TableRow key={item?.transactionID || item?.ID} align="top">

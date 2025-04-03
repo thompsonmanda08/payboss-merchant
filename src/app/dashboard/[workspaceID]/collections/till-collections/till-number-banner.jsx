@@ -1,10 +1,10 @@
 "use client";
-import React from "react";
 import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
+import Image from "next/image";
+
 import Loader from "@/components/ui/loader";
 import CardHeader from "@/components/base/card-header";
 import { DefaultCover } from "@/lib/constants";
-import Image from "next/image";
 import Logo from "@/components/base/logo";
 import BackgroundSVG from "@/components/base/BackgroundSVG";
 
@@ -27,23 +27,23 @@ export const TillBanner = ({ till }) => (
         </span>
       </div>
       <div className="font-semi-bold font-display flex items-center justify-center italic">
-        Powered by <Logo href="#" aria-label="Home" className="" />
+        Powered by <Logo aria-label="Home" className="" href="#" />
       </div>
     </div>
     <div className="hidden lg:block">
       <Image
-        className="relative -bottom-12 ml-auto h-full w-full max-w-lg flex-1 rounded-l-[180px] object-cover object-right"
-        src={DefaultCover}
         alt="banner"
-        width={1024}
+        className="relative -bottom-12 ml-auto h-full w-full max-w-lg flex-1 rounded-l-[180px] object-cover object-right"
         height={300}
+        src={DefaultCover}
+        width={1024}
       />
       <Image
-        className="absolute -bottom-6 right-12 z-20 h-full w-full flex-1 object-contain object-right"
-        src={"/images/like-a-boss.png"}
         alt="lady-boss"
-        width={1024}
+        className="absolute -bottom-6 right-12 z-20 h-full w-full flex-1 object-contain object-right"
         height={300}
+        src={"/images/like-a-boss.png"}
+        width={1024}
       />
     </div>
   </div>
@@ -60,19 +60,19 @@ export default function TillNumberBanner({
     <>
       <Modal
         // size={'lg'}
-        isOpen={isOpen}
-        onClose={onClose}
         className="max-w-[968px]"
         isDismissable={false}
+        isOpen={isOpen}
+        onClose={onClose}
       >
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-4">
               <CardHeader
-                title={"Till Number"}
                 infoText={
                   "Print this till number banner to display at the till"
                 }
+                title={"Till Number"}
               />
             </ModalHeader>
 

@@ -1,11 +1,13 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
+
 import useWorkspaces from "./useWorkspaces";
 
 const useNavigation = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const { workspaceID, activeWorkspace, workspaces, isLoading } = useWorkspaces();
+  const { workspaceID, activeWorkspace, workspaces, isLoading } =
+    useWorkspaces();
 
   const dashboardRoute = `/dashboard/${workspaceID}`;
   const settingsPathname = `${dashboardRoute}/settings`;

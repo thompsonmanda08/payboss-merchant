@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
   PlusIcon,
   Square2StackIcon,
@@ -28,8 +27,11 @@ import {
   TableRow,
   TableCell,
 } from "@heroui/react";
-import { cn, formatDate, maskString, notify } from "@/lib/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
 
+import { Button } from "@/components/ui/button";
+import { cn, formatDate, maskString, notify } from "@/lib/utils";
 import CustomTable from "@/components/tables/table";
 import {
   useWorkspaceAPIKey,
@@ -42,23 +44,21 @@ import {
   refreshWorkspaceAPIKey,
   setupWorkspaceAPIKey,
 } from "@/app/_actions/workspace-actions";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants";
-import APIConfigViewModal from "./APIConfigView";
 import { getAPICollectionLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
 import Card from "@/components/base/card";
 import CardHeader from "@/components/base/card-header";
-
 import {
   API_KEY_TERMINAL_TRANSACTION_COLUMNS,
   API_KEY_TRANSACTION_COLUMNS,
 } from "@/lib/table-columns";
 import TerminalsTable from "@/components/tables/terminal-tables";
-import TerminalConfigViewModal from "./TerminalConfigView";
-import { AnimatePresence, motion } from "framer-motion";
 import Loader from "@/components/ui/loader";
 import PromptModal from "@/components/base/prompt";
+
+import TerminalConfigViewModal from "./TerminalConfigView";
+import APIConfigViewModal from "./APIConfigView";
 
 const APIIntegration = ({ workspaceID }) => {
   const queryClient = useQueryClient();
@@ -90,6 +90,7 @@ const APIIntegration = ({ workspaceID }) => {
   };
 
   const thirtyDaysAgoDate = new Date();
+
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
   const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
   const end_date = formatDate(new Date(), "YYYY-MM-DD");
@@ -137,6 +138,7 @@ const APIIntegration = ({ workspaceID }) => {
 
       setIsLoading(false);
       handleClosePrompt();
+
       return;
     }
 
@@ -147,6 +149,7 @@ const APIIntegration = ({ workspaceID }) => {
         title: "Error",
         description: "You already have an API key for this workspace!",
       });
+
       return;
     }
 
@@ -159,6 +162,7 @@ const APIIntegration = ({ workspaceID }) => {
         description: response?.message,
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -172,6 +176,7 @@ const APIIntegration = ({ workspaceID }) => {
     });
     setIsLoading(false);
     handleClosePrompt();
+
     return;
   }
 
@@ -186,6 +191,7 @@ const APIIntegration = ({ workspaceID }) => {
       });
       setIsLoading(false);
       handleClosePrompt();
+
       return;
     }
 
@@ -196,6 +202,7 @@ const APIIntegration = ({ workspaceID }) => {
         description: "You have no API key.",
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -209,6 +216,7 @@ const APIIntegration = ({ workspaceID }) => {
       });
       console.error(response?.message);
       setIsLoading(false);
+
       return;
     }
 
@@ -222,6 +230,7 @@ const APIIntegration = ({ workspaceID }) => {
     });
     setIsLoading(false);
     handleClosePrompt();
+
     return;
   }
 
@@ -236,6 +245,7 @@ const APIIntegration = ({ workspaceID }) => {
       });
       setIsLoading(false);
       handleClosePrompt();
+
       return;
     }
 
@@ -247,6 +257,7 @@ const APIIntegration = ({ workspaceID }) => {
       });
       setIsLoading(false);
       handleClosePrompt();
+
       return;
     }
 
@@ -259,6 +270,7 @@ const APIIntegration = ({ workspaceID }) => {
         description: response?.message,
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -286,6 +298,7 @@ const APIIntegration = ({ workspaceID }) => {
       });
       setIsLoading(false);
       handleClosePrompt();
+
       return;
     }
 
@@ -298,6 +311,7 @@ const APIIntegration = ({ workspaceID }) => {
         description: response?.message,
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -324,6 +338,7 @@ const APIIntegration = ({ workspaceID }) => {
         description: "Terminals already activated for this workspace!",
       });
       handleClosePrompt();
+
       return;
     }
 
@@ -339,12 +354,14 @@ const APIIntegration = ({ workspaceID }) => {
         description: "Contact support to deactivate terminals!",
       });
       handleClosePrompt();
+
       return;
     }
 
     // ALLOW DEACTIVATION IF TERMINALS ARE NOT UPLOADED
     if (actionKey == "deactivate-terminals") {
       setCurrentActionIndex(3);
+
       return;
     }
 
@@ -359,11 +376,13 @@ const APIIntegration = ({ workspaceID }) => {
         description: "You cannot perform this action",
       });
       handleClosePrompt();
+
       return;
     }
 
     if (selectedKey == "add-terminal") {
       onAddTerminal();
+
       return;
     }
 
@@ -372,6 +391,7 @@ const APIIntegration = ({ workspaceID }) => {
       selectedKey == "deactivate-terminals"
     ) {
       handleTerminalStatus(selectedKey);
+
       return;
     }
   }
@@ -468,18 +488,18 @@ const APIIntegration = ({ workspaceID }) => {
         <Card className="">
           <div className="mb-8 flex justify-between">
             <CardHeader
-              title={"API Key"}
-              infoText={
-                "Use the API keys to collect payments to your workspace wallet."
-              }
               classNames={{
                 titleClasses: "xl:text-2xl lg:text-xl font-bold",
                 infoClasses: "!text-sm xl:text-base",
               }}
+              infoText={
+                "Use the API keys to collect payments to your workspace wallet."
+              }
+              title={"API Key"}
             />
             <Button
-              isDisabled={Boolean(configData?.apiKey)}
               endContent={<PlusIcon className="h-5 w-5" />}
+              isDisabled={Boolean(configData?.apiKey)}
               onClick={() => setCurrentActionIndex(0)}
             >
               Generate Key
@@ -494,18 +514,18 @@ const APIIntegration = ({ workspaceID }) => {
               <TableColumn align="center">ACTIONS</TableColumn>
             </TableHeader>
             <TableBody
+              emptyContent={
+                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
+                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70">
+                    You have no API keys generated
+                  </span>
+                </div>
+              }
               isLoading={isLoadingConfig}
               loadingContent={
                 <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
                   <span className="flex gap-4 text-sm font-bold capitalize text-primary">
                     <Spinner size="sm" /> Loading API key...
-                  </span>
-                </div>
-              }
-              emptyContent={
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
-                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70">
-                    You have no API keys generated
                   </span>
                 </div>
               }
@@ -524,8 +544,8 @@ const APIIntegration = ({ workspaceID }) => {
                         <Button
                           className={"h-max max-h-max max-w-max p-1"}
                           color="default"
-                          variant="light"
                           size="sm"
+                          variant="light"
                           onClick={() => setUnmaskAPIKey(!unmaskAPIKey)}
                         >
                           {unmaskAPIKey ? (
@@ -549,8 +569,8 @@ const APIIntegration = ({ workspaceID }) => {
                       <div className="flex items-center gap-4">
                         <Tooltip color="secondary" content="API Config">
                           <Cog6ToothIcon
-                            onClick={() => setOpenViewConfig(true)}
                             className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
+                            onClick={() => setOpenViewConfig(true)}
                           />
                         </Tooltip>
                         <Tooltip
@@ -568,8 +588,8 @@ const APIIntegration = ({ workspaceID }) => {
                         </Tooltip>
                         <Tooltip color="primary" content="Refresh API Key">
                           <ArrowPathIcon
-                            onClick={() => setCurrentActionIndex(1)}
                             className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300"
+                            onClick={() => setCurrentActionIndex(1)}
                           />
                         </Tooltip>
                       </div>
@@ -584,22 +604,22 @@ const APIIntegration = ({ workspaceID }) => {
         <Card className="">
           <div className="mb-8 flex justify-between">
             <CardHeader
-              title={"Terminals"}
-              infoText={
-                "Activate terminals to manage  multiple collection points like POS machines, tills, etc."
-              }
               classNames={{
                 titleClasses: "xl:text-2xl lg:text-xl font-bold",
                 infoClasses: "!text-sm xl:text-base",
               }}
+              infoText={
+                "Activate terminals to manage  multiple collection points like POS machines, tills, etc."
+              }
+              title={"Terminals"}
             />
 
             <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
               <Dropdown backdrop="blur">
                 <DropdownTrigger>
                   <Button
-                    endContent={<WrenchScrewdriverIcon className="h-5 w-5" />}
                     color="primary"
+                    endContent={<WrenchScrewdriverIcon className="h-5 w-5" />}
                     isLoading={initLoading}
                     loadingText={"Please wait..."}
                   >
@@ -613,8 +633,8 @@ const APIIntegration = ({ workspaceID }) => {
                   {hasTerminals && (
                     <DropdownItem
                       key="add-terminal"
-                      startContent={<PlusIcon className={cn(iconClasses)} />}
                       description="Add new terminals to workspace"
+                      startContent={<PlusIcon className={cn(iconClasses)} />}
                     >
                       Add New Terminal
                     </DropdownItem>
@@ -632,21 +652,21 @@ const APIIntegration = ({ workspaceID }) => {
                     {!hasTerminals ? (
                       <DropdownItem
                         key="activate-terminals"
+                        classNames={{
+                          shortcut: "group-hover:text-white",
+                        }}
                         color="primary"
-                        variant="solid"
+                        description="Activate collection terminals"
                         shortcut="⌘⇧A"
                         startContent={
                           <ComputerDesktopIcon
                             className={cn(
                               iconClasses,
-                              "group-hover:text-white font-bold group-hover:border-white"
+                              "group-hover:text-white font-bold group-hover:border-white",
                             )}
                           />
                         }
-                        classNames={{
-                          shortcut: "group-hover:text-white",
-                        }}
-                        description="Activate collection terminals"
+                        variant="solid"
                       >
                         Activate Terminals
                       </DropdownItem>
@@ -654,19 +674,19 @@ const APIIntegration = ({ workspaceID }) => {
                       <DropdownItem
                         key="deactivate-terminals"
                         className="text-danger"
-                        color="danger"
-                        description="Deactivate collection terminals"
-                        shortcut="⌘⇧D"
                         classNames={{
                           shortcut:
                             "group-hover:text-white font-bold group-hover:border-white",
                         }}
+                        color="danger"
+                        description="Deactivate collection terminals"
                         href="/support"
+                        shortcut="⌘⇧D"
                         startContent={
                           <TrashIcon
                             className={cn(
                               iconClasses,
-                              "text-danger group-hover:text-white"
+                              "text-danger group-hover:text-white",
                             )}
                           />
                         }
@@ -678,11 +698,11 @@ const APIIntegration = ({ workspaceID }) => {
                 </DropdownMenu>
               </Dropdown>
               <Tooltip
-                content="Show configured terminals"
-                color="secondary"
                 classNames={{
                   content: "max-w-96 text-sm leading-6 p-3",
                 }}
+                color="secondary"
+                content="Show configured terminals"
               >
                 <Button
                   color={"secondary"}
@@ -701,54 +721,54 @@ const APIIntegration = ({ workspaceID }) => {
 
           <AnimatePresence>
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
               animate={{
                 height: isExpanded ? "auto" : 0,
                 opacity: isExpanded ? 1 : 0,
               }}
+              initial={{ height: 0, opacity: 0 }}
             >
               {hasTerminals && terminalsConfigured ? (
                 <TerminalsTable
+                  removeWrapper
                   isLoading={isLoadingTerminals}
                   rows={terminals}
-                  removeWrapper
                 />
               ) : (
                 <div className="-mt-4 flex h-full min-h-32 flex-1 items-center justify-center rounded-2xl bg-primary-50 text-sm font-medium dark:bg-foreground/5">
                   {initLoading || isLoadingTerminals || isLoadingConfig ? (
                     <Loader
-                      size={60}
-                      loadingText={"Getting configuration..."}
                       classNames={{
                         wrapper: "bg-foreground-200/50 rounded-xl h-full",
                       }}
+                      loadingText={"Getting configuration..."}
+                      size={60}
                     />
                   ) : (
                     <Tooltip
-                      content="Terminals are like a POS/Till machines that can be used to collect payments from your customers."
                       classNames={{
                         content: "max-w-96 text-sm leading-6 p-3",
                       }}
+                      content="Terminals are like a POS/Till machines that can be used to collect payments from your customers."
                     >
                       <Button
-                        variant="light"
-                        isDisabled={isLoadingConfig || mutation?.isPending}
-                        isLoading={isLoadingConfig || mutation?.isPending}
-                        loadingText={"Getting Configuration..."}
-                        onClick={
-                          terminalsConfigured && hasTerminals
-                            ? onAddTerminal
-                            : handleTerminalStatus
-                        }
                         className={
                           "flex-grow min-h-auto max-h-auto min-h-32 w-full flex-1 font-medium text-primary-600"
                         }
+                        isDisabled={isLoadingConfig || mutation?.isPending}
+                        isLoading={isLoadingConfig || mutation?.isPending}
+                        loadingText={"Getting Configuration..."}
                         startContent={
                           terminalsConfigured && hasTerminals ? (
                             <PlusIcon className={cn(iconClasses)} />
                           ) : (
                             <ComputerDesktopIcon className={cn(iconClasses)} />
                           )
+                        }
+                        variant="light"
+                        onClick={
+                          terminalsConfigured && hasTerminals
+                            ? onAddTerminal
+                            : handleTerminalStatus
                         }
                       >
                         {terminalsConfigured && hasTerminals
@@ -767,10 +787,10 @@ const APIIntegration = ({ workspaceID }) => {
           <div className="flex w-full items-center justify-between gap-4">
             <CardHeader
               className={"mb-4"}
-              title={"Recent Transactions"}
               infoText={
                 "Transactions made to your workspace wallet in the last 30days."
               }
+              title={"Recent Transactions"}
             />
           </div>
           <CustomTable
@@ -781,8 +801,8 @@ const APIIntegration = ({ workspaceID }) => {
                 ? API_KEY_TERMINAL_TRANSACTION_COLUMNS
                 : API_KEY_TRANSACTION_COLUMNS
             }
-            rows={LATEST_TRANSACTIONS}
             isLoading={mutation.isPending}
+            rows={LATEST_TRANSACTIONS}
           />
         </Card>
       </div>
@@ -799,23 +819,23 @@ const APIIntegration = ({ workspaceID }) => {
 
       <TerminalConfigViewModal
         isOpen={isOpenAddTerminal}
-        onClose={onCloseTerminal}
         workspaceID={workspaceID}
+        onClose={onCloseTerminal}
       />
 
       {/* DELETE PROMPT MODAL */}
       <PromptModal
-        isOpen={currentActionIndex !== null}
-        onOpen={onOpen}
-        onClose={handleClosePrompt}
-        title={USER_PROMPT_ACTIONS[currentActionIndex]?.title}
-        onConfirm={USER_PROMPT_ACTIONS[currentActionIndex]?.onConfirmAction}
         confirmText={
           USER_PROMPT_ACTIONS[currentActionIndex]?.confirmText || "Confirm"
         }
         isDisabled={isLoading}
-        isLoading={isLoading}
         isDismissable={false}
+        isLoading={isLoading}
+        isOpen={currentActionIndex !== null}
+        title={USER_PROMPT_ACTIONS[currentActionIndex]?.title}
+        onClose={handleClosePrompt}
+        onConfirm={USER_PROMPT_ACTIONS[currentActionIndex]?.onConfirmAction}
+        onOpen={onOpen}
       >
         <p className="-mt-4 text-sm leading-6 text-foreground/70">
           <strong>{USER_PROMPT_ACTIONS[currentActionIndex]?.promptText}</strong>{" "}

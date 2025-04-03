@@ -1,16 +1,15 @@
 "use client";
 import Link from "next/link";
-import React from "react";
-import SignUpForm from "@/components/forms/signup-form";
-
 import { useRouter } from "next/navigation";
+import { Card } from "@heroui/react";
+
+import SignUpForm from "@/components/forms/signup-form";
 import Spinner from "@/components/ui/spinner";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import useAuthStore from "@/context/auth-store";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/base/logo";
 import EmptyState from "@/components/empty-state";
-import { Card } from "@heroui/react";
 
 export default function Register() {
   const { isLoading, isError } = useConfigOptions();
@@ -43,9 +42,9 @@ export default function Register() {
       ) : isError ? (
         <Card className="flex max-w-md items-center justify-center self-center bg-background p-5">
           <EmptyState
-            title={"Error"}
-            message={"Something went wrong. Try reloading the page!"}
             buttonText={"Reload"}
+            message={"Something went wrong. Try reloading the page!"}
+            title={"Error"}
             onButtonClick={() => router.refresh()}
           />
         </Card>
@@ -59,8 +58,8 @@ export default function Register() {
         <p className="mx-auto font-inter text-base font-medium leading-6 tracking-normal text-foreground/50">
           Already have an account?
           <Link
-            href="/login"
             className="relative z-10 ml-1 bg-gradient-to-br from-primary to-primary/80 bg-clip-text font-bold text-transparent"
+            href="/login"
           >
             Sign in
           </Link>
@@ -92,7 +91,7 @@ export function AccountCreatedSuccess() {
         </p>
 
         <div className="grid w-full">
-          <Button as={Link} href={"/login"} className={"w-full flex-1"}>
+          <Button as={Link} className={"w-full flex-1"} href={"/login"}>
             Login
           </Button>
         </div>

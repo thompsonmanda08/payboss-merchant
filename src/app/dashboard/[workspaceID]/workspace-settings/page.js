@@ -1,6 +1,6 @@
-import LoadingPage from "@/app/loading";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
+import LoadingPage from "@/app/loading";
 import WorkspaceSettings from "@/app/dashboard/[workspaceID]/workspace-settings/components";
 import { getAllUsers } from "@/app/_actions/user-actions";
 import { getWorkspaceMembers } from "@/app/_actions/workspace-actions";
@@ -37,12 +37,12 @@ export default async function ManageWorkspacePage({ params }) {
   return (
     <Suspense fallback={<LoadingPage />}>
       <WorkspaceSettings
-        workspaceID={workspaceID}
-        selectedWorkspace={activeWorkspace}
         allUsers={allUsersData?.data?.users}
+        permissions={permissions}
+        selectedWorkspace={activeWorkspace}
+        workspaceID={workspaceID}
         workspaceMembers={workspaceMembers?.data?.users}
         workspaceRoles={workspaceRoleData?.data?.roles}
-        permissions={permissions}
       />
     </Suspense>
   );

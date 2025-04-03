@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import {
   ArrowLeftEndOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
@@ -9,18 +8,19 @@ import {
   ReceiptPercentIcon,
   WalletIcon,
 } from "@heroicons/react/24/outline";
-import { formatCurrency } from "@/lib/utils";
-
 import { Chip } from "@heroui/react";
+
+import { formatCurrency } from "@/lib/utils";
 import Card from "@/components/base/card";
 import SimpleStats from "@/app/dashboard/components/simple-stats";
 import CardHeader from "@/components/base/card-header";
 import OverlayLoader from "@/components/ui/overlay-loader";
 import { MONTHS, WORKSPACE_TYPES } from "@/lib/constants";
-
 import ReportsBarChart from "@/components/charts/ReportsBarChart/ReportsBarChart";
 import CustomTable from "@/components/tables/table";
+
 import { WalletTransactionHistory } from "../[workspaceID]/workspace-settings/components/wallet";
+
 import PendingApprovals from "./PendingAnalytics";
 
 const TRANSACTION_COLUMNS = [
@@ -98,8 +98,8 @@ function DashboardAnalytics({
     workspaceType == WORKSPACE_TYPES[0]?.ID
       ? monthlyCollections
       : WORKSPACE_TYPES[1]?.ID
-      ? monthlyDisbursements
-      : [...monthlyDisbursements, ...monthlyCollections]; // HYBRID WORKSPACE
+        ? monthlyDisbursements
+        : [...monthlyDisbursements, ...monthlyCollections]; // HYBRID WORKSPACE
 
   const monthlyTransactions = {
     chart: {
@@ -108,8 +108,9 @@ function DashboardAnalytics({
         label: "Transactions",
         data: MONTHS.map((month) => {
           const transaction = monthlyTransactionRecords?.find((item) =>
-            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase())
+            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase()),
           );
+
           return transaction ? transaction.count : 0;
         }), // Total Transactions
       },
@@ -121,11 +122,11 @@ function DashboardAnalytics({
   const previousMonth = MONTHS[(thisMonth - 1 + MONTHS.length) % MONTHS.length]; // Handle January to December wrap-around
 
   const previousMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month)?.toLowerCase().startsWith(previousMonth?.toLowerCase())
+    String(item.month)?.toLowerCase().startsWith(previousMonth?.toLowerCase()),
   );
 
   const currentMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month)?.toLowerCase().startsWith(currentMonth?.toLowerCase())
+    String(item.month)?.toLowerCase().startsWith(currentMonth?.toLowerCase()),
   );
 
   // Extract counts or default to 0 if no transactions
@@ -149,10 +150,10 @@ function DashboardAnalytics({
     workspaceType == WORKSPACE_TYPES[0]?.ID // COLLECTIONS
       ? ArrowLeftEndOnRectangleIcon
       : workspaceType == WORKSPACE_TYPES[1]?.ID // DISBURSEMENTS
-      ? ArrowRightStartOnRectangleIcon
-      : workspaceType == WORKSPACE_TYPES[2]?.ID // BILLS
-      ? ReceiptPercentIcon
-      : ListBulletIcon; // HYBRID
+        ? ArrowRightStartOnRectangleIcon
+        : workspaceType == WORKSPACE_TYPES[2]?.ID // BILLS
+          ? ReceiptPercentIcon
+          : ListBulletIcon; // HYBRID
 
   const isLoadingDashboardData = !permissions?.role && !workspaceType;
 
@@ -182,44 +183,44 @@ function DashboardAnalytics({
             </p>
           </Card>
           <SimpleStats
-            title={`Today's ${workspaceType}`}
+            Icon={CardIcon}
+            classNames={{
+              smallFigureClasses: "md:text-base font-semibold",
+            }}
             figure={today?.count || 0}
             smallFigure={
               today?.value ? `(${formatCurrency(today?.value)})` : `(ZMW 0.00)`
             }
-            classNames={{
-              smallFigureClasses: "md:text-base font-semibold",
-            }}
-            Icon={CardIcon}
+            title={`Today's ${workspaceType}`}
           />
 
           <SimpleStats
-            title={`Yesterday's ${workspaceType}`}
+            Icon={CardIcon}
+            classNames={{
+              smallFigureClasses: "md:text-base font-semibold",
+            }}
             figure={yesterday?.count || 0}
             smallFigure={
               yesterday?.value
                 ? `(${formatCurrency(yesterday?.value)})`
                 : `(ZMW 0.00)`
             }
-            classNames={{
-              smallFigureClasses: "md:text-base font-semibold",
-            }}
-            Icon={CardIcon}
+            title={`Yesterday's ${workspaceType}`}
           />
 
           <SimpleStats
-            title={"All Transactions"}
+            Icon={CardIcon}
+            classNames={{
+              smallFigureClasses: "md:text-base font-bold",
+            }}
             figure={allTransactions?.count || 0}
+            isBad={true}
             smallFigure={
               allTransactions?.value
                 ? `(${formatCurrency(allTransactions?.value)})`
                 : `(ZMW 0.00)`
             }
-            classNames={{
-              smallFigureClasses: "md:text-base font-bold",
-            }}
-            isBad={true}
-            Icon={CardIcon}
+            title={"All Transactions"}
           />
         </div>
 
@@ -229,10 +230,10 @@ function DashboardAnalytics({
           <Card className={""}>
             <div className="flex items-center justify-between">
               <CardHeader
-                title={"Wallet Statement Summary"}
                 infoText={
                   "Brief overview of your latest statement transactions"
                 }
+                title={"Wallet Statement Summary"}
               />
               {/* <SimpleDropdown
                 isIconOnly
@@ -251,16 +252,16 @@ function DashboardAnalytics({
             </div>
 
             <WalletTransactionHistory
+              limit={5}
               transactionData={walletSummary}
               workspaceID={workspaceID}
-              limit={5}
             />
           </Card>
 
           <div className="flex flex-1 flex-col gap-4 self-start">
             <ReportsBarChart
-              title="Transactions Summary"
               description={"Monthly transactions by count and value"}
+              title="Transactions Summary"
               chart={monthlyTransactions.chart}
               // items={items}
             />
@@ -268,9 +269,9 @@ function DashboardAnalytics({
             {/* APPROVALS FOR DISBURSEMENTS */}
             {workspaceType == WORKSPACE_TYPES[1]?.ID && (
               <PendingApprovals
+                canApprove={permissions?.can_approve}
                 data={pendingApprovals}
                 workspaceType={workspaceType}
-                canApprove={permissions?.can_approve}
               />
             )}
           </div>
@@ -280,15 +281,15 @@ function DashboardAnalytics({
         <Card className={""}>
           <div className="flex justify-between">
             <CardHeader
-              title={"Latest Transactions"}
               infoText={"Some recent transactions from the last few days"}
+              title={"Latest Transactions"}
             />
           </div>
           <CustomTable
+            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
             columns={TRANSACTION_COLUMNS}
             rows={latestTransactions || []}
             rowsPerPage={6}
-            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
           />
         </Card>
       </div>

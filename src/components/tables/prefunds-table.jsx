@@ -11,11 +11,12 @@ import {
   Pagination,
 } from "@heroui/react";
 import { WalletIcon } from "@heroicons/react/24/outline";
+import { format } from "date-fns";
+
 import { cn, formatCurrency } from "@/lib/utils";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import EmptyLogs from "@/components/base/empty-logs";
 import Loader from "@/components/ui/loader";
-import { format } from "date-fns";
 
 const columns = [
   { name: "NAME", uid: "name" },
@@ -62,7 +63,7 @@ export default function PrefundsTable({
           <Button
             isDisabled
             className={cn(
-              "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100"
+              "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100",
             )}
             startContent={
               <SoftBoxIcon className={"h-12 w-12"}>
@@ -149,10 +150,10 @@ export default function PrefundsTable({
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
-          title={emptyTitleText || "No data to display."}
           subTitle={
             emptyDescriptionText || "you have no data to be displayed here."
           }
+          title={emptyTitleText || "No data to display."}
         />
       </div>
     );
@@ -162,8 +163,8 @@ export default function PrefundsTable({
     return (
       <div className="-mt-8 flex flex-1 items-center rounded-lg">
         <Loader
-          size={100}
           classNames={{ wrapper: "bg-foreground-200/50 rounded-xl h-full" }}
+          size={100}
         />
       </div>
     );
@@ -178,12 +179,14 @@ export default function PrefundsTable({
     // if the length of the array is 3 or the keys are all, then clear the selected keys
     if (keys.length === 3 || keys.join() == "all") {
       setSelectedKeys(new Set([]));
+
       return;
     }
 
     // if the length of the array is 2, then set the selected keys to the second key
     if (keys.length > 1) {
       setSelectedKeys(new Set([keys[1]]));
+
       return;
     }
 
@@ -193,19 +196,19 @@ export default function PrefundsTable({
 
   return (
     <Table
-      aria-label="Prefunds table with custom cells"
       isHeaderSticky
-      color="primary"
-      className="max-h-[480px]"
-      removeWrapper={removeWrapper}
+      aria-label="Prefunds table with custom cells"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
+      className="max-h-[480px]"
       classNames={{
         table: cn("align-top items-start justify-start", {
           "min-h-[400px]": isLoading || !rows,
         }),
         base: cn("overflow-x-auto", { "": pages <= 1 }),
       }}
+      color="primary"
+      removeWrapper={removeWrapper}
       selectedKeys={selectedKeys}
       selectionMode="multiple"
       onSelectionChange={handleprefundSelection}
@@ -224,11 +227,11 @@ export default function PrefundsTable({
         )}
       </TableHeader>
       <TableBody
-        isLoading={isLoading}
-        loadingContent={loadingContent}
-        emptyContent={emptyContent}
-        items={items}
         align="top"
+        emptyContent={emptyContent}
+        isLoading={isLoading}
+        items={items}
+        loadingContent={loadingContent}
       >
         {(item) => (
           <TableRow key={item?.ID} isDisabled={item?.isLocked}>

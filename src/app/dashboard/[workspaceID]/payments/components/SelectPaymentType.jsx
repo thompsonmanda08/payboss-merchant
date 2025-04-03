@@ -1,15 +1,16 @@
 "use client";
-import { cn } from "@/lib/utils";
-import usePaymentsStore from "@/context/payment-store";
 import { useRouter } from "next/navigation";
-import useNavigation from "@/hooks/useNavigation";
 import {
   ArrowRightCircleIcon,
   CircleStackIcon,
 } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
+
+import { cn } from "@/lib/utils";
+import usePaymentsStore from "@/context/payment-store";
+import useNavigation from "@/hooks/useNavigation";
 import { Button } from "@/components/ui/button";
 import { PAYMENT_PROTOCOL } from "@/lib/constants";
-import { useEffect } from "react";
 import Modal from "@/components/base/custom-modal";
 import CustomRadioGroup from "@/components/ui/custom-radio-group";
 
@@ -67,11 +68,11 @@ const SelectPaymentType = ({ setCreatePaymentLoading }) => {
     <>
       {/************************* MAIN MODAL RENDERER *************************/}
       <Modal
-        show={openPaymentsModal}
-        width={500}
-        title={"Create a payment"}
         confirmText={"Proceed"}
         infoText={"Choose a payment you would like to initiate"}
+        show={openPaymentsModal}
+        title={"Create a payment"}
+        width={500}
         onClose={() => {
           setOpenPaymentsModal(false);
         }}
@@ -87,14 +88,14 @@ const SelectPaymentType = ({ setCreatePaymentLoading }) => {
                 selected:
                   "bg-primary/10 border border-primary/30 hover:shadow-primary/20",
               }}
-              onChange={(option) => handleProtocolSelection(option)}
-              labelText="Select a service protocol"
               defaultValue={selectedProtocol}
+              labelText="Select a service protocol"
               options={PAYMENT_PROTOCOL?.map((item, index) => (
                 <div key={index} className="flex flex-1 capitalize">
                   <span className="font-medium">{item}</span>
                 </div>
               ))}
+              onChange={(option) => handleProtocolSelection(option)}
             />
           </div>
 
@@ -127,21 +128,21 @@ function PaymentTypeOption({
 }) {
   return (
     <Button
-      onClick={handleSelect}
       className={cn(
         `relative flex aspect-square h-40 max-h-40 flex-1 cursor-pointer items-center justify-center rounded-md border border-primary-100 bg-background p-5 text-[24px] tracking-tighter text-primary transition-colors duration-200 ease-in-out`,
         className,
         {
           "bg-primary text-white shadow-xl shadow-slate-500/10": selected,
-        }
+        },
       )}
+      onClick={handleSelect}
     >
       <Icon
         className={cn(
           "absolute left-20 z-0 scale-[2.5] font-bold text-gray-200/50 transition-all duration-150 ease-in-out",
           {
             "left-10": selected,
-          }
+          },
         )}
       />
       <span className="z-10 font-bold">{fieldOption}</span>

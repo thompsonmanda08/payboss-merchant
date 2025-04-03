@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Modal,
   ModalContent,
@@ -6,6 +5,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "@heroui/modal";
+
 import { Button } from "../ui/button";
 
 function PromptModal({
@@ -24,12 +24,12 @@ function PromptModal({
 }) {
   return (
     <Modal
-      size={size}
-      isOpen={isOpen}
-      onClose={onClose}
+      className={"z-[99999999] max-w-[600px]"}
       isDismissable={isDismissable}
       isKeyboardDismissDisabled={isKeyboardDismissDisabled}
-      className={"z-[99999999] max-w-[600px]"}
+      isOpen={isOpen}
+      size={size}
+      onClose={onClose}
     >
       <ModalContent>
         {(onClose) => (

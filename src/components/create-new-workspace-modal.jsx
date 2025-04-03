@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import {
   Modal,
   ModalContent,
@@ -8,10 +7,10 @@ import {
   ModalFooter,
   Checkbox,
 } from "@heroui/react";
+
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
 import SelectField from "@/components/ui/select-field";
-import { WORKSPACE_TYPES } from "@/lib/constants";
 
 export default function CreateNewWorkspaceModal({
   workspaceTypes,
@@ -24,7 +23,7 @@ export default function CreateNewWorkspaceModal({
   loading,
 }) {
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
+    <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>
@@ -34,9 +33,9 @@ export default function CreateNewWorkspaceModal({
             <ModalBody>
               <Input
                 autoFocus
+                className="mt-px"
                 label="Workspace Name"
                 placeholder="Commercial Team"
-                className="mt-px"
                 required={true}
                 value={formData?.workspace}
                 onChange={(e) => {
@@ -44,10 +43,10 @@ export default function CreateNewWorkspaceModal({
                 }}
               />
               <SelectField
-                options={workspaceTypes}
                 label="Workspace Type"
-                name="workspaceType"
                 listItemName={"workspace_type"}
+                name="workspaceType"
+                options={workspaceTypes}
                 required={true}
                 value={formData?.workspaceType}
                 onChange={(e) => {
@@ -56,19 +55,19 @@ export default function CreateNewWorkspaceModal({
               />
 
               <Input
+                className="my-px"
                 label="Description"
                 placeholder="Describe the workspace"
                 value={formData?.description}
                 onChange={(e) => {
                   editWorkspaceField({ description: e.target.value });
                 }}
-                className="my-px"
               />
 
               <Checkbox
-                size="md"
                 defaultSelected={false}
                 isSelected={formData?.isMerchantWorkspace}
+                size="md"
                 onValueChange={(isSelected) =>
                   editWorkspaceField({ isMerchantWorkspace: isSelected })
                 }
@@ -86,8 +85,8 @@ export default function CreateNewWorkspaceModal({
               </Button>
               <Button
                 color="primary"
-                isLoading={loading}
                 isDisabled={loading}
+                isLoading={loading}
                 onPress={() => handleCreateWorkspace(onClose)}
               >
                 Create

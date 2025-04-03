@@ -57,23 +57,23 @@ const faqs = [
 export function Faqs() {
   return (
     <section
-      id="faqs"
       aria-labelledby="payBoss FAQs"
       className="relative overflow-hidden bg-card py-20 sm:py-32"
+      id="faqs"
     >
       <Image
-        className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%] dark:opacity-0 dark:bg-blend-color-burn"
-        src={"/images/background-faqs.jpg"}
-        alt="background image"
-        width={1558}
-        height={946}
         unoptimized
+        alt="background image"
+        className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%] dark:opacity-0 dark:bg-blend-color-burn"
+        height={946}
+        src={"/images/background-faqs.jpg"}
+        width={1558}
       />
       <div className="container relative">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2
-            id="faq-title"
             className="text-3xl font-bold tracking-tight sm:text-4xl"
+            id="faq-title"
           >
             Frequently Asked Questions
           </h2>
@@ -83,12 +83,12 @@ export function Faqs() {
           </p>
         </div>
         <ul
-          role="list"
           className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-10 lg:max-w-none lg:grid-cols-3"
+          role="list"
         >
           {faqs.map((column, columnIndex) => (
             <li key={columnIndex}>
-              <ul role="list" className="flex flex-col gap-y-8">
+              <ul className="flex flex-col gap-y-8" role="list">
                 {column.map((faq, faqIndex) => (
                   <li key={faqIndex}>
                     <h3 className="text-lg font-bold leading-7">

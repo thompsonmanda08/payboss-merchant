@@ -1,10 +1,12 @@
 "use client";
 import { useMemo } from "react";
 import { Bar } from "react-chartjs-2";
-import configs from "./configs";
 import { Progress } from "@heroui/react";
+
 import Card from "@/components/base/card";
 import { cn } from "@/lib/utils";
+
+import configs from "./configs";
 
 function ReportsBarChart({ color, title, description, chart, items }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {});
@@ -13,7 +15,7 @@ function ReportsBarChart({ color, title, description, chart, items }) {
     items
       ? items?.map(
           ({ icon, label, progress }) => (
-            <div className="w-1/2 p-2 sm:w-1/4" key={label}>
+            <div key={label} className="w-1/2 p-2 sm:w-1/4">
               <ReportsBarChartItem
                 color={color}
                 icon={{ color: icon.color, component: icon.component }}
@@ -25,9 +27,9 @@ function ReportsBarChart({ color, title, description, chart, items }) {
               />
             </div>
           ),
-          [items]
+          [items],
         )
-      : []
+      : [],
   );
 
   const renderBarChart = useMemo(
@@ -38,7 +40,7 @@ function ReportsBarChart({ color, title, description, chart, items }) {
         <Bar data={data} options={options} />
       </div>
     ),
-    [chart, color]
+    [chart, color],
   );
 
   return (
@@ -65,7 +67,7 @@ function ReportsBarChartItem({ icon, label, progress }) {
         </span>
       </div>
       <div className="w-full">
-        <span className="text-sm font-medium text-primary-900"></span>
+        <span className="text-sm font-medium text-primary-900" />
         <div className="mt-1 w-3/4">
           <Progress
             className="w-full"
@@ -75,10 +77,10 @@ function ReportsBarChartItem({ icon, label, progress }) {
               indicator: "bg-gradient-to-r !h-4 from-primary-300 to-primary",
               label: "font-bold text-primary-900 text-nowrap",
             }}
-            size="md"
-            label={progress.content}
-            value={progress.percentage}
             color="primary from-primary-300 to-primary"
+            label={progress.content}
+            size="md"
+            value={progress.percentage}
           />
         </div>
       </div>

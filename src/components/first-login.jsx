@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import {
   Modal,
   ModalContent,
@@ -8,14 +8,15 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@heroui/react";
-
-import { Button } from "./ui/button";
-import { Input } from "./ui/input-field";
-import { PASSWORD_PATTERN } from "@/lib/constants";
 import { useQueryClient } from "@tanstack/react-query";
+
+import { PASSWORD_PATTERN } from "@/lib/constants";
 import useAuthStore from "@/context/auth-store";
 import { changeUserPassword } from "@/app/_actions/user-actions";
 import { notify } from "@/lib/utils";
+
+import { Input } from "./ui/input-field";
+import { Button } from "./ui/button";
 import StatusMessage from "./base/status-message";
 
 export default function FirstLogin({ open }) {
@@ -49,6 +50,7 @@ export default function FirstLogin({ open }) {
         message:
           "Passwords needs to contain at least 8 characters (consisting of lowercase, uppercase, symbols) and have no spaces",
       });
+
       return;
     }
 
@@ -66,6 +68,7 @@ export default function FirstLogin({ open }) {
       });
       queryClient.invalidateQueries();
       setIsLoading(false);
+
       return;
     }
 
@@ -88,11 +91,11 @@ export default function FirstLogin({ open }) {
   return (
     <Modal
       backdrop="blur"
-      isOpen={open || isOpen}
-      onClose={onClose}
+      hideCloseButton={true}
       isDismissable={false}
       isKeyboardDismissDisabled={true}
-      hideCloseButton={true}
+      isOpen={open || isOpen}
+      onClose={onClose}
     >
       <ModalContent>
         {(onClose) => (
@@ -106,17 +109,18 @@ export default function FirstLogin({ open }) {
             </ModalHeader>
             <ModalBody className="flex flex-col gap-y-2">
               <Input
-                label="Password"
-                type="password"
                 autoFocus
-                value={password.newPassword}
                 required
+                label="Password"
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                type="password"
+                value={password.newPassword}
                 onChange={(e) =>
                   updatePasswordField({ newPassword: e.target.value })
                 }
               />
               <Input
+                errorText={"Passwords do not match"}
                 label="Confirm Password"
                 type="password"
                 value={password.confirmPassword}
@@ -128,7 +132,6 @@ export default function FirstLogin({ open }) {
                     password?.confirmPassword.length > 6) ||
                   error?.onConfirmPassword
                 }
-                errorText={"Passwords do not match"}
               />
               {error.status && (
                 <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center gap-4">
@@ -136,12 +139,12 @@ export default function FirstLogin({ open }) {
                 </div>
               )}
               <Button
-                isLoading={isLoading}
+                className="mt-4"
                 isDisabled={
                   !password || password?.newPassword.length < 8 || isLoading
                 }
+                isLoading={isLoading}
                 onPress={handlePasswordChange}
-                className="mt-4"
               >
                 Change Password
               </Button>

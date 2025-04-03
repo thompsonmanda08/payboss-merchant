@@ -1,14 +1,15 @@
 "use client";
 import React, { useMemo, useState } from "react";
+import Image from "next/image";
+import { useDisclosure } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { Button } from "@/components/ui/button";
 import { formatCurrency, notify } from "@/lib/utils";
-import Image from "next/image";
 import { reviewBatch } from "@/app/_actions/transaction-actions";
 import usePaymentsStore from "@/context/payment-store";
-import { useDisclosure } from "@heroui/react";
 import { Input } from "@/components/ui/input-field";
 import useWorkspaces from "@/hooks/useWorkspaces";
-import { useQueryClient } from "@tanstack/react-query";
 import { PAYMENT_SERVICE_TYPES, QUERY_KEYS } from "@/lib/constants";
 import PromptModal from "@/components/base/prompt";
 import { useBatchDetails } from "@/hooks/useQueryHooks";
@@ -29,7 +30,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
   } = usePaymentsStore();
 
   const [queryID, setQueryID] = useState(
-    batchID || selectedBatch?.ID || batchState?.ID || transactionDetails?.ID
+    batchID || selectedBatch?.ID || batchState?.ID || transactionDetails?.ID,
   );
 
   const { data: batchResponse } = useBatchDetails(queryID);
@@ -59,6 +60,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
         message: "You do not have permissions to perform this action",
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -75,6 +77,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
         color: "danger",
         description: "Insufficient funds in workspace wallet",
       });
+
       return;
     }
 
@@ -85,6 +88,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
         color: "danger",
         description: "Review reason is required!",
       });
+
       return;
     }
 
@@ -101,11 +105,13 @@ const ApproverAction = ({ navigateForward, batchID }) => {
         color: "danger",
         description: response?.message,
       });
+
       return;
     }
 
     setIsLoading(false);
     let action = isApproval ? "approved" : "rejected";
+
     notify({
       title: "Success",
       color: "success",
@@ -170,8 +176,8 @@ const ApproverAction = ({ navigateForward, batchID }) => {
           {isApprovedOrRejected
             ? `Batch ${selectedBatch?.status || batchDetails?.status}`
             : isProcessed
-            ? `Batch Proccessed`
-            : "Batch payout requires approval"}
+              ? `Batch Proccessed`
+              : "Batch payout requires approval"}
         </h3>
 
         {isApprovedOrRejected ? (
@@ -243,15 +249,15 @@ const ApproverAction = ({ navigateForward, batchID }) => {
   ) : (
     <>
       <PromptModal
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={handleClosePrompt}
-        title="Approve Bulk Transaction"
-        onConfirm={handleApproval}
         confirmText="Confirm"
         isDisabled={isLoading}
-        isLoading={isLoading}
         isDismissable={false}
+        isLoading={isLoading}
+        isOpen={isOpen}
+        title="Approve Bulk Transaction"
+        onClose={handleClosePrompt}
+        onConfirm={handleApproval}
+        onOpen={onOpen}
       >
         <p className="-mt-4 mb-2 text-sm leading-6 text-foreground/70">
           Are you sure you want to {approve.action} the batch transaction{" "}
@@ -259,15 +265,15 @@ const ApproverAction = ({ navigateForward, batchID }) => {
             {`${
               selectedBatch?.batch_name || batchDetails?.batch_name
             } - (${formatCurrency(
-              selectedBatch?.total_amount || batchDetails?.total_amount
+              selectedBatch?.total_amount || batchDetails?.total_amount,
             )})`}
           </code>{" "}
           {isApproval ? "to run against your PayBoss Wallet balance." : ""}
         </p>
         <Input
+          isDisabled={isLoading}
           label="Review"
           placeholder="Enter a review remark"
-          isDisabled={isLoading}
           onChange={(e) =>
             setApprove((prev) => ({ ...prev, review: e.target.value }))
           }
@@ -276,11 +282,11 @@ const ApproverAction = ({ navigateForward, batchID }) => {
       <div className="flex h-full w-full flex-col justify-between gap-8">
         <div className="flex w-full select-none flex-col items-center gap-9 rounded-2xl bg-primary-50/70 p-9">
           <Image
+            alt="Approval Illustration"
             className="aspect-square max-h-80 object-contain"
+            height={200}
             src={"/images/illustrations/approval.svg"}
             width={200}
-            height={200}
-            alt="Approval Illustration"
           />
           {selectedActionType?.name == PAYMENT_SERVICE_TYPES[0].name
             ? renderBatchApproval
@@ -300,8 +306,8 @@ const ApproverAction = ({ navigateForward, batchID }) => {
             </Button>
             <Button
               className={"flex-1"}
-              isLoading={isLoading}
               isDisabled={isLoading}
+              isLoading={isLoading}
               onClick={onOpen}
             >
               Approve

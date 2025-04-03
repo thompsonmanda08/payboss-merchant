@@ -1,6 +1,8 @@
 "use client";
+import { useState } from "react";
+
 import { notify } from "@/lib/utils";
-import React, { useState } from "react";
+
 import { Button } from "../ui/button";
 import Card from "../base/card";
 import { Input } from "../ui/input-field";
@@ -60,56 +62,56 @@ function SupportForm() {
         </div> */}
 
         <form
-          onSubmit={handleOnSubmit}
           className="mx-auto flex w-full max-w-md flex-col gap-4"
+          onSubmit={handleOnSubmit}
         >
           <Input
-            label="Full Name"
-            placeholder="Jonas Banda"
-            name="FullName"
             required
+            label="Full Name"
+            name="FullName"
+            placeholder="Jonas Banda"
           />
           <Input
-            label="Business Name"
-            placeholder="BGS LTD"
-            name="BusinessName"
             required
+            label="Business Name"
+            name="BusinessName"
+            placeholder="BGS LTD"
           />
 
           <Input
-            label="Mobile Number"
-            placeholder="0977889910"
-            name="MobileNumber"
             required
+            label="Mobile Number"
+            name="MobileNumber"
+            placeholder="0977889910"
           />
           <Input
-            label="Email Address"
-            type="email"
-            placeholder="bgsgroup@mail.com"
-            name="Email"
             required
+            label="Email Address"
+            name="Email"
+            placeholder="bgsgroup@mail.com"
+            type="email"
           />
           <div>
             <label
-              htmlFor="message"
               className="block text-sm font-medium leading-6 text-foreground/50 "
+              htmlFor="message"
             >
               Message
             </label>
             <div className="mt-2">
               <textarea
-                rows={4}
-                name="Message"
-                id="message"
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary/80 sm:text-sm sm:leading-6"
                 defaultValue={""}
+                id="message"
+                name="Message"
+                rows={4}
               />
             </div>
           </div>
           <Button
-            isLoading={isLoading}
             isDisabled={isLoading}
+            isLoading={isLoading}
             loadingText={"Sending..."}
             type="submit"
           >

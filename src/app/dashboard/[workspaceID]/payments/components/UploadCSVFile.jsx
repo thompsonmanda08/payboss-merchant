@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
+import React from "react";
+
 import { Button } from "@/components/ui/button";
 import { notify } from "@/lib/utils";
 import usePaymentsStore from "@/context/payment-store";
-import Link from "next/link";
-import React from "react";
 import { uploadPaymentBatchFile } from "@/app/_actions/pocketbase-actions";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import { SingleFileDropzone } from "@/components/base/file-dropzone";
@@ -17,6 +18,7 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
   function handleProceed() {
     if (paymentAction?.url !== "") {
       navigateForward();
+
       return;
     }
 
@@ -43,6 +45,7 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
         recordID: response?.data?.file_record_id,
       });
       setIsLoading(false);
+
       return response?.data;
     }
 
@@ -52,6 +55,7 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
       description: "Failed to upload file.",
     });
     setIsLoading(false);
+
     return {};
   }
 
@@ -75,17 +79,17 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
             Having trouble with the validation and file uploads? Download
             {protocol == "direct" ? (
               <Link
-                href={"/batch_record_template.xlsx"}
-                download={"batch_record_template.xlsx"}
                 className="ml-1 font-bold text-primary hover:underline hover:underline-offset-2"
+                download={"batch_record_template.xlsx"}
+                href={"/batch_record_template.xlsx"}
               >
                 Direct Transfer{" "}
               </Link>
             ) : (
               <Link
-                href={"/batch_record_template_voucher.xlsx"}
-                download={"batch_record_template_voucher.xlsx"}
                 className="ml-1 font-bold text-primary"
+                download={"batch_record_template_voucher.xlsx"}
+                href={"/batch_record_template_voucher.xlsx"}
               >
                 Voucher Transfer{" "}
               </Link>
@@ -118,16 +122,16 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
           <Button
             className={"bg-primary/10 font-medium text-primary"}
             color={"primary"}
+            isDisabled={isLoading}
             variant="light"
             onClick={navigateBackwards}
-            isDisabled={isLoading}
           >
             Back
           </Button>
           <Button
-            size="lg"
-            isLoading={isLoading}
             isDisabled={isLoading}
+            isLoading={isLoading}
+            size="lg"
             onClick={handleProceed}
           >
             Next

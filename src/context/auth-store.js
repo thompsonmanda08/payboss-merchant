@@ -1,5 +1,6 @@
-import { logUserOut } from "@/app/_actions/auth-actions";
 import { create } from "zustand";
+
+import { logUserOut } from "@/app/_actions/auth-actions";
 
 const INITIAL_STATE = {
   isLoading: false,
@@ -91,10 +92,13 @@ const useAuthStore = create((set, get) => ({
   // METHODS AND ACTIONS
   handleUserLogOut: async () => {
     const isLoggedOut = await logUserOut();
+
     if (isLoggedOut) {
       get().resetAuthData();
+
       return isLoggedOut;
     }
+
     return isLoggedOut;
   },
 

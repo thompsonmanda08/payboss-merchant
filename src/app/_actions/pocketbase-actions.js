@@ -1,5 +1,7 @@
-import { POCKET_BASE_URL } from "@/lib/constants";
 import PocketBase from "pocketbase";
+
+import { POCKET_BASE_URL } from "@/lib/constants";
+
 import { getUserDetails } from "./config-actions";
 
 const pb = new PocketBase(POCKET_BASE_URL);
@@ -17,13 +19,14 @@ const pb = new PocketBase(POCKET_BASE_URL);
  *                            or an error message and status upon failure.
  */
 
-export async function uploadPaymentBatchFile(file, fileRecordId) {
+export async function uploadPaymentBatchFile(file) {
   const session = await getUserDetails();
   const merchantID = session?.user?.merchantID;
 
   try {
     let file_name = file?.name;
     const formData = new FormData();
+
     formData.append("file", file);
     formData.append("fileName", file_name);
     formData.append("merchantID", merchantID);
@@ -94,6 +97,7 @@ export async function uploadPOPDocument(file, fileRecordId) {
   try {
     let file_name = file?.name;
     const formData = new FormData();
+
     formData.append("file", file);
     formData.append("fileName", file_name);
     formData.append("merchantID", merchantID);
@@ -162,6 +166,7 @@ export async function uploadBusinessFile(file, merchantID, fileRecordId) {
   try {
     let file_name = file?.name;
     const formData = new FormData();
+
     formData.append("file", file);
     formData.append("fileName", file_name);
     formData.append("merchantID", merchantID);
@@ -234,6 +239,7 @@ export async function uploadTerminalConfigFile(file) {
   try {
     let file_name = file?.name;
     const formData = new FormData();
+
     formData.append("file", file);
     formData.append("fileName", file_name);
     formData.append("merchantID", merchantID);
@@ -271,9 +277,11 @@ export async function uploadTerminalConfigFile(file) {
 export async function uploadCheckoutLogoFile(file, fileRecordId) {
   const session = await getUserDetails();
   const merchantID = session?.user?.merchantID;
+
   try {
     let file_name = file?.name;
     const formData = new FormData();
+
     formData.append("file", file);
     formData.append("fileName", file_name);
     formData.append("merchantID", merchantID);

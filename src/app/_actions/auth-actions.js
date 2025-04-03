@@ -7,7 +7,6 @@ import {
   updateAuthSession,
   verifySession,
 } from "@/lib/session";
-
 import { apiClient } from "@/lib/utils";
 
 /**
@@ -19,6 +18,7 @@ import { apiClient } from "@/lib/utils";
  */
 export async function validateTPIN(tpin) {
   const url = `merchant/onboard/continue/${tpin}`;
+
   try {
     const res = await apiClient.get(url);
 
@@ -38,6 +38,7 @@ export async function validateTPIN(tpin) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -63,6 +64,7 @@ export async function createNewMerchant(businessInfo) {
 
   try {
     const res = await apiClient.post(url, businessInfo);
+
     return {
       success: true,
       message: res.message,
@@ -79,6 +81,7 @@ export async function createNewMerchant(businessInfo) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -133,6 +136,7 @@ export async function submitMerchantBankDetails(data, merchantID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -166,6 +170,7 @@ export async function updateMerchantDetails(businessInfo, merchantID) {
   }
 
   const url = `kyc/merchant/${merchantID}`;
+
   try {
     const res = await apiClient.patch(url, businessInfo);
 
@@ -185,6 +190,7 @@ export async function updateMerchantDetails(businessInfo, merchantID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -239,6 +245,7 @@ export async function createMerchantAdminUser(newUser, merchantID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -263,6 +270,7 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
   const url = `merchant/${merchantID}/document/submission`;
+
   try {
     const res = await authenticatedService({
       url,
@@ -286,6 +294,7 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -334,6 +343,7 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -358,6 +368,7 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
  */
 export async function authenticateUser(loginCredentials) {
   const url = `merchant/user/authentication`;
+
   try {
     const res = await apiClient.post(url, loginCredentials);
 
@@ -385,6 +396,7 @@ export async function authenticateUser(loginCredentials) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -411,6 +423,7 @@ export async function authenticateUser(loginCredentials) {
  */
 export async function getRefreshToken() {
   const url = `merchant/user/refresh/token`;
+
   try {
     const res = await authenticatedService({ url });
 
@@ -438,6 +451,7 @@ export async function getRefreshToken() {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message: error?.response?.data?.error || "Error Refreshing Token",
@@ -458,10 +472,13 @@ export async function getRefreshToken() {
  */
 export async function logUserOut() {
   const isLoggedIn = await verifySession();
+
   if (isLoggedIn) {
     await deleteSession();
+
     return true;
   }
+
   return false;
 }
 
@@ -478,9 +495,12 @@ export async function logUserOut() {
 
 export async function lockScreenOnUserIdle(state) {
   const isLoggedIn = await verifySession();
+
   if (isLoggedIn) {
     await updateAuthSession({ screenLocked: state });
+
     return true;
   }
+
   return false;
 }

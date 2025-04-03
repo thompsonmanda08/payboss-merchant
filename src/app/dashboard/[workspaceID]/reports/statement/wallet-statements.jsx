@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { ArrowDownTrayIcon, FunnelIcon } from "@heroicons/react/24/outline";
-import { Button } from "@/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
 
+import { Button } from "@/components/ui/button";
 import { DateRangePickerField } from "@/components/ui/date-select-field";
 import { QUERY_KEYS } from "@/lib/constants";
-import { useMutation } from "@tanstack/react-query";
 import { getWalletStatementReport } from "@/app/_actions/transaction-actions";
 import { WalletTransactionHistory } from "@/app/dashboard/[workspaceID]/workspace-settings/components/wallet";
 import { walletStatementReportToCSV } from "@/app/_actions/file-conversion-actions";
@@ -36,6 +36,7 @@ export default function StatementReport({ workspaceID }) {
 
   async function getReportsData(range) {
     const response = await getWalletStatementReport(workspaceID, range);
+
     return response || [];
   }
 
@@ -53,12 +54,14 @@ export default function StatementReport({ workspaceID }) {
       filteredRows = filteredRows.filter(
         (row) =>
           row?.ID?.toLowerCase().includes(
-            debouncedSearchQuery?.toLowerCase()
+            debouncedSearchQuery?.toLowerCase(),
           ) ||
           row?.amount
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.type?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
+          row?.type
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -68,6 +71,7 @@ export default function StatementReport({ workspaceID }) {
   useEffect(() => {
     if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
       runAsyncMutation(dateRange);
+
       return;
     }
   }, [dateRange]);
@@ -77,16 +81,16 @@ export default function StatementReport({ workspaceID }) {
       <div className="mb-4 flex w-full items-start justify-start pb-2">
         <div className="flex items-center gap-2">
           <DateRangePickerField
-            label={"Reports Date Range"}
-            description={"Dates to generate reports"}
-            visibleMonths={2}
             autoFocus
             dateRange={dateRange}
+            description={"Dates to generate reports"}
+            label={"Reports Date Range"}
             setDateRange={setDateRange}
+            visibleMonths={2}
           />{" "}
           <Button
-            onPress={() => runAsyncMutation(dateRange)}
             endContent={<FunnelIcon className="h-5 w-5" />}
+            onPress={() => runAsyncMutation(dateRange)}
           >
             Apply
           </Button>
@@ -97,7 +101,6 @@ export default function StatementReport({ workspaceID }) {
       <Card className={"mb-8 w-full"}>
         <div className="flex items-center gap-2">
           <CardHeader
-            title={"Wallet Statement Report"}
             classNames={{
               titleClasses: "xl:text-[clamp(1.125rem,1vw,1.75rem)] font-bold",
               infoClasses: "text-[clamp(0.8rem,0.8vw,1rem)]",
@@ -106,6 +109,7 @@ export default function StatementReport({ workspaceID }) {
               "Statement transactions:" +
               ` (${dateRange ? dateRange.range : "--"})`
             }
+            title={"Wallet Statement Report"}
           />
 
           <div className="flex w-full max-w-sm gap-4">
@@ -114,8 +118,8 @@ export default function StatementReport({ workspaceID }) {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <Button
-              onPress={handleFileExportToCSV}
               endContent={<ArrowDownTrayIcon className="h-5 w-5" />}
+              onPress={handleFileExportToCSV}
             >
               Export
             </Button>
@@ -123,9 +127,9 @@ export default function StatementReport({ workspaceID }) {
         </div>
 
         <WalletTransactionHistory
-          workspaceID={workspaceID}
-          transactionData={filteredItems || []}
           isLoading={mutation.isPending}
+          transactionData={filteredItems || []}
+          workspaceID={workspaceID}
         />
       </Card>
     </>

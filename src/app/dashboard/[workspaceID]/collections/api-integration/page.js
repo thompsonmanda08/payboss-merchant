@@ -1,5 +1,6 @@
+import { Suspense } from "react";
+
 import LoadingPage from "@/app/loading";
-import React, { Suspense } from "react";
 import APIIntegration from "@/app/dashboard/[workspaceID]/collections/api-integration/api-collections";
 
 export default async function APIIntergrationCollectionsPage(props) {

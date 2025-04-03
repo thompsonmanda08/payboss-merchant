@@ -1,12 +1,13 @@
 "use client";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import usePaymentsStore from "@/context/payment-store";
 import UploadCSVFile from "@/app/dashboard/[workspaceID]/payments/components/UploadCSVFile";
 import PaymentDetails from "@/app/dashboard/[workspaceID]/payments/components/bulk-payment-batch-details";
 import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/ValidationDetails";
 import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer";
-import { useRouter } from "next/navigation";
 import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/approver-action";
 import Card from "@/components/base/card";
 import CardHeader from "@/components/base/card-header";
@@ -64,29 +65,29 @@ function BulkPaymentAction({ workspaceID, protocol, activePrefunds }) {
     useCustomTabsHook([
       <SelectPrefund
         key={"step-1"}
-        workspaceID={workspaceID}
-        navigateForward={goForward}
         navigateBackwards={goBack}
+        navigateForward={goForward}
         protocol={protocol}
         walletActivePrefunds={activePrefunds}
+        workspaceID={workspaceID}
       />,
       <UploadCSVFile
         key={"step-2"}
-        protocol={protocol}
-        navigateForward={goForward}
         navigateBackwards={goBack}
+        navigateForward={goForward}
+        protocol={protocol}
       />,
       <PaymentDetails
         key={"step-3"}
-        navigateForward={goForward}
         navigateBackwards={goBack}
-        workspaceID={workspaceID}
+        navigateForward={goForward}
         protocol={protocol}
+        workspaceID={workspaceID}
       />,
       <ValidationDetails
         key={"step-4"}
-        navigateForward={goForward}
         navigateBackwards={goBack}
+        navigateForward={goForward}
       />,
       <ApproverAction
         key={"step-5"}
@@ -117,14 +118,14 @@ function BulkPaymentAction({ workspaceID, protocol, activePrefunds }) {
     <>
       <Card className={""}>
         <CardHeader
+          handleClose={() => router.back()}
+          infoText={STEPS[currentTabIndex].infoText}
           title={
             <>
               {STEPS[currentTabIndex].title}
               <span className="capitalize"> ({protocol})</span>
             </>
           }
-          infoText={STEPS[currentTabIndex].infoText}
-          handleClose={() => router.back()}
         />
         <ProgressStep STEPS={STEPS} currentTabIndex={currentTabIndex} />
         {activeTab}

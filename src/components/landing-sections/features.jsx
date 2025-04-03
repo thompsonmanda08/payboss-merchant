@@ -1,6 +1,5 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-
 import {
   BanknotesIcon,
   NewspaperIcon,
@@ -14,17 +13,17 @@ import {
   CalculatorIcon,
   TicketIcon,
 } from "@heroicons/react/24/solid";
+import { Tab, Tabs } from "@heroui/react";
+import {
+  ArrowLeftEndOnRectangleIcon,
+  ArrowLeftStartOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 
 import {
   staggerContainerItemVariants,
   containerVariants,
 } from "@/lib/constants";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-import { Tab, Tabs } from "@heroui/react";
-import {
-  ArrowLeftEndOnRectangleIcon,
-  ArrowLeftStartOnRectangleIcon,
-} from "@heroicons/react/24/outline";
 
 const collections = [
   [
@@ -178,21 +177,21 @@ export function Features() {
 
   return (
     <section
-      id="features"
       aria-label="Features payBoss is offering"
       className="bg-background py-20 sm:py-32"
+      id="features"
     >
       <div className="container flex flex-col justify-center">
         <Tabs
           aria-label="Options"
-          size="lg"
-          radius="sm"
-          color="primary"
-          variant="bordered"
-          selectedKey={String(currentTabIndex)}
-          onSelectionChange={navigateTo}
-          items={TABS}
           className="max-w-max mx-auto"
+          color="primary"
+          items={TABS}
+          radius="sm"
+          selectedKey={String(currentTabIndex)}
+          size="lg"
+          variant="bordered"
+          onSelectionChange={navigateTo}
         >
           {(item) => (
             <Tab
@@ -203,7 +202,7 @@ export function Features() {
                   <span>{item?.name}</span>
                 </div>
               }
-            ></Tab>
+            />
           )}
         </Tabs>
         <div className="mx-auto mt-6 md:text-center">
@@ -223,16 +222,16 @@ export function Features() {
 function CollectionFeatures() {
   return (
     <motion.ul
-      role="list"
-      className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-      variants={containerVariants}
-      initial="hidden"
       animate="show"
+      className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
       exit="hidden"
+      initial="hidden"
+      role="list"
+      variants={containerVariants}
     >
       {collections.map((column, columnIndex) => (
         <li key={columnIndex}>
-          <motion.ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
+          <motion.ul className="flex flex-col gap-y-6 sm:gap-y-8" role="list">
             {column.map((revenue, revenueIndex) => (
               <motion.li
                 key={revenueIndex}
@@ -271,16 +270,16 @@ function CollectionFeatures() {
 function PayoutFeatures() {
   return (
     <motion.ul
-      role="list"
-      className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-      variants={containerVariants}
-      initial="hidden"
       animate="show"
+      className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
       exit="hidden"
+      initial="hidden"
+      role="list"
+      variants={containerVariants}
     >
       {spending.map((column, columnIndex) => (
         <li key={columnIndex}>
-          <motion.ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
+          <motion.ul className="flex flex-col gap-y-6 sm:gap-y-8" role="list">
             {column.map((expense, expenseIndex) => (
               <motion.li
                 key={expenseIndex}

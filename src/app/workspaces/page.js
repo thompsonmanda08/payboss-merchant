@@ -1,12 +1,14 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import Image from "next/image";
+import { redirect } from "next/navigation";
+
 import { DefaultCover } from "@/lib/constants";
 import WorkspaceHeader from "@/components/welcome-header";
-import { getAuthSession, getUserDetails } from "../_actions/config-actions";
-import LoadingPage from "../loading";
-import { redirect } from "next/navigation";
 import WorkspacesList from "@/components/workspaces-list";
 import { cn } from "@/lib/utils";
+
+import { getAuthSession, getUserDetails } from "../_actions/config-actions";
+import LoadingPage from "../loading";
 
 async function WorkSpacesPage() {
   const session = await getUserDetails();
@@ -24,31 +26,31 @@ async function WorkSpacesPage() {
           <section role="workspace-header">
             <div className="relative h-[280px] w-full overflow-clip rounded-b-3xl bg-gray-900">
               <WorkspaceHeader
-                permissions={userPermissions}
                 accountState={merchantKYC?.state}
+                permissions={userPermissions}
               />
               <Image
-                className="z-0 h-full w-full object-cover"
-                src={DefaultCover}
                 alt="Cover Image"
-                width={1024}
+                className="z-0 h-full w-full object-cover"
                 height={300}
+                src={DefaultCover}
+                width={1024}
               />
 
-              <div className="absolute inset-0 z-10 bg-black/30"></div>
+              <div className="absolute inset-0 z-10 bg-black/30" />
             </div>
           </section>
 
           <section
-            role="workspaces-list"
             className={cn(
-              "z-20 mx-auto mb-20 mt-[-160px] w-full max-w-[1540px] px-4 md:px-6"
+              "z-20 mx-auto mb-20 mt-[-160px] w-full max-w-[1540px] px-4 md:px-6",
             )}
+            role="workspaces-list"
           >
             <WorkspacesList
-              user={user}
-              permissions={userPermissions}
               showHeader
+              permissions={userPermissions}
+              user={user}
             />
           </section>
         </div>

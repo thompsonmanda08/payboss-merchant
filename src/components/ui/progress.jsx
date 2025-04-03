@@ -1,11 +1,11 @@
 import { forwardRef } from "react";
 
 const Progress = forwardRef(({ value, color }, ref) => (
-  <div className="h-2 w-full rounded-full bg-gray-200" ref={ref}>
+  <div ref={ref} className="h-2 w-full rounded-full bg-gray-200">
     <div
-      style={{ width: value + "%" }}
       className={`h-2 rounded-full bg-gradient-to-r   bg-${color}`}
-    ></div>
+      style={{ width: value + "%" }}
+    />
   </div>
 ));
 

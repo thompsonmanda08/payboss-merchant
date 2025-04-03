@@ -1,7 +1,8 @@
 import Link from "next/link";
-import React from "react";
-import { Button } from "./ui/button";
+
 import { cn } from "@/lib/utils";
+
+import { Button } from "./ui/button";
 
 function EmptyState({
   title,
@@ -13,12 +14,13 @@ function EmptyState({
   classNames,
 }) {
   const { heading, paragraph } = classNames || "";
+
   return (
     <div className="my-12 flex h-full w-full flex-col items-center justify-center text-gray-300">
       <h3
         className={cn(
           `text-center text-2xl font-bold leading-8 text-primary-800 md:text-[48px]`,
-          heading
+          heading,
         )}
       >
         {title || "Whoops-a-daisy!"}
@@ -26,14 +28,14 @@ function EmptyState({
       <p
         className={cn(
           `my-6 mb-4 max-w-[380px] p-2 px-5 text-center text-sm text-gray-400/80 md:max-w-[480px] md:text-base`,
-          paragraph
+          paragraph,
         )}
       >
         {message || "There is nothing here yet. Please try again later."}
       </p>
       {children ||
         (!onButtonClick ? (
-          <Button as={Link} href={href || "/"} className={"h-12 px-8"}>
+          <Button as={Link} className={"h-12 px-8"} href={href || "/"}>
             {buttonText || "Go Home"}
           </Button>
         ) : (

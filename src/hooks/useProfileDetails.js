@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+
 import { useKYCData, useSetupConfig } from "./useQueryHooks";
 
 const useAccountProfile = () => {
@@ -56,7 +57,7 @@ const useAccountProfile = () => {
       setAllowUserToSubmitKYC(
         merchantKYC?.stageID < 3 &&
           merchantKYC?.can_edit &&
-          (isOwner || isAccountAdmin)
+          (isOwner || isAccountAdmin),
       );
     }
 
@@ -118,14 +119,12 @@ const useAccountProfile = () => {
         type: "SIGNED_CONTRACT",
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kycData]);
 
   useEffect(() => {
     if (businessDetails?.name && merchant == "") {
       setMerchant(businessDetails?.name);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [businessDetails]);
 
   return {

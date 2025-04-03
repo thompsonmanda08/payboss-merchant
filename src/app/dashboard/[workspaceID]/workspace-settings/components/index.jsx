@@ -1,10 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import React, { useEffect } from "react";
-import Tabs from "@/components/tabs";
-import WorkspaceDetails from "../../../../../components/workspace-general-details";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-import CreateNewUserModal from "../../../../manage-account/users/components/new-user-modal";
+import { useEffect } from "react";
 import { useDisclosure } from "@heroui/react";
 import {
   BanknotesIcon,
@@ -12,13 +7,21 @@ import {
   WalletIcon,
   WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
-import Wallet from "./wallet";
+
+import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import Tabs from "@/components/tabs";
+import { Button } from "@/components/ui/button";
 import LoadingPage from "@/app/loading";
 import { cn } from "@/lib/utils";
 import Card from "@/components/base/card";
-import ActivePockets from "./active-pockets-tab";
 import { WORKSPACE_TYPES } from "@/lib/constants";
 import useWorkspaceStore from "@/context/workspaces-store";
+
+import CreateNewUserModal from "../../../../manage-account/users/components/new-user-modal";
+import WorkspaceDetails from "../../../../../components/workspace-general-details";
+
+import Wallet from "./wallet";
+import ActivePockets from "./active-pockets-tab";
 import WorkspaceMembers from "./workspace-members";
 
 function WorkspaceSettings({
@@ -47,9 +50,9 @@ function WorkspaceSettings({
         { name: "Wallet Deposits", index: 3, icon: WalletIcon },
       ]
     : // BILL PAYMENTS TAB LABEL
-    isBillPaymentWorkspace
-    ? [{ name: "Wallet Deposits", index: 2, icon: WalletIcon }]
-    : [];
+      isBillPaymentWorkspace
+      ? [{ name: "Wallet Deposits", index: 2, icon: WalletIcon }]
+      : [];
 
   const TABS = [
     { name: "General Settings", index: 0, icon: WrenchScrewdriverIcon },
@@ -64,29 +67,29 @@ function WorkspaceSettings({
       ? [
           <ActivePockets
             key={"active-wallet-pocket"}
-            workspaceID={workspaceID}
             removeWrapper={true}
+            workspaceID={workspaceID}
           />,
           <Wallet
             key={"wallet"}
-            workspaceName={selectedWorkspace?.workspace}
-            workspaceID={workspaceID}
-            balance={selectedWorkspace?.balance}
             removeWrapper
+            balance={selectedWorkspace?.balance}
+            workspaceID={workspaceID}
+            workspaceName={selectedWorkspace?.workspace}
           />,
         ]
       : // BILL PAYMENTS SELECTED
-      isBillPaymentWorkspace
-      ? [
-          <Wallet
-            key={"wallet"}
-            workspaceName={selectedWorkspace?.workspace}
-            workspaceID={workspaceID}
-            balance={selectedWorkspace?.balance}
-            removeWrapper
-          />,
-        ]
-      : [];
+        isBillPaymentWorkspace
+        ? [
+            <Wallet
+              key={"wallet"}
+              removeWrapper
+              balance={selectedWorkspace?.balance}
+              workspaceID={workspaceID}
+              workspaceName={selectedWorkspace?.workspace}
+            />,
+          ]
+        : [];
 
   function handleNavigation(index) {
     navigateTo(index);
@@ -96,20 +99,20 @@ function WorkspaceSettings({
   const { activeTab, navigateTo, currentTabIndex } = useCustomTabsHook([
     <WorkspaceDetails
       key={"workspace-details"}
+      allUsers={allUsers}
+      navigateTo={handleNavigation}
       workspaceID={workspaceID}
       workspaceName={selectedWorkspace?.workspace}
-      navigateTo={handleNavigation}
       workspaceRoles={workspaceRoles}
-      allUsers={allUsers}
     />,
     <WorkspaceMembers
       key={"members"}
+      allUsers={allUsers}
       workspaceMembers={workspaceMembers}
       workspaceName={selectedWorkspace?.workspace}
       workspaceID={workspaceID}
       // isLoading={isLoading}
       workspaceRoles={workspaceRoles}
-      allUsers={allUsers}
     />,
     // Provides the disbursement tabs
     ...TAB_COMPONENTS,
@@ -146,9 +149,9 @@ function WorkspaceSettings({
         <div className="relative mb-2 flex items-center justify-between">
           <Tabs
             className={"md:w-full"}
-            tabs={TABS}
-            navigateTo={navigateTo}
             currentTab={currentTabIndex}
+            navigateTo={navigateTo}
+            tabs={TABS}
           />
 
           {allowUserCreation && (
@@ -172,9 +175,9 @@ function WorkspaceSettings({
       {/* MODALS */}
       <CreateNewUserModal
         isOpen={isOpen}
+        workspaceID={workspaceID}
         onClose={onClose}
         onOpenChange={onOpenChange}
-        workspaceID={workspaceID}
       />
     </div>
   );

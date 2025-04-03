@@ -1,19 +1,21 @@
 //BUSINESS REGISTRATION STATUS
 "use client";
-import React, { useMemo } from "react";
-import { Input } from "@/components/ui/input-field";
+import { useMemo } from "react";
 import { motion } from "framer-motion";
+import { getLocalTimeZone, today } from "@internationalized/date";
+import { Switch, Tooltip } from "@heroui/react";
+
+import { Input } from "@/components/ui/input-field";
 import { staggerContainerItemVariants } from "@/lib/constants";
 import { cn, formatDate, isValidZambianMobileNumber } from "@/lib/utils";
-import { STEPS } from "../signup-form";
 import DateSelectField from "@/components/ui/date-select-field";
 import useAuthStore from "@/context/auth-store";
-import { getLocalTimeZone, today } from "@internationalized/date";
 import SelectField from "@/components/ui/select-field";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import CardHeader from "@/components/base/card-header";
-import { Switch, Tooltip } from "@heroui/react";
 import AutoCompleteField from "@/components/base/auto-complete";
+
+import { STEPS } from "../signup-form";
 
 export default function Step1({ updateDetails, backToStart }) {
   const { companyTypes, provinces } = useConfigOptions();
@@ -26,19 +28,20 @@ export default function Step1({ updateDetails, backToStart }) {
 
   const cities = useMemo(() => {
     const selectedProvince = provinces?.find(
-      (province) => province?.id == formData?.provinceID
+      (province) => province?.id == formData?.provinceID,
     );
+
     return selectedProvince?.cities || [];
   }, [formData?.provinceID]);
 
   return (
     <>
       <CardHeader
-        title="Business Details"
+        handleClose={() => backToStart()}
         infoText={
           "Information about your business to help us verify your identity."
         }
-        handleClose={() => backToStart()}
+        title="Business Details"
       />
 
       <div className="flex w-full flex-col items-center justify-center gap-6 lg:flex-row">
@@ -48,12 +51,12 @@ export default function Step1({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <Input
-              type="text"
               label="Business Name"
               name="businessName"
               placeholder="Enter business name"
-              value={formData?.name}
               required={true}
+              type="text"
+              value={formData?.name}
               onChange={(e) => {
                 updateDetails(STEPS[1], { name: e.target.value });
               }}
@@ -61,39 +64,39 @@ export default function Step1({ updateDetails, backToStart }) {
           </motion.div>
 
           <motion.div
-            variants={staggerContainerItemVariants}
             className="flex w-full gap-4"
+            variants={staggerContainerItemVariants}
           >
             <SelectField
-              options={companyTypes}
               label="Company Type"
-              name="companyTypeID"
               listItemName={"type"}
-              value={formData?.companyTypeID}
+              name="companyTypeID"
+              options={companyTypes}
               prefilled={true}
               required={true}
+              value={formData?.companyTypeID}
               onChange={(e) => {
                 updateDetails(STEPS[1], { companyTypeID: e.target.value });
               }}
             />
           </motion.div>
           <motion.div
-            variants={staggerContainerItemVariants}
             className="flex w-full gap-4"
+            variants={staggerContainerItemVariants}
           >
             <Input
-              type="number"
-              label="TPIN"
-              placeholder="Enter TPIN"
-              name="tpin"
-              maxLength={10}
-              value={formData?.tpin}
-              onError={TPINError}
               errorText="Invalid TPIN"
+              label="TPIN"
+              maxLength={10}
+              name="tpin"
+              placeholder="Enter TPIN"
               required={true}
+              type="number"
+              value={formData?.tpin}
               onChange={(e) => {
                 updateDetails(STEPS[1], { tpin: e.target.value });
               }}
+              onError={TPINError}
             />
           </motion.div>
 
@@ -102,12 +105,12 @@ export default function Step1({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <Input
-              type="email"
               label="Company Email"
               name="company_email"
-              value={formData?.company_email}
               placeholder="Enter company email"
               required={true}
+              type="email"
+              value={formData?.company_email}
               onChange={(e) => {
                 updateDetails(STEPS[1], { company_email: e.target.value });
               }}
@@ -118,18 +121,18 @@ export default function Step1({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <DateSelectField
-              label={"Date of Incorporation"}
               className="max-w-sm"
-              description={"Date the company was registered"}
               defaultValue={formData?.date_of_incorporation}
+              description={"Date the company was registered"}
+              label={"Date of Incorporation"}
+              labelPlacement={"outside"}
+              maxValue={today(getLocalTimeZone())}
+              required={true}
               value={
                 formData?.date_of_incorporation?.split("").length > 9
                   ? formData?.date_of_incorporation
                   : ""
               }
-              labelPlacement={"outside"}
-              required={true}
-              maxValue={today(getLocalTimeZone())}
               onChange={(date) => {
                 updateDetails(STEPS[1], {
                   date_of_incorporation: formatDate(date, "YYYY-MM-DD"),
@@ -145,13 +148,13 @@ export default function Step1({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <AutoCompleteField
-              options={provinces}
-              label="Province"
-              name="provinceID"
               defaultValue={provinces[0]?.id}
+              label="Province"
               listItemName={"province"}
-              value={formData?.provinceID}
+              name="provinceID"
+              options={provinces}
               required={true}
+              value={formData?.provinceID}
               onChange={(selected) => {
                 updateDetails(STEPS[1], { provinceID: selected });
               }}
@@ -162,32 +165,32 @@ export default function Step1({ updateDetails, backToStart }) {
             variants={staggerContainerItemVariants}
           >
             <AutoCompleteField
-              options={cities}
+              defaultValue={cities[0]?.id}
               label="City/Town"
+              listItemName={"city"}
               name="cityID"
+              options={cities}
               placeholder={
                 formData?.provinceID ? "Select city" : "Select a province first"
               }
-              listItemName={"city"}
-              defaultValue={cities[0]?.id}
-              value={formData?.cityID}
               prefilled={true}
               required={true}
+              value={formData?.cityID}
               onChange={(selected) => {
                 updateDetails(STEPS[1], { cityID: selected });
               }}
             />
           </motion.div>
           <motion.div
-            variants={staggerContainerItemVariants}
             className="flex w-full gap-4"
+            variants={staggerContainerItemVariants}
           >
             <Input
               label="Physical Address"
               name="physical_address"
-              value={formData?.physical_address}
               placeholder="Enter physical address"
               required={true}
+              value={formData?.physical_address}
               onChange={(e) => {
                 updateDetails(STEPS[1], { physical_address: e.target.value });
               }}
@@ -195,37 +198,37 @@ export default function Step1({ updateDetails, backToStart }) {
           </motion.div>
 
           <motion.div
-            variants={staggerContainerItemVariants}
             className="flex w-full gap-4"
+            variants={staggerContainerItemVariants}
           >
             <Input
-              type="number"
-              label="Mobile Number"
-              placeholder="Enter mobile number (start with 0977/66/55)"
-              name="contact"
-              maxLength={12}
-              pattern="[0-9]{12}"
-              onError={phoneNoError}
               errorText="Invalid Mobile Number"
-              value={formData?.contact}
+              label="Mobile Number"
+              maxLength={12}
+              name="contact"
+              pattern="[0-9]{12}"
+              placeholder="Enter mobile number (start with 0977/66/55)"
               required={true}
+              type="number"
+              value={formData?.contact}
               onChange={(e) => {
                 updateDetails(STEPS[1], { contact: e.target.value });
               }}
+              onError={phoneNoError}
             />
           </motion.div>
           <motion.div
-            variants={staggerContainerItemVariants}
             className="flex w-full gap-4"
+            variants={staggerContainerItemVariants}
           >
             <Input
               label="Website / Social Media"
               name="website"
-              value={formData?.website}
-              required={true}
               pattern="https?://.+"
-              title="https://www.domain-name.com"
               placeholder="Enter website / social media link"
+              required={true}
+              title="https://www.domain-name.com"
+              value={formData?.website}
               onChange={(e) => {
                 updateDetails(STEPS[1], { website: e.target.value });
               }}
@@ -236,24 +239,18 @@ export default function Step1({ updateDetails, backToStart }) {
 
       <motion.div className="w-full" variants={staggerContainerItemVariants}>
         <Tooltip
-          color="default"
-          content="As a super merchant, you can manage multiple merchant collection workspaces and oversee your business operations and transactions"
           classNames={{
             content: "max-w-md",
           }}
+          color="default"
+          content="As a super merchant, you can manage multiple merchant collection workspaces and oversee your business operations and transactions"
         >
           <Switch
-            isSelected={formData?.merchant_type === "super"}
-            onValueChange={(isSelected) => {
-              updateDetails(STEPS[1], {
-                merchant_type: isSelected ? "super" : "ordinary",
-              });
-            }}
             classNames={{
               base: cn(
                 "inline-flex flex-row-reverse w-full bg-primary/5 max-w-full hover:bg-primary-50 items-center",
                 "justify-between cursor-pointer rounded-lg gap-2 p-4 pl-2 border-2 border-transparent",
-                "data-[selected=true]:border-primary"
+                "data-[selected=true]:border-primary",
               ),
               wrapper: "p-0 h-6 overflow-visible",
               thumb: cn(
@@ -263,8 +260,14 @@ export default function Step1({ updateDetails, backToStart }) {
                 "group-data-[selected=true]:ms-5",
                 // pressed
                 "group-data-[pressed=true]:w-8",
-                "group-data-[selected]:group-data-[pressed]:ms-4"
+                "group-data-[selected]:group-data-[pressed]:ms-4",
               ),
+            }}
+            isSelected={formData?.merchant_type === "super"}
+            onValueChange={(isSelected) => {
+              updateDetails(STEPS[1], {
+                merchant_type: isSelected ? "super" : "ordinary",
+              });
             }}
           >
             <div className="flex flex-col gap-1">
@@ -283,15 +286,15 @@ export default function Step1({ updateDetails, backToStart }) {
         <div className="flex w-full flex-col items-center justify-center gap-6 lg:flex-row">
           {/* SIGNATORY DETAILS */}
           <motion.div
-            variants={staggerContainerItemVariants}
             className="flex w-full flex-1 flex-col gap-2"
+            variants={staggerContainerItemVariants}
           >
             <Input
               label="Signatory Full Name"
               name="signatory_full_name"
               placeholder="Enter Full Name"
-              value={formData?.signatory_name}
               required={true}
+              value={formData?.signatory_name}
               onChange={(e) => {
                 updateDetails(STEPS[1], {
                   signatory_name: e.target.value,
@@ -299,26 +302,26 @@ export default function Step1({ updateDetails, backToStart }) {
               }}
             />
             <Input
-              type="text"
-              label="CFO Phone"
-              placeholder="0989 XXX XXX"
-              name="signatory_contact"
-              maxLength={12}
-              onError={phoneNoError}
               errorText="Invalid Mobile Number"
-              value={formData?.signatory_contact}
+              label="CFO Phone"
+              maxLength={12}
+              name="signatory_contact"
+              placeholder="0989 XXX XXX"
               required={true}
+              type="text"
+              value={formData?.signatory_contact}
               onChange={(e) => {
                 updateDetails(STEPS[1], { signatory_contact: e.target.value });
               }}
+              onError={phoneNoError}
             />
             <Input
-              type="email"
               label="Signatory Email"
               name="signatory_email"
-              value={formData?.signatory_email}
               placeholder="Enter Email"
               required={true}
+              type="email"
+              value={formData?.signatory_email}
               onChange={(e) => {
                 updateDetails(STEPS[1], { signatory_email: e.target.value });
               }}
@@ -327,40 +330,40 @@ export default function Step1({ updateDetails, backToStart }) {
 
           {/* CFO DETAILS */}
           <motion.div
-            variants={staggerContainerItemVariants}
             className="flex w-full flex-1 flex-col gap-2"
+            variants={staggerContainerItemVariants}
           >
             <Input
               label="CFO Full Name"
               name="cfo_full_name"
               placeholder="Enter Full Name"
-              value={formData?.cfo_name}
               required={true}
+              value={formData?.cfo_name}
               onChange={(e) => {
                 updateDetails(STEPS[1], { cfo_name: e.target.value });
               }}
             />
             <Input
-              type="text"
-              label="CFO Phone"
-              placeholder="0989 XXX XXX"
-              name="cfo_contact"
-              maxLength={12}
-              onError={phoneNoError}
               errorText="Invalid Mobile Number"
-              value={formData?.cfo_contact}
+              label="CFO Phone"
+              maxLength={12}
+              name="cfo_contact"
+              placeholder="0989 XXX XXX"
               required={true}
+              type="text"
+              value={formData?.cfo_contact}
               onChange={(e) => {
                 updateDetails(STEPS[1], { cfo_contact: e.target.value });
               }}
+              onError={phoneNoError}
             />
             <Input
-              type="email"
               label="CFO Email"
               name="cfo_email"
-              value={formData?.cfo_email}
               placeholder="Enter Email"
               required={true}
+              type="email"
+              value={formData?.cfo_email}
               onChange={(e) => {
                 updateDetails(STEPS[1], { cfo_email: e.target.value });
               }}

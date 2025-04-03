@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+
 import { cn } from "@/lib/utils";
 import useWorkspaces from "@/hooks/useWorkspaces";
 import useNavigation from "@/hooks/useNavigation";
@@ -17,8 +18,9 @@ export default function BreadCrumbLinks() {
     /********************* WORKSPACE NAME ********************** */
     if (pathArr.length > 2 && pathname?.startsWith("/dashboard")) {
       let workspace = workspaces?.find(
-        (item) => item?.ID == workspaceID
+        (item) => item?.ID == workspaceID,
       )?.workspace;
+
       pathArr[2] = workspace;
     }
     /***************************************************************** */
@@ -38,7 +40,7 @@ export default function BreadCrumbLinks() {
                   {
                     "text-foreground/70": idx === path.length - 1,
                     "text-white": isProfile,
-                  }
+                  },
                 )}
               >
                 {segment?.replace(/-|%20/g, " ")}
@@ -49,7 +51,7 @@ export default function BreadCrumbLinks() {
                     "h-3 w-3 text-foreground/50 hover:text-primary",
                     {
                       "text-white": isProfile,
-                    }
+                    },
                   )}
                 />
               )}

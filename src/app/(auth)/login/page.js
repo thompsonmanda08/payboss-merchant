@@ -1,7 +1,7 @@
+import Link from "next/link";
+
 import Logo from "@/components/base/logo";
 import LoginForm from "@/components/forms/login-form";
-import Link from "next/link";
-import React from "react";
 
 function LoginPage() {
   return (
@@ -26,8 +26,8 @@ function LoginPage() {
         <p className="mx-auto  font-inter text-base font-medium leading-6 tracking-normal text-foreground/50">
           Don&apos;t have an account?
           <Link
-            href="/register"
             className="relative z-10 ml-1 bg-gradient-to-br from-primary to-primary/80 bg-clip-text font-bold text-transparent"
+            href="/register"
           >
             Create Account
           </Link>

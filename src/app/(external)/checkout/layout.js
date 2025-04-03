@@ -1,5 +1,4 @@
 import { Footer } from "@/components/landing-sections/footer";
-import React from "react";
 
 function CheckoutLayout({ children }) {
   return (

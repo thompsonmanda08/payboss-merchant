@@ -1,8 +1,9 @@
 "use client";
-import Card from "@/components/base/card";
-import ChangePasswordField from "@/components/change-password";
 import { Switch } from "@heroui/switch";
 import { useState } from "react";
+
+import Card from "@/components/base/card";
+import ChangePasswordField from "@/components/change-password";
 
 function ProfileSecuritySettings() {
   const [changePassword, setChangePassword] = useState(false);
@@ -36,9 +37,9 @@ function ProfileSecuritySettings() {
                       <p className="text-foreground-900">************</p>
                     </span>
                     <button
+                      className="font-semibold text-primary hover:text-primary/80"
                       type="button"
                       onClick={() => setChangePassword(true)}
-                      className="font-semibold text-primary hover:text-primary/80"
                     >
                       Change
                     </button>
@@ -46,8 +47,8 @@ function ProfileSecuritySettings() {
                 )}
               </div>
               <ChangePasswordField
-                updatePassword={changePassword}
                 setUpdatePassword={setChangePassword}
+                updatePassword={changePassword}
               />
             </div>
             {/* *************************************** */}

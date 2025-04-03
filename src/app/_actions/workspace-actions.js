@@ -1,8 +1,9 @@
 "use server";
-import authenticatedService from "@/lib/api-config";
-import { updateWorkspaceSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
+
+import authenticatedService from "@/lib/api-config";
+import { updateWorkspaceSession } from "@/lib/session";
 
 export const initializeWorkspace = cache(async (workspaceID) => {
   if (!workspaceID) {
@@ -43,6 +44,7 @@ export const initializeWorkspace = cache(async (workspaceID) => {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -115,6 +117,7 @@ export async function submitPOP(popDetails, workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -176,6 +179,7 @@ export async function getWalletPrefunds(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -210,7 +214,7 @@ export async function getWalletPrefunds(workspaceID) {
 export async function approveWalletPrefund(
   prefundData,
   prefundID,
-  workspaceID
+  workspaceID,
 ) {
   if (!prefundID || !workspaceID) {
     return {
@@ -247,6 +251,7 @@ export async function approveWalletPrefund(
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -307,6 +312,7 @@ export async function getWorkspaceMembers(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -368,6 +374,7 @@ export async function deleteUserFromWorkspace(recordID, workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -396,7 +403,7 @@ export async function deleteUserFromWorkspace(recordID, workspaceID) {
 export async function changeUserRoleInWorkspace(
   mapping,
   recordID,
-  workspaceID
+  workspaceID,
 ) {
   if (!workspaceID) {
     return {
@@ -433,6 +440,7 @@ export async function changeUserRoleInWorkspace(
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -485,6 +493,7 @@ export async function setupWorkspaceAPIKey(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -545,6 +554,7 @@ export async function refreshWorkspaceAPIKey(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -603,6 +613,7 @@ export async function getWorkspaceAPIKey(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -641,6 +652,7 @@ export async function generateWorkspaceTillNumber(workspaceID) {
   }
 
   const url = `transaction/collection/create/till-number/${workspaceID}`;
+
   try {
     const res = await authenticatedService({ url });
 
@@ -660,6 +672,7 @@ export async function generateWorkspaceTillNumber(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -699,6 +712,7 @@ export async function getWorkspaceTillNumber(workspaceID) {
   }
 
   const url = `transaction/collection/till-number/${workspaceID}`;
+
   try {
     const res = await authenticatedService({ url });
 
@@ -718,6 +732,7 @@ export async function getWorkspaceTillNumber(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -776,6 +791,7 @@ export async function activateWorkspaceTerminals(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -833,6 +849,7 @@ export async function deactivateWorkspaceTerminals(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -891,6 +908,7 @@ export async function getAllWorkspaceTerminals(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -954,6 +972,7 @@ export async function registerTerminals(workspaceID, terminalUrl) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -1017,6 +1036,7 @@ export async function updateWorkspaceCallback(workspaceID, callbackData) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -1062,6 +1082,7 @@ export async function getWorkspaceCallback(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:

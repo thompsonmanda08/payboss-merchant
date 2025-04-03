@@ -52,6 +52,7 @@ export async function getAllPaymentTransactions(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -115,6 +116,7 @@ export async function getAllBulkTransactions(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -175,6 +177,7 @@ export async function getBatchDetails(batchID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -217,6 +220,7 @@ export async function reviewBatch(batchID, reviewDetails) {
   }
 
   const url = `transaction/payments/bulk/review-submission/${batchID}`;
+
   try {
     const res = await authenticatedService({
       url,
@@ -240,6 +244,7 @@ export async function reviewBatch(batchID, reviewDetails) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -274,6 +279,7 @@ export async function reviewBatch(batchID, reviewDetails) {
  */
 export async function initializeBulkTransaction(workspaceID, transactionData) {
   const { protocol } = transactionData;
+
   if (!workspaceID) {
     return {
       success: false,
@@ -309,6 +315,7 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -371,6 +378,7 @@ export async function submitBatchForApproval(batchID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -412,6 +420,7 @@ export async function getWalletPrefundHistory(workspaceID) {
   }
 
   const url = `merchant/workspace/wallet/prefund/${workspaceID}/history`;
+
   try {
     const res = await authenticatedService({ url });
 
@@ -431,6 +440,7 @@ export async function getWalletPrefundHistory(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -496,6 +506,7 @@ export async function getAllSingleTransactions(workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -540,6 +551,7 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
   }
 
   const url = `analytics/merchant/workspace/${workspaceID}/bulk/payments`;
+
   try {
     const res = await authenticatedService({
       url,
@@ -563,6 +575,7 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -628,6 +641,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -662,7 +676,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
  */
 export async function getAPICollectionLatestTransactions(
   workspaceID,
-  dateFilter
+  dateFilter,
 ) {
   if (!workspaceID) {
     return {
@@ -699,6 +713,7 @@ export async function getAPICollectionLatestTransactions(
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -729,7 +744,7 @@ export async function getAPICollectionLatestTransactions(
  */
 export async function getTillCollectionsLatestTransactions(
   workspaceID,
-  dateFilter
+  dateFilter,
 ) {
   if (!workspaceID) {
     return {
@@ -741,6 +756,7 @@ export async function getTillCollectionsLatestTransactions(
     };
   }
   const url = `transaction/merchant/collection/till/${workspaceID}`;
+
   try {
     const res = await authenticatedService({
       url,
@@ -764,6 +780,7 @@ export async function getTillCollectionsLatestTransactions(
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -809,6 +826,7 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
     };
   }
   const url = `merchant/workspace/wallet/prefund/${workspaceID}/history`;
+
   try {
     const res = await authenticatedService({
       url,
@@ -832,6 +850,7 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -901,6 +920,7 @@ export async function getBillsLatestTransactions(workspaceID, dateFilter) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:

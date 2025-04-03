@@ -1,9 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import useNavigationStore from "@/context/navigation-store.js";
-import MobileNavBar from "./mobile-menu";
-
 import {
   HomeIcon,
   BanknotesIcon,
@@ -20,21 +17,22 @@ import {
   ArrowRightStartOnRectangleIcon,
   BriefcaseIcon,
   ChevronRightIcon,
-  NewspaperIcon,
   CreditCardIcon,
 } from "@heroicons/react/24/outline";
 
+import useNavigationStore from "@/context/navigation-store.js";
 import DropdownButton from "@/components/ui/dropdown-button";
 import Spinner from "@/components/ui/spinner";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
+import useNavigation from "@/hooks/useNavigation";
+import { WORKSPACE_TYPES } from "@/lib/constants";
+
 import SideNavItems from "./side-nav-items";
 import { Skeleton } from "./ui/skeleton";
-
-import useNavigation from "@/hooks/useNavigation";
 import Logo from "./base/logo";
-import { WORKSPACE_TYPES } from "@/lib/constants";
+import MobileNavBar from "./mobile-menu";
+import { Button } from "./ui/button";
 
 function SideNavBar({ workspaceSession }) {
   const { dashboardRoute, pathname, activeWorkspace, workspaces, isLoading } =
@@ -184,28 +182,28 @@ function SideNavBar({ workspaceSession }) {
     workspaceType == WORKSPACE_TYPES[0].ID // "collection"
       ? COLLECTION_SERVICES
       : workspaceType == WORKSPACE_TYPES[1].ID //'disbursement'
-      ? DISBURSEMENT_SERVICES
-      : workspaceType == WORKSPACE_TYPES[2].ID //'bills'
-      ? BILL_PAYMENT_SERVICES
-      : [
-          ...DISBURSEMENT_SERVICES,
-          ...COLLECTION_SERVICES,
-          ...BILL_PAYMENT_SERVICES,
-        ];
+        ? DISBURSEMENT_SERVICES
+        : workspaceType == WORKSPACE_TYPES[2].ID //'bills'
+          ? BILL_PAYMENT_SERVICES
+          : [
+              ...DISBURSEMENT_SERVICES,
+              ...COLLECTION_SERVICES,
+              ...BILL_PAYMENT_SERVICES,
+            ];
 
   // BASED ON WORKSPACE TYPE, SELECT REPORTS
   const REPORTS =
     workspaceType == WORKSPACE_TYPES[0].ID
       ? COLLECTION_REPORTS
       : workspaceType == WORKSPACE_TYPES[1].ID
-      ? DISBURSEMENT_REPORTS
-      : workspaceType == WORKSPACE_TYPES[2].ID
-      ? BILL_PAYMENTS_REPORTS
-      : [
-          ...DISBURSEMENT_REPORTS,
-          ...COLLECTION_REPORTS,
-          ...BILL_PAYMENTS_REPORTS,
-        ];
+        ? DISBURSEMENT_REPORTS
+        : workspaceType == WORKSPACE_TYPES[2].ID
+          ? BILL_PAYMENTS_REPORTS
+          : [
+              ...DISBURSEMENT_REPORTS,
+              ...COLLECTION_REPORTS,
+              ...BILL_PAYMENTS_REPORTS,
+            ];
 
   const SIDE_BAR_OPTIONS = [
     {
@@ -337,7 +335,7 @@ function SideNavBar({ workspaceSession }) {
       <Skeleton className="mb-4 h-16 w-full rounded-xl" />
       <div className="h-full space-y-4">
         {Array.from({ length: 9 }).map((_, index) => (
-          <Skeleton className="h-9 w-full rounded-lg" key={index} />
+          <Skeleton key={index} className="h-9 w-full rounded-lg" />
         ))}
       </div>
       <Skeleton className="mt-auto h-[50px] w-full rounded-xl" />
@@ -345,10 +343,10 @@ function SideNavBar({ workspaceSession }) {
   ) : (
     <>
       <Button
+        onClick={toggleMobileMenu}
         size="md"
         // isIconOnly
         className="absolute left-6 top-3 z-[99] h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
-        onClick={toggleMobileMenu}
       >
         <Bars3BottomLeftIcon className="h-7 w-7 text-foreground/70" />
         <Logo href={"#"} />
@@ -360,14 +358,14 @@ function SideNavBar({ workspaceSession }) {
       >
         <nav
           className={cn(
-            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`
+            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`,
           )}
         >
           <Logo href={dashboardRoute} />
           <div className="relative py-2">
             <DropdownButton
-              dropDownItems={WORKSPACES_OPTIONS}
               backdropBlur={true}
+              dropDownItems={WORKSPACES_OPTIONS}
             >
               <SoftBoxIcon className={"aspect-square h-9 w-10 p-2"}>
                 <BriefcaseIcon />
@@ -392,25 +390,25 @@ function SideNavBar({ workspaceSession }) {
             </DropdownButton>
           </div>
           <SideNavItems
-            navBarItems={SIDE_BAR_OPTIONS}
-            pathname={pathname}
             expandedSection={expandedSection}
             handleExpand={handleExpand}
             handleMainLinkClick={handleMainLinkClick}
             isMobileMenuOpen={openMobileMenu}
+            navBarItems={SIDE_BAR_OPTIONS}
+            pathname={pathname}
             toggleMobileMenu={toggleMobileMenu}
           />
         </nav>
       </div>
       {/* MOBILE NAVIGATION */}
       <MobileNavBar
-        isMobileMenuOpen={openMobileMenu}
-        toggleMobileMenu={toggleMobileMenu}
-        pathname={pathname}
         expandedSection={expandedSection}
         handleExpand={handleExpand}
         handleMainLinkClick={handleMainLinkClick}
+        isMobileMenuOpen={openMobileMenu}
         navBarItems={SIDE_BAR_OPTIONS}
+        pathname={pathname}
+        toggleMobileMenu={toggleMobileMenu}
       />
     </>
   );

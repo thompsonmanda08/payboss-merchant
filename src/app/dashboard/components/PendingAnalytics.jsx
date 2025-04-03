@@ -3,18 +3,17 @@ import CardHeader from "@/components/base/card-header";
 import Tooltip from "@/components/base/Tooltip";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import React from "react";
 
 function PendingApprovals({ data, canApprove, workspaceType }) {
   return (
     <Card className={"flex-1 self-start"}>
       <CardHeader
-        title={canApprove ? "Pending Approvals" : "Initiated Transactions"}
         infoText={
           canApprove
             ? "Transactions that require you attention are displayed below"
             : "Transactions that require approval"
         }
+        title={canApprove ? "Pending Approvals" : "Initiated Transactions"}
       />
       <div className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-8">
         {data &&
@@ -59,7 +58,7 @@ const PendingApprovalsItem = ({ label, icon, total }) => {
               "bg-red-50 text-red-500": icon?.color === "danger",
               "bg-green-50 text-green-600": icon?.color === "success",
               "bg-secondary/10 text-orange-600": icon?.color === "secondary",
-            }
+            },
           )}
         >
           {total} records

@@ -1,10 +1,11 @@
 "use server";
-import authenticatedService from "@/lib/api-config";
-import { USER_SESSION } from "@/lib/constants";
-import { getUserSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { cache } from "react";
+
+import authenticatedService from "@/lib/api-config";
+import { USER_SESSION } from "@/lib/constants";
+import { getUserSession } from "@/lib/session";
 
 /**
  * Creates a new user for a merchant by calling the API endpoint.
@@ -45,6 +46,7 @@ export async function createNewUser(newUser) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -88,6 +90,7 @@ export async function fetchAllUsers() {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -136,6 +139,7 @@ export async function assignUsersToWorkspace(users, workspaceID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -177,6 +181,7 @@ export async function getUser(userID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -229,6 +234,7 @@ export async function updateProfileData(userID, userData) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -281,6 +287,7 @@ export async function updateSystemUserData(userID, userData) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -329,6 +336,7 @@ export async function deleteSystemUserData(userID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -378,6 +386,7 @@ export async function unlockSystemUser(userID) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -426,6 +435,7 @@ export async function changeUserPassword(password) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:
@@ -473,6 +483,7 @@ export async function adminResetUserPassword(userID, newPasswordData) {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
+
     return {
       success: false,
       message:

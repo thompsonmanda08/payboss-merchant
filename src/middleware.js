@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+
 import { getServerSession, getWorkspaceSessionData } from "./lib/session";
 
 const PUBLIC_ROUTE = [
@@ -48,11 +49,13 @@ export async function middleware(request) {
 
     if (accessToken && isAuthPage) {
       url.pathname = `/dashboard${workspaceID}`;
+
       return NextResponse.redirect(url);
     }
 
     if (!workspaceIDs.includes(workspaceID)) {
       url.pathname = "/workspaces";
+
       return NextResponse.redirect(url);
     }
   }
@@ -62,12 +65,14 @@ export async function middleware(request) {
     url.pathname = "/login";
 
     url.searchParams.set("callbackUrl", pathname);
+
     return NextResponse.redirect(url);
   }
 
   // IF THERE IS AN ACCESS TOKEN EXISTS - REDIRECT TO DASHBOARD
   if ((accessToken && isAuthPage) || isDashboardRoute) {
     url.pathname = `/workspaces`;
+
     return NextResponse.redirect(url);
   }
 

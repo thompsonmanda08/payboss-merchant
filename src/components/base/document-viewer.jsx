@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import CardHeader from "@/components/base/card-header";
 import Modal from "@/components/base/custom-modal";
 
@@ -26,10 +25,10 @@ const DocumentsViewer = ({ documents, contractDocument }) => {
           infoClasses: "mb-0",
           innerWrapper: "gap-0",
         }}
-        title="Business Documentation"
         infoText={
           "Documents that prove your company registrations and compliance with regulatory bodies."
         }
+        title="Business Documentation"
       />
 
       <div className="flex w-full flex-col gap-2 md:flex-row">
@@ -37,8 +36,8 @@ const DocumentsViewer = ({ documents, contractDocument }) => {
           {documents?.map((document, index) => (
             <Button
               key={index}
-              variant="light"
               className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border dark:hover:bg-primary/30 border-primary-100 dark:bg-primary/10 dark:border-primary-600/20 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
+              variant="light"
               onClick={() => {
                 setSelectedDoc(document);
                 setIsOpen(true);
@@ -49,12 +48,12 @@ const DocumentsViewer = ({ documents, contractDocument }) => {
               </Link>
               <div className="h-[65%]">
                 <Image
-                  className="h-full w-full object-cover"
-                  src={"/images/attachment.png"}
-                  alt="file"
-                  width={80}
-                  height={100}
                   unoptimized
+                  alt="file"
+                  className="h-full w-full object-cover"
+                  height={100}
+                  src={"/images/attachment.png"}
+                  width={80}
                 />
               </div>
               <span className="text-[13px] text-foreground/90">
@@ -65,8 +64,8 @@ const DocumentsViewer = ({ documents, contractDocument }) => {
 
           {contractDocument && (
             <Button
-              variant="light"
               className="relative flex h-40 w-full cursor-pointer flex-col gap-y-2 rounded-[10px] border dark:hover:bg-primary/30 border-primary-100 dark:bg-primary/10 dark:border-primary-600/20 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
+              variant="light"
               onClick={() => {
                 setSelectedDoc(contractDocument);
                 setIsOpen(true);
@@ -77,12 +76,12 @@ const DocumentsViewer = ({ documents, contractDocument }) => {
               </Link>
               <div className="h-[65%]">
                 <Image
-                  className="h-full w-full object-cover"
-                  src={"/images/attachment.png"}
-                  alt="file"
                   unoptimized
-                  width={80}
+                  alt="file"
+                  className="h-full w-full object-cover"
                   height={100}
+                  src={"/images/attachment.png"}
+                  width={80}
                 />
               </div>
               <span className="text-[13px] text-foreground/90">
@@ -96,24 +95,24 @@ const DocumentsViewer = ({ documents, contractDocument }) => {
       {/* **************************************************** */}
 
       <Modal
+        removeCallToAction
+        cancelText="Close"
+        infoText="Ensure the document aligns with the submitted details"
+        isDismissible={true}
         show={isOpen}
+        title={selectedDoc?.name}
+        width={1200}
         onClose={() => {
           setIsOpen(false);
           setSelectedDoc(null);
         }}
-        cancelText="Close"
-        isDismissible={true}
-        title={selectedDoc?.name}
-        infoText="Ensure the document aligns with the submitted details"
-        width={1200}
-        removeCallToAction
       >
         {selectedDoc?.url && (
           <iframe
-            src={selectedDoc?.url}
-            title={selectedDoc?.name}
             className="min-h-[60vh]  w-full py-4"
+            src={selectedDoc?.url}
             style={{ border: "none" }}
+            title={selectedDoc?.name}
           />
         )}
       </Modal>

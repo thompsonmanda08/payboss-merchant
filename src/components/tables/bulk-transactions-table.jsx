@@ -8,18 +8,19 @@ import {
   TableCell,
   Pagination,
 } from "@heroui/react";
+import { EyeIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { format } from "date-fns";
+
 import { TRANSACTION_STATUS_COLOR_MAP } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
 import Loader from "@/components/ui/loader";
-import { EyeIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Search from "@/components/ui/search";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import SelectField from "@/components/ui/select-field";
 import { useBulkTransactions, useWorkspaceInit } from "@/hooks/useQueryHooks";
 import EmptyLogs from "@/components/base/empty-logs";
-import { format } from "date-fns";
 import { BULK_TRANSACTIONS_COLUMN } from "@/lib/table-columns";
 
 // DEFINE FILTERABLE SERVICES
@@ -52,7 +53,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS),
   );
 
   const [serviceProtocolFilter, setServiceProtocolFilter] =
@@ -73,7 +74,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -84,7 +85,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       filteredRows = filteredRows.filter(
         (row) =>
           row?.batch_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-          row?.amount?.toLowerCase().includes(filterValue?.toLowerCase())
+          row?.amount?.toLowerCase().includes(filterValue?.toLowerCase()),
       );
     }
     if (
@@ -94,7 +95,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       let filters = Array.from(serviceProtocolFilter);
 
       filteredRows = filteredRows.filter((row) =>
-        filters.includes(row?.service)
+        filters.includes(row?.service),
       );
     }
 
@@ -122,6 +123,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
 
   const renderCell = React.useCallback((row, columnKey) => {
     const cellValue = row[columnKey];
+
     switch (columnKey) {
       case "created_at":
         return (
@@ -148,16 +150,16 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       case "status":
         return (
           <Button
+            className={cn(
+              "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
+              TRANSACTION_STATUS_COLOR_MAP[row.status],
+            )}
             size="sm"
             variant="light"
             onPress={() => {
               setSelectedBatch(row);
               setOpenBatchDetailsModal(true);
             }}
-            className={cn(
-              "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
-              TRANSACTION_STATUS_COLOR_MAP[row.status]
-            )}
           >
             {cellValue}
           </Button>
@@ -165,9 +167,9 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       case "actions":
         return (
           <Button
-            variant="light"
-            className={"max-w-fit p-2"}
             isIconOnly
+            className={"max-w-fit p-2"}
+            variant="light"
             onPress={() => {
               setSelectedBatch(row);
               setOpenBatchDetailsModal(true);
@@ -200,10 +202,10 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
     return (
       <div className="mt-24 flex flex-1 items-center rounded-lg">
         <Loader
-          size={100}
           classNames={{
             wrapper: "bg-foreground-200/50 rounded-xl mt-8 h-full",
           }}
+          size={100}
         />
       </div>
     );
@@ -215,8 +217,8 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
         <EmptyLogs
           className={"my-auto mt-16"}
           classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
-          title={"No transaction data records!"}
           subTitle={""}
+          title={"No transaction data records!"}
         />
       </div>
     );
@@ -251,40 +253,40 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
           />
           <div className="relative flex items-center gap-3">
             <SingleSelectionDropdown
-              name={"Type"}
+              buttonVariant="flat"
               className={"hidden min-w-[160px] md:flex"}
               classNames={{
                 trigger: "hidden lg:flex",
               }}
-              disallowEmptySelection={true}
               closeOnSelect={false}
-              buttonVariant="flat"
-              selectionMode="multiple"
-              selectedKeys={serviceProtocolFilter}
+              disallowEmptySelection={true}
               dropdownItems={SERVICE_FILTERS}
+              name={"Type"}
+              selectedKeys={serviceProtocolFilter}
+              selectionMode="multiple"
               onSelectionChange={setServiceProtocolFilter}
             />
             <SingleSelectionDropdown
-              name={"Columns"}
+              buttonVariant="flat"
               className={"hidden min-w-[160px] lg:flex"}
               classNames={{
                 trigger: "hidden lg:flex",
               }}
               closeOnSelect={false}
-              buttonVariant="flat"
-              selectionMode="multiple"
               disallowEmptySelection={true}
-              onSelectionChange={setVisibleColumns}
               dropdownItems={columns}
+              name={"Columns"}
               selectedKeys={visibleColumns}
+              selectionMode="multiple"
               setSelectedKeys={setSelectedKeys}
+              onSelectionChange={setVisibleColumns}
             />
 
             {role?.can_initiate && (
               <Button
                 color="primary"
-                size={"lg"}
                 endContent={<PlusIcon className="h-5 w-5" />}
+                size={"lg"}
                 onPress={() => setOpenPaymentsModal(true)}
               >
                 Create New
@@ -300,10 +302,10 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
             Rows per page:{" "}
             <SelectField
               className="-mb-1 h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
-              onChange={onRowsPerPageChange}
-              placeholder={rowsPerPage.toString()}
-              options={["5", "8", "10", "20"]}
               defaultValue={8}
+              options={["5", "8", "10", "20"]}
+              placeholder={rowsPerPage.toString()}
+              onChange={onRowsPerPageChange}
             />
           </label>
         </div>
@@ -321,14 +323,14 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
 
   return (
     <Table
-      aria-label="Transactions table with custom cells"
+      isHeaderSticky
       classNames={{
         table: cn(
           "align-top min-h-[300px] w-full overflow-scroll items-center justify-center",
           {
             // "min-h-max": pages <= 1,
             // "min-h-[300px]": isLoading || !rows,
-          }
+          },
         ),
         base: cn("overflow-x-auto", { "": pages <= 1 }),
       }}
@@ -337,37 +339,37 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       // selectionMode="multiple"
       // topContentPlacement="outside"
       // bottomContentPlacement="outside"
+      isStriped
       removeWrapper
-      sortDescriptor={sortDescriptor}
-      onSortChange={setSortDescriptor}
-      topContent={topContent}
+      aria-label="Transactions table with custom cells"
       bottomContent={bottomContent}
       selectedKeys={selectedKeys}
+      sortDescriptor={sortDescriptor}
+      topContent={topContent}
       onSelectionChange={setSelectedKeys}
-      isStriped
-      isHeaderSticky
+      onSortChange={setSortDescriptor}
     >
-      <TableHeader columns={headerColumns} className="fixed w-full">
+      <TableHeader className="fixed w-full" columns={headerColumns}>
         {(column) => (
           <TableColumn
             key={column.uid}
-            allowsSorting={column.sortable}
             align={
               column.uid === "actions" || column.uid === "status"
                 ? "center"
                 : "start"
             }
+            allowsSorting={column.sortable}
           >
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
       <TableBody
-        items={isLoading ? [] : sortedItems}
-        isLoading={isLoading}
-        loadingContent={loadingContent}
-        emptyContent={emptyContent}
         align="top"
+        emptyContent={emptyContent}
+        isLoading={isLoading}
+        items={isLoading ? [] : sortedItems}
+        loadingContent={loadingContent}
       >
         {(item) => (
           <TableRow

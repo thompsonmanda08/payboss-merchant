@@ -1,24 +1,26 @@
 "use client";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import { Card } from "@heroui/react";
 
-import { Button } from "../ui/button";
+import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { containerVariants } from "@/lib/constants";
 import { notify } from "@/lib/utils";
 import useAuthStore from "@/context/auth-store";
-import Step0 from "./signup-fragments/step-0";
-import Step1 from "./signup-fragments/step-1";
-import Step2 from "./signup-fragments/step-2";
-import Step3 from "./signup-fragments/step-3";
 import {
   createMerchantAdminUser,
   createNewMerchant,
   submitMerchantBankDetails,
 } from "@/app/_actions/auth-actions";
-import { Card } from "@heroui/react";
-import Step1_TPIN from "./signup-fragments/step-1-1";
+
+import { Button } from "../ui/button";
 import StatusMessage from "../base/status-message";
+
+import Step0 from "./signup-fragments/step-0";
+import Step1 from "./signup-fragments/step-1";
+import Step2 from "./signup-fragments/step-2";
+import Step3 from "./signup-fragments/step-3";
+import Step1_TPIN from "./signup-fragments/step-1-1";
 
 export const STEPS = [
   "business-registration",
@@ -51,38 +53,38 @@ export default function SignUpForm() {
     // BUSINESS INFO
     <Step1
       key={STEPS[1] + "_NEW"}
-      updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
+      updateDetails={updateAccountDetails}
     />,
 
     <Step2
       key={STEPS[2]} // BANK DETAILS
-      updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
+      updateDetails={updateAccountDetails}
     />,
 
     <Step3
       key={STEPS[3]} // ADMIN USER (OWNER)
-      updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
+      updateDetails={updateAccountDetails}
     />,
   ];
 
   const CONTINUE_REGISTRATION = [
     <Step1_TPIN
       key={STEPS[1] + "_CONTINUE"} // GET ACCOUNT DETAILS BY TPIN
-      updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
+      updateDetails={updateAccountDetails}
     />,
     <Step2
       key={STEPS[2]} // BANK DETAILS
-      updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
+      updateDetails={updateAccountDetails}
     />,
     <Step3
       key={STEPS[3]} // ADMIN USER (OWNER)
-      updateDetails={updateAccountDetails}
       backToStart={handleGotoStart}
+      updateDetails={updateAccountDetails}
     />,
   ];
 
@@ -119,11 +121,13 @@ export default function SignUpForm() {
     // BUSINESS INFO
     if (STEPS[0] == step || STEPS[1] == step) {
       setBusinessInfo({ ...businessInfo, ...fields });
+
       return;
     }
 
     if (STEPS[2] == step) {
       setBankingDetails({ ...bankDetails, ...fields });
+
       return;
     }
 
@@ -142,6 +146,7 @@ export default function SignUpForm() {
     if (businessInfo.registration == "CONTINUE" && !isValidTPIN) {
       navigateForward();
       setIsLoading(false);
+
       return;
     }
     // ******************************************************************************************** //
@@ -157,6 +162,7 @@ export default function SignUpForm() {
     ) {
       navigateTo(Number(businessInfo?.stage + currentTabIndex)); // INDEX START FROM ZERO
       setIsLoading(false);
+
       return;
     }
 
@@ -180,6 +186,7 @@ export default function SignUpForm() {
         });
         navigateForward();
         setIsLoading(false);
+
         return;
       } else {
         notify({
@@ -189,6 +196,7 @@ export default function SignUpForm() {
         });
         updateErrorStatus({ status: true, message: response?.message });
         setIsLoading(false);
+
         return;
       }
     }
@@ -206,6 +214,7 @@ export default function SignUpForm() {
         });
         navigateForward();
         setIsLoading(false);
+
         return;
       } else {
         notify({
@@ -215,6 +224,7 @@ export default function SignUpForm() {
         });
         updateErrorStatus({ status: true, message: response?.message });
         setIsLoading(false);
+
         return;
       }
     }
@@ -229,6 +239,7 @@ export default function SignUpForm() {
           message: "Passwords do not match",
         });
         setIsLoading(false);
+
         return;
       }
 
@@ -242,6 +253,7 @@ export default function SignUpForm() {
         });
         setAccountCreated(true);
         setIsLoading(false);
+
         return;
       } else {
         notify({
@@ -251,6 +263,7 @@ export default function SignUpForm() {
         });
         updateErrorStatus({ status: true, message: response?.message });
         setIsLoading(false);
+
         return;
       }
     }
@@ -259,6 +272,7 @@ export default function SignUpForm() {
     if (!isLastStep) {
       navigateForward();
       setIsLoading(false);
+
       return;
     }
   }
@@ -274,18 +288,18 @@ export default function SignUpForm() {
     <Card className="mx-auto w-full flex-auto p-6 sm:max-w-[790px]">
       <div className="flex flex-col">
         <form
-          onSubmit={handleCreateAccount}
           className="mx-auto flex w-full flex-col items-center justify-center gap-4"
+          onSubmit={handleCreateAccount}
         >
           <AnimatePresence mode="wait">
             <motion.div
               key={currentTabIndex}
-              variants={containerVariants}
-              initial={"hidden"}
               animate={"show"}
-              exit={"exit"}
-              transition={{ duration: 0.5 }}
               className="flex w-full flex-col items-center justify-center gap-y-4"
+              exit={"exit"}
+              initial={"hidden"}
+              transition={{ duration: 0.5 }}
+              variants={containerVariants}
             >
               {activeTab}
             </motion.div>
@@ -312,23 +326,23 @@ export default function SignUpForm() {
               </Button>
             )} */}
             <Button
-              type={"submit"}
-              size="lg"
+              className="w-full"
               color="primary"
-              isLoading={isLoading}
               disabled={
                 isLoading ||
                 (businessInfo.registration == "CONTINUE" &&
                   !isValidTPIN &&
                   currentTabIndex === 1)
               }
-              className="w-full"
+              isLoading={isLoading}
+              size="lg"
+              type={"submit"}
             >
               {isFirstStep
                 ? "Get Started"
                 : !isLastStep
-                ? "Next"
-                : "Create Account"}
+                  ? "Next"
+                  : "Create Account"}
             </Button>
           </div>
         </form>

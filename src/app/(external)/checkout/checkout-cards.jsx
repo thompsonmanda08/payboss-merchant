@@ -22,17 +22,16 @@ import {
   useDisclosure,
   Alert,
 } from "@heroui/react";
-
-import React, { useRef } from "react";
-import { Input } from "@/components/ui/input-field";
-import { cn, formatCurrency, notify } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-
-import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
+import React from "react";
 import {
   CreditCardIcon,
   DevicePhoneMobileIcon,
 } from "@heroicons/react/24/outline";
+
+import { Input } from "@/components/ui/input-field";
+import { cn, formatCurrency, notify } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
 import CardHeader from "@/components/base/card-header";
 import Logo from "@/components/base/logo";
 
@@ -41,19 +40,21 @@ export function Checkout({ checkoutData }) {
 
   function handleChange(e) {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
   function updateFormData(fields) {
     setFormData((prev) => ({ ...prev, ...fields }));
   }
+
   return (
     <div className="container mx-auto grid place-items-center py-8 ">
       <PaymentMethods
+        checkoutData={checkoutData}
         formData={formData}
         handleChange={handleChange}
         updateFormData={updateFormData}
-        checkoutData={checkoutData}
       />
     </div>
   );
@@ -80,12 +81,14 @@ function PaymentMethods({
     if (AIRTEL_NO.test(phone)) {
       updateFormData({ operator: "airtel" });
       setOperatorLogo("/images/airtel-logo.png");
+
       return;
     }
 
     if (MTN_NO.test(phone)) {
       updateFormData({ operator: "mtn" });
       setOperatorLogo("/images/mtn-logo.png");
+
       return;
     }
 
@@ -105,11 +108,12 @@ function PaymentMethods({
     const paymentWindow = window.open(
       paymentUrl,
       "PayBoss Checkout",
-      `width=${width},height=${height},left=${left},top=${top}`
+      `width=${width},height=${height},left=${left},top=${top}`,
     );
 
     if (!paymentWindow) {
       alert("Popup blocked! Please allow popups for this site.");
+
       return;
     }
 
@@ -139,7 +143,7 @@ function PaymentMethods({
 
       if (event.data.status === "success") {
         alert(
-          `Payment successful! Transaction ID: ${event.data.transactionId}`
+          `Payment successful! Transaction ID: ${event.data.transactionId}`,
         );
         setIsCompleted(true);
       } else {
@@ -185,6 +189,7 @@ function PaymentMethods({
         color: "warning",
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -201,6 +206,7 @@ function PaymentMethods({
 
       // TODO: HANDLE PAYMENT RESPONSE
       setTimeout(() => setIsLoading(false), 2000);
+
       return;
     }
   }
@@ -209,7 +215,7 @@ function PaymentMethods({
     <>
       <Card
         className={cn(
-          "border-1 px-1 py-2 pb-6 shadow-xl hover:shadow-2xl hover:shadow-primary/20 shadow-primary/10 transition-all duration-300 ease-in-out max-w-lg w-full mx-auto"
+          "border-1 px-1 py-2 pb-6 shadow-xl hover:shadow-2xl hover:shadow-primary/20 shadow-primary/10 transition-all duration-300 ease-in-out max-w-lg w-full mx-auto",
         )}
       >
         <HeroCardHeader className="flex-col items-start px-4 pb-0 pt-2">
@@ -221,8 +227,8 @@ function PaymentMethods({
         <CardBody className="overflow-visible gap-3 pb-0">
           <Table
             hideHeader
-            removeWrapper
             isStriped
+            removeWrapper
             aria-label="checkout-summary"
             radius="sm"
             // className="bg-red-500"
@@ -234,10 +240,10 @@ function PaymentMethods({
             <TableBody>
               {checkoutData?.logo && (
                 <TableRow key="merchant-logo">
-                  <TableCell colSpan={2} className="text-right font-bold">
+                  <TableCell className="text-right font-bold" colSpan={2}>
                     <Logo
-                      src={checkoutData?.logo}
                       className={"ml-auto -mr-4"}
+                      src={checkoutData?.logo}
                     />
                   </TableCell>
                 </TableRow>
@@ -278,25 +284,25 @@ function PaymentMethods({
           </Table>
           <div className="flex w-full flex-col h-full gap-2">
             <CardHeader
-              title={"Payment Method"}
-              infoText={
-                "Select a payment method and provide payment information"
-              }
               classNames={{
                 infoClasses: "!text-xs xl:text-sm",
               }}
+              infoText={
+                "Select a payment method and provide payment information"
+              }
+              title={"Payment Method"}
             />
             <Tabs
               aria-label="payment-methods"
-              color="primary"
-              radius="sm"
-              size="lg"
-              variant="bordered"
               className="max-w-lg w-full "
               classNames={{
                 tabList: "w-full p-0.5 ",
               }}
+              color="primary"
+              radius="sm"
               selectedKey={selected}
+              size="lg"
+              variant="bordered"
               onSelectionChange={(type) => {
                 updateFormData({ type });
                 setSelected(type);
@@ -307,19 +313,19 @@ function PaymentMethods({
             >
               <Tab
                 key="mobile"
+                className="gap-2 flex flex-col"
                 title={
                   <div className="flex items-center space-x-2">
                     <DevicePhoneMobileIcon className="h-5 w-5" />
                     <span>Mobile</span>
                   </div>
                 }
-                className="gap-2 flex flex-col"
               >
                 <div className="relative flex flex-col">
                   <Input
                     required
-                    placeholder={"Mobile Number"}
                     name={"phone"}
+                    placeholder={"Mobile Number"}
                     size="lg"
                     value={formData?.phone || ""}
                     onChange={(e) => {
@@ -330,11 +336,11 @@ function PaymentMethods({
                   <span className="absolute right-0 top-1 h-full w-28 px-4">
                     {Boolean(operatorLogo) && (
                       <Image
-                        className="h-full w-full object-contain"
-                        src={operatorLogo}
                         alt="logo"
-                        width={80}
+                        className="h-full w-full object-contain"
                         height={32}
+                        src={operatorLogo}
+                        width={80}
                       />
                     )}
                   </span>
@@ -344,8 +350,8 @@ function PaymentMethods({
                 </div>
                 <Input
                   required
-                  placeholder={"Reference"}
                   name={"reference"}
+                  placeholder={"Reference"}
                   size="lg"
                   value={formData?.reference}
                   onChange={handleChange}
@@ -354,44 +360,44 @@ function PaymentMethods({
 
               <Tab
                 key="card"
+                className="gap-2  flex flex-col"
                 title={
                   <div className="flex items-center space-x-2">
                     <CreditCardIcon className="h-5 w-5" />
                     <span>Card</span>
                   </div>
                 }
-                className="gap-2  flex flex-col"
               >
                 <div className="flex flex-col gap-3 my-1">
                   <div className="flex flex-col sm:flex-row flex-1 gap-2">
                     <Input
                       required
-                      placeholder={"First Name"}
                       name={"firstName"}
+                      placeholder={"First Name"}
                       value={formData?.firstName}
                       onChange={handleChange}
                     />
                     <Input
                       required
-                      placeholder={"Last Name"}
                       name={"lastName"}
+                      placeholder={"Last Name"}
                       value={formData?.lastName}
                       onChange={handleChange}
                     />
                   </div>
                   <Input
                     required
-                    placeholder={"Email"}
                     name={"email"}
-                    type={"email"}
+                    placeholder={"Email"}
                     size="lg"
+                    type={"email"}
                     value={formData?.email || ""}
                     onChange={handleChange}
                   />
                   <Input
                     required
-                    placeholder={"Mobile Number"}
                     name={"phone"}
+                    placeholder={"Mobile Number"}
                     value={formData?.phone || ""}
                     onChange={(e) => updateFormData({ phone: e.target.value })}
                   />
@@ -406,8 +412,8 @@ function PaymentMethods({
             <div className="w-full flex items-center mb-3">
               {isCompleted && (
                 <Alert
-                  radius="sm"
                   color={"success"}
+                  radius="sm"
                   title={`This is an alert`}
                 />
               )}
@@ -423,16 +429,16 @@ function PaymentMethods({
 
           {!isCompleted && (
             <Button
+              className="w-full"
               isLoading={isLoading}
               loadingText="Initializing..."
               onPress={handlePayment}
-              className="w-full"
             >
               {selected == "mobile"
                 ? "Pay via Mobile"
                 : selected == "card"
-                ? "Proceed to Payment"
-                : "Pay Now"}
+                  ? "Proceed to Payment"
+                  : "Pay Now"}
             </Button>
           )}
         </CardFooter>
@@ -459,12 +465,12 @@ function BankCard({ formData }) {
       <HeroCardHeader className="flex justify-between">
         <Logo isWhite />
         <Chip
-          color="warning"
-          variant="solid"
           className="bg-gradient-to-r  from-orange-400 via-orange-300 to-orange-400 "
           classNames={{
             content: "text-black font-bold",
           }}
+          color="warning"
+          variant="solid"
         >
           GOLD
         </Chip>
