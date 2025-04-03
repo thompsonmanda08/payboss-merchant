@@ -1,6 +1,6 @@
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
-import Tooltip from "@/components/base/Tooltip";
+import Tooltip from "@/components/base/custom-tooltip";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -58,7 +58,7 @@ const PendingApprovalsItem = ({ label, icon, total }) => {
               "bg-red-50 text-red-500": icon?.color === "danger",
               "bg-green-50 text-green-600": icon?.color === "success",
               "bg-secondary/10 text-orange-600": icon?.color === "secondary",
-            },
+            }
           )}
         >
           {total} records

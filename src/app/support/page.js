@@ -1,5 +1,5 @@
 import SupportForm from "@/components/forms/support-form";
-import Logo from "@/components/base/logo";
+import Logo from "@/components/base/payboss-logo";
 import WorkspaceHeader from "@/components/welcome-header";
 
 import AuthLayout from "../(auth)/layout";

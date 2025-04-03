@@ -34,8 +34,8 @@ import { getBillsLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
 import CardHeader from "@/components/base/card-header";
 import { BILLS_TRANSACTION_COLUMNS } from "@/lib/table-columns";
-import PromptModal from "@/components/base/prompt";
-import Card from "@/components/base/card";
+import PromptModal from "@/components/base/prompt-modal";
+import Card from "@/components/base/custom-card";
 
 import BillPaymentAPIConfigModal from "./bill-api-config-modal";
 

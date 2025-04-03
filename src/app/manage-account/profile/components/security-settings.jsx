@@ -2,7 +2,7 @@
 import { Switch } from "@heroui/switch";
 import { useState } from "react";
 
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import ChangePasswordField from "@/components/change-password";
 
 function ProfileSecuritySettings() {

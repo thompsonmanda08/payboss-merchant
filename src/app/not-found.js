@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
-import Logo from "@/components/base/logo";
+import Logo from "@/components/base/payboss-logo";
 import { Button } from "@/components/ui/button";
 
 import AuthLayout from "./(auth)/layout";

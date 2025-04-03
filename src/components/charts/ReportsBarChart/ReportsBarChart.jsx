@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 import { Progress } from "@heroui/react";
 
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import { cn } from "@/lib/utils";
 
 import configs from "./configs";
@@ -27,9 +27,9 @@ function ReportsBarChart({ color, title, description, chart, items }) {
               />
             </div>
           ),
-          [items],
+          [items]
         )
-      : [],
+      : []
   );
 
   const renderBarChart = useMemo(
@@ -40,7 +40,7 @@ function ReportsBarChart({ color, title, description, chart, items }) {
         <Bar data={data} options={options} />
       </div>
     ),
-    [chart, color],
+    [chart, color]
   );
 
   return (

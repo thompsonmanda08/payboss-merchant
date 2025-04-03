@@ -18,7 +18,7 @@ import { DateRangePickerField } from "@/components/ui/date-select-field";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getCollectionsReport } from "@/app/_actions/transaction-actions";
 import TotalStatsLoader from "@/app/dashboard/components/total-stats-loader";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import Tabs from "@/components/tabs";
 import TotalValueStat from "@/app/dashboard/components/total-stats";
@@ -86,7 +86,7 @@ export default function CollectionsReports({ workspaceID }) {
     const response = await getCollectionsReport(
       workspaceID,
       serviceType,
-      dateRange,
+      dateRange
     );
 
     return response || [];
@@ -118,7 +118,7 @@ export default function CollectionsReports({ workspaceID }) {
             .includes(debouncedSearchQuery?.toLowerCase()) ||
           row?.service_provider
             ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()),
+            .includes(debouncedSearchQuery?.toLowerCase())
       );
     }
 
@@ -141,7 +141,7 @@ export default function CollectionsReports({ workspaceID }) {
             .includes(debouncedTerminalQuery?.toLowerCase()) ||
           terminal?.terminalID
             ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase()),
+            .includes(debouncedTerminalQuery?.toLowerCase())
       );
     }
 

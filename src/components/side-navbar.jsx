@@ -30,7 +30,7 @@ import { WORKSPACE_TYPES } from "@/lib/constants";
 
 import SideNavItems from "./side-nav-items";
 import { Skeleton } from "./ui/skeleton";
-import Logo from "./base/logo";
+import Logo from "./base/payboss-logo";
 import MobileNavBar from "./mobile-menu";
 import { Button } from "./ui/button";
 
@@ -358,7 +358,7 @@ function SideNavBar({ workspaceSession }) {
       >
         <nav
           className={cn(
-            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`,
+            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`
           )}
         >
           <Logo href={dashboardRoute} />

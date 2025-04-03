@@ -27,7 +27,7 @@ import useWorkspaces from "@/hooks/useWorkspaces";
 import useDashboard from "@/hooks/useDashboard";
 import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 
-import BreadCrumbLinks from "./base/BreadCrumbLinks";
+import BreadCrumbLinks from "./base/breadcrumb";
 import { Skeleton } from "./ui/skeleton";
 import Avatar from "./ui/avatar";
 import NavIconButton from "./ui/nav-icon-button";

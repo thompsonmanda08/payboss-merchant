@@ -11,7 +11,7 @@ import {
 import { Chip } from "@heroui/react";
 
 import { formatCurrency } from "@/lib/utils";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 import SimpleStats from "@/app/dashboard/components/simple-stats";
 import CardHeader from "@/components/base/card-header";
 import OverlayLoader from "@/components/ui/overlay-loader";
@@ -108,7 +108,7 @@ function DashboardAnalytics({
         label: "Transactions",
         data: MONTHS.map((month) => {
           const transaction = monthlyTransactionRecords?.find((item) =>
-            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase()),
+            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase())
           );
 
           return transaction ? transaction.count : 0;
@@ -122,11 +122,11 @@ function DashboardAnalytics({
   const previousMonth = MONTHS[(thisMonth - 1 + MONTHS.length) % MONTHS.length]; // Handle January to December wrap-around
 
   const previousMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month)?.toLowerCase().startsWith(previousMonth?.toLowerCase()),
+    String(item.month)?.toLowerCase().startsWith(previousMonth?.toLowerCase())
   );
 
   const currentMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month)?.toLowerCase().startsWith(currentMonth?.toLowerCase()),
+    String(item.month)?.toLowerCase().startsWith(currentMonth?.toLowerCase())
   );
 
   // Extract counts or default to 0 if no transactions

@@ -3,7 +3,7 @@ import { useRef, useEffect, useState, useMemo } from "react";
 import { Line } from "react-chartjs-2";
 
 import { cn } from "@/lib/utils";
-import Card from "@/components/base/card";
+import Card from "@/components/base/custom-card";
 
 import configs from "./configs";
 

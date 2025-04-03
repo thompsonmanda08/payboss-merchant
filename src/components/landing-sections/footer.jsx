@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { NavLink } from "@/components/base/nav-link";
-import Logo from "@/components/base/logo";
+import Logo from "@/components/base/payboss-logo";
 import ThemeSwitcher from "@/components/base/theme-switcher";
 import { cn } from "@/lib/utils";
 
