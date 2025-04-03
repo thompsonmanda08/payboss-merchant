@@ -13,6 +13,7 @@ export default function WorkspaceMembers({
   allUsers,
   workspaceMembers,
   workspaceRoles,
+  permissions,
 }) {
   const {
     isOpen: openAdd,
@@ -34,11 +35,12 @@ export default function WorkspaceMembers({
       />
       <UsersTable
         removeWrapper
-        isUserAdmin={canUpdate}
+        permissions={permissions}
         tableLoading={isLoading}
         users={workspaceMembers}
         workspaceID={workspaceID}
         onAddUser={onOpenAdd}
+        roles={workspaceRoles}
       />
       <AddUserToWorkspace
         allUsers={allUsers}

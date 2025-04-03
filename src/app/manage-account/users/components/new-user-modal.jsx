@@ -27,7 +27,7 @@ import useWorkspaceStore from "@/context/workspaces-store";
 import { changeUserRoleInWorkspace } from "@/app/_actions/workspace-actions";
 import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
 
-function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
+function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
   const { isEditingRole, selectedUser, setSelectedUser, setIsEditingRole } =
     useWorkspaceStore();
   const queryClient = useQueryClient();
@@ -163,7 +163,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
     let response = await changeUserRoleInWorkspace(
       userMapping,
       recordID,
-      workspaceID,
+      workspaceID
     );
 
     if (response?.success) {
@@ -292,6 +292,8 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
     }
   }, [selectedUser]);
 
+  console.log("ROLESSSSSSSSSSSSSSSSSSS", roles);
+
   return (
     <Modal
       isOpen={isOpen || isEditingRole}
@@ -318,7 +320,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID }) {
                     : "System Role"
                 }
                 listItemName={"role"}
-                options={USER_ROLES}
+                options={roles}
                 placeholder={isEditingRole ? newUser?.role : "Choose a role"}
                 value={newUser?.role || "Choose a role"}
                 onChange={(e) => {

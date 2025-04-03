@@ -22,8 +22,9 @@ export const initializeWorkspace = cache(async (workspaceID) => {
     const res = await authenticatedService({ url });
 
     await updateWorkspaceSession({
-      workspacePermissions: res.data,
+      activeWorkspaceID: workspaceID,
       workspaceType: res.data.workspaceType,
+      workspacePermissions: res.data,
     });
 
     revalidatePath("/dashboard/[workspaceID]", "layout");
@@ -214,7 +215,7 @@ export async function getWalletPrefunds(workspaceID) {
 export async function approveWalletPrefund(
   prefundData,
   prefundID,
-  workspaceID,
+  workspaceID
 ) {
   if (!prefundID || !workspaceID) {
     return {
@@ -403,7 +404,7 @@ export async function deleteUserFromWorkspace(recordID, workspaceID) {
 export async function changeUserRoleInWorkspace(
   mapping,
   recordID,
-  workspaceID,
+  workspaceID
 ) {
   if (!workspaceID) {
     return {

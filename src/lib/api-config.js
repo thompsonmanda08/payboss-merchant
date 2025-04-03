@@ -26,7 +26,7 @@ const authenticatedService = async (request) => {
 // API INTERCEPTOR FOR REFRESHING TOKEN
 apiClient.interceptors.response.use(
   (response) => {
-    console.log("INTERCEPTOR....", response?.data);
+    // console.log("INTERCEPTOR....", response?.data);
 
     return response;
   },
@@ -60,7 +60,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 export default authenticatedService;

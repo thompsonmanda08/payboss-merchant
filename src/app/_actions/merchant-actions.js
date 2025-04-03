@@ -40,7 +40,8 @@ export const setupAccountConfig = cache(async () => {
       await createWorkspaceSession({
         workspaces: workspaces,
         workspaceIDs: workspaceIDs,
-        activeWorkspace: workspaces?.[0] || null,
+        activeWorkspace: null,
+        activeWorkspaceID: null,
         workspacePermissions: null,
       });
     }
@@ -84,7 +85,7 @@ export const setupAccountConfig = cache(async () => {
  */
 
 export async function getUserAccountRoles() {
-  const url = `merchant/roles`;
+  const url = `configuration/all/system/role/${"payboss"}`;
 
   try {
     const res = await authenticatedService({ url });
@@ -127,7 +128,7 @@ export async function getUserAccountRoles() {
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
 export async function getWorkspaceRoles() {
-  const url = `merchant/workspace/roles`;
+  const url = `/configuration/all/workspace/roles`;
 
   try {
     const res = await authenticatedService({ url });

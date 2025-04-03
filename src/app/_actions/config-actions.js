@@ -9,6 +9,7 @@ import {
   getUserSession,
   getWorkspaceSessionData,
 } from "@/lib/session";
+import { apiClient } from "@/lib/utils";
 
 /**
  * Retrieves the general configurations from the configuration service.
@@ -20,11 +21,10 @@ import {
  */
 
 export const getGeneralConfigs = cache(async () => {
-  const CONFIG_URL = process.env.CONFIG_BASE_URL || BASE_URL;
-  const url = `${CONFIG_URL}/configuration/all-configs`;
+  const url = `/configuration/all-configs`;
 
   try {
-    const res = await axios.get(url);
+    const res = await apiClient.get(url);
 
     return {
       success: true,

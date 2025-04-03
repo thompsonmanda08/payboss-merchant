@@ -3,11 +3,13 @@ import { usePathname, useRouter } from "next/navigation";
 
 import useWorkspaces from "./useWorkspaces";
 
-const useNavigation = () => {
+const useNavigation = (query) => {
   const pathname = usePathname();
   const router = useRouter();
-  const { workspaceID, activeWorkspace, workspaces, isLoading } =
-    useWorkspaces();
+
+  const workspaceID = query?.workspaceID || query?.activeWorkspaceID || "";
+  const activeWorkspace = query?.activeWorkspace || {};
+  const workspaces = query?.workspaces || [];
 
   const dashboardRoute = `/dashboard/${workspaceID}`;
   const settingsPathname = `${dashboardRoute}/settings`;
@@ -46,7 +48,6 @@ const useNavigation = () => {
     workspaceID,
     activeWorkspace,
     workspaces,
-    isLoading,
   };
 };
 

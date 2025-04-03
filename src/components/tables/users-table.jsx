@@ -88,12 +88,11 @@ export default function UsersTable({
   users = [],
   workspaceID,
   removeWrapper,
-  isUserAdmin,
   tableLoading,
   rowLimit = 10,
-  allowUserCreation,
-  isApprovedUser,
   onAddUser,
+  permissions = {},
+  roles = [],
 }) {
   const {
     isLoading,
@@ -129,7 +128,7 @@ export default function UsersTable({
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS),
+    new Set(INITIAL_VISIBLE_COLUMNS)
   );
 
   const [roleFilter, setRoleFilter] = React.useState("all");
@@ -147,22 +146,22 @@ export default function UsersTable({
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
+      Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
 
   // GETS USERS ARRAY AND APPLIES FILTERS AND RETURNS A FILTERED ARRAY
   const filteredItems = React.useMemo(() => {
-    let filteredrows = [...users];
+    let filteredRows = [...users];
 
     if (hasSearchFilter) {
-      filteredrows = filteredrows.filter(
+      filteredRows = filteredRows.filter(
         (row) =>
           row?.name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.first_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.last_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.email?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-          row?.username?.toLowerCase().includes(filterValue?.toLowerCase()),
+          row?.username?.toLowerCase().includes(filterValue?.toLowerCase())
       );
     }
 
@@ -172,10 +171,10 @@ export default function UsersTable({
     ) {
       let filters = Array.from(roleFilter);
 
-      filteredrows = filteredrows.filter((row) => filters.includes(row?.role));
+      filteredRows = filteredRows.filter((row) => filters.includes(row?.role));
     }
 
-    return filteredrows;
+    return filteredRows;
   }, [users, filterValue, roleFilter]);
 
   const pages = Math.ceil(users?.length / rowsPerPage);
@@ -219,7 +218,7 @@ export default function UsersTable({
     setPage(1);
   }, []);
 
-  // AHNDLE EXPLICIT SEARCH
+  // HANDLE EXPLICIT SEARCH
   const onSearchChange = React.useCallback((value) => {
     if (value) {
       setFilterValue(value);
@@ -232,7 +231,7 @@ export default function UsersTable({
   // RENDER ACTION BUTTONS
   const renderActionButtons = React.useCallback(
     (user) => {
-      if (isUserAdmin) {
+      if (permissions?.edit || permissions?.create) {
         return (
           <div className="relative flex items-center justify-center gap-4">
             {/* EDIT USER ROLE */}
@@ -250,7 +249,7 @@ export default function UsersTable({
               </Tooltip>
             )}
 
-            {/* RESET USER PASSOWRD BY ACCOUNT ADMIN */}
+            {/* RESET USER PASSWORD BY ACCOUNT ADMIN */}
             {isUsersRoute && (
               <>
                 {user?.isLockedOut && (
@@ -309,7 +308,7 @@ export default function UsersTable({
         </Tooltip>
       );
     },
-    [isUserAdmin],
+    [permissions?.edit, permissions?.create, isUsersRoute]
   );
 
   // TABLE CELL RENDERER
@@ -372,7 +371,7 @@ export default function UsersTable({
           return cellValue;
       }
     },
-    [isUsersRoute],
+    [isUsersRoute]
   );
 
   async function resetUserPassword() {
@@ -472,24 +471,28 @@ export default function UsersTable({
               onSelectionChange={setVisibleColumns}
             />
 
-            {allowUserCreation && isApprovedUser && isUsersRoute && (
-              <Button
-                color="primary"
-                endContent={<PlusIcon className="h-5 w-5" />}
-                onPress={openCreateUserModal}
-              >
-                Create New User
-              </Button>
-            )}
-            {isUserAdmin && !isUsersRoute && (
-              <Button
-                color="primary"
-                endContent={<PlusIcon className="h-5 w-5" />}
-                onPress={onAddUser}
-              >
-                Add Workspace Members
-              </Button>
-            )}
+            {permissions?.create &&
+              permissions?.isApprovedUser &&
+              isUsersRoute && (
+                <Button
+                  color="primary"
+                  endContent={<PlusIcon className="h-5 w-5" />}
+                  onPress={openCreateUserModal}
+                >
+                  Create New User
+                </Button>
+              )}
+            {(permissions?.create || permissions?.edit) &&
+              permissions?.isApprovedUser &&
+              !isUsersRoute && (
+                <Button
+                  color="primary"
+                  endContent={<PlusIcon className="h-5 w-5" />}
+                  onPress={onAddUser}
+                >
+                  Add Workspace Members
+                </Button>
+              )}
           </div>
         </div>
         <div className="flex items-center justify-between">
@@ -710,6 +713,7 @@ export default function UsersTable({
         isOpen={isEditingRole || createUserModal}
         workspaceID={workspaceID}
         onClose={closeCreateUserModal}
+        roles={roles}
       />
     </>
   );
@@ -731,7 +735,7 @@ export function UserAvatarComponent({
     <div
       className={cn(
         "flex max-w-max cursor-pointer items-center justify-start gap-4 transition-all duration-200 ease-in-out",
-        wrapper,
+        wrapper
       )}
       onClick={(e) => {
         e.stopPropagation();
@@ -756,7 +760,7 @@ export function UserAvatarComponent({
         <p
           className={cn(
             "text-base font-semibold leading-6 text-foreground/80",
-            {},
+            {}
           )}
         >{`${firstName} ${lastName}`}</p>
         <p className={cn("text-[11px] font-medium text-foreground/50", {})}>

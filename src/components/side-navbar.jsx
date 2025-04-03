@@ -35,11 +35,16 @@ import MobileNavBar from "./mobile-menu";
 import { Button } from "./ui/button";
 
 function SideNavBar({ workspaceSession }) {
-  const { dashboardRoute, pathname, activeWorkspace, workspaces, isLoading } =
-    useNavigation();
-  const { openMobileMenu, toggleMobileMenu } = useNavigationStore();
   const [expandedSection, setExpandedSection] = useState(null);
-  const { workspaceType } = workspaceSession;
+  const { openMobileMenu, toggleMobileMenu } = useNavigationStore();
+
+  const { dashboardRoute, pathname } = useNavigation(workspaceSession);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const workspaces = workspaceSession?.workspaces;
+  const activeWorkspace = workspaceSession?.activeWorkspace;
+  const workspaceType = workspaceSession?.workspaceType;
 
   // *************** COLLECTIONS AND INCOME *************** //
   const COLLECTION_SERVICES = [
@@ -330,7 +335,12 @@ function SideNavBar({ workspaceSession }) {
     });
   }, [pathname]);
 
-  return isLoading || !workspaceType ? (
+  // setLoading to true after 1 second
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 1000);
+  }, []);
+
+  return Boolean(isLoading || !workspaceType) ? (
     <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
       <Skeleton className="mb-4 h-16 w-full rounded-xl" />
       <div className="h-full space-y-4">
@@ -358,7 +368,7 @@ function SideNavBar({ workspaceSession }) {
       >
         <nav
           className={cn(
-            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`,
+            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`
           )}
         >
           <Logo href={dashboardRoute} />
@@ -371,20 +381,28 @@ function SideNavBar({ workspaceSession }) {
                 <BriefcaseIcon />
               </SoftBoxIcon>
               <div className="flex w-full items-center justify-between text-primary">
-                <div className="flex flex-col items-start justify-start gap-0">
-                  <div className="text-base font-semibold uppercase">
-                    {!activeWorkspace || !activeWorkspace?.workspace ? (
-                      <div className="flex gap-2 text-sm font-bold capitalize">
-                        <Spinner size={18} /> Loading workspace...
+                {(() => {
+                  const isFetching =
+                    !activeWorkspace || !activeWorkspace?.workspace;
+                  return (
+                    <div className="flex flex-col items-start justify-start gap-0">
+                      <div className="text-base font-semibold uppercase">
+                        {isFetching ? (
+                          <div className="flex gap-2 text-sm font-bold capitalize">
+                            <Spinner size={18} /> Loading workspace...
+                          </div>
+                        ) : (
+                          activeWorkspace?.workspace
+                        )}
                       </div>
-                    ) : (
-                      activeWorkspace?.workspace
-                    )}
-                  </div>
-                  <span className="-mt-1 text-xs font-medium capitalize tracking-wide text-foreground-600">
-                    {`${activeWorkspace?.workspaceType}'s Workspace`}
-                  </span>
-                </div>
+                      {!isFetching && (
+                        <span className="-mt-1 text-xs font-medium capitalize tracking-wide text-foreground-600">
+                          {`${activeWorkspace?.workspaceType}'s Workspace`}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })()}
                 <ChevronRightIcon className={cn("h-4 w-4 ease-in-out")} />
               </div>
             </DropdownButton>

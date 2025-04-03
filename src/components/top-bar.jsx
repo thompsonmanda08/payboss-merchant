@@ -32,19 +32,21 @@ import { Skeleton } from "./ui/skeleton";
 import Avatar from "./ui/avatar";
 import NavIconButton from "./ui/nav-icon-button";
 
-export default function TopNavBar({ user }) {
+export default function TopNavBar({ user, workspaceSession }) {
   const queryClient = useQueryClient();
-  const { isProfile, currentPath, dashboardRoute, workspaceID } =
-    useNavigation();
-  const { isLoading } = useWorkspaceInit(workspaceID);
-  const { workspaceWalletBalance } = useWorkspaces();
+  const { isLoading } = useWorkspaceInit(workspaceSession?.activeWorkspaceID);
+
+  const { workspaceWalletBalance } = useWorkspaces(workspaceSession);
+
+  const { isProfile, currentPath, dashboardRoute, router } =
+    useNavigation(workspaceSession);
 
   const dataNotReady = !workspaceWalletBalance || isLoading;
 
-  // IF WORKSPACE CHANGES ==> INVALIDATE EVERYTHING IN THE CACHE
-  useEffect(() => {
-    queryClient.invalidateQueries();
-  }, [workspaceID]);
+  // TODO: REMOVE==> IF WORKSPACE CHANGES ==> INVALIDATE EVERYTHING IN THE CACHE
+  // useEffect(() => {
+  //   queryClient.invalidateQueries();
+  // }, [activeWorkspaceID]);
 
   if (dataNotReady) {
     return <NavbarLoader isProfile />;
@@ -53,11 +55,11 @@ export default function TopNavBar({ user }) {
   return (
     <nav
       className={cn(
-        `rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center rounded-xl bg-background/80 py-3 pr-5 shadow-sm backdrop-blur-md transition-all md:pl-2 lg:sticky lg:top-0 lg:justify-start lg:shadow-none`,
+        `rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center rounded-xl bg-background/80 py-3 pr-5 shadow-sm backdrop-blur-md transition-all md:pl-2 lg:sticky lg:-top-2.5 lg:justify-start lg:shadow-none`,
         {
           "bg-transparent lg:static px-10 pl-20 pr-10 text-white backdrop-blur-none":
             isProfile,
-        },
+        }
         // { 'bg-red-600 ': isFloating },
       )}
     >
@@ -66,14 +68,14 @@ export default function TopNavBar({ user }) {
         <div
           className={cn(
             "relative left-16 hidden transition-all duration-300 ease-in-out lg:left-0 lg:block",
-            { "pl-5": isProfile },
+            { "pl-5": isProfile }
           )}
         >
           <BreadCrumbLinks isProfile={isProfile} />
           <h2
             className={cn(
               "pl-2 text-lg font-bold uppercase leading-8 text-foreground/80",
-              { "text-white": isProfile },
+              { "text-white": isProfile }
             )}
           >
             {currentPath}
@@ -86,7 +88,7 @@ export default function TopNavBar({ user }) {
             "relative z-50 ml-auto flex  items-center justify-center rounded-full",
             {
               "bg-card/5 pl-4 pr-1 py-0.5": isProfile,
-            },
+            }
           )}
         >
           <div
@@ -94,20 +96,27 @@ export default function TopNavBar({ user }) {
               "text-white": isProfile,
             })}
           >
-            <Link
+            <Button
+              variant="link"
               className={cn(
-                "mr-4 flex group cursor-pointer items-start gap-3 text-foreground-600",
+                "flex group cursor-pointer items-start gap-2 text-foreground-600",
                 {
                   "text-white": isProfile,
-                },
+                }
               )}
-              href={dashboardRoute + "/workspace-settings?wallet=true"}
+              onPress={() => {
+                router.push(`${dashboardRoute}/workspace-settings?wallet=true`);
+              }}
             >
-              <NavIconButton className={"bg-primary"}>
+              <span
+                className={cn(
+                  "rounded-lg w-9 h-9 grid place-items-center aspect-square bg-primary"
+                )}
+              >
                 <WalletIcon className="h-5 w-5 text-white" />
-              </NavIconButton>
+              </span>
 
-              <div className="flex flex-col items-start">
+              <div className="flex flex-col items-start gap-1 ">
                 <span
                   className={cn("text-sm leading-4 tracking-wide", {
                     "text-white group-hover:text-white": isProfile,
@@ -123,7 +132,7 @@ export default function TopNavBar({ user }) {
                   {formatCurrency(workspaceWalletBalance || "0.00")}
                 </span>
               </div>
-            </Link>
+            </Button>
             {/* TODO: ENABLE NOTIFICATIONS IN THE FUTURE */}
             {/* <div className="relative flex cursor-pointer items-center gap-2 text-sm after:absolute after:-right-1 after:-top-1 after:aspect-square after:h-3 after:w-3 after:rounded-full after:bg-secondary after:content-['']">
               <NavIconButton className={"bg-primary"}>
@@ -145,7 +154,7 @@ export function AvatarDropdown({ user, isProfile }) {
   const { workspaceUserRole: role } = useDashboard();
   const { theme, setTheme } = useTheme();
   const [isSelected, setIsSelected] = React.useState(
-    theme == "dark" ? true : false,
+    theme == "dark" ? true : false
   );
 
   return (
@@ -157,7 +166,7 @@ export function AvatarDropdown({ user, isProfile }) {
           "p-0 border-sm border-divider bg-card border-[1px] border-border",
           {
             "bg-card/80 backdrop-blur-md": isProfile,
-          },
+          }
         ),
       }}
       radius="sm"
@@ -294,7 +303,7 @@ export function NavbarLoader({ isProfile }) {
             "mb-2 aspect-square h-[8px] w-full max-w-xl rounded-lg",
             {
               "bg-foreground-200 p-4 backdrop-blur-md": isProfile,
-            },
+            }
           )}
         />
         <Skeleton
