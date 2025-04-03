@@ -25,7 +25,7 @@ export function ErrorCard({
     <Card
       className={cn(
         "mx-auto aspect-square w-full max-w-sm flex-1 p-6 font-inter",
-        className
+        className,
       )}
     >
       <CardHeader>

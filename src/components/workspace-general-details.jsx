@@ -50,7 +50,7 @@ function WorkspaceDetails({
   const { data: callbackResponse } = useWorkspaceCallbackURL(workspaceID);
 
   const [isSandbox, setIsSandbox] = useState(
-    activeWorkspace?.workspace?.toLowerCase() == "sandbox"
+    activeWorkspace?.workspace?.toLowerCase() == "sandbox",
   );
 
   const [newWorkspace, setNewWorkspace] = useState({
@@ -350,7 +350,7 @@ function WorkspaceDetails({
                     {
                       "bg-primary-300 bg-opacity-50 rounded-md ":
                         callbackURL.method == "POST",
-                    }
+                    },
                   )}
                   classNames={{
                     value: cn(
@@ -358,7 +358,7 @@ function WorkspaceDetails({
                       {
                         "text-primary-600 group-data-[has-value=true]:text-primary-600":
                           callbackURL.method == "POST",
-                      }
+                      },
                     ),
                   }}
                   defaultValue={"GET"}
@@ -433,8 +433,8 @@ function WorkspaceDetails({
                               mno_status_description: "string",
                             },
                             undefined,
-                            2
-                          )
+                            2,
+                          ),
                         ),
                       }}
                     />

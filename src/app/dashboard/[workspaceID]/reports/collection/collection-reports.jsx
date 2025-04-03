@@ -86,7 +86,7 @@ export default function CollectionsReports({ workspaceID }) {
     const response = await getCollectionsReport(
       workspaceID,
       serviceType,
-      dateRange
+      dateRange,
     );
 
     return response || [];
@@ -118,7 +118,7 @@ export default function CollectionsReports({ workspaceID }) {
             .includes(debouncedSearchQuery?.toLowerCase()) ||
           row?.service_provider
             ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase())
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -141,7 +141,7 @@ export default function CollectionsReports({ workspaceID }) {
             .includes(debouncedTerminalQuery?.toLowerCase()) ||
           terminal?.terminalID
             ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase())
+            .includes(debouncedTerminalQuery?.toLowerCase()),
       );
     }
 

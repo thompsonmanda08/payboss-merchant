@@ -2,10 +2,10 @@
 import "server-only";
 
 import { SignJWT, jwtVerify } from "jose";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 import { AUTH_SESSION, USER_SESSION, WORKSPACE_SESSION } from "./constants";
-import { revalidatePath } from "next/cache";
 
 const secretKey =
   process.env.NEXT_PUBLIC_AUTH_SECRET || process.env.AUTH_SECRET;
@@ -27,6 +27,7 @@ export async function decrypt(session) {
 
     return payload;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }
@@ -139,7 +140,7 @@ export async function createWorkspaceSession({
   }
 }
 
-// UPDATE THE WOPRKSPACE SESSION
+// UPDATE THE WORKSPACE SESSION
 export async function updateWorkspaceSession(fields) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24); // AFTER 1 DAY
   const isLoggedIn = await verifySession();

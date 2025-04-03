@@ -54,12 +54,14 @@ export default function StatementReport({ workspaceID }) {
       filteredRows = filteredRows.filter(
         (row) =>
           row?.ID?.toLowerCase().includes(
-            debouncedSearchQuery?.toLowerCase()
+            debouncedSearchQuery?.toLowerCase(),
           ) ||
           row?.amount
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.type?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
+          row?.type
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
