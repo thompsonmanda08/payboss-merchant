@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Card } from "@heroui/react";
 
 import SignUpForm from "@/components/forms/signup-form";
-import Spinner from "@/components/ui/spinner";
+import Spinner from "@/components/ui/custom-spinner";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import useAuthStore from "@/context/auth-store";
 import { Button } from "@/components/ui/button";

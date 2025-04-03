@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
-import Spinner from "./spinner";
+import Spinner from "./custom-spinner";
 
 const modalVariants = {
   hidden: { opacity: 0, y: "-20%", scale: 0.5 },
@@ -38,7 +38,7 @@ function OverlayLoader({ show, className, classNames }) {
           animate="visible"
           className={cn(
             "absolute inset-0 z-[9999999] flex h-screen w-full items-center justify-center bg-black/50 backdrop-blur-sm",
-            wrapper,
+            wrapper
           )}
           exit="exit"
           initial="hidden"
@@ -50,7 +50,7 @@ function OverlayLoader({ show, className, classNames }) {
             className={cn(
               "grid h-full w-full place-content-center place-items-center",
               className,
-              conatiner,
+              conatiner
             )}
             exit="exit"
             initial="hidden"

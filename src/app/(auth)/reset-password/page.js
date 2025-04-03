@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
-import Spinner from "@/components/ui/spinner";
+import Spinner from "@/components/ui/custom-spinner";
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 
 export default function PasswordReset() {

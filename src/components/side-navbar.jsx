@@ -22,7 +22,7 @@ import {
 
 import useNavigationStore from "@/context/navigation-store.js";
 import DropdownButton from "@/components/ui/dropdown-button";
-import Spinner from "@/components/ui/spinner";
+import Spinner from "@/components/ui/custom-spinner";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { cn } from "@/lib/utils";
 import useNavigation from "@/hooks/useNavigation";
