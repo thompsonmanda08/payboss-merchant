@@ -1,10 +1,8 @@
 "use server";
 
+import { apiClient } from "./utils";
 import { getAuthSession } from "@/app/_actions/config-actions";
 import { getRefreshToken } from "@/app/_actions/auth-actions";
-
-import { apiClient } from "./utils";
-import { deleteSession } from "./session";
 
 const authenticatedService = async (request) => {
   const session = await getAuthSession();
