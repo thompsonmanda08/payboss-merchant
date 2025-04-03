@@ -193,7 +193,7 @@ function StatusCard({
                 // color={IconColor}
                 className={cn(
                   "my-auto ml-4 aspect-square h-6 w-6",
-                  `text-${IconColor}`
+                  `text-${IconColor}`,
                 )}
               />
             </Tooltip>

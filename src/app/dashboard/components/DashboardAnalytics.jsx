@@ -108,7 +108,7 @@ function DashboardAnalytics({
         label: "Transactions",
         data: MONTHS.map((month) => {
           const transaction = monthlyTransactionRecords?.find((item) =>
-            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase())
+            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase()),
           );
 
           return transaction ? transaction.count : 0;
@@ -122,11 +122,11 @@ function DashboardAnalytics({
   const previousMonth = MONTHS[(thisMonth - 1 + MONTHS.length) % MONTHS.length]; // Handle January to December wrap-around
 
   const previousMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month)?.toLowerCase().startsWith(previousMonth?.toLowerCase())
+    String(item.month)?.toLowerCase().startsWith(previousMonth?.toLowerCase()),
   );
 
   const currentMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month)?.toLowerCase().startsWith(currentMonth?.toLowerCase())
+    String(item.month)?.toLowerCase().startsWith(currentMonth?.toLowerCase()),
   );
 
   // Extract counts or default to 0 if no transactions

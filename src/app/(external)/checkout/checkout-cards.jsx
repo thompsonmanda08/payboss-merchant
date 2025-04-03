@@ -108,7 +108,7 @@ function PaymentMethods({
     const paymentWindow = window.open(
       paymentUrl,
       "PayBoss Checkout",
-      `width=${width},height=${height},left=${left},top=${top}`
+      `width=${width},height=${height},left=${left},top=${top}`,
     );
 
     if (!paymentWindow) {
@@ -143,7 +143,7 @@ function PaymentMethods({
 
       if (event.data.status === "success") {
         alert(
-          `Payment successful! Transaction ID: ${event.data.transactionId}`
+          `Payment successful! Transaction ID: ${event.data.transactionId}`,
         );
         setIsCompleted(true);
       } else {
@@ -215,7 +215,7 @@ function PaymentMethods({
     <>
       <Card
         className={cn(
-          "border-1 px-1 py-2 pb-6 shadow-xl hover:shadow-2xl hover:shadow-primary/20 shadow-primary/10 transition-all duration-300 ease-in-out max-w-lg w-full mx-auto"
+          "border-1 px-1 py-2 pb-6 shadow-xl hover:shadow-2xl hover:shadow-primary/20 shadow-primary/10 transition-all duration-300 ease-in-out max-w-lg w-full mx-auto",
         )}
       >
         <HeroCardHeader className="flex-col items-start px-4 pb-0 pt-2">

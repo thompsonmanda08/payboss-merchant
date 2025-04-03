@@ -163,7 +163,7 @@ export default function TillPaymentCollections({ workspaceID }) {
                     <Button
                       isDisabled
                       className={cn(
-                        "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100"
+                        "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100",
                       )}
                       startContent={
                         <SoftBoxIcon className={"h-12 w-12"}>
@@ -183,7 +183,7 @@ export default function TillPaymentCollections({ workspaceID }) {
                         "m-0 flex flex-row items-center justify-center rounded-md text-[clamp(1.25rem,1vw,2rem)]",
                         {
                           "-mb-3 mt-1": !TILL_NUMBER,
-                        }
+                        },
                       )}
                       color="primary"
                     >

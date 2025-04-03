@@ -68,7 +68,7 @@ export default function BillPaymentReports({ workspaceID }) {
     const response = await getCollectionsReport(
       workspaceID,
       serviceType,
-      dateRange
+      dateRange,
     );
 
     return response || [];
@@ -90,7 +90,7 @@ export default function BillPaymentReports({ workspaceID }) {
           row?.transactionID
             ?.toLowerCase()
             .includes(searchQuery?.toLowerCase()) ||
-          row?.amount?.toLowerCase().includes(searchQuery?.toLowerCase())
+          row?.amount?.toLowerCase().includes(searchQuery?.toLowerCase()),
       );
     }
 

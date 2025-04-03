@@ -30,7 +30,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
   } = usePaymentsStore();
 
   const [queryID, setQueryID] = useState(
-    batchID || selectedBatch?.ID || batchState?.ID || transactionDetails?.ID
+    batchID || selectedBatch?.ID || batchState?.ID || transactionDetails?.ID,
   );
 
   const { data: batchResponse } = useBatchDetails(queryID);
@@ -265,7 +265,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
             {`${
               selectedBatch?.batch_name || batchDetails?.batch_name
             } - (${formatCurrency(
-              selectedBatch?.total_amount || batchDetails?.total_amount
+              selectedBatch?.total_amount || batchDetails?.total_amount,
             )})`}
           </code>{" "}
           {isApproval ? "to run against your PayBoss Wallet balance." : ""}

@@ -23,7 +23,7 @@ function SimpleStats({
         <h2
           className={cn(
             "text-nowrap text-xs font-semibold text-foreground/50 md:text-sm capitalize",
-            heading
+            heading,
           )}
         >
           {title}
@@ -31,7 +31,7 @@ function SimpleStats({
         <div
           className={cn(
             "text-nowrap text-lg font-bold text-foreground/80 md:text-xl lg:text-2xl",
-            figureClasses
+            figureClasses,
           )}
         >
           {figure}
@@ -43,7 +43,7 @@ function SimpleStats({
                 {
                   "text-green-500": isGood,
                   "text-rose-600": isBad,
-                }
+                },
               )}
             >
               {smallFigure}

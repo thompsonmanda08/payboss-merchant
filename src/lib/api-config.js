@@ -1,8 +1,9 @@
 "use server";
 
-import { apiClient } from "./utils";
 import { getAuthSession } from "@/app/_actions/config-actions";
 import { getRefreshToken } from "@/app/_actions/auth-actions";
+
+import { apiClient } from "./utils";
 
 const authenticatedService = async (request) => {
   const session = await getAuthSession();
@@ -59,7 +60,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default authenticatedService;

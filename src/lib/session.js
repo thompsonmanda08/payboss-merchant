@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import "server-only";
 
 import { SignJWT, jwtVerify } from "jose";
@@ -139,7 +140,7 @@ export async function createWorkspaceSession({
   }
 }
 
-// UPDATE THE WOPRKSPACE SESSION
+// UPDATE THE WORKSPACE SESSION
 export async function updateWorkspaceSession(fields) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24); // AFTER 1 DAY
   const isLoggedIn = await verifySession();

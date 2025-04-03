@@ -358,7 +358,7 @@ function SideNavBar({ workspaceSession }) {
       >
         <nav
           className={cn(
-            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`
+            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`,
           )}
         >
           <Logo href={dashboardRoute} />

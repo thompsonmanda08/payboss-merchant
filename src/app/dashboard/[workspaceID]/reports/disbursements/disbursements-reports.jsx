@@ -74,7 +74,9 @@ export default function DisbursementReports({ workspaceID }) {
           row?.transactionID
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.name?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
+          row?.name
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -90,7 +92,9 @@ export default function DisbursementReports({ workspaceID }) {
           row?.transactionID
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.name?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
+          row?.name
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -268,7 +272,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Processed Direct Transactions"}
                         value={formatCurrency(
-                          report?.direct?.proccessed?.value || 0
+                          report?.direct?.proccessed?.value || 0,
                         )}
                       />
                       <TotalValueStat
@@ -279,7 +283,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Processed Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucher?.proccessed?.value || 0
+                          report?.voucher?.proccessed?.value || 0,
                         )}
                       />
                     </div>
@@ -295,7 +299,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Successful Direct Transactions"}
                         value={formatCurrency(
-                          report?.directTransactions?.successful?.value || 0
+                          report?.directTransactions?.successful?.value || 0,
                         )}
                       />
                       <TotalValueStat
@@ -306,7 +310,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Failed Direct Transactions"}
                         value={formatCurrency(
-                          report?.directTransactions?.failed?.value || 0
+                          report?.directTransactions?.failed?.value || 0,
                         )}
                       />
                     </div>
@@ -322,7 +326,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Successful Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucherTransactions?.successful?.value || 0
+                          report?.voucherTransactions?.successful?.value || 0,
                         )}
                       />
                       <TotalValueStat
@@ -333,7 +337,7 @@ export default function DisbursementReports({ workspaceID }) {
                         }}
                         label={"Failed Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucherTransactions?.failed?.value || 0
+                          report?.voucherTransactions?.failed?.value || 0,
                         )}
                       />
                     </div>

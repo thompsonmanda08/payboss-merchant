@@ -662,7 +662,7 @@ const APIIntegration = ({ workspaceID }) => {
                           <ComputerDesktopIcon
                             className={cn(
                               iconClasses,
-                              "group-hover:text-white font-bold group-hover:border-white"
+                              "group-hover:text-white font-bold group-hover:border-white",
                             )}
                           />
                         }
@@ -686,7 +686,7 @@ const APIIntegration = ({ workspaceID }) => {
                           <TrashIcon
                             className={cn(
                               iconClasses,
-                              "text-danger group-hover:text-white"
+                              "text-danger group-hover:text-white",
                             )}
                           />
                         }
