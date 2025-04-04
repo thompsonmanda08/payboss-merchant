@@ -27,8 +27,20 @@ import useWorkspaceStore from "@/context/workspaces-store";
 import { changeUserRoleInWorkspace } from "@/app/_actions/workspace-actions";
 import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
 
+const USER_INIT = {
+  first_name: "",
+  last_name: "",
+  username: "",
+  email: "",
+  phone_number: "",
+  roleID: "",
+  role: "",
+  changePassword: true,
+  password: "P4y-B055_*848#=@B/G/S&zm",
+};
+
 function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
-  const { isEditingRole, selectedUser, setSelectedUser, setIsEditingRole } =
+  const { isEditingUser, selectedUser, setSelectedUser, setIsEditingUser } =
     useWorkspaceStore();
   const queryClient = useQueryClient();
   const pathname = usePathname();
@@ -37,16 +49,8 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
   const isUsersRoute = pathname.split("/manage-account/users");
 
   const [loading, setLoading] = useState(false);
-  const [newUser, setNewUser] = useState({
-    role: "",
-    changePassword: true,
-    password: "PB0484G@#$%Szm",
-  });
+  const [newUser, setNewUser] = useState(USER_INIT);
   const [error, setError] = useState({ status: false, message: "" });
-  const { workspaceRoles } = useAllUsersAndRoles();
-
-  // ON CREATE => NO IDS are needed for now... only the role name
-  const USER_ROLES = getUserRoles();
 
   const phoneNoError =
     !isValidZambianMobileNumber(newUser?.phone_number) &&
@@ -59,12 +63,8 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
   function handleClose() {
     setError({});
     setSelectedUser(null);
-    setIsEditingRole(false);
-    setNewUser({
-      role: "guest",
-      changePassword: true,
-      password: "PB0484G@#$%Szm",
-    });
+    setIsEditingUser(false);
+    setNewUser(USER_INIT);
     onClose();
   }
 
@@ -189,16 +189,6 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
     setLoading(false);
   }
 
-  function getUserRoles() {
-    // MANAGE ACCOUNT AND NEW USER TO SYSTEM
-
-    if (isEditingRole) {
-      return workspaceRoles;
-    }
-
-    return ["admin", "viewer"];
-  }
-
   function isValidData() {
     let valid = true;
 
@@ -264,13 +254,13 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
   }
 
   function onConfirmAction() {
-    if (isEditingRole && isUsersRoute) {
+    if (isEditingUser && isUsersRoute) {
       handleUpdateSystemUser();
 
       return;
     }
 
-    if (isEditingRole && !isUsersRoute) {
+    if (isEditingUser && !isUsersRoute) {
       handleUpdateWorkspaceUserRole();
 
       return;
@@ -287,16 +277,14 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
 
   useEffect(() => {
     // If a user has already provided, prefill the fields
-    if (isEditingRole && Object.keys(selectedUser)?.length > 0) {
+    if (isEditingUser && Object.keys(selectedUser)?.length > 0) {
       setNewUser(selectedUser);
     }
   }, [selectedUser]);
 
-  console.log("ROLESSSSSSSSSSSSSSSSSSS", roles);
-
   return (
     <Modal
-      isOpen={isOpen || isEditingRole}
+      isOpen={isOpen || isEditingUser}
       placement="center"
       onClose={handleClose}
     >
@@ -304,9 +292,9 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {isEditingRole && !isUsersRoute
+              {isEditingUser && !isUsersRoute
                 ? "Update Workspace User"
-                : isEditingRole && isUsersRoute
+                : isEditingUser && isUsersRoute
                   ? "Update System User"
                   : "Create New User"}
             </ModalHeader>
@@ -315,13 +303,13 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
                 required
                 className="mt-px"
                 label={
-                  isEditingRole && !isUsersRoute
+                  isEditingUser && !isUsersRoute
                     ? "Workspace Role"
                     : "System Role"
                 }
                 listItemName={"role"}
-                options={roles}
-                placeholder={isEditingRole ? newUser?.role : "Choose a role"}
+                options={roles?.filter((role) => role?.role !== "owner")}
+                placeholder={isEditingUser ? newUser?.role : "Choose a role"}
                 value={newUser?.role || "Choose a role"}
                 onChange={(e) => {
                   updateDetails({
@@ -336,9 +324,9 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
                 <Input
                   autoFocus
                   errorText="Invalid First Name"
-                  isDisabled={isEditingRole}
+                  isDisabled={isEditingUser}
                   label="First Name"
-                  required={!isEditingRole}
+                  required={!isEditingUser}
                   value={newUser?.first_name}
                   onChange={(e) => {
                     updateDetails({ first_name: e.target.value });
@@ -347,9 +335,9 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
                 />
                 <Input
                   errorText="Invalid Last Name"
-                  isDisabled={isEditingRole}
+                  isDisabled={isEditingUser}
                   label="Last Name"
-                  required={!isEditingRole}
+                  required={!isEditingUser}
                   value={newUser?.last_name}
                   onChange={(e) => {
                     updateDetails({ last_name: e.target.value });
@@ -359,9 +347,9 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
               </div>
               <Input
                 errorText="Username is required"
-                isDisabled={isEditingRole}
+                isDisabled={isEditingUser}
                 label="Username"
-                required={!isEditingRole}
+                required={!isEditingUser}
                 value={newUser?.username}
                 onChange={(e) => {
                   updateDetails({ username: e.target.value });
@@ -370,11 +358,11 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
               />
               <Input
                 errorText="Invalid Mobile Number"
-                isDisabled={isEditingRole}
+                isDisabled={isEditingUser}
                 label="Mobile Number"
                 maxLength={12}
                 pattern="[0-9]{12}"
-                required={!isEditingRole}
+                required={!isEditingUser}
                 type="number"
                 value={newUser?.phone_number}
                 onChange={(e) => {
@@ -384,9 +372,9 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
               />
               <Input
                 errorText="Invalid Email Address"
-                isDisabled={isEditingRole}
+                isDisabled={isEditingUser}
                 label="Email Address"
-                required={!isEditingRole}
+                required={!isEditingUser}
                 type="email"
                 value={newUser?.email}
                 onChange={(e) => {
@@ -395,7 +383,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
                 onError={error?.onEmail}
               />
 
-              {isEditingRole ? (
+              {isEditingUser ? (
                 <p className="mx-auto max-w-[88%] text-center text-xs font-medium italic text-foreground/50">
                   The user will be notified of the changes made to their account
                   on PayBoss. If an action is required, the user will also
@@ -425,7 +413,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
                   isLoading={loading}
                   onPress={onConfirmAction}
                 >
-                  {isEditingRole ? "Save" : "Create User"}
+                  {isEditingUser ? "Save" : "Create User"}
                 </Button>
               }
             </ModalFooter>

@@ -17,7 +17,7 @@ const INITIAL_STATE = {
     message: "",
   },
   isLoading: false,
-  isEditingRole: false,
+  isEditingUser: false,
   selectedUser: null,
 };
 
@@ -28,7 +28,7 @@ const useWorkspaceStore = create((set, get) => ({
   setAddedUsers: (users) => set({ addedUsers: users }),
   setExistingUsers: (users) => set({ existingUsers: users }),
   setIsLoading: (status) => set({ isLoading: status }),
-  setIsEditingRole: (status) => set({ isEditingRole: status }),
+  setIsEditingUser: (status) => set({ isEditingUser: status }),
   setError: (error) => set({ error }),
   setSelectedUser: (user) => set({ selectedUser: user }),
 
@@ -173,7 +173,7 @@ const useWorkspaceStore = create((set, get) => ({
 
     const response = await adminResetUserPassword(
       selectedUser?.ID,
-      passwordInfo,
+      passwordInfo
     );
 
     if (response?.success) {
@@ -201,7 +201,7 @@ const useWorkspaceStore = create((set, get) => ({
 
     const response = await deleteUserFromWorkspace(
       selectedUser?.ID,
-      workspaceID,
+      workspaceID
     );
 
     if (response?.success) {

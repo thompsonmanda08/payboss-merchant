@@ -100,7 +100,7 @@ export async function decrypt(session) {
 
 export async function createAuthSession(
   accessToken,
-  expiresIn = 3600,
+  expiresIn = 1800,
   refreshToken = ""
 ) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // AFTER 1 HOUR
@@ -117,7 +117,7 @@ export async function createAuthSession(
     (await cookies()).set(AUTH_SESSION, session, {
       httpOnly: true,
       secure: false,
-      maxAge: expiresIn,
+      expires: expiresAt,
       sameSite: "lax",
       path: "/",
     });
@@ -158,7 +158,7 @@ export async function createUserSession({
   userPermissions,
   kyc,
 }) {
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24); // AFTER 1 DAY
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
   const session = await encrypt({
     user,
     merchantID,
@@ -185,7 +185,7 @@ export async function createWorkspaceSession({
   activeWorkspace,
   workspacePermissions,
 }) {
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24); // AFTER 1 DAY
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
   const session = await encrypt({
     workspaces,
     workspaceIDs,
@@ -208,7 +208,7 @@ export async function createWorkspaceSession({
 
 // UPDATE THE WORKSPACE SESSION
 export async function updateWorkspaceSession(fields) {
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24); // AFTER 1 DAY
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
   const isLoggedIn = await verifySession();
   const cookie = (await cookies()).get(WORKSPACE_SESSION)?.value;
   const oldSession = await decrypt(cookie);

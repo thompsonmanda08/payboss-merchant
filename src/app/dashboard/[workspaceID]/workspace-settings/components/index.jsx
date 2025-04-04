@@ -30,6 +30,7 @@ function WorkspaceSettings({
   allUsers,
   workspaceMembers,
   workspaceRoles,
+  systemRoles,
   permissions,
 }) {
   const { existingUsers, setExistingUsers } = useWorkspaceStore();
@@ -113,6 +114,7 @@ function WorkspaceSettings({
       workspaceName={selectedWorkspace?.workspace}
       workspaceID={workspaceID}
       workspaceRoles={workspaceRoles}
+      systemRoles={systemRoles}
       permissions={permissions}
     />,
     // Provides the disbursement tabs

@@ -96,9 +96,9 @@ export default function UsersTable({
 }) {
   const {
     isLoading,
-    isEditingRole,
+    isEditingUser,
     setIsLoading,
-    setIsEditingRole,
+    setIsEditingUser,
     setSelectedUser,
     selectedUser,
     handleDeleteFromWorkspace,
@@ -111,13 +111,10 @@ export default function UsersTable({
   const queryClient = useQueryClient();
   const [page, setPage] = React.useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: createUserModal,
-    onOpen: openCreateUserModal,
-    onClose: closeCreateUserModal,
-  } = useDisclosure();
-  const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false);
+  const [isCreateUser, setIsCreateUser] = useState(false);
   const [openUnlockUserPrompt, setOpenUnlockUserPrompt] = useState(false);
+  const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false);
+
   const isUsersRoute = pathname == "/manage-account/users";
 
   const ROLE_FILTERS = isUsersRoute ? ACCOUNT_ROLES : WORKSPACE_ROLES;
@@ -241,7 +238,7 @@ export default function UsersTable({
                   className="cursor-pointer text-lg text-primary active:opacity-50"
                   onClick={() => {
                     setSelectedUser(user);
-                    setIsEditingRole(true);
+                    setIsEditingUser(true);
                   }}
                 >
                   <PencilSquareIcon className="h-5 w-5" />
@@ -477,7 +474,10 @@ export default function UsersTable({
                 <Button
                   color="primary"
                   endContent={<PlusIcon className="h-5 w-5" />}
-                  onPress={openCreateUserModal}
+                  onPress={() => {
+                    onOpen();
+                    setIsCreateUser(true);
+                  }}
                 >
                   Create New User
                 </Button>
@@ -586,6 +586,15 @@ export default function UsersTable({
     );
   }, [tableLoading]);
 
+  function handleClosePrompts() {
+    onClose();
+    setIsCreateUser(false);
+    setIsEditingUser(false);
+    setSelectedUser(null);
+    setOpenUnlockUserPrompt(false);
+    setOpenResetPasswordPrompt(false);
+  }
+
   return (
     <>
       <Table
@@ -644,9 +653,7 @@ export default function UsersTable({
         isLoading={isLoading}
         isOpen={openUnlockUserPrompt}
         title="Unlock User Account"
-        onClose={() => {
-          setOpenUnlockUserPrompt(false);
-        }}
+        onClose={handleClosePrompts}
         onConfirm={handleUnlockSystemUser}
         onOpen={setOpenUnlockUserPrompt}
       >
@@ -668,10 +675,7 @@ export default function UsersTable({
         isLoading={isLoading}
         isOpen={openResetPasswordPrompt}
         title="Reset User Password"
-        onClose={() => {
-          onClose();
-          setOpenResetPasswordPrompt(false);
-        }}
+        onClose={handleClosePrompts}
         onConfirm={resetUserPassword}
         onOpen={onOpen}
       >
@@ -690,12 +694,9 @@ export default function UsersTable({
         isDisabled={isLoading}
         isDismissable={false}
         isLoading={isLoading}
-        isOpen={isOpen}
+        isOpen={isOpen && selectedUser !== null}
         title="Remove Workspace User"
-        onClose={() => {
-          onClose();
-          setSelectedUser(null);
-        }}
+        onClose={handleClosePrompts}
         onConfirm={handleRemoveUser}
         onOpen={onOpen}
       >
@@ -710,9 +711,9 @@ export default function UsersTable({
 
       {/* CREATE  A NEW USER  */}
       <CreateNewUserModal
-        isOpen={isEditingRole || createUserModal}
+        isOpen={(isEditingUser || isCreateUser) && isOpen}
         workspaceID={workspaceID}
-        onClose={closeCreateUserModal}
+        onClose={handleClosePrompts}
         roles={roles}
       />
     </>
