@@ -482,17 +482,15 @@ export default function UsersTable({
                   Create New User
                 </Button>
               )}
-            {(permissions?.create || permissions?.edit) &&
-              permissions?.isApprovedUser &&
-              !isUsersRoute && (
-                <Button
-                  color="primary"
-                  endContent={<PlusIcon className="h-5 w-5" />}
-                  onPress={onAddUser}
-                >
-                  Add Workspace Members
-                </Button>
-              )}
+            {(permissions?.create || permissions?.edit) && !isUsersRoute && (
+              <Button
+                color="primary"
+                endContent={<PlusIcon className="h-5 w-5" />}
+                onPress={onAddUser}
+              >
+                Add Members
+              </Button>
+            )}
           </div>
         </div>
         <div className="flex items-center justify-between">

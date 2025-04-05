@@ -117,6 +117,7 @@ function WorkspaceSettings({
       systemRoles={systemRoles}
       permissions={permissions}
     />,
+
     // Provides the disbursement tabs
     ...TAB_COMPONENTS,
   ]);
@@ -172,7 +173,7 @@ function WorkspaceSettings({
         workspaceID={workspaceID}
         onClose={onClose}
         onOpenChange={onOpenChange}
-        roles={workspaceRoles}
+        roles={systemRoles}
       />
     </div>
   );

@@ -1,6 +1,3 @@
-import { Suspense } from "react";
-
-import LoadingPage from "@/app/loading";
 import WorkspaceSettings from "@/app/dashboard/[workspaceID]/workspace-settings/components";
 import { getAllUsers } from "@/app/_actions/user-actions";
 import { getWorkspaceMembers } from "@/app/_actions/workspace-actions";
@@ -14,7 +11,8 @@ import { getWorkspaceSession } from "@/app/_actions/config-actions";
 export default async function ManageWorkspacePage({ params }) {
   const workspaceID = (await params).workspaceID;
 
-  const workspaceResponse = await getWorkspaceDetails();
+  const workspaceResponse = await getWorkspaceDetails(workspaceID);
+  const workspaceMembers = await getWorkspaceMembers(workspaceID);
 
   const allUsersData = await getAllUsers();
 
@@ -23,10 +21,8 @@ export default async function ManageWorkspacePage({ params }) {
 
   const workspaceSession = await getWorkspaceSession();
 
-  const workspaceMembers = await getWorkspaceMembers(workspaceID);
-
   return (
-    <Suspense fallback={<LoadingPage />}>
+    <>
       <WorkspaceSettings
         allUsers={allUsersData?.data?.users}
         permissions={workspaceSession?.workspacePermissions}
@@ -36,6 +32,6 @@ export default async function ManageWorkspacePage({ params }) {
         workspaceMembers={workspaceMembers?.data?.users}
         workspaceRoles={workspaceRolesResponse?.data?.workspace_role}
       />
-    </Suspense>
+    </>
   );
 }

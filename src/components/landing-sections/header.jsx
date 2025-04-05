@@ -133,39 +133,37 @@ export function Header({ session }) {
           </div>
         </div>
         <div className="flex items-center gap-1">
-          {!session && (
-            <div className="flex translate-x-8 md:translate-x-0">
-              <NavLink href="/login">
+          <div className="flex lg:gap-2 items-center">
+            {session ? (
+              <NavLink href="/dashboard" className={"p-1"}>
                 <NavIconButton>
-                  <UserCircleIcon className="h-5 w-5 " />
+                  <Squares2X2Icon className="h-5 w-5 " />
                 </NavIconButton>
-                <span className="hidden md:flex">Sign in</span>
+                <span className="hidden sm:flex">Dashboard</span>
               </NavLink>
-              <NavLink className="hidden gap-2 lg:flex" href="/register">
-                <NavIconButton>
-                  <UserPlusIcon className="h-5 w-5 " />
-                </NavIconButton>
-                <span> Register</span>
-              </NavLink>
-            </div>
-          )}
-          {session && (
-            <NavLink href="/dashboard">
-              <NavIconButton>
-                <Squares2X2Icon className="h-5 w-5 " />
-              </NavIconButton>
-              <span className="hidden md:flex">Dashboard</span>
-            </NavLink>
-          )}
-          <div className="md:ml-8 flex gap-1 items-center">
-            <ThemeSwitcher />
+            ) : (
+              <>
+                <NavLink href="/login" className={"p-1 "}>
+                  <NavIconButton>
+                    <UserCircleIcon className="h-5 w-5 " />
+                  </NavIconButton>
+                  <span className="hidden lg:flex">Sign in</span>
+                </NavLink>
+                <NavLink className="hidden gap-2 lg:flex" href="/register">
+                  <NavIconButton>
+                    <UserPlusIcon className="h-5 w-5 " />
+                  </NavIconButton>
+                  <span> Register</span>
+                </NavLink>
+              </>
+            )}
             <NavLink href="/support">
               <NavIconButton>
                 <ChatBubbleLeftRightIcon className="h-5 w-5" />
               </NavIconButton>
             </NavLink>
+            <ThemeSwitcher />
           </div>
-
           <div className="-mr-1 lg:hidden">
             <MobileNavigation session={session} />
           </div>

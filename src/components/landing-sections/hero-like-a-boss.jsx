@@ -22,7 +22,7 @@ export function HeroLikeABoss() {
         role="region"
         aria-label="hero section"
       >
-        <div className="container px-4 z-20 relative">
+        <div className="container px-8 z-20 relative">
           <div className="flex flex-col lg:flex-row items-center gap-8">
             {/* Text Content */}
             <div className="w-full lg:w-1/2 z-20 pt-8">
@@ -61,7 +61,7 @@ export function HeroLikeABoss() {
               </div>
             </div>
 
-            <div className="w-full lg:w-1/2 relative bg-erd">
+            <div className="w-full lg:w-1/2 relative hidden md:flex">
               <LadyBoss />
             </div>
           </div>
@@ -74,6 +74,7 @@ export function HeroLikeABoss() {
           height={600}
           width={800}
           src={DefaultCover}
+          
         />
       </section>
     </>
