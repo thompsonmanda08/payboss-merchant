@@ -61,7 +61,7 @@ export function HeroLikeABoss() {
               </div>
             </div>
 
-            <div className="w-full lg:w-1/2 relative bg-red-500">
+            <div className="w-full lg:w-1/2 relative hidden md:flex">
               <LadyBoss />
             </div>
           </div>
@@ -74,6 +74,7 @@ export function HeroLikeABoss() {
           height={600}
           width={800}
           src={DefaultCover}
+          
         />
       </section>
     </>

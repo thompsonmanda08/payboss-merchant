@@ -91,7 +91,6 @@ export function PrimaryFeatures() {
             classNames={{
               wrapper: "h-full max-h-full flex-1 w-full",
               // base: "bg-red-300 p-3 h-full max-h-full border-red-500",
-
               cursor: "",
               tab: "h-full w-full text-left px-0",
               tabContent: "text-white/80 w-full",
