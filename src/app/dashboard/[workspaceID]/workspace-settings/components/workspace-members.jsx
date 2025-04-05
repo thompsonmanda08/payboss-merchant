@@ -13,15 +13,15 @@ export default function WorkspaceMembers({
   allUsers,
   workspaceMembers,
   workspaceRoles,
+  systemRoles,
+  permissions,
 }) {
   const {
     isOpen: openAdd,
     onOpen: onOpenAdd,
     onClose: onCloseAdd,
   } = useDisclosure();
-  const { workspaceUserRole } = useDashboard();
 
-  const canUpdate = workspaceUserRole?.role?.toLowerCase() == "admin";
 
   return (
     <div>
@@ -34,11 +34,12 @@ export default function WorkspaceMembers({
       />
       <UsersTable
         removeWrapper
-        isUserAdmin={canUpdate}
+        permissions={permissions}
         tableLoading={isLoading}
         users={workspaceMembers}
         workspaceID={workspaceID}
         onAddUser={onOpenAdd}
+        roles={systemRoles}
       />
       <AddUserToWorkspace
         allUsers={allUsers}

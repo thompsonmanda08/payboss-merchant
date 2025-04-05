@@ -5,7 +5,6 @@ import {
   getWorkspaceSession,
 } from "@/app/_actions/config-actions";
 import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
-import { getWorkspaceDetails } from "@/app/_actions/merchant-actions";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -13,10 +12,6 @@ export const dynamicParams = true;
 async function DashboardHome({ params }) {
   const workspaceID = (await params).workspaceID;
   const workspaceSession = (await getWorkspaceSession()) || [];
-
-  const workspaceResponse = await getWorkspaceDetails();
-
-  const activeWorkspace = workspaceResponse?.data || {};
 
   const session = await getUserDetails();
   const dashboardAnalytics = await getDashboardAnalytics(workspaceID);
@@ -36,7 +31,7 @@ async function DashboardHome({ params }) {
         permissions={workspaceSession?.workspacePermissions}
         workspaceID={workspaceID}
         workspaceType={workspaceSession?.workspaceType}
-        workspaceWalletBalance={activeWorkspace?.balance}
+        workspaceWalletBalance={workspaceSession?.activeWorkspace?.balance}
       />
     </>
   );

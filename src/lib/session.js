@@ -7,34 +7,100 @@ import { cookies } from "next/headers";
 
 import { AUTH_SESSION, USER_SESSION, WORKSPACE_SESSION } from "./constants";
 
+// 1. Get secret from environment variables (MUST be set)
 const secretKey =
   process.env.NEXT_PUBLIC_AUTH_SECRET || process.env.AUTH_SECRET;
+
+// 2. Validate the secret exists
+if (!secretKey || secretKey.length < 32) {
+  throw new Error(
+    "JWT_SECRET or AUTH_SECRET environment variable must be at least 32 characters"
+  );
+}
+
+// 3. Create the key properly
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload) {
+  if (!payload || typeof payload !== "object") {
+    throw new Error("Payload must be a non-empty object");
+  }
+
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("1hr")
+    .setExpirationTime("1h")
     .sign(key);
 }
 
 export async function decrypt(session) {
+  if (!session || typeof session !== "string") {
+    return {
+      success: false,
+      message: "No session token provided",
+      data: null,
+      status: 500,
+      statusText: "UNAUTHENTICATED",
+    };
+  }
+
+  const parts = session.split(".");
+
+  if (parts.length !== 3) {
+    return {
+      success: false,
+      message: "Invalid token format",
+      data: null,
+      status: 500,
+      statusText: "INVALID_TOKEN_FORMAT",
+    };
+  }
+
   try {
     const { payload } = await jwtVerify(session, key, {
       algorithms: ["HS256"],
+      clockTolerance: 15,
     });
 
     return payload;
   } catch (error) {
     console.error(error);
+
+    // Specific error handling
+    if (error.code === "ERR_JWS_INVALID") {
+      return {
+        success: false,
+        message: "Invalid token signature",
+        data: null,
+        status: 500,
+        statusText: "INVALID_TOKEN_SIGNATURE",
+      };
+    }
+
+    if (error.code === "ERR_JWT_EXPIRED") {
+      return {
+        success: false,
+        message: "Token expired",
+        data: null,
+        status: 500,
+        statusText: "TOKEN_EXPIRED",
+      };
+    }
+
     return null;
+    // return {
+    //   success: false,
+    //   message: "Failed to verify session",
+    //   data: null,
+    //   status: 500,
+    //   statusText: "TOKEN_VERIFICATION_FAILED",
+    // };
   }
 }
 
 export async function createAuthSession(
   accessToken,
-  expiresIn = 3600,
+  expiresIn = 1800,
   refreshToken = ""
 ) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // AFTER 1 HOUR
@@ -51,7 +117,7 @@ export async function createAuthSession(
     (await cookies()).set(AUTH_SESSION, session, {
       httpOnly: true,
       secure: false,
-      maxAge: expiresIn,
+      expires: expiresAt,
       sameSite: "lax",
       path: "/",
     });
@@ -92,7 +158,7 @@ export async function createUserSession({
   userPermissions,
   kyc,
 }) {
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24); // AFTER 1 DAY
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
   const session = await encrypt({
     user,
     merchantID,
@@ -119,7 +185,7 @@ export async function createWorkspaceSession({
   activeWorkspace,
   workspacePermissions,
 }) {
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24); // AFTER 1 DAY
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
   const session = await encrypt({
     workspaces,
     workspaceIDs,
@@ -142,7 +208,7 @@ export async function createWorkspaceSession({
 
 // UPDATE THE WORKSPACE SESSION
 export async function updateWorkspaceSession(fields) {
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000 * 24); // AFTER 1 DAY
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
   const isLoggedIn = await verifySession();
   const cookie = (await cookies()).get(WORKSPACE_SESSION)?.value;
   const oldSession = await decrypt(cookie);
@@ -151,6 +217,9 @@ export async function updateWorkspaceSession(fields) {
     const session = await encrypt({
       ...oldSession,
       ...fields,
+      activeWorkspace: oldSession?.workspaces?.find(
+        (workspace) => workspace?.ID == fields?.activeWorkspaceID
+      ),
     });
 
     if (session) {

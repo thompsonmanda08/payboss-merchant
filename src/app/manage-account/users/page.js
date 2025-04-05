@@ -4,11 +4,14 @@ import LoadingPage from "@/app/loading";
 import ManagePeople from "@/app/manage-account/users/components/manage-users";
 import { getAllUsers } from "@/app/_actions/user-actions";
 import { getUserAccountRoles } from "@/app/_actions/merchant-actions";
-import { getUserDetails } from "@/app/_actions/config-actions";
+import {
+  getGeneralConfigs,
+  getUserDetails,
+} from "@/app/_actions/config-actions";
 
 async function UsersSettingsPage() {
   const userRolesResponse = await getUserAccountRoles();
-  const roles = await userRolesResponse?.data?.roles;
+  const roles = await userRolesResponse?.data?.system_roles;
 
   const usersResponse = await getAllUsers();
   const users = usersResponse?.data?.users;
@@ -20,10 +23,7 @@ async function UsersSettingsPage() {
   const permissions = {
     isOwner: session?.user?.role?.toLowerCase() == "owner",
     isAccountAdmin: session?.user?.role?.toLowerCase() == "admin",
-    isApprovedUser:
-      kyc?.stageID == 4 &&
-      user?.isCompleteKYC &&
-      kyc?.kyc_approval_status?.toLowerCase() == "approved",
+    isApprovedUser: kyc?.stageID == 3,
     ...session?.userPermissions,
   };
 

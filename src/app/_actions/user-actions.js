@@ -66,14 +66,15 @@ export async function createNewUser(newUser) {
  *
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  * */
-export async function fetchAllUsers() {
+
+export const getAllUsers = cache(async function fetchAllUsers() {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
 
+  const url = `merchant/${merchantID}/users`;
+
   try {
-    const res = await authenticatedService({
-      url: `merchant/users/${merchantID}`,
-    });
+    const res = await authenticatedService({ url });
 
     return {
       success: true,
@@ -84,6 +85,7 @@ export async function fetchAllUsers() {
     };
   } catch (error) {
     console.error({
+      endpoint: `GET | ALL USERS ~ ${url}`,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -101,9 +103,7 @@ export async function fetchAllUsers() {
       statusText: error?.response?.statusText,
     };
   }
-}
-
-export const getAllUsers = cache(fetchAllUsers);
+});
 
 /**
  * Assigns the given users to a workspace by calling the API endpoint.

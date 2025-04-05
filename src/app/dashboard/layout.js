@@ -14,13 +14,23 @@ export default async function DashboardLayout({ children }) {
   const session = await getUserDetails();
   const workspaceSession = (await getWorkspaceSession()) || [];
 
+  const activeWorkspaceID = workspaceSession?.activeWorkspaceID;
+
+
   if (!authSession?.accessToken) redirect("/login");
 
   return (
     <main className="flex h-screen items-start justify-start overflow-hidden bg-background text-foreground">
-      <SideNavBar workspaceSession={workspaceSession} />
+      <SideNavBar
+        workspaceSession={workspaceSession}
+        activeWorkspaceID={activeWorkspaceID}
+      />
       <div className="flex max-h-screen w-full flex-col overflow-y-auto  p-5 pt-20 lg:pt-8">
-        <TopNavBar user={session?.user} />
+        <TopNavBar
+          user={session?.user}
+          activeWorkspaceID={activeWorkspaceID}
+          workspaceSession={workspaceSession}
+        />
         {children}
       </div>
     </main>

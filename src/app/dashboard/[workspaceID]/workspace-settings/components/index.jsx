@@ -30,6 +30,7 @@ function WorkspaceSettings({
   allUsers,
   workspaceMembers,
   workspaceRoles,
+  systemRoles,
   permissions,
 }) {
   const { existingUsers, setExistingUsers } = useWorkspaceStore();
@@ -104,22 +105,21 @@ function WorkspaceSettings({
       workspaceID={workspaceID}
       workspaceName={selectedWorkspace?.workspace}
       workspaceRoles={workspaceRoles}
+      permissions={permissions}
     />,
     <WorkspaceMembers
       key={"members"}
-      allUsers={allUsers}
-      workspaceMembers={workspaceMembers}
+      allUsers={allUsers || []}
+      workspaceMembers={workspaceMembers || []}
       workspaceName={selectedWorkspace?.workspace}
       workspaceID={workspaceID}
-      // isLoading={isLoading}
       workspaceRoles={workspaceRoles}
+      systemRoles={systemRoles}
+      permissions={permissions}
     />,
     // Provides the disbursement tabs
     ...TAB_COMPONENTS,
   ]);
-
-  const canCreateUsers = permissions?.isAdmin || permissions?.isOwner;
-  const allowUserCreation = currentTabIndex == 1 && canCreateUsers;
 
   useEffect(() => {
     // UPDATE EXISTING USERS LIST
@@ -154,18 +154,12 @@ function WorkspaceSettings({
             tabs={TABS}
           />
 
-          {allowUserCreation && (
+          {currentTabIndex == 1 && permissions?.create && (
             <Button className={"absolute right-0"} onClick={onOpen}>
               Create New User
             </Button>
           )}
         </div>
-
-        {/* <div className="">
-            {currentTabIndex == 1 && (
-              <SearchOrInviteUsers setSearchQuery={setSearchQuery} />
-            )}
-          </div> */}
 
         <div className="flex w-full flex-grow flex-col justify-start">
           {activeTab}
@@ -178,6 +172,7 @@ function WorkspaceSettings({
         workspaceID={workspaceID}
         onClose={onClose}
         onOpenChange={onOpenChange}
+        roles={workspaceRoles}
       />
     </div>
   );

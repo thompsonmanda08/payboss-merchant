@@ -50,7 +50,7 @@ function WorkspaceDetails({
   const { data: callbackResponse } = useWorkspaceCallbackURL(workspaceID);
 
   const [isSandbox, setIsSandbox] = useState(
-    activeWorkspace?.workspace?.toLowerCase() == "sandbox",
+    activeWorkspace?.workspace?.toLowerCase() == "sandbox"
   );
 
   const [newWorkspace, setNewWorkspace] = useState({
@@ -300,7 +300,7 @@ function WorkspaceDetails({
 
       <hr className="my-6 h-px bg-foreground-900/5" />
 
-      <div className="flex flex-col gap-8 md:flex-row md:justify-between md:gap-16 xl:gap-24">
+      {/* <div className="flex flex-col gap-8 md:flex-row md:justify-between md:gap-16 xl:gap-24">
         <div className="flex w-full items-center justify-between md:flex-row">
           <div className="flex max-w-4xl flex-col gap-2">
             <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
@@ -319,12 +319,12 @@ function WorkspaceDetails({
             Add Members
           </Button>
         </div>
-      </div>
+      </div> */}
 
       {/* DISBURSEMENTS WORKSPACE DOES NOT NEED A CALLBACK-URL */}
       {activeWorkspace?.workspaceType !== WORKSPACE_TYPES[1]?.ID && (
         <>
-          <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
+          {/* <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" /> */}
 
           {/* CHANGE WORKSPACE VISIBILITY */}
           <div className="flex flex-col gap-6">
@@ -350,7 +350,7 @@ function WorkspaceDetails({
                     {
                       "bg-primary-300 bg-opacity-50 rounded-md ":
                         callbackURL.method == "POST",
-                    },
+                    }
                   )}
                   classNames={{
                     value: cn(
@@ -358,7 +358,7 @@ function WorkspaceDetails({
                       {
                         "text-primary-600 group-data-[has-value=true]:text-primary-600":
                           callbackURL.method == "POST",
-                      },
+                      }
                     ),
                   }}
                   defaultValue={"GET"}
@@ -385,6 +385,10 @@ function WorkspaceDetails({
                   value={callbackURL?.url}
                   onChange={(e) => updateCallbackURL({ url: e.target.value })}
                   onError={error?.onCallbackURL}
+                  className="w-full"
+                  classNames={{
+                    wrapper: "max-w-full",
+                  }}
                 />
 
                 <Button
@@ -397,7 +401,8 @@ function WorkspaceDetails({
                 </Button>
               </form>
             </div>
-            <div className="flex max-w-4xl flex-col gap-2 lg:gap-1">
+
+            <div className="flex flex-col gap-2 lg:gap-1">
               <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
                 Status Response
               </h2>
@@ -418,7 +423,7 @@ function WorkspaceDetails({
                   <Snippet
                     hideSymbol
                     classNames={{
-                      base: "max-w-sm flex text-wrap",
+                      base: "max-w- w-full flex text-wrap",
                     }}
                   >
                     <pre
@@ -433,8 +438,8 @@ function WorkspaceDetails({
                               mno_status_description: "string",
                             },
                             undefined,
-                            2,
-                          ),
+                            2
+                          )
                         ),
                       }}
                     />
