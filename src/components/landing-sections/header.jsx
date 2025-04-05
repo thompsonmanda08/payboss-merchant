@@ -41,7 +41,7 @@ function MobileNavIcon({ open }) {
       <path
         className={cn(
           "origin-center transition",
-          !open && "scale-90 opacity-0",
+          !open && "scale-90 opacity-0"
         )}
         d="M2 2L12 12M12 2L2 12"
       />
@@ -118,9 +118,9 @@ export function Header({ session }) {
       className={cn(
         `rounded-blur fixed left-0 right-0 top-0 z-30 flex flex-wrap items-center px-4 py-5 backdrop-blur-2xl backdrop-saturate-200 transition-all lg:flex-nowrap lg:justify-start`,
         {
-          "top-2 mx-10 rounded-xl bg-background/80": isFloating,
-          "z-50 pt-5": pathname === "/" && !isFloating,
-        },
+          "top-4 sm:top-2 sm:mx-10 rounded-xl bg-background/80": isFloating,
+          "z-50": pathname === "/" && !isFloating,
+        }
       )}
     >
       <nav className="relative z-50 flex w-full justify-between container">
@@ -154,10 +154,10 @@ export function Header({ session }) {
               <NavIconButton>
                 <Squares2X2Icon className="h-5 w-5 " />
               </NavIconButton>
-              <span>Dashboard</span>
+              <span className="hidden md:flex">Dashboard</span>
             </NavLink>
           )}
-          <div className="ml-8 flex gap-1 items-center">
+          <div className="md:ml-8 flex gap-1 items-center">
             <ThemeSwitcher />
             <NavLink href="/support">
               <NavIconButton>
@@ -167,7 +167,7 @@ export function Header({ session }) {
           </div>
 
           <div className="-mr-1 lg:hidden">
-            <MobileNavigation />
+            <MobileNavigation session={session} />
           </div>
         </div>
       </nav>

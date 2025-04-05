@@ -9,6 +9,62 @@ import {
 } from "@/lib/session";
 import { apiClient } from "@/lib/utils";
 
+import { setupAccountConfig } from "./merchant-actions";
+
+/**
+ * Authenticates a user with their email and password by calling the API endpoint
+ * and creates an authentication session upon successful login.
+ *
+ * @param {LoginDetails} param - An object containing login details.
+ * @param {string} param.email - The email of the user.
+ * @param {string} param.password - The password of the user.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object which indicates the success or failure of the operation.
+ *
+ */
+export async function authenticateUser(loginCredentials) {
+  const url = `merchant/user/authentication`;
+
+  try {
+    const res = await apiClient.post(url, loginCredentials);
+
+    const response = res.data;
+
+    const accessToken = response?.token;
+    const refreshToken = response?.refreshToken;
+    const expiresIn = response?.expires_in;
+
+    await createAuthSession(accessToken, expiresIn, refreshToken);
+
+    const setup = await setupAccountConfig();
+
+    return {
+      success: true,
+      message: res.message || setup?.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: `POST | LOGIN ~ ${url}`,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error || "Login Failed: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
 /**
  * Validates a merchant's TPIN,
  * If the TPIN is valid, an API response containing the merchant's information is returned.
@@ -349,58 +405,6 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
       message:
         error?.response?.data?.error ||
         "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-/**
- * Authenticates a user with their email and password by calling the API endpoint
- * and creates an authentication session upon successful login.
- *
- * @param {LoginDetails} param - An object containing login details.
- * @param {string} param.email - The email of the user.
- * @param {string} param.password - The password of the user.
- * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object which indicates the success or failure of the operation.
- *
- */
-export async function authenticateUser(loginCredentials) {
-  const url = `merchant/user/authentication`;
-
-  try {
-    const res = await apiClient.post(url, loginCredentials);
-
-    const response = res.data;
-
-    const accessToken = response?.token;
-    const refreshToken = response?.refreshToken;
-    const expiresIn = response?.expires_in;
-
-    await createAuthSession(accessToken, expiresIn, refreshToken);
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      endpoint: `POST | LOGIN ~ ${url}`,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error || "Login Failed: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

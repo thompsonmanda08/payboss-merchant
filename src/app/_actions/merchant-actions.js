@@ -29,10 +29,13 @@ export const setupAccountConfig = cache(async () => {
       merchantID: res.data?.merchantID,
       userPermissions: res.data?.userPermissions,
       kyc: res.data?.kyc,
+      isSetupComplete: true,
     });
 
     let workspaceIDs = res.data?.workspaces?.map((item) => item?.ID);
     let workspaces = res.data?.workspaces;
+
+    revalidatePath("/workspaces", "page");
 
     // Create a workspace session for the logged in user -
     // This is used to get the active workspace and workspace user as well as permissions

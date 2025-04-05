@@ -87,7 +87,7 @@ export function PrimaryFeatures() {
         <div className="flex flex-col gap-2 md:gap-4 md:flex-row w-full">
           <Tabs
             aria-label="PayBoss Features"
-            className="max-w-full w-full overflow-auto md:max-w-[460px]"
+            className="max-w-full w-full overflow-auto lg:max-w-[460px]"
             classNames={{
               wrapper: "h-full max-h-full flex-1 w-full",
               // base: "bg-red-300 p-3 h-full max-h-full border-red-500",
@@ -112,14 +112,14 @@ export function PrimaryFeatures() {
                   <div className={cn("group relative rounded-full p-4 ")}>
                     <h3
                       className={cn(
-                        "font-semibold text-sm lg:text-[clamp(1rem,1rem+0.25vw,1.25rem)]",
+                        "font-semibold text-sm lg:text-[clamp(1rem,1rem+0.25vw,1.25rem)]"
                       )}
                     >
                       {feature.title}
                     </h3>
                     <p
                       className={cn(
-                        "mt-2 hidden text-sm lg:block w-full text-wrap",
+                        "mt-2 hidden text-sm lg:block w-full text-wrap"
                       )}
                     >
                       {feature.description}

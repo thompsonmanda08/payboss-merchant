@@ -12,7 +12,6 @@ import LoadingPage from "../loading";
 
 async function WorkSpacesPage() {
   const session = await getUserDetails();
-  const { user, userPermissions, kyc: merchantKYC } = session || {};
 
   const auth = await getAuthSession();
   const { accessToken } = auth || "";
@@ -26,8 +25,8 @@ async function WorkSpacesPage() {
           <section role="workspace-header">
             <div className="relative h-[280px] w-full overflow-clip rounded-b-3xl bg-gray-900">
               <WorkspaceHeader
-                accountState={merchantKYC?.state}
-                permissions={userPermissions}
+                accountState={session?.kyc?.state}
+                permissions={session?.userPermissions}
               />
               <Image
                 alt="Cover Image"
@@ -43,14 +42,14 @@ async function WorkSpacesPage() {
 
           <section
             className={cn(
-              "z-20 mx-auto mb-20 mt-[-160px] w-full max-w-[1540px] px-4 md:px-6",
+              "z-20 mx-auto mb-20 mt-[-160px] w-full max-w-[1540px] px-4 md:px-6"
             )}
             role="workspaces-list"
           >
             <WorkspacesList
               showHeader
-              permissions={userPermissions}
-              user={user}
+              permissions={session?.userPermissions}
+              user={session?.user || session?.userDetails}
             />
           </section>
         </div>

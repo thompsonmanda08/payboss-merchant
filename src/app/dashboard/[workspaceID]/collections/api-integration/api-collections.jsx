@@ -45,7 +45,7 @@ import {
   setupWorkspaceAPIKey,
 } from "@/app/_actions/workspace-actions";
 import { QUERY_KEYS } from "@/lib/constants";
-import { getAPICollectionLatestTransactions } from "@/app/_actions/transaction-actions";
+import { getCollectionLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
 import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
@@ -104,7 +104,11 @@ const APIIntegration = ({ workspaceID }) => {
   const mutation = useMutation({
     mutationKey: [QUERY_KEYS.API_COLLECTIONS, workspaceID],
     mutationFn: (dateRange) =>
-      getAPICollectionLatestTransactions(workspaceID, dateRange),
+      getCollectionLatestTransactions(
+        workspaceID,
+        "api-integration",
+        dateRange
+      ),
   });
 
   function copyToClipboard(key) {
@@ -662,7 +666,7 @@ const APIIntegration = ({ workspaceID }) => {
                           <ComputerDesktopIcon
                             className={cn(
                               iconClasses,
-                              "group-hover:text-white font-bold group-hover:border-white",
+                              "group-hover:text-white font-bold group-hover:border-white"
                             )}
                           />
                         }
@@ -686,7 +690,7 @@ const APIIntegration = ({ workspaceID }) => {
                           <TrashIcon
                             className={cn(
                               iconClasses,
-                              "text-danger group-hover:text-white",
+                              "text-danger group-hover:text-white"
                             )}
                           />
                         }
