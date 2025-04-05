@@ -654,7 +654,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
   }
 }
 
-// *********************** API COLLECTIONS LATEST TRANSACTIONS ************************* //
+// *********************** API/TILL COLLECTIONS LATEST TRANSACTIONS ************************* //
 
 /**
  * Retrieves the latest transactions for a specific workspace using the
@@ -662,6 +662,8 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
  *
  * @param {string} workspaceID - The ID of the workspace for which the latest
  * transactions are being fetched.
+ * @param {string} service - The name of the service for which the latest
+ * transactions are being fetched. // api-collections or till
  * @param {Object} dateFilter - An object containing the date range for
  * filtering transactions, with properties `start_date` and `end_date`.
  *
@@ -674,9 +676,10 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function getAPICollectionLatestTransactions(
+export async function getCollectionLatestTransactions(
   workspaceID,
-  dateFilter,
+  service,
+  dateFilter
 ) {
   if (!workspaceID) {
     return {
@@ -688,7 +691,7 @@ export async function getAPICollectionLatestTransactions(
     };
   }
 
-  const url = `transaction/merchant/collection/api-integration/${workspaceID}`;
+  const url = `transaction/merchant/collection/${service}/${workspaceID}`;
 
   try {
     const res = await authenticatedService({
@@ -722,74 +725,6 @@ export async function getAPICollectionLatestTransactions(
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
-    };
-  }
-}
-
-// *********************** TILL NUMBER LATEST TRANSACTIONS ************************* //
-
-/**
- * Retrieves the latest transactions for a specific till within a given date range.
- *
- * @param {string} workspaceID - The ID of the workspace for which the latest transactions are being fetched.
- * @param {Object} dateFilter - An object containing the date range for filtering reports, with properties `start_date` and `end_date`.
- *
- * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
- *
- * - `success`: A boolean indicating whether the operation was successful.
- * - `message`: A string providing a message about the result of the operation.
- * - `data`: An array of transaction objects.
- * - `status`: The HTTP status code for the operation.
- * - `statusText`: The HTTP status text for the operation.
- */
-export async function getTillCollectionsLatestTransactions(
-  workspaceID,
-  dateFilter,
-) {
-  if (!workspaceID) {
-    return {
-      success: false,
-      message: "workspaceID ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
-  }
-  const url = `transaction/merchant/collection/till/${workspaceID}`;
-
-  try {
-    const res = await authenticatedService({
-      url,
-      method: "POST",
-      data: dateFilter,
-    });
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      endpoint: "POST | TILL COLLECTION TRANSACTIONS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.message ||
-        error?.response?.data?.error ||
-        error ||
-        "NextError! See Console for more details",
-      data: null,
-      status: error?.response?.status || 500,
     };
   }
 }

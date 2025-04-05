@@ -24,7 +24,7 @@ import CustomTable from "@/components/tables/table";
 import { useTillNumber } from "@/hooks/useQueryHooks";
 import { generateWorkspaceTillNumber } from "@/app/_actions/workspace-actions";
 import { QUERY_KEYS } from "@/lib/constants";
-import { getTillCollectionsLatestTransactions } from "@/app/_actions/transaction-actions";
+import { getCollectionLatestTransactions } from "@/app/_actions/transaction-actions";
 import LoadingPage from "@/app/loading";
 import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
@@ -52,7 +52,7 @@ export default function TillPaymentCollections({ workspaceID }) {
   const mutation = useMutation({
     mutationKey: [QUERY_KEYS.TILL_COLLECTIONS, workspaceID],
     mutationFn: (dateRange) =>
-      getTillCollectionsLatestTransactions(workspaceID, dateRange),
+      getCollectionLatestTransactions(workspaceID, "till", dateRange),
   });
 
   const TILL_NUMBER = useMemo(() => {
