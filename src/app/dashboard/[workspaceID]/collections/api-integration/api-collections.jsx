@@ -26,6 +26,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Chip,
 } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
@@ -60,7 +61,7 @@ import PromptModal from "@/components/base/prompt-modal";
 import TerminalConfigViewModal from "./TerminalConfigView";
 import APIConfigViewModal from "./APIConfigView";
 
-const APIIntegration = ({ workspaceID }) => {
+const APIIntegration = ({ workspaceID, permissions }) => {
   const queryClient = useQueryClient();
   const { onOpen, onClose } = useDisclosure();
   const {
@@ -69,14 +70,13 @@ const APIIntegration = ({ workspaceID }) => {
     onClose: onCloseTerminal,
   } = useDisclosure();
 
-  const { data, isLoading: isLoadingConfig } = useWorkspaceAPIKey(workspaceID);
+  const { data: apiKeyResponse, isLoading: isLoadingConfig } =
+    useWorkspaceAPIKey(workspaceID);
   const { data: terminalData, isLoading: isLoadingTerminals } =
     useWorkspaceTerminals(workspaceID);
-  const { data: workspaceResponse, isLoading: initLoading } =
-    useWorkspaceInit(workspaceID);
-  const permissions = workspaceResponse?.data;
 
   const [copiedKey, setCopiedKey] = useState("");
+  const [refreshKeyID, setRefreshKeyID] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
   const [openViewConfig, setOpenViewConfig] = useState(false);
@@ -87,6 +87,8 @@ const APIIntegration = ({ workspaceID }) => {
     onClose();
     setIsLoading(false);
     setCurrentActionIndex(null);
+    setUnmaskAPIKey(false);
+    setRefreshKeyID("");
   };
 
   const thirtyDaysAgoDate = new Date();
@@ -95,9 +97,11 @@ const APIIntegration = ({ workspaceID }) => {
   const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
   const end_date = formatDate(new Date(), "YYYY-MM-DD");
 
-  const configData = data?.data;
+  const API_KEYS_DATA = apiKeyResponse?.data || [];
+  const API_CONFIG = API_KEYS_DATA?.config || [];
+  const API_KEYS = API_KEYS_DATA?.data || [];
   const terminals = terminalData?.data?.terminals || []; //
-  const hasTerminals = Boolean(configData?.hasTerminals);
+  const hasTerminals = Boolean(API_KEYS_DATA?.hasTerminals);
   const terminalsConfigured = Boolean(terminals.length > 0);
 
   // HANDLE FETCH API COLLECTION LATEST TRANSACTION DATA
@@ -146,8 +150,8 @@ const APIIntegration = ({ workspaceID }) => {
       return;
     }
 
-    // THERE CAN ONLY BE ONE API KEY
-    if (configData?.apiKey) {
+    // THERE CAN ONLY BE 2 API KEYS ==> UAT AND PRODUCTION
+    if (API_KEYS?.length == 2) {
       notify({
         color: "danger",
         title: "Error",
@@ -199,39 +203,35 @@ const APIIntegration = ({ workspaceID }) => {
       return;
     }
 
-    if (!configData?.apiKey) {
+    if (API_KEYS?.length == 0) {
       notify({
         color: "danger",
         title: "Error",
         description: "You have no API key.",
       });
       setIsLoading(false);
-
       return;
     }
 
-    const response = await refreshWorkspaceAPIKey(workspaceID);
+    const response = await refreshWorkspaceAPIKey(workspaceID, refreshKeyID);
 
-    if (!response?.success) {
+    if (response?.success) {
+      notify({
+        color: "success",
+        title: "Success",
+        description: "API key has been updated",
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
+      });
+    } else {
       notify({
         color: "danger",
         title: "Error",
-        description: "Failed to refresh API key.",
+        description: response?.message || "Failed to refresh API key.",
       });
-      console.error(response?.message);
-      setIsLoading(false);
-
-      return;
     }
 
-    notify({
-      color: "success",
-      title: "Success",
-      description: "API key has been updated",
-    });
-    queryClient.invalidateQueries({
-      queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
-    });
     setIsLoading(false);
     handleClosePrompt();
 
@@ -253,7 +253,7 @@ const APIIntegration = ({ workspaceID }) => {
       return;
     }
 
-    if (configData?.terminals || hasTerminals) {
+    if (API_KEYS_DATA?.terminals || hasTerminals) {
       notify({
         color: "danger",
         title: "Error",
@@ -484,6 +484,8 @@ const APIIntegration = ({ workspaceID }) => {
 
   const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
 
+  console.log("API_KEYS", API_KEYS);
+
   return isLoadingConfig ? (
     <LoadingPage />
   ) : (
@@ -503,28 +505,23 @@ const APIIntegration = ({ workspaceID }) => {
             />
             <Button
               endContent={<PlusIcon className="h-5 w-5" />}
-              isDisabled={Boolean(configData?.apiKey)}
-              onClick={() => setCurrentActionIndex(0)}
+              isDisabled={Boolean(API_KEYS?.length == 2)}
+              onPress={() => {
+                setCurrentActionIndex(0);
+              }}
             >
               Generate Key
             </Button>
           </div>
 
-          <Table removeWrapper aria-label="API KEY TABLE">
+          <Table removeWrapper aria-label="API KEY TABLE" items={API_KEYS}>
             <TableHeader>
               <TableColumn width={"30%"}>NAME</TableColumn>
-              <TableColumn width={"65%"}>KEY</TableColumn>
-              {/* <TableColumn>ENABLE</TableColumn> */}
+              <TableColumn width={"60%"}>API KEY</TableColumn>
+              <TableColumn width={"5%"}>STATE</TableColumn>
               <TableColumn align="center">ACTIONS</TableColumn>
             </TableHeader>
             <TableBody
-              emptyContent={
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
-                  <span className="flex gap-4 text-sm font-bold capitalize text-foreground/70">
-                    You have no API keys generated
-                  </span>
-                </div>
-              }
               isLoading={isLoadingConfig}
               loadingContent={
                 <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
@@ -534,70 +531,94 @@ const APIIntegration = ({ workspaceID }) => {
                 </div>
               }
             >
-              {configData && (
-                <TableRow key="1">
-                  <TableCell>{configData?.username}</TableCell>
-                  <TableCell className="flex gap-1">
-                    {configData?.apiKey ? (
-                      <>
-                        <span className="flex items-center gap-4 font-medium">
-                          {unmaskAPIKey
-                            ? configData?.apiKey
-                            : maskString(configData?.apiKey, 0, 20)}
-                        </span>
-                        <Button
-                          className={"h-max max-h-max max-w-max p-1"}
-                          color="default"
-                          size="sm"
-                          variant="light"
-                          onClick={() => setUnmaskAPIKey(!unmaskAPIKey)}
-                        >
-                          {unmaskAPIKey ? (
-                            <EyeSlashIcon className="h-5 w-5 cursor-pointer text-primary" />
-                          ) : (
-                            <EyeIcon className="h-5 w-5 cursor-pointer text-primary" />
-                          )}
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <span className="relative -left-32 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50/0 py-3 text-xs text-foreground/70">
-                          You have no API keys generated
-                        </span>
-                      </>
-                    )}
-                  </TableCell>
+              {API_KEYS?.length > 0 ? (
+                API_KEYS?.map((item) => (
+                  <TableRow key={`${item?.state}-key`}>
+                    <TableCell>{item?.username}</TableCell>
+                    <TableCell className="flex gap-1">
+                      {item?.apikey && (
+                        <>
+                          <span className="flex items-center gap-4 font-medium">
+                            {unmaskAPIKey
+                              ? item?.apikey
+                              : maskString(item?.apikey, 0, 50)}
+                          </span>
+                          <Button
+                            className={"h-max max-h-max max-w-max p-1"}
+                            color="default"
+                            size="sm"
+                            variant="light"
+                            onClick={() => setUnmaskAPIKey(!unmaskAPIKey)}
+                          >
+                            {unmaskAPIKey ? (
+                              <EyeSlashIcon className="h-5 w-5 cursor-pointer text-primary" />
+                            ) : (
+                              <EyeIcon className="h-5 w-5 cursor-pointer text-primary" />
+                            )}
+                          </Button>
+                        </>
+                      )}
+                    </TableCell>
 
-                  <TableCell>
-                    {configData?.apiKey && (
-                      <div className="flex items-center gap-4">
-                        <Tooltip color="secondary" content="API Config">
-                          <Cog6ToothIcon
-                            className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
-                            onClick={() => setOpenViewConfig(true)}
-                          />
-                        </Tooltip>
-                        <Tooltip
-                          color="default"
-                          content="Copy API Key to clipboard"
-                        >
-                          <Square2StackIcon
-                            className={`h-6 w-6 cursor-pointer ${
-                              copiedKey === configData?.apiKey
-                                ? "text-primary"
-                                : "text-gray-500"
-                            } hover:text-primary`}
-                            onClick={() => copyToClipboard(configData?.apiKey)}
-                          />
-                        </Tooltip>
-                        <Tooltip color="primary" content="Refresh API Key">
-                          <ArrowPathIcon
-                            className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300"
-                            onClick={() => setCurrentActionIndex(1)}
-                          />
-                        </Tooltip>
-                      </div>
-                    )}
+                    <TableCell>
+                      <Chip
+                        color={item?.state === "prod" ? "success" : "warning"}
+                        variant="solid"
+                        size="sm"
+                        classNames={{
+                          content: "uppercase text-white",
+                        }}
+                      >
+                        {item?.state}
+                      </Chip>
+                    </TableCell>
+
+                    <TableCell>
+                      {item?.username && (
+                        <div className="flex items-center gap-4">
+                          <Tooltip color="secondary" content="API Config">
+                            <Cog6ToothIcon
+                              className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
+                              onClick={() => setOpenViewConfig(true)}
+                            />
+                          </Tooltip>
+                          <Tooltip
+                            color="default"
+                            content="Copy API Key to clipboard"
+                          >
+                            <Square2StackIcon
+                              className={`h-6 w-6 cursor-pointer ${
+                                copiedKey === item?.apikey
+                                  ? "text-primary"
+                                  : "text-gray-500"
+                              } hover:text-primary`}
+                              onClick={() => copyToClipboard(item?.apikey)}
+                            />
+                          </Tooltip>
+                          <Tooltip color="primary" content="Refresh API Key">
+                            <ArrowPathIcon
+                              className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300"
+                              onClick={() => {
+                                setCurrentActionIndex(1);
+                                setRefreshKeyID(item?.ID);
+                              }}
+                            />
+                          </Tooltip>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow key="empty">
+                  <TableCell
+                    align="center"
+                    className="font-medium text-center"
+                    colSpan={4}
+                  >
+                    <span className="flex gap-4 text-xs text-center text-foreground/50 py-2 w-max mx-auto">
+                      You have no API keys generated
+                    </span>
                   </TableCell>
                 </TableRow>
               )}
@@ -619,32 +640,35 @@ const APIIntegration = ({ workspaceID }) => {
             />
 
             <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
-              <Dropdown backdrop="blur">
-                <DropdownTrigger>
-                  <Button
-                    color="primary"
-                    endContent={<WrenchScrewdriverIcon className="h-5 w-5" />}
-                    isLoading={initLoading}
-                    loadingText={"Please wait..."}
-                  >
-                    Manage
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  aria-label="Action event example"
-                  onAction={(key) => handleManageTerminals(key)}
-                >
-                  {hasTerminals && (
-                    <DropdownItem
-                      key="add-terminal"
-                      description="Add new terminals to workspace"
-                      startContent={<PlusIcon className={cn(iconClasses)} />}
+              {(permissions?.create ||
+                permissions?.update ||
+                permissions?.edit ||
+                permissions?.delete) && (
+                <Dropdown backdrop="blur">
+                  <DropdownTrigger>
+                    <Button
+                      color="primary"
+                      endContent={<WrenchScrewdriverIcon className="h-5 w-5" />}
+                      loadingText={"Please wait..."}
                     >
-                      Add New Terminal
-                    </DropdownItem>
-                  )}
+                      Manage
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    aria-label="Action event example"
+                    onAction={(key) => handleManageTerminals(key)}
+                  >
+                    {hasTerminals && (
+                      <DropdownItem
+                        key="add-terminal"
+                        description="Add new terminals to workspace"
+                        startContent={<PlusIcon className={cn(iconClasses)} />}
+                      >
+                        Add New Terminal
+                      </DropdownItem>
+                    )}
 
-                  {/* <DropdownItem
+                    {/* <DropdownItem
                     key="workspace-settings"
                     href={`${dashboardRoute}/workspace-settings`}
                     description="Goto your workspace settings"
@@ -652,55 +676,56 @@ const APIIntegration = ({ workspaceID }) => {
                   >
                     Workspace Settings
                   </DropdownItem> */}
-                  <DropdownSection title={hasTerminals ? "" : "Danger zone"}>
-                    {!hasTerminals ? (
-                      <DropdownItem
-                        key="activate-terminals"
-                        classNames={{
-                          shortcut: "group-hover:text-white",
-                        }}
-                        color="primary"
-                        description="Activate collection terminals"
-                        shortcut="⌘⇧A"
-                        startContent={
-                          <ComputerDesktopIcon
-                            className={cn(
-                              iconClasses,
-                              "group-hover:text-white font-bold group-hover:border-white"
-                            )}
-                          />
-                        }
-                        variant="solid"
-                      >
-                        Activate Terminals
-                      </DropdownItem>
-                    ) : (
-                      <DropdownItem
-                        key="deactivate-terminals"
-                        className="text-danger"
-                        classNames={{
-                          shortcut:
-                            "group-hover:text-white font-bold group-hover:border-white",
-                        }}
-                        color="danger"
-                        description="Deactivate collection terminals"
-                        href="/support"
-                        shortcut="⌘⇧D"
-                        startContent={
-                          <TrashIcon
-                            className={cn(
-                              iconClasses,
-                              "text-danger group-hover:text-white"
-                            )}
-                          />
-                        }
-                      >
-                        Deactivate Terminals
-                      </DropdownItem>
-                    )}
-                  </DropdownSection>
-                </DropdownMenu>
-              </Dropdown>
+                    <DropdownSection title={hasTerminals ? "" : "Danger zone"}>
+                      {!hasTerminals ? (
+                        <DropdownItem
+                          key="activate-terminals"
+                          classNames={{
+                            shortcut: "group-hover:text-white",
+                          }}
+                          color="primary"
+                          description="Activate collection terminals"
+                          shortcut="⌘⇧A"
+                          startContent={
+                            <ComputerDesktopIcon
+                              className={cn(
+                                iconClasses,
+                                "group-hover:text-white font-bold group-hover:border-white"
+                              )}
+                            />
+                          }
+                          variant="solid"
+                        >
+                          Activate Terminals
+                        </DropdownItem>
+                      ) : (
+                        <DropdownItem
+                          key="deactivate-terminals"
+                          className="text-danger"
+                          classNames={{
+                            shortcut:
+                              "group-hover:text-white font-bold group-hover:border-white",
+                          }}
+                          color="danger"
+                          description="Deactivate collection terminals"
+                          href="/support"
+                          shortcut="⌘⇧D"
+                          startContent={
+                            <TrashIcon
+                              className={cn(
+                                iconClasses,
+                                "text-danger group-hover:text-white"
+                              )}
+                            />
+                          }
+                        >
+                          Deactivate Terminals
+                        </DropdownItem>
+                      )}
+                    </DropdownSection>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
               <Tooltip
                 classNames={{
                   content: "max-w-96 text-sm leading-6 p-3",
@@ -739,7 +764,7 @@ const APIIntegration = ({ workspaceID }) => {
                 />
               ) : (
                 <div className="-mt-4 flex h-full min-h-32 flex-1 items-center justify-center rounded-2xl bg-primary-50 text-sm font-medium dark:bg-foreground/5">
-                  {initLoading || isLoadingTerminals || isLoadingConfig ? (
+                  {isLoadingTerminals || isLoadingConfig ? (
                     <Loader
                       classNames={{
                         wrapper: "bg-foreground-200/50 rounded-xl h-full",
@@ -812,7 +837,7 @@ const APIIntegration = ({ workspaceID }) => {
       </div>
 
       <APIConfigViewModal
-        configData={configData}
+        API_CONFIG={API_CONFIG}
         isLoading={isLoadingConfig}
         isOpen={openViewConfig}
         onClose={() => {

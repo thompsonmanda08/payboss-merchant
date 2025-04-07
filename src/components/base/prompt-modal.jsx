@@ -7,6 +7,7 @@ import {
 } from "@heroui/modal";
 
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 function PromptModal({
   size = "lg",
@@ -20,11 +21,14 @@ function PromptModal({
   isLoading,
   isDismissable = true,
   isKeyboardDismissDisabled = true,
+  className,
+  backdrop,
   children,
 }) {
   return (
     <Modal
-      className={"z-[99999999] max-w-[600px]"}
+      backdrop={backdrop}
+      className={cn("z-[99999999] max-w-[600px]", className)}
       isDismissable={isDismissable}
       isKeyboardDismissDisabled={isKeyboardDismissDisabled}
       isOpen={isOpen}
@@ -40,14 +44,16 @@ function PromptModal({
               <Button color="danger" isDisabled={isDisabled} onPress={onClose}>
                 {cancelText}
               </Button>
-              <Button
-                color="primary"
-                isDisabled={isDisabled}
-                isLoading={isLoading}
-                onPress={onConfirm}
-              >
-                {confirmText}
-              </Button>
+              {onConfirm && (
+                <Button
+                  color="primary"
+                  isDisabled={isDisabled}
+                  isLoading={isLoading}
+                  onPress={onConfirm}
+                >
+                  {confirmText}
+                </Button>
+              )}
             </ModalFooter>
           </>
         )}
