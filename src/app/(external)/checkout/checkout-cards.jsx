@@ -24,8 +24,10 @@ import {
 } from "@heroui/react";
 import React from "react";
 import {
+  CheckBadgeIcon,
   CreditCardIcon,
   DevicePhoneMobileIcon,
+  XCircleIcon,
 } from "@heroicons/react/24/outline";
 
 import { Input } from "@/components/ui/input-field";
@@ -34,9 +36,21 @@ import { Button } from "@/components/ui/button";
 import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
 import CardHeader from "@/components/base/card-header";
 import Logo from "@/components/base/payboss-logo";
+import { useWebhook } from "@/hooks/use-webhook";
+import PromptModal from "@/components/base/prompt-modal";
+import Loader from "@/components/ui/loader";
+import Spinner from "@/components/ui/custom-spinner";
+
+const INIT_USER = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  reference: "",
+};
 
 export function Checkout({ checkoutData }) {
-  const [formData, setFormData] = React.useState({});
+  const [formData, setFormData] = React.useState(INIT_USER);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -71,7 +85,15 @@ function PaymentMethods({
   const [isLoading, setIsLoading] = React.useState(false);
   const [isCancelled, setIsCancelled] = React.useState(false);
   const [isCompleted, setIsCompleted] = React.useState(false);
+  const [pinPromptSent, setPinPromptSent] = React.useState(false);
   const [error, setError] = React.useState({ status: false, message: "" });
+
+  const {
+    data,
+    isSuccess,
+    isError,
+    isLoading: loadingWebHook,
+  } = useWebhook(checkoutData?.transactionId, pinPromptSent);
 
   const popUpWindowRef = React.useRef(null);
 
@@ -108,7 +130,7 @@ function PaymentMethods({
     const paymentWindow = window.open(
       paymentUrl,
       "PayBoss Checkout",
-      `width=${width},height=${height},left=${left},top=${top}`,
+      `width=${width},height=${height},left=${left},top=${top}`
     );
 
     if (!paymentWindow) {
@@ -143,7 +165,7 @@ function PaymentMethods({
 
       if (event.data.status === "success") {
         alert(
-          `Payment successful! Transaction ID: ${event.data.transactionId}`,
+          `Payment successful! Transaction ID: ${event.data.transactionId}`
         );
         setIsCompleted(true);
       } else {
@@ -188,6 +210,7 @@ function PaymentMethods({
         description: "Still under maintenance",
         color: "warning",
       });
+      onOpen();
       setIsLoading(false);
 
       return;
@@ -211,11 +234,20 @@ function PaymentMethods({
     }
   }
 
+  function handleClosePrompt() {
+    onClose();
+    setIsLoading(false);
+    setIsCancelled(false);
+    setIsCompleted(false);
+    setPinPromptSent(false);
+    popUpWindowRef.current = null;
+  }
+
   return (
     <>
       <Card
         className={cn(
-          "border-1 px-1 py-2 pb-6 shadow-xl hover:shadow-2xl hover:shadow-primary/20 shadow-primary/10 transition-all duration-300 ease-in-out max-w-lg w-full mx-auto",
+          "border-1 px-1 py-2 pb-6 shadow-xl hover:shadow-2xl hover:shadow-primary/20 shadow-primary/10 transition-all duration-300 ease-in-out max-w-lg w-full mx-auto"
         )}
       >
         <HeroCardHeader className="flex-col items-start px-4 pb-0 pt-2">
@@ -444,13 +476,77 @@ function PaymentMethods({
         </CardFooter>
       </Card>
 
-      {/* <TransactionPromptModal
-        onOpen={onOpen}
-        isOpen={isOpen}
-        isCancelled={isCancelled}
-        handleClose={onClose}
-        onOpenChange={onOpenChange}
-      /> */}
+      {selected == "mobile" && isOpen && (
+        <PromptModal
+          // confirmText={"Confirm"}
+          backdrop="blur"
+          isDismissable={false}
+          isDisabled={isLoading || pinPromptSent}
+          // isLoading={isLoading}
+          isOpen={selected == "mobile" && isOpen}
+          title={"Transaction Status"}
+          onClose={handleClosePrompt}
+          // onConfirm={handleClosePrompt}
+          onOpen={onOpen}
+          className={"max-w-sm"}
+          size="sm"
+        >
+          {pinPromptSent ? (
+            <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
+              {/* <Loader loadingText={"Please wait..."} size={100} /> */}
+              <Spinner size={100} />
+              <div className="grid place-items-center gap-2">
+                <p
+                  className={cn(
+                    "mt-4 max-w-sm break-words font-bold text-foreground/80"
+                  )}
+                >
+                  {"Please wait..."}
+                </p>
+                <small className="text-muted-foreground">
+                  Check your phone for an approval prompt
+                </small>
+              </div>
+            </div>
+          ) : !isSuccess ? (
+            <>
+              <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
+                {/* <Loader loadingText={"Please wait..."} size={100} /> */}
+                <CheckBadgeIcon className="w-32 text-success" />
+                <div className="grid place-items-center gap-2">
+                  <p
+                    className={cn(
+                      "mt-4 max-w-sm break-words font-bold text-foreground/80"
+                    )}
+                  >
+                    Success
+                  </p>
+                  <small className="text-muted-foreground">
+                    Payment completed successfully!
+                  </small>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
+              {/* <Loader loadingText={"Please wait..."} size={100} /> */}
+              <XCircleIcon className="w-32 text-danger" />
+              <div className="grid place-items-center gap-2">
+                <p
+                  className={cn(
+                    "mt-4 max-w-sm break-words font-bold text-foreground/80"
+                  )}
+                >
+                  {"Failed"}
+                </p>
+                <small className="text-muted-foreground">
+                  Payment failed. Try again later!
+                </small>
+              </div>
+            </div>
+          )}
+        </PromptModal>
+      )}
     </>
   );
 }

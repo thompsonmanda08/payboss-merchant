@@ -36,8 +36,8 @@ export const API_CONFIG_VIEWS = [
 export default function APIConfigViewModal({
   isOpen,
   onClose,
-  configData,
   isLoading,
+  API_CONFIG,
 }) {
   const [currentStep, setCurrentStep] = useState(API_CONFIG_VIEWS[0]);
 
@@ -66,25 +66,25 @@ export default function APIConfigViewModal({
     <API_Authentication
       key={currentStep.title}
       config={{
-        url: configData?.collectionAuthURL,
-        authentication: configData?.authPayload,
-        response: configData?.authResponse,
+        url: API_CONFIG?.collectionAuthURL,
+        authentication: API_CONFIG?.authPayload,
+        response: API_CONFIG?.authResponse,
       }}
     />,
 
     <ActionResponses
       key={currentStep.title}
       config={{
-        url: configData?.collectionURL,
-        payload: configData?.collectionPayload,
-        response: configData?.collectionResponse,
+        url: API_CONFIG?.collectionURL,
+        payload: API_CONFIG?.collectionPayload,
+        response: API_CONFIG?.collectionResponse,
       }}
     />,
     <StatusResponses
       key={currentStep.title}
       config={{
-        url: configData?.collectionStatusURL,
-        response: configData?.collectionStatusResponse,
+        url: API_CONFIG?.collectionStatusURL,
+        response: API_CONFIG?.collectionStatusResponse,
       }}
     />,
   ]);
@@ -166,7 +166,7 @@ export function API_Authentication({ config, titles }) {
           <pre
             dangerouslySetInnerHTML={{
               __html: syntaxHighlight(
-                JSON.stringify(payload || authentication, undefined, 2),
+                JSON.stringify(payload || authentication, undefined, 2)
               ),
             }}
           />
@@ -213,7 +213,7 @@ export function ActionResponses({ config, titles, method }) {
             <pre
               dangerouslySetInnerHTML={{
                 __html: syntaxHighlight(
-                  JSON.stringify(payload || collection, undefined, 2),
+                  JSON.stringify(payload || collection, undefined, 2)
                 ),
               }}
             />

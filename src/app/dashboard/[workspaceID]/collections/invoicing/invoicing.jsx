@@ -487,7 +487,7 @@ export default function CheckoutAndInvoicing({ workspaceID, permissions }) {
         onConfirm={handleCheckoutURLGenerate}
         onOpen={onOpen}
       >
-        <div className="flex flex-col gap-2 w-full mb-4">
+        <div className="flex flex-col gap-4 w-full mb-4">
           <Input
             required
             label={"Display Name"}
@@ -528,8 +528,15 @@ export default function CheckoutAndInvoicing({ workspaceID, permissions }) {
             }
           />
         </div>
-
+        <label
+          className={cn(
+            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70"
+          )}
+        >
+          Logo (Optional)
+        </label>
         <SingleFileDropzone
+          showPreview
           isLoading={isUploading}
           otherAcceptedFiles={{
             // images

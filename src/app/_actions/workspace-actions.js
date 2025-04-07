@@ -523,18 +523,18 @@ export async function setupWorkspaceAPIKey(workspaceID) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function refreshWorkspaceAPIKey(workspaceID) {
-  if (!workspaceID) {
+export async function refreshWorkspaceAPIKey(workspaceID, keyID) {
+  if (!workspaceID || !keyID) {
     return {
       success: false,
-      message: "Workspace ID is required!",
+      message: "Workspace/Refresh Key ID is required!",
       data: null,
       status: 400,
       statusText: "Bad Request",
     };
   }
 
-  const url = `transaction/collection/generate/api-key/${workspaceID}`;
+  const url = `/transaction/collection/generate/${workspaceID}/api-key/${keyID}`;
 
   try {
     const res = await authenticatedService({ url });
