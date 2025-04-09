@@ -6,7 +6,7 @@ import { addToast } from "@heroui/react";
 import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from "./constants";
 
 export const apiClient = axios.create({
-  baseURL: BASE_URL,
+  baseURL: assertValue(BASE_URL, "Missing Environment Variable: BASE_URL"),
 });
 
 export function cn(...inputs) {
@@ -212,7 +212,7 @@ export function syntaxHighlight(json) {
       }
 
       return '<span class="' + cls + '">' + match + "</span>";
-    },
+    }
   );
 }
 
@@ -228,4 +228,12 @@ export function generateRandomString(length = 10) {
   }
 
   return randomString;
+}
+
+export function assertValue(v, errorMessage) {
+  if (v === undefined || !v) {
+    throw new Error(errorMessage);
+  }
+
+  return v;
 }
