@@ -117,7 +117,7 @@ export const getAllUsers = cache(async function fetchAllUsers() {
 export async function assignUsersToWorkspace(users, workspaceID) {
   try {
     const res = await authenticatedService({
-      url: `merchant/workspace/user/mapping/${workspaceID}`,
+      url: `merchant/workspace/${workspaceID}/user/mapping`,
       method: "POST",
       data: {
         users,
