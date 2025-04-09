@@ -361,7 +361,7 @@ export async function deleteSystemUserData(userID) {
 export async function unlockSystemUser(userID) {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
-  const url = `merchant/${merchantID}/user/${userID}`;
+  const url = `merchant/${merchantID}/user/${userID}/unlock`;
 
   try {
     const res = await authenticatedService({
@@ -461,7 +461,7 @@ export async function changeUserPassword(password) {
 export async function adminResetUserPassword(userID, newPasswordData) {
   try {
     const res = await authenticatedService({
-      url: `merchant/user/reset/password/${userID}`,
+      url: `merchant/user/${userID}/reset/password`,
       method: "PATCH",
       data: newPasswordData,
     });
