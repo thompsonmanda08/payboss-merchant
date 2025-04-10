@@ -69,10 +69,7 @@ export default function Checkout({ checkoutData }) {
                   </div>
                 }
               >
-                <MobileMoneyForm
-                  amount={checkoutData.amount}
-                  transactionID={checkoutData.transactionID}
-                />
+                <MobileMoneyForm checkoutData={checkoutData} />
               </Tab>
 
               <Tab
@@ -85,10 +82,7 @@ export default function Checkout({ checkoutData }) {
                   </div>
                 }
               >
-                <CardPaymentForm
-                  amount={checkoutData.amount}
-                  transactionID={checkoutData.transactionID}
-                />
+                <CardPaymentForm checkoutData={checkoutData} />
               </Tab>
             </Tabs>
           </CardBody>

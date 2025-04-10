@@ -1,5 +1,9 @@
 import Logo from "@/components/base/payboss-logo";
-import { getCheckoutInfo } from "@/app/_actions/vas-actions";
+import {
+  getCheckoutInfo,
+  validateCheckoutData,
+} from "@/app/_actions/checkout-actions";
+import { ErrorCard } from "@/components/base/error-card";
 
 import Checkout from "../components/checkout";
 
@@ -15,20 +19,28 @@ async function CheckoutPage(props) {
     serviceID: searchParams?.service_id || "",
   };
 
-  const response = await getCheckoutInfo(checkoutData?.checkoutID);
+  // FIRST POST CHECKOUT DATA TO LOG CHECKOUT INFO FOR VALIDATION
+  const validation = validateCheckoutData(checkoutData);
 
-  // if (!response?.success) {
-  //   return (
-  //     <>
-  //       <ErrorCard
-  //         className={"max-h-fit m-auto"}
-  //         title={"Checkout not found"}
-  //         message={"The checkout you are looking for does not exist"}
-  //         goBack={true}
-  //       ></ErrorCard>
-  //     </>
-  //   );
-  // }
+  if (!validation?.success) {
+    return (
+      <>
+        <ErrorCard
+          className={"max-h-fit m-auto"}
+          goBack={true}
+          message={
+            response?.message ||
+            "The checkout you are looking for does not exist"
+          }
+          title={"Checkout Error"}
+        />
+      </>
+    );
+  }
+
+  const [response] = await Promise.all([
+    getCheckoutInfo(checkoutData?.checkoutID),
+  ]);
 
   checkoutData = {
     ...checkoutData,

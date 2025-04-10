@@ -62,7 +62,7 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
   const { data: checkoutResponse, isLoading: isLoadingConfig } =
     useWorkspaceCheckout(workspaceID);
 
-  const configData = checkoutResponse || {};
+  const configData = checkoutResponse?.data || {};
 
   const [selectedKey, setSelectedKey] = useState(null);
   const [copiedKey, setCopiedKey] = useState("");
@@ -74,8 +74,6 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
   const [isUploading, setIsUploading] = useState(false);
 
   const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
-
-  console.log("configData,", configData);
 
   function handleManageDropdown(key) {
     /* OPEN MODAL */
@@ -256,46 +254,32 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
               }
               title={"Checkout Config"}
             />
-            {isOpen ? (
-              <>
+            <Dropdown>
+              <DropdownTrigger>
                 <Button
-                  isIconOnly
-                  className="bg-red-500/10 text-red-500"
-                  color="danger"
-                  radius={"full"}
-                  variant="flat"
-                  onClick={handleClosePrompts}
+                  color="primary"
+                  startContent={<Cog6ToothIcon className="h-6 w-6" />}
+                  variant="faded"
+                  // isLoading={initLoading}
+                  loadingText={"Please wait..."}
                 >
-                  <XMarkIcon className="w-6 h-6" />
+                  Menu
                 </Button>
-              </>
-            ) : (
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button
-                    color="primary"
-                    startContent={<Cog6ToothIcon className="h-6 w-6" />}
-                    variant="faded"
-                    // isLoading={initLoading}
-                    loadingText={"Please wait..."}
-                  >
-                    Menu
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  aria-label="select-action"
-                  onAction={(key) => handleManageDropdown(key)}
-                >
-                  <DropdownItem
-                    key="generate-checkout-url"
-                    description="
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="select-action"
+                onAction={(key) => handleManageDropdown(key)}
+              >
+                <DropdownItem
+                  key="generate-checkout-url"
+                  description="
                   Generate a payment URL for your clients
                   "
-                    startContent={<LinkIcon className={cn(iconClasses)} />}
-                  >
-                    Generate Checkout URL
-                  </DropdownItem>
-                  {/* <DropdownItem
+                  startContent={<LinkIcon className={cn(iconClasses)} />}
+                >
+                  Generate Checkout URL
+                </DropdownItem>
+                {/* <DropdownItem
                     key="new-invoice"
                     description="Create a new invoice for your client"
                     startContent={<PlusIcon className={cn(iconClasses)} />}
@@ -303,9 +287,8 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
                   >
                     Create New Invoice
                   </DropdownItem> */}
-                </DropdownMenu>
-              </Dropdown>
-            )}
+              </DropdownMenu>
+            </Dropdown>
           </div>
 
           {selectedKey != "new-invoice" && (
