@@ -122,16 +122,16 @@ export async function setupUserSessions(sessionData) {
   // CREATE A USER SESSION COOKIE TO STORE THE LOGGED IN USER DATA
   await Promise.all([
     createUserSession({
-      user: sessionData.userDetails,
-      merchantID: sessionData.merchantID,
-      userPermissions: sessionData.userPermissions,
-      kyc: sessionData.kyc,
+      user: sessionData?.userDetails,
+      merchantID: sessionData?.merchantID,
+      userPermissions: sessionData?.userPermissions,
+      kyc: sessionData?.kyc,
       isSetupComplete: true,
     }),
-    sessionData.workspaces &&
+    sessionData?.workspaces &&
       createWorkspaceSession({
-        workspaces: sessionData.workspaces,
-        workspaceIDs: sessionData.workspaces.map((item) => item?.ID),
+        workspaces: sessionData?.workspaces,
+        workspaceIDs: sessionData?.workspaces.map((item) => item?.ID),
         activeWorkspace: null,
         activeWorkspaceID: null,
         workspacePermissions: null,
