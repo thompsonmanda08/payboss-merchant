@@ -11,15 +11,21 @@ import { getWorkspaceSession } from "@/app/_actions/config-actions";
 export default async function ManageWorkspacePage({ params }) {
   const workspaceID = (await params).workspaceID;
 
-  const workspaceResponse = await getWorkspaceDetails(workspaceID);
-  const workspaceMembers = await getWorkspaceMembers(workspaceID);
-
-  const allUsersData = await getAllUsers();
-
-  const workspaceRolesResponse = await getWorkspaceRoles();
-  const systemRolesResponse = await getUserAccountRoles();
-
-  const workspaceSession = await getWorkspaceSession();
+  const [
+    workspaceSession,
+    allUsersData,
+    workspaceRolesResponse,
+    systemRolesResponse,
+    workspaceResponse,
+    workspaceMembers,
+  ] = await Promise.all([
+    getWorkspaceSession(),
+    getAllUsers(),
+    getWorkspaceRoles(),
+    getUserAccountRoles(),
+    getWorkspaceDetails(workspaceID),
+    getWorkspaceMembers(workspaceID),
+  ]);
 
   return (
     <>

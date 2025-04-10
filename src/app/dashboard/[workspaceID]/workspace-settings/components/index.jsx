@@ -6,6 +6,7 @@ import {
   UserGroupIcon,
   WalletIcon,
   WrenchScrewdriverIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
@@ -23,6 +24,7 @@ import WorkspaceDetails from "../../../../../components/workspace-general-detail
 import Wallet from "./wallet";
 import ActivePockets from "./active-pockets-tab";
 import WorkspaceMembers from "./workspace-members";
+import CheckoutConfig from "./checkout-config";
 
 function WorkspaceSettings({
   workspaceID,
@@ -53,7 +55,8 @@ function WorkspaceSettings({
     : // BILL PAYMENTS TAB LABEL
       isBillPaymentWorkspace
       ? [{ name: "Wallet Deposits", index: 2, icon: WalletIcon }]
-      : [];
+      : // COLLECTION TABS
+        [{ name: "Hosted Checkout", index: 2, icon: ShoppingCartIcon }];
 
   const TABS = [
     { name: "General Settings", index: 0, icon: WrenchScrewdriverIcon },
@@ -63,7 +66,7 @@ function WorkspaceSettings({
 
   // Components to be rendered for the workspace type
   const TAB_COMPONENTS =
-    // DISBURSEMENTS & HYBRID WORKSPACES
+    // * DISBURSEMENTS & HYBRID WORKSPACES
     isDisbursementOrHybrid
       ? [
           <ActivePockets
@@ -79,7 +82,7 @@ function WorkspaceSettings({
             workspaceName={selectedWorkspace?.workspace}
           />,
         ]
-      : // BILL PAYMENTS SELECTED
+      : // * BILL PAYMENTS WORKSPACE TABS
         isBillPaymentWorkspace
         ? [
             <Wallet
@@ -90,7 +93,14 @@ function WorkspaceSettings({
               workspaceName={selectedWorkspace?.workspace}
             />,
           ]
-        : [];
+        : // * COLLECTION WORKSPACE TABS
+          [
+            <CheckoutConfig
+              key={"hosted-checkout"}
+              workspaceID={workspaceID}
+              permissions={permissions}
+            />,
+          ];
 
   function handleNavigation(index) {
     navigateTo(index);
