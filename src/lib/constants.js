@@ -5,7 +5,13 @@ import {
   CircleStackIcon,
 } from "@heroicons/react/24/outline";
 
-import { assertValue } from "./utils";
+export function assertValue(v, errorMessage) {
+  if (v === undefined || !v) {
+    throw new Error(errorMessage);
+  }
+
+  return v;
+}
 
 export const BASE_URL = assertValue(
   process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL,
