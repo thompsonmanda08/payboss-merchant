@@ -1,10 +1,10 @@
 "use server";
 
-import axios from "axios";
 import { cache } from "react";
+import { revalidatePath } from "next/cache";
 
-import { BASE_URL } from "@/lib/constants";
 import {
+  deleteSession,
   getServerSession,
   getUserSession,
   getWorkspaceSessionData,
@@ -107,3 +107,11 @@ export async function getWorkspaceSession() {
 
   return null;
 }
+
+export const revokeAccessToken = async () => {
+  const response = await deleteSession();
+
+  revalidatePath("/", "layout");
+
+  return response;
+};

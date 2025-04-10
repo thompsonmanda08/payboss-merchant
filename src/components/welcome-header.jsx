@@ -36,8 +36,8 @@ function WorkspaceHeader({ permissions, accountState }) {
           startContent={<PowerIcon className=" h-5 w-5" />}
           variant="light"
           onClick={() => {
-            queryClient.invalidateQueries();
             handleUserLogOut();
+            queryClient.invalidateQueries();
           }}
         >
           Sign out

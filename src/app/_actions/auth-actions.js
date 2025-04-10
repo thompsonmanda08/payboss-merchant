@@ -2,7 +2,6 @@
 import authenticatedService from "@/lib/api-config";
 import {
   createAuthSession,
-  deleteSession,
   getUserSession,
   updateAuthSession,
   verifySession,
@@ -10,6 +9,7 @@ import {
 import { apiClient } from "@/lib/utils";
 
 import { setupAccountConfig } from "./merchant-actions";
+import { revokeAccessToken } from "./config-actions";
 
 /**
  * Authenticates a user with their email and password by calling the API endpoint
@@ -478,9 +478,9 @@ export async function logUserOut() {
   const isLoggedIn = await verifySession();
 
   if (isLoggedIn) {
-    await deleteSession();
+    const response = await revokeAccessToken();
 
-    return true;
+    return response?.success;
   }
 
   return false;

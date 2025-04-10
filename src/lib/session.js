@@ -98,17 +98,12 @@ export async function decrypt(session) {
   }
 }
 
-export async function createAuthSession(
-  accessToken,
-  expiresIn = 1800,
-  refreshToken = ""
-) {
+export async function createAuthSession(accessToken) {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // AFTER 1 HOUR
 
   // Call `encrypt` to generate the session token
   const session = await encrypt({
     accessToken: accessToken || "",
-    refreshToken: refreshToken || "",
     expiresAt,
   });
 

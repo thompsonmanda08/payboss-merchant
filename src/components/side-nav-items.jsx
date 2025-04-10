@@ -143,8 +143,8 @@ export default function SideNavItems({
           `group flex cursor-pointer items-center gap-3 rounded-lg bg-transparent p-3 text-sm font-bold text-slate-600 shadow-none transition-all duration-200 ease-in-out hover:text-primary`
         )}
         onClick={() => {
-          queryClient.invalidateQueries();
           handleUserLogOut();
+          queryClient.invalidateQueries();
         }}
       >
         <NavItemIcon
@@ -152,8 +152,8 @@ export default function SideNavItems({
           activeLayer={false}
           isSelected={true}
           onIconPress={() => {
-            queryClient.invalidateQueries();
             handleUserLogOut();
+            queryClient.invalidateQueries();
           }}
         />
         Log out

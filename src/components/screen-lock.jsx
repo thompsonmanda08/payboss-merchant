@@ -50,8 +50,8 @@ function ScreenLock({ open }) {
     }, 1000);
 
     if (seconds == 0) {
-      queryClient.invalidateQueries();
       handleUserLogOut();
+      queryClient.invalidateQueries();
     }
 
     return () => {
@@ -118,8 +118,8 @@ function ScreenLock({ open }) {
             isDisabled={isLoading}
             variant="light"
             onPress={() => {
-              queryClient.invalidateQueries();
               handleUserLogOut();
+              queryClient.invalidateQueries();
             }}
           >
             Log out
@@ -161,7 +161,7 @@ export function IdleTimerContainer({ authSession }) {
       async () => {
         await getRefreshToken();
       },
-      1000 * 60 * 4.5,
+      1000 * 60 * 4.5
     );
   };
 

@@ -271,8 +271,8 @@ export function AvatarDropdown({ user, isProfile }) {
           <DropdownItem
             key="logout"
             onPress={() => {
-              queryClient.invalidateQueries();
               handleUserLogOut();
+              queryClient.invalidateQueries();
             }}
           >
             <div className="flex items-center justify-between">
@@ -280,8 +280,8 @@ export function AvatarDropdown({ user, isProfile }) {
               <NavIconButton
                 className={"scale-80 bg-primary"}
                 onClick={() => {
-                  queryClient.invalidateQueries();
                   handleUserLogOut();
+                  queryClient.invalidateQueries();
                 }}
               >
                 <PowerIcon className="h-5 w-5 text-white" />
