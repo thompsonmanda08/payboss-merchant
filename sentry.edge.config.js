@@ -15,7 +15,7 @@ export function assertValue(v, errorMessage) {
 
 Sentry.init({
   dsn: assertValue(
-    process.env.SENTRY_DSN,
+    process.env.SENTRY_DNS || process.env.NEXT_PUBLIC_SENTRY_DNS,
     "Missing Environment Variable: SENTRY_DSN"
   ),
 
