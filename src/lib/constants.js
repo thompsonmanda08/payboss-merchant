@@ -5,13 +5,20 @@ import {
   CircleStackIcon,
 } from "@heroicons/react/24/outline";
 
-export const BASE_URL =
-  process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL;
+import { assertValue } from "./utils";
+
+export const BASE_URL = assertValue(
+  process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL,
+  "Missing Environment Variable: BASE_URL"
+);
 // const POCKET_BASE_URL =
 //   process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL
 
 //https://payboss-uat-backend.bgsgroup.co.zm/_/#/login
-export const POCKET_BASE_URL = "https://payboss-uat-backend.bgsgroup.co.zm";
+export const POCKET_BASE_URL = assertValue(
+  process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL,
+  "Missing Environment Variable: POCKET_BASE_URL"
+);
 
 export const AUTH_SESSION = "pb-session";
 export const USER_SESSION = "pb-next-usr";

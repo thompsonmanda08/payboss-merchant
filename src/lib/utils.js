@@ -6,7 +6,7 @@ import { addToast } from "@heroui/react";
 import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from "./constants";
 
 export const apiClient = axios.create({
-  baseURL: assertValue(BASE_URL, "Missing Environment Variable: BASE_URL"),
+  baseURL: BASE_URL,
 });
 
 export function cn(...inputs) {
