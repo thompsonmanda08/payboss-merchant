@@ -7,8 +7,12 @@ import { getUserDetails } from "../_actions/config-actions";
 import { getAllWorkspaces } from "../_actions/merchant-actions";
 
 async function AllWorkspacesPage() {
-  const session = await getUserDetails();
-  const workspacesResponse = await getAllWorkspaces();
+  // Parallelize data fetching
+  const [workspacesResponse, session] = await Promise.all([
+    getAllWorkspaces(),
+    getUserDetails(),
+  ]);
+
   const workspaces = workspacesResponse?.data?.workspaces || [];
 
   return (

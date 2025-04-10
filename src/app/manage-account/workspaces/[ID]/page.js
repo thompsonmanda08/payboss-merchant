@@ -13,12 +13,20 @@ import WorkspaceSummary from "./workspace-summary-details";
 async function WorkSpaceIDPage({ params }) {
   const workspaceID = (await params).ID;
 
-  const workspacesResponse = await getAllWorkspaces();
-  const workspaces = workspacesResponse?.data?.workspaces || [];
+  // Parallelize data fetching
+  const [
+    workspacesResponse, // ALL WORKSPACES
+    allUsersData, // ALL USERS
+    workspaceRoleData, // WORKSPACE ROLES
+    workspaceMembers, // WORKSPACE USER MEMBERS
+  ] = await Promise.all([
+    getAllWorkspaces(),
+    getAllUsers(),
+    getWorkspaceRoles(),
+    getWorkspaceMembers(workspaceID),
+  ]);
 
-  const allUsersData = await getAllUsers();
-  const workspaceMembers = await getWorkspaceMembers(workspaceID);
-  const workspaceRoleData = await getWorkspaceRoles();
+  const workspaces = workspacesResponse?.data?.workspaces || [];
 
   return (
     <Suspense fallback={<LoadingPage loadingText="Initializing Workspace.." />}>

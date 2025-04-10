@@ -21,6 +21,7 @@ export default function CreateNewWorkspaceModal({
   formData,
   handleClose,
   loading,
+  merchantKYC,
 }) {
   return (
     <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
@@ -64,16 +65,18 @@ export default function CreateNewWorkspaceModal({
                 }}
               />
 
-              <Checkbox
-                defaultSelected={false}
-                isSelected={formData?.isMerchantWorkspace}
-                size="md"
-                onValueChange={(isSelected) =>
-                  editWorkspaceField({ isMerchantWorkspace: isSelected })
-                }
-              >
-                Is Merchant Workspace
-              </Checkbox>
+              {merchantKYC?.merchant_type == "super" && (
+                <Checkbox
+                  defaultSelected={false}
+                  isSelected={formData?.isMerchantWorkspace}
+                  size="md"
+                  onValueChange={(isSelected) =>
+                    editWorkspaceField({ isMerchantWorkspace: isSelected })
+                  }
+                >
+                  Is Merchant Workspace
+                </Checkbox>
+              )}
             </ModalBody>
             <ModalFooter>
               <Button

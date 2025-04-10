@@ -4,11 +4,9 @@ import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
 import authenticatedService from "@/lib/api-config";
-import {
-  createUserSession,
-  createWorkspaceSession,
-  getUserSession,
-} from "@/lib/session";
+import { getUserSession } from "@/lib/session";
+
+import { setupUserSessions } from "./config-actions";
 
 /**
  * Retrieves the user setup configurations including the logged in user details, permissions, KYC and workspaces.
@@ -24,30 +22,7 @@ export const setupAccountConfig = cache(async () => {
     const res = await authenticatedService({ url });
 
     // CREATE A USER SESSION COOKIE TO STORE THE LOGGED IN USER DATA
-    await createUserSession({
-      user: res.data?.userDetails,
-      merchantID: res.data?.merchantID,
-      userPermissions: res.data?.userPermissions,
-      kyc: res.data?.kyc,
-      isSetupComplete: true,
-    });
-
-    let workspaceIDs = res.data?.workspaces?.map((item) => item?.ID);
-    let workspaces = res.data?.workspaces;
-
-    revalidatePath("/workspaces", "page");
-
-    // Create a workspace session for the logged in user -
-    // This is used to get the active workspace and workspace user as well as permissions
-    if (workspaces) {
-      await createWorkspaceSession({
-        workspaces: workspaces,
-        workspaceIDs: workspaceIDs,
-        activeWorkspace: null,
-        activeWorkspaceID: null,
-        workspacePermissions: null,
-      });
-    }
+    await setupUserSessions(res?.data);
 
     return {
       success: true,

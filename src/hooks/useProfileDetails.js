@@ -7,8 +7,6 @@ const useAccountProfile = () => {
   const { data: setup } = useSetupConfig();
   const { data: kycData } = useKYCData();
 
-  console.log("kycData", kycData);
-  console.log("setup", setup);
 
   const user = setup?.data?.userDetails || [];
   const permissions = setup?.data?.userPermissions;

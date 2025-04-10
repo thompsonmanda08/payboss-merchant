@@ -277,14 +277,15 @@ export async function getWorkspaceSessionData() {
 // DELETE THE SESSION
 export async function deleteSession() {
   const cookieStore = await cookies();
-  const allCookies = cookieStore.getAll();
+  // const allCookies = cookieStore.getAll();
 
-  allCookies.forEach(({ name }) => {
-    cookieStore.set(name, "", {
-      expires: new Date(0),
-      path: "/",
-    });
-  });
+  // allCookies.forEach(({ name }) => {
+  //   cookieStore.set(name, "", {
+  //     expires: new Date(0),
+  //     path: "/",
+  //   });
+  // });
+  cookieStore.delete(AUTH_SESSION);
 
   if (typeof window !== "undefined") {
     localStorage.clear();

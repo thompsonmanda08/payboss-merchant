@@ -51,7 +51,7 @@ async function CheckoutPage(props) {
           </p>
         </div>
         <span className="font-medium italic flex gap-2 items-center">
-          Powered by <Logo />
+          Powered by <Logo href={"#"} />
         </span>
       </div>
       <hr className="mb-4 bg-transparent border-slate-200" />
