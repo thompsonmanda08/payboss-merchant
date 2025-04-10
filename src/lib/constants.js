@@ -15,7 +15,7 @@ export function assertValue(v, errorMessage) {
 
 export const BASE_URL = assertValue(
   process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL,
-  "Missing Environment Variable: BASE_URL"
+  "Missing Environment Variable: BASE_URL OR SERVER_URL"
 );
 // const POCKET_BASE_URL =
 //   process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL
