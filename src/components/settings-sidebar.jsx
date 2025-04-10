@@ -169,7 +169,6 @@ function SettingsSideBar({ title, backButtonText, session }) {
               className={"bg-primary"}
               onClick={() => {
                 handleUserLogOut();
-                queryClient.invalidateQueries();
               }}
             >
               <PowerIcon className="h-5 w-5 text-white" />
@@ -177,7 +176,6 @@ function SettingsSideBar({ title, backButtonText, session }) {
             <Button
               onClick={() => {
                 handleUserLogOut();
-                queryClient.invalidateQueries();
               }}
               variant="light"
               // size="sm"

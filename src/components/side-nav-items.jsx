@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { PowerIcon } from "@heroicons/react/24/solid";
-import { useQueryClient } from "@tanstack/react-query";
 
 import { cn } from "@/lib/utils";
 import useAuthStore from "@/context/auth-store";
@@ -19,7 +18,6 @@ export default function SideNavItems({
   handleLinkClick,
   navBarItems,
 }) {
-  const queryClient = useQueryClient();
   const { handleUserLogOut } = useAuthStore((state) => state);
   const { pathname, pathArr } = useNavigation((state) => state);
 
@@ -144,7 +142,6 @@ export default function SideNavItems({
         )}
         onClick={() => {
           handleUserLogOut();
-          queryClient.invalidateQueries();
         }}
       >
         <NavItemIcon
@@ -153,7 +150,6 @@ export default function SideNavItems({
           isSelected={true}
           onIconPress={() => {
             handleUserLogOut();
-            queryClient.invalidateQueries();
           }}
         />
         Log out

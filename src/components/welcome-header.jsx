@@ -12,7 +12,6 @@ import EnvironmentMode from "./environment-mode";
 
 function WorkspaceHeader({ permissions, accountState }) {
   const { handleUserLogOut } = useAuthStore((state) => state);
-  const queryClient = useQueryClient();
 
   return (
     <>
@@ -37,7 +36,6 @@ function WorkspaceHeader({ permissions, accountState }) {
           variant="light"
           onClick={() => {
             handleUserLogOut();
-            queryClient.invalidateQueries();
           }}
         >
           Sign out

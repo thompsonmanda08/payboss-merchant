@@ -33,7 +33,6 @@ import Avatar from "./ui/avatar";
 import NavIconButton from "./ui/nav-icon-button";
 
 export default function TopNavBar({ user, workspaceSession }) {
-  const queryClient = useQueryClient();
   const { isLoading } = useWorkspaceInit(workspaceSession?.activeWorkspaceID);
 
   const { workspaceWalletBalance } = useWorkspaces(workspaceSession);

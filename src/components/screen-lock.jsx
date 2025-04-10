@@ -119,7 +119,6 @@ function ScreenLock({ open }) {
             variant="light"
             onPress={() => {
               handleUserLogOut();
-              queryClient.invalidateQueries();
             }}
           >
             Log out

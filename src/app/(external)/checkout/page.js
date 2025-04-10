@@ -1,7 +1,7 @@
 import Logo from "@/components/base/payboss-logo";
 import { getCheckoutInfo } from "@/app/_actions/vas-actions";
 
-import { Checkout } from "./checkout-cards";
+import Checkout from "../components/checkout";
 
 async function CheckoutPage(props) {
   const searchParams = await props.searchParams;

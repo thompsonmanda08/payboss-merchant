@@ -2,8 +2,8 @@ import SupportForm from "@/components/forms/support-form";
 import Logo from "@/components/base/payboss-logo";
 import WorkspaceHeader from "@/components/welcome-header";
 
-import AuthLayout from "../(auth)/layout";
-import { getUserDetails } from "../_actions/config-actions";
+import AuthLayout from "../../(auth)/layout";
+import { getUserDetails } from "../../_actions/config-actions";
 
 async function Support() {
   const session = await getUserDetails();
