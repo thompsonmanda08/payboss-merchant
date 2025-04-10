@@ -5,19 +5,8 @@
 
 import * as Sentry from "@sentry/nextjs";
 
-export function assertValue(v, errorMessage) {
-  if (v === undefined || !v) {
-    throw new Error(errorMessage);
-  }
-
-  return v;
-}
-
 Sentry.init({
-  dsn: assertValue(
-    process.env.SENTRY_DNS || process.env.NEXT_PUBLIC_SENTRY_DNS,
-    "Missing Environment Variable: SENTRY_DSN"
-  ),
+  dsn: process.env.SENTRY_DNS || process.env.NEXT_PUBLIC_SENTRY_DNS,
 
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,

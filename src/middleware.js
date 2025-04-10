@@ -64,7 +64,7 @@ export async function middleware(request) {
   if (!accessToken && !isPublicRoute) {
     url.pathname = "/login";
 
-    url.searchParams.set("callbackUrl", pathname);
+    // url.searchParams.set("callbackUrl", pathname);
 
     return NextResponse.redirect(url);
   }
