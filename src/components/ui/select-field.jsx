@@ -7,7 +7,8 @@ function SelectField({
   onChange,
   options,
   placeholder,
-  listItemName,
+  listItemName, // CHOOSE THE VALUE TO BE DISPLAYED
+  selector, // CHOOSE THE VALUE TO BE SELECTED
   name,
   label,
   type,
@@ -89,6 +90,7 @@ function SelectField({
           {options &&
             options.map((item) => {
               let ItemValue =
+                item?.[selector] ||
                 item?.key ||
                 item?.id ||
                 item?.ID ||
@@ -96,7 +98,7 @@ function SelectField({
                 item;
 
               let ItemLabel =
-                item?.name || item?.label || item?.[listItemName] || item;
+                item?.[listItemName] || item?.name || item?.label || item;
 
               return (
                 <SelectItem

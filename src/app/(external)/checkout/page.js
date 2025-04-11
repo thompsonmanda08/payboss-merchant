@@ -3,7 +3,6 @@ import {
   getCheckoutInfo,
   validateCheckoutData,
 } from "@/app/_actions/checkout-actions";
-import { ErrorCard } from "@/components/base/error-card";
 
 import Checkout from "../components/checkout";
 
@@ -22,21 +21,18 @@ async function CheckoutPage(props) {
   // FIRST POST CHECKOUT DATA TO LOG CHECKOUT INFO FOR VALIDATION
   const validation = validateCheckoutData(checkoutData);
 
-  if (!validation?.success) {
-    return (
-      <>
-        <ErrorCard
-          className={"max-h-fit m-auto"}
-          goBack={true}
-          message={
-            response?.message ||
-            "The checkout you are looking for does not exist"
-          }
-          title={"Checkout Error"}
-        />
-      </>
-    );
-  }
+  // if (!validation?.success) {
+  //   return (
+  //     <>
+  //       <ErrorCard
+  //         className={"max-h-fit m-auto"}
+  //         goBack={true}
+  //         message={validation?.message}
+  //         title={"Checkout Error"}
+  //       />
+  //     </>
+  //   );
+  // }
 
   const [response] = await Promise.all([
     getCheckoutInfo(checkoutData?.checkoutID),
@@ -44,9 +40,10 @@ async function CheckoutPage(props) {
 
   checkoutData = {
     ...checkoutData,
-    ...response.data,
+    ...(response?.data || {}),
   };
 
+  console.log("LOG: [ CHECKOUT-DATA ]: ", checkoutData);
   console.log("LOG: [ VALIDATION ]: ", validation);
   console.log("LOG: [CHECKOUT-INFO]", response);
 

@@ -3,10 +3,16 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input-field";
 import AutoCompleteField from "@/components/base/auto-complete";
 import { Button } from "@/components/ui/button";
+import useConfigOptions from "@/hooks/useConfigOptions";
+import { payWithBankCard } from "@/app/_actions/checkout-actions";
+import SelectField from "@/components/ui/select-field";
+import { notify } from "@/lib/utils";
 
-export default function CardPaymentForm({ amount, transactionID }) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
+export default function CardPaymentForm({ checkoutData }) {
+  const { countries, provinces } = useConfigOptions();
+  const { amount, transactionID } = checkoutData || "";
+
+  const CARD_FORM = {
     phoneNumber: "",
     amount: amount,
     narration: "",
@@ -16,10 +22,13 @@ export default function CardPaymentForm({ amount, transactionID }) {
     email: "",
     address: "",
     city: "",
+    province: "",
     country: "ZM",
     postalCode: "10101",
-  });
+  };
 
+  const [formData, setFormData] = useState(CARD_FORM);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
@@ -80,24 +89,6 @@ export default function CardPaymentForm({ amount, transactionID }) {
       isValid = false;
     }
 
-    if (
-      !formData.cardNumber ||
-      formData.cardNumber.replace(/\s/g, "").length < 16
-    ) {
-      newErrors.cardNumber = "Valid card number is required";
-      isValid = false;
-    }
-
-    if (!formData.expiry || !/^\d{2}\/\d{2}$/.test(formData.expiry)) {
-      newErrors.expiry = "Valid expiry date (MM/YY) is required";
-      isValid = false;
-    }
-
-    if (!formData.cvc || !/^\d{3,4}$/.test(formData.cvc)) {
-      newErrors.cvc = "Valid CVC is required";
-      isValid = false;
-    }
-
     setErrors(newErrors);
     return isValid;
   };
@@ -110,7 +101,7 @@ export default function CardPaymentForm({ amount, transactionID }) {
     const left = (window.innerWidth - width) / 2 + window.screenX;
     const top = (window.innerHeight - height) / 2 + window.screenY;
 
-    const paymentUrl = "https://google.com"; // Route where the client runs
+    const paymentUrl = paymentData?.url || "https://google.com"; // Route where the client runs
 
     const paymentWindow = window.open(
       paymentUrl,
@@ -190,26 +181,58 @@ export default function CardPaymentForm({ amount, transactionID }) {
     e.preventDefault();
 
     if (!validateForm()) {
+      notify({
+        title: "Card Payment Error",
+        description: "Missing Fields",
+        color: "danger",
+      });
+      console.log(errors);
+
       return;
     }
 
     setIsSubmitting(true);
 
-    // TODO: SEND TO PAYBOSS BACKEND
+    if (process.env.NODE_ENV === "development") {
+      // Simulate API call
+      setTimeout(async () => {
+        console.log("Card Payment:", formData);
+        notify({
+          title: "Card Payment",
+          description: "Still under maintenance",
+          color: "warning",
+        });
+        const transactionStatus = await openPaymentWindow({});
+        setIsSubmitting(false);
+        // Handle success/redirect here
+      }, 2000);
 
-    // OPEN PAYMENT WINDOW
-    const payload = {
-      // FROM PAYBOSS BACKEND
-      ...formData,
-    };
-    const transactionStatus = await openPaymentWindow(payload);
+      return;
+    }
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Card Payment:", formData);
+    const response = await payWithBankCard(formData);
+
+    if (response?.success) {
+      const payload = {
+        ...formData,
+        // FROM PAYBOSS BACKEND
+        ...response?.data,
+      };
+      // OPEN PAYMENT WINDOW
+      const transactionStatus = await openPaymentWindow(payload);
+      setIsSubmitting(false); // THIS WILL TRIGGER THE WEB HOOK
+
+      setTimeout(() => {
+        // setPinPromptSent(false); // THIS WILL DISABLE THE WEB HOOK AFTER 5 SECONDS
+      }, 5000);
+    } else {
+      notify({
+        title: "Error",
+        description: response.message,
+        color: "danger",
+      });
       setIsSubmitting(false);
-      // Handle success/redirect here
-    }, 2000);
+    }
   };
 
   return (
@@ -219,6 +242,7 @@ export default function CardPaymentForm({ amount, transactionID }) {
           id="firstName"
           name="firstName"
           label="First Name"
+          required
           value={formData.firstName}
           onError={errors.firstName}
           errorText={errors.firstName}
@@ -230,6 +254,7 @@ export default function CardPaymentForm({ amount, transactionID }) {
           id="lastName"
           name="lastName"
           label="Last Name"
+          required
           value={formData.lastName}
           onError={errors.lastName}
           errorText={errors.lastName}
@@ -243,6 +268,7 @@ export default function CardPaymentForm({ amount, transactionID }) {
         name="email"
         type="email"
         label="  Email"
+        required
         value={formData.email}
         onError={errors.email}
         errorText={errors.email}
@@ -255,6 +281,7 @@ export default function CardPaymentForm({ amount, transactionID }) {
           id="phoneNumber"
           name="phoneNumber"
           label="Phone Number"
+          required
           onError={errors.phoneNumber}
           value={formData.phoneNumber}
           errorText={errors.phoneNumber}
@@ -267,6 +294,7 @@ export default function CardPaymentForm({ amount, transactionID }) {
         id="address"
         name="address"
         label="Address"
+        required
         value={formData.address}
         onChange={handleChange}
         placeholder="123 Main St"
@@ -277,18 +305,31 @@ export default function CardPaymentForm({ amount, transactionID }) {
           id="city"
           name="city"
           label="City"
+          required
           value={formData.city}
           onChange={handleChange}
           placeholder="Lusaka"
         />
-        <Input
-          id="province"
-          name="province"
-          label="Province"
-          value={formData.province}
-          onChange={handleChange}
-          placeholder="Lusaka"
-        />
+        {formData?.country == "ZM" ? (
+          <SelectField
+            label="Province"
+            listItemName={"province"}
+            name="province"
+            options={provinces}
+            prefilled={true}
+            value={formData?.province}
+            onChange={handleChange}
+          />
+        ) : (
+          <Input
+            id="province"
+            name="province"
+            label="Province"
+            value={formData.province}
+            onChange={handleChange}
+            placeholder="Lusaka"
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -296,30 +337,19 @@ export default function CardPaymentForm({ amount, transactionID }) {
           id="postalCode"
           name="postalCode"
           label="Postal Code"
+          required
           value={formData.postalCode}
           onChange={handleChange}
           placeholder="10101"
         />
 
-        {/* <SelectField
-          label="Company Type"
-          listItemName={"type"}
-          name="companyTypeID"
-          options={companyTypes}
-          prefilled={true}
-          required={true}
-          value={formData?.companyTypeID}
-          onChange={(e) => {
-            updateDetails(STEPS[1], { companyTypeID: e.target.value });
-          }}
-        /> */}
-
         <AutoCompleteField
           label="Country"
+          // required
           listItemName={"country"}
+          selector={"country_code"}
           name="country"
-          options={[]}
-          required={true}
+          options={countries || []}
           value={formData?.country}
           onChange={(value) => handleSelectChange("country", value)}
         />
@@ -334,7 +364,6 @@ export default function CardPaymentForm({ amount, transactionID }) {
         </label>
         <div className="mt-2">
           <textarea
-            required
             className="block w-full rounded-md border-0 py-1.5 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary/80 sm:text-sm sm:leading-6"
             onChange={handleChange}
             value={formData?.narration}

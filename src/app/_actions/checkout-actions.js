@@ -18,6 +18,7 @@ export async function validateCheckoutData(checkoutData) {
       statusText: "BAD REQUEST",
     };
   }
+
   const url = `/transaction/collection/checkout/validation`;
 
   try {

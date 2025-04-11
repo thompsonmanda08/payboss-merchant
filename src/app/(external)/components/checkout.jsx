@@ -156,24 +156,24 @@ export default function Checkout({ checkoutData }) {
               </TableBody>
             </Table>
 
-            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-              <h3 className="font-medium text-gray-800">Payment Methods</h3>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <CreditCardIcon className="h-4 w-4 text-gray-500" />
+            <div className="bg-primary/5 rounded-lg p-4 space-y-3">
+              <h3 className="font-medium ">Payment Methods</h3>
+              <div className="flex items-center space-x-2 text-sm text-foreground/80">
+                <CreditCardIcon className="h-4 w-4 text-foreground/60" />
                 <span>Visa, Mastercard, American Express</span>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <DevicePhoneMobileIcon className="h-4 w-4 text-gray-500" />
+              <div className="flex items-center space-x-2 text-sm text-foreground/80">
+                <DevicePhoneMobileIcon className="h-4 w-4 text-foreground/60" />
                 <span>Mobile Money (MTN, Airtel, Zamtel)</span>
               </div>
             </div>
           </CardBody>
-          <CardFooter className="flex flex-col items-start space-y-4 bg-gray-50 p-6 border-t">
-            <div className="flex items-center text-sm text-gray-700">
+          <CardFooter className="flex flex-col items-start space-y-4 bg-primary/5 p-6 rounded-lg">
+            <div className="flex items-center text-sm text-foreground/80">
               <CheckBadgeIcon className="h-4 w-4 mr-2 text-emerald-600" />
               <span>Secure payment processing</span>
             </div>
-            <div className="flex items-center text-sm text-gray-700">
+            <div className="flex items-center text-sm text-foreground/80">
               <ShieldCheckIcon className="h-4 w-4 mr-2 text-emerald-600" />
               <span>Encrypted transaction</span>
             </div>

@@ -4,13 +4,14 @@ import React, { useState } from "react";
 
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
-import { AIRTEL_NO } from "@/lib/constants";
+import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
 import { cn, notify } from "@/lib/utils";
-import { useDisclosure } from "@heroui/react";
+import { Image, useDisclosure } from "@heroui/react";
 import PromptModal from "@/components/base/prompt-modal";
 import { useWebhook } from "@/hooks/use-webhook";
 import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { payWithMobileMoney } from "@/app/_actions/checkout-actions";
+import Spinner from "@/components/ui/custom-spinner";
 
 export default function MobileMoneyForm({ checkoutData }) {
   const { amount, transactionID } = checkoutData || "";
@@ -95,16 +96,19 @@ export default function MobileMoneyForm({ checkoutData }) {
     }
 
     if (process.env.NODE_ENV === "development") {
+      setPinPromptSent(true);
+      onOpen();
       // Simulate API call
       setTimeout(() => {
         console.log("Mobile Money Payment:", formData);
         notify({
           title: "Mobile Payment",
-          description: "Still under maintenance",
+          description: "Still under maintenance. [Demo]",
           color: "warning",
         });
-        onOpen();
         setIsSubmitting(false);
+        setPinPromptSent(false);
+
         // Handle success/redirect here
       }, 2000);
 
@@ -165,14 +169,14 @@ export default function MobileMoneyForm({ checkoutData }) {
                 checkOperator(e.target.value);
               }}
             />
-            <span className="absolute right-0 top-1 h-full w-28 px-4">
+            <span className="absolute right-0 top-6 h-full w-24 px-4">
               {Boolean(operatorLogo) && (
                 <Image
                   alt="logo"
                   className="h-full w-full object-contain"
                   height={32}
                   src={operatorLogo}
-                  width={80}
+                  width={60}
                 />
               )}
             </span>
@@ -184,12 +188,12 @@ export default function MobileMoneyForm({ checkoutData }) {
 
         <div>
           <label
-            className="block text-sm font-medium leading-6 text-foreground/50 "
+            className="block text-sm font-medium leading-6 text-foreground/80"
             htmlFor="narration"
           >
             Payment Description
           </label>
-          <div className="mt-2">
+          <div className="">
             <textarea
               required
               className="block w-full rounded-md border-0 py-1.5 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary/80 sm:text-sm sm:leading-6"
@@ -220,7 +224,7 @@ export default function MobileMoneyForm({ checkoutData }) {
         isDismissable={false}
         isDisabled={pinPromptSent}
         // isLoading={isLoading}
-        isOpen={isOpen && pinPromptSent}
+        isOpen={isOpen}
         title={"Transaction Status"}
         onClose={handleClosePrompt}
         // onConfirm={handleClosePrompt}
