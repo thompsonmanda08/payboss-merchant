@@ -10,15 +10,16 @@ import { useDisclosure } from "@heroui/react";
 import PromptModal from "@/components/base/prompt-modal";
 import { useWebhook } from "@/hooks/use-webhook";
 import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { payWithMobileMoney } from "@/app/_actions/checkout-actions";
 
-export default function MobileMoneyForm({ amount, transactionID }) {
-  const [isCancelled, setIsCancelled] = React.useState(false);
-  const [isCompleted, setIsCompleted] = React.useState(false);
+export default function MobileMoneyForm({ checkoutData }) {
+  const { amount, transactionID } = checkoutData || "";
+
   const [pinPromptSent, setPinPromptSent] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const [operatorLogo, setOperatorLogo] = React.useState("");
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   /* WEB HOOK */
   const { data, isSuccess, isError, isLoading } = useWebhook(
@@ -80,8 +81,10 @@ export default function MobileMoneyForm({ amount, transactionID }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsSubmitting(true);
 
     // Validate before submission
     if (formData.phoneNumber.length < 10) {
@@ -91,29 +94,56 @@ export default function MobileMoneyForm({ amount, transactionID }) {
       return;
     }
 
-    setIsSubmitting(true);
+    if (process.env.NODE_ENV === "development") {
+      // Simulate API call
+      setTimeout(() => {
+        console.log("Mobile Money Payment:", formData);
+        notify({
+          title: "Mobile Payment",
+          description: "Still under maintenance",
+          color: "warning",
+        });
+        onOpen();
+        setIsSubmitting(false);
+        // Handle success/redirect here
+      }, 2000);
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Mobile Money Payment:", formData);
+      return;
+    }
+
+    const response = await payWithMobileMoney(formData);
+
+    if (response?.success) {
       notify({
         title: "Mobile Payment",
-        description: "Still under maintenance",
-        color: "warning",
+        description: `Pin prompt sent to${formData?.phoneNumber}`,
+        color: "success",
       });
       onOpen();
       setIsSubmitting(false);
-      // Handle success/redirect here
-    }, 2000);
+      setPinPromptSent(true); // THIS WILL TRIGGER THE WEB HOOK
+
+      setTimeout(() => {
+        setPinPromptSent(false); // THIS WILL DISABLE THE WEB HOOK AFTER 5 SECONDS
+      }, 5000);
+    } else {
+      notify({
+        title: "Error",
+        description: response.message,
+        color: "danger",
+      });
+      setIsSubmitting(false);
+      setPinPromptSent(false);
+    }
   };
 
   function handleClosePrompt() {
     onClose();
-    setIsCancelled(false);
-    setIsCompleted(false);
     setIsSubmitting(false);
     setPinPromptSent(false);
   }
+
+  console.log("LOG: [WEBHOOK-API]", data);
 
   return (
     <>
@@ -190,7 +220,7 @@ export default function MobileMoneyForm({ amount, transactionID }) {
         isDismissable={false}
         isDisabled={pinPromptSent}
         // isLoading={isLoading}
-        isOpen={isOpen}
+        isOpen={isOpen && pinPromptSent}
         title={"Transaction Status"}
         onClose={handleClosePrompt}
         // onConfirm={handleClosePrompt}
@@ -215,7 +245,7 @@ export default function MobileMoneyForm({ amount, transactionID }) {
               </small>
             </div>
           </div>
-        ) : !isSuccess ? (
+        ) : isSuccess ? (
           <>
             <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
               {/* <Loader loadingText={"Please wait..."} size={100} /> */}
@@ -247,7 +277,8 @@ export default function MobileMoneyForm({ amount, transactionID }) {
                 {"Failed"}
               </p>
               <small className="text-muted-foreground">
-                Payment failed. Try again later!
+                Payment failed. Try again later! <br />
+                {data?.message}
               </small>
             </div>
           </div>

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-import { BASE_URL } from "@/lib/constants";
 import { apiClient } from "@/lib/utils";
 
 export const useWebhook = (transactionID, enable) => {
@@ -27,7 +26,10 @@ export const useWebhook = (transactionID, enable) => {
           statusText: "BAD_REQUEST",
         };
       }
-      const response = await apiClient.get(`${BASE_URL}/api`);
+
+      const response = await apiClient.get(
+        `/transaction/collection/webhook/${transactionID}`
+      );
 
       return response.data;
     },

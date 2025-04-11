@@ -47,6 +47,9 @@ async function CheckoutPage(props) {
     ...response.data,
   };
 
+  console.log("LOG: [ VALIDATION ]: ", validation);
+  console.log("LOG: [CHECKOUT-INFO]", response);
+
   return (
     <>
       <div className="flex w-full container items-center justify-between px-8 mb-4 max-h-[100px]">
