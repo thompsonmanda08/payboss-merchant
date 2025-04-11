@@ -15,7 +15,7 @@ import { Image as HeroImage } from "@heroui/react";
 export function HeroLikeABoss() {
   return (
     <>
-      <BackgroundSVG className={"top-0 bg-secondary/30 z-10"} />
+      <BackgroundSVG className={"-top-1 bg-secondary/30 z-10"} />
 
       <section
         className="pt-16 lg:pt-20 relative w-full overflow-hidden"
@@ -74,7 +74,6 @@ export function HeroLikeABoss() {
           height={600}
           width={800}
           src={DefaultCover}
-          
         />
       </section>
     </>
