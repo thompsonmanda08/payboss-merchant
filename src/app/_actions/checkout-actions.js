@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import axios from "axios";
 
 import { apiClient } from "@/lib/utils";
 
@@ -19,10 +20,10 @@ export async function validateCheckoutData(checkoutData) {
     };
   }
 
-  const url = `/transaction/collection/checkout/validation`;
+  const url = `${process.env.SERVICES_BASE_URL}/transaction/collection/checkout/validation`;
 
   try {
-    const res = await apiClient.post(url, checkoutData);
+    const res = await axios.post(url, checkoutData);
 
     revalidatePath("/checkout", "page");
 
