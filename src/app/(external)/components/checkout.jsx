@@ -21,7 +21,7 @@ import {
   TableRow,
   Image,
 } from "@heroui/react";
-import { useWebhook } from "@/hooks/use-webhook";
+import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
 
 import {
   CheckBadgeIcon,

@@ -8,10 +8,11 @@ import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
 import { cn, notify } from "@/lib/utils";
 import { Image, useDisclosure } from "@heroui/react";
 import PromptModal from "@/components/base/prompt-modal";
-import { useWebhook } from "@/hooks/use-webhook";
+import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
 import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { payWithMobileMoney } from "@/app/_actions/checkout-actions";
 import Spinner from "@/components/ui/custom-spinner";
+import { data } from "autoprefixer";
 
 export default function MobileMoneyForm({ checkoutData }) {
   const { amount, transactionID } = checkoutData || "";
@@ -22,18 +23,13 @@ export default function MobileMoneyForm({ checkoutData }) {
   const [operatorLogo, setOperatorLogo] = React.useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  /* WEB HOOK */
-  const { data, isSuccess, isError, isLoading } = useWebhook(
-    transactionID,
-    pinPromptSent
-  );
-
-  console.log("CONSOLE WEB HOOK: ==>", data);
+  // GET TRANSACTION STATUS HOOK
+  const { data, isSuccess, isFailed, isProcessing } =
+    useCheckoutTransactionStatus(transactionID, pinPromptSent);
 
   const [formData, setFormData] = useState({
     phoneNumber: "",
     amount: amount,
-    narration: "",
   });
   const [errors, setErrors] = useState({
     phoneNumber: "",
@@ -95,26 +91,6 @@ export default function MobileMoneyForm({ checkoutData }) {
       return;
     }
 
-    if (process.env.NODE_ENV === "development") {
-      setPinPromptSent(true);
-      onOpen();
-      // Simulate API call
-      setTimeout(() => {
-        console.log("Mobile Money Payment:", formData);
-        notify({
-          title: "Mobile Payment",
-          description: "Still under maintenance. [Demo]",
-          color: "warning",
-        });
-        setIsSubmitting(false);
-        setPinPromptSent(false);
-
-        // Handle success/redirect here
-      }, 2000);
-
-      return;
-    }
-
     const response = await payWithMobileMoney({
       transactionID,
       phoneNumber: formData.phoneNumber,
@@ -129,11 +105,7 @@ export default function MobileMoneyForm({ checkoutData }) {
       });
       onOpen();
       setIsSubmitting(false);
-      setPinPromptSent(true); // THIS WILL TRIGGER THE WEB HOOK
-
-      setTimeout(() => {
-        setPinPromptSent(false); // THIS WILL DISABLE THE WEB HOOK AFTER 5 SECONDS
-      }, 5000);
+      setPinPromptSent(true); // THIS WILL ENABLE THE TRANSACTION STATUS HOOK - FIRES IN INTERVALS
     } else {
       notify({
         title: "Error",
@@ -141,7 +113,7 @@ export default function MobileMoneyForm({ checkoutData }) {
         color: "danger",
       });
       setIsSubmitting(false);
-      setPinPromptSent(false);
+      setPinPromptSent(false); // THIS WILL DISABLE THE TRANSACTION STATUS HOOK - FIRES IN INTERVALS
     }
   };
 
@@ -151,7 +123,16 @@ export default function MobileMoneyForm({ checkoutData }) {
     setPinPromptSent(false);
   }
 
-  console.log("LOG: [WEBHOOK-API]", data);
+  useEffect(() => {
+    if (isSuccess) {
+      // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
+      setPinPromptSent(false);
+    }
+    if (isFailed) {
+      // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
+      setPinPromptSent(false);
+    }
+  }, [data, isLoading, isSuccess, isFailed]);
 
   return (
     <>
@@ -223,20 +204,17 @@ export default function MobileMoneyForm({ checkoutData }) {
       </form>
 
       <PromptModal
-        // confirmText={"Confirm"}
         backdrop="blur"
         isDismissable={false}
         isDisabled={pinPromptSent}
-        // isLoading={isLoading}
         isOpen={isOpen}
         title={"Transaction Status"}
         onClose={handleClosePrompt}
-        // onConfirm={handleClosePrompt}
         onOpen={onOpen}
         className={"max-w-sm"}
         size="sm"
       >
-        {pinPromptSent ? (
+        {pinPromptSent && isProcessing ? (
           <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
             {/* <Loader loadingText={"Please wait..."} size={100} /> */}
             <Spinner size={100} />
@@ -249,47 +227,48 @@ export default function MobileMoneyForm({ checkoutData }) {
                 {"Please wait..."}
               </p>
               <small className="text-muted-foreground">
-                Check your phone for an approval prompt
+                Check your phone for an approval prompt, Once approved, wait for
+                the transaction to process and complete before closing the
+                popup.
               </small>
             </div>
           </div>
-        ) : isSuccess ? (
+        ) : (
           <>
             <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
               {/* <Loader loadingText={"Please wait..."} size={100} /> */}
-              <CheckBadgeIcon className="w-32 text-success" />
+              {isSuccess ? (
+                <CheckBadgeIcon className="w-32 text-success" />
+              ) : isFailed ? (
+                <XCircleIcon className="w-32 text-danger" />
+              ) : (
+                <QuestionMarkCircleIcon className="w-32 text-warning" />
+              )}
               <div className="grid place-items-center gap-2">
                 <p
                   className={cn(
-                    "mt-4 max-w-sm break-words font-bold text-foreground/80"
+                    "mt-4 max-w-sm break-words  font-bold text-foreground/80"
                   )}
                 >
-                  Success
+                  {data?.status}
                 </p>
                 <small className="text-muted-foreground">
-                  Payment completed successfully!
+                  {isSuccess
+                    ? "Payment completed successfully!"
+                    : isFailed
+                      ? "Payment failed. Try again later!"
+                      : "Warning: Payment is still being processed."}
+                  {isFailed && (
+                    // REASON FOR FAILURE
+                    <>
+                      <br />
+                      {data?.message}
+                    </>
+                  )}
                 </small>
               </div>
             </div>
           </>
-        ) : (
-          <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
-            {/* <Loader loadingText={"Please wait..."} size={100} /> */}
-            <XCircleIcon className="w-32 text-danger" />
-            <div className="grid place-items-center gap-2">
-              <p
-                className={cn(
-                  "mt-4 max-w-sm break-words font-bold text-foreground/80"
-                )}
-              >
-                {"Failed"}
-              </p>
-              <small className="text-muted-foreground">
-                Payment failed. Try again later! <br />
-                {data?.message}
-              </small>
-            </div>
-          </div>
         )}
       </PromptModal>
     </>

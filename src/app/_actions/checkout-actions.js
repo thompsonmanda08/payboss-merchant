@@ -1,9 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import axios from "axios";
 
-import { apiClient } from "@/lib/utils";
+import { apiClient, apiServiceClient } from "@/lib/utils";
 
 export async function validateCheckoutData(checkoutData) {
   if (
@@ -20,10 +19,10 @@ export async function validateCheckoutData(checkoutData) {
     };
   }
 
-  const url = `${process.env.SERVICES_BASE_URL}/transaction/collection/checkout/validation`;
+  const url = `transaction/collection/checkout/validation`;
 
   try {
-    const res = await axios.post(url, checkoutData);
+    const res = await apiServiceClient.post(url, checkoutData);
 
     // revalidatePath("/checkout", "page");
 
@@ -125,7 +124,7 @@ export async function payWithMobileMoney(checkoutData) {
   const url = `transaction/collection/checkout/mobile/${transactionID}/${phoneNumber}/${amount}`;
 
   try {
-    const res = await apiClient.get(url);
+    const res = await apiServiceClient.get(url);
 
     revalidatePath("/checkout", "page");
 
@@ -190,6 +189,54 @@ export async function payWithBankCard(checkoutData) {
   } catch (error) {
     console.error({
       endpoint: "POST | CHECKOUT WITH CARD ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        error?.response?.config?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: error?.response?.data,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+export async function getTransactionStatus(transactionID) {
+  if (!transactionID) {
+    return {
+      success: false,
+      message: "Missing Required Params: Transaction ID",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
+
+  const url = `transaction/collection/checkout/status/${transactionID}`;
+
+  try {
+    const res = await apiServiceClient.get(url);
+
+    revalidatePath("/checkout", "page");
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "GET | TRANSACTION STATUS ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
