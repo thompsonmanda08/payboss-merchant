@@ -11,6 +11,8 @@ export const BASE_URL =
 export const POCKET_BASE_URL =
   process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL;
 
+// export const POCKET_BASE_URL = "https://payboss-uat-backend.bgsgroup.co.zm";
+
 export const AUTH_SESSION = "pb-session";
 export const USER_SESSION = "pb-next-usr";
 export const WORKSPACE_SESSION = "pb-next-workspace";

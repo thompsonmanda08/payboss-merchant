@@ -2,7 +2,7 @@
 
 import authenticatedService from "@/lib/api-config";
 
-export async function generateCheckoutURL({ workspaceID, checkoutData }) {
+export async function generateCheckoutURL(workspaceID, checkoutData) {
   if (!workspaceID) {
     return {
       success: false,
@@ -54,18 +54,18 @@ export async function generateCheckoutURL({ workspaceID, checkoutData }) {
     };
   }
 }
-export async function updateCheckoutURL({ workspaceID, checkoutData }) {
-  if (!workspaceID) {
+export async function updateCheckoutURL(workspaceID, checkoutID, checkoutData) {
+  if (!checkoutID || !workspaceID) {
     return {
       success: false,
-      message: "Workspace ID is required",
+      message: "Checkout/Workspace ID is missing",
       data: null,
       status: 400,
       statusText: "BAD REQUEST",
     };
   }
 
-  const url = `transaction/collection/create/checkout/${workspaceID}`;
+  const url = `transaction/collection/update/${workspaceID}/checkout/${checkoutID}`;
 
   try {
     const res = await authenticatedService({

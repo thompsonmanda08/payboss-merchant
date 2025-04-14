@@ -18,7 +18,13 @@ async function CheckoutPage(props) {
   };
 
   // FIRST POST CHECKOUT DATA TO LOG CHECKOUT INFO FOR VALIDATION
-  const validation = await validateCheckoutData(checkoutData);
+  const validation = await validateCheckoutData({
+    workspaceID: searchParams?.workspace_id || "",
+    checkout_id: searchParams?.checkout_id || "",
+    amount: searchParams?.amount || "",
+    transactionID: searchParams?.transaction_id || "",
+    serviceID: searchParams?.service_id || "",
+  });
 
   if (!validation?.success) {
     return (
@@ -40,7 +46,7 @@ async function CheckoutPage(props) {
 
   checkoutData = {
     ...checkoutData,
-    ...(response?.data || {}),
+    // ...(response?.data || {}),
   };
 
   console.log("LOG: [ CHECKOUT-DATA ]: ", checkoutData);

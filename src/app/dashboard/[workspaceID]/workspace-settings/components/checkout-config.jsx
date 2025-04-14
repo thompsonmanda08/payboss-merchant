@@ -40,10 +40,14 @@ import { QUERY_KEYS } from "@/lib/constants";
 import { cn, maskString, notify } from "@/lib/utils";
 import { uploadCheckoutLogoFile } from "@/app/_actions/pocketbase-actions";
 import PromptModal from "@/components/base/prompt-modal";
-import { generateCheckoutURL } from "@/app/_actions/vas-actions";
+import {
+  generateCheckoutURL,
+  updateCheckoutURL,
+} from "@/app/_actions/vas-actions";
 import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
 import { Input } from "@/components/ui/input-field";
 import { SingleFileDropzone } from "@/components/base/file-dropzone";
+import { redirect } from "next/dist/server/api-utils";
 
 const INIT_FORM = {
   display_name: "",
@@ -75,9 +79,52 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
 
   const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
 
+  async function handleFileUpload(file, recordID) {
+    setIsUploading(true);
+
+    let response = await uploadCheckoutLogoFile(file, recordID);
+
+    if (response?.success) {
+      notify({
+        color: "success",
+        title: "Logo Uploaded!",
+        description: "Logo File uploaded successfully!",
+      });
+      setNewCheckoutFormData((prev) => ({
+        ...prev,
+        logo: response?.data?.file_name,
+        logo_url: response?.data?.file_url,
+        recordID: response?.data?.file_record_id,
+      }));
+      setIsUploading(false);
+
+      return response?.data;
+    }
+
+    notify({
+      title: "Error",
+      color: "danger",
+      description: "Failed to upload file.",
+    });
+    setIsUploading(false);
+
+    return {};
+  }
+
   function handleManageDropdown(key) {
+    if (configData?.url && key == "update-checkout-url") {
+      setNewCheckoutFormData({
+        ...configData,
+        city_country: configData?.city,
+        redirect_url: configData?.redirect_url,
+      });
+      setSelectedKey(key);
+      onOpen();
+      return;
+    }
+
     /* OPEN MODAL */
-    if (key == "new-invoice" || key == "generate-checkout-url") {
+    if (key == "generate-checkout-url") {
       // CHECK IF URL ALREADY EXISTS
       if (configData?.url && key == "generate-checkout-url") {
         notify({
@@ -87,13 +134,11 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
         });
         setIsLoading(false);
         handleClosePrompts();
-
         return;
       }
 
       setSelectedKey(key);
       onOpen();
-
       return;
     }
   }
@@ -129,6 +174,59 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
     }
   }
 
+  async function handleCheckoutURLGenerate() {
+    setIsLoading(true);
+
+    if (!permissions?.create || !permissions?.update) {
+      notify({
+        color: "danger",
+        title: "NOT ALLOWED",
+        description: "Only admins are allowed to generate URLs.",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    const checkoutData = {
+      display_name: newCheckoutFormData?.display_name,
+      logo: newCheckoutFormData?.logo_url,
+      physical_address: newCheckoutFormData?.physical_address,
+      city: newCheckoutFormData?.city_country,
+      redirect_url: newCheckoutFormData?.redirect_url,
+    };
+
+    let response;
+
+    if (configData?.url && selectedKey == "update-checkout-url") {
+      const checkoutID = configData?.ID;
+      response = await updateCheckoutURL(workspaceID, checkoutID, checkoutData);
+    } else {
+      response = await generateCheckoutURL(workspaceID, checkoutData);
+    }
+
+    if (!response?.success) {
+      notify({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
+    } else {
+      notify({
+        title: "Success",
+        color: "success",
+        description: "Checkout URL Configured Successfully!",
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.WORKSPACE_CHECKOUT, workspaceID],
+      });
+    }
+
+    setIsLoading(false);
+    handleClosePrompts();
+
+    return;
+  }
+
   useEffect(() => {
     let timeoutId;
 
@@ -157,87 +255,6 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
       clearTimeout(timeoutId);
     };
   }, [copiedKey]);
-
-  async function handleFileUpload(file, recordID) {
-    setIsUploading(true);
-
-    let response = await uploadCheckoutLogoFile(file, recordID);
-
-    if (response?.success) {
-      notify({
-        color: "success",
-        title: "Logo Uploaded!",
-        description: "Logo File uploaded successfully!",
-      });
-      setNewCheckoutFormData((prev) => ({
-        ...prev,
-        logo: response?.data?.file_name,
-        logo_url: response?.data?.file_url,
-        recordID: response?.data?.file_record_id,
-      }));
-      setIsUploading(false);
-
-      return response?.data;
-    }
-
-    notify({
-      title: "Error",
-      color: "danger",
-      description: "Failed to upload file.",
-    });
-    setIsUploading(false);
-
-    return {};
-  }
-
-  async function handleCheckoutURLGenerate() {
-    setIsLoading(true);
-
-    if (!permissions?.create || !permissions?.update) {
-      notify({
-        color: "danger",
-        title: "NOT ALLOWED",
-        description: "Only admins are allowed to generate URLs.",
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    const checkoutData = {
-      display_name: newCheckoutFormData?.display_name,
-      logo: newCheckoutFormData?.logo_url,
-      physical_address: newCheckoutFormData?.physical_address,
-      city: newCheckoutFormData?.city_country,
-      redirect_url: newCheckoutFormData?.redirect_url,
-    };
-
-    const response = await generateCheckoutURL({
-      workspaceID,
-      checkoutData,
-    });
-
-    if (!response?.success) {
-      notify({
-        title: "Error",
-        color: "danger",
-        description: response?.message,
-      });
-    } else {
-      notify({
-        title: "Success",
-        color: "success",
-        description: "Checkout URL Generated Successfully!",
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.WORKSPACE_CHECKOUT, workspaceID],
-      });
-    }
-
-    setIsLoading(false);
-    handleClosePrompts();
-
-    return;
-  }
 
   return (
     <>
@@ -270,15 +287,28 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
                 aria-label="select-action"
                 onAction={(key) => handleManageDropdown(key)}
               >
-                <DropdownItem
-                  key="generate-checkout-url"
-                  description="
+                {configData?.url ? (
+                  <DropdownItem
+                    key="update-checkout-url"
+                    description="
                   Generate a payment URL for your clients
                   "
-                  startContent={<LinkIcon className={cn(iconClasses)} />}
-                >
-                  Generate Checkout URL
-                </DropdownItem>
+                    startContent={<LinkIcon className={cn(iconClasses)} />}
+                  >
+                    Update Checkout URL
+                  </DropdownItem>
+                ) : (
+                  <DropdownItem
+                    key="generate-checkout-url"
+                    description="
+                  Generate a payment URL for your clients
+                  "
+                    startContent={<LinkIcon className={cn(iconClasses)} />}
+                  >
+                    Generate Checkout URL
+                  </DropdownItem>
+                )}
+
                 {/* <DropdownItem
                     key="new-invoice"
                     description="Create a new invoice for your client"
@@ -291,120 +321,118 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
             </Dropdown>
           </div>
 
-          {selectedKey != "new-invoice" && (
-            <Alert hideIcon className="bg-stone-50" color="default">
-              <Table removeWrapper aria-label="Checkout URL TABLE">
-                <TableHeader>
-                  <TableColumn width={"40%"}>CHECKOUT DISPLAY NAME</TableColumn>
-                  <TableColumn width={"55%"}>URL</TableColumn>
-                  <TableColumn align="center">ACTIONS</TableColumn>
-                </TableHeader>
-                <TableBody
-                  isLoading={isLoadingConfig}
-                  loadingContent={
-                    <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
-                      <span className="flex gap-4 text-sm font-bold capitalize text-primary">
-                        <Spinner size="sm" /> Loading Checkout Data...
-                      </span>
-                    </div>
-                  }
-                >
-                  {Object.keys(configData).length > 0 ? (
-                    <TableRow key="checkout-url-row">
-                      <TableCell className="font-bold">
-                        {configData?.display_name}
-                      </TableCell>
-                      <TableCell className="flex gap-1">
-                        {configData?.display_name ? (
-                          <>
-                            <span className="flex items-center gap-4 font-medium">
-                              {unmaskURL
-                                ? configData?.url
-                                : maskString(configData?.url, 0, 60)}
-                            </span>
+          <Alert hideIcon className="bg-stone-50" color="default">
+            <Table removeWrapper aria-label="Checkout URL TABLE">
+              <TableHeader>
+                <TableColumn width={"40%"}>CHECKOUT DISPLAY NAME</TableColumn>
+                <TableColumn width={"55%"}>URL</TableColumn>
+                <TableColumn align="center">ACTIONS</TableColumn>
+              </TableHeader>
+              <TableBody
+                isLoading={isLoadingConfig}
+                loadingContent={
+                  <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
+                    <span className="flex gap-4 text-sm font-bold capitalize text-primary">
+                      <Spinner size="sm" /> Loading Checkout Data...
+                    </span>
+                  </div>
+                }
+              >
+                {Object.keys(configData).length > 0 ? (
+                  <TableRow key="checkout-url-row">
+                    <TableCell className="font-bold">
+                      {configData?.display_name}
+                    </TableCell>
+                    <TableCell className="flex gap-1">
+                      {configData?.display_name ? (
+                        <>
+                          <span className="flex items-center gap-4 font-medium">
+                            {unmaskURL
+                              ? configData?.url
+                              : maskString(configData?.url, 0, 60)}
+                          </span>
+                          <Button
+                            className={"h-max max-h-max max-w-max p-1"}
+                            color="default"
+                            size="sm"
+                            variant="light"
+                            onClick={() => setUnmaskURL(!unmaskURL)}
+                          >
+                            {unmaskURL ? (
+                              <EyeSlashIcon className="h-5 w-5 cursor-pointer text-primary" />
+                            ) : (
+                              <EyeIcon className="h-5 w-5 cursor-pointer text-primary" />
+                            )}
+                          </Button>
+                        </>
+                      ) : (
+                        <TableRow>
+                          <TableCell
+                            className="relative -left-32 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50/0 py-3 text-xs text-foreground/70"
+                            colSpan={3}
+                          >
+                            You have no API keys generated
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {configData?.url && (
+                        <div className="flex items-center gap-2">
+                          <Tooltip
+                            color="secondary"
+                            content="Checkout URL Config"
+                          >
                             <Button
-                              className={"h-max max-h-max max-w-max p-1"}
-                              color="default"
-                              size="sm"
+                              isIconOnly
+                              color="secondary"
                               variant="light"
-                              onClick={() => setUnmaskURL(!unmaskURL)}
+                              onPress={() => {
+                                setOpenViewConfig(true);
+                                onOpen();
+                              }}
                             >
-                              {unmaskURL ? (
-                                <EyeSlashIcon className="h-5 w-5 cursor-pointer text-primary" />
+                              <Cog6ToothIcon className="h-6 w-6 " />
+                            </Button>
+                          </Tooltip>
+                          <Tooltip
+                            color="default"
+                            content="Copy URL to clipboard"
+                          >
+                            <Button
+                              isIconOnly
+                              variant="light"
+                              onPress={() => copyToClipboard(configData?.url)}
+                            >
+                              {copiedKey ? (
+                                <ClipboardDocumentCheckIcon
+                                  className={`h-6 w-6`}
+                                />
                               ) : (
-                                <EyeIcon className="h-5 w-5 cursor-pointer text-primary" />
+                                <Square2StackIcon className={`h-6 w-6`} />
                               )}
                             </Button>
-                          </>
-                        ) : (
-                          <TableRow>
-                            <TableCell
-                              className="relative -left-32 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50/0 py-3 text-xs text-foreground/70"
-                              colSpan={3}
-                            >
-                              You have no API keys generated
-                            </TableCell>
-                          </TableRow>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {configData?.url && (
-                          <div className="flex items-center gap-2">
-                            <Tooltip
-                              color="secondary"
-                              content="Checkout URL Config"
-                            >
-                              <Button
-                                isIconOnly
-                                color="secondary"
-                                variant="light"
-                                onPress={() => {
-                                  setOpenViewConfig(true);
-                                  onOpen();
-                                }}
-                              >
-                                <Cog6ToothIcon className="h-6 w-6 " />
-                              </Button>
-                            </Tooltip>
-                            <Tooltip
-                              color="default"
-                              content="Copy URL to clipboard"
-                            >
-                              <Button
-                                isIconOnly
-                                variant="light"
-                                onPress={() => copyToClipboard(configData?.url)}
-                              >
-                                {copiedKey ? (
-                                  <ClipboardDocumentCheckIcon
-                                    className={`h-6 w-6`}
-                                  />
-                                ) : (
-                                  <Square2StackIcon className={`h-6 w-6`} />
-                                )}
-                              </Button>
-                            </Tooltip>
-                          </div>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    <TableRow key="checkout-url-row">
-                      <TableCell
-                        align="center"
-                        className="font-medium text-center"
-                        colSpan={3}
-                      >
-                        <span className="flex gap-4 text-xs text-center text-foreground/50 py-2 w-max mx-auto">
-                          You have not generated a checkout URL yet
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </Alert>
-          )}
+                          </Tooltip>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  <TableRow key="checkout-url-row">
+                    <TableCell
+                      align="center"
+                      className="font-medium text-center"
+                      colSpan={3}
+                    >
+                      <span className="flex gap-4 text-xs text-center text-foreground/50 py-2 w-max mx-auto">
+                        You have not generated a checkout URL yet
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </Alert>
         </Card>
       </div>
 
@@ -414,9 +442,9 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
         isDisabled={isLoading}
         isDismissable={false}
         isLoading={isLoading}
-        isOpen={isOpen && selectedKey == "generate-checkout-url"}
+        isOpen={isOpen}
         size="sm"
-        title={"Generate Checkout URL?"}
+        title={"Checkout URL Information"}
         onClose={handleClosePrompts}
         onConfirm={handleCheckoutURLGenerate}
         onOpen={onOpen}

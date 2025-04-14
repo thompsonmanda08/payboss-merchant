@@ -25,7 +25,7 @@ export async function validateCheckoutData(checkoutData) {
   try {
     const res = await axios.post(url, checkoutData);
 
-    revalidatePath("/checkout", "page");
+    // revalidatePath("/checkout", "page");
 
     return {
       success: true,
@@ -73,7 +73,7 @@ export async function getCheckoutInfo(checkoutID) {
   try {
     const res = await apiClient.get(url);
 
-    revalidatePath("/checkout", "page");
+    // revalidatePath("/checkout", "page");
 
     return {
       success: true,
