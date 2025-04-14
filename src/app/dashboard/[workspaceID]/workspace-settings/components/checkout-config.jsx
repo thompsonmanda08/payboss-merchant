@@ -216,9 +216,7 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
         color: "success",
         description: "Checkout URL Configured Successfully!",
       });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.WORKSPACE_CHECKOUT, workspaceID],
-      });
+      queryClient.invalidateQueries();
     }
 
     setIsLoading(false);

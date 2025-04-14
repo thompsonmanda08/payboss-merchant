@@ -46,11 +46,11 @@ async function CheckoutPage(props) {
 
   checkoutData = {
     ...checkoutData,
-    // ...(response?.data || {}),
+    ...(response?.data || {}),
   };
 
   console.log("LOG: [ CHECKOUT-DATA ]: ", checkoutData);
-  console.log("LOG: [ VALIDATION ]: ", validation);
+  // console.log("LOG: [ VALIDATION ]: ", validation);
   console.log("LOG: [CHECKOUT-INFO]", response);
 
   return (

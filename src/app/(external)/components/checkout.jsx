@@ -19,6 +19,7 @@ import {
   TableCell,
   TableBody,
   TableRow,
+  Image,
 } from "@heroui/react";
 import { useWebhook } from "@/hooks/use-webhook";
 
@@ -28,7 +29,8 @@ import {
   DevicePhoneMobileIcon,
   ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
+import Logo from "@/components/base/payboss-logo";
 
 export default function Checkout({ checkoutData }) {
   const [selectedMethod, setSelectedMethod] = React.useState("mobile");
@@ -113,7 +115,7 @@ export default function Checkout({ checkoutData }) {
                   <TableRow key="merchant-logo">
                     <TableCell className="text-right font-bold" colSpan={2}>
                       <Logo
-                        className={"ml-auto -mr-4"}
+                        className={"ml-auto -mr-3"}
                         src={checkoutData?.logo}
                       />
                     </TableCell>
@@ -122,20 +124,20 @@ export default function Checkout({ checkoutData }) {
                 <TableRow key="merchant-display-name">
                   <TableCell className="">Payment To:</TableCell>
                   <TableCell className="text-right font-bold">
-                    {checkoutData?.displayName || "BGS PayBoss"}
+                    {checkoutData?.display_name || "BGS PayBoss"}
                   </TableCell>
                 </TableRow>
-                {checkoutData?.physicalAddress && (
+                {checkoutData?.physical_address && (
                   <TableRow key="physical-address">
                     <TableCell className="">Physical Address:</TableCell>
                     <TableCell className="text-right font-bold">
-                      {checkoutData?.physicalAddress || "87A Kabulonga Rd."}
+                      {checkoutData?.physical_address || "87A Kabulonga Rd."}
                     </TableCell>
                   </TableRow>
                 )}
                 {checkoutData?.city && (
                   <TableRow key="city-country">
-                    <TableCell>CIty,Country</TableCell>
+                    <TableCell>City,Country</TableCell>
                     <TableCell className="text-right font-bold">
                       {checkoutData?.city || "Lusaka, ZM"}
                     </TableCell>

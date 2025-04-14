@@ -355,7 +355,7 @@ export default function CardPaymentForm({ checkoutData }) {
         />
       </div>
 
-      <div>
+      {/* <div>
         <label
           className="block text-sm font-medium leading-6 text-foreground/50 "
           htmlFor="narration"
@@ -372,7 +372,7 @@ export default function CardPaymentForm({ checkoutData }) {
             rows={2}
           />
         </div>
-      </div>
+      </div> */}
 
       <Button
         type="submit"

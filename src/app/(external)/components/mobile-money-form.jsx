@@ -115,7 +115,11 @@ export default function MobileMoneyForm({ checkoutData }) {
       return;
     }
 
-    const response = await payWithMobileMoney(formData);
+    const response = await payWithMobileMoney({
+      transactionID,
+      phoneNumber: formData.phoneNumber,
+      amount: formData.amount,
+    });
 
     if (response?.success) {
       notify({
@@ -186,7 +190,7 @@ export default function MobileMoneyForm({ checkoutData }) {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <label
             className="block text-sm font-medium leading-6 text-foreground/80"
             htmlFor="narration"
@@ -204,7 +208,7 @@ export default function MobileMoneyForm({ checkoutData }) {
               rows={2}
             />
           </div>
-        </div>
+        </div> */}
 
         <Button
           type="submit"

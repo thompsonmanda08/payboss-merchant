@@ -16,6 +16,7 @@ function Logo({
   className,
   classNames,
   href,
+  src,
 }) {
   const { theme } = useTheme();
   const [logoUrl, setLogoUrl] = useState(payBossLogo);
@@ -42,7 +43,7 @@ function Logo({
           {
             "mx-auto max-h-[48px] min-h-12 max-w-10": isCollapsedNavBar,
             "max-h-[50px] w-full": !isCollapsedNavBar,
-          },
+          }
         )}
         href={href || "/"}
       >
@@ -51,7 +52,7 @@ function Logo({
           alt="logo"
           className={cn("object-contain", className)}
           height={50}
-          src={logoUrl}
+          src={src || logoUrl}
           width={60}
         />
       </Link>
@@ -65,7 +66,7 @@ function Logo({
           {
             // 'mx-auto max-h-[48px] min-h-12 max-w-10': isCollapsedNavBar,
             // 'max-h-[50px] w-full': !isCollapsedNavBar,
-          },
+          }
         )}
         href={href || "/"}
       >
@@ -74,10 +75,10 @@ function Logo({
           alt="logo"
           className={cn(
             "-translate-x-2 scale-[0.9] object-contain transition-all duration-300 ease-in-out sm:scale-90 md:scale-95 lg:translate-x-0 lg:scale-100",
-            className,
+            className
           )}
           height={48}
-          src={isWhite ? payBossLogoWhite : logoUrl}
+          src={src ? src : isWhite ? payBossLogoWhite : logoUrl}
           width={120}
         />
       </Link>

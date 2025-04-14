@@ -3,6 +3,24 @@ import { withSentryConfig } from "@sentry/nextjs";
 const nextConfig = {
   output: "standalone",
   // distDir: "build",
+  images: {
+    unoptimized: true,
+
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "payboss-uat-backend.bgsgroup.co.zm",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "bgspayboss.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
 
   experimental: {
     turbo: {
@@ -49,5 +67,5 @@ export default withSentryConfig(
     disableLogger: true,
 
     automaticVercelMonitors: true,
-  },
+  }
 );

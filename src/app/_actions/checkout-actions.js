@@ -121,6 +121,7 @@ export async function payWithMobileMoney(checkoutData) {
   }
 
   const { transactionID, phoneNumber, amount } = checkoutData;
+
   const url = `transaction/collection/checkout/mobile/${transactionID}/${phoneNumber}/${amount}`;
 
   try {
