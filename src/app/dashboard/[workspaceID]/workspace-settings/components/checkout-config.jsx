@@ -2,7 +2,6 @@
 import {
   Cog6ToothIcon,
   LinkIcon,
-  XMarkIcon,
   EyeIcon,
   EyeSlashIcon,
   Square2StackIcon,
@@ -36,7 +35,6 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
-import { QUERY_KEYS } from "@/lib/constants";
 import { cn, maskString, notify } from "@/lib/utils";
 import { uploadCheckoutLogoFile } from "@/app/_actions/pocketbase-actions";
 import PromptModal from "@/components/base/prompt-modal";
@@ -47,7 +45,6 @@ import {
 import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
 import { Input } from "@/components/ui/input-field";
 import { SingleFileDropzone } from "@/components/base/file-dropzone";
-import { redirect } from "next/dist/server/api-utils";
 
 const INIT_FORM = {
   display_name: "",

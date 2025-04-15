@@ -1,7 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import MobileMoneyForm from "./mobile-money-form";
 import CardPaymentForm from "./card-payment-form";
@@ -12,16 +11,13 @@ import {
   CardFooter,
   Tab,
   Tabs,
-  useDisclosure,
   Table,
   TableHeader,
   TableColumn,
   TableCell,
   TableBody,
   TableRow,
-  Image,
 } from "@heroui/react";
-import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
 
 import {
   CheckBadgeIcon,
@@ -29,7 +25,7 @@ import {
   DevicePhoneMobileIcon,
   ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
-import { cn, formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import Logo from "@/components/base/payboss-logo";
 
 export default function Checkout({ checkoutData }) {

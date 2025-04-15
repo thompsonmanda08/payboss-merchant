@@ -1,11 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
+  AdjustmentsVerticalIcon,
   ArrowDownTrayIcon,
+  CalculatorIcon,
+  ChevronDownIcon,
+  DocumentTextIcon,
   EyeSlashIcon,
   FunnelIcon,
   ListBulletIcon,
   PresentationChartBarIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import { useMutation } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,7 +18,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Search from "@/components/ui/search";
 import CustomTable from "@/components/tables/table";
 import { Button } from "@/components/ui/button";
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import { DateRangePickerField } from "@/components/ui/date-select-field";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getCollectionsReport } from "@/app/_actions/transaction-actions";
@@ -29,29 +34,56 @@ import {
 } from "@/lib/table-columns";
 import { TerminalInfo } from "@/components/tables/terminal-tables";
 import { useDebounce } from "@/hooks/use-debounce";
+import SelectField from "@/components/ui/select-field";
+import Spinner from "@/components/ui/custom-spinner";
+import SoftBoxIcon from "@/components/base/soft-box-icon";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button as HeroButton,
+  DropdownSection,
+} from "@heroui/react";
 
 const SERVICE_TYPES = [
   {
-    name: "API Transactions Reports",
-    description:
-      "Reports on API transactions that took place within the date range applied",
+    name: "API Integration ",
+    description: "Integrations on 3rd party aplications",
     index: 0,
     service: "api-integration", // SERVICE TYPE REQUIRED BY API ENDPOINT
+    icon: AdjustmentsVerticalIcon,
   },
   {
-    name: "Till Transactions Reports",
-    description:
-      "Reports on till transactions that took place within the date range applied",
+    name: "Till Payment",
+    description: "Integration on USSD and POS devices",
     index: 1,
     service: "till", // SERVICE TYPE REQUIRED BY API ENDPOINT
+    icon: CalculatorIcon,
+  },
+  {
+    name: "Hosted Checkout ",
+    description: "Online E-Commerce and 3rd party checkout",
+    index: 2,
+    service: "checkout", // SERVICE TYPE REQUIRED BY API ENDPOINT
+    icon: ShoppingCartIcon,
+  },
+  {
+    name: "Invoice ",
+    description: "Invoicing with checkout integration",
+    index: 3,
+    service: "invoice", // SERVICE TYPE REQUIRED BY API ENDPOINT
+    icon: DocumentTextIcon,
   },
 ];
 
 export default function CollectionsReports({ workspaceID }) {
+  const [selectedServiceIndex, setSelectedServiceIndex] = React.useState(0);
+
   const [dateRange, setDateRange] = useState(); // DATE RANGE FILTER
 
   const [isExpanded, setIsExpanded] = useState(true); // SUMMARY EXPANDED STATE
-  const [currentTab, setCurrentTab] = useState(0); // CURRENTLY ACTIVE TAB
+  // const [selectedServiceIndex, setCurrentTab] = useState(0); // CURRENTLY ACTIVE TAB
 
   const [searchQuery, setSearchQuery] = useState(""); // TABLE SEARCH FILTER
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
@@ -77,16 +109,16 @@ export default function CollectionsReports({ workspaceID }) {
 
   // FETCH COLLECTIONS REPORT DATA - ASYNC AS HOISTED INTO THE MUTATION FUNCTION
   async function getReportsData(dateRange) {
-    let serviceType = SERVICE_TYPES[currentTab]?.service;
+    let serviceType = SERVICE_TYPES[selectedServiceIndex]?.service;
 
     if (!serviceType) {
-      serviceType = "api-integration";
+      throw new Error("No service type selected");
     }
 
     const response = await getCollectionsReport(
       workspaceID,
       serviceType,
-      dateRange,
+      dateRange
     );
 
     return response || [];
@@ -97,6 +129,7 @@ export default function CollectionsReports({ workspaceID }) {
   const transactions = mutation?.data?.data?.data || [];
   const hasTerminals = Boolean(mutation?.data?.data?.hasTerminal || false);
   const terminalSummary = mutation?.data?.data?.terminal || [];
+  const isPending = mutation?.isPending;
 
   // RESOLVE DATA FILTERING
   const hasSearchFilter = Boolean(debouncedSearchQuery);
@@ -118,7 +151,7 @@ export default function CollectionsReports({ workspaceID }) {
             .includes(debouncedSearchQuery?.toLowerCase()) ||
           row?.service_provider
             ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()),
+            .includes(debouncedSearchQuery?.toLowerCase())
       );
     }
 
@@ -141,7 +174,7 @@ export default function CollectionsReports({ workspaceID }) {
             .includes(debouncedTerminalQuery?.toLowerCase()) ||
           terminal?.terminalID
             ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase()),
+            .includes(debouncedTerminalQuery?.toLowerCase())
       );
     }
 
@@ -156,29 +189,118 @@ export default function CollectionsReports({ workspaceID }) {
   }, [dateRange]);
 
   function handleFileExportToCSV() {
-    if (currentTab === 0)
+    if (selectedServiceIndex === 0)
       apiTransactionsReportToCSV({
         objArray: transactions,
         fileName: "api_collection_transactions",
         hasTerminals,
       });
 
-    if (currentTab === 1) {
+    if (selectedServiceIndex === 1) {
       apiTransactionsReportToCSV({
         objArray: transactions,
         fileName: "till_collection_transactions",
-        hasTerminals: false, //? TILL COLLECTION CANNOT HAVE TERMINALS
+      });
+    }
+
+    if (selectedServiceIndex === 2) {
+      apiTransactionsReportToCSV({
+        objArray: transactions,
+        fileName: "checkout_collection_transactions",
+      });
+    }
+
+    if (selectedServiceIndex === 3) {
+      apiTransactionsReportToCSV({
+        objArray: transactions,
+        fileName: "invoice_collection_transactions",
       });
     }
   }
 
   useEffect(() => {
     runAsyncMutation(dateRange);
-  }, [currentTab]);
+  }, [selectedServiceIndex]);
+
+  const SERVICE = SERVICE_TYPES?.[selectedServiceIndex];
+
+  const iconClasses =
+    "w-5 h-5 text-default-500 pointer-events-none flex-shrink-0";
 
   return (
     <>
-      <div className="mb-4 flex w-full items-start justify-start pb-2">
+      <div className="flex w-full items-start justify-between mb-4 -mt-4">
+        <div className="relative">
+          <label className={cn("pl-1 text-sm font-medium text-foreground/70")}>
+            Select a Service
+          </label>
+          <Dropdown backdrop="blur">
+            <DropdownTrigger>
+              <HeroButton
+                variant="light"
+                size="lg"
+                radius="sm"
+                className={cn(
+                  "border border-primary-300 max-h-[60px] w-full items-center justify-start p-1"
+                )}
+              >
+                <SoftBoxIcon
+                  className={"aspect-square h-10 w-10 p-1 rounded-[5px]"}
+                >
+                  {(() => {
+                    const Icon = SERVICE?.icon;
+                    return <Icon className="w-5 h-5" />;
+                  })()}
+                </SoftBoxIcon>
+                <div className="flex w-full items-center justify-between text-primary">
+                  <div className="flex flex-col items-start justify-start gap-0">
+                    <div className="text-base font-semibold capitalize">
+                      {isPending ? (
+                        <div className="flex gap-2 text-sm font-bold ">
+                          <Spinner size={18} />{" "}
+                          {`Fetching ${SERVICE_TYPES[selectedServiceIndex]?.name} reports ...`}
+                        </div>
+                      ) : (
+                        SERVICE_TYPES[selectedServiceIndex]?.name
+                      )}
+                    </div>
+                    {!isPending && (
+                      <span className="-mt-0.5 text-xs font-medium tracking-wide text-foreground-600">
+                        Report analytics on{" "}
+                        {SERVICE_TYPES[selectedServiceIndex]?.name}
+                      </span>
+                    )}
+                  </div>
+                  <ChevronDownIcon className={cn("h-4 w-4 ease-in-out mx-4")} />
+                </div>
+              </HeroButton>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Dropdown menu with services"
+          
+              selectionMode="single"
+            >
+              <DropdownSection
+                // showDivider
+                title="Reports by Service types"
+              >
+                {SERVICE_TYPES.map((service, index) => {
+                  return (
+                    <DropdownItem
+                      key={String(service?.index || index)}
+                      description={service?.description}
+                      // shortcut="⌘N"
+                      onPress={() => setSelectedServiceIndex(index)}
+                      startContent={<service.icon className={iconClasses} />}
+                    >
+                      {service?.name}
+                    </DropdownItem>
+                  );
+                })}
+              </DropdownSection>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
         <div className="flex items-center gap-2">
           <DateRangePickerField
             autoFocus
@@ -199,27 +321,28 @@ export default function CollectionsReports({ workspaceID }) {
 
       {/************************************************************************/}
       <Card className={"w-full gap-3"}>
-        <div className="flex items-end justify-between">
+        {/* <div className="flex items-end justify-between">
           <Tabs
             className={"mb-2 mr-auto"}
-            currentTab={currentTab}
+            selectedServiceIndex={selectedServiceIndex}
             navigateTo={setCurrentTab}
             tabs={SERVICE_TYPES}
           />
-        </div>
+        </div> */}
         <div className="flex w-full items-center justify-between gap-8">
           <CardHeader
+            className={"max-w-full"}
             classNames={{
-              titleClasses: "xl:text-[clamp(1.125rem,1vw,1.75rem)] font-bold",
+              titleClasses: "xl:text-[clamp(1.125rem,1vw,1.5rem)] font-bold",
               infoClasses: "text-[clamp(0.8rem,0.8vw,1rem)]",
             }}
-            infoText={SERVICE_TYPES[currentTab].description}
-            title={`${SERVICE_TYPES[currentTab].name} (${
+            infoText={`Reports on ${SERVICE_TYPES[selectedServiceIndex]?.name} transactions that took place within the date range applied `}
+            title={`${SERVICE_TYPES[selectedServiceIndex]?.name} Reports from (${
               dateRange?.range || "--"
             })`}
           />
 
-          <div className="flex w-full justify-end gap-4">
+          <div className="flex max-w-max justify-end gap-4">
             <Button
               color={"primary"}
               variant="flat"
