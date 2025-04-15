@@ -16,6 +16,7 @@ export function ErrorCard({
   href,
   handleReload,
   className,
+  classNames,
   buttonText,
   goBack,
 }) {
@@ -25,7 +26,7 @@ export function ErrorCard({
     <Card
       className={cn(
         "mx-auto aspect-square w-full max-w-sm flex-1 p-6 font-inter",
-        className,
+        className
       )}
     >
       <CardHeader>
@@ -36,13 +37,28 @@ export function ErrorCard({
         />
       </CardHeader>
       <CardBody className="flex cursor-pointer select-none flex-col items-center justify-center p-0">
-        <p className="text-[clamp(32px,5vw,60px)] font-bold leading-normal text-primary-700">
+        <p
+          className={cn(
+            "text-[clamp(32px,5vw,60px)] font-bold leading-normal text-primary-700",
+            classNames?.status
+          )}
+        >
           {status || "404"}
         </p>
-        <h1 className="text-lg font-semibold capitalize text-gray-900">
+        <h1
+          className={cn(
+            "text-lg font-semibold capitalize text-gray-900",
+            classNames?.title
+          )}
+        >
           {title || "Page not found"}
         </h1>
-        <p className="my-3 max-w-[300px] text-center text-sm font-medium text-foreground/70">
+        <p
+          className={cn(
+            "my-3 max-w-[300px] text-center text-sm font-medium text-foreground/70",
+            classNames?.message
+          )}
+        >
           {message || "Sorry, we couldn’t find the page you’re looking for."}
         </p>
       </CardBody>

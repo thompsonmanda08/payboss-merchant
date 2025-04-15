@@ -46,6 +46,7 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
 
   // return data or any other state of the query
   return {
+    isError,
     data: transactionStatusResponse?.data,
 
     // TRANSACTION RESPONSES
@@ -55,9 +56,7 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
       transactionStatusResponse?.data?.status?.toUpperCase() == "PENDING",
     isSuccess:
       isSuccess &&
-      (transactionStatusResponse?.data?.status?.toUpperCase() == "COMPLETED" ||
-        transactionStatusResponse?.data?.status?.toUpperCase() ==
-          "SUCCESSFUL" ||
+      (transactionStatusResponse?.data?.status?.toUpperCase() == "SUCCESSFUL" ||
         transactionStatusResponse?.data?.status?.toUpperCase() == "SUCCESS"),
     isFailed:
       transactionStatusResponse?.data?.status?.toUpperCase() == "FAILED" ||

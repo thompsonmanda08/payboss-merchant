@@ -1,27 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
 import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
 import { cn, notify } from "@/lib/utils";
 import { Image, useDisclosure } from "@heroui/react";
-import PromptModal from "@/components/base/prompt-modal";
 import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
 import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { payWithMobileMoney } from "@/app/_actions/checkout-actions";
+import {
+  completeCheckoutProcess,
+  payWithMobileMoney,
+} from "@/app/_actions/checkout-actions";
+
 import Spinner from "@/components/ui/custom-spinner";
-import { data } from "autoprefixer";
+import PromptModal from "@/components/base/prompt-modal";
 
 export default function MobileMoneyForm({ checkoutData }) {
   const { amount, transactionID } = checkoutData || "";
 
-  const [pinPromptSent, setPinPromptSent] = React.useState(false);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [operatorLogo, setOperatorLogo] = React.useState("");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [pinPromptSent, setPinPromptSent] = React.useState(false);
 
   // GET TRANSACTION STATUS HOOK
   const { data, isSuccess, isFailed, isProcessing } =
@@ -123,16 +126,18 @@ export default function MobileMoneyForm({ checkoutData }) {
     setPinPromptSent(false);
   }
 
-  useEffect(() => {
-    if (isSuccess) {
+  useEffect(async () => {
+    if (isSuccess && pinPromptSent) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setPinPromptSent(false);
+      await completeCheckoutProcess(transactionID, data?.status);
     }
-    if (isFailed) {
+    if (isFailed && pinPromptSent) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setPinPromptSent(false);
+      await completeCheckoutProcess(transactionID, data?.status);
     }
-  }, [data, isLoading, isSuccess, isFailed]);
+  }, [data, isProcessing, isSuccess, isFailed]);
 
   return (
     <>

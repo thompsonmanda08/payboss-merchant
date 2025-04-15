@@ -3,6 +3,7 @@ import {
   validateCheckoutData,
 } from "@/app/_actions/checkout-actions";
 import { ErrorCard } from "@/components/base/error-card";
+import { capitalize } from "@/lib/utils";
 
 import Checkout from "../components/checkout";
 
@@ -32,7 +33,7 @@ async function CheckoutPage(props) {
         <ErrorCard
           className={"max-h-fit m-auto"}
           goBack={true}
-          message={validation?.message}
+          message={capitalize(validation?.message)}
           status={validation?.status}
           title={"Checkout Error"}
         />

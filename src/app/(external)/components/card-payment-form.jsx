@@ -29,6 +29,7 @@ export default function CardPaymentForm({ checkoutData }) {
 
   const [formData, setFormData] = useState(CARD_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
@@ -210,10 +211,15 @@ export default function CardPaymentForm({ checkoutData }) {
       return;
     }
 
-    const response = await payWithBankCard(formData);
+    const response = await payWithBankCard({
+      transactionID,
+      amount,
+      ...formData,
+    });
 
     if (response?.success) {
       const payload = {
+        ...checkoutData,
         ...formData,
         // FROM PAYBOSS BACKEND
         ...response?.data,
