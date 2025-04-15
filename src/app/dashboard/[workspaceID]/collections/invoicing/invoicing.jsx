@@ -1,39 +1,17 @@
 "use client";
-import {
-  Cog6ToothIcon,
-  PlusIcon,
-  LinkIcon,
-  XMarkIcon,
-  EyeIcon,
-  EyeSlashIcon,
-  Square2StackIcon,
-  ClipboardDocumentCheckIcon,
-} from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import {
   Modal,
   ModalContent,
   ModalBody,
   useDisclosure,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Spinner,
-  Tooltip,
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
   Alert,
   Snippet,
   ModalHeader,
   ModalFooter,
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import CustomTable from "@/components/tables/table";
@@ -41,23 +19,8 @@ import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import { INVOICE_COLUMNS } from "@/lib/table-columns";
 import InvoiceForm from "@/components/forms/invoice-form";
-import { QUERY_KEYS, slideDownInView } from "@/lib/constants";
-import { cn, maskString, notify } from "@/lib/utils";
-import { uploadCheckoutLogoFile } from "@/app/_actions/pocketbase-actions";
-import PromptModal from "@/components/base/prompt-modal";
-import { generateCheckoutURL } from "@/app/_actions/vas-actions";
+import { notify } from "@/lib/utils";
 import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
-import { Input } from "@/components/ui/input-field";
-import { SingleFileDropzone } from "@/components/base/file-dropzone";
-
-const INIT_FORM = {
-  display_name: "",
-  logo: "",
-  logo_url: "",
-  physical_address: "",
-  city_country: "",
-  recordID: null,
-};
 
 export default function CheckoutAndInvoicing({ workspaceID, permissions }) {
   const queryClient = useQueryClient();
@@ -74,7 +37,6 @@ export default function CheckoutAndInvoicing({ workspaceID, permissions }) {
 
   function handleClosePrompts() {
     onClose();
-    setIsLoading(false);
     setOpenViewConfig(false);
     setOpenCreateInvoice(false);
   }
@@ -95,8 +57,6 @@ export default function CheckoutAndInvoicing({ workspaceID, permissions }) {
     onOpen();
     setOpenCreateInvoice(true);
   }
-
-  async function handleInvoiceCreation() {}
 
   return (
     <>
@@ -140,7 +100,10 @@ export default function CheckoutAndInvoicing({ workspaceID, permissions }) {
       >
         <ModalContent>
           <ModalBody className="gap-0 max-h-[700px] overflow-y-auto">
-            <InvoiceForm />
+            <InvoiceForm
+              permissions={permissions}
+              handleClosePrompts={handleClosePrompts}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>

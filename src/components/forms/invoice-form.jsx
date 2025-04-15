@@ -5,9 +5,9 @@ import {
   Card,
   CardBody,
   CardHeader,
-  CardFooter,
   Tab,
   Tabs,
+  NumberInput,
 } from "@heroui/react";
 
 import {
@@ -16,27 +16,31 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { getLocalTimeZone, today } from "@internationalized/date";
 
 import { formatCurrency, formatDate, notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
-import DateSelectField from "@/components/ui/date-select-field";
+import { createInvoice } from "@/app/_actions/vas-actions";
+import { useQueryClient } from "@tanstack/react-query";
 
 const INIT_INVOICE = {
   customerName: "",
   customerEmail: "",
   customerPhone: "",
   customerAddress: "",
-  invoiceNumber: `INV-${Date.now().toString().slice(-6)}`,
-  invoiceDate: "",
+  // invoiceNumber: `INV-${Date.now().toString().slice(-6)}`,
+  // invoiceDate: "",
   // dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
   dueDate: "", // 30 days from now
   notes: "",
+  taxValue: 0,
+  tax: 0,
   lineItems: [{ description: "", quantity: 1, unitPrice: 0 }],
 };
 
-export default function InvoiceForm() {
+export default function InvoiceForm({ permissions, handleClosePrompts }) {
+  const queryClient = useQueryClient();
+
   const [formData, setFormData] = useState(INIT_INVOICE);
   const [selectedTab, setSelectedTab] = useState("invoice-details");
   const [isLoading, setIsLoading] = useState(false);
@@ -63,36 +67,95 @@ export default function InvoiceForm() {
     );
   };
 
-  const calculateTax = (subtotal) => {
-    // Assuming a tax rate of 17%
-    return subtotal * 0.17;
+  const calculateTax = (subtotal, taxValue = 0) => {
+    // Assuming a tax rate of 0% if no value is provided
+    return subtotal * taxValue;
   };
 
   const calculateTotal = (subtotal, tax) => {
     return subtotal + tax;
   };
 
-  function onSubmit(e) {
+  function isValidDetails() {
+    if (
+      !formData?.customerName ||
+      !formData?.customerEmail ||
+      !formData?.customerPhone ||
+      !formData?.customerAddress
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  async function onSubmit(e) {
     e.preventDefault();
 
     setIsLoading(true);
 
-    if (selectedTab == "invoice-details") {
+    if (selectedTab == "invoice-details" && isValidDetails()) {
       setSelectedTab("invoice-items");
       setIsLoading(false);
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("DATA:", formData);
+    const subtotal = calculateSubtotal() || 0;
+    const tax = calculateTax(subtotal, formData?.taxValue) || 0;
+    const total = calculateTotal(subtotal, tax) || 0;
+
+    const invoiceData = {
+      customer_name: formData?.customerName,
+      customer_email: formData?.customerEmail,
+      customer_phone_number: formData?.customerPhone,
+      customer_address: formData?.customerAddress,
+      items: formData?.lineItems?.map((item) => {
+        return {
+          description: item?.description,
+          quantity: String(item?.quantity),
+          unit_price: String(item?.unitPrice),
+        };
+      }),
+
+      tax: String(tax.toFixed(2)),
+      total: String(total.toFixed(2)),
+    };
+
+    if (process.env.NODE_ENV == "development") {
+      // Simulate API call
+      console.log("INVOICE DATA", invoiceData);
+      setTimeout(() => {
+        console.log("DATA:", formData);
+        notify({
+          title: "Invoice created",
+          description: "Invoice created successfully.",
+          color: "success",
+        });
+        setIsLoading(false);
+        handleClosePrompts();
+      }, 2000);
+
+      return;
+    }
+
+    const response = await createInvoice(invoiceData);
+
+    if (response?.success) {
       notify({
         title: "Invoice created",
         description: "Invoice created successfully.",
         color: "success",
       });
+      queryClient.invalidateQueries();
+      handleClosePrompts();
+    } else {
+      notify({
+        title: "Error",
+        description: response.message,
+        color: "danger",
+      });
       setIsLoading(false);
-    }, 2000);
+    }
   }
 
   useEffect(() => {
@@ -103,7 +166,10 @@ export default function InvoiceForm() {
   }, []);
 
   return (
-    <form onSubmit={onSubmit} className="min-h-[680px] flex flex-col">
+    <form
+      onSubmit={onSubmit}
+      className="h-screen max-h-[calc(100svh-80px)] flex flex-col"
+    >
       <div className="flex-col items-start pb-4 pt-2">
         <h4 className="text-large font-bold">Client & Invoice Information</h4>
         <small className="text-default-500">All fields are required</small>
@@ -119,8 +185,16 @@ export default function InvoiceForm() {
         selectedKey={selectedTab}
         size="lg"
         variant="bordered"
-        onSelectionChange={(type) => {
-          setSelectedTab(type);
+        onSelectionChange={(key) => {
+          if (!isValidDetails() && key == "invoice-items") {
+            notify({
+              color: "warning",
+              title: "Missing Fields",
+              description: "Required fields are missing!",
+            });
+            return;
+          }
+          setSelectedTab(key);
         }}
       >
         <Tab
@@ -161,30 +235,63 @@ export default function InvoiceForm() {
       <div className="flex flex-col gap-1 mt-auto">
         {(() => {
           const subtotal = calculateSubtotal() || 0;
-          const tax = calculateTax(subtotal) || 0;
+          const tax = calculateTax(subtotal, formData?.taxValue) || 0;
           const total = calculateTotal(subtotal, tax) || 0;
 
           return (
             <>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Subtotal:</span>
+                <span className="text-muted-foreground ml-2">Subtotal:</span>
                 <span>{formatCurrency(subtotal.toFixed(2))}</span>
               </div>
               {/* TODO: Tax handling */}
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Tax (17%):</span>
-                <span>{formatCurrency(tax.toFixed(2))}</span>
+              <div className="flex justify-between items-center">
+                <div className="text-muted-foreground flex gap-2 items-center">
+                  <NumberInput
+                    required
+                    radius="sm"
+                    minValue={0}
+                    maxValue={100}
+                    startContent="Tax: "
+                    labelPlacement="outside"
+                    formatOptions={{
+                      style: "percent",
+                    }}
+                    className="w-28 -ml-2"
+                    classNames={{
+                      input: "shadow-none outline-transparent",
+                      errorMessage: "text-nowrap",
+                    }}
+                    validate={(value) => {
+                      if (value < 0) {
+                        return "Tax percentage can't be less than 0";
+                      }
+
+                      if (value > 100) {
+                        return "Tax percentage must be less than 100";
+                      }
+
+                      return null;
+                    }}
+                    name={"taxValue"}
+                    onValueChange={(value) => {
+                      setFormData((prev) => ({ ...prev, taxValue: value }));
+                    }}
+                    value={formData?.taxValue}
+                  />
+                </div>
+                <span>{formatCurrency(formData?.tax)}</span>
               </div>
               <div className="flex justify-between font-medium text-lg">
-                <span>Total:</span>
-                <span>{formatCurrency(total.toFixed(2))}</span>
+                <span className="text-base ml-2">Total:</span>
+                <span>{formatCurrency(total)}</span>
               </div>
             </>
           );
         })()}
       </div>
       <Button
-        className="w-full my-4"
+        className="w-full my-4 min-h-9"
         isLoading={isLoading}
         isDisabled={isLoading}
         loadingText={"Processing..."}
@@ -213,6 +320,7 @@ function InvoiceDetails({ formData, updateFormData, handleChange }) {
             required
             label={"Customer Email"}
             name={"customerEmail"}
+            type={"email"}
             placeholder={"brick@enterprise.com"}
             value={formData?.customerEmail}
             onChange={handleChange}
@@ -237,7 +345,8 @@ function InvoiceDetails({ formData, updateFormData, handleChange }) {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+        {/* INVOICE NUMBERS AND DATES */}
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
           <Input
             required
             label={"Invoice Number "}
@@ -291,9 +400,10 @@ function InvoiceDetails({ formData, updateFormData, handleChange }) {
               });
             }}
           />
-        </div>
+        </div> */}
 
-        <div className="">
+        {/* INVOICE NOTES */}
+        {/* <div className="">
           <label
             className="block text-sm font-medium leading-6 text-foreground/50 "
             htmlFor="message"
@@ -309,7 +419,7 @@ function InvoiceDetails({ formData, updateFormData, handleChange }) {
             value={formData?.notes}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

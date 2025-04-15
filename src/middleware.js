@@ -2,13 +2,19 @@ import { NextResponse } from "next/server";
 
 import { getServerSession, getWorkspaceSessionData } from "./lib/session";
 
-const PUBLIC_ROUTE = [
+const PUBLIC_ROUTES = [
   "/",
   "/login",
   "/register",
   "/support",
-  "/checkout",
   "/sentry-example-page",
+  "/checkout",
+  "/invoice",
+];
+
+const PUBLIC_PREFIXES = [
+  "/invoice/", // This will catch all /invoice/[id] routes
+  "/checkout/",
 ];
 
 export async function middleware(request) {
@@ -38,7 +44,9 @@ export async function middleware(request) {
   const isUserInWorkspace =
     pathname.startsWith("/dashboard") && pathname.split("/").length >= 3;
   const isDashboardRoute = pathname == "/dashboard";
-  const isPublicRoute = PUBLIC_ROUTE.includes(pathname);
+  const isPublicRoute =
+    PUBLIC_ROUTES.includes(pathname) ||
+    PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 
   if (pathname == "/") return response;
   if (isPublicRoute && !accessToken) return response;

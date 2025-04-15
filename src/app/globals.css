@@ -175,3 +175,9 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

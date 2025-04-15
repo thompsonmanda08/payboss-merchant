@@ -38,7 +38,7 @@ export function formatCurrency(amount) {
     minimumFractionDigits: 2,
   });
 
-  return amount ? currencyFormat.format(amount) : "";
+  return currencyFormat.format(amount || 0);
 }
 
 export const formatActivityData = (activityLog, isNotReverse = true) => {

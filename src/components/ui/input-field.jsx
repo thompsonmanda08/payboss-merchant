@@ -20,7 +20,7 @@ const Input = React.forwardRef(
       errorText = "",
       ...props
     },
-    ref,
+    ref
   ) => {
     return (
       <div
@@ -30,7 +30,7 @@ const Input = React.forwardRef(
           classNames?.wrapper,
           {
             "cursor-not-allowed opacity-50": isDisabled,
-          },
+          }
         )}
       >
         {label && (
@@ -39,7 +39,7 @@ const Input = React.forwardRef(
               "pl-1 text-sm font-medium text-nowrap text-foreground/70",
               {
                 "text-red-500": onError,
-              },
+              }
             )}
             htmlFor={name}
           >
@@ -58,11 +58,12 @@ const Input = React.forwardRef(
                 onError,
             },
             className,
+            classNames?.input
           )}
           disabled={isDisabled}
           id={name}
-          max={max}
           maxLength={maxLength}
+          max={max}
           min={min}
           name={name}
           type={type}
@@ -70,7 +71,7 @@ const Input = React.forwardRef(
         />
         {errorText && onError && (
           <motion.span
-            className="ml-1 text-xs text-red-500"
+            className={cn("ml-1 text-xs text-red-500", classNames?.errorText)}
             whileInView={{
               scale: [0, 1],
               opacity: [0, 1],
@@ -82,7 +83,7 @@ const Input = React.forwardRef(
         )}
       </div>
     );
-  },
+  }
 );
 
 Input.displayName = "Input";
