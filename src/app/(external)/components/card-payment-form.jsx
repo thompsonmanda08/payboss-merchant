@@ -6,11 +6,17 @@ import { Button } from "@/components/ui/button";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import { payWithBankCard } from "@/app/_actions/checkout-actions";
 import SelectField from "@/components/ui/select-field";
-import { notify } from "@/lib/utils";
+import { cn, notify } from "@/lib/utils";
+import { useDisclosure } from "@heroui/react";
+import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
+import PromptModal from "@/components/base/prompt-modal";
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 
 export default function CardPaymentForm({ checkoutData }) {
   const { countries, provinces } = useConfigOptions();
   const { amount, transactionID } = checkoutData || "";
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const CARD_FORM = {
     phoneNumber: "",
@@ -29,13 +35,17 @@ export default function CardPaymentForm({ checkoutData }) {
 
   const [formData, setFormData] = useState(CARD_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isPaymentStarted, setIsPaymentStarted] = useState(false);
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
   });
+
+  // GET TRANSACTION STATUS HOOK
+  const { data, isSuccess, isFailed, isProcessing } =
+    useCheckoutTransactionStatus(transactionID, isPaymentStarted);
 
   const popUpWindowRef = React.useRef(null);
 
@@ -178,7 +188,13 @@ export default function CardPaymentForm({ checkoutData }) {
     requestAnimationFrame(checkIfClosed); // Start checking
   };
 
-  const handleSubmit = async (e) => {
+  function handleClosePrompt() {
+    onClose();
+    setIsSubmitting(false);
+    setIsPaymentStarted(false);
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -225,11 +241,13 @@ export default function CardPaymentForm({ checkoutData }) {
         ...response?.data,
       };
       // OPEN PAYMENT WINDOW
-      const transactionStatus = await openPaymentWindow(payload);
+      onOpen();
       setIsSubmitting(false); // THIS WILL TRIGGER THE WEB HOOK
+      setIsPaymentStarted(true);
+      const transactionStatus = await openPaymentWindow(payload);
 
       setTimeout(() => {
-        // setPinPromptSent(false); // THIS WILL DISABLE THE WEB HOOK AFTER 5 SECONDS
+        // setIsPaymentStarted(false); // THIS WILL DISABLE THE WEB HOOK AFTER 5 SECONDS
       }, 5000);
     } else {
       notify({
@@ -238,158 +256,230 @@ export default function CardPaymentForm({ checkoutData }) {
         color: "danger",
       });
       setIsSubmitting(false);
+      setIsPaymentStarted(false);
     }
-  };
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-        <Input
-          id="firstName"
-          name="firstName"
-          label="First Name"
-          required
-          value={formData.firstName}
-          onError={errors.firstName}
-          errorText={errors.firstName}
-          onChange={handleChange}
-          placeholder="Bob"
-        />
-
-        <Input
-          id="lastName"
-          name="lastName"
-          label="Last Name"
-          required
-          value={formData.lastName}
-          onError={errors.lastName}
-          errorText={errors.lastName}
-          onChange={handleChange}
-          placeholder="Mwale"
-        />
-      </div>
-
-      <Input
-        id="email"
-        name="email"
-        type="email"
-        label="  Email"
-        required
-        value={formData.email}
-        onError={errors.email}
-        errorText={errors.email}
-        onChange={handleChange}
-        placeholder="bob.mwale@mail.com"
-      />
-
-      <div className="relative">
-        <Input
-          id="phoneNumber"
-          name="phoneNumber"
-          label="Phone Number"
-          required
-          onError={errors.phoneNumber}
-          value={formData.phoneNumber}
-          errorText={errors.phoneNumber}
-          onChange={handleChange}
-          placeholder="09XXXXXX77"
-        />
-      </div>
-
-      <Input
-        id="address"
-        name="address"
-        label="Address"
-        required
-        value={formData.address}
-        onChange={handleChange}
-        placeholder="123 Main St"
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input
-          id="city"
-          name="city"
-          label="City"
-          required
-          value={formData.city}
-          onChange={handleChange}
-          placeholder="Lusaka"
-        />
-        {formData?.country == "ZM" ? (
-          <SelectField
-            label="Province"
-            listItemName={"province"}
-            name="province"
-            options={provinces}
-            prefilled={true}
-            value={formData?.province}
-            onChange={handleChange}
-          />
-        ) : (
+    <>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <Input
-            id="province"
-            name="province"
-            label="Province"
-            value={formData.province}
+            id="firstName"
+            name="firstName"
+            label="First Name"
+            required
+            value={formData.firstName}
+            onError={errors.firstName}
+            errorText={errors.firstName}
+            onChange={handleChange}
+            placeholder="Bob"
+          />
+
+          <Input
+            id="lastName"
+            name="lastName"
+            label="Last Name"
+            required
+            value={formData.lastName}
+            onError={errors.lastName}
+            errorText={errors.lastName}
+            onChange={handleChange}
+            placeholder="Mwale"
+          />
+        </div>
+
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          label="  Email"
+          required
+          value={formData.email}
+          onError={errors.email}
+          errorText={errors.email}
+          onChange={handleChange}
+          placeholder="bob.mwale@mail.com"
+        />
+
+        <div className="relative">
+          <Input
+            id="phoneNumber"
+            name="phoneNumber"
+            label="Phone Number"
+            required
+            onError={errors.phoneNumber}
+            value={formData.phoneNumber}
+            errorText={errors.phoneNumber}
+            onChange={handleChange}
+            placeholder="09XXXXXX77"
+          />
+        </div>
+
+        <Input
+          id="address"
+          name="address"
+          label="Address"
+          required
+          value={formData.address}
+          onChange={handleChange}
+          placeholder="123 Main St"
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Input
+            id="city"
+            name="city"
+            label="City"
+            required
+            value={formData.city}
             onChange={handleChange}
             placeholder="Lusaka"
           />
-        )}
-      </div>
+          {formData?.country == "ZM" ? (
+            <SelectField
+              label="Province"
+              listItemName={"province"}
+              name="province"
+              options={provinces}
+              prefilled={true}
+              value={formData?.province}
+              onChange={handleChange}
+            />
+          ) : (
+            <Input
+              id="province"
+              name="province"
+              label="Province"
+              value={formData.province}
+              onChange={handleChange}
+              placeholder="Lusaka"
+            />
+          )}
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input
-          id="postalCode"
-          name="postalCode"
-          label="Postal Code"
-          required
-          value={formData.postalCode}
-          onChange={handleChange}
-          placeholder="10101"
-        />
-
-        <AutoCompleteField
-          label="Country"
-          // required
-          listItemName={"country"}
-          selector={"country_code"}
-          name="country"
-          options={countries || []}
-          value={formData?.country}
-          onChange={(value) => handleSelectChange("country", value)}
-        />
-      </div>
-
-      {/* <div>
-        <label
-          className="block text-sm font-medium leading-6 text-foreground/50 "
-          htmlFor="narration"
-        >
-          Payment Description
-        </label>
-        <div className="mt-2">
-          <textarea
-            className="block w-full rounded-md border-0 py-1.5 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary/80 sm:text-sm sm:leading-6"
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Input
+            id="postalCode"
+            name="postalCode"
+            label="Postal Code"
+            required
+            value={formData.postalCode}
             onChange={handleChange}
-            value={formData?.narration}
-            id="narration"
-            name="narration"
-            rows={2}
+            placeholder="10101"
+          />
+
+          <AutoCompleteField
+            label="Country"
+            // required
+            listItemName={"country"}
+            selector={"country_code"}
+            name="country"
+            options={countries || []}
+            value={formData?.country}
+            onChange={(value) => handleSelectChange("country", value)}
           />
         </div>
-      </div> */}
 
-      <Button
-        type="submit"
-        isLoading={isSubmitting}
-        loadingText={"Processing..."}
-        disabled={isSubmitting}
-        className={"w-full"}
-        size={"lg"}
+        {/* <div>
+          <label
+            className="block text-sm font-medium leading-6 text-foreground/50 "
+            htmlFor="narration"
+          >
+            Payment Description
+          </label>
+          <div className="mt-2">
+            <textarea
+              className="block w-full rounded-md border-0 py-1.5 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary/80 sm:text-sm sm:leading-6"
+              onChange={handleChange}
+              value={formData?.narration}
+              id="narration"
+              name="narration"
+              rows={2}
+            />
+          </div>
+        </div> */}
+
+        <Button
+          type="submit"
+          isLoading={isSubmitting}
+          loadingText={"Processing..."}
+          disabled={isSubmitting}
+          className={"w-full"}
+          size={"lg"}
+        >
+          Pay with Card
+        </Button>
+      </form>
+
+      <PromptModal
+        backdrop="blur"
+        isDismissable={false}
+        isDisabled={isPaymentStarted}
+        isOpen={isOpen}
+        title={"Transaction Status"}
+        onClose={handleClosePrompt}
+        onOpen={onOpen}
+        className={"max-w-sm"}
+        size="sm"
       >
-        Pay with Card
-      </Button>
-    </form>
+        {isPaymentStarted && isProcessing ? (
+          <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
+            {/* <Loader loadingText={"Please wait..."} size={100} /> */}
+            <Spinner size={100} />
+            <div className="grid place-items-center gap-2">
+              <p
+                className={cn(
+                  "mt-4 max-w-sm break-words font-bold text-foreground/80"
+                )}
+              >
+                {"Please wait..."}
+              </p>
+              <small className="text-muted-foreground">
+                Check your phone for an approval prompt, Once approved, wait for
+                the transaction to process and complete before closing the
+                popup.
+              </small>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
+              {/* <Loader loadingText={"Please wait..."} size={100} /> */}
+              {isSuccess ? (
+                <CheckBadgeIcon className="w-32 text-success" />
+              ) : isFailed ? (
+                <XCircleIcon className="w-32 text-danger" />
+              ) : (
+                <QuestionMarkCircleIcon className="w-32 text-warning" />
+              )}
+              <div className="grid place-items-center gap-2">
+                <p
+                  className={cn(
+                    "mt-4 max-w-sm break-words  font-bold text-foreground/80"
+                  )}
+                >
+                  {data?.status}
+                </p>
+                <small className="text-muted-foreground">
+                  {isSuccess
+                    ? "Payment completed successfully!"
+                    : isFailed
+                      ? "Payment failed. Try again later!"
+                      : "Warning: Payment is still being processed."}
+                  {isFailed && (
+                    // REASON FOR FAILURE
+                    <>
+                      <br />
+                      {data?.message}
+                    </>
+                  )}
+                </small>
+              </div>
+            </div>
+          </>
+        )}
+      </PromptModal>
+    </>
   );
 }

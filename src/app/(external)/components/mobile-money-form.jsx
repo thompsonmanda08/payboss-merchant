@@ -8,7 +8,11 @@ import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
 import { cn, notify } from "@/lib/utils";
 import { Image, useDisclosure } from "@heroui/react";
 import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
-import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import {
+  CheckBadgeIcon,
+  QuestionMarkCircleIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import {
   completeCheckoutProcess,
   payWithMobileMoney,
@@ -126,16 +130,19 @@ export default function MobileMoneyForm({ checkoutData }) {
     setPinPromptSent(false);
   }
 
-  useEffect(async () => {
+  useEffect(() => {
+    async function completeCheckout() {
+      await completeCheckoutProcess(transactionID, data?.status);
+    }
     if (isSuccess && pinPromptSent) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setPinPromptSent(false);
-      await completeCheckoutProcess(transactionID, data?.status);
+      completeCheckout();
     }
     if (isFailed && pinPromptSent) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setPinPromptSent(false);
-      await completeCheckoutProcess(transactionID, data?.status);
+      completeCheckout();
     }
   }, [data, isProcessing, isSuccess, isFailed]);
 
