@@ -484,7 +484,7 @@ const APIIntegration = ({ workspaceID, permissions }) => {
 
   const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
 
-  console.log("API_KEYS", API_KEYS);
+
 
   return isLoadingConfig ? (
     <LoadingPage />

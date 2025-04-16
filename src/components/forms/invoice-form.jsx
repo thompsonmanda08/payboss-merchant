@@ -121,23 +121,6 @@ export default function InvoiceForm({ permissions, handleClosePrompts }) {
       total: String(total.toFixed(2)),
     };
 
-    if (process.env.NODE_ENV == "development") {
-      // Simulate API call
-      console.log("INVOICE DATA", invoiceData);
-      setTimeout(() => {
-        console.log("DATA:", formData);
-        notify({
-          title: "Invoice created",
-          description: "Invoice created successfully.",
-          color: "success",
-        });
-        setIsLoading(false);
-        handleClosePrompts();
-      }, 2000);
-
-      return;
-    }
-
     const response = await createInvoice(invoiceData);
 
     if (response?.success) {

@@ -106,7 +106,6 @@ export default function MobileMoneyForm({ checkoutData }) {
         description: `Pin prompt sent to${formData?.phoneNumber}`,
         color: "success",
       });
-      console.log("PROMPT GONE....");
       onOpen();
       setIsSubmitting(false);
       setPinPromptSent(true); // THIS WILL ENABLE THE TRANSACTION STATUS HOOK - FIRES IN INTERVALS
@@ -143,10 +142,6 @@ export default function MobileMoneyForm({ checkoutData }) {
       completeCheckout();
     }
   }, [data, isProcessing, isSuccess, isFailed]);
-
-  console.log("FAILED: ", isFailed);
-  console.log("SUCCESS: ", isSuccess);
-  console.log("DATA", data);
 
   return (
     <>

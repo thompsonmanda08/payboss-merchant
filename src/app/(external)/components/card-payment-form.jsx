@@ -133,65 +133,6 @@ export default function CardPaymentForm({ checkoutData }) {
     }
 
     popUpWindowRef.current = paymentWindow;
-
-    console.log("Opening Payment Window...", paymentWindow);
-
-    // Send payment data to the pop-up after a short delay to ensure window is loaded
-    // Send payment data to the pop-up after a short delay
-    setTimeout(() => {
-      try {
-        console.log("Sending Payment data...");
-        paymentWindow.postMessage(paymentData, paymentUrl); // Ensure it matches `event.origin`
-      } catch (error) {
-        console.error("Failed to send message:", error);
-      }
-    }, 2000);
-
-    /* TODO: EVENT LISTENER */
-    // Payment event handler
-    const handlePaymentEvent = (event) => {
-      console.log("Payment event received:", event);
-
-      if (event.origin !== paymentUrl) return; // Security check
-
-      console.log("Payment Response:", event.data);
-
-      if (event.data.status === "success") {
-        alert(
-          `Payment successful! Transaction ID: ${event.data.transactionId}`
-        );
-        setIsCompleted(true);
-      } else {
-        alert("Payment failed or canceled.");
-        setIsCancelled(true);
-      }
-
-      // Close the pop-up and clean up
-      if (!paymentWindow.closed) {
-        paymentWindow.close();
-        console.log("Closing Payment Window...");
-      }
-
-      popUpWindowRef.current = null; // THIS EVENT SHOULD HELP RENDER THE APPROPRIATE MESSAGE
-      window.removeEventListener("message", handlePaymentEvent); // Clean up listener
-    };
-
-    // Listen for response from the payment provider
-    window.addEventListener("message", handlePaymentEvent);
-
-    // Check if the window is closed
-    // **Improved window closed detection**
-    function checkIfClosed() {
-      if (!popUpWindowRef.current) {
-        // THE REF WILL NOT BE NULL TILL THE WINDOW IS CLOSED
-        console.log("Payment window closed.");
-
-        return true;
-      }
-      requestAnimationFrame(checkIfClosed); // Continue checking
-    }
-
-    requestAnimationFrame(checkIfClosed); // Start checking
   };
 
   function handleClosePrompt() {
@@ -209,8 +150,7 @@ export default function CardPaymentForm({ checkoutData }) {
         description: "Missing Fields",
         color: "danger",
       });
-      console.log(errors);
-
+      console.error(errors);
       return;
     }
 
@@ -258,6 +198,7 @@ export default function CardPaymentForm({ checkoutData }) {
 
       setIsPaymentStarted(false);
       completeCheckout();
+      /* TODO: AUTO CLOSE THE OPEN WINDOW USING THE REF OBJECT */
     }
     if (isFailed && isPaymentStarted) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING

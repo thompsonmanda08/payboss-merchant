@@ -43,8 +43,6 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
     refetchInterval: 15000, // every 15 seconds
   });
 
-  console.log("HOOK RESPONSE: ", transactionStatusResponse);
-
   // return data or any other state of the query
   return {
     isError,

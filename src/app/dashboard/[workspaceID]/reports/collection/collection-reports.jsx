@@ -226,7 +226,6 @@ export default function CollectionsReports({ workspaceID }) {
   const iconClasses =
     "w-5 h-5 text-default-500 pointer-events-none flex-shrink-0";
 
-  console.log("SELECTED SERVICE: ", SERVICE);
 
   return (
     <>
