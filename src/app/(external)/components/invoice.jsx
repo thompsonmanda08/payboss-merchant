@@ -13,7 +13,7 @@ export default function Invoice({ invoice }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const captureRef = useRef(null);
 
-  const generatePDF = async (blob) => {
+  const generatePDF = async () => {
     setIsProcessing(true);
     try {
       const element = captureRef.current;
@@ -34,6 +34,8 @@ export default function Invoice({ invoice }) {
 
       pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
       pdf.save(`INV-${invoice?.number}-PB.pdf`);
+
+      noPrintEls.forEach((el) => (el.style.display = "flex"));
       setIsProcessing(false);
     } catch (error) {
       console.error("Error:", error);
