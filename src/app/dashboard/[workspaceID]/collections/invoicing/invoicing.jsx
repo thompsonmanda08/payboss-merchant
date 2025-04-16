@@ -22,7 +22,7 @@ import InvoiceForm from "@/components/forms/invoice-form";
 import { notify } from "@/lib/utils";
 import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
 
-export default function CheckoutAndInvoicing({ workspaceID, permissions }) {
+export default function Invoicing({ workspaceID, permissions }) {
   const queryClient = useQueryClient();
 
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -61,30 +61,39 @@ export default function CheckoutAndInvoicing({ workspaceID, permissions }) {
   return (
     <>
       <div className="flex w-full flex-col gap-4">
+        <div className="flex w-full items-center justify-between md:px-6">
+          <CardHeader
+            title={"Invoices"}
+            infoText={"View and manage your invoices in one place."}
+            classNames={{
+              titleClasses: "xl:text-2xl lg:text-xl font-bold",
+              infoClasses: "!text-sm xl:text-base",
+            }}
+          />
+
+          <Button
+            startContent={<PlusIcon className="h-6 w-6" />}
+            onClick={handleOpenCreateModal}
+          >
+            Create New
+          </Button>
+        </div>
         <Card>
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full items-center mb-4">
             <CardHeader
+              title={"Recent Invoices"}
               classNames={{
-                titleClasses: "xl:text-2xl lg:text-xl font-bold",
-                infoClasses: "!text-sm xl:text-base",
+                infoClasses: "text-sm -mt-1",
               }}
               infoText={"Invoices made to your clients in the last 30days."}
-              title={"Recent Invoices"}
             />
-
-            <Button
-              startContent={<PlusIcon className="h-6 w-6" />}
-              onClick={handleOpenCreateModal}
-            >
-              Create New
-            </Button>
           </div>
           <CustomTable
             classNames={{ wrapper: "shadow-none px-0 mx-0" }}
             columns={INVOICE_COLUMNS}
             rowsPerPage={12}
             // isLoading={mutation.isPending}
-            // removeWrapper
+            removeWrapper
             rows={[]}
           />
         </Card>

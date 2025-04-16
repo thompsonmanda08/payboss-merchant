@@ -80,10 +80,11 @@ const SERVICE_TYPES = [
 export default function CollectionsReports({ workspaceID }) {
   const [selectedServiceIndex, setSelectedServiceIndex] = React.useState(0);
 
+  const SERVICE = SERVICE_TYPES?.[selectedServiceIndex]; // SELECTED SERVICE
+
   const [dateRange, setDateRange] = useState(); // DATE RANGE FILTER
 
   const [isExpanded, setIsExpanded] = useState(true); // SUMMARY EXPANDED STATE
-  // const [selectedServiceIndex, setCurrentTab] = useState(0); // CURRENTLY ACTIVE TAB
 
   const [searchQuery, setSearchQuery] = useState(""); // TABLE SEARCH FILTER
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
@@ -109,7 +110,7 @@ export default function CollectionsReports({ workspaceID }) {
 
   // FETCH COLLECTIONS REPORT DATA - ASYNC AS HOISTED INTO THE MUTATION FUNCTION
   async function getReportsData(dateRange) {
-    let serviceType = SERVICE_TYPES[selectedServiceIndex]?.service;
+    let serviceType = SERVICE?.service;
 
     if (!serviceType) {
       throw new Error("No service type selected");
@@ -222,10 +223,10 @@ export default function CollectionsReports({ workspaceID }) {
     runAsyncMutation(dateRange);
   }, [selectedServiceIndex]);
 
-  const SERVICE = SERVICE_TYPES?.[selectedServiceIndex];
-
   const iconClasses =
     "w-5 h-5 text-default-500 pointer-events-none flex-shrink-0";
+
+  console.log("SELECTED SERVICE: ", SERVICE);
 
   return (
     <>
@@ -258,16 +259,15 @@ export default function CollectionsReports({ workspaceID }) {
                       {isPending ? (
                         <div className="flex gap-2 text-sm font-bold ">
                           <Spinner size={18} />{" "}
-                          {`Fetching ${SERVICE_TYPES[selectedServiceIndex]?.name} reports ...`}
+                          {`Fetching ${SERVICE?.name} reports ...`}
                         </div>
                       ) : (
-                        SERVICE_TYPES[selectedServiceIndex]?.name
+                        SERVICE?.name
                       )}
                     </div>
                     {!isPending && (
                       <span className="-mt-0.5 text-xs font-medium tracking-wide text-foreground-600">
-                        Report analytics on{" "}
-                        {SERVICE_TYPES[selectedServiceIndex]?.name}
+                        Report analytics on {SERVICE?.name}
                       </span>
                     )}
                   </div>
@@ -277,7 +277,6 @@ export default function CollectionsReports({ workspaceID }) {
             </DropdownTrigger>
             <DropdownMenu
               aria-label="Dropdown menu with services"
-          
               selectionMode="single"
             >
               <DropdownSection

@@ -10,7 +10,7 @@ import {
   Tooltip,
   Chip,
 } from "@heroui/react";
-import { EyeIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, FunnelIcon } from "@heroicons/react/24/outline";
 import { format } from "date-fns";
 
 import {
@@ -23,6 +23,8 @@ import usePaymentsStore from "@/context/payment-store";
 import Loader from "@/components/ui/loader";
 import SelectField from "@/components/ui/select-field";
 import EmptyLogs from "@/components/base/empty-logs";
+import Search from "../ui/search";
+import { SingleSelectionDropdown } from "../ui/dropdown-button";
 
 export default function CustomTable({
   columns,
@@ -38,10 +40,30 @@ export default function CustomTable({
   emptyDescriptionText,
   emptyTitleText,
   classNames,
+  permissions = {},
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
   const [rowsPerPage, setRowsPerPage] = React.useState(limitPerRow || 6);
   const [page, setPage] = React.useState(1);
+
+  // DEFINE FILTERABLE COLUMNS
+  const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
+  const [visibleColumns, setVisibleColumns] = React.useState(
+    new Set(INITIAL_VISIBLE_COLUMNS)
+  );
+
+  const [filterValue, setFilterValue] = React.useState("");
+  const [statusFilter, setStatusFilter] = React.useState("all");
+
+  // HANDLE EXPLICIT SEARCH
+  const onSearchChange = React.useCallback((value) => {
+    if (value) {
+      setFilterValue(value);
+      setPage(1);
+    } else {
+      setFilterValue("");
+    }
+  }, []);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "amount",
@@ -56,6 +78,40 @@ export default function CustomTable({
 
     return rows?.slice(start, end);
   }, [page, rows, rowsPerPage]);
+
+  const hasSearchFilter = Boolean(filterValue);
+
+  const headerColumns = React.useMemo(() => {
+    if (visibleColumns === "all") return columns;
+
+    return columns.filter((column) =>
+      Array.from(visibleColumns).includes(column.uid)
+    );
+  }, [visibleColumns]);
+
+  // GETS ROWS ARRAY AND APPLIES FILTERS AND RETURNS A FILTERED ARRAY
+  const filteredItems = React.useMemo(() => {
+    let filteredRows = [...rows];
+
+    if (hasSearchFilter) {
+      filteredRows = filteredRows.filter(
+        (row) =>
+          row?.["name"]?.toLowerCase().includes(filterValue?.toLowerCase())
+        // OTHER ITEMS IN ROWS
+      );
+    }
+
+    if (
+      statusFilter !== "all" &&
+      Array.from(statusFilter).length !== ROLE_FILTERS.length
+    ) {
+      let filters = Array.from(statusFilter);
+
+      filteredRows = filteredRows.filter((row) => filters.includes(row?.role));
+    }
+
+    return filteredRows;
+  }, [rows, filterValue, statusFilter]);
 
   const sortedItems = React.useMemo(() => {
     return [...items].sort((a, b) => {
@@ -88,7 +144,7 @@ export default function CustomTable({
           <Button
             className={cn(
               "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
-              TRANSACTION_STATUS_COLOR_MAP[row.status],
+              TRANSACTION_STATUS_COLOR_MAP[row.status]
             )}
             variant="light"
             // onPress={() => {
@@ -117,9 +173,7 @@ export default function CustomTable({
             <Chip
               className={cn(
                 "mx-auto self-center capitalize",
-                SERVICE_PROVIDER_COLOR_MAP[
-                  row?.service_provider?.toLowerCase()
-                ],
+                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider?.toLowerCase()]
               )}
               classNames={{
                 content: "font-semibold",
@@ -166,6 +220,58 @@ export default function CustomTable({
       </div>
     );
   }, [isLoading]);
+
+  const topContent = React.useMemo(() => {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-3">
+          <Search
+            placeholder="Search by name..."
+            value={filterValue}
+            onChange={(e) => onSearchChange(e.target.value)}
+          />
+          <div className="relative flex gap-3">
+            <SingleSelectionDropdown
+              startContent={<FunnelIcon className="h-5 w-5" />}
+              buttonVariant="flat"
+              className={"min-w-[160px]"}
+              closeOnSelect={false}
+              disallowEmptySelection={true}
+              dropdownItems={[]}
+              name={"Status"}
+              selectedKeys={statusFilter}
+              selectionMode="multiple"
+              onSelectionChange={setStatusFilter}
+            />
+            <SingleSelectionDropdown
+              buttonVariant="flat"
+              className={"min-w-[160px]"}
+              closeOnSelect={false}
+              disallowEmptySelection={true}
+              dropdownItems={columns}
+              name={"Columns"}
+              selectedKeys={visibleColumns}
+              selectionMode="multiple"
+              setSelectedKeys={setSelectedKeys}
+              onSelectionChange={setVisibleColumns}
+            />
+
+            {permissions?.create &&
+              permissions?.isApprovedUser &&
+              isUsersRoute && <Button color="primary">ACTION</Button>}
+          </div>
+        </div>
+      </div>
+    );
+  }, [
+    filterValue,
+    statusFilter,
+    visibleColumns,
+    onRowsPerPageChange,
+    rows.length,
+    onSearchChange,
+    hasSearchFilter,
+  ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -224,18 +330,19 @@ export default function CustomTable({
           {
             "min-h-[400px]": isLoading || !rows,
           },
-          classNames?.table,
+          classNames?.table
         ),
 
         base: cn(
           "min-h-[200px] overflow-x-auto",
           { "min-h-max": pages <= 1 },
-          classNames?.wrapper,
+          classNames?.wrapper
         ),
       }}
       // classNames={}
       // showSelectionCheckboxes
       // selectionMode="multiple"
+      topContent={topContent}
       bottomContent={bottomContent}
       className="max-h-[1080px]"
       removeWrapper={removeWrapper}
@@ -247,7 +354,7 @@ export default function CustomTable({
       onSelectionChange={setSelectedKeys}
       onSortChange={setSortDescriptor}
     >
-      <TableHeader className="fixed" columns={columns}>
+      <TableHeader className="fixed" columns={headerColumns}>
         {(column) => (
           <TableColumn
             key={column.uid}

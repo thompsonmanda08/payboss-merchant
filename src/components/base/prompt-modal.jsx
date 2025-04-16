@@ -14,7 +14,7 @@ function PromptModal({
   isOpen,
   onClose,
   onConfirm,
-  title = "Prompt",
+  title = "",
   cancelText = "Cancel",
   confirmText = "Confirm",
   isDisabled,
@@ -23,6 +23,7 @@ function PromptModal({
   isKeyboardDismissDisabled = true,
   className,
   backdrop,
+  removeActionButtons = false,
   children,
 }) {
   return (
@@ -36,26 +37,28 @@ function PromptModal({
       onClose={onClose}
     >
       <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="tracking-tight">{title}</ModalHeader>
-            <ModalBody className="gap-0">{children}</ModalBody>
-            <ModalFooter>
-              <Button color="danger" isDisabled={isDisabled} onPress={onClose}>
-                {cancelText}
+        {title && (
+          <ModalHeader className="tracking-tight text-base">
+            {title}
+          </ModalHeader>
+        )}
+        <ModalBody className="gap-0">{children}</ModalBody>
+        {!removeActionButtons && (
+          <ModalFooter>
+            <Button color="danger" isDisabled={isDisabled} onPress={onClose}>
+              {cancelText}
+            </Button>
+            {onConfirm && (
+              <Button
+                color="primary"
+                isDisabled={isDisabled}
+                isLoading={isLoading}
+                onPress={onConfirm}
+              >
+                {confirmText}
               </Button>
-              {onConfirm && (
-                <Button
-                  color="primary"
-                  isDisabled={isDisabled}
-                  isLoading={isLoading}
-                  onPress={onConfirm}
-                >
-                  {confirmText}
-                </Button>
-              )}
-            </ModalFooter>
-          </>
+            )}
+          </ModalFooter>
         )}
       </ModalContent>
     </Modal>

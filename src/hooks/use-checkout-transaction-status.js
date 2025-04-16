@@ -7,7 +7,6 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
     data: transactionStatusResponse,
     isLoading,
     isPending,
-    isSuccess,
     isError,
   } = useQuery({
     queryKey: ["transaction-status", transactionID],
@@ -44,23 +43,19 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
     refetchInterval: 15000, // every 15 seconds
   });
 
+  console.log("HOOK RESPONSE: ", transactionStatusResponse);
+
   // return data or any other state of the query
   return {
     isError,
-    data: transactionStatusResponse?.data,
+    data: transactionStatusResponse,
 
     // TRANSACTION RESPONSES
     isProcessing:
       isLoading ||
       isPending ||
-      transactionStatusResponse?.data?.status?.toUpperCase() == "PENDING",
-    isSuccess:
-      isSuccess &&
-      (transactionStatusResponse?.data?.status?.toUpperCase() == "SUCCESSFUL" ||
-        transactionStatusResponse?.data?.status?.toUpperCase() == "SUCCESS"),
-    isFailed:
-      transactionStatusResponse?.data?.status?.toUpperCase() == "FAILED" ||
-      transactionStatusResponse?.data?.status?.toUpperCase() == "DECLINED" ||
-      transactionStatusResponse?.data?.status?.toUpperCase() == "CANCELLED",
+      transactionStatusResponse?.status?.toUpperCase() == "PENDING",
+    isSuccess: transactionStatusResponse?.status?.toUpperCase() == "SUCCESSFUL",
+    isFailed: transactionStatusResponse?.status?.toUpperCase() == "FAILED",
   };
 };

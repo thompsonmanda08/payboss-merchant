@@ -1,7 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-
 import { apiClient, apiServiceClient } from "@/lib/utils";
 
 /**
@@ -97,8 +95,6 @@ export async function getCheckoutInfo(checkoutID) {
   try {
     const res = await apiClient.get(url);
 
-    // revalidatePath("/checkout", "page");
-
     return {
       success: true,
       message: res.message,
@@ -165,8 +161,6 @@ export async function payWithMobileMoney(checkoutData) {
   try {
     const res = await apiServiceClient.get(url);
 
-    revalidatePath("/checkout", "page");
-
     return {
       success: true,
       message: res.message,
@@ -211,14 +205,10 @@ export async function payWithMobileMoney(checkoutData) {
  * @returns {Object} An object containing the result of the request. If successful, includes a success status, message, data, status code, and status text. If unsuccessful, provides an error message and status information.
  */
 export async function payWithBankCard(checkoutData) {
-  if (
-    !checkoutData?.workspaceID ||
-    !checkoutData?.transactionID ||
-    !checkoutData?.serviceID
-  ) {
+  if (!checkoutData?.transactionID) {
     return {
       success: false,
-      message: "Missing Required Params",
+      message: "Missing Required Params: Transaction ID",
       data: null,
       status: 400,
       statusText: "BAD REQUEST",
@@ -227,9 +217,7 @@ export async function payWithBankCard(checkoutData) {
   const url = `transaction/collection/checkout/card`;
 
   try {
-    const res = await apiClient.post(url, checkoutData);
-
-    revalidatePath("/checkout", "page");
+    const res = await apiServiceClient.post(url, checkoutData);
 
     return {
       success: true,
@@ -286,8 +274,6 @@ export async function getTransactionStatus(transactionID) {
 
   try {
     const res = await apiServiceClient.get(url);
-
-    revalidatePath("/checkout", "page");
 
     return {
       success: true,
@@ -346,8 +332,6 @@ export async function completeCheckoutProcess(transactionID, status) {
 
   try {
     const res = await apiServiceClient.get(url);
-
-    revalidatePath("/checkout", "page");
 
     return {
       success: true,

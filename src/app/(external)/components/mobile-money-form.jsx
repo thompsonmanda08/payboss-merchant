@@ -8,11 +8,7 @@ import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
 import { cn, notify } from "@/lib/utils";
 import { Image, useDisclosure } from "@heroui/react";
 import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
-import {
-  CheckBadgeIcon,
-  QuestionMarkCircleIcon,
-  XCircleIcon,
-} from "@heroicons/react/24/outline";
+import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import {
   completeCheckoutProcess,
   payWithMobileMoney,
@@ -110,6 +106,7 @@ export default function MobileMoneyForm({ checkoutData }) {
         description: `Pin prompt sent to${formData?.phoneNumber}`,
         color: "success",
       });
+      console.log("PROMPT GONE....");
       onOpen();
       setIsSubmitting(false);
       setPinPromptSent(true); // THIS WILL ENABLE THE TRANSACTION STATUS HOOK - FIRES IN INTERVALS
@@ -136,6 +133,7 @@ export default function MobileMoneyForm({ checkoutData }) {
     }
     if (isSuccess && pinPromptSent) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
+
       setPinPromptSent(false);
       completeCheckout();
     }
@@ -145,6 +143,10 @@ export default function MobileMoneyForm({ checkoutData }) {
       completeCheckout();
     }
   }, [data, isProcessing, isSuccess, isFailed]);
+
+  console.log("FAILED: ", isFailed);
+  console.log("SUCCESS: ", isSuccess);
+  console.log("DATA", data);
 
   return (
     <>
@@ -220,68 +222,59 @@ export default function MobileMoneyForm({ checkoutData }) {
         isDismissable={false}
         isDisabled={pinPromptSent}
         isOpen={isOpen}
-        title={"Transaction Status"}
-        onClose={handleClosePrompt}
+        // title={"Transaction Status"}
+        // onClose={handleClosePrompt}
         onOpen={onOpen}
         className={"max-w-sm"}
         size="sm"
+        removeActionButtons
       >
-        {pinPromptSent && isProcessing ? (
-          <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
-            {/* <Loader loadingText={"Please wait..."} size={100} /> */}
-            <Spinner size={100} />
-            <div className="grid place-items-center gap-2">
-              <p
-                className={cn(
-                  "mt-4 max-w-sm break-words font-bold text-foreground/80"
-                )}
-              >
-                {"Please wait..."}
-              </p>
-              <small className="text-muted-foreground">
-                Check your phone for an approval prompt, Once approved, wait for
-                the transaction to process and complete before closing the
-                popup.
-              </small>
-            </div>
+        <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max max-h-max m-auto aspect-square">
+          <div className="w-32 aspect-square flex justify-center items-center">
+            {isSuccess ? (
+              <CheckBadgeIcon className="w-32 text-success" />
+            ) : isFailed ? (
+              <XCircleIcon className="w-32 text-danger" />
+            ) : (
+              <Spinner size={120} />
+            )}
           </div>
-        ) : (
-          <>
-            <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
-              {/* <Loader loadingText={"Please wait..."} size={100} /> */}
-              {isSuccess ? (
-                <CheckBadgeIcon className="w-32 text-success" />
-              ) : isFailed ? (
-                <XCircleIcon className="w-32 text-danger" />
-              ) : (
-                <QuestionMarkCircleIcon className="w-32 text-warning" />
+          <div className="grid place-items-center ">
+            <p
+              className={cn(
+                " max-w-sm break-words uppercase font-bold text-foreground/80"
               )}
-              <div className="grid place-items-center gap-2">
-                <p
-                  className={cn(
-                    "mt-4 max-w-sm break-words  font-bold text-foreground/80"
-                  )}
-                >
-                  {data?.status}
-                </p>
-                <small className="text-muted-foreground">
-                  {isSuccess
-                    ? "Payment completed successfully!"
-                    : isFailed
-                      ? "Payment failed. Try again later!"
-                      : "Warning: Payment is still being processed."}
-                  {isFailed && (
-                    // REASON FOR FAILURE
-                    <>
-                      <br />
-                      {data?.message}
-                    </>
-                  )}
-                </small>
-              </div>
-            </div>
-          </>
-        )}
+            >
+              {data?.status}
+            </p>
+            <small className="text-muted-foreground text-center min-w-60  mx-auto">
+              {isSuccess
+                ? "Payment completed successfully!"
+                : isFailed
+                  ? "Payment failed. Try again later!"
+                  : "  Check your phone for an approval prompt, Once approved, wait for the transaction to process and complete before closing the popup."}
+              {isFailed && (
+                // REASON FOR FAILURE
+                <>
+                  <br />
+                  {/* {data?.message} */}
+                  {`Reason: ${data?.mno_status_description}`}
+                </>
+              )}
+            </small>
+          </div>
+
+          {!isProcessing && (
+            <Button
+              color="danger"
+              isDisabled={isProcessing}
+              onPress={handleClosePrompt}
+              className={"w-full"}
+            >
+              Close
+            </Button>
+          )}
+        </div>
       </PromptModal>
     </>
   );

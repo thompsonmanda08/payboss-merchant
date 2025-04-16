@@ -588,7 +588,7 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
   }
 }
 
-// ************************** API & TILL COLLECTIONS REPORTS ****************************** //
+// ********************* API & TILL COLLECTIONS REPORTS ************************** //
 
 /**
  * Retrieves a collection report for a specific workspace and service based on the provided date filter.

@@ -1,16 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input-field";
 import AutoCompleteField from "@/components/base/auto-complete";
 import { Button } from "@/components/ui/button";
 import useConfigOptions from "@/hooks/useConfigOptions";
-import { payWithBankCard } from "@/app/_actions/checkout-actions";
+import {
+  completeCheckoutProcess,
+  payWithBankCard,
+} from "@/app/_actions/checkout-actions";
 import SelectField from "@/components/ui/select-field";
 import { cn, notify } from "@/lib/utils";
 import { useDisclosure } from "@heroui/react";
 import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
 import PromptModal from "@/components/base/prompt-modal";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import Spinner from "@/components/ui/custom-spinner";
 
 export default function CardPaymentForm({ checkoutData }) {
   const { countries, provinces } = useConfigOptions();
@@ -112,7 +116,10 @@ export default function CardPaymentForm({ checkoutData }) {
     const left = (window.innerWidth - width) / 2 + window.screenX;
     const top = (window.innerHeight - height) / 2 + window.screenY;
 
-    const paymentUrl = paymentData?.url || "https://google.com"; // Route where the client runs
+    const paymentUrl =
+      paymentData?.paymentUrl || paymentData?.redirect_url || ""; // Route where the client runs
+
+    if (!paymentUrl) throw new Error("Payment URL not found");
 
     const paymentWindow = window.open(
       paymentUrl,
@@ -122,7 +129,6 @@ export default function CardPaymentForm({ checkoutData }) {
 
     if (!paymentWindow) {
       alert("Popup blocked! Please allow popups for this site.");
-
       return;
     }
 
@@ -210,26 +216,11 @@ export default function CardPaymentForm({ checkoutData }) {
 
     setIsSubmitting(true);
 
-    if (process.env.NODE_ENV === "development") {
-      // Simulate API call
-      setTimeout(async () => {
-        console.log("Card Payment:", formData);
-        notify({
-          title: "Card Payment",
-          description: "Still under maintenance",
-          color: "warning",
-        });
-        const transactionStatus = await openPaymentWindow({});
-        setIsSubmitting(false);
-        // Handle success/redirect here
-      }, 2000);
-
-      return;
-    }
-
     const response = await payWithBankCard({
       transactionID,
       amount,
+      postal_code: formData.postalCode,
+      ...checkoutData,
       ...formData,
     });
 
@@ -238,17 +229,15 @@ export default function CardPaymentForm({ checkoutData }) {
         ...checkoutData,
         ...formData,
         // FROM PAYBOSS BACKEND
+        paymentUrl: response?.data?.redirect_url,
         ...response?.data,
       };
+
       // OPEN PAYMENT WINDOW
       onOpen();
       setIsSubmitting(false); // THIS WILL TRIGGER THE WEB HOOK
       setIsPaymentStarted(true);
-      const transactionStatus = await openPaymentWindow(payload);
-
-      setTimeout(() => {
-        // setIsPaymentStarted(false); // THIS WILL DISABLE THE WEB HOOK AFTER 5 SECONDS
-      }, 5000);
+      await openPaymentWindow(payload);
     } else {
       notify({
         title: "Error",
@@ -259,6 +248,23 @@ export default function CardPaymentForm({ checkoutData }) {
       setIsPaymentStarted(false);
     }
   }
+
+  useEffect(() => {
+    async function completeCheckout() {
+      await completeCheckoutProcess(transactionID, data?.status);
+    }
+    if (isSuccess && isPaymentStarted) {
+      // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
+
+      setIsPaymentStarted(false);
+      completeCheckout();
+    }
+    if (isFailed && isPaymentStarted) {
+      // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
+      setIsPaymentStarted(false);
+      completeCheckout();
+    }
+  }, [data, isProcessing, isSuccess, isFailed]);
 
   return (
     <>
@@ -417,68 +423,59 @@ export default function CardPaymentForm({ checkoutData }) {
         isDismissable={false}
         isDisabled={isPaymentStarted}
         isOpen={isOpen}
-        title={"Transaction Status"}
-        onClose={handleClosePrompt}
+        // title={"Transaction Status"}
+        // onClose={handleClosePrompt}
         onOpen={onOpen}
         className={"max-w-sm"}
         size="sm"
+        removeActionButtons
       >
-        {isPaymentStarted && isProcessing ? (
-          <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
-            {/* <Loader loadingText={"Please wait..."} size={100} /> */}
-            <Spinner size={100} />
-            <div className="grid place-items-center gap-2">
-              <p
-                className={cn(
-                  "mt-4 max-w-sm break-words font-bold text-foreground/80"
-                )}
-              >
-                {"Please wait..."}
-              </p>
-              <small className="text-muted-foreground">
-                Check your phone for an approval prompt, Once approved, wait for
-                the transaction to process and complete before closing the
-                popup.
-              </small>
-            </div>
+        <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max max-h-max m-auto aspect-square mb-4">
+          <div className="w-32 aspect-square flex justify-center items-center">
+            {isSuccess ? (
+              <CheckBadgeIcon className="w-32 text-success" />
+            ) : isFailed ? (
+              <XCircleIcon className="w-32 text-danger" />
+            ) : (
+              <Spinner size={120} />
+            )}
           </div>
-        ) : (
-          <>
-            <div className="grid flex-1 place-items-center max-w-max max-h-max m-auto aspect-square">
-              {/* <Loader loadingText={"Please wait..."} size={100} /> */}
-              {isSuccess ? (
-                <CheckBadgeIcon className="w-32 text-success" />
-              ) : isFailed ? (
-                <XCircleIcon className="w-32 text-danger" />
-              ) : (
-                <QuestionMarkCircleIcon className="w-32 text-warning" />
+          <div className="grid place-items-center ">
+            <p
+              className={cn(
+                " max-w-sm break-words uppercase font-bold text-foreground/80"
               )}
-              <div className="grid place-items-center gap-2">
-                <p
-                  className={cn(
-                    "mt-4 max-w-sm break-words  font-bold text-foreground/80"
-                  )}
-                >
-                  {data?.status}
-                </p>
-                <small className="text-muted-foreground">
-                  {isSuccess
-                    ? "Payment completed successfully!"
-                    : isFailed
-                      ? "Payment failed. Try again later!"
-                      : "Warning: Payment is still being processed."}
-                  {isFailed && (
-                    // REASON FOR FAILURE
-                    <>
-                      <br />
-                      {data?.message}
-                    </>
-                  )}
-                </small>
-              </div>
-            </div>
-          </>
-        )}
+            >
+              {data?.status}
+            </p>
+            <small className="text-muted-foreground text-center min-w-60  mx-auto">
+              {isSuccess
+                ? "Payment completed successfully!"
+                : isFailed
+                  ? "Payment failed. Try again later!"
+                  : "Transaction is processing. " + data?.message}
+              {isFailed && (
+                // REASON FOR FAILURE
+                <>
+                  <br />
+                  {/* {data?.message} */}
+                  {`Reason: ${data?.mno_status_description}`}
+                </>
+              )}
+            </small>
+          </div>
+
+          {!isProcessing && (
+            <Button
+              color="danger"
+              isDisabled={isProcessing}
+              onPress={handleClosePrompt}
+              className={"w-full "}
+            >
+              Close
+            </Button>
+          )}
+        </div>
       </PromptModal>
     </>
   );
