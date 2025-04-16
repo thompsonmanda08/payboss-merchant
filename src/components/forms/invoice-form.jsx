@@ -72,11 +72,14 @@ export default function InvoiceForm({
   };
 
   const calculateTax = (subtotal, taxValue = 0) => {
-    // Assuming a tax rate of 0% if no value is provided
-    return (subtotal * taxValue) / 100;
+    // Defaults taxValue to 0 if no value is provided
+    return subtotal * taxValue;
   };
 
   const calculateTotal = (subtotal, tax) => {
+    console.log("subtotal", subtotal);
+    console.log("tax", tax);
+
     return subtotal + tax;
   };
 
@@ -125,6 +128,12 @@ export default function InvoiceForm({
       total: String(total.toFixed(2)),
     };
 
+    if (process.env.NODE_ENV === "development") {
+      console.log("formData", invoiceData);
+      setIsLoading(false);
+      return;
+    }
+
     const response = await createInvoice(workspaceID, invoiceData);
 
     if (response?.success) {
@@ -151,8 +160,6 @@ export default function InvoiceForm({
       setIsLoading(false);
     };
   }, []);
-
-  console.log("formData", formData);
 
   return (
     <form
