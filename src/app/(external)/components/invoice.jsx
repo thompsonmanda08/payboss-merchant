@@ -3,15 +3,21 @@
 import React, { useRef, useState } from "react";
 
 import { CloudArrowDownIcon, PrinterIcon } from "@heroicons/react/24/outline";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatDate } from "@/lib/utils";
 import Logo from "@/components/base/payboss-logo";
 import { Button } from "@/components/ui/button";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { Link } from "@heroui/react";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import { useDateFormatter } from "@react-aria/i18n";
+import Image from "next/image";
 
 export default function Invoice({ invoice }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const captureRef = useRef(null);
+
+  const formatter = useDateFormatter({ dateStyle: "long" });
 
   const generatePDF = async () => {
     setIsProcessing(true);
@@ -23,17 +29,18 @@ export default function Invoice({ invoice }) {
       const noPrintEls = element.querySelectorAll(".no-print");
       noPrintEls.forEach((el) => (el.style.display = "none"));
 
-      const canvas = await html2canvas(element, { scale: 2 }); // higher scale for better quality
+      const canvas = await html2canvas(element, { scale: 2, useCORS: true }); // higher scale for better quality
       const imgData = canvas.toDataURL("image/png");
 
       const pdf = new jsPDF({
+        pageSize: "a4",
         orientation: "portrait",
-        unit: "px",
+        unit: "mm",
         format: [canvas.width, canvas.height],
       });
 
       pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-      pdf.save(`INV-${invoice?.number}-PB.pdf`);
+      pdf.save(`${invoice?.invoiceID}.pdf`);
 
       noPrintEls.forEach((el) => (el.style.display = "flex"));
       setIsProcessing(false);
@@ -49,18 +56,34 @@ export default function Invoice({ invoice }) {
   return (
     <div
       ref={captureRef}
-      className="max-w-[800px] mx-auto p-8 bg-white min-h-screen"
+      className="max-w-[800px] relative mx-auto p-8 bg-white min-h-screen rounded-lg shadow-xl shadow-primary/5 "
     >
-      <div className="mb-6">
+      {invoice?.status?.toUpperCase() === "PAID" && (
+        <div className="absolute left-24 bottom-0 opacity-10 max-w-sm aspect-square m-auto z-30">
+          <Image
+            unoptimized
+            alt="payment-status stamp"
+            className="z-0 h-full w-full object-contain "
+            height={200}
+            loading="lazy"
+            src={"/images/paid.png"}
+            width={480}
+          />
+        </div>
+      )}
+
+      <div className="mb-4">
         <div className="flex justify-between items-start">
           <div className="text-gray-700">
-            {/* <div className="uppercase text-sm font-bold">YOUR LOGO</div> */}
-            <div className="uppercase text-sm font-bold">
-              <Logo src={"/images/payboss-logo-light.png"} />
+            <div className="uppercase text-sm font-bold h-16 ">
+              <Logo
+                className={"object-contain w-full h-full"}
+                src={invoice?.from?.logo || "/images/payboss-logo-light.png"}
+              />
             </div>
           </div>
-          <div className="text-right">
-            <span className="text-sm">NO. {invoice.number}</span>
+          <div className="text-right text-sm ">
+            NO. <span className="font-medium"> {invoice?.invoiceID}</span>
           </div>
         </div>
       </div>
@@ -87,29 +110,37 @@ export default function Invoice({ invoice }) {
         </div>
       </div>
 
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="text-sm mb-1">Date:</div>
-        <div className="font-medium">{invoice.date}</div>
+        <div className="font-medium">
+          {invoice?.date
+            ? formatter.format(
+                parseDate(invoice?.date.split("T")[0]).toDate(
+                  getLocalTimeZone()
+                )
+              )
+            : "---"}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-8 mb-12">
         <div>
           <div className="text-sm font-medium mb-2">Billed to:</div>
-          <div className="font-medium">{invoice.billedTo.name}</div>
+          <div className="font-medium">{invoice?.billedTo.name}</div>
           <div>
-            {invoice.billedTo.address}, {invoice.billedTo.city}
+            {invoice?.billedTo.address}, {invoice?.billedTo.city}
           </div>
-          <div>{invoice.billedTo.email}</div>
+          <div>{invoice?.billedTo.email}</div>
         </div>
 
-        {invoice.from && Object.keys(invoice.from).length > 0 && (
+        {invoice?.from && Object.keys(invoice?.from).length > 0 && (
           <div>
             <div className="text-sm font-medium mb-2">From:</div>
-            <div className="font-medium">{invoice.from.name}</div>
-            <div>
-              {invoice.from.address}, {invoice.from.city}
-            </div>
-            <div>{invoice.from.email}</div>
+            <div className="font-medium">{invoice?.from.name}</div>
+            <div>{invoice?.from.address}</div>
+            <div>{invoice?.from.city}</div>
+            <div>{invoice?.from.phone}</div>
+            <div>{invoice?.from.email}</div>
           </div>
         )}
       </div>
@@ -125,7 +156,7 @@ export default function Invoice({ invoice }) {
             </tr>
           </thead>
           <tbody>
-            {invoice.items.map((item, index) => (
+            {invoice?.items.map((item, index) => (
               <tr key={index} className="border-b border-gray-100">
                 <td className="py-3 px-4">{item.description}</td>
                 <td className="py-3 px-4 text-center">{item.quantity}</td>
@@ -140,11 +171,19 @@ export default function Invoice({ invoice }) {
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={3} className="py-4 px-4 text-right font-medium">
+              <td colSpan={3} className="pt-2 px-4 text-right font-medium">
+                Tax
+              </td>
+              <td className=" px-4 text-right font-semibold">
+                {formatCurrency(invoice?.tax)}
+              </td>
+            </tr>
+            <tr>
+              <td colSpan={3} className="pb-4 pt-2 px-4 text-right font-medium">
                 Total
               </td>
-              <td className="py-4 px-4 text-right font-bold">
-                {formatCurrency(invoice.total)}
+              <td className="pb-4 pt-2 px-4 text-right font-bold">
+                {formatCurrency(invoice?.total)}
               </td>
             </tr>
           </tfoot>
@@ -155,31 +194,21 @@ export default function Invoice({ invoice }) {
         <p className="font-medium max-w-lg">
           Note:
           <span className="text-sm text-muted-foreground mx-1 font-normal">
-            {invoice.note || "Thank you for doing business with us!"}
+            {invoice?.note || "Thank you for doing business with us!"}
           </span>
         </p>
 
-        <Button size="lg" className="w-full no-print sm:w-auto">
-          Pay Invoice ({formatCurrency(invoice.total)})
-        </Button>
-      </div>
-
-      {/* Wave decoration at the bottom */}
-      <div className="relative h-40 mt-16">
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 320" className="w-full">
-            <path
-              fill="#5776e020"
-              fillOpacity="1"
-              d="M0,192L80,176C160,160,320,128,480,128C640,128,800,160,960,165.3C1120,171,1280,149,1360,138.7L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
-            ></path>
-            <path
-              fill="#f58b452a"
-              fillOpacity="1"
-              d="M0,224L80,229.3C160,235,320,245,480,234.7C640,224,800,192,960,181.3C1120,171,1280,181,1360,186.7L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
-            ></path>
-          </svg>
-        </div>
+        {invoice?.status?.toUpperCase() !== "PAID" && (
+          <Button
+            as={Link}
+            href={invoice?.checkoutUrl}
+            target="_blank"
+            size="lg"
+            className="w-full no-print sm:w-auto"
+          >
+            Pay Invoice ({formatCurrency(invoice?.total)})
+          </Button>
+        )}
       </div>
     </div>
   );

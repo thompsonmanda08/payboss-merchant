@@ -1,87 +1,74 @@
 import { ErrorCard } from "@/components/base/error-card";
 import { capitalize } from "@/lib/utils";
+import { getInvoiceDetails } from "@/app/_actions/vas-actions";
 
 import Invoice from "../../components/invoice";
 
-export async function getInvoice(id) {
-  // In a real application, you would fetch this data from your API
-  // For example:
-  // const res = await fetch(`${process.env.API_URL}/invoices/${id}`)
-  // if (!res.ok) return null
-  // return res.json()
-
-  // Mock data for demonstration
-  return {
-    success: true,
-    message: "",
-    status: 200,
-    data: {
-      id,
-      number: "000001",
-      date: "02 June, 2030",
-      billedTo: {
-        name: "Studio Shodwe",
-        address: "123 Anywhere St.",
-        city: "Any City",
-        email: "hello@reallygreatsite.com",
-      },
-      from: {
-        name: "Olivia Wilson",
-        address: "123 Anywhere St.",
-        city: "Any City",
-        email: "hello@reallygreatsite.com",
-      },
-      items: [
-        {
-          description: "Logo",
-          quantity: 1,
-          price: 500,
-          amount: 500,
-        },
-        {
-          description: "Banner (2x6m)",
-          quantity: 2,
-          price: 45,
-          amount: 90,
-        },
-        {
-          description: "Poster (1x2m)",
-          quantity: 3,
-          price: 55,
-          amount: 165,
-        },
-      ],
-      total: 755,
-      note: "Payment is due within 15 days. Thank you for your business!",
-    },
-  };
-}
-
 async function InvoicePage(props) {
   const params = await props.params;
-  const invoiceID = params?.ID;
+  const ID = params?.ID;
 
-  // FIRST POST CHECKOUT DATA TO LOG CHECKOUT INFO FOR VALIDATION
-  // const invoice = await getInvoiceDetails(invoiceID);
-  const invoice = await getInvoice(invoiceID);
+  const response = await getInvoiceDetails(ID);
 
-  if (!invoice?.success) {
+  if (!response?.success || !response?.data?.invoice_id) {
     return (
       <>
         <ErrorCard
           className={"max-h-fit m-auto"}
           goBack={true}
-          message={capitalize(invoice?.message)}
-          status={invoice?.status}
-          title={"Error"}
+          message={
+            !response?.data?.invoice_id
+              ? "Could not find invoice with the provided ID"
+              : capitalize(response?.message)
+          }
+          status={response?.status}
+          title={!response?.data?.invoice_id ? "Invoice not found" : "Error"}
         />
       </>
     );
   }
 
+  const invoice = {
+    id: response?.data?.id || ID,
+    workspaceID: response?.data?.workspace_id,
+    invoiceID: response?.data?.invoice_id,
+    date: response?.data?.created_at,
+    from: {
+      name: response?.data?.from?.display_name,
+      address: response?.data?.from?.physical_address,
+      logo: response?.data?.from?.logo,
+      city: response?.data?.from?.city,
+      email: "",
+    },
+    billedTo: {
+      name: response?.data?.customer_name,
+      address: response?.data?.customer_address,
+      city: response?.data?.city,
+      phone: response?.data?.customer_phone_number,
+      email: response?.data?.customer_email,
+    },
+    items: response?.data?.items?.map((item) => ({
+      description: item?.description,
+      quantity: parseInt(String(item?.quantity || "0")),
+      price: parseFloat(String(item?.unit_price || "0")),
+      amount: parseFloat(
+        parseInt(String(item?.quantity || "0")) *
+          parseFloat(String(item?.unit_price || "0"))
+      ),
+    })),
+    tax: parseFloat(String(response?.data?.tax || "0")),
+    total: parseFloat(String(response?.data?.total || "0")),
+    checkoutUrl: response?.data?.checkout_link,
+    status: response?.data?.status,
+    note:
+      response?.data?.description ||
+      response?.data?.notes ||
+      "Thank you for doing business with us!",
+  };
+
   return (
     <>
-      <Invoice invoice={invoice.data} />
+      <Invoice invoice={invoice} />
     </>
   );
 }

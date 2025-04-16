@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import authenticatedService from "@/lib/api-config";
-import { apiServiceClient } from "@/lib/utils";
+import { apiClient } from "@/lib/utils";
 
 export async function generateCheckoutURL(workspaceID, checkoutData) {
   if (!workspaceID) {
@@ -153,18 +153,19 @@ export async function getCheckoutURL(workspaceID) {
   }
 }
 
-export async function createInvoice(formData) {
-  // if (!checkoutID) {
-  //   return {
-  //     success: false,
-  //     message: "checkout ID is required",
-  //     data: null,
-  //     status: 400,
-  //     statusText: "BAD REQUEST",
-  //   };
-  // }
+export async function createInvoice(workspaceID, formData) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "Workspace ID is required",
+      data: null,
+      status: 400,
+      statusText: "BAD REQUEST",
+    };
+  }
 
-  const url = `transaction/collection/create/invoice`;
+  const url = `/transaction/collection/create/invoice/${workspaceID}
+`;
 
   try {
     const res = await authenticatedService({
@@ -219,7 +220,7 @@ export async function getInvoiceDetails(ID) {
   const url = `/transaction/collection/invoice/${ID}/details`;
 
   try {
-    const res = await apiServiceClient.get(url);
+    const res = await apiClient.get(url);
 
     return {
       success: true,
