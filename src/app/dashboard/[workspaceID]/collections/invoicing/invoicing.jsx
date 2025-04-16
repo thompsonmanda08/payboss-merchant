@@ -110,6 +110,7 @@ export default function Invoicing({ workspaceID, permissions }) {
         <ModalContent>
           <ModalBody className="gap-0 max-h-[700px] overflow-y-auto">
             <InvoiceForm
+              workspaceID={workspaceID}
               permissions={permissions}
               handleClosePrompts={handleClosePrompts}
             />

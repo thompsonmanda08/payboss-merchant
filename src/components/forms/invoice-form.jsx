@@ -38,7 +38,11 @@ const INIT_INVOICE = {
   lineItems: [{ description: "", quantity: 1, unitPrice: 0 }],
 };
 
-export default function InvoiceForm({ permissions, handleClosePrompts }) {
+export default function InvoiceForm({
+  workspaceID,
+  permissions,
+  handleClosePrompts,
+}) {
   const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState(INIT_INVOICE);
@@ -69,7 +73,7 @@ export default function InvoiceForm({ permissions, handleClosePrompts }) {
 
   const calculateTax = (subtotal, taxValue = 0) => {
     // Assuming a tax rate of 0% if no value is provided
-    return subtotal * taxValue;
+    return (subtotal * taxValue) / 100;
   };
 
   const calculateTotal = (subtotal, tax) => {
@@ -121,7 +125,7 @@ export default function InvoiceForm({ permissions, handleClosePrompts }) {
       total: String(total.toFixed(2)),
     };
 
-    const response = await createInvoice(invoiceData);
+    const response = await createInvoice(workspaceID, invoiceData);
 
     if (response?.success) {
       notify({
@@ -147,6 +151,8 @@ export default function InvoiceForm({ permissions, handleClosePrompts }) {
       setIsLoading(false);
     };
   }, []);
+
+  console.log("formData", formData);
 
   return (
     <form
@@ -218,7 +224,7 @@ export default function InvoiceForm({ permissions, handleClosePrompts }) {
       <div className="flex flex-col gap-1 mt-auto">
         {(() => {
           const subtotal = calculateSubtotal() || 0;
-          const tax = calculateTax(subtotal, formData?.taxValue) || 0;
+          const tax = calculateTax(subtotal, formData?.taxValue);
           const total = calculateTotal(subtotal, tax) || 0;
 
           return (
@@ -227,7 +233,7 @@ export default function InvoiceForm({ permissions, handleClosePrompts }) {
                 <span className="text-muted-foreground ml-2">Subtotal:</span>
                 <span>{formatCurrency(subtotal.toFixed(2))}</span>
               </div>
-              {/* TODO: Tax handling */}
+
               <div className="flex justify-between items-center">
                 <div className="text-muted-foreground flex gap-2 items-center">
                   <NumberInput
@@ -258,12 +264,16 @@ export default function InvoiceForm({ permissions, handleClosePrompts }) {
                     }}
                     name={"taxValue"}
                     onValueChange={(value) => {
-                      setFormData((prev) => ({ ...prev, taxValue: value }));
+                      setFormData((prev) => ({
+                        ...prev,
+                        taxValue: value,
+                        tax,
+                      }));
                     }}
                     value={formData?.taxValue}
                   />
                 </div>
-                <span>{formatCurrency(formData?.tax)}</span>
+                <span>{formatCurrency(tax)}</span>
               </div>
               <div className="flex justify-between font-medium text-lg">
                 <span className="text-base ml-2">Total:</span>

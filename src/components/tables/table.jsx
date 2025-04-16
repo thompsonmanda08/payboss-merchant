@@ -25,6 +25,26 @@ import SelectField from "@/components/ui/select-field";
 import EmptyLogs from "@/components/base/empty-logs";
 import Search from "../ui/search";
 import { SingleSelectionDropdown } from "../ui/dropdown-button";
+import { useDebounce } from "@/hooks/use-debounce";
+
+const STATUSES = [
+  {
+    name: "Successful",
+    uid: "successful",
+  },
+  {
+    name: "Failed",
+    uid: "failed",
+  },
+  {
+    name: "Pending",
+    uid: "pending",
+  },
+  {
+    name: "Submitted",
+    uid: "submitted",
+  },
+];
 
 export default function CustomTable({
   columns,
@@ -41,6 +61,7 @@ export default function CustomTable({
   emptyTitleText,
   classNames,
   permissions = {},
+  searchKeys = [],
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
   const [rowsPerPage, setRowsPerPage] = React.useState(limitPerRow || 6);
@@ -54,6 +75,7 @@ export default function CustomTable({
 
   const [filterValue, setFilterValue] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState("all");
+  const debouncedSearchQuery = useDebounce(filterValue, 500);
 
   // HANDLE EXPLICIT SEARCH
   const onSearchChange = React.useCallback((value) => {
@@ -79,7 +101,7 @@ export default function CustomTable({
     return rows?.slice(start, end);
   }, [page, rows, rowsPerPage]);
 
-  const hasSearchFilter = Boolean(filterValue);
+  const hasSearchFilter = Boolean(debouncedSearchQuery);
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -94,10 +116,13 @@ export default function CustomTable({
     let filteredRows = [...rows];
 
     if (hasSearchFilter) {
-      filteredRows = filteredRows.filter(
-        (row) =>
-          row?.["name"]?.toLowerCase().includes(filterValue?.toLowerCase())
-        // OTHER ITEMS IN ROWS
+      filteredRows = filteredRows.filter((row) =>
+        searchKeys.some((key) =>
+          row?.[key]
+            ?.toString()
+            .toLowerCase()
+            .includes(debouncedSearchQuery.toLowerCase())
+        )
       );
     }
 
@@ -226,7 +251,7 @@ export default function CustomTable({
       <div className="flex flex-col gap-4">
         <div className="flex gap-3">
           <Search
-            placeholder="Search by name..."
+            placeholder="Search..."
             value={filterValue}
             onChange={(e) => onSearchChange(e.target.value)}
           />
@@ -237,7 +262,7 @@ export default function CustomTable({
               className={"min-w-[160px]"}
               closeOnSelect={false}
               disallowEmptySelection={true}
-              dropdownItems={[]}
+              dropdownItems={STATUSES}
               name={"Status"}
               selectedKeys={statusFilter}
               selectionMode="multiple"
