@@ -10,8 +10,8 @@ import {
   ModalHeader,
   ModalFooter,
 } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import CustomTable from "@/components/tables/table";
@@ -21,6 +21,7 @@ import { INVOICE_COLUMNS } from "@/lib/table-columns";
 import InvoiceForm from "@/components/forms/invoice-form";
 import { notify } from "@/lib/utils";
 import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
+import { getCollectionLatestTransactions } from "@/app/_actions/transaction-actions";
 
 export default function Invoicing({ workspaceID, permissions }) {
   const queryClient = useQueryClient();
@@ -34,6 +35,30 @@ export default function Invoicing({ workspaceID, permissions }) {
 
   const [openViewConfig, setOpenViewConfig] = useState(false);
   const [openCreateInvoice, setOpenCreateInvoice] = useState(false);
+
+
+
+    const thirtyDaysAgoDate = new Date();
+    thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
+    const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
+  const end_date = formatDate(new Date(), "YYYY-MM-DD");
+  
+    // HANDLE FETCH LATEST INVOICE TRANSACTIONS 
+    const mutation = useMutation({
+      mutationKey: [QUERY_KEYS.TILL_COLLECTIONS, workspaceID],
+      mutationFn: (dateRange) =>
+        getCollectionLatestTransactions(workspaceID, "invoice", dateRange),
+    });
+  
+  
+    useEffect(() => {
+      // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
+      if (!mutation.data) {
+        mutation.mutateAsync({ start_date, end_date });
+      }
+    }, []);
+
+    const LATEST_INVOICES = mutation.data?.data || [];
 
   function handleClosePrompts() {
     onClose();
@@ -95,6 +120,9 @@ export default function Invoicing({ workspaceID, permissions }) {
             // isLoading={mutation.isPending}
             removeWrapper
             rows={[]}
+            enableFilters={{
+              status: true,
+            }}
           />
         </Card>
       </div>

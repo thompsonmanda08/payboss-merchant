@@ -24,10 +24,6 @@ import {
 } from "@/app/_actions/workspace-actions";
 import DateSelectField from "@/components/ui/date-select-field";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  useWalletPrefundHistory,
-  useWorkspaceInit,
-} from "@/hooks/useQueryHooks";
 import Card from "@/components/base/custom-card";
 import Balance from "@/components/base/wallet-balance";
 import StatusMessage from "@/components/base/status-message";
@@ -43,8 +39,10 @@ function Wallet({
   balance,
   hideHistory,
   removeWrapper,
+  permissions,
 }) {
   const queryClient = useQueryClient();
+
   const {
     setOpenAttachmentModal,
     openAttachmentModal,
@@ -57,12 +55,10 @@ function Wallet({
     setFormData,
     updateFormData,
   } = useWalletStore();
+
   const { isOpen, onClose, onOpenChange, onOpen } = useDisclosure();
 
-  const { data: workspaceResponse, isLoading: initLoading } =
-    useWorkspaceInit(workspaceID);
-  const workspaceUserRole = workspaceResponse?.data;
-  const workspaceType = workspaceResponse?.data?.workspaceType;
+  const workspaceType = permissions.workspaceType;
 
   const [error, setError] = useState({
     status: "",
@@ -255,11 +251,11 @@ function Wallet({
             {
               "items-center justify-center gap-x-0": hideHistory,
               "rounded-none border-none p-0 shadow-none": removeWrapper,
-            },
+            }
           )}
         >
           {/* ONLY THE INITIATOR CAN SEE THIS FORM IN DISBURSEMENT WORKSPACE */}
-          {workspaceUserRole?.can_initiate &&
+          {permissions?.can_initiate &&
             workspaceType !== WORKSPACE_TYPES[0]?.ID && (
               <div
                 className={cn("flex w-full max-w-md flex-1 flex-col gap-4", {
@@ -276,7 +272,7 @@ function Wallet({
                     "flex w-full flex-col gap-y-4 p-[25px] lg:border lg:border-y-0 lg:border-l-0 lg:border-border",
                     {
                       "lg:border-r-0": hideHistory,
-                    },
+                    }
                   )}
                 >
                   <div className="flex flex-col gap-4" role="pre-fund-wallet">
@@ -337,7 +333,7 @@ function Wallet({
                       handleFile={async (file) => {
                         const file_record = await handleFileUpload(
                           file,
-                          formData.file?.file_record_id,
+                          formData.file?.file_record_id
                         );
 
                         updateFormData({ url: file_record?.file_url });
@@ -380,6 +376,7 @@ function Wallet({
                 setOpenAttachmentModal={setOpenAttachmentModal}
                 setSelectedPrefund={setSelectedPrefund}
                 workspaceID={workspaceID}
+                permissions={permissions}
               />
             </div>
           )}
@@ -426,6 +423,7 @@ export function WalletTransactionHistory({
   isLoading,
   className,
   classNames,
+  permissions,
 }) {
   const queryClient = useQueryClient();
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -440,18 +438,10 @@ export function WalletTransactionHistory({
     updatePrefundApproval,
   } = useWalletStore();
 
-  const { data: workspaceResponse, isLoading: initLoading } =
-    useWorkspaceInit(workspaceID);
-
-  const workspaceUserRole = workspaceResponse?.data;
-
-  const { data: walletHistoryResponse, isLoading: loadingWalletHistory } =
-    useWalletPrefundHistory(workspaceID);
-
-  const walletData = transactionData || walletHistoryResponse?.data?.data || [];
+  const walletData = transactionData || [];
 
   const walletHistory = walletData.sort(
-    (a, b) => new Date(b.created_at) - new Date(a.created_at),
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
   );
 
   const data = [
@@ -464,7 +454,7 @@ export function WalletTransactionHistory({
   const reverseSort = false;
   const formattedActivityData = formatActivityData(data, reverseSort);
 
-  const isFetching = isLoading || loadingWalletHistory;
+  const isFetching = isLoading;
 
   function handleClosePrompt() {
     setOpenAttachmentModal(false);
@@ -527,7 +517,7 @@ export function WalletTransactionHistory({
     const response = await approveWalletPrefund(
       prefundApproval,
       selectedPrefund?.ID,
-      workspaceID,
+      workspaceID
     );
 
     if (!response?.success) {
@@ -573,7 +563,7 @@ export function WalletTransactionHistory({
             "my-0": formattedActivityData?.length > 0,
           },
           className,
-          wrapper,
+          wrapper
         )}
       >
         {formattedActivityData.length > 0 ? (
@@ -621,7 +611,7 @@ export function WalletTransactionHistory({
                                 ...
                                 {formatDistance(
                                   new Date(item?.created_at),
-                                  new Date(),
+                                  new Date()
                                 )}{" "}
                                 ago
                               </span>
@@ -637,7 +627,7 @@ export function WalletTransactionHistory({
                                         "bg-secondary/10 text-secondary":
                                           isYellow,
                                         "bg-danger/10 text-danger": isRed,
-                                      },
+                                      }
                                     ),
                                   }}
                                   content={`${capitalize(item?.status)}: ${
@@ -664,7 +654,7 @@ export function WalletTransactionHistory({
                                           "bg-secondary/10 text-secondary":
                                             isYellow,
                                           "bg-danger/10 text-danger": isRed,
-                                        },
+                                        }
                                       ),
                                       content: cn("text-base font-bold", {}),
                                     }}
@@ -693,7 +683,7 @@ export function WalletTransactionHistory({
 
                               {/* TRANSACTION APPROVAL BUTTON COMPONENTS} */}
                               {item?.status == "pending" &&
-                                workspaceUserRole?.can_approve && (
+                                permissions?.can_approve && (
                                   <div className="mb-4 ml-auto mt-2 flex max-w-max gap-2">
                                     <Button
                                       className={"h-8"}
@@ -768,7 +758,7 @@ export function LogTaskType({ type, classNames }) {
           `inline-flex h-8 w-fit items-center justify-center gap-2 text-nowrap rounded-[4px]  px-2 py-1.5`,
           `cursor-pointer px-4`,
           `bg-${taskType?.color}/10`,
-          wrapper,
+          wrapper
         )}
       >
         <span className={cn(`text-${taskType?.color}`, icon)}>
@@ -778,7 +768,7 @@ export function LogTaskType({ type, classNames }) {
           className={cn(
             `text-sm font-medium leading-6`,
             `text-${taskType?.color}`,
-            text,
+            text
           )}
         >
           {taskType?.label}

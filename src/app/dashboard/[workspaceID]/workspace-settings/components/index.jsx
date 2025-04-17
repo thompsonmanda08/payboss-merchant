@@ -32,6 +32,7 @@ function WorkspaceSettings({
   allUsers,
   workspaceMembers,
   workspaceRoles,
+  walletHistory,
   systemRoles,
   permissions,
 }) {
@@ -39,12 +40,12 @@ function WorkspaceSettings({
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
+  const workspaceType = selectedWorkspace?.workspaceType;
   const isDisbursementOrHybrid =
-    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[1]?.ID ||
-    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[3]?.ID;
+    workspaceType == WORKSPACE_TYPES[1]?.ID ||
+    workspaceType == WORKSPACE_TYPES[3]?.ID;
 
-  const isBillPaymentWorkspace =
-    selectedWorkspace?.workspaceType == WORKSPACE_TYPES[2]?.ID;
+  const isBillPaymentWorkspace = workspaceType == WORKSPACE_TYPES[2]?.ID;
 
   const DISBURSEMENT_TABS = isDisbursementOrHybrid
     ? // DISBURSEMENTS & HYBRID WORKSPACES TAB LABELS
@@ -64,6 +65,8 @@ function WorkspaceSettings({
     ...DISBURSEMENT_TABS,
   ];
 
+  console.log("PERMISSIONS", permissions);
+
   // Components to be rendered for the workspace type
   const TAB_COMPONENTS =
     // * DISBURSEMENTS & HYBRID WORKSPACES
@@ -80,6 +83,8 @@ function WorkspaceSettings({
             balance={selectedWorkspace?.balance}
             workspaceID={workspaceID}
             workspaceName={selectedWorkspace?.workspace}
+            transactionData={walletHistory}
+            permissions={permissions}
           />,
         ]
       : // * BILL PAYMENTS WORKSPACE TABS
@@ -91,6 +96,8 @@ function WorkspaceSettings({
               balance={selectedWorkspace?.balance}
               workspaceID={workspaceID}
               workspaceName={selectedWorkspace?.workspace}
+              transactionData={walletHistory}
+              permissions={permissions}
             />,
           ]
         : // * COLLECTION WORKSPACE TABS

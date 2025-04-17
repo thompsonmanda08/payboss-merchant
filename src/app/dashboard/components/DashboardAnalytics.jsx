@@ -255,6 +255,7 @@ function DashboardAnalytics({
               limit={5}
               transactionData={walletSummary}
               workspaceID={workspaceID}
+              permissions={permissions}
             />
           </Card>
 

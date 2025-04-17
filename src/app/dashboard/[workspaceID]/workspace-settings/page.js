@@ -7,6 +7,7 @@ import {
   getWorkspaceRoles,
 } from "@/app/_actions/merchant-actions";
 import { getWorkspaceSession } from "@/app/_actions/config-actions";
+import { getWalletPrefundHistory } from "@/app/_actions/transaction-actions";
 
 export default async function ManageWorkspacePage({ params }) {
   const workspaceID = (await params).workspaceID;
@@ -18,6 +19,7 @@ export default async function ManageWorkspacePage({ params }) {
     systemRolesResponse,
     workspaceResponse,
     workspaceMembers,
+    walletHistory,
   ] = await Promise.all([
     getWorkspaceSession(),
     getAllUsers(),
@@ -25,7 +27,10 @@ export default async function ManageWorkspacePage({ params }) {
     getUserAccountRoles(),
     getWorkspaceDetails(workspaceID),
     getWorkspaceMembers(workspaceID),
+    getWalletPrefundHistory(workspaceID),
   ]);
+
+  console.log(workspaceSession?.workspacePermissions);
 
   return (
     <>
@@ -34,6 +39,7 @@ export default async function ManageWorkspacePage({ params }) {
         permissions={workspaceSession?.workspacePermissions}
         selectedWorkspace={workspaceResponse?.data || {}}
         systemRoles={systemRolesResponse?.data?.system_roles}
+        walletHistory={walletHistory?.data?.data}
         workspaceID={workspaceID}
         workspaceMembers={workspaceMembers?.data?.users}
         workspaceRoles={workspaceRolesResponse?.data?.workspace_role}
