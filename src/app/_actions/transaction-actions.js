@@ -746,11 +746,6 @@ export async function getCollectionLatestTransactions(
  * - `statusText`: The HTTP status text for the operation.
  */
 export async function getWalletStatementReport(workspaceID, dateFilter) {
-  // const {
-  //     "start_date":"2024-08-01",
-  //     "end_date":"2014-10-01"
-  //  } = dateFilter
-
   if (!workspaceID) {
     return {
       success: false,
@@ -760,7 +755,7 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
       statusText: "BAD_REQUEST",
     };
   }
-  const url = `merchant/workspace/wallet/prefund/${workspaceID}/history`;
+  const url = `/analytics/merchant/workspace/${workspaceID}/wallet-report`;
 
   try {
     const res = await authenticatedService({
@@ -778,7 +773,7 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
     };
   } catch (error) {
     console.error({
-      endpoint: "POST | WALLET TRANSACTIONS ~ " + url,
+      endpoint: "POST | WALLET STATEMENT REPORT ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,

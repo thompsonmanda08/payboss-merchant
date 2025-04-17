@@ -36,7 +36,6 @@ export default function StatementReport({ workspaceID }) {
 
   async function getReportsData(range) {
     const response = await getWalletStatementReport(workspaceID, range);
-
     return response || [];
   }
 
@@ -79,7 +78,7 @@ export default function StatementReport({ workspaceID }) {
   return (
     <>
       <div className="mb-4 flex w-full items-start justify-start pb-2">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-end gap-2">
           <DateRangePickerField
             autoFocus
             dateRange={dateRange}
