@@ -76,7 +76,7 @@ export default function CustomTable({
   // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS),
   );
 
   const [filterValue, setFilterValue] = React.useState("");
@@ -113,7 +113,7 @@ export default function CustomTable({
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -127,8 +127,8 @@ export default function CustomTable({
           row?.[key]
             ?.toString()
             .toLowerCase()
-            .includes(debouncedSearchQuery.toLowerCase())
-        )
+            .includes(debouncedSearchQuery.toLowerCase()),
+        ),
       );
     }
 
@@ -175,7 +175,7 @@ export default function CustomTable({
           <Button
             className={cn(
               "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
-              TRANSACTION_STATUS_COLOR_MAP[row.status]
+              TRANSACTION_STATUS_COLOR_MAP[row.status],
             )}
             variant="light"
             // onPress={() => {
@@ -204,7 +204,9 @@ export default function CustomTable({
             <Chip
               className={cn(
                 "mx-auto self-center capitalize",
-                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider?.toLowerCase()]
+                SERVICE_PROVIDER_COLOR_MAP[
+                  row?.service_provider?.toLowerCase()
+                ],
               )}
               classNames={{
                 content: "font-semibold",
@@ -363,13 +365,13 @@ export default function CustomTable({
           {
             "min-h-[400px]": isLoading || !rows,
           },
-          classNames?.table
+          classNames?.table,
         ),
 
         base: cn(
           "min-h-[200px] overflow-x-auto",
           { "min-h-max": pages <= 1 },
-          classNames?.wrapper
+          classNames?.wrapper,
         ),
       }}
       // classNames={}

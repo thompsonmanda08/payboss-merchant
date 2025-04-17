@@ -173,7 +173,7 @@ const useWorkspaceStore = create((set, get) => ({
 
     const response = await adminResetUserPassword(
       selectedUser?.ID,
-      passwordInfo
+      passwordInfo,
     );
 
     if (response?.success) {
@@ -201,7 +201,7 @@ const useWorkspaceStore = create((set, get) => ({
 
     const response = await deleteUserFromWorkspace(
       selectedUser?.ID,
-      workspaceID
+      workspaceID,
     );
 
     if (response?.success) {

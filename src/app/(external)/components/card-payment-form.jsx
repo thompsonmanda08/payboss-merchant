@@ -130,7 +130,7 @@ export default function CardPaymentForm({ checkoutData }) {
     const paymentWindow = window.open(
       paymentUrl,
       "PayBoss Checkout",
-      `width=${width},height=${height},left=${left},top=${top}`
+      `width=${width},height=${height},left=${left},top=${top}`,
     );
 
     if (!paymentWindow) {
@@ -393,7 +393,7 @@ export default function CardPaymentForm({ checkoutData }) {
           <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words text-center uppercase font-bold text-foreground/80"
+                " max-w-sm break-words text-center uppercase font-bold text-foreground/80",
               )}
             >
               {transaction?.status}

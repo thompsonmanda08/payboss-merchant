@@ -166,7 +166,7 @@ export function API_Authentication({ config, titles }) {
           <pre
             dangerouslySetInnerHTML={{
               __html: syntaxHighlight(
-                JSON.stringify(payload || authentication, undefined, 2)
+                JSON.stringify(payload || authentication, undefined, 2),
               ),
             }}
           />
@@ -213,7 +213,7 @@ export function ActionResponses({ config, titles, method }) {
             <pre
               dangerouslySetInnerHTML={{
                 __html: syntaxHighlight(
-                  JSON.stringify(payload || collection, undefined, 2)
+                  JSON.stringify(payload || collection, undefined, 2),
                 ),
               }}
             />

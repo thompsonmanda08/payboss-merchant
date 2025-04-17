@@ -43,7 +43,7 @@ function Logo({
           {
             "mx-auto max-h-[48px] min-h-12 max-w-10": isCollapsedNavBar,
             "max-h-[50px] w-full": !isCollapsedNavBar,
-          }
+          },
         )}
         href={href || "/"}
       >
@@ -66,7 +66,7 @@ function Logo({
           {
             // 'mx-auto max-h-[48px] min-h-12 max-w-10': isCollapsedNavBar,
             // 'max-h-[50px] w-full': !isCollapsedNavBar,
-          }
+          },
         )}
         href={href || "/"}
       >
@@ -75,7 +75,7 @@ function Logo({
           alt="logo"
           className={cn(
             "-translate-x-2 scale-[0.9] object-contain transition-all duration-300 ease-in-out sm:scale-90 md:scale-95 lg:translate-x-0 lg:scale-100",
-            className
+            className,
           )}
           height={48}
           src={src ? src : isWhite ? payBossLogoWhite : logoUrl}

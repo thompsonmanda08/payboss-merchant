@@ -26,7 +26,7 @@ export function ErrorCard({
     <Card
       className={cn(
         "mx-auto aspect-square w-full max-w-sm flex-1 p-6 font-inter",
-        className
+        className,
       )}
     >
       <CardHeader>
@@ -40,7 +40,7 @@ export function ErrorCard({
         <p
           className={cn(
             "text-[clamp(32px,5vw,60px)] font-bold leading-normal text-primary-700",
-            classNames?.status
+            classNames?.status,
           )}
         >
           {status || "404"}
@@ -48,7 +48,7 @@ export function ErrorCard({
         <h1
           className={cn(
             "text-lg font-semibold capitalize text-gray-900",
-            classNames?.title
+            classNames?.title,
           )}
         >
           {title || "Page not found"}
@@ -56,7 +56,7 @@ export function ErrorCard({
         <p
           className={cn(
             "my-3 max-w-[300px] text-center text-sm font-medium text-foreground/70",
-            classNames?.message
+            classNames?.message,
           )}
         >
           {message || "Sorry, we couldn’t find the page you’re looking for."}

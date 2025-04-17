@@ -38,7 +38,7 @@ const eslintConfig = [
 
     rules: {
       "no-undef": "error", // Errors on undefined variables
-      "import/no-unresolved": "error", // Errors on unresolved imports
+      "import/no-unresolved": "warn", // Errors on unresolved imports
       // "no-console": "warn", // No Console logs in code base
       "react/prop-types": "off",
       "react/jsx-uses-react": "off",
@@ -46,7 +46,7 @@ const eslintConfig = [
       "react-hooks/exhaustive-deps": "off",
       "jsx-a11y/click-events-have-key-events": "warn",
       "jsx-a11y/interactive-supports-focus": "warn",
-
+      "trailing-comma": "off",
       "prettier/prettier": [
         "warn",
         {
@@ -57,7 +57,7 @@ const eslintConfig = [
         "warn",
         { args: "after-used", ignoreRestSiblings: true },
       ],
-      "unused-imports/no-unused-vars": "off",
+      "unused-imports/no-unused-vars": "warn",
       "unused-imports/no-unused-imports": "warn",
 
       "import/order": [

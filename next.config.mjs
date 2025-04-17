@@ -67,5 +67,5 @@ export default withSentryConfig(
     disableLogger: true,
 
     automaticVercelMonitors: true,
-  }
+  },
 );

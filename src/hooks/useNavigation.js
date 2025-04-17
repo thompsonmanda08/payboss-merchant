@@ -1,8 +1,6 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 
-import useWorkspaces from "./useWorkspaces";
-
 const useNavigation = (query) => {
   const pathname = usePathname();
   const router = useRouter();

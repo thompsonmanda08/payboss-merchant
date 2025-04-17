@@ -111,14 +111,14 @@ export function PrimaryFeatures() {
                   <div className={cn("group relative rounded-full p-4 ")}>
                     <h3
                       className={cn(
-                        "font-semibold text-sm lg:text-[clamp(1rem,1rem+0.25vw,1.25rem)]"
+                        "font-semibold text-sm lg:text-[clamp(1rem,1rem+0.25vw,1.25rem)]",
                       )}
                     >
                       {feature.title}
                     </h3>
                     <p
                       className={cn(
-                        "mt-2 hidden text-sm lg:block w-full text-wrap"
+                        "mt-2 hidden text-sm lg:block w-full text-wrap",
                       )}
                     >
                       {feature.description}

@@ -22,7 +22,6 @@ export default function WorkspaceMembers({
     onClose: onCloseAdd,
   } = useDisclosure();
 
-
   return (
     <div>
       <CardHeader

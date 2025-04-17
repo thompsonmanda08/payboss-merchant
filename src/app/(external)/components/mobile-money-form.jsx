@@ -243,7 +243,7 @@ export default function MobileMoneyForm({ checkoutData }) {
           <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words text-center uppercase font-bold text-foreground/80"
+                " max-w-sm break-words text-center uppercase font-bold text-foreground/80",
               )}
             >
               {transaction?.status}

@@ -6,7 +6,7 @@ function BackgroundSVG({ className }) {
       aria-hidden="true"
       className={cn(
         "absolute inset-0 -top-20 -z-10 h-full w-full stroke-gray-200 hidden sm:block [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]",
-        className
+        className,
       )}
     >
       <defs>

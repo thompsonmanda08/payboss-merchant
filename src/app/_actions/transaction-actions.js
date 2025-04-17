@@ -680,7 +680,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
 export async function getCollectionLatestTransactions(
   workspaceID,
   service,
-  dateFilter
+  dateFilter,
 ) {
   if (!workspaceID) {
     return {
@@ -864,7 +864,6 @@ export async function getBillsLatestTransactions(workspaceID, dateFilter) {
     };
   }
 }
-
 
 export async function getRecentInvoices(workspaceID, dateFilter) {
   if (!workspaceID) {

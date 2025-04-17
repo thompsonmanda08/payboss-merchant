@@ -4,10 +4,7 @@ import LoadingPage from "@/app/loading";
 import ManagePeople from "@/app/manage-account/users/components/manage-users";
 import { getAllUsers } from "@/app/_actions/user-actions";
 import { getUserAccountRoles } from "@/app/_actions/merchant-actions";
-import {
-  getGeneralConfigs,
-  getUserDetails,
-} from "@/app/_actions/config-actions";
+import { getUserDetails } from "@/app/_actions/config-actions";
 
 async function UsersSettingsPage() {
   const userRolesResponse = await getUserAccountRoles();
@@ -17,7 +14,7 @@ async function UsersSettingsPage() {
   const users = usersResponse?.data?.users;
 
   const session = await getUserDetails();
-  const user = session?.user;
+  // const user = session?.user;
   const kyc = session?.kyc;
 
   const permissions = {

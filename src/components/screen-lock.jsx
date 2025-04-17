@@ -160,7 +160,7 @@ export function IdleTimerContainer({ authSession }) {
       async () => {
         await getRefreshToken();
       },
-      1000 * 60 * 4.5
+      1000 * 60 * 4.5,
     );
   };
 

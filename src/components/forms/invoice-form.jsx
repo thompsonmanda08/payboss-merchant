@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
 import { createInvoice } from "@/app/_actions/vas-actions";
 import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constants";
 
 const INIT_INVOICE = {
   customerName: "",
@@ -128,12 +129,6 @@ export default function InvoiceForm({
       total: String(total.toFixed(2)),
     };
 
-    if (process.env.NODE_ENV === "development") {
-      console.log("formData", invoiceData);
-      setIsLoading(false);
-      return;
-    }
-
     const response = await createInvoice(workspaceID, invoiceData);
 
     if (response?.success) {
@@ -142,7 +137,9 @@ export default function InvoiceForm({
         description: "Invoice created successfully.",
         color: "success",
       });
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.INVOICES, workspaceID],
+      });
       handleClosePrompts();
     } else {
       notify({

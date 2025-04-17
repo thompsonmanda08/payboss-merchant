@@ -79,7 +79,7 @@ export default function Invoice({ invoice, className, classNames }) {
       <div className="mb-4">
         <div className="flex justify-between items-start">
           <div className="text-gray-700">
-            <div className="uppercase text-sm font-bold h-16 ">
+            <div className="uppercase text-sm max-w-[100px] font-bold h-16 ">
               <Logo
                 className={"object-contain w-full h-full"}
                 src={invoice?.from?.logo || "/images/payboss-logo-light.png"}
@@ -202,18 +202,17 @@ export default function Invoice({ invoice, className, classNames }) {
           </span>
         </p>
 
-        {invoice?.status?.toUpperCase() !== "PAID" ||
-          (!invoice?.checkoutUrl && (
-            <Button
-              as={Link}
-              href={invoice?.checkoutUrl}
-              target="_blank"
-              size="lg"
-              className="w-full no-print sm:w-auto"
-            >
-              Pay Invoice ({formatCurrency(invoice?.total)})
-            </Button>
-          ))}
+        {(invoice?.status?.toUpperCase() !== "PAID" || invoice?.checkoutUrl)(
+          <Button
+            as={Link}
+            href={invoice?.checkoutUrl}
+            target="_blank"
+            size="lg"
+            className="w-full no-print sm:w-auto"
+          >
+            Pay Invoice ({formatCurrency(invoice?.total)})
+          </Button>
+        )}
       </div>
     </div>
   );

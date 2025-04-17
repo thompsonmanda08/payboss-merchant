@@ -1,15 +1,6 @@
 "use client";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import {
-  Modal,
-  ModalContent,
-  ModalBody,
-  useDisclosure,
-  Alert,
-  Snippet,
-  ModalHeader,
-  ModalFooter,
-} from "@heroui/react";
+import { Modal, ModalContent, ModalBody, useDisclosure } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -49,12 +40,12 @@ export default function Invoicing({ workspaceID, permissions }) {
 
   // HANDLE FETCH LATEST INVOICE TRANSACTIONS
   const mutation = useMutation({
-    mutationKey: [QUERY_KEYS.INVOICE_COLLECTIONS, workspaceID],
+    mutationKey: [QUERY_KEYS.INVOICES, workspaceID],
     mutationFn: (dateRange) => getRecentInvoices(workspaceID, dateRange),
   });
 
   const transactionsMutation = useMutation({
-    mutationKey: [QUERY_KEYS.TILL_COLLECTIONS, workspaceID],
+    mutationKey: [QUERY_KEYS.INVOICE_COLLECTIONS, workspaceID],
     mutationFn: (dateRange) =>
       getCollectionLatestTransactions(workspaceID, "invoice", dateRange),
   });

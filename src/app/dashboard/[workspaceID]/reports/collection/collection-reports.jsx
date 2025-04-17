@@ -119,7 +119,7 @@ export default function CollectionsReports({ workspaceID }) {
     const response = await getCollectionsReport(
       workspaceID,
       serviceType,
-      dateRange
+      dateRange,
     );
 
     return response || [];
@@ -152,7 +152,7 @@ export default function CollectionsReports({ workspaceID }) {
             .includes(debouncedSearchQuery?.toLowerCase()) ||
           row?.service_provider
             ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase())
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -175,7 +175,7 @@ export default function CollectionsReports({ workspaceID }) {
             .includes(debouncedTerminalQuery?.toLowerCase()) ||
           terminal?.terminalID
             ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase())
+            .includes(debouncedTerminalQuery?.toLowerCase()),
       );
     }
 
@@ -226,7 +226,6 @@ export default function CollectionsReports({ workspaceID }) {
   const iconClasses =
     "w-5 h-5 text-default-500 pointer-events-none flex-shrink-0";
 
-
   return (
     <>
       <div className="flex w-full items-start justify-between mb-4 -mt-4">
@@ -241,7 +240,7 @@ export default function CollectionsReports({ workspaceID }) {
                 size="lg"
                 radius="sm"
                 className={cn(
-                  "border border-primary-300 max-h-[60px] w-full items-center justify-start p-1"
+                  "border border-primary-300 max-h-[60px] w-full items-center justify-start p-1",
                 )}
               >
                 <SoftBoxIcon

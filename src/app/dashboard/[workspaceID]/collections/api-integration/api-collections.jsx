@@ -111,7 +111,7 @@ const APIIntegration = ({ workspaceID, permissions }) => {
       getCollectionLatestTransactions(
         workspaceID,
         "api-integration",
-        dateRange
+        dateRange,
       ),
   });
 
@@ -484,8 +484,6 @@ const APIIntegration = ({ workspaceID, permissions }) => {
 
   const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
 
-
-
   return isLoadingConfig ? (
     <LoadingPage />
   ) : (
@@ -690,7 +688,7 @@ const APIIntegration = ({ workspaceID, permissions }) => {
                             <ComputerDesktopIcon
                               className={cn(
                                 iconClasses,
-                                "group-hover:text-white font-bold group-hover:border-white"
+                                "group-hover:text-white font-bold group-hover:border-white",
                               )}
                             />
                           }
@@ -714,7 +712,7 @@ const APIIntegration = ({ workspaceID, permissions }) => {
                             <TrashIcon
                               className={cn(
                                 iconClasses,
-                                "text-danger group-hover:text-white"
+                                "text-danger group-hover:text-white",
                               )}
                             />
                           }

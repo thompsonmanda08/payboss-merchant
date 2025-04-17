@@ -12,8 +12,6 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
     queryKey: ["transaction-status", transactionID],
     queryFn: async () => {
       if (!enable) {
-        setIsPending(false);
-
         return {
           success: false,
           message: "Transaction ID is required",
@@ -24,8 +22,6 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
       }
 
       if (!transactionID) {
-        setIsPending(false);
-
         return {
           success: false,
           message: "Transaction ID is required",

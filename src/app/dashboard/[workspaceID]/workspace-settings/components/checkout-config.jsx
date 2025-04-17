@@ -500,7 +500,7 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
         </div>
         <label
           className={cn(
-            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70"
+            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70",
           )}
         >
           Logo (Optional)

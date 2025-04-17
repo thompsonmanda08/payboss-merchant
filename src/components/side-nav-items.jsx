@@ -44,7 +44,7 @@ export default function SideNavItems({
                         isExpanded,
 
                       "font-bold text-primary": activeLayer,
-                    }
+                    },
                   )}
                   onClick={() => handleExpand(index)}
                 >
@@ -67,7 +67,7 @@ export default function SideNavItems({
                       "ml-auto h-4 w-4 transition-all duration-300 ease-in-out",
                       {
                         "rotate-180": isExpanded,
-                      }
+                      },
                     )}
                   />
                 </div>
@@ -78,7 +78,7 @@ export default function SideNavItems({
                     {
                       "rounded-lg bg-primary/10 font-medium text-primary shadow-none shadow-slate-400/10":
                         isSelected,
-                    }
+                    },
                   )}
                   href={href}
                   onClick={handleMainLinkClick}
@@ -110,7 +110,7 @@ export default function SideNavItems({
                         {
                           "bg-primary/5 text-primary font-medium":
                             pathname === subItem.href,
-                        }
+                        },
                       )}
                       href={subItem.href}
                       onClick={handleLinkClick}
@@ -138,7 +138,7 @@ export default function SideNavItems({
       <hr className="mt-auto" />
       <div
         className={cn(
-          `group flex cursor-pointer items-center gap-3 rounded-lg bg-transparent p-3 text-sm font-bold text-slate-600 shadow-none transition-all duration-200 ease-in-out hover:text-primary`
+          `group flex cursor-pointer items-center gap-3 rounded-lg bg-transparent p-3 text-sm font-bold text-slate-600 shadow-none transition-all duration-200 ease-in-out hover:text-primary`,
         )}
         onClick={() => {
           handleUserLogOut();
