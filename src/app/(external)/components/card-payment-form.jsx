@@ -130,7 +130,7 @@ export default function CardPaymentForm({ checkoutData }) {
     const paymentWindow = window.open(
       paymentUrl,
       "PayBoss Checkout",
-      `width=${width},height=${height},left=${left},top=${top}`,
+      `width=${width},height=${height},left=${left},top=${top}`
     );
 
     if (!paymentWindow) {
@@ -214,7 +214,7 @@ export default function CardPaymentForm({ checkoutData }) {
       setIsPaymentStarted(false);
       setTransaction(data);
     }
-  }, [data, isProcessing, isSuccess, isFailed]);
+  }, [isProcessing, isSuccess, isFailed]);
 
   return (
     <>
@@ -374,7 +374,17 @@ export default function CardPaymentForm({ checkoutData }) {
         isDisabled={isPaymentStarted}
         isOpen={isOpen}
         // title={"Transaction Status"}
-        onClose={isProcessing ? undefined : handleClosePrompt}
+        onClose={
+          transaction?.status == "PENDING"
+            ? () => {
+                notify({
+                  color: "warning",
+                  title: "Pending Transaction",
+                  description: "Transaction is still pending, please wait.",
+                });
+              }
+            : handleClosePrompt
+        }
         onOpen={onOpen}
         className={"max-w-md"}
         size="sm"
@@ -382,9 +392,9 @@ export default function CardPaymentForm({ checkoutData }) {
       >
         <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max m-auto p-4 pb-6">
           <div className="aspect-square flex justify-center items-center mx-auto ">
-            {isSuccess ? (
+            {transaction?.status.toUpperCase() == "SUCCESSFUL" ? (
               <CheckBadgeIcon className="w-32 text-success" />
-            ) : isFailed ? (
+            ) : transaction?.status.toUpperCase() == "FAILED" ? (
               <XCircleIcon className="w-32 text-danger" />
             ) : (
               <Spinner size={120} />
@@ -393,15 +403,15 @@ export default function CardPaymentForm({ checkoutData }) {
           <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words text-center uppercase font-bold text-foreground/80",
+                " max-w-sm break-words text-center uppercase font-bold text-foreground/80"
               )}
             >
               {transaction?.status}
             </p>
             <small className="text-muted-foreground text-center min-w-60 mx-auto">
-              {isSuccess
+              {transaction?.status.toUpperCase() == "SUCCESSFUL"
                 ? "Payment completed successfully!"
-                : isFailed
+                : transaction?.status.toUpperCase() == "FAILED"
                   ? "Payment failed. Try again later!"
                   : "Transaction is processing. " + transaction?.message}
               {isFailed && (
@@ -415,7 +425,7 @@ export default function CardPaymentForm({ checkoutData }) {
             </small>
           </div>
 
-          {!isProcessing && (
+          {transaction?.status !== "PENDING" && (
             <Button
               color="danger"
               isDisabled={isProcessing}

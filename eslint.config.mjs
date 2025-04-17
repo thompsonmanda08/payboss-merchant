@@ -46,11 +46,11 @@ const eslintConfig = [
       "react-hooks/exhaustive-deps": "off",
       "jsx-a11y/click-events-have-key-events": "warn",
       "jsx-a11y/interactive-supports-focus": "warn",
-      "trailing-comma": "off",
       "prettier/prettier": [
         "warn",
         {
           endOfLine: "auto", // This will maintain existing line endings
+          trailingComma: "all", // Add this line to allow trailing commas
         },
       ],
       "no-unused-vars": [

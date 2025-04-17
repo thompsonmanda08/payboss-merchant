@@ -3,19 +3,16 @@ import { useQuery } from "@tanstack/react-query";
 import { getTransactionStatus } from "@/app/_actions/checkout-actions";
 
 export const useCheckoutTransactionStatus = (transactionID, enable) => {
-  const {
-    data: transactionStatusResponse,
-    isLoading,
-    isPending,
-    isError,
-  } = useQuery({
+  const { data, isLoading, isPending, isError } = useQuery({
     queryKey: ["transaction-status", transactionID],
     queryFn: async () => {
       if (!enable) {
         return {
           success: false,
           message: "Transaction ID is required",
-          data: [],
+          data: {
+            status: "NOT STARTED",
+          },
           status: 400,
           statusText: "BAD_REQUEST",
         };
@@ -39,17 +36,20 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
     refetchInterval: 15000, // every 15 seconds
   });
 
+  const status = String(data?.status);
+
+  const isSuccess = status?.toUpperCase() == "SUCCESSFUL";
+  const isFailed = status?.toUpperCase() == "FAILED";
+  const isProcessing = status?.toUpperCase() == "PENDING";
+
   // return data or any other state of the query
   return {
     isError,
-    data: transactionStatusResponse,
+    data,
 
     // TRANSACTION RESPONSES
-    isProcessing:
-      isLoading ||
-      isPending ||
-      transactionStatusResponse?.status?.toUpperCase() == "PENDING",
-    isSuccess: transactionStatusResponse?.status?.toUpperCase() == "SUCCESSFUL",
-    isFailed: transactionStatusResponse?.status?.toUpperCase() == "FAILED",
+    isProcessing,
+    isSuccess,
+    isFailed,
   };
 };
