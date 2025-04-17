@@ -33,7 +33,7 @@ const INIT_INVOICE = {
   // dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
   dueDate: "", // 30 days from now
   notes: "",
-  taxValue: 0,
+  taxRate: 0,
   tax: 0,
   lineItems: [{ description: "", quantity: 1, unitPrice: 0 }],
 };
@@ -71,9 +71,9 @@ export default function InvoiceForm({
     );
   };
 
-  const calculateTax = (subtotal, taxValue = 0) => {
-    // Defaults taxValue to 0 if no value is provided
-    return subtotal * taxValue;
+  const calculateTax = (subtotal, taxRate = 0) => {
+    // Defaults taxRate to 0 if no value is provided
+    return subtotal * taxRate;
   };
 
   const calculateTotal = (subtotal, tax) => {
@@ -108,7 +108,7 @@ export default function InvoiceForm({
     }
 
     const subtotal = calculateSubtotal() || 0;
-    const tax = calculateTax(subtotal, formData?.taxValue) || 0;
+    const tax = calculateTax(subtotal, formData?.taxRate) || 0;
     const total = calculateTotal(subtotal, tax) || 0;
 
     const invoiceData = {
@@ -123,7 +123,7 @@ export default function InvoiceForm({
           unit_price: String(item?.unitPrice),
         };
       }),
-
+      tax_rate: String(formData?.taxRate),
       tax: String(tax.toFixed(2)),
       total: String(total.toFixed(2)),
     };
@@ -231,7 +231,7 @@ export default function InvoiceForm({
       <div className="flex flex-col gap-1 mt-auto">
         {(() => {
           const subtotal = calculateSubtotal() || 0;
-          const tax = calculateTax(subtotal, formData?.taxValue);
+          const tax = calculateTax(subtotal, formData?.taxRate);
           const total = calculateTotal(subtotal, tax) || 0;
 
           return (
@@ -269,15 +269,15 @@ export default function InvoiceForm({
 
                       return null;
                     }}
-                    name={"taxValue"}
+                    name={"taxRate"}
                     onValueChange={(value) => {
                       setFormData((prev) => ({
                         ...prev,
-                        taxValue: value,
+                        taxRate: value,
                         tax,
                       }));
                     }}
-                    value={formData?.taxValue}
+                    value={formData?.taxRate}
                   />
                 </div>
                 <span>{formatCurrency(tax)}</span>

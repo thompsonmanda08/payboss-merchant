@@ -62,6 +62,10 @@ export default function CustomTable({
   classNames,
   permissions = {},
   searchKeys = [],
+  enableFilters = {
+    status: false,
+    columns: true,
+  },
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
   const [rowsPerPage, setRowsPerPage] = React.useState(limitPerRow || 6);
@@ -256,34 +260,36 @@ export default function CustomTable({
             onChange={(e) => onSearchChange(e.target.value)}
           />
           <div className="relative flex gap-3">
-            <SingleSelectionDropdown
-              startContent={<FunnelIcon className="h-5 w-5" />}
-              buttonVariant="flat"
-              className={"min-w-[160px]"}
-              closeOnSelect={false}
-              disallowEmptySelection={true}
-              dropdownItems={STATUSES}
-              name={"Status"}
-              selectedKeys={statusFilter}
-              selectionMode="multiple"
-              onSelectionChange={setStatusFilter}
-            />
-            <SingleSelectionDropdown
-              buttonVariant="flat"
-              className={"min-w-[160px]"}
-              closeOnSelect={false}
-              disallowEmptySelection={true}
-              dropdownItems={columns}
-              name={"Columns"}
-              selectedKeys={visibleColumns}
-              selectionMode="multiple"
-              setSelectedKeys={setSelectedKeys}
-              onSelectionChange={setVisibleColumns}
-            />
+            {enableFilters?.status && (
+              <SingleSelectionDropdown
+                startContent={<FunnelIcon className="h-5 w-5" />}
+                buttonVariant="flat"
+                className={"min-w-[160px]"}
+                closeOnSelect={false}
+                disallowEmptySelection={true}
+                dropdownItems={STATUSES}
+                name={"Status"}
+                selectedKeys={statusFilter}
+                selectionMode="multiple"
+                onSelectionChange={setStatusFilter}
+              />
+            )}
+            {enableFilters?.columns && (
+              <SingleSelectionDropdown
+                buttonVariant="flat"
+                className={"min-w-[160px]"}
+                closeOnSelect={false}
+                disallowEmptySelection={true}
+                dropdownItems={columns}
+                name={"Columns"}
+                selectedKeys={visibleColumns}
+                selectionMode="multiple"
+                setSelectedKeys={setSelectedKeys}
+                onSelectionChange={setVisibleColumns}
+              />
+            )}
 
-            {permissions?.create &&
-              permissions?.isApprovedUser &&
-              isUsersRoute && <Button color="primary">ACTION</Button>}
+            {permissions?.create && <Button color="primary">ACTION</Button>}
           </div>
         </div>
       </div>

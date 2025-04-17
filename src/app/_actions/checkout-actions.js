@@ -79,7 +79,7 @@ export async function validateCheckoutData(checkoutData) {
  * includes a success status, message, data, status code, and status text. If
  * unsuccessful, provides an error message and status information.
  */
-export async function getCheckoutInfo(checkoutID) {
+export async function getCheckoutInfo(checkoutID, serviceID) {
   if (!checkoutID) {
     return {
       success: false,
@@ -90,7 +90,7 @@ export async function getCheckoutInfo(checkoutID) {
     };
   }
 
-  const url = `transaction/collection/checkout/${checkoutID}/details`;
+  const url = `transaction/collection/checkout/${checkoutID}/details/${serviceID}`;
 
   try {
     const res = await apiClient.get(url);

@@ -172,7 +172,7 @@ export default function Invoice({ invoice }) {
           <tfoot>
             <tr>
               <td colSpan={3} className="pt-2 px-4 text-right font-medium">
-                Tax
+                Tax: ({invoice?.taxRate}%)
               </td>
               <td className=" px-4 text-right font-semibold">
                 {formatCurrency(invoice?.tax)}

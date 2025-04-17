@@ -56,6 +56,7 @@ async function InvoicePage(props) {
           parseFloat(String(item?.unit_price || "0"))
       ),
     })),
+    taxRate: parseFloat(String(response?.data?.tax_rate || "0")),
     tax: parseFloat(String(response?.data?.tax || "0")),
     total: parseFloat(String(response?.data?.total || "0")),
     checkoutUrl: response?.data?.checkout_link,

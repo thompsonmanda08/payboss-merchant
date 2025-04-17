@@ -15,6 +15,7 @@ import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-s
 import PromptModal from "@/components/base/prompt-modal";
 import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import Spinner from "@/components/ui/custom-spinner";
+import { useRouter } from "next/navigation";
 
 export default function CardPaymentForm({ checkoutData }) {
   const { countries, provinces } = useConfigOptions();
@@ -46,6 +47,8 @@ export default function CardPaymentForm({ checkoutData }) {
     email: "",
     phoneNumber: "",
   });
+
+  const router = useRouter();
 
   // GET TRANSACTION STATUS HOOK
   const { data, isSuccess, isFailed, isProcessing } =
@@ -410,7 +413,12 @@ export default function CardPaymentForm({ checkoutData }) {
             <Button
               color="danger"
               isDisabled={isProcessing}
-              onPress={handleClosePrompt}
+              onPress={() => {
+                if (isSuccess) {
+                  router.push(checkoutData?.redirect_url);
+                }
+                handleClosePrompt();
+              }}
               className={"w-full "}
             >
               Close

@@ -16,11 +16,13 @@ import {
 
 import Spinner from "@/components/ui/custom-spinner";
 import PromptModal from "@/components/base/prompt-modal";
+import { useRouter } from "next/navigation";
 
 export default function MobileMoneyForm({ checkoutData }) {
   const { amount, transactionID } = checkoutData || "";
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
 
   const [operatorLogo, setOperatorLogo] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -263,7 +265,12 @@ export default function MobileMoneyForm({ checkoutData }) {
             <Button
               color="danger"
               isDisabled={isProcessing}
-              onPress={handleClosePrompt}
+              onPress={() => {
+                if (isSuccess) {
+                  router.push(checkoutData?.redirect_url);
+                }
+                handleClosePrompt();
+              }}
               className={"w-full"}
             >
               Close
