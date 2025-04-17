@@ -374,14 +374,14 @@ export default function CardPaymentForm({ checkoutData }) {
         isDisabled={isPaymentStarted}
         isOpen={isOpen}
         // title={"Transaction Status"}
-        // onClose={handleClosePrompt}
+        onClose={isProcessing ? undefined : handleClosePrompt}
         onOpen={onOpen}
         className={"max-w-md"}
         size="sm"
         removeActionButtons
       >
-        <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max m-auto mb-4">
-          <div className="w-32 aspect-square flex justify-center items-center">
+        <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max m-auto p-4 pb-6">
+          <div className="aspect-square flex justify-center items-center mx-auto ">
             {isSuccess ? (
               <CheckBadgeIcon className="w-32 text-success" />
             ) : isFailed ? (
@@ -390,15 +390,15 @@ export default function CardPaymentForm({ checkoutData }) {
               <Spinner size={120} />
             )}
           </div>
-          <div className="grid place-items-center ">
+          <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words uppercase font-bold text-foreground/80"
+                " max-w-sm break-words text-center uppercase font-bold text-foreground/80"
               )}
             >
               {transaction?.status}
             </p>
-            <small className="text-muted-foreground text-center min-w-60  mx-auto">
+            <small className="text-muted-foreground text-center min-w-60 mx-auto">
               {isSuccess
                 ? "Payment completed successfully!"
                 : isFailed
