@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import CustomTable from "@/components/tables/table";
 import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
-import { INVOICE_COLUMNS } from "@/lib/table-columns";
+import { INVOICE_COLUMNS, TILL_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 import InvoiceForm from "@/components/forms/invoice-form";
 import { formatDate, notify } from "@/lib/utils";
 import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
@@ -26,6 +26,7 @@ import {
   getRecentInvoices,
 } from "@/app/_actions/transaction-actions";
 import { QUERY_KEYS } from "@/lib/constants";
+import Invoice from "@/app/(external)/components/invoice";
 
 export default function Invoicing({ workspaceID, permissions }) {
   const queryClient = useQueryClient();
@@ -37,8 +38,9 @@ export default function Invoicing({ workspaceID, permissions }) {
     useWorkspaceCheckout(workspaceID);
   const configData = checkoutResponse?.data || {};
 
-  const [openViewConfig, setOpenViewConfig] = useState(false);
+  const [openViewInvoice, setOpenViewInvoice] = useState(false);
   const [openCreateInvoice, setOpenCreateInvoice] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
 
   const thirtyDaysAgoDate = new Date();
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
@@ -51,21 +53,33 @@ export default function Invoicing({ workspaceID, permissions }) {
     mutationFn: (dateRange) => getRecentInvoices(workspaceID, dateRange),
   });
 
+  const transactionsMutation = useMutation({
+    mutationKey: [QUERY_KEYS.TILL_COLLECTIONS, workspaceID],
+    mutationFn: (dateRange) =>
+      getCollectionLatestTransactions(workspaceID, "invoice", dateRange),
+  });
+
   useEffect(() => {
-    // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
+    // IF NO DATA IS FETCH THEN GET THE LATEST INVOICES
     if (!mutation.data) {
       mutation.mutateAsync({ start_date, end_date });
+    }
+
+    // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
+    if (!transactionsMutation.data) {
+      transactionsMutation.mutateAsync({ start_date, end_date });
     }
   }, []);
 
   const LATEST_INVOICES = mutation.data?.data?.invoices || [];
-
-  console.log(LATEST_INVOICES);
+  const INVOICE_TRANSACTIONS = transactionsMutation.data?.data?.data || [];
 
   function handleClosePrompts() {
     onClose();
-    setOpenViewConfig(false);
+    setOpenViewInvoice(false);
     setOpenCreateInvoice(false);
+    setSelectedInvoice(null);
+    // queryClient.invalidateQueries();
   }
 
   function handleOpenCreateModal() {
@@ -83,6 +97,53 @@ export default function Invoicing({ workspaceID, permissions }) {
     // OPEN MODAL
     onOpen();
     setOpenCreateInvoice(true);
+  }
+
+  function handleViewInvoice(ID) {
+    const invoiceData = LATEST_INVOICES.find((invoice) => invoice.id === ID);
+
+    const invoice = {
+      id: invoiceData?.id || ID,
+      workspaceID: invoiceData?.workspace_id,
+      invoiceID: invoiceData?.invoice_id,
+      date: invoiceData?.created_at,
+      from: {
+        name: invoiceData?.from?.display_name,
+        address: invoiceData?.from?.physical_address,
+        logo: invoiceData?.from?.logo,
+        city: invoiceData?.from?.city,
+        email: "",
+      },
+      billedTo: {
+        name: invoiceData?.customer_name,
+        address: invoiceData?.customer_address,
+        city: invoiceData?.city,
+        phone: invoiceData?.customer_phone_number,
+        email: invoiceData?.customer_email,
+      },
+      items: invoiceData?.items?.map((item) => ({
+        description: item?.description,
+        quantity: parseInt(String(item?.quantity || "0")),
+        price: parseFloat(String(item?.unit_price || "0")),
+        amount: parseFloat(
+          parseInt(String(item?.quantity || "0")) *
+            parseFloat(String(item?.unit_price || "0"))
+        ),
+      })),
+      taxRate: parseFloat(String(invoiceData?.tax_rate || "0")),
+      tax: parseFloat(String(invoiceData?.tax || "0")),
+      total: parseFloat(String(invoiceData?.total || "0")),
+
+      status: invoiceData?.status,
+      note:
+        invoiceData?.description ||
+        invoiceData?.notes ||
+        "Thank you for doing business with us!",
+    };
+
+    setSelectedInvoice(invoice);
+    setOpenViewInvoice(true);
+    onOpen();
   }
 
   return (
@@ -118,10 +179,35 @@ export default function Invoicing({ workspaceID, permissions }) {
           <CustomTable
             classNames={{ wrapper: "shadow-none px-0 mx-0" }}
             columns={INVOICE_COLUMNS}
-            rowsPerPage={12}
-            // isLoading={mutation.isPending}
+            rowsPerPage={8}
+            isLoading={mutation.isPending}
             removeWrapper
             rows={LATEST_INVOICES}
+            onRowAction={handleViewInvoice}
+            enableFilters={{
+              status: true,
+            }}
+          />
+        </Card>
+        <Card>
+          <div className="flex w-full items-center mb-4">
+            <CardHeader
+              title={"Recent Invoice Transactions"}
+              classNames={{
+                infoClasses: "text-sm -mt-1",
+              }}
+              infoText={
+                "Invoice transactions made by your clients in the last 30days."
+              }
+            />
+          </div>
+          <CustomTable
+            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
+            columns={TILL_TRANSACTION_COLUMNS}
+            rowsPerPage={8}
+            isLoading={transactionsMutation.isPending}
+            removeWrapper
+            rows={INVOICE_TRANSACTIONS}
             enableFilters={{
               status: true,
             }}
@@ -150,59 +236,20 @@ export default function Invoicing({ workspaceID, permissions }) {
 
       {/* VIEW INVOICE  */}
       <Modal
+        backdrop="blur"
         isDismissable
-        isKeyboardDismissDisabled
-        className={"z-[99] max-w-full 2xl:max-w-[calc(100svw-200px)]"}
-        isOpen={isOpen && openViewConfig}
-        onClose={onClose}
+        className={"z-[999] max-h-[calc(100svh-60px)]"}
+        size="3xl"
+        isOpen={isOpen && openViewInvoice}
+        onClose={handleClosePrompts}
       >
         <ModalContent>
-          <ModalHeader className="tracking-tight">{"Checkout URL"}</ModalHeader>
-          <ModalBody className="gap-0">
-            <div className="flex w-full flex-col gap-8">
-              <Snippet hideSymbol className="w-full flex-1">
-                <p className="text-wrap">{configData?.url}</p>
-              </Snippet>
-              <div className="flex flex-col gap-2">
-                <h4 className="text-base font-bold text-slate-600">
-                  URL Anatomy
-                </h4>
-                <Snippet hideSymbol className="w-full">
-                  <p>
-                    {
-                      "{BASE_URL}/checkout/?checkout_id='xxxxxxxxx'&workspace_id='xxxxxxxxx'&service_id='xxxxxxxx'"
-                    }
-                    <span className="font-bold">
-                      {"&amount='1.0'&transaction_id='XXXXXXXX'"}
-                    </span>
-                  </p>
-                </Snippet>
-                <div className="w-full flex items-center my-3">
-                  <Alert
-                    color={"warning"}
-                    title={
-                      <span>
-                        Please replace the 'XXXXXX' placeholder ONLY on the
-                        <span className="font-bold mx-1 uppercase">amount</span>
-                        &amp;
-                        <span className="font-bold mx-1 uppercase">
-                          transaction_id
-                        </span>
-                        <span>
-                          {`fields with your own values as you do your integration for this workspace`}
-                        </span>
-                      </span>
-                    }
-                  />
-                </div>
-              </div>
-            </div>
+          <ModalBody className="gap-0 w-full overflow-y-auto p-4">
+            <Invoice
+              invoice={selectedInvoice}
+              className={"min-h-auto shadow-none"}
+            />
           </ModalBody>
-          <ModalFooter>
-            <Button color="danger" onPress={handleClosePrompts}>
-              Close
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

@@ -207,11 +207,14 @@ export const TRANSACTION_STATUS_COLOR_MAP = {
   canceled: "from-red-500/10 to-red-600/10 text-red-700",
   rejected: "from-red-500/10 to-red-600/10 text-red-700",
 
+  // LIGHT GREEN WITH OPACITY
   succeeded: "from-[#58FF5F]/10 to-green-500/10 text-green-700",
   successful: "from-[#58FF5F]/10 to-green-500/10 text-green-700",
   approved: "from-[#58FF5F]/10 to-green-500/10 text-green-700",
 
+  // SOLID GREEN
   processed: "from-[#23C760] to-[#23C760] text-white",
+  paid: "from-[#23C760] to-[#23C760] text-white",
 };
 
 export const SERVICE_PROVIDER_COLOR_MAP = {

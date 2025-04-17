@@ -62,6 +62,8 @@ export default function CustomTable({
   classNames,
   permissions = {},
   searchKeys = [],
+  useRowDataAsKey = false,
+  rowKey,
   enableFilters = {
     status: false,
     columns: true,
@@ -404,7 +406,16 @@ export default function CustomTable({
         loadingContent={loadingContent}
       >
         {(item) => (
-          <TableRow key={item?.transactionID || item?.ID} align="top">
+          <TableRow
+            key={
+              useRowDataAsKey
+                ? item
+                : rowKey
+                  ? item?.[rowKey]
+                  : item?.transactionID || item?.ID
+            }
+            align="top"
+          >
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

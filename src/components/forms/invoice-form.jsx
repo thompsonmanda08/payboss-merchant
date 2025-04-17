@@ -123,7 +123,7 @@ export default function InvoiceForm({
           unit_price: String(item?.unitPrice),
         };
       }),
-      tax_rate: String(formData?.taxRate),
+      tax_rate: String(formData?.taxRate * 100),
       tax: String(tax.toFixed(2)),
       total: String(total.toFixed(2)),
     };

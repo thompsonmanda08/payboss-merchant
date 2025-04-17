@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 
 import { CloudArrowDownIcon, PrinterIcon } from "@heroicons/react/24/outline";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import Logo from "@/components/base/payboss-logo";
 import { Button } from "@/components/ui/button";
 import jsPDF from "jspdf";
@@ -13,7 +13,7 @@ import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
 import Image from "next/image";
 
-export default function Invoice({ invoice }) {
+export default function Invoice({ invoice, className, classNames }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const captureRef = useRef(null);
 
@@ -56,7 +56,11 @@ export default function Invoice({ invoice }) {
   return (
     <div
       ref={captureRef}
-      className="max-w-[800px] relative mx-auto p-8 bg-white min-h-screen rounded-lg shadow-xl shadow-primary/5 "
+      className={cn(
+        "max-w-[800px] relative mx-auto p-8 bg-white min-h-screen rounded-lg shadow-xl shadow-primary/5 w-full",
+        className,
+        classNames?.wrapper
+      )}
     >
       {invoice?.status?.toUpperCase() === "PAID" && (
         <div className="absolute left-24 bottom-0 opacity-10 max-w-sm aspect-square m-auto z-30">
@@ -133,7 +137,7 @@ export default function Invoice({ invoice }) {
           <div>{invoice?.billedTo.email}</div>
         </div>
 
-        {invoice?.from && Object.keys(invoice?.from).length > 0 && (
+        {invoice?.checkoutUrl && (
           <div>
             <div className="text-sm font-medium mb-2">From:</div>
             <div className="font-medium">{invoice?.from.name}</div>
@@ -158,13 +162,13 @@ export default function Invoice({ invoice }) {
           <tbody>
             {invoice?.items.map((item, index) => (
               <tr key={index} className="border-b border-gray-100">
-                <td className="py-3 px-4">{item.description}</td>
-                <td className="py-3 px-4 text-center">{item.quantity}</td>
+                <td className="py-3 px-4">{item?.description}</td>
+                <td className="py-3 px-4 text-center">{item?.quantity}</td>
                 <td className="py-3 px-4 text-center">
-                  {formatCurrency(item.price)}
+                  {formatCurrency(item?.price)}
                 </td>
                 <td className="py-3 px-4 text-right">
-                  {formatCurrency(item.amount)}
+                  {formatCurrency(item?.amount)}
                 </td>
               </tr>
             ))}
@@ -198,17 +202,18 @@ export default function Invoice({ invoice }) {
           </span>
         </p>
 
-        {invoice?.status?.toUpperCase() !== "PAID" && (
-          <Button
-            as={Link}
-            href={invoice?.checkoutUrl}
-            target="_blank"
-            size="lg"
-            className="w-full no-print sm:w-auto"
-          >
-            Pay Invoice ({formatCurrency(invoice?.total)})
-          </Button>
-        )}
+        {invoice?.status?.toUpperCase() !== "PAID" ||
+          (!invoice?.checkoutUrl && (
+            <Button
+              as={Link}
+              href={invoice?.checkoutUrl}
+              target="_blank"
+              size="lg"
+              className="w-full no-print sm:w-auto"
+            >
+              Pay Invoice ({formatCurrency(invoice?.total)})
+            </Button>
+          ))}
       </div>
     </div>
   );
