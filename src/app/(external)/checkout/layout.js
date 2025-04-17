@@ -13,11 +13,11 @@ async function CheckoutLayout({ children }) {
           >
             Checkout
           </h2>
-          <p className="text-foreground text-xs xl:text-sm">
+          <p className="text-foreground text-xs xl:text-sm text-nowrap">
             Complete the checkout process here
           </p>
         </div>
-        <span className="font-medium italic flex gap-2 items-center">
+        <span className="font-medium italic text-xs sm:text-sm  text-nowrap flex gap-2 items-center scale-80 sm:scale-100">
           Powered by <Logo href={"#"} />
         </span>
       </div>

@@ -32,9 +32,9 @@ export default function Checkout({ checkoutData }) {
   const [selectedMethod, setSelectedMethod] = React.useState("mobile");
 
   return (
-    <div className="container max-w-5xl mx-auto">
-      <div className="flex flex-col lg:flex-row gap-6">
-        <Card className="border-0 lg:flex[1.5] w-full max-w-lg p-4 overflow-hidden">
+    <div className="container px-0">
+      <div className="flex flex-col lg:flex-row gap-6 w-full">
+        <Card className="border-0 lg:flex[1.5] w-full md:max-w-lg p-4 overflow-hidden">
           <CardHeader className="flex-col items-start">
             <h4 className="text-large font-bold">Payment Method</h4>
             <small className="text-default-500 text-xs">
