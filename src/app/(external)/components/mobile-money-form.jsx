@@ -27,6 +27,11 @@ export default function MobileMoneyForm({ checkoutData }) {
   const [operatorLogo, setOperatorLogo] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [pinPromptSent, setPinPromptSent] = React.useState(false);
+  const [transaction, setTransaction] = React.useState({
+    status: "pending",
+    data: null,
+    message: "",
+  });
 
   // GET TRANSACTION STATUS HOOK
   const { data, isSuccess, isFailed, isProcessing } =
@@ -126,21 +131,28 @@ export default function MobileMoneyForm({ checkoutData }) {
     onClose();
     setIsSubmitting(false);
     setPinPromptSent(false);
+    setTransaction({
+      status: "pending",
+      data: null,
+      message: "",
+    });
   }
 
   useEffect(() => {
     async function completeCheckout() {
-      await completeCheckoutProcess(transactionID, data?.status);
+      await completeCheckoutProcess(transactionID, transaction?.status);
     }
     if (isSuccess && pinPromptSent) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
 
       setPinPromptSent(false);
+      setTransaction(data);
       completeCheckout();
     }
     if (isFailed && pinPromptSent) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setPinPromptSent(false);
+      setTransaction(data);
       completeCheckout();
     }
   }, [data, isProcessing, isSuccess, isFailed]);
@@ -222,7 +234,7 @@ export default function MobileMoneyForm({ checkoutData }) {
         // title={"Transaction Status"}
         // onClose={handleClosePrompt}
         onOpen={onOpen}
-        className={"max-w-sm"}
+        className={"max-w-sm overflow-clip"}
         size="sm"
         removeActionButtons
       >
@@ -242,7 +254,7 @@ export default function MobileMoneyForm({ checkoutData }) {
                 " max-w-sm break-words uppercase font-bold text-foreground/80"
               )}
             >
-              {data?.status}
+              {transaction?.status}
             </p>
             <small className="text-muted-foreground text-center min-w-60  mx-auto">
               {isSuccess
@@ -255,7 +267,7 @@ export default function MobileMoneyForm({ checkoutData }) {
                 <>
                   <br />
                   {/* {data?.message} */}
-                  {`Reason: ${data?.mno_status_description}`}
+                  {`Reason: ${transaction?.mno_status_description}`}
                 </>
               )}
             </small>

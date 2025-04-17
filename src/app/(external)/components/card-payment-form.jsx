@@ -48,6 +48,12 @@ export default function CardPaymentForm({ checkoutData }) {
     phoneNumber: "",
   });
 
+  const [transaction, setTransaction] = React.useState({
+    status: "pending",
+    data: null,
+    message: "",
+  });
+
   const router = useRouter();
 
   // GET TRANSACTION STATUS HOOK
@@ -142,6 +148,11 @@ export default function CardPaymentForm({ checkoutData }) {
     onClose();
     setIsSubmitting(false);
     setIsPaymentStarted(false);
+    setTransaction({
+      status: "pending",
+      data: null,
+      message: "",
+    });
   }
 
   async function handleSubmit(e) {
@@ -194,18 +205,20 @@ export default function CardPaymentForm({ checkoutData }) {
 
   useEffect(() => {
     async function completeCheckout() {
-      await completeCheckoutProcess(transactionID, data?.status);
+      await completeCheckoutProcess(transactionID, transaction?.status);
     }
     if (isSuccess && isPaymentStarted) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
 
       setIsPaymentStarted(false);
+      setTransaction(data);
       completeCheckout();
       /* TODO: AUTO CLOSE THE OPEN WINDOW USING THE REF OBJECT */
     }
     if (isFailed && isPaymentStarted) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setIsPaymentStarted(false);
+      setTransaction(data);
       completeCheckout();
     }
   }, [data, isProcessing, isSuccess, isFailed]);
@@ -390,20 +403,20 @@ export default function CardPaymentForm({ checkoutData }) {
                 " max-w-sm break-words uppercase font-bold text-foreground/80"
               )}
             >
-              {data?.status}
+              {transaction?.status}
             </p>
             <small className="text-muted-foreground text-center min-w-60  mx-auto">
               {isSuccess
                 ? "Payment completed successfully!"
                 : isFailed
                   ? "Payment failed. Try again later!"
-                  : "Transaction is processing. " + data?.message}
+                  : "Transaction is processing. " + transaction?.message}
               {isFailed && (
                 // REASON FOR FAILURE
                 <>
                   <br />
                   {/* {data?.message} */}
-                  {`Reason: ${data?.mno_status_description}`}
+                  {`Reason: ${transaction?.mno_status_description}`}
                 </>
               )}
             </small>
