@@ -118,7 +118,7 @@ export default function Invoicing({ workspaceID, permissions }) {
         price: parseFloat(String(item?.unit_price || "0")),
         amount: parseFloat(
           parseInt(String(item?.quantity || "0")) *
-            parseFloat(String(item?.unit_price || "0")),
+            parseFloat(String(item?.unit_price || "0"))
         ),
       })),
       taxRate: parseFloat(String(invoiceData?.tax_rate || "0")),
@@ -238,7 +238,7 @@ export default function Invoicing({ workspaceID, permissions }) {
           <ModalBody className="gap-0 w-full overflow-y-auto p-4">
             <Invoice
               invoice={selectedInvoice}
-              className={"min-h-auto shadow-none"}
+              className={"min-h-auto shadow-none bg-transparent"}
             />
           </ModalBody>
         </ModalContent>

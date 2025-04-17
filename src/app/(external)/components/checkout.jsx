@@ -32,7 +32,7 @@ export default function Checkout({ checkoutData }) {
   const [selectedMethod, setSelectedMethod] = React.useState("mobile");
 
   return (
-    <div className="container px-0 sm:px-4 md:px-8 lg:px-12">
+    <div className="container px-0 sm:px-4 md:px-8 lg:px-12 max-w-5xl">
       <div className="flex flex-col lg:flex-row gap-6 w-full">
         <Card className="border-0 border-primary-50/50 w-full max-w-lg p-4 overflow-hidden">
           <CardHeader className="flex-col items-start">
@@ -86,7 +86,7 @@ export default function Checkout({ checkoutData }) {
           </CardBody>
         </Card>
 
-        <Card className="border-0 border-primary-50/50 overflow-hidden p-4 w-full max-h-fit">
+        <Card className="border-0 border-primary-50/50 overflow-hidden p-4 w-full max-w-md max-h-fit">
           <CardHeader className="flex-col items-start">
             <h4 className="text-large font-bold">Payment Summary</h4>
             <small className="text-default-500 text-xs">
@@ -100,7 +100,10 @@ export default function Checkout({ checkoutData }) {
               removeWrapper
               aria-label="checkout-summary"
               radius="sm"
-              // className="bg-red-500"
+              className=" -mt-4 overflow-visible"
+              classNames={{
+                wrapper: "overflow-visible",
+              }}
             >
               <TableHeader>
                 <TableColumn>KEY</TableColumn>

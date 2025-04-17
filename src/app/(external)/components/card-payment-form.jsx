@@ -425,7 +425,8 @@ export default function CardPaymentForm({ checkoutData }) {
             </small>
           </div>
 
-          {transaction?.status !== "PENDING" && (
+          {(transaction?.status.toUpperCase() == "SUCCESSFUL" ||
+            transaction?.status.toUpperCase() == "FAILED") && (
             <Button
               color="danger"
               isDisabled={isProcessing}
