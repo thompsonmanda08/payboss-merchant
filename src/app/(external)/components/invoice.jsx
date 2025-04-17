@@ -59,7 +59,7 @@ export default function Invoice({ invoice, className, classNames }) {
       className={cn(
         "max-w-[800px] relative mx-auto p-8 bg-white min-h-screen rounded-lg shadow-xl shadow-primary/5 w-full",
         className,
-        classNames?.wrapper
+        classNames?.wrapper,
       )}
     >
       {invoice?.status?.toUpperCase() === "PAID" && (
@@ -120,8 +120,8 @@ export default function Invoice({ invoice, className, classNames }) {
           {invoice?.date
             ? formatter.format(
                 parseDate(invoice?.date.split("T")[0]).toDate(
-                  getLocalTimeZone()
-                )
+                  getLocalTimeZone(),
+                ),
               )
             : "---"}
         </div>
@@ -202,7 +202,8 @@ export default function Invoice({ invoice, className, classNames }) {
           </span>
         </p>
 
-        {(invoice?.status?.toUpperCase() !== "PAID" || invoice?.checkoutUrl)(
+        {(invoice?.status?.toUpperCase() !== "PAID" ||
+          invoice?.checkoutUrl) && (
           <Button
             as={Link}
             href={invoice?.checkoutUrl}
