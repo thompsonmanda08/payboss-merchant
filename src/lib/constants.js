@@ -85,6 +85,8 @@ export const QUERY_KEYS = {
   API_COLLECTIONS: "api-transactions",
   TILL_COLLECTIONS_REPORTS: "till-collection-reports",
   TILL_COLLECTIONS: "till-transactions",
+  INVOICE_COLLECTIONS: "invoices",
+  INVOICE_REPORTS: "invoice-collection-reports",
   WORKSPACE_TILL_NUMBER: "workspace-till-number",
   WALLET_STATEMENT_REPORTS: "wallet-statement-report",
   WORKSPACE_TERMINALS: "workspace-terminals",

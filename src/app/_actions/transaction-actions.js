@@ -676,6 +676,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
+
 export async function getCollectionLatestTransactions(
   workspaceID,
   service,
@@ -860,6 +861,56 @@ export async function getBillsLatestTransactions(workspaceID, dateFilter) {
         "NextError! See Console for more details",
       data: null,
       status: error?.response?.status || 500,
+    };
+  }
+}
+
+
+export async function getRecentInvoices(workspaceID, dateFilter) {
+  if (!workspaceID) {
+    return {
+      success: false,
+      message: "workspaceID ID is required",
+      data: [],
+      status: 400,
+      statusText: "BAD_REQUEST",
+    };
+  }
+
+  const url = `transaction/collection/invoices/${workspaceID}`;
+
+  try {
+    const res = await authenticatedService({
+      url,
+      method: "POST",
+      data: dateFilter,
+    });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "POST | INVOICES ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
     };
   }
 }

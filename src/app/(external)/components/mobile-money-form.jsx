@@ -9,10 +9,7 @@ import { cn, notify } from "@/lib/utils";
 import { Image, useDisclosure } from "@heroui/react";
 import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
 import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import {
-  completeCheckoutProcess,
-  payWithMobileMoney,
-} from "@/app/_actions/checkout-actions";
+import { payWithMobileMoney } from "@/app/_actions/checkout-actions";
 
 import Spinner from "@/components/ui/custom-spinner";
 import PromptModal from "@/components/base/prompt-modal";
@@ -139,21 +136,16 @@ export default function MobileMoneyForm({ checkoutData }) {
   }
 
   useEffect(() => {
-    async function completeCheckout() {
-      await completeCheckoutProcess(transactionID, transaction?.status);
-    }
     if (isSuccess && pinPromptSent) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
 
       setPinPromptSent(false);
       setTransaction(data);
-      completeCheckout();
     }
     if (isFailed && pinPromptSent) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setPinPromptSent(false);
       setTransaction(data);
-      completeCheckout();
     }
   }, [data, isProcessing, isSuccess, isFailed]);
 
@@ -234,11 +226,11 @@ export default function MobileMoneyForm({ checkoutData }) {
         // title={"Transaction Status"}
         // onClose={handleClosePrompt}
         onOpen={onOpen}
-        className={"max-w-sm overflow-clip"}
+        className={"max-w-md"}
         size="sm"
         removeActionButtons
       >
-        <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max max-h-max m-auto aspect-square">
+        <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max ">
           <div className="w-32 aspect-square flex justify-center items-center">
             {isSuccess ? (
               <CheckBadgeIcon className="w-32 text-success" />

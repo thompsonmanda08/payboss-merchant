@@ -317,48 +317,48 @@ export async function getTransactionStatus(transactionID) {
  * data, status code, and status text. If unsuccessful, provides an error message and status information.
  */
 
-export async function completeCheckoutProcess(transactionID, status) {
-  if (!transactionID || !status) {
-    return {
-      success: false,
-      message: "Missing Required Params: Transaction ID or Status",
-      data: null,
-      status: 400,
-      statusText: "BAD REQUEST",
-    };
-  }
+// export async function completeCheckoutProcess(transactionID, status) {
+//   if (!transactionID || !status) {
+//     return {
+//       success: false,
+//       message: "Missing Required Params: Transaction ID or Status",
+//       data: null,
+//       status: 400,
+//       statusText: "BAD REQUEST",
+//     };
+//   }
 
-  const url = `transaction/collection/checkout/transaction/${transactionID}/status/${status}`;
+//   const url = `transaction/collection/checkout/transaction/${transactionID}/status/${status}`;
 
-  try {
-    const res = await apiServiceClient.get(url);
+//   try {
+//     const res = await apiServiceClient.get(url);
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      endpoint: "GET | SEND TRANSACTION STATUS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
+//     return {
+//       success: true,
+//       message: res.message,
+//       data: res.data,
+//       status: res.status,
+//       statusText: res.statusText,
+//     };
+//   } catch (error) {
+//     console.error({
+//       endpoint: "GET | SEND TRANSACTION STATUS ~ " + url,
+//       status: error?.response?.status,
+//       statusText: error?.response?.statusText,
+//       headers: error?.response?.headers,
+//       config: error?.response?.config,
+//       data: error?.response?.data || error,
+//     });
 
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
+//     return {
+//       success: false,
+//       message:
+//         error?.response?.data?.error ||
+//         error?.response?.config?.data?.error ||
+//         "Error Occurred: See Console for details",
+//       data: error?.response?.data,
+//       status: error?.response?.status,
+//       statusText: error?.response?.statusText,
+//     };
+//   }
+// }

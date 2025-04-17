@@ -4,10 +4,7 @@ import { Input } from "@/components/ui/input-field";
 import AutoCompleteField from "@/components/base/auto-complete";
 import { Button } from "@/components/ui/button";
 import useConfigOptions from "@/hooks/useConfigOptions";
-import {
-  completeCheckoutProcess,
-  payWithBankCard,
-} from "@/app/_actions/checkout-actions";
+import { payWithBankCard } from "@/app/_actions/checkout-actions";
 import SelectField from "@/components/ui/select-field";
 import { cn, notify } from "@/lib/utils";
 import { useDisclosure } from "@heroui/react";
@@ -204,22 +201,18 @@ export default function CardPaymentForm({ checkoutData }) {
   }
 
   useEffect(() => {
-    async function completeCheckout() {
-      await completeCheckoutProcess(transactionID, transaction?.status);
-    }
     if (isSuccess && isPaymentStarted) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
 
       setIsPaymentStarted(false);
       setTransaction(data);
-      completeCheckout();
+
       /* TODO: AUTO CLOSE THE OPEN WINDOW USING THE REF OBJECT */
     }
     if (isFailed && isPaymentStarted) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setIsPaymentStarted(false);
       setTransaction(data);
-      completeCheckout();
     }
   }, [data, isProcessing, isSuccess, isFailed]);
 
@@ -383,11 +376,11 @@ export default function CardPaymentForm({ checkoutData }) {
         // title={"Transaction Status"}
         // onClose={handleClosePrompt}
         onOpen={onOpen}
-        className={"max-w-sm"}
+        className={"max-w-md"}
         size="sm"
         removeActionButtons
       >
-        <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max max-h-max m-auto aspect-square mb-4">
+        <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max m-auto mb-4">
           <div className="w-32 aspect-square flex justify-center items-center">
             {isSuccess ? (
               <CheckBadgeIcon className="w-32 text-success" />

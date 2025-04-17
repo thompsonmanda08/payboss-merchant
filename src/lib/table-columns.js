@@ -64,11 +64,10 @@ export const INVOICE_COLUMNS = [
   { name: "NAME", uid: "customer_name", sortable: true },
   { name: "CUSTOMER EMAIL", uid: "customer_email", sortable: true },
 
-  { name: "DESCRIPTION", uid: "description" },
-  { name: "ISSUE DATE", uid: "invoice_date", sortable: true },
-  { name: "DUE DATE", uid: "due_date", sortable: true },
-  { name: "INVOICE ID", uid: "invoiceID", sortable: true },
-  { name: "AMOUNT", uid: "amount", sortable: true },
+  { name: "INVOICE NO.", uid: "invoice_id" },
+  { name: "TAX RATE", uid: "tax_rate" },
+  { name: "TAX ", uid: "tax" },
+  { name: "AMOUNT", uid: "total", sortable: true },
   { name: "STATUS", uid: "status", sortable: true },
 ];
 
