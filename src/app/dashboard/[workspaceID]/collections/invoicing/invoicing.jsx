@@ -238,7 +238,7 @@ export default function Invoicing({ workspaceID, permissions }) {
           <ModalBody className="gap-0 w-full overflow-y-auto p-4">
             <Invoice
               invoice={selectedInvoice}
-              className={"min-h-auto shadow-none bg-transparent"}
+              className={"min-h-auto shadow-none bg-transparent mt-6"}
             />
           </ModalBody>
         </ModalContent>
