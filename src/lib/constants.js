@@ -13,9 +13,10 @@ export const POCKET_BASE_URL =
 
 // export const POCKET_BASE_URL = "https://payboss-uat-backend.bgsgroup.co.zm";
 
-export const AUTH_SESSION = "pb-session";
-export const USER_SESSION = "pb-next-usr";
-export const WORKSPACE_SESSION = "pb-next-workspace";
+export const AUTH_SESSION = "__com.bgs.payboss-merchant-portal.com__";
+export const USER_SESSION = "__com.bgs.payboss-merchant-user__";
+export const WORKSPACE_SESSION =
+  "__com.bgs.payboss-merchant-portal-workspaces__";
 
 export const placeHolderImage = "/images/placeholder-image.webp";
 export const DefaultCover = "/images/profile-cover.jpg";
@@ -68,8 +69,8 @@ export const QUERY_KEYS = {
   SETUP: "setup",
   WORKSPACES: "workspaces",
   WORKSPACE_ROLES: "workspace-role",
-  WORKSPACE_DASHBOARD: "dashboard",
-  WORKSPACE_MEMBERS: "members",
+  WORKSPACE_SESSION: "workspace-init-session",
+  WORKSPACE_MEMBERS: "workspace-members",
   BULK_TRANSACTIONS: "bulk-transactions",
   SINGLE_TRANSACTIONS: "single-transactions",
   BATCH_DETAILS: "batch-details",

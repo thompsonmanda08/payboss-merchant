@@ -88,7 +88,7 @@ export const useWorkspaceRoles = () =>
 
 export const useWorkspaceInit = (workspaceID) =>
   useQuery({
-    queryKey: [QUERY_KEYS.WORKSPACE_DASHBOARD, workspaceID],
+    queryKey: [QUERY_KEYS.WORKSPACE_SESSION, workspaceID],
     queryFn: async () => await initializeWorkspace(workspaceID),
     refetchOnMount: true,
     staleTime: 30 * 1000,
