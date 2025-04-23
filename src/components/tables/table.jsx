@@ -65,8 +65,14 @@ export default function CustomTable({
   useRowDataAsKey = false,
   rowKey,
   enableFilters = {
-    status: false,
-    columns: true,
+    status: {
+      state: false,
+      options: [],
+    },
+    columns: {
+      state: true,
+      options: [],
+    },
   },
 }) {
   const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
@@ -76,7 +82,7 @@ export default function CustomTable({
   // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS),
+    new Set(INITIAL_VISIBLE_COLUMNS)
   );
 
   const [filterValue, setFilterValue] = React.useState("");
@@ -113,7 +119,7 @@ export default function CustomTable({
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
+      Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
 
@@ -121,20 +127,25 @@ export default function CustomTable({
   const filteredItems = React.useMemo(() => {
     let filteredRows = [...rows];
 
+    const STATUS_FILTERS =
+      enableFilters.status.state && enableFilters.status.options
+        ? enableFilters.status.options
+        : STATUSES;
+
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) =>
         searchKeys.some((key) =>
           row?.[key]
             ?.toString()
             .toLowerCase()
-            .includes(debouncedSearchQuery.toLowerCase()),
-        ),
+            .includes(debouncedSearchQuery.toLowerCase())
+        )
       );
     }
 
     if (
       statusFilter !== "all" &&
-      Array.from(statusFilter).length !== ROLE_FILTERS.length
+      Array.from(statusFilter).length !== STATUS_FILTERS.length
     ) {
       let filters = Array.from(statusFilter);
 
@@ -172,10 +183,10 @@ export default function CustomTable({
         );
       case "status":
         return (
-          <Button
+          <Chip
             className={cn(
               "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
-              TRANSACTION_STATUS_COLOR_MAP[row.status],
+              TRANSACTION_STATUS_COLOR_MAP[row.status]
             )}
             variant="light"
             // onPress={() => {
@@ -185,7 +196,7 @@ export default function CustomTable({
             size="sm"
           >
             {cellValue}
-          </Button>
+          </Chip>
         );
       case "service_provider":
         return (
@@ -204,9 +215,7 @@ export default function CustomTable({
             <Chip
               className={cn(
                 "mx-auto self-center capitalize",
-                SERVICE_PROVIDER_COLOR_MAP[
-                  row?.service_provider?.toLowerCase()
-                ],
+                SERVICE_PROVIDER_COLOR_MAP[row?.service_provider?.toLowerCase()]
               )}
               classNames={{
                 content: "font-semibold",
@@ -365,13 +374,13 @@ export default function CustomTable({
           {
             "min-h-[400px]": isLoading || !rows,
           },
-          classNames?.table,
+          classNames?.table
         ),
 
         base: cn(
           "min-h-[200px] overflow-x-auto",
           { "min-h-max": pages <= 1 },
-          classNames?.wrapper,
+          classNames?.wrapper
         ),
       }}
       // classNames={}

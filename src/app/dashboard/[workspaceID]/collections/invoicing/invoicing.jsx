@@ -176,7 +176,9 @@ export default function Invoicing({ workspaceID, permissions }) {
             rows={LATEST_INVOICES}
             onRowAction={handleViewInvoice}
             enableFilters={{
-              status: true,
+              status: {
+                state: true,
+              },
             }}
           />
         </Card>

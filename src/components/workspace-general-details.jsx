@@ -2,7 +2,6 @@ import { Snippet, Switch, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { PlusIcon } from "@heroicons/react/24/outline";
 
 import PromptModal from "@/components/base/prompt-modal";
 import { Button } from "@/components/ui/button";
@@ -50,7 +49,7 @@ function WorkspaceDetails({
   const { data: callbackResponse } = useWorkspaceCallbackURL(workspaceID);
 
   const [isSandbox, setIsSandbox] = useState(
-    activeWorkspace?.workspace?.toLowerCase() == "sandbox",
+    activeWorkspace?.workspace?.toLowerCase() == "sandbox"
   );
 
   const [newWorkspace, setNewWorkspace] = useState({
@@ -75,8 +74,8 @@ function WorkspaceDetails({
 
     // VALIDATE INPUTS
     if (
-      newWorkspace.workspace?.length <= 3 ||
-      newWorkspace.description?.length <= 3
+      newWorkspace.workspace?.length < 3 ||
+      newWorkspace.description?.length < 3
     ) {
       notify({
         title: "Error",
@@ -97,25 +96,19 @@ function WorkspaceDetails({
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.WORKSPACES],
       });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.SETUP],
-      });
 
-      setLoading(false);
       notify({
         color: "success",
         title: "Success",
-        description: "Changes Saved!",
+        description: "Workspace updated successfully!",
       });
-
-      return;
+    } else {
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Failed to Update Workspace!",
+      });
     }
-
-    notify({
-      title: "Error",
-      color: "danger",
-      description: "Failed to Update Workspace!",
-    });
     setLoading(false);
   }
 
@@ -350,7 +343,7 @@ function WorkspaceDetails({
                     {
                       "bg-primary-300 bg-opacity-50 rounded-md ":
                         callbackURL.method == "POST",
-                    },
+                    }
                   )}
                   classNames={{
                     value: cn(
@@ -358,7 +351,7 @@ function WorkspaceDetails({
                       {
                         "text-primary-600 group-data-[has-value=true]:text-primary-600":
                           callbackURL.method == "POST",
-                      },
+                      }
                     ),
                   }}
                   defaultValue={"GET"}
@@ -438,8 +431,8 @@ function WorkspaceDetails({
                               mno_status_description: "string",
                             },
                             undefined,
-                            2,
-                          ),
+                            2
+                          )
                         ),
                       }}
                     />

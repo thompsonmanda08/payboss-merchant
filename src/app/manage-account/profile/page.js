@@ -7,7 +7,6 @@ import ProfileBanner from "@/app/manage-account/profile/components/profile-banne
 import ProfileSecuritySettings from "@/app/manage-account/profile/components/security-settings";
 
 import ProfileDetails from "./components/profile-details";
-import AccountPreferences from "./components/account-preferences";
 
 function AccountSettings() {
   return (
@@ -31,10 +30,10 @@ function AccountSettings() {
         className="z-50 -mt-[160px] flex flex-col gap-4 p-5 md:-mt-[180px] lg:place-items-center"
         role="profile-content"
       >
-        <div className="7xl:grid-cols-3 grid w-full  gap-4 md:grid-cols-2 xl:flex-row">
+        <div className="7xl:grid-cols-3 grid w-full  gap-4 md:grid-cols-1 xl:flex-row">
           <ProfileDetails />
           <ProfileSecuritySettings />
-          <AccountPreferences />
+          {/* <AccountPreferences /> */}
         </div>
       </section>
     </Suspense>
