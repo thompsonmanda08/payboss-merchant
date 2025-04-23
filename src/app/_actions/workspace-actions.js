@@ -159,7 +159,7 @@ export async function getWalletPrefunds(workspaceID) {
     };
   }
 
-  const url = `merchant/workspace/wallet/prefund/${workspaceID}/list`;
+  const url = `merchant/workspace/${workspaceID}/wallet/prefund/list`;
 
   try {
     const res = await authenticatedService({ url });
@@ -215,7 +215,7 @@ export async function getWalletPrefunds(workspaceID) {
 export async function approveWalletPrefund(
   prefundData,
   prefundID,
-  workspaceID,
+  workspaceID
 ) {
   if (!prefundID || !workspaceID) {
     return {
@@ -404,7 +404,7 @@ export async function deleteUserFromWorkspace(recordID, workspaceID) {
 export async function changeUserRoleInWorkspace(
   mapping,
   recordID,
-  workspaceID,
+  workspaceID
 ) {
   if (!workspaceID) {
     return {

@@ -49,7 +49,7 @@ export default async function RootLayout({ children }) {
         />
         <meta
           content="upgrade-insecure-requests"
-          http-equiv="Content-Security-Policy"
+          httpEquiv="Content-Security-Policy"
         />
         <link href="/apple-icon.png" rel="apple-touch-icon" />
         {/* Structured data */}

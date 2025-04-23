@@ -65,13 +65,13 @@ export const getGeneralConfigs = cache(async () => {
  *
  * @returns {Promise<Object|null>} A promise that resolves to the session object if available, or null if not.
  */
-export const getAuthSession = async () => {
+export const getAuthSession = cache(async () => {
   const session = await getServerSession();
 
   if (session) return session;
 
   return null;
-};
+});
 
 /**
  * Retrieves the user details for the currently authenticated user.
@@ -86,13 +86,13 @@ export const getAuthSession = async () => {
 //   return null;
 // }
 
-export const getUserDetails = async () => {
+export const getUserDetails = cache(async () => {
   const session = await getUserSession();
 
   if (session) return session;
 
   return null;
-};
+});
 
 /**
  * Retrieves the workspace session for the currently authenticated user.
@@ -102,13 +102,13 @@ export const getUserDetails = async () => {
  * @returns {Promise<Object|null>} A promise that resolves to the workspace session object if available, or null if not.
  */
 
-export async function getWorkspaceSession() {
+export const getWorkspaceSession = cache(async () => {
   const session = await getWorkspaceSessionData();
 
   if (session) return session;
 
   return null;
-}
+});
 
 export const revokeAccessToken = async () => {
   const response = await deleteSession();

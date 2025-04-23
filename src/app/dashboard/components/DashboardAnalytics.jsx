@@ -17,7 +17,6 @@ import CardHeader from "@/components/base/card-header";
 import OverlayLoader from "@/components/ui/overlay-loader";
 import { MONTHS, WORKSPACE_TYPES } from "@/lib/constants";
 import ReportsBarChart from "@/components/charts/ReportsBarChart/ReportsBarChart";
-import CustomTable from "@/components/tables/table";
 
 import { WalletTransactionHistory } from "../[workspaceID]/workspace-settings/components/wallet";
 
@@ -108,7 +107,7 @@ function DashboardAnalytics({
         label: "Transactions",
         data: MONTHS.map((month) => {
           const transaction = monthlyTransactionRecords?.find((item) =>
-            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase()),
+            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase())
           );
 
           return transaction ? transaction.count : 0;
@@ -122,11 +121,11 @@ function DashboardAnalytics({
   const previousMonth = MONTHS[(thisMonth - 1 + MONTHS.length) % MONTHS.length]; // Handle January to December wrap-around
 
   const previousMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month)?.toLowerCase().startsWith(previousMonth?.toLowerCase()),
+    String(item.month)?.toLowerCase().startsWith(previousMonth?.toLowerCase())
   );
 
   const currentMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month)?.toLowerCase().startsWith(currentMonth?.toLowerCase()),
+    String(item.month)?.toLowerCase().startsWith(currentMonth?.toLowerCase())
   );
 
   // Extract counts or default to 0 if no transactions
@@ -138,14 +137,6 @@ function DashboardAnalytics({
     ? ((currentCount - previousCount) / previousCount) * 100
     : 0; // Avoid division by zero
 
-  // // Determine if it was an increase, decrease, or no change
-  // const changeType =
-  //   currentCount > previousCount
-  //     ? true //
-  //     : currentCount < previousCount
-  //     ? false // decrease
-  //     : "none"; // no change
-
   const CardIcon =
     workspaceType == WORKSPACE_TYPES[0]?.ID // COLLECTIONS
       ? ArrowLeftEndOnRectangleIcon
@@ -155,7 +146,8 @@ function DashboardAnalytics({
           ? ReceiptPercentIcon
           : ListBulletIcon; // HYBRID
 
-  const isLoadingDashboardData = !permissions?.role && !workspaceType;
+  const isLoadingDashboardData = !workspaceType;
+  // const isLoadingDashboardData = !permissions?.role && !workspaceType;
 
   return (
     <>

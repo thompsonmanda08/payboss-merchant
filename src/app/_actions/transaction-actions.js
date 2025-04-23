@@ -419,7 +419,7 @@ export async function getWalletPrefundHistory(workspaceID) {
     };
   }
 
-  const url = `merchant/workspace/wallet/prefund/${workspaceID}/history`;
+  const url = `merchant/workspace/${workspaceID}/wallet/prefund/history`;
 
   try {
     const res = await authenticatedService({ url });

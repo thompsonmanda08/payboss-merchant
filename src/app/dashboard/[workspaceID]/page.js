@@ -11,10 +11,12 @@ export const dynamicParams = true;
 
 async function DashboardHome({ params }) {
   const workspaceID = (await params).workspaceID;
-  const workspaceSession = (await getWorkspaceSession()) || [];
 
-  const session = await getUserDetails();
-  const dashboardAnalytics = await getDashboardAnalytics(workspaceID);
+  const [session, workspaceSession, dashboardAnalytics] = await Promise.all([
+    getUserDetails(),
+    getWorkspaceSession(),
+    getDashboardAnalytics(workspaceID),
+  ]);
 
   return (
     <>
@@ -27,7 +29,7 @@ async function DashboardHome({ params }) {
         />
       )}
       <DashboardAnalytics
-        dashboardAnalytics={dashboardAnalytics?.data}
+        dashboardAnalytics={dashboardAnalytics?.data || []}
         permissions={workspaceSession?.workspacePermissions}
         workspaceID={workspaceID}
         workspaceType={workspaceSession?.workspaceType}
