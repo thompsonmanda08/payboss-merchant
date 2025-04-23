@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Chip } from "@heroui/react";
 
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import Card from "@/components/base/custom-card";
 import SimpleStats from "@/app/dashboard/components/simple-stats";
 import CardHeader from "@/components/base/card-header";
@@ -157,92 +157,96 @@ function DashboardAnalytics({
 
       <div className="flex w-full flex-col gap-4 md:gap-4">
         {/* TOP ROW - WALLET BALANCE && OVERALL VALUES */}
-        <div className="flex-cols flex w-full flex-wrap items-start gap-4 md:flex-row">
-          <Card className="flex-1 gap-4 border-none bg-gradient-to-br from-primary to-primary-400 shadow-lg shadow-primary-300/50">
-            <Chip
+        <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex-cols flex w-full flex-wrap items-start gap-4 md:flex-row">
+            <Card className="flex-1 gap-4 border-none bg-gradient-to-br from-primary to-primary-400 shadow-lg shadow-primary-300/50">
+              <Chip
+                classNames={{
+                  base: "border-1 border-white/30",
+                  content: "text-white/90 text-small font-semibold",
+                }}
+                variant="bordered"
+              >
+                Available Wallet Balance
+              </Chip>
+              <p className="text-[1.75rem] font-black leading-7 tracking-tight text-white">
+                {workspaceWalletBalance
+                  ? `${formatCurrency(workspaceWalletBalance)}`
+                  : `ZMW 0.00`}
+              </p>
+            </Card>
+            <SimpleStats
+              Icon={CardIcon}
               classNames={{
-                base: "border-1 border-white/30",
-                content: "text-white/90 text-small font-semibold",
+                smallFigureClasses: "md:text-base font-semibold",
               }}
-              variant="bordered"
-            >
-              Available Wallet Balance
-            </Chip>
-            <p className="text-[1.75rem] font-black leading-7 tracking-tight text-white">
-              {workspaceWalletBalance
-                ? `${formatCurrency(workspaceWalletBalance)}`
-                : `ZMW 0.00`}
-            </p>
+              figure={today?.count || 0}
+              smallFigure={
+                today?.value
+                  ? `(${formatCurrency(today?.value)})`
+                  : `(ZMW 0.00)`
+              }
+              title={`Today's ${workspaceType}`}
+            />
+
+            <SimpleStats
+              Icon={CardIcon}
+              classNames={{
+                smallFigureClasses: "md:text-base font-semibold",
+              }}
+              figure={yesterday?.count || 0}
+              smallFigure={
+                yesterday?.value
+                  ? `(${formatCurrency(yesterday?.value)})`
+                  : `(ZMW 0.00)`
+              }
+              title={`Yesterday's ${workspaceType}`}
+            />
+          </div>
+
+          <Card className="flex-col flex w-full flex-wrap items-start">
+            <CardHeader
+              infoText={"Monthly transactions by count and value"}
+              title={"Transactions Summary"}
+              classNames={{
+                infoClasses: "text-sm -mt-1",
+              }}
+            />
+            <ReportsBarChart
+              chart={monthlyTransactions.chart}
+              // items={items}
+            />
+            <div className="flex items-center gap-3 mt-2">
+              <div className="grid aspect-square h-12 w-12 place-items-center rounded-lg bg-gradient-to-tr from-primary to-blue-300 p-3 text-white">
+                <ListBulletIcon className="h-6 w-6" />
+              </div>
+
+              <div>
+                <div className="flex items-center gap-1">
+                  <p className="text-lg font-bold">
+                    {allTransactions?.count || 0}
+                  </p>
+                  <span className={cn("text-sm text-gray-500")}>
+                    ({formatCurrency(allTransactions?.value || "0")})
+                  </span>
+                </div>
+                <p className="text-sm text-gray-500">All Transactions</p>
+              </div>
+            </div>
           </Card>
-          <SimpleStats
-            Icon={CardIcon}
-            classNames={{
-              smallFigureClasses: "md:text-base font-semibold",
-            }}
-            figure={today?.count || 0}
-            smallFigure={
-              today?.value ? `(${formatCurrency(today?.value)})` : `(ZMW 0.00)`
-            }
-            title={`Today's ${workspaceType}`}
-          />
-
-          <SimpleStats
-            Icon={CardIcon}
-            classNames={{
-              smallFigureClasses: "md:text-base font-semibold",
-            }}
-            figure={yesterday?.count || 0}
-            smallFigure={
-              yesterday?.value
-                ? `(${formatCurrency(yesterday?.value)})`
-                : `(ZMW 0.00)`
-            }
-            title={`Yesterday's ${workspaceType}`}
-          />
-
-          <SimpleStats
-            Icon={CardIcon}
-            classNames={{
-              smallFigureClasses: "md:text-base font-bold",
-            }}
-            figure={allTransactions?.count || 0}
-            isBad={true}
-            smallFigure={
-              allTransactions?.value
-                ? `(${formatCurrency(allTransactions?.value)})`
-                : `(ZMW 0.00)`
-            }
-            title={"All Transactions"}
-          />
         </div>
 
         {/*  2ND ROW - MONTHLY FIGURES AND VALUES */}
 
-        <div className="grid w-full grid-cols-1 gap-4 xl:grid-cols-2">
+        <div className="grid w-full grid-cols-1 gap-4">
           <Card className={""}>
-            <div className="flex items-center justify-between">
-              <CardHeader
-                infoText={
-                  "Brief overview of your latest statement transactions"
-                }
-                title={"Wallet Statement Summary"}
-              />
-              {/* <SimpleDropdown
-                isIconOnly
-                classNames={{
-                  trigger:
-                    "bg-transparent-500 w-auto max-w-max shadow-none items-center justify-center",
-                  // innerWrapper,
-                  dropdownItem: "py-2",
-                  chevronIcon: "hidden",
-                }}
-                name={
-                  <EllipsisVerticalIcon className="h-5 w-5 cursor-pointer hover:text-primary" />
-                }
-                // dropdownItems={walletOptions}
-              /> */}
-            </div>
-
+            <CardHeader
+              infoText={"Brief overview of your latest statement transactions"}
+              classNames={{
+                infoClasses: "text-sm -mt-1",
+              }}
+              title={"Wallet Statement Summary"}
+            />
             <WalletTransactionHistory
               limit={5}
               transactionData={walletSummary}
@@ -250,24 +254,6 @@ function DashboardAnalytics({
               permissions={permissions}
             />
           </Card>
-
-          <div className="flex flex-1 flex-col gap-4 self-start">
-            <ReportsBarChart
-              description={"Monthly transactions by count and value"}
-              title="Transactions Summary"
-              chart={monthlyTransactions.chart}
-              // items={items}
-            />
-
-            {/* APPROVALS FOR DISBURSEMENTS */}
-            {workspaceType == WORKSPACE_TYPES[1]?.ID && (
-              <PendingApprovals
-                canApprove={permissions?.can_approve}
-                data={pendingApprovals}
-                workspaceType={workspaceType}
-              />
-            )}
-          </div>
         </div>
 
         {/* TODO:  3RD ROW - LATEST TRANSACTIONS */}

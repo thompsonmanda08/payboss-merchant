@@ -4,9 +4,9 @@ import { Bar } from "react-chartjs-2";
 import { Progress } from "@heroui/react";
 
 import Card from "@/components/base/custom-card";
-import { cn } from "@/lib/utils";
 
 import configs from "./configs";
+import CardHeader from "@/components/base/card-header";
 
 function ReportsBarChart({ color, title, description, chart, items }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {});
@@ -27,9 +27,9 @@ function ReportsBarChart({ color, title, description, chart, items }) {
               />
             </div>
           ),
-          [items],
+          [items]
         )
-      : [],
+      : []
   );
 
   const renderBarChart = useMemo(
@@ -40,16 +40,14 @@ function ReportsBarChart({ color, title, description, chart, items }) {
         <Bar data={data} options={options} />
       </div>
     ),
-    [chart, color],
+    [chart, color]
   );
 
   return (
-    <Card>
-      <h6 className="mt-2 text-lg font-medium capitalize">{title}</h6>
-      <p className={cn("text-sm text-foreground-500 mb-4")}>{description}</p>
+    <div className="flex w-full flex-col gap-4">
       {renderBarChart}
       {items && <div className="-mx-2 flex flex-wrap">{renderItems}</div>}
-    </Card>
+    </div>
   );
 }
 
