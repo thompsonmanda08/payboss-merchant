@@ -8,8 +8,14 @@ import {
 } from "@/app/_actions/config-actions";
 import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
 
-export const revalidate = 60;
+export const revalidate = 15;
 export const dynamicParams = true;
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+export const metadata = {
+  title: "Dashboard",
+  description: "Summary dashboard analytics data from the last 30 days",
+};
 
 async function DashboardHome({ params }) {
   const workspaceID = (await params).workspaceID;
@@ -22,22 +28,30 @@ async function DashboardHome({ params }) {
     getDashboardAnalytics(workspaceID),
   ]);
 
+  const isCompleteKYC = session?.user?.isCompleteKYC;
+  const user = session?.user;
+
+  const analytics = dashboardAnalytics?.data || [];
+  const workspaceType = workspaceSession?.workspaceType;
+  const workspaceWalletBalance = workspaceSession?.activeWorkspace?.balance;
+  const permissions = workspaceSession?.workspacePermissions;
+
   return (
     <>
-      {session?.user?.isCompleteKYC && (
+      {isCompleteKYC && (
         <InfoBanner
           buttonText="Submit Documents"
           href={"manage-account/account-verification"}
           infoText="Just one more step, please submit your business documents to aid us with the approval process"
-          user={session?.user}
+          user={user}
         />
       )}
       <DashboardAnalytics
-        dashboardAnalytics={dashboardAnalytics?.data || []}
-        permissions={workspaceSession?.workspacePermissions}
+        dashboardAnalytics={analytics}
+        permissions={permissions}
         workspaceID={workspaceID}
-        workspaceType={workspaceSession?.workspaceType}
-        workspaceWalletBalance={workspaceSession?.activeWorkspace?.balance}
+        workspaceType={workspaceType}
+        workspaceWalletBalance={workspaceWalletBalance}
       />
     </>
   );

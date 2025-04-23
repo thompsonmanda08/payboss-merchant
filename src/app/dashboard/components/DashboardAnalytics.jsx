@@ -20,8 +20,6 @@ import ReportsBarChart from "@/components/charts/ReportsBarChart/ReportsBarChart
 
 import { WalletTransactionHistory } from "../[workspaceID]/workspace-settings/components/wallet";
 
-import PendingApprovals from "./PendingAnalytics";
-
 const TRANSACTION_COLUMNS = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "NARRATION", uid: "narration" },
@@ -157,87 +155,74 @@ function DashboardAnalytics({
 
       <div className="flex w-full flex-col gap-4 md:gap-4">
         {/* TOP ROW - WALLET BALANCE && OVERALL VALUES */}
-        <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex-cols flex w-full flex-wrap items-start gap-4 md:flex-row">
-            <Card className="flex-1 gap-4 border-none bg-gradient-to-br from-primary to-primary-400 shadow-lg shadow-primary-300/50">
-              <Chip
-                classNames={{
-                  base: "border-1 border-white/30",
-                  content: "text-white/90 text-small font-semibold",
-                }}
-                variant="bordered"
-              >
-                Available Wallet Balance
-              </Chip>
-              <p className="text-[1.75rem] font-black leading-7 tracking-tight text-white">
-                {workspaceWalletBalance
-                  ? `${formatCurrency(workspaceWalletBalance)}`
-                  : `ZMW 0.00`}
-              </p>
-            </Card>
-            <SimpleStats
-              Icon={CardIcon}
+        <div className="flex-cols flex w-full flex-wrap items-start gap-4 md:flex-row">
+          <Card className="flex-1 gap-2 border-none bg-gradient-to-br from-primary to-primary-400 shadow-lg shadow-primary-300/50">
+            <Chip
               classNames={{
-                smallFigureClasses: "md:text-base font-semibold",
+                base: "border-1 border-white/30",
+                content: "text-white/90 text-small font-semibold",
               }}
-              figure={today?.count || 0}
-              smallFigure={
-                today?.value
-                  ? `(${formatCurrency(today?.value)})`
-                  : `(ZMW 0.00)`
-              }
-              title={`Today's ${workspaceType}`}
-            />
-
-            <SimpleStats
-              Icon={CardIcon}
-              classNames={{
-                smallFigureClasses: "md:text-base font-semibold",
-              }}
-              figure={yesterday?.count || 0}
-              smallFigure={
-                yesterday?.value
-                  ? `(${formatCurrency(yesterday?.value)})`
-                  : `(ZMW 0.00)`
-              }
-              title={`Yesterday's ${workspaceType}`}
-            />
-          </div>
-
-          <Card className="flex-col flex w-full flex-wrap items-start">
-            <CardHeader
-              infoText={"Monthly transactions by count and value"}
-              title={"Transactions Summary"}
-              classNames={{
-                infoClasses: "text-sm -mt-1",
-              }}
-            />
-            <ReportsBarChart
-              chart={monthlyTransactions.chart}
-              // items={items}
-            />
-            <div className="flex items-center gap-3 mt-2">
-              <div className="grid aspect-square h-12 w-12 place-items-center rounded-lg bg-gradient-to-tr from-primary to-blue-300 p-3 text-white">
-                <ListBulletIcon className="h-6 w-6" />
-              </div>
-
-              <div>
-                <div className="flex items-center gap-1">
-                  <p className="text-lg font-bold">
-                    {allTransactions?.count || 0}
-                  </p>
-                  <span className={cn("text-sm text-gray-500")}>
-                    ({formatCurrency(allTransactions?.value || "0")})
-                  </span>
-                </div>
-                <p className="text-sm text-gray-500">All Transactions</p>
-              </div>
-            </div>
+              variant="bordered"
+            >
+              Available Wallet Balance
+            </Chip>
+            <p className="text-[1.7rem] font-black leading-7 tracking-tight text-white">
+              {formatCurrency(workspaceWalletBalance || 0)}
+            </p>
           </Card>
+          <SimpleStats
+            Icon={CardIcon}
+            classNames={{
+              smallFigureClasses: "md:text-base font-semibold",
+            }}
+            figure={today?.count || 0}
+            smallFigure={formatCurrency(today?.value || 0)}
+            title={`Today's ${workspaceType}`}
+          />
+
+          <SimpleStats
+            Icon={CardIcon}
+            classNames={{
+              smallFigureClasses: "md:text-base font-semibold",
+            }}
+            figure={yesterday?.count || 0}
+            smallFigure={formatCurrency(yesterday?.value || 0)}
+            title={`Yesterday's ${workspaceType}`}
+          />
         </div>
-
         {/*  2ND ROW - MONTHLY FIGURES AND VALUES */}
+        <Card className="flex-col flex w-full flex-wrap items-start">
+          <CardHeader
+            infoText={"Monthly transactions by count and value"}
+            title={"Transactions Summary"}
+            classNames={{
+              infoClasses: "text-sm -mt-1 mb-4",
+            }}
+          />
+          <ReportsBarChart
+            chart={monthlyTransactions.chart}
+            // items={items}
+          />
+          <div className="flex items-center gap-3 mt-2">
+            <div className="grid aspect-square h-12 w-12 place-items-center rounded-lg bg-gradient-to-tr from-primary to-blue-300 p-3 text-white">
+              <ListBulletIcon className="h-6 w-6" />
+            </div>
 
+            <div>
+              <div className="flex items-center gap-1">
+                <p className="text-lg font-bold">
+                  {allTransactions?.count || 0}
+                </p>
+                <span className={cn("text-sm text-gray-500")}>
+                  ({formatCurrency(allTransactions?.value || "0")})
+                </span>
+              </div>
+              <p className="text-sm text-gray-500">All Transactions</p>
+            </div>
+          </div>
+        </Card>
+
+        {/*  3RD ROW - LATEST WALLET STATEMENT TRANSACTIONS */}
         <div className="grid w-full grid-cols-1 gap-4">
           <Card className={""}>
             <CardHeader
@@ -255,22 +240,6 @@ function DashboardAnalytics({
             />
           </Card>
         </div>
-
-        {/* TODO:  3RD ROW - LATEST TRANSACTIONS */}
-        {/* <Card className={""}>
-          <div className="flex justify-between">
-            <CardHeader
-              infoText={"Some recent transactions from the last few days"}
-              title={"Latest Transactions"}
-            />
-          </div>
-          <CustomTable
-            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
-            columns={TRANSACTION_COLUMNS}
-            rows={latestTransactions || []}
-            rowsPerPage={6}
-          />
-        </Card> */}
       </div>
     </>
   );

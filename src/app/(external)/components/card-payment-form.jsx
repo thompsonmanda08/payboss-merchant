@@ -297,6 +297,7 @@ export default function CardPaymentForm({ checkoutData }) {
               label="Province"
               listItemName={"province"}
               name="province"
+              selector={"province"}
               options={provinces}
               prefilled={true}
               value={formData?.province}
