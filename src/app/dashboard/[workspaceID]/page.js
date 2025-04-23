@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import InfoBanner from "@/components/base/info-banner";
 import DashboardAnalytics from "@/app/dashboard/components/DashboardAnalytics";
 import {
@@ -11,6 +13,8 @@ export const dynamicParams = true;
 
 async function DashboardHome({ params }) {
   const workspaceID = (await params).workspaceID;
+
+  if (!workspaceID) return redirect("/workspaces");
 
   const [session, workspaceSession, dashboardAnalytics] = await Promise.all([
     getUserDetails(),
