@@ -3,9 +3,12 @@ import { usePathname, useRouter } from "next/navigation";
 
 const useNavigation = (query) => {
   const pathname = usePathname();
+  const pathArr = pathname?.split("/");
+
   const router = useRouter();
 
-  const workspaceID = query?.workspaceID || query?.activeWorkspaceID || "";
+  const workspaceID =
+    query?.workspaceID || query?.activeWorkspaceID || pathArr[2];
   const activeWorkspace = query?.activeWorkspace || {};
   const workspaces = query?.workspaces || [];
 
@@ -16,7 +19,6 @@ const useNavigation = (query) => {
   const isUserInWorkspace =
     pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
 
-  const pathArr = pathname?.split("/");
   const currentPath =
     pathArr?.length >= 4
       ? pathArr[pathArr?.length - 1]?.replaceAll("-", " ")

@@ -175,9 +175,9 @@ export default function Invoicing({ workspaceID, permissions }) {
             removeWrapper
             rows={LATEST_INVOICES}
             onRowAction={handleViewInvoice}
-            enableFilters={{
+            filters={{
               status: {
-                state: true,
+                enabled: true,
               },
             }}
           />

@@ -64,13 +64,13 @@ export default function CustomTable({
   searchKeys = [],
   useRowDataAsKey = false,
   rowKey,
-  enableFilters = {
+  filters = {
     status: {
-      state: false,
+      enabled: false,
       options: [],
     },
     columns: {
-      state: true,
+      enabled: true,
       options: [],
     },
   },
@@ -106,13 +106,6 @@ export default function CustomTable({
 
   const pages = Math.ceil(rows?.length / rowsPerPage);
 
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return rows?.slice(start, end);
-  }, [page, rows, rowsPerPage]);
-
   const hasSearchFilter = Boolean(debouncedSearchQuery);
 
   const headerColumns = React.useMemo(() => {
@@ -128,8 +121,8 @@ export default function CustomTable({
     let filteredRows = [...rows];
 
     const STATUS_FILTERS =
-      enableFilters.status.state && enableFilters.status.options
-        ? enableFilters.status.options
+      filters.status.enabled && filters.status.options
+        ? filters.status.options
         : STATUSES;
 
     if (hasSearchFilter) {
@@ -147,13 +140,22 @@ export default function CustomTable({
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== STATUS_FILTERS.length
     ) {
-      let filters = Array.from(statusFilter);
+      let selectedFilters = Array.from(statusFilter);
 
-      filteredRows = filteredRows.filter((row) => filters.includes(row?.role));
+      filteredRows = filteredRows.filter((row) =>
+        selectedFilters.includes(row?.status)
+      );
     }
 
     return filteredRows;
   }, [rows, filterValue, statusFilter]);
+
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return filteredItems.slice(start, end);
+  }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
     return [...items].sort((a, b) => {
@@ -189,10 +191,6 @@ export default function CustomTable({
               TRANSACTION_STATUS_COLOR_MAP[row.status]
             )}
             variant="light"
-            // onPress={() => {
-            //   setSelectedBatch(row)
-            //   setOpenBatchDetailsModal(true)
-            // }}
             size="sm"
           >
             {cellValue}
@@ -273,7 +271,7 @@ export default function CustomTable({
             onChange={(e) => onSearchChange(e.target.value)}
           />
           <div className="relative flex gap-3">
-            {enableFilters?.status && (
+            {filters?.status?.enabled && (
               <SingleSelectionDropdown
                 startContent={<FunnelIcon className="h-5 w-5" />}
                 buttonVariant="flat"
@@ -287,7 +285,7 @@ export default function CustomTable({
                 onSelectionChange={setStatusFilter}
               />
             )}
-            {enableFilters?.columns && (
+            {filters?.columns && (
               <SingleSelectionDropdown
                 buttonVariant="flat"
                 className={"min-w-[160px]"}
@@ -319,32 +317,30 @@ export default function CustomTable({
 
   const bottomContent = React.useMemo(() => {
     return (
-      pages > 1 && (
-        <div className="flex w-full items-center justify-between">
-          <span className="text-small text-foreground-400">
-            Total: {rows.length} transactions
-          </span>
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={(page) => setPage(page)}
+      <div className="flex w-full items-center justify-between">
+        <span className="text-small text-foreground-400">
+          Total: {rows.length} transactions
+        </span>
+        <Pagination
+          isCompact
+          showControls
+          showShadow
+          color="primary"
+          page={page}
+          total={pages}
+          onChange={(page) => setPage(page)}
+        />
+        <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-foreground-400">
+          Rows per page:{" "}
+          <SelectField
+            className="h-8 min-w-max bg-transparent text-sm text-foreground-400 outline-none"
+            defaultValue={8}
+            options={["5", "8", "10", "16", "20"]}
+            placeholder={rowsPerPage.toString()}
+            onChange={onRowsPerPageChange}
           />
-          <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-foreground-400">
-            Rows per page:{" "}
-            <SelectField
-              className="h-8 min-w-max bg-transparent text-sm text-foreground-400 outline-none"
-              defaultValue={8}
-              options={["5", "8", "10", "16", "20"]}
-              placeholder={rowsPerPage.toString()}
-              onChange={onRowsPerPageChange}
-            />
-          </label>
-        </div>
-      )
+        </label>
+      </div>
     );
   }, [rows, pages]);
 

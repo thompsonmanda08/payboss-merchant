@@ -34,14 +34,18 @@ import { Skeleton } from "./ui/skeleton";
 import Logo from "./base/payboss-logo";
 import MobileNavBar from "./mobile-menu";
 import { Button } from "./ui/button";
+import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 
 function SideNavBar({ workspaceSession }) {
   const [expandedSection, setExpandedSection] = useState(null);
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore();
 
-  const { dashboardRoute, pathname } = useNavigation(workspaceSession);
+  const { dashboardRoute, pathname, workspaceID } =
+    useNavigation(workspaceSession);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const { isPending } = useWorkspaceInit(workspaceID);
 
   const workspaces = workspaceSession?.workspaces;
   const activeWorkspace = workspaceSession?.activeWorkspace;
@@ -341,11 +345,11 @@ function SideNavBar({ workspaceSession }) {
     setTimeout(() => setIsLoading(false), 1000);
   }, []);
 
-  return Boolean(isLoading || !workspaceType) ? (
+  return Boolean(isLoading || isPending || !workspaceType) ? (
     <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
       <Skeleton className="mb-4 h-16 w-full rounded-xl" />
       <div className="h-full space-y-4">
-        {Array.from({ length: 9 }).map((_, index) => (
+        {Array.from({ length: 7 }).map((_, index) => (
           <Skeleton key={index} className="h-9 w-full rounded-lg" />
         ))}
       </div>
@@ -369,7 +373,7 @@ function SideNavBar({ workspaceSession }) {
       >
         <nav
           className={cn(
-            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`,
+            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`
           )}
         >
           <Logo href={dashboardRoute} />
