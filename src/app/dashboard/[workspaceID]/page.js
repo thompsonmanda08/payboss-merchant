@@ -28,30 +28,22 @@ async function DashboardHome({ params }) {
     getDashboardAnalytics(workspaceID),
   ]);
 
-  const isCompleteKYC = session?.user?.isCompleteKYC;
-  const user = session?.user;
-
   const analytics = dashboardAnalytics?.data || [];
-  const workspaceType = workspaceSession?.workspaceType;
-  const workspaceWalletBalance = workspaceSession?.activeWorkspace?.balance;
-  const permissions = workspaceSession?.workspacePermissions;
 
   return (
     <>
-      {isCompleteKYC && (
+      {session?.user?.isCompleteKYC && (
         <InfoBanner
           buttonText="Submit Documents"
           href={"manage-account/account-verification"}
           infoText="Just one more step, please submit your business documents to aid us with the approval process"
-          user={user}
+          user={session?.user}
         />
       )}
       <DashboardAnalytics
         dashboardAnalytics={analytics}
-        permissions={permissions}
         workspaceID={workspaceID}
-        workspaceType={workspaceType}
-        workspaceWalletBalance={workspaceWalletBalance}
+        workspaceSession={workspaceSession}
       />
     </>
   );

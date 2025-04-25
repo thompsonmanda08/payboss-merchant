@@ -2,7 +2,6 @@
 import "server-only";
 
 import { SignJWT, jwtVerify } from "jose";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 import { AUTH_SESSION, USER_SESSION, WORKSPACE_SESSION } from "./constants";
@@ -14,7 +13,7 @@ const secretKey =
 // 2. Validate the secret exists
 if (!secretKey || secretKey.length < 32) {
   throw new Error(
-    "JWT_SECRET or AUTH_SECRET environment variable must be at least 32 characters",
+    "JWT_SECRET or AUTH_SECRET environment variable must be at least 32 characters"
   );
 }
 
@@ -208,14 +207,16 @@ export async function updateWorkspaceSession(fields) {
   const cookie = (await cookies()).get(WORKSPACE_SESSION)?.value;
   const oldSession = await decrypt(cookie);
 
+  const updatedSession = {
+    ...oldSession,
+    ...fields,
+    activeWorkspace: oldSession?.workspaces?.find(
+      (workspace) => workspace?.ID == fields?.activeWorkspaceID
+    ),
+  };
+
   if (isLoggedIn && oldSession) {
-    const session = await encrypt({
-      ...oldSession,
-      ...fields,
-      activeWorkspace: oldSession?.workspaces?.find(
-        (workspace) => workspace?.ID == fields?.activeWorkspaceID,
-      ),
-    });
+    const session = await encrypt(updatedSession);
 
     if (session) {
       (await cookies()).set(WORKSPACE_SESSION, session, {
@@ -225,6 +226,8 @@ export async function updateWorkspaceSession(fields) {
         sameSite: "lax",
         path: "/",
       });
+
+      return updatedSession;
     } else {
       throw new Error("Failed to update workspace session token.");
     }
@@ -290,8 +293,6 @@ export async function deleteSession() {
   if (typeof window !== "undefined") {
     localStorage.clear();
   }
-
-  revalidatePath("/", "layout");
 
   return { success: true, message: "Logout Success" };
 }

@@ -31,18 +31,22 @@ import BreadCrumbLinks from "./base/breadcrumb";
 import { Skeleton } from "./ui/skeleton";
 import Avatar from "./ui/avatar";
 import NavIconButton from "./ui/nav-icon-button";
+import { useParams } from "next/navigation";
 
 export default function TopNavBar({ user, workspaceSession }) {
-  const { isProfile, currentPath, dashboardRoute, router, workspaceID } =
+  const params = useParams();
+  const workspaceID = params.workspaceID;
+
+  const { isProfile, currentPath, dashboardRoute, router } =
     useNavigation(workspaceSession);
 
-  const activeWorkspace = workspaceSession?.activeWorkspace;
-  const activeWorkspaceID = workspaceSession?.activeWorkspaceID || workspaceID;
+  const { data: workspaceInit, isLoading } = useWorkspaceInit(workspaceID);
+
+  const activeWorkspace =
+    workspaceSession?.activeWorkspace || workspaceInit?.data?.activeWorkspace;
   const workspaceWalletBalance = activeWorkspace?.balance;
 
-  const { isLoading } = useWorkspaceInit(activeWorkspaceID);
-
-  if (isLoading) return <NavbarLoader isProfile />;
+  if (isLoading || !workspaceID) return <NavbarLoader isProfile />;
 
   return (
     <nav

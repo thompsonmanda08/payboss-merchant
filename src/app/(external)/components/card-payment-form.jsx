@@ -307,10 +307,10 @@ export default function CardPaymentForm({ checkoutData }) {
             <Input
               id="province"
               name="province"
-              label="Province"
+              label="State"
               value={formData.province}
               onChange={handleChange}
-              placeholder="Lusaka"
+              placeholder="Copperbelt"
             />
           )}
         </div>

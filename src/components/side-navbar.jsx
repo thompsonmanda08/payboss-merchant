@@ -35,21 +35,33 @@ import Logo from "./base/payboss-logo";
 import MobileNavBar from "./mobile-menu";
 import { Button } from "./ui/button";
 import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useParams, usePathname } from "next/navigation";
 
 function SideNavBar({ workspaceSession }) {
-  const [expandedSection, setExpandedSection] = useState(null);
+  const pathname = usePathname();
+
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore();
+  const [expandedSection, setExpandedSection] = useState(null);
 
-  const { dashboardRoute, pathname, workspaceID } =
-    useNavigation(workspaceSession);
+  const params = useParams();
+  const workspaceID = params.workspaceID;
 
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    data: workspaceInit,
+    isPending,
+    isLoading,
+  } = useWorkspaceInit(workspaceID);
 
-  const { isPending } = useWorkspaceInit(workspaceID);
+  const dashboardRoute = `/dashboard/${workspaceID}`;
 
-  const workspaces = workspaceSession?.workspaces;
-  const activeWorkspace = workspaceSession?.activeWorkspace;
-  const workspaceType = workspaceSession?.workspaceType;
+  // const [isLoading, setIsLoading] = useState(true);
+
+  const workspaces =
+    workspaceSession?.workspaces || workspaceInit?.data?.workspaces;
+  const activeWorkspace =
+    workspaceSession?.activeWorkspace || workspaceInit?.data?.activeWorkspace;
+  const workspaceType =
+    workspaceSession?.workspaceType || workspaceInit?.data?.workspaceType;
 
   // *************** COLLECTIONS AND INCOME *************** //
   const COLLECTION_SERVICES = [
@@ -341,11 +353,11 @@ function SideNavBar({ workspaceSession }) {
   }, [pathname]);
 
   // setLoading to true after 1 second
-  useEffect(() => {
-    setTimeout(() => setIsLoading(false), 1000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => setIsLoading(false), 500);
+  // }, []);
 
-  return Boolean(isLoading || isPending || !workspaceType) ? (
+  return Boolean(isLoading || isPending || !workspaceID) ? (
     <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
       <Skeleton className="mb-4 h-16 w-full rounded-xl" />
       <div className="h-full space-y-4">
@@ -353,7 +365,7 @@ function SideNavBar({ workspaceSession }) {
           <Skeleton key={index} className="h-9 w-full rounded-lg" />
         ))}
       </div>
-      <Skeleton className="mt-auto h-[50px] w-full rounded-xl" />
+      <Skeleton className="mt-auto h-[48px] w-full rounded-xl" />
     </div>
   ) : (
     <>

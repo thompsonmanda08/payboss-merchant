@@ -11,10 +11,16 @@ import {
 
 export default async function DashboardLayout({ children }) {
   const authSession = await getAuthSession();
-  const session = await getUserDetails();
-  const workspaceSession = (await getWorkspaceSession()) || [];
 
   if (!authSession?.accessToken) redirect("/login");
+
+  const [session, workspaceSession] = await Promise.all([
+    getUserDetails(),
+    getWorkspaceSession(),
+  ]);
+
+
+  console.log("session", workspaceSession);
 
   return (
     <main className="flex h-screen items-start justify-start overflow-hidden bg-background text-foreground">

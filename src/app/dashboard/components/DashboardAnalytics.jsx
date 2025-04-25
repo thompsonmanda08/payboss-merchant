@@ -19,15 +19,7 @@ import { MONTHS, WORKSPACE_TYPES } from "@/lib/constants";
 import ReportsBarChart from "@/components/charts/ReportsBarChart/ReportsBarChart";
 
 import { WalletTransactionHistory } from "../[workspaceID]/workspace-settings/components/wallet";
-
-const TRANSACTION_COLUMNS = [
-  { name: "DATE", uid: "created_at", sortable: true },
-  { name: "NARRATION", uid: "narration" },
-  { name: "PROVIDER", uid: "service_provider", sortable: true },
-  { name: "SOURCE ACCOUNT", uid: "destination", sortable: true },
-  { name: "AMOUNT", uid: "amount", sortable: true },
-  { name: "STATUS", uid: "status", sortable: true },
-];
+import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 
 const pendingApprovals = [
   {
@@ -69,11 +61,21 @@ const pendingApprovals = [
 
 function DashboardAnalytics({
   workspaceID,
-  permissions,
-  workspaceType,
   dashboardAnalytics,
-  workspaceWalletBalance,
+  workspaceSession,
 }) {
+  const { data: workspaceInit, isLoading } = useWorkspaceInit(workspaceID);
+
+  const activeWorkspace = workspaceInit?.data?.activeWorkspace || {};
+  const workspaceType =
+    workspaceInit?.data?.workspaceType || activeWorkspace?.workspaceType;
+
+  const permissions =
+    workspaceInit?.data?.workspacePermissions ||
+    workspaceSession?.workspacePermissions;
+
+  const workspaceWalletBalance = activeWorkspace?.balance;
+
   const {
     today,
     yesterday,
@@ -114,27 +116,6 @@ function DashboardAnalytics({
     },
   };
 
-  const thisMonth = new Date().getMonth();
-  const currentMonth = MONTHS[thisMonth];
-  const previousMonth = MONTHS[(thisMonth - 1 + MONTHS.length) % MONTHS.length]; // Handle January to December wrap-around
-
-  const previousMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month)?.toLowerCase().startsWith(previousMonth?.toLowerCase())
-  );
-
-  const currentMonthTransactions = monthlyTransactionRecords?.find((item) =>
-    String(item.month)?.toLowerCase().startsWith(currentMonth?.toLowerCase())
-  );
-
-  // Extract counts or default to 0 if no transactions
-  const previousCount = previousMonthTransactions?.count || 0;
-  const currentCount = currentMonthTransactions?.count || 0;
-
-  // Calculate the percentage change between the current month and the previous month
-  const percentageChange = previousCount
-    ? ((currentCount - previousCount) / previousCount) * 100
-    : 0; // Avoid division by zero
-
   const CardIcon =
     workspaceType == WORKSPACE_TYPES[0]?.ID // COLLECTIONS
       ? ArrowLeftEndOnRectangleIcon
@@ -144,14 +125,9 @@ function DashboardAnalytics({
           ? ReceiptPercentIcon
           : ListBulletIcon; // HYBRID
 
-  const isLoadingDashboardData = !workspaceType;
-  // const isLoadingDashboardData = !permissions?.role && !workspaceType;
-
   return (
     <>
-      {isLoadingDashboardData && (
-        <OverlayLoader show={isLoadingDashboardData} />
-      )}
+      <OverlayLoader show={isLoading} />
 
       <div className="flex w-full flex-col gap-4 md:gap-4">
         {/* TOP ROW - WALLET BALANCE && OVERALL VALUES */}

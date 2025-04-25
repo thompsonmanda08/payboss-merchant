@@ -1,16 +1,23 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 
+import { useWorkspaceInit } from "./useQueryHooks";
+
 const useNavigation = (query) => {
   const pathname = usePathname();
   const pathArr = pathname?.split("/");
 
   const router = useRouter();
 
-  const workspaceID =
-    query?.workspaceID || query?.activeWorkspaceID || pathArr[2];
-  const activeWorkspace = query?.activeWorkspace || {};
-  const workspaces = query?.workspaces || [];
+  let workspaceID = pathname.startsWith("/dashboard")
+    ? pathArr?.[2]
+    : query?.workspaceID || query?.activeWorkspaceID;
+
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+
+  const activeWorkspace =
+    query?.activeWorkspace || workspaceInit?.data?.activeWorkspace || {};
+  const workspaces = query?.workspaces || workspaceInit?.data?.workspaces || [];
 
   const dashboardRoute = `/dashboard/${workspaceID}`;
   const settingsPathname = `${dashboardRoute}/settings`;
@@ -22,7 +29,8 @@ const useNavigation = (query) => {
   const currentPath =
     pathArr?.length >= 4
       ? pathArr[pathArr?.length - 1]?.replaceAll("-", " ")
-      : pathArr[3]?.replaceAll("-", " ") || activeWorkspace?.workspace;
+      : pathArr[3]?.replaceAll("-", " ") ||
+        `${activeWorkspace?.workspace || ""} Dashboard`;
 
   const isProfile =
     settingsPathname == pathname ||

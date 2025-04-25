@@ -21,18 +21,20 @@ export const initializeWorkspace = cache(async (workspaceID) => {
   try {
     const res = await authenticatedService({ url });
 
-    await updateWorkspaceSession({
+    const workspaceSession = {
       activeWorkspaceID: workspaceID,
       workspaceType: res.data.workspaceType,
       workspacePermissions: res.data,
-    });
+    };
+
+    const updatedSession = await updateWorkspaceSession(workspaceSession);
 
     revalidatePath("/dashboard/[workspaceID]", "layout");
 
     return {
       success: true,
       message: res.message,
-      data: res.data,
+      data: updatedSession,
       status: res.status,
       statusText: res.statusText,
     };
@@ -93,7 +95,7 @@ export async function submitPOP(popDetails, workspaceID) {
     };
   }
 
-  const url = `merchant/workspace/wallet/prefund/${workspaceID}`;
+  const url = `merchant/workspace/${workspaceID}/wallet/prefund`;
 
   try {
     const res = await authenticatedService({
