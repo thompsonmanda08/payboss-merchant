@@ -207,12 +207,22 @@ export async function updateWorkspaceSession(fields) {
   const cookie = (await cookies()).get(WORKSPACE_SESSION)?.value;
   const oldSession = await decrypt(cookie);
 
+  // const workspaceSession = {
+  //   activeWorkspaceID: workspaceID,
+  //   workspaceType: res.data.workspaceType,
+  //   workspacePermissions: res.data,
+  // };
+
   const updatedSession = {
     ...oldSession,
     ...fields,
-    activeWorkspace: oldSession?.workspaces?.find(
-      (workspace) => workspace?.ID == fields?.activeWorkspaceID
-    ),
+    workspacePermissions:
+      fields?.workspacePermissions ?? oldSession?.workspacePermissions,
+    activeWorkspace: fields?.activeWorkspaceID
+      ? oldSession?.workspaces?.find(
+          (workspace) => workspace?.ID == fields?.activeWorkspaceID
+        )
+      : oldSession?.activeWorkspace,
   };
 
   if (isLoggedIn && oldSession) {

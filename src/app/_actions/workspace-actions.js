@@ -29,7 +29,7 @@ export const initializeWorkspace = cache(async (workspaceID) => {
 
     const updatedSession = await updateWorkspaceSession(workspaceSession);
 
-    revalidatePath("/dashboard/[workspaceID]", "layout");
+    // revalidatePath("/dashboard/[workspaceID]", "layout");
 
     return {
       success: true,

@@ -9,6 +9,8 @@ import {
 import { getWorkspaceSession } from "@/app/_actions/config-actions";
 import { getWalletPrefundHistory } from "@/app/_actions/transaction-actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function ManageWorkspacePage({ params }) {
   const workspaceID = (await params).workspaceID;
 
@@ -29,8 +31,6 @@ export default async function ManageWorkspacePage({ params }) {
     getWorkspaceMembers(workspaceID),
     getWalletPrefundHistory(workspaceID),
   ]);
-
-  console.log(workspaceSession?.workspacePermissions);
 
   return (
     <>

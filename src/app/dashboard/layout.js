@@ -19,9 +19,6 @@ export default async function DashboardLayout({ children }) {
     getWorkspaceSession(),
   ]);
 
-
-  console.log("session", workspaceSession);
-
   return (
     <main className="flex h-screen items-start justify-start overflow-hidden bg-background text-foreground">
       <SideNavBar workspaceSession={workspaceSession} />

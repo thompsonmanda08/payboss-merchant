@@ -106,12 +106,6 @@ const useAuthStore = create((set, get) => ({
       console.error("Logout error:", error);
       alert("Failed to logout. Please try again.");
     }
-    // try {
-    //   await fetch("/api/logout");
-    //   get().resetAuthData();
-    // } catch (error) {
-    //   console.error("Error logging out:", error);
-    // }
   },
 
   // CLear & Reset

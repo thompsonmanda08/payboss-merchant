@@ -12,7 +12,6 @@ import {
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import Tabs from "@/components/tabs";
 import { Button } from "@/components/ui/button";
-import LoadingPage from "@/app/loading";
 import { cn } from "@/lib/utils";
 import Card from "@/components/base/custom-card";
 import { WORKSPACE_TYPES } from "@/lib/constants";
@@ -26,6 +25,7 @@ import ActivePockets from "./active-pockets-tab";
 import WorkspaceMembers from "./workspace-members";
 import CheckoutConfig from "./checkout-config";
 import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+import SettingsLoading from "../loading";
 
 function WorkspaceSettings({
   workspaceID,
@@ -39,15 +39,17 @@ function WorkspaceSettings({
 }) {
   const { existingUsers, setExistingUsers } = useWorkspaceStore();
 
+  console.log("walletHistory", walletHistory);
+
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+  const { data: workspaceInit, isLoading } = useWorkspaceInit(workspaceID);
 
   const activeWorkspace =
     selectedWorkspace || workspaceInit?.data?.activeWorkspace || {};
 
   const workspaceType =
-    workspaceInit?.data?.workspaceType || activeWorkspace?.workspaceType;
+    activeWorkspace?.workspaceType || workspaceInit?.data?.workspaceType;
 
   const isDisbursementOrHybrid =
     workspaceType == WORKSPACE_TYPES[1]?.ID ||
@@ -90,7 +92,9 @@ function WorkspaceSettings({
             workspaceID={workspaceID}
             workspaceName={activeWorkspace?.workspace}
             transactionData={walletHistory}
-            permissions={permissions}
+            permissions={
+              permissions || workspaceInit?.data?.workspacePermissions
+            }
           />,
         ]
       : // * BILL PAYMENTS WORKSPACE TABS
@@ -152,8 +156,8 @@ function WorkspaceSettings({
     }
   }, []);
 
-  return !workspaceMembers ? (
-    <LoadingPage />
+  return isLoading || !workspaceMembers || !workspaceType ? (
+    <SettingsLoading />
   ) : (
     <div className={cn("px-3")}>
       {/* HEADER */}

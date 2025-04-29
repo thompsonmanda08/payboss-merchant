@@ -40,6 +40,7 @@ function Wallet({
   hideHistory,
   removeWrapper,
   permissions,
+  transactionData,
 }) {
   const queryClient = useQueryClient();
 
@@ -251,7 +252,7 @@ function Wallet({
             {
               "items-center justify-center gap-x-0": hideHistory,
               "rounded-none border-none p-0 shadow-none": removeWrapper,
-            },
+            }
           )}
         >
           {/* ONLY THE INITIATOR CAN SEE THIS FORM IN DISBURSEMENT WORKSPACE */}
@@ -272,7 +273,7 @@ function Wallet({
                     "flex w-full flex-col gap-y-4 p-[25px] lg:border lg:border-y-0 lg:border-l-0 lg:border-border",
                     {
                       "lg:border-r-0": hideHistory,
-                    },
+                    }
                   )}
                 >
                   <div className="flex flex-col gap-4" role="pre-fund-wallet">
@@ -333,7 +334,7 @@ function Wallet({
                       handleFile={async (file) => {
                         const file_record = await handleFileUpload(
                           file,
-                          formData.file?.file_record_id,
+                          formData.file?.file_record_id
                         );
 
                         updateFormData({ url: file_record?.file_url });
@@ -377,6 +378,7 @@ function Wallet({
                 setSelectedPrefund={setSelectedPrefund}
                 workspaceID={workspaceID}
                 permissions={permissions}
+                transactionData={transactionData}
               />
             </div>
           )}
@@ -441,7 +443,7 @@ export function WalletTransactionHistory({
   const walletData = transactionData || [];
 
   const walletHistory = walletData.sort(
-    (a, b) => new Date(b.created_at) - new Date(a.created_at),
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
   );
 
   const data = [
@@ -517,7 +519,7 @@ export function WalletTransactionHistory({
     const response = await approveWalletPrefund(
       prefundApproval,
       selectedPrefund?.ID,
-      workspaceID,
+      workspaceID
     );
 
     if (!response?.success) {
@@ -563,7 +565,7 @@ export function WalletTransactionHistory({
             "my-0": formattedActivityData?.length > 0,
           },
           className,
-          wrapper,
+          wrapper
         )}
       >
         {formattedActivityData.length > 0 ? (
@@ -611,7 +613,7 @@ export function WalletTransactionHistory({
                                 ...
                                 {formatDistance(
                                   new Date(item?.created_at),
-                                  new Date(),
+                                  new Date()
                                 )}{" "}
                                 ago
                               </span>
@@ -627,7 +629,7 @@ export function WalletTransactionHistory({
                                         "bg-secondary/10 text-secondary":
                                           isYellow,
                                         "bg-danger/10 text-danger": isRed,
-                                      },
+                                      }
                                     ),
                                   }}
                                   content={`${capitalize(item?.status)}: ${
@@ -654,7 +656,7 @@ export function WalletTransactionHistory({
                                           "bg-secondary/10 text-secondary":
                                             isYellow,
                                           "bg-danger/10 text-danger": isRed,
-                                        },
+                                        }
                                       ),
                                       content: cn("text-base font-bold", {}),
                                     }}
@@ -758,7 +760,7 @@ export function LogTaskType({ type, classNames }) {
           `inline-flex h-8 w-fit items-center justify-center gap-2 text-nowrap rounded-[4px]  px-2 py-1.5`,
           `cursor-pointer px-4`,
           `bg-${taskType?.color}/10`,
-          wrapper,
+          wrapper
         )}
       >
         <span className={cn(`text-${taskType?.color}`, icon)}>
@@ -768,7 +770,7 @@ export function LogTaskType({ type, classNames }) {
           className={cn(
             `text-sm font-medium leading-6`,
             `text-${taskType?.color}`,
-            text,
+            text
           )}
         >
           {taskType?.label}
