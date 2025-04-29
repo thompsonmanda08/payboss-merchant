@@ -160,12 +160,12 @@ export default function Checkout({ checkoutData }) {
             <div className="bg-primary/5 rounded-lg p-4 space-y-3">
               <h3 className="font-medium ">Payment Methods</h3>
               <div className="flex items-center space-x-2 text-sm text-foreground/80">
-                <CreditCardIcon className="h-4 w-4 text-foreground/60" />
-                <span>Visa, Mastercard, American Express</span>
+                <DevicePhoneMobileIcon className="h-4 w-4 text-foreground/60" />
+                <span>Mobile Money (MTN, Airtel)</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-foreground/80">
-                <DevicePhoneMobileIcon className="h-4 w-4 text-foreground/60" />
-                <span>Mobile Money (MTN, Airtel, Zamtel)</span>
+                <CreditCardIcon className="h-4 w-4 text-foreground/60" />
+                <span>Visa, Mastercard, American Express</span>
               </div>
             </div>
           </CardBody>

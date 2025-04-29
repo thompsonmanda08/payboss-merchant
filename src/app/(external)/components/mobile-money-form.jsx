@@ -26,12 +26,11 @@ export default function MobileMoneyForm({ checkoutData }) {
   const [pinPromptSent, setPinPromptSent] = React.useState(false);
   const [transaction, setTransaction] = React.useState({
     status: "PENDING",
-    data: null,
-    message: "",
+    message: "Please wait while we process your payment request",
   });
 
   // GET TRANSACTION STATUS HOOK
-  const { data, isSuccess, isFailed, isProcessing } =
+  const { transactionResponse, isSuccess, isFailed, isProcessing } =
     useCheckoutTransactionStatus(transactionID, pinPromptSent);
 
   const [formData, setFormData] = useState({
@@ -130,8 +129,7 @@ export default function MobileMoneyForm({ checkoutData }) {
     setPinPromptSent(false);
     setTransaction({
       status: "PENDING",
-      data: null,
-      message: "",
+      message: "Please wait while we process your payment request",
     });
   }
 
@@ -140,14 +138,16 @@ export default function MobileMoneyForm({ checkoutData }) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
 
       setPinPromptSent(false);
-      setTransaction(data);
+      setTransaction(transactionResponse);
     }
     if (isFailed && pinPromptSent) {
       // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setPinPromptSent(false);
-      setTransaction(data);
+      setTransaction(transactionResponse);
     }
-  }, [isProcessing, isSuccess, isFailed]);
+  }, [isSuccess, isFailed]);
+
+  console.log("TXN RES", transactionResponse);
 
   return (
     <>
@@ -220,8 +220,7 @@ export default function MobileMoneyForm({ checkoutData }) {
 
       <PromptModal
         backdrop="blur"
-        isDismissable={false}
-        isDisabled={pinPromptSent}
+        isDismissable={!pinPromptSent}
         isOpen={isOpen}
         onClose={
           transaction?.status == "PENDING"
@@ -235,18 +234,18 @@ export default function MobileMoneyForm({ checkoutData }) {
             : handleClosePrompt
         }
         onOpen={onOpen}
-        className={"max-w-md"}
+        className={"max-w-xs aspect-square"}
         size="sm"
         removeActionButtons
       >
         <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max m-auto p-4 pb-6">
-          <div className="aspect-square flex justify-center items-center mx-auto ">
-            {transaction?.status.toUpperCase() == "SUCCESSFUL" ? (
+          <div className="aspect-square flex justify-center items-center mx-auto mb-4">
+            {transaction?.status == "SUCCESSFUL" ? (
               <CheckBadgeIcon className="w-32 text-success" />
-            ) : transaction?.status.toUpperCase() == "FAILED" ? (
+            ) : transaction?.status == "FAILED" ? (
               <XCircleIcon className="w-32 text-danger" />
             ) : (
-              <Spinner size={120} />
+              <Spinner size={100} />
             )}
           </div>
           <div className="grid place-items-center w-full mx-auto">
@@ -258,11 +257,11 @@ export default function MobileMoneyForm({ checkoutData }) {
               {transaction?.status}
             </p>
             <small className="text-muted-foreground text-center min-w-60 mx-auto">
-              {transaction?.status.toUpperCase() == "SUCCESSFUL"
+              {transaction?.status == "SUCCESSFUL"
                 ? "Payment completed successfully!"
-                : transaction?.status.toUpperCase() == "FAILED"
+                : transaction?.status == "FAILED"
                   ? "Payment failed. Try again later!"
-                  : "Transaction is processing. " + transaction?.message}
+                  : transaction?.message}
               {isFailed && (
                 // REASON FOR FAILURE
                 <>
@@ -274,8 +273,7 @@ export default function MobileMoneyForm({ checkoutData }) {
             </small>
           </div>
 
-          {(transaction?.status.toUpperCase() == "SUCCESSFUL" ||
-            transaction?.status.toUpperCase() == "FAILED") && (
+          {!isProcessing && transaction?.status != "PENDING" && (
             <Button
               color="danger"
               isDisabled={isProcessing}

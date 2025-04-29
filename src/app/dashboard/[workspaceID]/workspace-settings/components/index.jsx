@@ -25,6 +25,7 @@ import Wallet from "./wallet";
 import ActivePockets from "./active-pockets-tab";
 import WorkspaceMembers from "./workspace-members";
 import CheckoutConfig from "./checkout-config";
+import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 
 function WorkspaceSettings({
   workspaceID,
@@ -40,7 +41,14 @@ function WorkspaceSettings({
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const workspaceType = selectedWorkspace?.workspaceType;
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+
+  const activeWorkspace =
+    selectedWorkspace || workspaceInit?.data?.activeWorkspace || {};
+
+  const workspaceType =
+    workspaceInit?.data?.workspaceType || activeWorkspace?.workspaceType;
+
   const isDisbursementOrHybrid =
     workspaceType == WORKSPACE_TYPES[1]?.ID ||
     workspaceType == WORKSPACE_TYPES[3]?.ID;
@@ -65,8 +73,6 @@ function WorkspaceSettings({
     ...DISBURSEMENT_TABS,
   ];
 
-  console.log("PERMISSIONS", permissions);
-
   // Components to be rendered for the workspace type
   const TAB_COMPONENTS =
     // * DISBURSEMENTS & HYBRID WORKSPACES
@@ -80,9 +86,9 @@ function WorkspaceSettings({
           <Wallet
             key={"wallet"}
             removeWrapper
-            balance={selectedWorkspace?.balance}
+            balance={activeWorkspace?.balance}
             workspaceID={workspaceID}
-            workspaceName={selectedWorkspace?.workspace}
+            workspaceName={activeWorkspace?.workspace}
             transactionData={walletHistory}
             permissions={permissions}
           />,
@@ -93,9 +99,9 @@ function WorkspaceSettings({
             <Wallet
               key={"wallet"}
               removeWrapper
-              balance={selectedWorkspace?.balance}
+              balance={activeWorkspace?.balance}
               workspaceID={workspaceID}
-              workspaceName={selectedWorkspace?.workspace}
+              workspaceName={activeWorkspace?.workspace}
               transactionData={walletHistory}
               permissions={permissions}
             />,
@@ -120,7 +126,7 @@ function WorkspaceSettings({
       allUsers={allUsers}
       navigateTo={handleNavigation}
       workspaceID={workspaceID}
-      workspaceName={selectedWorkspace?.workspace}
+      workspaceName={activeWorkspace?.workspace}
       workspaceRoles={workspaceRoles}
       permissions={permissions}
     />,
@@ -128,7 +134,7 @@ function WorkspaceSettings({
       key={"members"}
       allUsers={allUsers || []}
       workspaceMembers={workspaceMembers || []}
-      workspaceName={selectedWorkspace?.workspace}
+      workspaceName={activeWorkspace?.workspace}
       workspaceID={workspaceID}
       workspaceRoles={workspaceRoles}
       systemRoles={systemRoles}
@@ -153,7 +159,7 @@ function WorkspaceSettings({
       {/* HEADER */}
       <div className={cn("mb-4")}>
         <h2 className="heading-3 !font-bold uppercase tracking-tight text-foreground">
-          {selectedWorkspace?.workspace}
+          {activeWorkspace?.workspace}
         </h2>
         <p className="text-sm text-foreground-600">
           Workspaces provide a structured way to group and manage services,

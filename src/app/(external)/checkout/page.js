@@ -35,19 +35,19 @@ async function CheckoutPage(props) {
           goBack={true}
           message={capitalize(validation?.message)}
           status={validation?.status}
-          title={"Checkout Error"}
+          title={"Checkout"}
         />
       </>
     );
   }
 
-  const [response] = await Promise.all([
+  const [checkout] = await Promise.all([
     getCheckoutInfo(checkoutData?.checkoutID),
   ]);
 
   checkoutData = {
     ...checkoutData,
-    ...(response?.data || {}),
+    ...(checkout?.data || {}),
   };
 
   return (

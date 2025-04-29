@@ -74,7 +74,7 @@ export const QUERY_KEYS = {
   BULK_TRANSACTIONS: "bulk-transactions",
   SINGLE_TRANSACTIONS: "single-transactions",
   BATCH_DETAILS: "batch-details",
-  WALLET_HISTORY: "wallet-history-details",
+  WALLET_HISTORY: "wallet-history",
   DASHBOARD_ANALYTICS: "dashboard-analytics",
   PAYMENT_TRANSACTIONS: "payment-transactions",
   COLLECTION_TRANSACTIONS: "collections-transactions",
