@@ -36,7 +36,11 @@ const SERVICE_FILTERS = [
   },
 ];
 
-export default function BulkTransactionsTable({ workspaceID, rows }) {
+export default function BulkTransactionsTable({
+  workspaceID,
+  rows,
+  workspaceSession,
+}) {
   // DATA FETCHING
   const { isLoading } = useBulkTransactions(workspaceID);
 
@@ -44,8 +48,10 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
   const { setSelectedBatch, setOpenBatchDetailsModal, setOpenPaymentsModal } =
     usePaymentsStore();
 
-  const { data: initialization } = useWorkspaceInit(workspaceID);
-  const role = initialization?.data;
+  const { data: workspaceSessionResponse } = useWorkspaceInit(workspaceID);
+  const permissions =
+    workspaceSession?.workspacePermissions ||
+    workspaceSessionResponse?.data?.workspacePermissions;
 
   // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
@@ -53,7 +59,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS),
+    new Set(INITIAL_VISIBLE_COLUMNS)
   );
 
   const [serviceProtocolFilter, setServiceProtocolFilter] =
@@ -74,7 +80,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
+      Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
 
@@ -85,7 +91,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       filteredRows = filteredRows.filter(
         (row) =>
           row?.batch_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-          row?.amount?.toLowerCase().includes(filterValue?.toLowerCase()),
+          row?.amount?.toLowerCase().includes(filterValue?.toLowerCase())
       );
     }
     if (
@@ -95,7 +101,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
       let filters = Array.from(serviceProtocolFilter);
 
       filteredRows = filteredRows.filter((row) =>
-        filters.includes(row?.service),
+        filters.includes(row?.service)
       );
     }
 
@@ -152,7 +158,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
           <Button
             className={cn(
               "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
-              TRANSACTION_STATUS_COLOR_MAP[row.status],
+              TRANSACTION_STATUS_COLOR_MAP[row.status]
             )}
             size="sm"
             variant="light"
@@ -282,7 +288,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
               onSelectionChange={setVisibleColumns}
             />
 
-            {role?.can_initiate && (
+            {permissions?.can_initiate && (
               <Button
                 color="primary"
                 endContent={<PlusIcon className="h-5 w-5" />}
@@ -330,7 +336,7 @@ export default function BulkTransactionsTable({ workspaceID, rows }) {
           {
             // "min-h-max": pages <= 1,
             // "min-h-[300px]": isLoading || !rows,
-          },
+          }
         ),
         base: cn("overflow-x-auto", { "": pages <= 1 }),
       }}

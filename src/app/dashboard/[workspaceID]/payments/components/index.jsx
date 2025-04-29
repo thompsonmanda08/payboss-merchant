@@ -17,6 +17,7 @@ import BatchDetailsPage from "./ViewBatchDetails";
 export default function DisbursementsWrapper({
   workspaceID,
   bulkTransactions,
+  workspaceSession,
 }) {
   const {
     openPaymentsModal,
@@ -32,6 +33,7 @@ export default function DisbursementsWrapper({
       key={PAYMENT_SERVICE_TYPES[0]?.name}
       rows={bulkTransactions}
       workspaceID={workspaceID}
+      workspaceSession={workspaceSession}
     />,
     // <SingleTransactionsTable
     //   key={PAYMENT_SERVICE_TYPES[1]?.name}

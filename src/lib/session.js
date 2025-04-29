@@ -283,8 +283,11 @@ export async function deleteSession() {
   // const allCookies = cookieStore.getAll();
 
   cookieStore.delete(AUTH_SESSION);
-  cookieStore.delete(USER_SESSION);
-  cookieStore.delete(WORKSPACE_SESSION);
+
+  setTimeout(() => {
+    cookieStore.delete(USER_SESSION);
+    cookieStore.delete(WORKSPACE_SESSION);
+  }, 1000);
 
   if (typeof window !== "undefined") {
     localStorage.clear();
