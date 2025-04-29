@@ -284,10 +284,8 @@ export async function deleteSession() {
 
   cookieStore.delete(AUTH_SESSION);
 
-  setTimeout(() => {
-    cookieStore.delete(USER_SESSION);
-    cookieStore.delete(WORKSPACE_SESSION);
-  }, 1000);
+  cookieStore.delete(USER_SESSION);
+  cookieStore.delete(WORKSPACE_SESSION);
 
   if (typeof window !== "undefined") {
     localStorage.clear();

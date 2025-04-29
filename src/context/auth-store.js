@@ -1,7 +1,5 @@
 import { create } from "zustand";
 
-import { logUserOut } from "@/app/_actions/auth-actions";
-
 const INITIAL_STATE = {
   isLoading: false,
   auth: {},
@@ -91,15 +89,29 @@ const useAuthStore = create((set, get) => ({
 
   // METHODS AND ACTIONS
   handleUserLogOut: async () => {
-    const isLoggedOut = await logUserOut();
+    try {
+      const res = await fetch("/api/logout");
 
-    if (isLoggedOut) {
+      if (!res.ok) throw new Error("Logout failed");
+
+      const data = await res.json();
+
       get().resetAuthData();
 
-      return isLoggedOut;
+      // Redirect manually if using JSON response
+      if (data.redirect) {
+        window.location.href = data.redirect;
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("Failed to logout. Please try again.");
     }
-
-    return isLoggedOut;
+    // try {
+    //   await fetch("/api/logout");
+    //   get().resetAuthData();
+    // } catch (error) {
+    //   console.error("Error logging out:", error);
+    // }
   },
 
   // CLear & Reset
