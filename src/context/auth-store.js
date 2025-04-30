@@ -89,19 +89,29 @@ const useAuthStore = create((set, get) => ({
 
   // METHODS AND ACTIONS
   handleUserLogOut: async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
     try {
-      const res = await fetch("/api/logout");
+      const res = await fetch("/api/logout", {
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
 
       const data = await res.json();
 
-      get().resetAuthData();
-
       // Redirect manually if using JSON response
       if (data.redirect) {
+        get().resetAuthData();
         window.location.href = data.redirect;
       }
     } catch (error) {
       console.error("Logout error:", error);
+    } finally {
+      clearTimeout(timeoutId);
     }
   },
 

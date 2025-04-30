@@ -12,63 +12,67 @@ import {
   CardFooter,
   Chip,
 } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useIdleTimer } from "react-idle-timer/legacy";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
-import {
-  getRefreshToken,
-  lockScreenOnUserIdle,
-  logUserOut,
-} from "@/app/_actions/auth-actions";
+import { lockScreenOnUserIdle } from "@/app/_actions/auth-actions";
 
 import { Button } from "./ui/button";
+import { useRefreshToken } from "@/hooks/useQueryHooks";
 
 function ScreenLock({ open }) {
-  const queryClient = useQueryClient();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [seconds, setSeconds] = useState(90);
 
-  const router = useRouter();
-
   async function handleRefreshAuthToken() {
     setIsLoading(true);
-    await lockScreenOnUserIdle(false); // User is no longer idle
-    // queryClient.invalidateQueries();
+    await lockScreenOnUserIdle(false);
     onClose();
-    await getRefreshToken();
     setIsLoading(false);
   }
 
   async function handleUserLogOut() {
     setIsLoading(true);
-    const isLoggedOut = await logUserOut();
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
-    if (isLoggedOut) {
-      queryClient.invalidateQueries();
-      await lockScreenOnUserIdle(false); // User is no longer idle
-      router.push("/login");
-      onClose();
+    try {
+      const res = await fetch("/api/logout", {
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const response = await res.json();
+
+      if (response?.redirect) {
+        window.location.href = response.redirect;
+        onClose();
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      clearTimeout(timeoutId);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }
-
-  useEffect(() => {
-    onOpen();
-  }, [onOpen]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setSeconds((x) => x - 1);
     }, 1000);
 
-    if (seconds == 0) handleUserLogOut();
+    if (seconds == 0) {
+      handleUserLogOut();
+    }
 
     return () => {
       clearInterval(interval);
     };
-  });
+  }, [seconds]);
 
   return (
     <Modal
@@ -130,7 +134,7 @@ function ScreenLock({ open }) {
             variant="light"
             onPress={handleUserLogOut}
           >
-            Log out
+            Log me out
           </Button>
           <Button
             color="primary"
@@ -138,7 +142,7 @@ function ScreenLock({ open }) {
             isLoading={isLoading}
             onPress={handleRefreshAuthToken}
           >
-            Am still here
+            Stay Logged In
           </Button>
         </ModalFooter>
       </ModalContent>
@@ -155,6 +159,8 @@ export function IdleTimerContainer({ authSession }) {
 
   const loggedIn = authSession?.accessToken;
 
+  const {} = useRefreshToken(loggedIn);
+
   const onIdle = async () => {
     setState("Idle");
     await lockScreenOnUserIdle(true);
@@ -162,24 +168,9 @@ export function IdleTimerContainer({ authSession }) {
 
   const onActive = () => {
     setState("Active");
-
-    // REFRESH TOKEN IF THE USER IS ACTIVE WITHIN THE IDLE TIMEOUT
-    // IN INTERVALS
-    setInterval(
-      async () => {
-        await getRefreshToken();
-      },
-      1000 * 60 * 4.5
-    );
   };
 
-  const onAction = async () => {
-    setCount(count + 1);
-
-    if (count == 1000) {
-      await getRefreshToken();
-    }
-  };
+  const onAction = async () => setCount(count + 1);
 
   const { getRemainingTime } = useIdleTimer({
     onIdle,
@@ -202,14 +193,9 @@ export function IdleTimerContainer({ authSession }) {
 
   /* NO TIMER ON EXTERNAL ROUTES */
   if (pathname.startsWith("/checkout")) return null;
+  if (pathname.startsWith("/invoice")) return null;
 
-  return (
-    <>
-      {/* <h1>React Idle Timer</h1>
-      <p>Current State: {state}</p>
-      <p>{remaining} seconds remaining</p> */}
-    </>
-  );
+  return <></>;
 }
 
 export default ScreenLock;

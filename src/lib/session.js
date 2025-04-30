@@ -207,12 +207,6 @@ export async function updateWorkspaceSession(fields) {
   const cookie = (await cookies()).get(WORKSPACE_SESSION)?.value;
   const oldSession = await decrypt(cookie);
 
-  // const workspaceSession = {
-  //   activeWorkspaceID: workspaceID,
-  //   workspaceType: res.data.workspaceType,
-  //   workspacePermissions: res.data,
-  // };
-
   const updatedSession = {
     ...oldSession,
     ...fields,

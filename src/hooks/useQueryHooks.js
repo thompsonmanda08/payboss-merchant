@@ -28,6 +28,7 @@ import {
 } from "@/app/_actions/workspace-actions";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getCheckoutURL } from "@/app/_actions/vas-actions";
+import { getRefreshToken } from "@/app/_actions/auth-actions";
 
 export const useGeneralConfigOptions = () =>
   useQuery({
@@ -97,6 +98,28 @@ export const useWorkspaceInit = (workspaceID) =>
     retry: 3,
     retryDelay: 3000,
     staleTime: 60 * 1000 * 3,
+  });
+
+export const useRefreshToken = (enable) =>
+  useQuery({
+    queryKey: ["refresh-token"],
+    queryFn: async () => {
+      if (!enable) {
+        return {
+          success: false,
+          error: null,
+          message: "Refresh token is disabled",
+          data: null,
+          status: 200,
+          statusText: "REFRESH_TOKEN_DISABLED",
+        };
+      }
+
+      return await getRefreshToken();
+    },
+    retry: 3,
+    retryDelay: 3000,
+    refetchInterval: 1000 * 60 * 3, // 3minutes
   });
 
 export const useWorkspaceMembers = (workspaceID) =>
