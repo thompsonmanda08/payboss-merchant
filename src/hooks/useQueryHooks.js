@@ -91,6 +91,11 @@ export const useWorkspaceInit = (workspaceID) =>
     queryKey: [QUERY_KEYS.WORKSPACE_SESSION, workspaceID],
     queryFn: async () => await initializeWorkspace(workspaceID),
     refetchOnMount: true,
+    refetchInterval: 1000 * 60 * 3, // 3minutes
+    refetchIntervalInBackground: true,
+    refetchOnWindowFocus: true,
+    retry: 3,
+    retryDelay: 3000,
     staleTime: 60 * 1000 * 3,
   });
 

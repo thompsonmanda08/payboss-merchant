@@ -14,29 +14,43 @@ import {
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useIdleTimer } from "react-idle-timer/legacy";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   getRefreshToken,
   lockScreenOnUserIdle,
+  logUserOut,
 } from "@/app/_actions/auth-actions";
-import useAuthStore from "@/context/auth-store";
 
 import { Button } from "./ui/button";
 
 function ScreenLock({ open }) {
   const queryClient = useQueryClient();
-  const { handleUserLogOut } = useAuthStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [seconds, setSeconds] = useState(90);
 
+  const router = useRouter();
+
   async function handleRefreshAuthToken() {
     setIsLoading(true);
     await lockScreenOnUserIdle(false); // User is no longer idle
-    queryClient.invalidateQueries();
+    // queryClient.invalidateQueries();
     onClose();
     await getRefreshToken();
+    setIsLoading(false);
+  }
+
+  async function handleUserLogOut() {
+    setIsLoading(true);
+    const isLoggedOut = await logUserOut();
+
+    if (isLoggedOut) {
+      queryClient.invalidateQueries();
+      await lockScreenOnUserIdle(false); // User is no longer idle
+      router.push("/login");
+      onClose();
+    }
     setIsLoading(false);
   }
 
@@ -49,10 +63,7 @@ function ScreenLock({ open }) {
       setSeconds((x) => x - 1);
     }, 1000);
 
-    if (seconds == 0) {
-      handleUserLogOut();
-      queryClient.invalidateQueries();
-    }
+    if (seconds == 0) handleUserLogOut();
 
     return () => {
       clearInterval(interval);
@@ -117,9 +128,7 @@ function ScreenLock({ open }) {
             color="danger"
             isDisabled={isLoading}
             variant="light"
-            onPress={() => {
-              handleUserLogOut();
-            }}
+            onPress={handleUserLogOut}
           >
             Log out
           </Button>
@@ -160,7 +169,7 @@ export function IdleTimerContainer({ authSession }) {
       async () => {
         await getRefreshToken();
       },
-      1000 * 60 * 4.5,
+      1000 * 60 * 4.5
     );
   };
 

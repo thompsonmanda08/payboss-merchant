@@ -92,8 +92,6 @@ const useAuthStore = create((set, get) => ({
     try {
       const res = await fetch("/api/logout");
 
-      if (!res.ok) throw new Error("Logout failed");
-
       const data = await res.json();
 
       get().resetAuthData();
@@ -104,7 +102,6 @@ const useAuthStore = create((set, get) => ({
       }
     } catch (error) {
       console.error("Logout error:", error);
-      alert("Failed to logout. Please try again.");
     }
   },
 
