@@ -72,7 +72,7 @@ function ScreenLock({ open }) {
     return () => {
       clearInterval(interval);
     };
-  }, [seconds]);
+  });
 
   return (
     <Modal
@@ -159,7 +159,7 @@ export function IdleTimerContainer({ authSession }) {
 
   const loggedIn = authSession?.accessToken;
 
-  const {} = useRefreshToken(loggedIn);
+  const {} = useRefreshToken(loggedIn && state !== "Idle");
 
   const onIdle = async () => {
     setState("Idle");

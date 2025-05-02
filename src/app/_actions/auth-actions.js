@@ -503,8 +503,8 @@ export async function lockScreenOnUserIdle(state) {
   if (isLoggedIn) {
     await updateAuthSession({ screenLocked: state });
 
-    return true;
+    return isLoggedIn;
   }
 
-  return false;
+  return isLoggedIn;
 }

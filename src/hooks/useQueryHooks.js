@@ -115,11 +115,14 @@ export const useRefreshToken = (enable) =>
         };
       }
 
-      return await getRefreshToken();
+      const response = await getRefreshToken();
+
+      return response;
     },
     retry: 3,
     retryDelay: 3000,
-    refetchInterval: 1000 * 60 * 3, // 3minutes
+
+    refetchInterval: 1000 * 60 * 4, // 4minutes
   });
 
 export const useWorkspaceMembers = (workspaceID) =>
