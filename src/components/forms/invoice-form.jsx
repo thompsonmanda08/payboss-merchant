@@ -68,7 +68,7 @@ export default function InvoiceForm({
   const calculateSubtotal = () => {
     return formData.lineItems.reduce(
       (total, item) => total + item.quantity * item.unitPrice,
-      0,
+      0
     );
   };
 
@@ -78,9 +78,6 @@ export default function InvoiceForm({
   };
 
   const calculateTotal = (subtotal, tax) => {
-    console.log("subtotal", subtotal);
-    console.log("tax", tax);
-
     return subtotal + tax;
   };
 

@@ -104,6 +104,11 @@ export async function submitPOP(popDetails, workspaceID) {
       data: popDetails,
     });
 
+    revalidatePath(
+      "/manage-account/workspaces/[ID]/workspace-settings",
+      "page"
+    );
+
     return {
       success: true,
       message: res.message,

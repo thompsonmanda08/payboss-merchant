@@ -468,25 +468,13 @@ export function WalletTransactionHistory({
     onClose();
   }
 
-  function approve(item) {
+  function handleApproveOrReject(item, action) {
     setSelectedPrefund(item);
     updatePrefundApproval({
-      action: "approved",
-      remarks: "",
+      action: action,
+      remarks: `Transaction was ${action}.`,
     });
 
-    // Only open prompt if the prefund action and item are set
-    onOpen();
-  }
-
-  function reject(item) {
-    setSelectedPrefund(item);
-    updatePrefundApproval({
-      action: "rejected",
-      remarks: "",
-    });
-
-    // Only open prompt if the prefund action and item are set
     onOpen();
   }
 
@@ -592,7 +580,7 @@ export function WalletTransactionHistory({
 
                   return (
                     <div
-                      key={`${itemIndex}${index}${item?.created_by}`}
+                      key={`${itemIndex}${index}${item?.name}`}
                       className="flex flex-col gap-y-4 py-2"
                     >
                       <div className="flex items-start space-x-4">
@@ -603,13 +591,13 @@ export function WalletTransactionHistory({
 
                         <div className="w-full items-start">
                           <div className="flex w-full justify-between">
-                            <p className="text-xs text-foreground/70">
-                              <span className="text-sm font-medium capitalize leading-6">
-                                {item?.created_by || item?.remarks}
+                            <p className="text-xs text-foreground/70 -mt-1">
+                              <span className="text-base font-semibold text-foreground/80 capitalize leading-6">
+                                {item?.name || item?.created_by}
                               </span>{" "}
                               <br />
                               {item?.content}
-                              <span className="ml-2 font-normal leading-4 text-slate-400">
+                              <span className="ml-2 font-normal leading-4 text-foreground/40">
                                 ...
                                 {formatDistance(
                                   new Date(item?.created_at),
@@ -618,6 +606,7 @@ export function WalletTransactionHistory({
                                 ago
                               </span>
                             </p>
+
                             <div className="flex max-w-max flex-col items-end">
                               <div className="flex gap-2">
                                 <Tooltip
@@ -691,14 +680,18 @@ export function WalletTransactionHistory({
                                       className={"h-8"}
                                       color={"danger"}
                                       size="sm"
-                                      onClick={() => reject(item)}
+                                      onClick={() =>
+                                        handleApproveOrReject(item, "rejected")
+                                      }
                                     >
                                       Reject
                                     </Button>
                                     <Button
                                       className={"h-8"}
                                       size="sm"
-                                      onClick={() => approve(item)}
+                                      onClick={() =>
+                                        handleApproveOrReject(item, "approved")
+                                      }
                                     >
                                       Approve
                                     </Button>

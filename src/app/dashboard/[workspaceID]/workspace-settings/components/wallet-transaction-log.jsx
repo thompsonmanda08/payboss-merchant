@@ -4,46 +4,46 @@ import { TASK_ICON_BG_COLOR_MAP, TASK_TYPE } from "@/lib/constants";
 import { formatActivityData } from "@/lib/utils";
 
 // Sample log data
-export const sampleActivityLogs = [
-  {
-    title: "Wallet Prefund",
-    data: [
-      {
-        type: "Deposit",
-        created_by: { user_name: "John Doe" },
-        createdAt: "2024-07-01T10:30:00Z",
-        content: "Deposit made with ref No. 32168651.",
-      },
-      {
-        type: "Deposit",
-        created_by: { user_name: "Jane Smith" },
-        createdAt: "2024-07-02T15:45:00Z",
-        content: "Client expressed interest in real estate investment trusts.",
-      },
-      {
-        type: "Deposit",
-        created_by: { user_name: "Emily Davis" },
-        createdAt: "2024-07-01T10:30:00Z",
-        content:
-          "Scheduled a follow-up call to discuss client's financial goals.",
-      },
-      {
-        type: "Deposit",
-        created_by: { user_name: "Emily Davis" },
-        createdAt: "2024-07-01T10:30:00Z",
-        content:
-          "Scheduled a follow-up call to discuss client's financial goals.",
-      },
-      {
-        type: "Deposit",
-        created_by: { user_name: "Emily Davis" },
-        createdAt: "2024-07-01T10:30:00Z",
-        content:
-          "Scheduled a follow-up call to discuss client's financial goals.",
-      },
-    ],
-  },
-];
+// export const sampleActivityLogs = [
+//   {
+//     title: "Wallet Prefund",
+//     data: [
+//       {
+//         type: "Deposit",
+//         created_by: { user_name: "John Doe" },
+//         createdAt: "2024-07-01T10:30:00Z",
+//         content: "Deposit made with ref No. 32168651.",
+//       },
+//       {
+//         type: "Deposit",
+//         created_by: { user_name: "Jane Smith" },
+//         createdAt: "2024-07-02T15:45:00Z",
+//         content: "Client expressed interest in real estate investment trusts.",
+//       },
+//       {
+//         type: "Deposit",
+//         created_by: { user_name: "Emily Davis" },
+//         createdAt: "2024-07-01T10:30:00Z",
+//         content:
+//           "Scheduled a follow-up call to discuss client's financial goals.",
+//       },
+//       {
+//         type: "Deposit",
+//         created_by: { user_name: "Emily Davis" },
+//         createdAt: "2024-07-01T10:30:00Z",
+//         content:
+//           "Scheduled a follow-up call to discuss client's financial goals.",
+//       },
+//       {
+//         type: "Deposit",
+//         created_by: { user_name: "Emily Davis" },
+//         createdAt: "2024-07-01T10:30:00Z",
+//         content:
+//           "Scheduled a follow-up call to discuss client's financial goals.",
+//       },
+//     ],
+//   },
+// ];
 
 const activityLogStore = {
   activityLogs: sampleActivityLogs,
@@ -72,7 +72,7 @@ const renderTaskType = (taskName) => {
 
 const ActivityLog = () => {
   const formattedActivityData = formatActivityData(
-    activityLogStore.activityLogs,
+    activityLogStore.activityLogs
   );
 
   return (

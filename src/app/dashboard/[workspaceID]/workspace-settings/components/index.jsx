@@ -39,8 +39,6 @@ function WorkspaceSettings({
 }) {
   const { existingUsers, setExistingUsers } = useWorkspaceStore();
 
-  console.log("walletHistory", walletHistory);
-
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const { data: workspaceInit, isLoading } = useWorkspaceInit(workspaceID);
