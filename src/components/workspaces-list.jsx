@@ -12,7 +12,6 @@ import { createNewWorkspace } from "@/app/_actions/merchant-actions";
 import { QUERY_KEYS } from "@/lib/constants";
 import useWorkspace from "@/hooks/useWorkspaces";
 import OverlayLoader from "@/components/ui/overlay-loader";
-import Loader from "@/components/ui/loader";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import Card from "@/components/base/custom-card";
 import InfoBanner from "@/components/base/info-banner";
@@ -20,6 +19,7 @@ import EmptyLogs from "@/components/base/empty-logs";
 
 import WorkspaceItem from "./workspace-card-item";
 import CreateNewWorkspaceModal from "./create-new-workspace-modal";
+import WorkspacesLoading from "@/app/manage-account/loading";
 
 function WorkspacesList({ user, showHeader = false, className, workspaces }) {
   const pathname = usePathname();
@@ -159,7 +159,11 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
             )}
           >
             {isLoading ? (
-              <Loader loadingText={"Loading Workspaces..."} size={80} />
+              <WorkspacesLoading
+                showHeader={false}
+                loadingText={"Loading Workspaces..."}
+                size={80}
+              />
             ) : (
               <div
                 className={cn(

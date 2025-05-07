@@ -1,25 +1,172 @@
-import { Suspense } from "react";
+"use client";
+import { useEffect } from "react";
+import { useParams } from "next/navigation";
+import { Skeleton } from "@heroui/react";
 
-import LoadingPage from "@/app/loading";
-import { getWalletPrefunds } from "@/app/_actions/workspace-actions";
+import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import usePaymentsStore from "@/context/payment-store";
+import UploadCSVFile from "@/app/dashboard/[workspaceID]/payments/components/upload-batch-file-step";
+import PaymentDetails from "@/app/dashboard/[workspaceID]/payments/components/bulk-payment-batch-details";
+import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/validation-details-step";
+import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer";
+import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/approver-action";
+import Card from "@/components/base/custom-card";
+import CardHeader from "@/components/base/card-header";
+import ProgressStep from "@/components/progress-step";
+import SelectPrefund from "@/app/dashboard/[workspaceID]/payments/components/select-prefund-step";
 
-import BulkPaymentAction from "./BulkPaymentAction";
+export const STEPS = [
+  {
+    title: "Create a Bulk payment - Select Prefund",
+    infoText: "Choose a prefund balance to use for the disbursement action",
+    step: "Wallet",
+  },
+  {
+    title: "Create a Bulk payment - Upload Batch File",
+    infoText: "Upload a file with records of the recipient in `.csv` format",
+    step: "Batch",
+  },
+  {
+    title: "Create a Bulk payment - Batch Details",
+    infoText: "Provide details for the payment action batch files",
+    step: "Details",
+  },
+  {
+    title: "Create a payment - File Record Validation",
+    infoText:
+      "The validation will make sure all record entries do not cause internal errors",
+    step: "Validation",
+  },
+  {
+    title: "Create a payment - Approval Status",
+    infoText: "Approvals can only be done by account admins",
+    step: "Approval",
+  },
+];
 
-async function CreatePayment(props) {
-  const params = await props.params;
+function CreateBulkPayment({}) {
+  const params = useParams();
   const { workspaceID, protocol } = params;
 
-  const activePrefunds = await getWalletPrefunds(workspaceID);
+  // ** INITIALIZEs PAYMENT STATE **//
+  const {
+    openAllRecordsModal,
+    openValidRecordsModal,
+    openInvalidRecordsModal,
+    setLoading,
+    paymentAction,
+    setPaymentAction,
+    setError,
+  } = usePaymentsStore();
 
-  return (
-    <Suspense fallback={<LoadingPage />}>
-      <BulkPaymentAction
-        activePrefunds={activePrefunds?.data?.data || []}
-        protocol={protocol}
-        workspaceID={workspaceID}
-      />
-    </Suspense>
+  //************ STEPS TO CREATE A BULK PAYMENT ACTION *****************/
+  const {
+    activeTab,
+    currentTabIndex,
+    navigateForward,
+    navigateBackwards,
+    navigateTo,
+  } = useCustomTabsHook([
+    <SelectPrefund
+      key={"step-1"}
+      navigateBackwards={goBack}
+      navigateForward={goForward}
+      protocol={protocol}
+      workspaceID={workspaceID}
+    />,
+    <UploadCSVFile
+      key={"step-2"}
+      handleCancel={handleCancel}
+      navigateBackwards={goBack}
+      navigateForward={goForward}
+      protocol={protocol}
+    />,
+    <PaymentDetails
+      key={"step-3"}
+      navigateBackwards={goBack}
+      navigateForward={goForward}
+      protocol={protocol}
+      workspaceID={workspaceID}
+    />,
+    <ValidationDetails
+      key={"step-4"}
+      navigateBackwards={goBack}
+      navigateForward={goForward}
+      workspaceID={workspaceID}
+    />,
+    <ApproverAction
+      key={"step-5"}
+      workspaceID={workspaceID}
+      // navigateForward={goForward}
+      // navigateBackwards={goBack}
+    />,
+  ]);
+
+  function goForward() {
+    navigateForward();
+  }
+
+  function goBack() {
+    navigateBackwards();
+  }
+
+  function handleCancel() {
+    setPaymentAction({
+      type: protocol,
+      url: "",
+    });
+    navigateTo(0);
+  }
+
+  useEffect(() => {
+    setError({ status: false, message: "" });
+    setLoading(false);
+  }, [paymentAction, currentTabIndex]);
+
+  return !workspaceID && !protocol ? (
+    <div className="w-full mx-auto p-4 space-y-4">
+      {/* Short title skeleton */}
+      <Skeleton className="h-9 w-1/4" />
+
+      {/* Longer subtitle skeleton */}
+      <Skeleton className="h-6 w-3/4" />
+
+      {/* Full width divider */}
+      <Skeleton className="h-5 w-full" />
+
+      {/* First content block */}
+      <Skeleton className="h-32 w-full" />
+
+      {/* Second content block */}
+      <Skeleton className="h-60 w-full" />
+      {/* Second content block */}
+      <Skeleton className="h-48 w-full" />
+      {/* Second content block */}
+    </div>
+  ) : (
+    <>
+      <Card className={""}>
+        <CardHeader
+          handleClose={handleCancel}
+          infoText={STEPS[currentTabIndex].infoText}
+          title={
+            <>
+              {STEPS[currentTabIndex].title}
+              <span className="capitalize"> ({protocol})</span>
+            </>
+          }
+        />
+        <ProgressStep STEPS={STEPS} currentTabIndex={currentTabIndex} />
+        {activeTab}
+      </Card>
+
+      {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
+      {(openAllRecordsModal ||
+        openValidRecordsModal ||
+        openInvalidRecordsModal) && <RecordDetailsViewer />}
+      {/************************************************************************/}
+    </>
   );
 }
 
-export default CreatePayment;
+export default CreateBulkPayment;

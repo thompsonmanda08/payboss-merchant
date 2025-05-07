@@ -12,7 +12,6 @@ import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
 
 import useWorkspaceStore from "@/context/workspaces-store";
-import LoadingPage from "@/app/loading";
 import { cn, formatCurrency, notify } from "@/lib/utils";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
@@ -27,10 +26,10 @@ import {
 
 function WorkspaceSummary({
   workspaceID,
-  workspaces,
   allUsers,
   workspaceRoles,
   workspaceMembers,
+  selectedWorkspace,
 }) {
   const queryClient = useQueryClient();
   const pathname = usePathname();
@@ -39,9 +38,6 @@ function WorkspaceSummary({
   const isUserInWorkspace =
     pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
 
-  const selectedWorkspace = workspaces.find(
-    (workspace) => workspace.ID === workspaceID,
-  );
   const isSandbox = selectedWorkspace?.workspace?.toLowerCase() == "sandbox";
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -217,9 +213,7 @@ function WorkspaceSummary({
     });
   }
 
-  return !selectedWorkspace && !isUserInWorkspace ? (
-    <LoadingPage />
-  ) : (
+  return (
     <div className={cn("px-2", { "px-3": isUserInWorkspace })}>
       <div className={cn("mb-8")}>
         <h2 className="heading-3 !font-bold uppercase tracking-tight text-foreground">
@@ -312,7 +306,7 @@ function WorkspaceSummary({
         <div className="flex w-full justify-between gap-4">
           <div
             className={cn(
-              "flex group select-none items-start gap-2 text-slate-600",
+              "flex group select-none items-start gap-2 text-slate-600"
             )}
           >
             <WalletIcon className="h-12 w-12 dark:text-foreground text-primary" />{" "}

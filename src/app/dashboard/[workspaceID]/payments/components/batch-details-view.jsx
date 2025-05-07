@@ -4,7 +4,7 @@ import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/ValidationDetails";
+import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/validation-details-step";
 import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/approver-action";
 import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer";
 import usePaymentsStore from "@/context/payment-store";
@@ -85,7 +85,7 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
         selectedBatch.status?.toLowerCase() != "submitted"
           ? COMPONENT_LIST_RENDERER.length - 1
           : currentTabIndex
-      ],
+      ]
     );
   }, [currentTabIndex]);
 

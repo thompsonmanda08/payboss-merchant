@@ -1,8 +1,6 @@
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
 import { getAuthSession, getUserDetails } from "@/app/_actions/config-actions";
-import LoadingPage from "@/app/loading";
 import AccountVerification from "@/app/manage-account/account-verification/components";
 
 export default async function AccountVerificationPage() {
@@ -11,9 +9,5 @@ export default async function AccountVerificationPage() {
 
   if (!accessToken) redirect("/login");
 
-  return (
-    <Suspense fallback={<LoadingPage />}>
-      <AccountVerification session={session} />
-    </Suspense>
-  );
+  return <AccountVerification session={session} />;
 }

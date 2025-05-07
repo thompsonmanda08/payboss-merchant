@@ -36,22 +36,19 @@ const SERVICE_FILTERS = [
   },
 ];
 
-export default function BulkTransactionsTable({
-  workspaceID,
-  rows,
-  workspaceSession,
-}) {
+export default function BulkTransactionsTable({ workspaceID, rowssss }) {
   // DATA FETCHING
-  const { isLoading } = useBulkTransactions(workspaceID);
+  const { data: bulkTransactionsResponse, isLoading } =
+    useBulkTransactions(workspaceID);
+
+  const rows = bulkTransactionsResponse?.data?.batches || [];
 
   const columns = BULK_TRANSACTIONS_COLUMN;
   const { setSelectedBatch, setOpenBatchDetailsModal, setOpenPaymentsModal } =
     usePaymentsStore();
 
-  const { data: workspaceSessionResponse } = useWorkspaceInit(workspaceID);
-  const permissions =
-    workspaceSession?.workspacePermissions ||
-    workspaceSessionResponse?.data?.workspacePermissions;
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+  const permissions = workspaceInit?.data?.workspacePermissions;
 
   // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
@@ -292,10 +289,9 @@ export default function BulkTransactionsTable({
               <Button
                 color="primary"
                 endContent={<PlusIcon className="h-5 w-5" />}
-                size={"lg"}
                 onPress={() => setOpenPaymentsModal(true)}
               >
-                Create New
+                New Batch
               </Button>
             )}
           </div>
@@ -332,19 +328,10 @@ export default function BulkTransactionsTable({
       isHeaderSticky
       classNames={{
         table: cn(
-          "align-top min-h-[300px] w-full overflow-scroll items-center justify-center",
-          {
-            // "min-h-max": pages <= 1,
-            // "min-h-[300px]": isLoading || !rows,
-          }
+          "align-top min-h-[300px] w-full overflow-scroll items-center justify-center"
         ),
         base: cn("overflow-x-auto", { "": pages <= 1 }),
       }}
-      // classNames={}
-      // showSelectionCheckboxes
-      // selectionMode="multiple"
-      // topContentPlacement="outside"
-      // bottomContentPlacement="outside"
       isStriped
       removeWrapper
       aria-label="Transactions table with custom cells"
@@ -378,11 +365,7 @@ export default function BulkTransactionsTable({
         loadingContent={loadingContent}
       >
         {(item) => (
-          <TableRow
-            key={item?.ID || item}
-            // className="hover:bg-primary-50"
-            align="top"
-          >
+          <TableRow key={item?.ID || item} align="top">
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

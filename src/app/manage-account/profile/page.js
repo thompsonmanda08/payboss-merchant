@@ -1,7 +1,5 @@
 import Image from "next/image";
-import { Suspense } from "react";
 
-import LoadingPage from "@/app/loading";
 import { DefaultCover } from "@/lib/constants";
 import ProfileBanner from "@/app/manage-account/profile/components/profile-banner";
 import ProfileSecuritySettings from "@/app/manage-account/profile/components/security-settings";
@@ -10,7 +8,7 @@ import ProfileDetails from "./components/profile-details";
 
 function AccountSettings() {
   return (
-    <Suspense fallback={<LoadingPage />}>
+    <>
       <section role="profile-header">
         <div className="relative flex flex-col lg:px-2">
           <div className="relative -top-[90px] h-[300px] w-full overflow-clip rounded-t-none bg-gray-900 sm:rounded-2xl">
@@ -36,7 +34,7 @@ function AccountSettings() {
           {/* <AccountPreferences /> */}
         </div>
       </section>
-    </Suspense>
+    </>
   );
 }
 

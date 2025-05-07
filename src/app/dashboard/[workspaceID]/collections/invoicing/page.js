@@ -1,24 +1,257 @@
-import { Suspense } from "react";
+"use client";
+import { PlusIcon } from "@heroicons/react/24/outline";
+import { Modal, ModalContent, ModalBody, useDisclosure } from "@heroui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
-import LoadingPage from "@/app/loading";
-import { getUserDetails } from "@/app/_actions/config-actions";
+import { Button } from "@/components/ui/button";
+import CustomTable from "@/components/tables/table";
+import Card from "@/components/base/custom-card";
+import CardHeader from "@/components/base/card-header";
+import { INVOICE_COLUMNS, TILL_TRANSACTION_COLUMNS } from "@/lib/table-columns";
+import InvoiceForm from "@/components/forms/invoice-form";
+import { formatDate, notify } from "@/lib/utils";
+import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
+import {
+  getCollectionLatestTransactions,
+  getRecentInvoices,
+} from "@/app/_actions/transaction-actions";
+import { QUERY_KEYS } from "@/lib/constants";
+import Invoice from "@/app/(external)/components/invoice";
 
-import Invoicing from "./invoicing";
-
-export default async function CheckoutAndInvoicingPage(props) {
-  const params = await props.params;
+export default function InvoicingPage({}) {
+  const params = useParams();
   const workspaceID = params.workspaceID;
+  const queryClient = useQueryClient();
 
-  const session = await getUserDetails();
+  const { onOpen, onClose, isOpen } = useDisclosure();
 
-  // const response = getLatestINvoices(params.workspaceID);
+  //!!! CHECKOUT FOR A WORKSPACE CONFIG  IS REQUIRED
+  const { data: checkoutResponse } = useWorkspaceCheckout(workspaceID);
+  const configData = checkoutResponse?.data || {};
+
+  const [openViewInvoice, setOpenViewInvoice] = useState(false);
+  const [openCreateInvoice, setOpenCreateInvoice] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
+
+  const thirtyDaysAgoDate = new Date();
+
+  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
+  const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
+  const end_date = formatDate(new Date(), "YYYY-MM-DD");
+
+  // HANDLE FETCH LATEST INVOICE TRANSACTIONS
+  const mutation = useMutation({
+    mutationKey: [QUERY_KEYS.INVOICES, workspaceID],
+    mutationFn: (dateRange) => getRecentInvoices(workspaceID, dateRange),
+  });
+
+  const transactionsMutation = useMutation({
+    mutationKey: [QUERY_KEYS.INVOICE_COLLECTIONS, workspaceID],
+    mutationFn: (dateRange) =>
+      getCollectionLatestTransactions(workspaceID, "invoice", dateRange),
+  });
+
+  useEffect(() => {
+    // IF NO DATA IS FETCH THEN GET THE LATEST INVOICES
+    if (!mutation.data) {
+      mutation.mutateAsync({ start_date, end_date });
+    }
+
+    // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
+    if (!transactionsMutation.data) {
+      transactionsMutation.mutateAsync({ start_date, end_date });
+    }
+  }, []);
+
+  const LATEST_INVOICES = mutation.data?.data?.invoices || [];
+  const INVOICE_TRANSACTIONS = transactionsMutation.data?.data?.data || [];
+
+  function handleClosePrompts() {
+    onClose();
+    setOpenViewInvoice(false);
+    setOpenCreateInvoice(false);
+    setSelectedInvoice(null);
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.INVOICES, workspaceID],
+    });
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.INVOICE_COLLECTIONS, workspaceID],
+    });
+  }
+
+  function handleOpenCreateModal() {
+    // IF NOT CHECKOUT URL - CANNOT CREATE INVOICE
+    if (!configData?.url) {
+      notify({
+        title: "Checkout Config not Found",
+        description: "Please generate a checkout URL from workspace settings.",
+        color: "danger",
+      });
+
+      return;
+    }
+
+    // OPEN MODAL
+    onOpen();
+    setOpenCreateInvoice(true);
+  }
+
+  function handleViewInvoice(ID) {
+    const invoiceData = LATEST_INVOICES.find((invoice) => invoice.id === ID);
+
+    const invoice = {
+      id: invoiceData?.id || ID,
+      workspaceID: invoiceData?.workspace_id,
+      invoiceID: invoiceData?.invoice_id,
+      date: invoiceData?.created_at,
+      from: {
+        name: invoiceData?.from?.display_name,
+        address: invoiceData?.from?.physical_address,
+        logo: invoiceData?.from?.logo,
+        city: invoiceData?.from?.city,
+        email: "",
+      },
+      billedTo: {
+        name: invoiceData?.customer_name,
+        address: invoiceData?.customer_address,
+        city: invoiceData?.city,
+        phone: invoiceData?.customer_phone_number,
+        email: invoiceData?.customer_email,
+      },
+      items: invoiceData?.items?.map((item) => ({
+        description: item?.description,
+        quantity: parseInt(String(item?.quantity || "0")),
+        price: parseFloat(String(item?.unit_price || "0")),
+        amount: parseFloat(
+          parseInt(String(item?.quantity || "0")) *
+            parseFloat(String(item?.unit_price || "0"))
+        ),
+      })),
+      taxRate: parseFloat(String(invoiceData?.tax_rate || "0")),
+      tax: parseFloat(String(invoiceData?.tax || "0")),
+      total: parseFloat(String(invoiceData?.total || "0")),
+
+      status: invoiceData?.status,
+      note:
+        invoiceData?.description ||
+        invoiceData?.notes ||
+        "Thank you for doing business with us!",
+    };
+
+    setSelectedInvoice(invoice);
+    setOpenViewInvoice(true);
+    onOpen();
+  }
 
   return (
-    <Suspense fallback={<LoadingPage />}>
-      <Invoicing
-        permissions={session?.userPermissions}
-        workspaceID={workspaceID}
-      />
-    </Suspense>
+    <>
+      <div className="flex w-full flex-col gap-4">
+        <div className="flex w-full items-center justify-between md:px-6">
+          <CardHeader
+            classNames={{
+              titleClasses: "xl:text-2xl lg:text-xl font-bold",
+              infoClasses: "!text-sm xl:text-base",
+            }}
+            infoText={"View and manage your invoices in one place."}
+            title={"Invoices"}
+          />
+
+          <Button
+            startContent={<PlusIcon className="h-6 w-6" />}
+            onClick={handleOpenCreateModal}
+          >
+            Create New
+          </Button>
+        </div>
+        <Card>
+          <div className="flex w-full items-center mb-4">
+            <CardHeader
+              classNames={{
+                infoClasses: "text-sm -mt-1",
+              }}
+              infoText={"Invoices made to your clients in the last 30days."}
+              title={"Recent Invoices"}
+            />
+          </div>
+          <CustomTable
+            removeWrapper
+            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
+            columns={INVOICE_COLUMNS}
+            filters={{
+              status: {
+                enabled: true,
+              },
+            }}
+            isLoading={mutation.isPending}
+            rows={LATEST_INVOICES}
+            rowsPerPage={8}
+            onRowAction={handleViewInvoice}
+          />
+        </Card>
+        <Card>
+          <div className="flex w-full items-center mb-4">
+            <CardHeader
+              classNames={{
+                infoClasses: "text-sm -mt-1",
+              }}
+              infoText={
+                "Invoice transactions made by your clients in the last 30days."
+              }
+              title={"Recent Invoice Transactions"}
+            />
+          </div>
+          <CustomTable
+            removeWrapper
+            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
+            columns={TILL_TRANSACTION_COLUMNS}
+            enableFilters={{
+              status: true,
+            }}
+            isLoading={transactionsMutation.isPending}
+            rows={INVOICE_TRANSACTIONS}
+            rowsPerPage={8}
+          />
+        </Card>
+      </div>
+
+      <Modal
+        isDismissable
+        backdrop="blur"
+        className={"z-[999]"}
+        isOpen={isOpen && openCreateInvoice}
+        size="3xl"
+        onClose={handleClosePrompts}
+      >
+        <ModalContent>
+          <ModalBody className="gap-0 max-h-[700px] overflow-y-auto">
+            <InvoiceForm
+              handleClosePrompts={handleClosePrompts}
+              workspaceID={workspaceID}
+            />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* VIEW INVOICE  */}
+      <Modal
+        isDismissable
+        backdrop="blur"
+        className={"z-[999] max-h-[calc(100svh-60px)]"}
+        isOpen={isOpen && openViewInvoice}
+        size="3xl"
+        onClose={handleClosePrompts}
+      >
+        <ModalContent>
+          <ModalBody className="gap-0 w-full overflow-y-auto p-4">
+            <Invoice
+              className={"min-h-auto shadow-none bg-transparent mt-6"}
+              invoice={selectedInvoice}
+            />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

@@ -13,18 +13,18 @@ import { Alert } from "@heroui/react";
 const SelectPrefund = ({
   navigateForward,
   workspaceID,
-  walletActivePrefunds,
+
   protocol,
 }) => {
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
+  const { data: prefunds, isLoading } = useActivePrefunds(workspaceID);
+  const walletActivePrefunds = prefunds?.data?.data || [];
+
   const { paymentAction, updatePaymentFields, error, setError } =
     usePaymentsStore();
-  const [isLoading, setIsLoading] = React.useState(false);
 
   function handleProceed() {
-    setIsLoading(true);
-
     if (paymentAction?.prefundID !== "" || selectedKeys.size !== 0) {
       let prefund = walletActivePrefunds.find(
         (prefund) => prefund.ID === paymentAction?.prefundID
@@ -34,9 +34,6 @@ const SelectPrefund = ({
         updatePaymentFields({ prefund, protocol });
         navigateForward();
       }
-
-      setIsLoading(false);
-
       return;
     }
 
@@ -46,7 +43,6 @@ const SelectPrefund = ({
       color: "danger",
       description: "You need to select a prefund!",
     });
-    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -61,7 +57,8 @@ const SelectPrefund = ({
             "You have no active prefunds available at this moment"
           }
           emptyTitleText={"Unavailable Prefunds"}
-          removeWrapper={true}
+          removeWrapper
+          isLoading={isLoading}
           rows={walletActivePrefunds}
           selectedKeys={selectedKeys}
           selectionBehavior={"multiple"}
@@ -81,7 +78,6 @@ const SelectPrefund = ({
         <div className="mt-auto flex w-full items-end justify-end gap-4">
           <Button
             isDisabled={isLoading || selectedKeys.size === 0}
-            isLoading={isLoading}
             onClick={handleProceed}
           >
             Next

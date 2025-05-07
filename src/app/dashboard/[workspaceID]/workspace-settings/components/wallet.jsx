@@ -813,7 +813,11 @@ export function AttachmentModal() {
 export function WalletLHistoryLoader({ limit }) {
   return (
     <div className="flex w-full flex-col gap-4">
-      <Skeleton className="mt-6 h-8 max-w-xs" />
+      <div>
+        <Skeleton className="w-48 h-7 rounded-lg " />
+        <Skeleton className="w-96 h-5 mt-2 rounded-lg " />
+      </div>
+
       {Array.from({ length: limit || 5 }).map((_, index) => (
         <div key={index} className="flex justify-between">
           <div className="flex w-full gap-4">

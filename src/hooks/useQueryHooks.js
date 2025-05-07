@@ -121,8 +121,7 @@ export const useRefreshToken = (enable) =>
     },
     retry: 3,
     retryDelay: 3000,
-
-    refetchInterval: 1000 * 60 * 4, // 4minutes
+    refetchInterval: 1000 * 60 * 3, // 4minutes
   });
 
 export const useWorkspaceMembers = (workspaceID) =>
@@ -204,7 +203,7 @@ export const useActivePrefunds = (workspaceID) =>
   useQuery({
     queryKey: [QUERY_KEYS.ACTIVE_PREFUND, workspaceID],
     queryFn: async () => await getWalletPrefunds(workspaceID),
-    staleTime: Infinity,
+    staleTime: 30 * 1000,
   });
 
 export const useWorkspaceCallbackURL = (workspaceID) =>

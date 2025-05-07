@@ -1,6 +1,3 @@
-import { Suspense } from "react";
-
-import LoadingPage from "@/app/loading";
 import ManagePeople from "@/app/manage-account/users/components/manage-users";
 import { getAllUsers } from "@/app/_actions/user-actions";
 import { getUserAccountRoles } from "@/app/_actions/merchant-actions";
@@ -24,11 +21,7 @@ async function UsersSettingsPage() {
     ...session?.userPermissions,
   };
 
-  return (
-    <Suspense fallback={<LoadingPage />}>
-      <ManagePeople permissions={permissions} roles={roles} users={users} />
-    </Suspense>
-  );
+  return <ManagePeople permissions={permissions} roles={roles} users={users} />;
 }
 
 export const dynamic = "force-dynamic";

@@ -17,7 +17,7 @@ import {
   ActionResponses,
   API_Authentication,
   StatusResponses,
-} from "../collections/api-integration/APIConfigView";
+} from "../collections/api-integration/api-config-view";
 
 export const API_CONFIG_VIEWS = [
   {

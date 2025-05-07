@@ -1,16 +1,7 @@
 "use client";
-import Loader from "@/components/ui/loader";
+
+import WorkspacesLoading from "../manage-account/loading";
 
 export default function LoadingPage({}) {
-  return (
-    <div className="grid h-[85vh] w-full place-content-center place-items-center">
-      <div className="flex flex-col items-center justify-center p-10 text-center">
-        <Loader
-          color="#1B64CE"
-          loadingText={"Loading Workspace..."}
-          size={60}
-        />
-      </div>
-    </div>
-  );
+  return <WorkspacesLoading />;
 }

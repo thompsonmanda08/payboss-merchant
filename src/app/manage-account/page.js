@@ -1,6 +1,3 @@
-import { Suspense } from "react";
-
-import LoadingPage from "@/app/loading";
 import Workspaces from "@/components/workspaces-list";
 
 import { getUserDetails } from "../_actions/config-actions";
@@ -16,25 +13,23 @@ async function AllWorkspacesPage() {
   const workspaces = workspacesResponse?.data?.workspaces || [];
 
   return (
-    <Suspense fallback={<LoadingPage />}>
-      <div className="flex w-full flex-col gap-8">
-        <div className="flex flex-col mb-4">
-          <h2 className="heading-3 !font-bold tracking-tight text-foreground">
-            Workspaces
-          </h2>
-          <p className="text-foreground-600 ">
-            Workspaces provide a structured way to group and manage services,
-            users, and transactions effectively.
-          </p>
-        </div>
-
-        <Workspaces
-          className={"m-0 border-none bg-transparent p-0 shadow-none"}
-          user={session?.user}
-          workspaces={workspaces}
-        />
+    <div className="flex w-full flex-col gap-8">
+      <div className="flex flex-col mb-4">
+        <h2 className="heading-3 !font-bold tracking-tight text-foreground">
+          Workspaces
+        </h2>
+        <p className="text-foreground-600 ">
+          Workspaces provide a structured way to group and manage services,
+          users, and transactions effectively.
+        </p>
       </div>
-    </Suspense>
+
+      <Workspaces
+        className={"m-0 border-none bg-transparent p-0 shadow-none"}
+        user={session?.user}
+        workspaces={workspaces}
+      />
+    </div>
   );
 }
 

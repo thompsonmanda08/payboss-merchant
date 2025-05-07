@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input-field";
 import { createInvoice } from "@/app/_actions/vas-actions";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants";
+import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 
 const INIT_INVOICE = {
   customerName: "",
@@ -39,12 +40,11 @@ const INIT_INVOICE = {
   lineItems: [{ description: "", quantity: 1, unitPrice: 0 }],
 };
 
-export default function InvoiceForm({
-  workspaceID,
-  permissions,
-  handleClosePrompts,
-}) {
+export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
   const queryClient = useQueryClient();
+
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+  const permissions = workspaceInit?.data?.workspacePermissions;
 
   const [formData, setFormData] = useState(INIT_INVOICE);
   const [selectedTab, setSelectedTab] = useState("invoice-details");
@@ -98,6 +98,16 @@ export default function InvoiceForm({
     e.preventDefault();
 
     setIsLoading(true);
+
+    if (!permissions?.can_initiate) {
+      notify({
+        title: "NOT ALLOWED",
+        color: "danger",
+        description: "You do not have permissions to perform this action",
+      });
+      setIsLoading(false);
+      return;
+    }
 
     if (selectedTab == "invoice-details" && isValidDetails()) {
       setSelectedTab("invoice-items");
