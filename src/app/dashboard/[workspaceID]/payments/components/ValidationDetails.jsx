@@ -5,18 +5,16 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import usePaymentsStore from "@/context/payment-store";
 import { Button } from "@/components/ui/button";
-import { useBatchDetails } from "@/hooks/useQueryHooks";
+import { useBatchDetails, useWorkspaceInit } from "@/hooks/useQueryHooks";
 import { submitBatchForApproval } from "@/app/_actions/transaction-actions";
 import { notify } from "@/lib/utils";
 import { QUERY_KEYS } from "@/lib/constants";
 import useWorkspaces from "@/hooks/useWorkspaces";
 import Loader from "@/components/ui/loader";
-import useDashboard from "@/hooks/useDashboard";
 import StatusCard from "@/components/status-card";
-import StatusMessage from "@/components/base/status-message";
 import { Alert } from "@heroui/react";
 
-const ValidationDetails = ({ navigateForward, batchID }) => {
+const ValidationDetails = ({ navigateForward, batchID, workspaceID }) => {
   const queryClient = useQueryClient();
   const {
     openRecordsModal,
@@ -31,7 +29,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     setError,
   } = usePaymentsStore();
 
-  const { workspaceID, workspaceWalletBalance } = useWorkspaces();
+  const { workspaceWalletBalance } = useWorkspaces();
 
   const [queryID, setQueryID] = useState(
     batchID || selectedBatch?.ID || batchState?.ID
@@ -43,7 +41,9 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
     isFetched,
     isSuccess,
   } = useBatchDetails(queryID);
-  const { workspaceUserRole: role } = useDashboard();
+
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+  const role = workspaceInit?.data?.workspacePermissions;
 
   const batchDetails = batchResponse?.data;
 

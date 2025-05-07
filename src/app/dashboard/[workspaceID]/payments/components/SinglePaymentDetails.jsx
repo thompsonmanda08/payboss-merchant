@@ -11,7 +11,6 @@
 // } from '@/lib/utils'
 // import { useSearchParams } from 'next/navigation'
 // import { slideDownInView } from '@/lib/constants'
-// import useDashboard from '@/hooks/useDashboard'
 // import useWorkspaces from '@/hooks/useWorkspaces'
 // import { initializeSingleTransaction } from '@/app/_actions/transaction-actions'
 // import SelectField from '@/components/ui/SelectField'
@@ -20,6 +19,8 @@
 // import Card from '@/components/base/Card'
 // import CardHeader from '@/components/base/CardHeader'
 // import StatusMessage from '@/components/base/StatusMessage'
+
+const { useWorkspaceInit } = require("@/hooks/useQueryHooks");
 
 // const SinglePaymentDetails = ({ navigateForward }) => {
 //   const {
@@ -31,7 +32,8 @@
 //     updatePaymentFields,
 //     setTransactionDetails,
 //   } = usePaymentsStore()
-//   const { workspaceUserRole } = useDashboard()
+// const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+//   const workspaceUserRole = workspaceInit?.data?.workspacePermissions;
 //   const { workspaceID } = useWorkspaces()
 
 //   const phoneNoError =

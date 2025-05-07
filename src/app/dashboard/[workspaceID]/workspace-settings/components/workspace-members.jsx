@@ -2,7 +2,6 @@
 import { useDisclosure } from "@heroui/react";
 
 import CardHeader from "@/components/base/card-header";
-import useDashboard from "@/hooks/useDashboard";
 import UsersTable from "@/components/tables/users-table";
 import AddUserToWorkspace from "@/components/add-users-workspace-modal";
 

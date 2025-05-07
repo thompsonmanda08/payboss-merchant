@@ -5,10 +5,9 @@ import usePaymentsStore from "@/context/payment-store";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, notify } from "@/lib/utils";
-import useDashboard from "@/hooks/useDashboard";
 import { initializeBulkTransaction } from "@/app/_actions/transaction-actions";
-import StatusMessage from "@/components/base/status-message";
 import { Alert } from "@heroui/react";
+import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 
 const PaymentDetails = ({
   navigateForward,
@@ -28,7 +27,8 @@ const PaymentDetails = ({
     selectedActionType,
   } = usePaymentsStore();
 
-  const { workspaceUserRole: role } = useDashboard();
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+  const role = workspaceInit?.data?.workspacePermissions;
 
   async function handleProceed() {
     setLoading(true);

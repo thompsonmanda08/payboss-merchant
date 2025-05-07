@@ -9,14 +9,12 @@ import { formatCurrency, notify } from "@/lib/utils";
 import { reviewBatch } from "@/app/_actions/transaction-actions";
 import usePaymentsStore from "@/context/payment-store";
 import { Input } from "@/components/ui/input-field";
-import useWorkspaces from "@/hooks/useWorkspaces";
 import { PAYMENT_SERVICE_TYPES, QUERY_KEYS } from "@/lib/constants";
 import PromptModal from "@/components/base/prompt-modal";
-import { useBatchDetails } from "@/hooks/useQueryHooks";
-import useDashboard from "@/hooks/useDashboard";
+import { useBatchDetails, useWorkspaceInit } from "@/hooks/useQueryHooks";
 import Loader from "@/components/ui/loader";
 
-const ApproverAction = ({ navigateForward, batchID }) => {
+const ApproverAction = ({ workspaceID, batchID }) => {
   const queryClient = useQueryClient();
   const {
     selectedBatch,
@@ -29,15 +27,19 @@ const ApproverAction = ({ navigateForward, batchID }) => {
     setError,
   } = usePaymentsStore();
 
-  const [queryID, setQueryID] = useState(
-    batchID || selectedBatch?.ID || batchState?.ID || transactionDetails?.ID,
+  const [queryID] = useState(
+    batchID || selectedBatch?.ID || batchState?.ID || transactionDetails?.ID
   );
 
   const { data: batchResponse } = useBatchDetails(queryID);
   const batchDetails = batchResponse?.data;
 
-  const { workspaceWalletBalance, workspaceID } = useWorkspaces();
-  const { workspaceUserRole: role } = useDashboard();
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+
+  const role = workspaceInit?.data?.workspacePermissions;
+  const activeWorkspace = workspaceInit?.data?.activeWorkspace || {};
+  const workspaceWalletBalance = activeWorkspace?.balance;
+
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [isLoading, setIsLoading] = React.useState(false);
   const [isApproval, setIsApproval] = React.useState(true);
@@ -176,7 +178,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
           {isApprovedOrRejected
             ? `Batch ${selectedBatch?.status || batchDetails?.status}`
             : isProcessed
-              ? `Batch Proccessed`
+              ? `Batch Processed`
               : "Batch payout requires approval"}
         </h3>
 
@@ -265,7 +267,7 @@ const ApproverAction = ({ navigateForward, batchID }) => {
             {`${
               selectedBatch?.batch_name || batchDetails?.batch_name
             } - (${formatCurrency(
-              selectedBatch?.total_amount || batchDetails?.total_amount,
+              selectedBatch?.total_amount || batchDetails?.total_amount
             )})`}
           </code>{" "}
           {isApproval ? "to run against your PayBoss Wallet balance." : ""}

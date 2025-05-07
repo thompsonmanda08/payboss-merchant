@@ -96,9 +96,11 @@ function BulkPaymentAction({ workspaceID, protocol, activePrefunds }) {
       key={"step-4"}
       navigateBackwards={goBack}
       navigateForward={goForward}
+      workspaceID={workspaceID}
     />,
     <ApproverAction
       key={"step-5"}
+      workspaceID={workspaceID}
       // navigateForward={goForward}
       // navigateBackwards={goBack}
     />,

@@ -12,6 +12,8 @@
 // import InitiatorsLog from '@/components/disbursements/InitiatorsLog'
 // import { MissingConfigurationError } from '@/components/base/ErrorCard'
 
+// const { useWorkspaceInit } = require("@/hooks/useQueryHooks");
+
 // export const STEPS = [
 //   {
 //     title: 'Create a Single payment',
@@ -32,7 +34,8 @@
 //   const urlParams = useSearchParams()
 //   const protocol = urlParams.get('protocol')
 
-//   const { workspaceUserRole: role } = useDashboard()
+// const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+//   const role = workspaceInit?.data?.workspacePermissions;
 //   const { dashboardRoute, router } = useNavigation()
 
 //   // ** INITIALIZEs PAYMENT STATE **//
