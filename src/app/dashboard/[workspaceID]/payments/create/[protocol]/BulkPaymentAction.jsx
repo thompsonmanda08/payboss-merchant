@@ -55,46 +55,54 @@ function BulkPaymentAction({ workspaceID, protocol, activePrefunds }) {
     openInvalidRecordsModal,
     setLoading,
     paymentAction,
+    selectedProtocol,
+    setPaymentAction,
     setError,
   } = usePaymentsStore();
 
   const router = useRouter();
 
   //************ STEPS TO CREATE A BULK PAYMENT ACTION *****************/
-  const { activeTab, currentTabIndex, navigateForward, navigateBackwards } =
-    useCustomTabsHook([
-      <SelectPrefund
-        key={"step-1"}
-        navigateBackwards={goBack}
-        navigateForward={goForward}
-        protocol={protocol}
-        walletActivePrefunds={activePrefunds}
-        workspaceID={workspaceID}
-      />,
-      <UploadCSVFile
-        key={"step-2"}
-        navigateBackwards={goBack}
-        navigateForward={goForward}
-        protocol={protocol}
-      />,
-      <PaymentDetails
-        key={"step-3"}
-        navigateBackwards={goBack}
-        navigateForward={goForward}
-        protocol={protocol}
-        workspaceID={workspaceID}
-      />,
-      <ValidationDetails
-        key={"step-4"}
-        navigateBackwards={goBack}
-        navigateForward={goForward}
-      />,
-      <ApproverAction
-        key={"step-5"}
-        // navigateForward={goForward}
-        // navigateBackwards={goBack}
-      />,
-    ]);
+  const {
+    activeTab,
+    currentTabIndex,
+    navigateForward,
+    navigateBackwards,
+    navigateTo,
+  } = useCustomTabsHook([
+    <SelectPrefund
+      key={"step-1"}
+      navigateBackwards={goBack}
+      navigateForward={goForward}
+      protocol={protocol}
+      walletActivePrefunds={activePrefunds}
+      workspaceID={workspaceID}
+    />,
+    <UploadCSVFile
+      key={"step-2"}
+      navigateBackwards={goBack}
+      navigateForward={goForward}
+      protocol={protocol}
+      handleCancel={handleCancel}
+    />,
+    <PaymentDetails
+      key={"step-3"}
+      navigateBackwards={goBack}
+      navigateForward={goForward}
+      protocol={protocol}
+      workspaceID={workspaceID}
+    />,
+    <ValidationDetails
+      key={"step-4"}
+      navigateBackwards={goBack}
+      navigateForward={goForward}
+    />,
+    <ApproverAction
+      key={"step-5"}
+      // navigateForward={goForward}
+      // navigateBackwards={goBack}
+    />,
+  ]);
 
   function goForward() {
     navigateForward();
@@ -102,6 +110,14 @@ function BulkPaymentAction({ workspaceID, protocol, activePrefunds }) {
 
   function goBack() {
     navigateBackwards();
+  }
+
+  function handleCancel() {
+    setPaymentAction({
+      type: protocol,
+      url: "",
+    });
+    navigateTo(0);
   }
 
   useEffect(() => {
@@ -112,13 +128,15 @@ function BulkPaymentAction({ workspaceID, protocol, activePrefunds }) {
   //**************** USER ROLE CHECK *************************************** //
   // if (!role?.can_initiate) return router.back()
 
+  console.log("PAYMENT FORM DATA", paymentAction);
+
   return !workspaceID && !protocol ? (
     <LoadingPage />
   ) : (
     <>
       <Card className={""}>
         <CardHeader
-          handleClose={() => router.back()}
+          handleClose={handleCancel}
           infoText={STEPS[currentTabIndex].infoText}
           title={
             <>

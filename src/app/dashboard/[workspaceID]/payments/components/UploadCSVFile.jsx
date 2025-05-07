@@ -10,7 +10,7 @@ import { uploadPaymentBatchFile } from "@/app/_actions/pocketbase-actions";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import { SingleFileDropzone } from "@/components/base/file-dropzone";
 
-const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
+const UploadCSVFile = ({ navigateForward, handleCancel, protocol }) => {
   const { paymentAction, updatePaymentFields } = usePaymentsStore();
   const [isLoading, setIsLoading] = React.useState(false);
   const { merchantID } = useAccountProfile();
@@ -41,6 +41,7 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
         description: "File uploaded successfully!",
       });
       updatePaymentFields({
+        file,
         url: response?.data?.file_url,
         recordID: response?.data?.file_record_id,
       });
@@ -65,6 +66,8 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
         <div className="flex flex-col">
           <SingleFileDropzone
             isLoading={isLoading}
+            isUploaded={paymentAction?.file != undefined}
+            file={paymentAction?.file}
             otherAcceptedFiles={{
               "application/vnd.ms-excel": [],
               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
@@ -120,18 +123,15 @@ const UploadCSVFile = ({ navigateForward, navigateBackwards, protocol }) => {
 
         <div className="mt-auto flex w-full items-end justify-end gap-4">
           <Button
-            className={"bg-primary/10 font-medium text-primary"}
-            color={"primary"}
+            color={"danger"}
             isDisabled={isLoading}
-            variant="light"
-            onClick={navigateBackwards}
+            onClick={handleCancel}
           >
-            Back
+            Cancel
           </Button>
           <Button
             isDisabled={isLoading}
             isLoading={isLoading}
-            size="lg"
             onClick={handleProceed}
           >
             Next

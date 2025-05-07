@@ -2,7 +2,7 @@
 
 import { cache } from "react";
 
-import authenticatedService from "@/lib/api-config";
+import authenticatedApiClient from "@/lib/api-config";
 
 /**
  * Retrieves the analytics data for a given workspace ID.
@@ -29,7 +29,7 @@ export async function fetchDashboardAnalytics(workspaceID) {
   }
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url: `analytics/merchant/dashboard/workspace/${workspaceID}`,
     });
 

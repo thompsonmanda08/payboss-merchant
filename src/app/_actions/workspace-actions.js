@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
-import authenticatedService from "@/lib/api-config";
+import authenticatedApiClient from "@/lib/api-config";
 import { updateWorkspaceSession } from "@/lib/session";
 
 export const initializeWorkspace = cache(async (workspaceID) => {
@@ -19,7 +19,7 @@ export const initializeWorkspace = cache(async (workspaceID) => {
   const url = `merchant/workspace/${workspaceID}/init`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     const workspaceSession = {
       activeWorkspaceID: workspaceID,
@@ -28,8 +28,6 @@ export const initializeWorkspace = cache(async (workspaceID) => {
     };
 
     const updatedSession = await updateWorkspaceSession(workspaceSession);
-
-    // revalidatePath("/dashboard/[workspaceID]", "layout");
 
     return {
       success: true,
@@ -98,7 +96,7 @@ export async function submitPOP(popDetails, workspaceID) {
   const url = `merchant/workspace/${workspaceID}/wallet/prefund`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: popDetails,
@@ -169,7 +167,7 @@ export async function getWalletPrefunds(workspaceID) {
   const url = `merchant/workspace/${workspaceID}/wallet/prefund/list`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -237,7 +235,7 @@ export async function approveWalletPrefund(
   const url = `merchant/workspace/${workspaceID}/wallet/prefund/${prefundID}/review`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "PATCH",
       data: prefundData,
@@ -302,7 +300,7 @@ export async function getWorkspaceMembers(workspaceID) {
   const url = `merchant/workspace/${workspaceID}/users`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -358,7 +356,7 @@ export async function deleteUserFromWorkspace(recordID, workspaceID) {
   const url = `/merchant/workspace/${workspaceID}/user/${recordID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "DELETE",
     });
@@ -426,7 +424,7 @@ export async function changeUserRoleInWorkspace(
   const url = `merchant/workspace/${workspaceID}/user/role/${recordID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "PATCH",
       data: mapping,
@@ -483,7 +481,7 @@ export async function setupWorkspaceAPIKey(workspaceID) {
   const url = `transaction/collection/create/api-key/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -544,7 +542,7 @@ export async function refreshWorkspaceAPIKey(workspaceID, keyID) {
   const url = `/transaction/collection/generate/${workspaceID}/api-key/${keyID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -603,7 +601,7 @@ export async function getWorkspaceAPIKey(workspaceID) {
   const url = `transaction/collection/api-key/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -662,7 +660,7 @@ export async function generateWorkspaceTillNumber(workspaceID) {
   const url = `transaction/collection/create/till-number/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -722,7 +720,7 @@ export async function getWorkspaceTillNumber(workspaceID) {
   const url = `transaction/collection/till-number/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -781,7 +779,7 @@ export async function activateWorkspaceTerminals(workspaceID) {
   const url = `merchant/workspace/${workspaceID}/terminal/activation`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -838,7 +836,7 @@ export async function deactivateWorkspaceTerminals(workspaceID) {
   }
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url: `merchant/workspace/${workspaceID}/terminal/deactivation`,
     });
 
@@ -898,7 +896,7 @@ export async function getAllWorkspaceTerminals(workspaceID) {
   const url = `merchant/workspace/${workspaceID}/terminals`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -958,7 +956,7 @@ export async function registerTerminals(workspaceID, terminalUrl) {
   const url = `merchant/workspace/${workspaceID}/terminal`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       method: "POST",
       url,
       data: { terminalUrl },
@@ -1022,7 +1020,7 @@ export async function updateWorkspaceCallback(workspaceID, callbackData) {
   const url = `merchant/workspace/callback/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       method: "PATCH",
       url,
       data: callbackData,
@@ -1072,7 +1070,7 @@ export async function getWorkspaceCallback(workspaceID) {
   const url = `merchant/workspace/${workspaceID}/callback`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,

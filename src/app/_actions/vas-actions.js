@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import authenticatedService from "@/lib/api-config";
+import authenticatedApiClient from "@/lib/api-config";
 import { apiClient } from "@/lib/utils";
 
 export async function generateCheckoutURL(workspaceID, checkoutData) {
@@ -19,7 +19,7 @@ export async function generateCheckoutURL(workspaceID, checkoutData) {
   const url = `transaction/collection/create/checkout/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       method: "POST",
       url,
       data: checkoutData,
@@ -71,7 +71,7 @@ export async function updateCheckoutURL(workspaceID, checkoutID, checkoutData) {
   const url = `transaction/collection/update/${workspaceID}/checkout/${checkoutID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       method: "PATCH",
       url,
       data: checkoutData,
@@ -121,7 +121,7 @@ export async function getCheckoutURL(workspaceID) {
   const url = `/transaction/collection/checkout/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -168,7 +168,7 @@ export async function createInvoice(workspaceID, formData) {
 `;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: formData,

@@ -8,6 +8,7 @@ import usePaymentsStore from "@/context/payment-store";
 import { notify } from "@/lib/utils";
 import StatusMessage from "@/components/base/status-message";
 import PrefundsTable from "@/components/tables/prefunds-table";
+import { Alert } from "@heroui/react";
 
 const SelectPrefund = ({
   navigateForward,
@@ -26,7 +27,7 @@ const SelectPrefund = ({
 
     if (paymentAction?.prefundID !== "" || selectedKeys.size !== 0) {
       let prefund = walletActivePrefunds.find(
-        (prefund) => prefund.ID === paymentAction?.prefundID,
+        (prefund) => prefund.ID === paymentAction?.prefundID
       );
 
       if (prefund) {
@@ -67,16 +68,20 @@ const SelectPrefund = ({
           setSelectedKeys={setSelectedKeys}
         />
         {error?.status && (
-          <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
-            <StatusMessage error={error?.status} message={error?.message} />
-          </div>
+          <Alert
+            color="danger"
+            classNames={{
+              base: "items-center",
+            }}
+          >
+            {error.message}
+          </Alert>
         )}
 
         <div className="mt-auto flex w-full items-end justify-end gap-4">
           <Button
             isDisabled={isLoading || selectedKeys.size === 0}
             isLoading={isLoading}
-            size="lg"
             onClick={handleProceed}
           >
             Next

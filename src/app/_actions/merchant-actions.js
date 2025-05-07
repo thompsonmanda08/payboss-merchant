@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
-import authenticatedService from "@/lib/api-config";
+import authenticatedApiClient from "@/lib/api-config";
 import { getUserSession } from "@/lib/session";
 
 import { setupUserSessions } from "./config-actions";
@@ -19,7 +19,7 @@ export const setupAccountConfig = cache(async () => {
   const url = `merchant/user/setup`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     // CREATE A USER SESSION COOKIE TO STORE THE LOGGED IN USER DATA
     await setupUserSessions(res?.data);
@@ -66,7 +66,7 @@ export async function getUserAccountRoles() {
   const url = `configuration/all/system/role/${"payboss"}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -109,7 +109,7 @@ export async function getWorkspaceRoles() {
   const url = `/configuration/all/workspace/roles`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -155,7 +155,7 @@ export async function changeWorkspaceVisibility(workspaceID, isVisible) {
   const url = `merchant/workspace/visibility/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "PATCH",
       data: {
@@ -210,7 +210,7 @@ export async function createNewWorkspace(newWorkspace) {
   const url = `merchant/workspace/new`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       method: "POST",
       url,
       data: { ...newWorkspace, merchantID },
@@ -260,7 +260,7 @@ export async function updateWorkspace({ workspace, description, ID }) {
   const url = `merchant/workspace/${ID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       method: "PATCH",
       url,
       data: {
@@ -329,7 +329,7 @@ export async function deleteWorkspace(workspaceID) {
   const url = `merchant/workspace/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "DELETE",
     });
@@ -390,7 +390,7 @@ export const getAllWorkspaces = cache(async () => {
   const url = `merchant/${merchantID}/workspaces`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -443,7 +443,7 @@ export const getAllKYCData = cache(async () => {
   const url = `merchant/${merchantID}/details`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -489,7 +489,7 @@ export const getWorkspaceDetails = cache(async (workspaceID) => {
   const url = `merchant/workspace/${workspaceID}/details`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,

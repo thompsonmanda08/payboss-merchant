@@ -19,7 +19,7 @@ import { Button } from "../ui/button";
 
 const variants = {
   base: cn(
-    "relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out",
+    "relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out"
   ),
   image:
     "border-0 p-0 min-h-0 min-w-0 relative shadow-md bg-foreground-200 dark:bg-foreground-900 rounded-md",
@@ -55,16 +55,19 @@ export const SingleFileDropzone = React.forwardRef(
       className,
       disabled,
       onChange,
+      file,
       otherAcceptedFiles,
       isMultipleFiles = false,
       isLandscape,
       isLoading = false,
       showPreview = false,
+      isUploaded = false,
       preview = "",
     },
-    ref,
+    ref
   ) => {
     const [imagePreview, setImagePreview] = React.useState(preview);
+
     const imageUrl = React.useMemo(() => {
       if (typeof value === "string") {
         // in case a url is passed in, use it to display the image
@@ -130,7 +133,7 @@ export const SingleFileDropzone = React.forwardRef(
           imageUrl && variants.image,
           (isDragReject ?? fileRejections[0]) && variants.reject,
           isDragAccept && variants.accept,
-          className,
+          className
         ).trim(),
       [
         isFocused,
@@ -140,7 +143,7 @@ export const SingleFileDropzone = React.forwardRef(
         isDragReject,
         disabled,
         className,
-      ],
+      ]
     );
 
     // error validation messages
@@ -163,10 +166,10 @@ export const SingleFileDropzone = React.forwardRef(
     }, [fileRejections, dropzoneOptions]);
 
     React.useEffect(() => {
-      if (acceptedFiles[0]) {
-        setImagePreview(URL.createObjectURL(acceptedFiles[0]));
+      if (acceptedFiles[0] || file) {
+        setImagePreview(URL.createObjectURL(acceptedFiles[0] || file));
       }
-    }, [value, acceptedFiles]);
+    }, [value, acceptedFiles, file]);
 
     return (
       <div>
@@ -190,15 +193,15 @@ export const SingleFileDropzone = React.forwardRef(
               aria-label="Loading..."
               className="w-full max-w-md"
             />
-          ) : showPreview && imagePreview && acceptedFiles[0] ? (
+          ) : showPreview && imagePreview && (acceptedFiles[0] || file) ? (
             <div className="w-80 h-[120px] rounded-md">
               <img
                 className="h-full w-full rounded-md object-contain"
                 src={imagePreview || imageUrl}
-                alt={acceptedFiles[0]?.name}
+                alt={acceptedFiles[0]?.name || file?.name}
               />
             </div>
-          ) : acceptedFiles[0] ? (
+          ) : (isUploaded && file) || acceptedFiles[0] ? (
             // ********************* FILE UPLOAD PREVIEW ******************* //
             <div
               className={cn("relative flex flex-col items-center gap-4 py-2", {
@@ -215,7 +218,7 @@ export const SingleFileDropzone = React.forwardRef(
                   "relative z-10 flex flex-col items-center gap-4",
                   {
                     "bg-red-10 w-full gap-0": isLandscape,
-                  },
+                  }
                 )}
               >
                 {!isLandscape && (
@@ -229,7 +232,7 @@ export const SingleFileDropzone = React.forwardRef(
                   {isLandscape && (
                     <CheckCircleIcon className="h-6 w-6 font-bold text-green-500" />
                   )}{" "}
-                  {acceptedFiles[0]?.name}
+                  {acceptedFiles[0]?.name || file?.name}
                 </span>
                 {/* // ONLY SHOWS ON THE UPRIGHT COMPONENT */}
                 {!isLandscape && (
@@ -249,7 +252,7 @@ export const SingleFileDropzone = React.forwardRef(
                 "flex flex-col items-center justify-center text-xs text-gray-400",
                 {
                   "w-full flex-row items-center justify-between ": isLandscape,
-                },
+                }
               )}
             >
               <div
@@ -296,7 +299,7 @@ export const SingleFileDropzone = React.forwardRef(
         <div className="mt-1 text-sm text-red-500">{errorMessage}</div>
       </div>
     );
-  },
+  }
 );
 SingleFileDropzone.displayName = "SingleFileDropzone";
 
@@ -318,7 +321,7 @@ function formatFileSize(bytes) {
 
 export default function UploadField(
   { label, isLoading, handleFile, acceptedFiles, ...props },
-  ref,
+  ref
 ) {
   return (
     <motion.div

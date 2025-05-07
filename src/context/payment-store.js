@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   paymentAction: {
     type: "",
     url: "",
+    batch_name: "",
   },
 
   error: {
@@ -54,6 +55,7 @@ const usePaymentsStore = create((set) => ({
   setTransactionDetails: (details) => set({ transactionDetails: details }),
   setOpenTransactionDetailsModal: (open) =>
     set({ openTransactionDetailsModal: open }),
+
   updateDateFilter: (dateFilter) => set({ dateFilter }),
 
   // UPDATE FIELDS ON THE SELECTED INVALID RECORD

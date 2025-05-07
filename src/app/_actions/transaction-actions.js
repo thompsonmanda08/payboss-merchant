@@ -1,6 +1,8 @@
 "use server";
 
-import authenticatedService from "@/lib/api-config";
+import authenticatedApiClient, {
+  authenticatedServiceClient,
+} from "@/lib/api-config";
 
 // ****************** ******************************** ************************** //
 // ****************** BULK TRANSACTION API ENDPOINTS ************************** //
@@ -34,7 +36,7 @@ export async function getAllPaymentTransactions(workspaceID) {
   const url = `transaction/merchant/payment/transactions/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -98,7 +100,7 @@ export async function getAllBulkTransactions(workspaceID) {
   const url = `transaction/payments/bulk/batches/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -159,7 +161,7 @@ export async function getBatchDetails(batchID) {
   const url = `transaction/payments/bulk/batch/details/${batchID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -222,7 +224,7 @@ export async function reviewBatch(batchID, reviewDetails) {
   const url = `transaction/payments/bulk/review-submission/${batchID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedServiceClient({
       url,
       method: "POST",
       data: reviewDetails,
@@ -293,7 +295,7 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
   const url = `transaction/${protocol}/payments/bulk/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedServiceClient({
       url,
       method: "POST",
       data: transactionData,
@@ -360,7 +362,7 @@ export async function submitBatchForApproval(batchID) {
   const url = `transaction/payments/bulk/review-submission/${batchID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedServiceClient({ url });
 
     return {
       success: true,
@@ -422,7 +424,7 @@ export async function getWalletPrefundHistory(workspaceID) {
   const url = `merchant/workspace/${workspaceID}/wallet/prefund/history`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -488,7 +490,7 @@ export async function getAllSingleTransactions(workspaceID) {
   const url = `transaction/payments/single/transactions/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -553,7 +555,7 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
   const url = `analytics/merchant/workspace/${workspaceID}/bulk/payments`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: dateFilter,
@@ -619,7 +621,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
   const url = `analytics/merchant/workspace/${workspaceID}/${service}/report`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: dateFilter,
@@ -680,7 +682,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
 export async function getCollectionLatestTransactions(
   workspaceID,
   service,
-  dateFilter,
+  dateFilter
 ) {
   if (!workspaceID) {
     return {
@@ -695,7 +697,7 @@ export async function getCollectionLatestTransactions(
   const url = `transaction/merchant/collection/${service}/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: dateFilter,
@@ -759,7 +761,7 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
   const url = `/analytics/merchant/workspace/${workspaceID}/wallet-report`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: dateFilter,
@@ -829,7 +831,7 @@ export async function getBillsLatestTransactions(workspaceID, dateFilter) {
   const url = `transaction/merchant/bills/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: dateFilter,
@@ -879,7 +881,7 @@ export async function getRecentInvoices(workspaceID, dateFilter) {
   const url = `transaction/collection/invoices/${workspaceID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: dateFilter,

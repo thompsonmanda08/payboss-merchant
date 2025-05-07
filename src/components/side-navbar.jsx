@@ -17,7 +17,6 @@ import {
   ArrowRightStartOnRectangleIcon,
   BriefcaseIcon,
   ChevronRightIcon,
-  CreditCardIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 
@@ -26,7 +25,6 @@ import DropdownButton from "@/components/ui/dropdown-button";
 import Spinner from "@/components/ui/custom-spinner";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { cn } from "@/lib/utils";
-import useNavigation from "@/hooks/useNavigation";
 import { WORKSPACE_TYPES } from "@/lib/constants";
 
 import SideNavItems from "./side-nav-items";
@@ -57,11 +55,9 @@ function SideNavBar({ workspaceSession }) {
   // const [isLoading, setIsLoading] = useState(true);
 
   const workspaces =
-    workspaceSession?.workspaces || workspaceInit?.data?.workspaces;
-  const activeWorkspace =
-    workspaceSession?.activeWorkspace || workspaceInit?.data?.activeWorkspace;
-  const workspaceType =
-    workspaceSession?.workspaceType || workspaceInit?.data?.workspaceType;
+    workspaceInit?.data?.workspaces || workspaceSession?.workspaces || [];
+  const activeWorkspace = workspaceInit?.data?.activeWorkspace || {};
+  const workspaceType = workspaceInit?.data?.workspaceType;
 
   // *************** COLLECTIONS AND INCOME *************** //
   const COLLECTION_SERVICES = [

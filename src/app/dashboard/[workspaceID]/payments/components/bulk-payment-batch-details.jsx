@@ -8,6 +8,7 @@ import { formatCurrency, notify } from "@/lib/utils";
 import useDashboard from "@/hooks/useDashboard";
 import { initializeBulkTransaction } from "@/app/_actions/transaction-actions";
 import StatusMessage from "@/components/base/status-message";
+import { Alert } from "@heroui/react";
 
 const PaymentDetails = ({
   navigateForward,
@@ -65,7 +66,7 @@ const PaymentDetails = ({
     // Create payment batch here if user is create access
     const response = await initializeBulkTransaction(
       workspaceID,
-      paymentAction,
+      paymentAction
     );
 
     if (response?.success) {
@@ -95,8 +96,6 @@ const PaymentDetails = ({
   }
 
   function handleBackwardsNavigation() {
-    // Set the file to null so that the user can upload again
-    updatePaymentFields({ file: null });
     setError({ status: false, message: "" });
     navigateBackwards();
   }
@@ -144,7 +143,7 @@ const PaymentDetails = ({
 
           <li>
             During validation and pending approval, the selected prefund wallet
-            will be disbaled and locked for the duration of the batch process.
+            will be disabled and locked for the duration of the batch process.
           </li>
           <li>
             <strong>
@@ -157,18 +156,30 @@ const PaymentDetails = ({
             failed transactions as the available balance.
           </li>
         </ul>
-        <Input
-          className="mb-auto"
-          classNames={{ wrapper: "w-full col-span-1 max-w-lg" }}
-          label={"Batch Name"}
-          placeholder={"Enter a batch name"}
-          required={true}
-          value={paymentAction?.batch_name}
-          onChange={(e) => {
-            updatePaymentFields({ batch_name: e.target.value, protocol });
-          }}
-          onError={error?.status}
-        />
+        <div className="flex flex-1 flex-col gap-4">
+          <Input
+            className="mb-auto"
+            classNames={{ wrapper: "w-full col-span-1 max-w-lg" }}
+            label={"Batch Name"}
+            placeholder={"Enter a batch name"}
+            required={true}
+            value={paymentAction?.batch_name}
+            onChange={(e) => {
+              updatePaymentFields({ batch_name: e.target.value, protocol });
+            }}
+            onError={error?.status}
+          />
+          {error?.status && (
+            <Alert
+              color="danger"
+              classNames={{
+                base: "items-center",
+              }}
+            >
+              {error.message}
+            </Alert>
+          )}
+        </div>
       </div>
 
       <div className="flex flex-1 items-end justify-end gap-4">
@@ -190,12 +201,6 @@ const PaymentDetails = ({
           Validate Batch
         </Button>
       </div>
-
-      {error?.status && (
-        <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
-          <StatusMessage error={error.status} message={error.message} />
-        </div>
-      )}
     </div>
   );
 };

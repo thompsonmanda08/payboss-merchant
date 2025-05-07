@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
-import Link from "next/link";
+import React from "react";
 import {
   Dropdown,
   DropdownTrigger,
@@ -23,8 +22,6 @@ import { useTheme } from "next-themes";
 import { capitalize, cn, formatCurrency } from "@/lib/utils";
 import useAuthStore from "@/context/auth-store";
 import useNavigation from "@/hooks/useNavigation";
-import useWorkspaces from "@/hooks/useWorkspaces";
-import useDashboard from "@/hooks/useDashboard";
 import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 
 import BreadCrumbLinks from "./base/breadcrumb";
@@ -43,7 +40,8 @@ export default function TopNavBar({ user, workspaceSession }) {
   const { data: workspaceInit, isLoading } = useWorkspaceInit(workspaceID);
 
   const activeWorkspace =
-    workspaceSession?.activeWorkspace || workspaceInit?.data?.activeWorkspace;
+    workspaceInit?.data?.activeWorkspace || workspaceSession?.activeWorkspace;
+
   const workspaceWalletBalance = activeWorkspace?.balance;
 
   if (isLoading || !workspaceID) return <NavbarLoader isProfile />;

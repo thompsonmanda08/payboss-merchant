@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-import authenticatedService from "@/lib/api-config";
+import authenticatedApiClient from "@/lib/api-config";
 import { USER_SESSION } from "@/lib/constants";
 import { getUserSession } from "@/lib/session";
 
@@ -22,7 +22,7 @@ export async function createNewUser(newUser) {
   const url = `merchant/${merchantID}/user/other`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       method: "POST",
       url,
       data: newUser,
@@ -74,7 +74,7 @@ export const getAllUsers = cache(async function fetchAllUsers() {
   const url = `merchant/${merchantID}/users`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,
@@ -116,7 +116,7 @@ export const getAllUsers = cache(async function fetchAllUsers() {
  * */
 export async function assignUsersToWorkspace(users, workspaceID) {
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url: `merchant/workspace/${workspaceID}/user/mapping`,
       method: "POST",
       data: {
@@ -162,7 +162,7 @@ export async function assignUsersToWorkspace(users, workspaceID) {
  * */
 export async function getUser(userID) {
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url: `merchant/user/${userID}`,
     });
 
@@ -210,7 +210,7 @@ export async function updateProfileData(userID, userData) {
   const url = `merchant/${merchantID}/user/${userID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "PATCH",
       data: userData,
@@ -263,7 +263,7 @@ export async function updateSystemUserData(userID, userData) {
   const url = `merchant/${merchantID}/user/${userID}`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "PATCH",
       data: userData,
@@ -314,7 +314,7 @@ export async function deleteSystemUserData(userID) {
   // const merchantID = session?.user?.merchantID;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       method: "DELETE",
       url: `merchant/user/${userID}`,
     });
@@ -364,7 +364,7 @@ export async function unlockSystemUser(userID) {
   const url = `merchant/${merchantID}/user/${userID}/unlock`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
     });
 
@@ -412,7 +412,7 @@ export async function changeUserPassword(password) {
   (await cookies()).delete(USER_SESSION);
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url: `merchant/user/change/password `,
       method: "PATCH",
       data: { password },
@@ -460,7 +460,7 @@ export async function changeUserPassword(password) {
 
 export async function adminResetUserPassword(userID, newPasswordData) {
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url: `merchant/user/${userID}/reset/password`,
       method: "PATCH",
       data: newPasswordData,

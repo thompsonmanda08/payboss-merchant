@@ -1,5 +1,5 @@
 "use server";
-import authenticatedService from "@/lib/api-config";
+import authenticatedApiClient from "@/lib/api-config";
 import {
   createAuthSession,
   getUserSession,
@@ -328,7 +328,7 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
   const url = `merchant/${merchantID}/document/submission`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: payloadUrls,
@@ -377,7 +377,7 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
   const url = `merchant/${merchantID}/document/submission`;
 
   try {
-    const res = await authenticatedService({
+    const res = await authenticatedApiClient({
       url,
       method: "PATCH",
       data: payloadUrls,
@@ -429,7 +429,7 @@ export async function getRefreshToken() {
   const url = `merchant/user/refresh/token`;
 
   try {
-    const res = await authenticatedService({ url });
+    const res = await authenticatedApiClient({ url });
 
     const response = res.data;
 

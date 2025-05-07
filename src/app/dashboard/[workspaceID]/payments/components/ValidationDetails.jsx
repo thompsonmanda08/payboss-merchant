@@ -14,6 +14,7 @@ import Loader from "@/components/ui/loader";
 import useDashboard from "@/hooks/useDashboard";
 import StatusCard from "@/components/status-card";
 import StatusMessage from "@/components/base/status-message";
+import { Alert } from "@heroui/react";
 
 const ValidationDetails = ({ navigateForward, batchID }) => {
   const queryClient = useQueryClient();
@@ -33,7 +34,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
   const { workspaceID, workspaceWalletBalance } = useWorkspaces();
 
   const [queryID, setQueryID] = useState(
-    batchID || selectedBatch?.ID || batchState?.ID,
+    batchID || selectedBatch?.ID || batchState?.ID
   );
 
   const {
@@ -169,11 +170,7 @@ const ValidationDetails = ({ navigateForward, batchID }) => {
             batchDetails?.valid ? () => openRecordsModal("valid") : undefined
           }
         />
-        {error?.status && (
-          <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
-            <StatusMessage error={error?.status} message={error?.message} />
-          </div>
-        )}
+        {error?.status && <Alert color="danger">{error.message}</Alert>}
 
         {(batchState?.status?.toLowerCase() == "submitted" ||
           selectedBatch?.status?.toLowerCase() == "submitted") &&
