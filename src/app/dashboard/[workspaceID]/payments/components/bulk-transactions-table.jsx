@@ -8,7 +8,7 @@ import {
   TableCell,
   Pagination,
 } from "@heroui/react";
-import { EyeIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { ComputerDesktopIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { format } from "date-fns";
 
 import { TRANSACTION_STATUS_COLOR_MAP } from "@/lib/constants";
@@ -177,8 +177,9 @@ export default function BulkTransactionsTable({ workspaceID, rowssss }) {
               setSelectedBatch(row);
               setOpenBatchDetailsModal(true);
             }}
+            startContent={<ComputerDesktopIcon className="h-6 w-5" />}
           >
-            <EyeIcon className="h-6 w-5" />
+            View
           </Button>
         );
 
