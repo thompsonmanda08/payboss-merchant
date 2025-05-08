@@ -3,10 +3,12 @@ import { create } from "zustand";
 const INITIAL_STATE = {
   selectedProtocol: "", // DIRECT OR VOUCHER
   selectedActionType: {},
+  selectedBatch: null,
   paymentAction: {
     type: "",
     url: "",
     batch_name: "",
+    file: null,
   },
 
   error: {
@@ -14,8 +16,6 @@ const INITIAL_STATE = {
     message: "",
   },
 
-  bulkPayments: [],
-  batchDetails: {},
   transactionDetails: {},
   createPaymentLoading: false,
   openPaymentsModal: false,
@@ -26,8 +26,6 @@ const INITIAL_STATE = {
   openBatchDetailsModal: false,
   openTransactionDetailsModal: false,
   loading: false,
-  selectedRecord: null,
-  selectedBatch: null,
   dateFilter: "",
 };
 
@@ -38,10 +36,8 @@ const usePaymentsStore = create((set) => ({
   setOpenPaymentsModal: (open) => set({ openPaymentsModal: open }),
   setCreatePaymentLoading: (open) => set({ openPaymentsModal: open }),
 
-  setBulkPayments: (bulkPayments) => set({ bulkPayments }),
   setPaymentAction: (action) => set({ paymentAction: action }),
   setError: (error) => set({ error }),
-  setBatchDetails: (batchDetails) => set({ batchDetails }),
   setOpenAllRecordsModal: (open) => set({ openAllRecordsModal: open }),
   setOpenValidRecordsModal: (open) => set({ openValidRecordsModal: open }),
   setOpenInvalidRecordsModal: (open) => set({ openInvalidRecordsModal: open }),
@@ -57,18 +53,6 @@ const usePaymentsStore = create((set) => ({
     set({ openTransactionDetailsModal: open }),
 
   updateDateFilter: (dateFilter) => set({ dateFilter }),
-
-  // UPDATE FIELDS ON THE SELECTED INVALID RECORD
-  updateSelectedRecord: (fields) => {
-    set((state) => {
-      return {
-        selectedRecord: {
-          ...state.selectedRecord,
-          ...fields,
-        },
-      };
-    });
-  },
 
   // OPEN VALIDATION AND RECORD MODALS
   openRecordsModal: (type) => {

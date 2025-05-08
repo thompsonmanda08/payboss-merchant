@@ -22,7 +22,7 @@ const PaymentDetails = ({
     setError,
     error,
     paymentAction,
-    setBatchDetails,
+    setSelectedBatch,
     resetPaymentData,
     selectedActionType,
   } = usePaymentsStore();
@@ -32,6 +32,7 @@ const PaymentDetails = ({
 
   async function handleProceed() {
     setLoading(true);
+    setError({ status: false, message: "" });
 
     if (
       paymentAction?.batch_name == "" &&
@@ -77,7 +78,7 @@ const PaymentDetails = ({
       });
 
       resetPaymentData();
-      setBatchDetails(response?.data); // SET VALIDATION DATA INTO STATE
+      setSelectedBatch(response?.data); // SET VALIDATION DATA INTO STATE
       navigateForward(); // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
       setLoading(false);
 

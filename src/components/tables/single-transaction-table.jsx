@@ -463,7 +463,7 @@ export default function SingleTransactionsTable({
       >
         {(item) => (
           <TableRow
-            key={item?.ID || item?.key || item}
+            key={item?.ID || item?.key }
             // className="hover:bg-primary-50"
             align="top"
           >

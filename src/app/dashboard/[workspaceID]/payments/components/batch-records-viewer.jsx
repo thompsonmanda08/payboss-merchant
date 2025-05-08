@@ -13,15 +13,15 @@ function RecordDetailsViewer({ batchID }) {
     openValidRecordsModal,
     openInvalidRecordsModal,
     closeRecordsModal,
-    batchDetails: batchState,
+    selectedBatch,
   } = usePaymentsStore();
 
-  const { data: batch } = useBatchDetails(batchState?.ID || batchID);
-  const batchDetails = batch?.data;
+  const { data: batchResponse } = useBatchDetails(selectedBatch?.ID || batchID);
+  const batchData = selectedBatch || batchResponse?.data;
 
   // Determine which modal view to open
   const openModalView =
-    (openInvalidRecordsModal && batchDetails?.invalid?.length) ||
+    (openInvalidRecordsModal && batchData?.invalid?.length) ||
     openValidRecordsModal ||
     openAllRecordsModal;
 
@@ -43,7 +43,10 @@ function RecordDetailsViewer({ batchID }) {
       isOpen={openModalView}
       onClose={closeRecordsModal}
       // onConfirm={handleConfirmationClose}
-      classNames={{ overlay: "z-[55]", base: "max-w-[1440px]" }}
+      classNames={{
+        overlay: "z-[55]",
+        base: "max-w-[calc(100vw-180px)] min-h-[calc(100vh-200px)]",
+      }}
     >
       <ModalContent>
         {() => (
@@ -53,29 +56,29 @@ function RecordDetailsViewer({ batchID }) {
             </ModalHeader>
             <ModalBody className="gap-0">
               {/* IF MODAL OPENED AND TOTAL RECORDS ARRAY IS NOT EMPTY */}
-              {openAllRecordsModal && batchDetails?.total && (
+              {openAllRecordsModal && batchData?.total && (
                 <SingleTransactionsTable
                   removeWrapper
                   columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
-                  rowData={batchDetails?.total}
+                  rowData={batchData?.total}
                 />
               )}
 
               {/* IF MODAL OPENED AND TOTAL VALID RECORDS ARRAY IS NOT EMPTY */}
-              {openValidRecordsModal && batchDetails?.valid && (
+              {openValidRecordsModal && batchData?.valid && (
                 <SingleTransactionsTable
                   removeWrapper
                   columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
-                  rowData={batchDetails?.valid}
+                  rowData={batchData?.valid}
                 />
               )}
 
               {/* IF MODAL OPENED AND TOTAL INVALID RECORDS ARRAY IS NOT EMPTY */}
-              {openInvalidRecordsModal && batchDetails?.invalid?.length && (
+              {openInvalidRecordsModal && batchData?.invalid?.length && (
                 <SingleTransactionsTable
                   removeWrapper
                   columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
-                  rowData={batchDetails?.invalid}
+                  rowData={batchData?.invalid}
                 />
               )}
             </ModalBody>

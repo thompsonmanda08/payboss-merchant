@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Skeleton } from "@heroui/react";
 
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
@@ -47,6 +47,7 @@ export const STEPS = [
 function CreateBulkPayment({}) {
   const params = useParams();
   const { workspaceID, protocol } = params;
+  const router = useRouter();
 
   // ** INITIALIZEs PAYMENT STATE **//
   const {
@@ -111,6 +112,10 @@ function CreateBulkPayment({}) {
   }
 
   function handleCancel() {
+    if (currentTabIndex == 0) {
+      router.back();
+    }
+
     setPaymentAction({
       type: protocol,
       url: "",

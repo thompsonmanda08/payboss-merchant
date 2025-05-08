@@ -1,11 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { useQueryClient } from "@tanstack/react-query";
 
 import usePaymentsStore from "@/context/payment-store";
 import { Button } from "@/components/ui/button";
-import { useBatchDetails, useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 import { submitBatchForApproval } from "@/app/_actions/transaction-actions";
 import { notify } from "@/lib/utils";
 import { QUERY_KEYS } from "@/lib/constants";
@@ -14,16 +13,12 @@ import Loader from "@/components/ui/loader";
 import StatusCard from "@/components/status-card";
 import { Alert } from "@heroui/react";
 
-const ValidationDetails = ({ navigateForward, batchID, workspaceID }) => {
+const ValidationDetails = ({ navigateForward, workspaceID }) => {
   const queryClient = useQueryClient();
   const {
     openRecordsModal,
-    // TODO: => THERE IS A BETTER WAY TO HANDLE THIS RUBBISH I HAVE DONE HERE ==> USE MUTATION
-    batchDetails: batchState, // COPY ONLY IN STATTE
-    setBatchDetails,
-    loading,
-    setLoading,
     selectedBatch,
+    setLoading,
     openBatchDetailsModal,
     error,
     setError,
@@ -31,26 +26,13 @@ const ValidationDetails = ({ navigateForward, batchID, workspaceID }) => {
 
   const { workspaceWalletBalance } = useWorkspaces();
 
-  const [queryID, setQueryID] = useState(
-    batchID || selectedBatch?.ID || batchState?.ID
-  );
-
-  const {
-    data: batchResponse,
-    isLoading,
-    isFetched,
-    isSuccess,
-  } = useBatchDetails(queryID);
-
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const role = workspaceInit?.data?.workspacePermissions;
-
-  const batchDetails = batchResponse?.data;
 
   async function handleSubmitForApproval() {
     setLoading(true);
     if (
-      batchDetails?.number_of_records != batchDetails?.number_of_valid_records
+      selectedBatch?.number_of_records != selectedBatch?.number_of_valid_records
     ) {
       notify({
         title: "Error",
@@ -63,7 +45,7 @@ const ValidationDetails = ({ navigateForward, batchID, workspaceID }) => {
     }
 
     if (
-      parseFloat(batchDetails?.valid_amount) >
+      parseFloat(selectedBatch?.valid_amount) >
       parseFloat(workspaceWalletBalance)
     ) {
       notify({
@@ -91,7 +73,7 @@ const ValidationDetails = ({ navigateForward, batchID, workspaceID }) => {
       return;
     }
 
-    const response = await submitBatchForApproval(batchState?.ID || batchID);
+    const response = await submitBatchForApproval(selectedBatch?.ID);
 
     if (!response?.success) {
       notify({
@@ -111,7 +93,7 @@ const ValidationDetails = ({ navigateForward, batchID, workspaceID }) => {
       });
     } else {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BATCH_DETAILS, queryID],
+        queryKey: [QUERY_KEYS.BATCH_DETAILS, selectedBatch?.ID],
       });
     }
 
@@ -126,21 +108,10 @@ const ValidationDetails = ({ navigateForward, batchID, workspaceID }) => {
     return;
   }
 
-  // TODO: => THERE IS A BETTER WAY TO HANDLE THIS RUBBISH I HAVE DONE HERE
-  // CANNOT HAVE ZUSTAND STATE AND AND REACT QUERY TO MANAGE STATE - NEEDS TO BE IN SYNC
-  useEffect(() => {
-    // IF FETCHED AND THERE ARE NO BATCH
-    if (isFetched && isSuccess && batchResponse?.success) {
-      setBatchDetails(batchResponse?.data);
-    }
+  console.log("selectedBatch", selectedBatch);
 
-    return () => {
-      setError({});
-    };
-  }, [batchID, selectedBatch?.ID, queryID]);
-
-  return isLoading || loading || !queryID || !batchDetails ? (
-    <Loader size={80} />
+  return !selectedBatch ? (
+    <Loader size={80} loadingText={"Processing batch..."} />
   ) : (
     <>
       <div className="flex h-full w-full flex-col justify-between">
@@ -149,31 +120,30 @@ const ValidationDetails = ({ navigateForward, batchID, workspaceID }) => {
           IconColor="secondary"
           invalidInfo={"View Invalid Records"}
           invalidTitle={"Invalid Records"}
-          invalidValue={batchDetails?.number_of_invalid_records || "0"}
+          invalidValue={selectedBatch?.number_of_invalid_records || "0"}
           tooltipText={"All records must be valid to proceed"}
           totalInfo={"Records in total"}
           totalTitle={"Total Records"}
-          totalValue={batchDetails?.number_of_records || "0"}
-          validAmount={batchDetails?.valid_amount || "0"}
+          totalValue={selectedBatch?.number_of_records || "0"}
+          validAmount={selectedBatch?.valid_amount || "0"}
           validInfo={"View Valid Records"}
           validTitle={"Valid Records"}
-          validValue={batchDetails?.number_of_valid_records || "0"}
+          validValue={selectedBatch?.number_of_valid_records || "0"}
           viewAllRecords={
-            batchDetails?.total ? () => openRecordsModal("all") : undefined
+            selectedBatch?.total ? () => openRecordsModal("all") : undefined
           }
           viewInvalidRecords={
-            batchDetails?.invalid
+            selectedBatch?.invalid
               ? () => openRecordsModal("invalid")
               : undefined
           }
           viewValidRecords={
-            batchDetails?.valid ? () => openRecordsModal("valid") : undefined
+            selectedBatch?.valid ? () => openRecordsModal("valid") : undefined
           }
         />
         {error?.status && <Alert color="danger">{error.message}</Alert>}
 
-        {(batchState?.status?.toLowerCase() == "submitted" ||
-          selectedBatch?.status?.toLowerCase() == "submitted") &&
+        {selectedBatch?.status?.toLowerCase() == "submitted" &&
           role?.can_initiate && (
             <div className="my-4 flex h-1/6 w-full items-end justify-end gap-4">
               <Button onClick={handleSubmitForApproval}>
