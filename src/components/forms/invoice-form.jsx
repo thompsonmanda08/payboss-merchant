@@ -99,16 +99,6 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
 
     setIsLoading(true);
 
-    if (!permissions?.can_initiate) {
-      notify({
-        title: "NOT ALLOWED",
-        color: "danger",
-        description: "You do not have permissions to perform this action",
-      });
-      setIsLoading(false);
-      return;
-    }
-
     if (selectedTab == "invoice-details" && isValidDetails()) {
       setSelectedTab("invoice-items");
       setIsLoading(false);

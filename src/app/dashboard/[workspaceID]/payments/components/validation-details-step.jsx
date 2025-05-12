@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import usePaymentsStore from "@/context/payment-store";
 import { Button } from "@/components/ui/button";
-import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useBatchDetails, useWorkspaceInit } from "@/hooks/useQueryHooks";
 import { submitBatchForApproval } from "@/app/_actions/transaction-actions";
 import { notify } from "@/lib/utils";
 import { QUERY_KEYS } from "@/lib/constants";
@@ -12,11 +12,13 @@ import useWorkspaces from "@/hooks/useWorkspaces";
 import Loader from "@/components/ui/loader";
 import StatusCard from "@/components/status-card";
 import { Alert } from "@heroui/react";
+import { useEffect } from "react";
 
 const ValidationDetails = ({ navigateForward, workspaceID }) => {
   const queryClient = useQueryClient();
   const {
     openRecordsModal,
+    setSelectedBatch,
     selectedBatch,
     setLoading,
     openBatchDetailsModal,
@@ -24,10 +26,19 @@ const ValidationDetails = ({ navigateForward, workspaceID }) => {
     setError,
   } = usePaymentsStore();
 
-  const { workspaceWalletBalance } = useWorkspaces();
+  // const { workspaceWalletBalance } = useWorkspaces();
 
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const role = workspaceInit?.data?.workspacePermissions;
+
+  const workspaceWalletBalance = workspaceInit?.data?.activeWorkspace?.balance;
+
+  const {
+    data: batchResponse,
+    isSuccess,
+    isLoading,
+  } = useBatchDetails(selectedBatch?.id);
+  const batchDetails = batchResponse?.data;
 
   async function handleSubmitForApproval() {
     setLoading(true);
@@ -73,7 +84,7 @@ const ValidationDetails = ({ navigateForward, workspaceID }) => {
       return;
     }
 
-    const response = await submitBatchForApproval(selectedBatch?.ID);
+    const response = await submitBatchForApproval(selectedBatch?.id);
 
     if (!response?.success) {
       notify({
@@ -93,7 +104,7 @@ const ValidationDetails = ({ navigateForward, workspaceID }) => {
       });
     } else {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BATCH_DETAILS, selectedBatch?.ID],
+        queryKey: [QUERY_KEYS.BATCH_DETAILS, selectedBatch?.id],
       });
     }
 
@@ -108,9 +119,18 @@ const ValidationDetails = ({ navigateForward, workspaceID }) => {
     return;
   }
 
+  useEffect(() => {
+    if (isSuccess && batchDetails?.total.length > 0) {
+      setSelectedBatch({
+        ...selectedBatch,
+        ...batchDetails,
+      });
+    }
+  }, [isSuccess]);
+
   console.log("selectedBatch", selectedBatch);
 
-  return !selectedBatch ? (
+  return isLoading || !selectedBatch ? (
     <Loader size={80} loadingText={"Processing batch..."} />
   ) : (
     <>

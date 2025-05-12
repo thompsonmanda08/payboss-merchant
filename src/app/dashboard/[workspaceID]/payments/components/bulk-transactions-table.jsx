@@ -177,7 +177,7 @@ export default function BulkTransactionsTable({ workspaceID, rowssss }) {
               setSelectedBatch(row);
               setOpenBatchDetailsModal(true);
             }}
-            startContent={<ComputerDesktopIcon className="h-6 w-5" />}
+            startContent={<ComputerDesktopIcon className="h-6 w-5 mr-2" />}
           >
             View
           </Button>
@@ -366,7 +366,7 @@ export default function BulkTransactionsTable({ workspaceID, rowssss }) {
         loadingContent={loadingContent}
       >
         {(item) => (
-          <TableRow key={item?.ID || item} align="top">
+          <TableRow key={item?.id || item} align="top">
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}
