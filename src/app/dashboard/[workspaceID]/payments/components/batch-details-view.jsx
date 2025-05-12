@@ -10,6 +10,8 @@ import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/componen
 import usePaymentsStore from "@/context/payment-store";
 import CardHeader from "@/components/base/card-header";
 import Tabs from "@/components/tabs";
+import { useBatchDetails, useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useParams } from "next/navigation";
 
 export const BATCH_DETAILS_STEPS = [
   {
@@ -24,9 +26,22 @@ export const BATCH_DETAILS_STEPS = [
   },
 ];
 
+const TABS = [
+  {
+    name: "Batch Details",
+    index: 0,
+  },
+  {
+    name: "Approval Status",
+    index: 1,
+  },
+];
+
 export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
   const [currentStep, setCurrentStep] = useState(BATCH_DETAILS_STEPS[0]);
   const queryClient = useQueryClient();
+  const params = useParams();
+  const workspaceID = params.workspaceID;
 
   // ** INITIALIZEs PAYMENT STATE **//
   const {
@@ -34,41 +49,46 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
     openValidRecordsModal,
     openInvalidRecordsModal,
     selectedProtocol,
-    setSelectedProtocol,
     selectedBatch,
     setSelectedBatch,
     setOpenBatchDetailsModal,
   } = usePaymentsStore();
 
-  const batchID = selectedBatch?.ID;
+  const batchID = selectedBatch?.id;
+
+  const {
+    data: batchResponse,
+    isSuccess,
+    isLoading,
+  } = useBatchDetails(batchID);
+
+  const batch = batchResponse?.data;
+
+  // useEffect(() => {
+  //   if (isSuccess && batch?.total.length > 0) {
+  //     setSelectedBatch({
+  //       ...selectedBatch,
+  //       ...batch,
+  //     });
+  //   }
+  // }, [isSuccess, batchID]);
 
   const COMPONENT_LIST_RENDERER = [
     <ValidationDetails
-      key={"step-4"}
-      batchID={batchID}
+      key={"batch-details"}
+      workspaceID={workspaceID}
+      batch={batch}
       navigateForward={goForward}
     />,
-    <ApproverAction key={"step-5"} batchID={batchID} />,
+    <ApproverAction
+      key={"approval-status"}
+      workspaceID={workspaceID}
+      batch={batch}
+    />,
   ];
 
-  const TABS = [
-    {
-      name: "Batch Details",
-      index: 0,
-    },
-    {
-      name: "Approval Status",
-      index: 1,
-    },
-  ];
-
-  const {
-    activeTab,
-    currentTabIndex,
-    navigateTo,
-    navigateForward,
-    navigateBackwards,
-  } = useCustomTabsHook(COMPONENT_LIST_RENDERER);
+  const { activeTab, currentTabIndex, navigateTo, navigateForward } =
+    useCustomTabsHook(COMPONENT_LIST_RENDERER);
 
   function goForward() {
     navigateForward();
@@ -82,7 +102,7 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
   useEffect(() => {
     setCurrentStep(
       BATCH_DETAILS_STEPS[
-        selectedBatch.status?.toLowerCase() != "submitted"
+        batch?.status?.toLowerCase() != "submitted"
           ? COMPONENT_LIST_RENDERER.length - 1
           : currentTabIndex
       ]
@@ -90,27 +110,27 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
   }, [currentTabIndex]);
 
   useEffect(() => {
-    if (selectedBatch.status?.toLowerCase() != "submitted") {
+    if (batch?.status?.toLowerCase() != "submitted") {
       navigateTo(COMPONENT_LIST_RENDERER.length - 1);
     }
   }, []);
 
-  useEffect(() => {
-    if (protocol) {
-      setSelectedProtocol(protocol);
-    }
+  // useEffect(() => {
+  //   if (protocol) {
+  //     setSelectedProtocol(protocol);
+  //   }
 
-    return () => {
-      queryClient.invalidateQueries();
-    };
-  }, [protocol]);
+  //   return () => {
+  //     queryClient.invalidateQueries();
+  //   };
+  // }, [protocol]);
 
   return (
     <>
       {/* *************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
       {(openAllRecordsModal ||
         openValidRecordsModal ||
-        openInvalidRecordsModal) && <RecordDetailsViewer batchID={batchID} />}
+        openInvalidRecordsModal) && <RecordDetailsViewer batch={batch} />}
       {/*********************************************************************** */}
       {/************************* COMPONENT RENDERER *************************/}
       <Modal
@@ -128,10 +148,10 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
                   <>
                     {currentStep.title}
                     {
-                      selectedProtocol && selectedBatch && (
+                      selectedProtocol && batch && (
                         <span className="capitalize">
                           {" "}
-                          ({selectedProtocol} - {selectedBatch?.batch_name}){" "}
+                          ({selectedProtocol} - {batch?.batch_name}){" "}
                         </span>
                       ) //ONLY FOR THE CREATE PAYMENTS PAGE
                     }

@@ -4,47 +4,32 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import usePaymentsStore from "@/context/payment-store";
 import { Button } from "@/components/ui/button";
-import { useBatchDetails, useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 import { submitBatchForApproval } from "@/app/_actions/transaction-actions";
 import { notify } from "@/lib/utils";
 import { QUERY_KEYS } from "@/lib/constants";
-import useWorkspaces from "@/hooks/useWorkspaces";
 import Loader from "@/components/ui/loader";
 import StatusCard from "@/components/status-card";
 import { Alert } from "@heroui/react";
-import { useEffect } from "react";
 
-const ValidationDetails = ({ navigateForward, workspaceID }) => {
+const ValidationDetails = ({ navigateForward, workspaceID, batch }) => {
   const queryClient = useQueryClient();
   const {
     openRecordsModal,
-    setSelectedBatch,
-    selectedBatch,
+    loading,
     setLoading,
     openBatchDetailsModal,
     error,
     setError,
   } = usePaymentsStore();
 
-  // const { workspaceWalletBalance } = useWorkspaces();
-
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
-  const role = workspaceInit?.data?.workspacePermissions;
-
+  const permissions = workspaceInit?.data?.workspacePermissions;
   const workspaceWalletBalance = workspaceInit?.data?.activeWorkspace?.balance;
-
-  const {
-    data: batchResponse,
-    isSuccess,
-    isLoading,
-  } = useBatchDetails(selectedBatch?.id);
-  const batchDetails = batchResponse?.data;
 
   async function handleSubmitForApproval() {
     setLoading(true);
-    if (
-      selectedBatch?.number_of_records != selectedBatch?.number_of_valid_records
-    ) {
+    if (batch?.number_of_records != batch?.number_of_valid_records) {
       notify({
         title: "Error",
         color: "danger",
@@ -55,10 +40,7 @@ const ValidationDetails = ({ navigateForward, workspaceID }) => {
       return;
     }
 
-    if (
-      parseFloat(selectedBatch?.valid_amount) >
-      parseFloat(workspaceWalletBalance)
-    ) {
+    if (parseFloat(batch?.valid_amount) > parseFloat(workspaceWalletBalance)) {
       notify({
         title: "Error",
         color: "danger",
@@ -69,7 +51,7 @@ const ValidationDetails = ({ navigateForward, workspaceID }) => {
       return;
     }
 
-    if (!role.can_initiate) {
+    if (!permissions.can_initiate) {
       notify({
         title: "NOT ALLOWED",
         color: "danger",
@@ -84,7 +66,7 @@ const ValidationDetails = ({ navigateForward, workspaceID }) => {
       return;
     }
 
-    const response = await submitBatchForApproval(selectedBatch?.id);
+    const response = await submitBatchForApproval(batch?.id);
 
     if (!response?.success) {
       notify({
@@ -98,15 +80,12 @@ const ValidationDetails = ({ navigateForward, workspaceID }) => {
     }
 
     // PERFORM QUERY INVALIDATION TO UPDATE THE STATE OF THE UI
-    if (openBatchDetailsModal) {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, workspaceID],
-      });
-    } else {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BATCH_DETAILS, selectedBatch?.id],
-      });
-    }
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.BATCH_DETAILS, batch?.id],
+    });
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, workspaceID],
+    });
 
     notify({
       title: "Success",
@@ -119,18 +98,7 @@ const ValidationDetails = ({ navigateForward, workspaceID }) => {
     return;
   }
 
-  useEffect(() => {
-    if (isSuccess && batchDetails?.total.length > 0) {
-      setSelectedBatch({
-        ...selectedBatch,
-        ...batchDetails,
-      });
-    }
-  }, [isSuccess]);
-
-  console.log("selectedBatch", selectedBatch);
-
-  return isLoading || !selectedBatch ? (
+  return !batch ? (
     <Loader size={80} loadingText={"Processing batch..."} />
   ) : (
     <>
@@ -140,33 +108,25 @@ const ValidationDetails = ({ navigateForward, workspaceID }) => {
           IconColor="secondary"
           invalidInfo={"View Invalid Records"}
           invalidTitle={"Invalid Records"}
-          invalidValue={selectedBatch?.number_of_invalid_records || "0"}
+          invalidValue={batch?.number_of_invalid_records || "0"}
           tooltipText={"All records must be valid to proceed"}
           totalInfo={"Records in total"}
           totalTitle={"Total Records"}
-          totalValue={selectedBatch?.number_of_records || "0"}
-          validAmount={selectedBatch?.valid_amount || "0"}
+          totalValue={batch?.number_of_records || "0"}
+          validAmount={batch?.valid_amount || "0"}
           validInfo={"View Valid Records"}
           validTitle={"Valid Records"}
-          validValue={selectedBatch?.number_of_valid_records || "0"}
-          viewAllRecords={
-            selectedBatch?.total ? () => openRecordsModal("all") : undefined
-          }
-          viewInvalidRecords={
-            selectedBatch?.invalid
-              ? () => openRecordsModal("invalid")
-              : undefined
-          }
-          viewValidRecords={
-            selectedBatch?.valid ? () => openRecordsModal("valid") : undefined
-          }
+          validValue={batch?.number_of_valid_records || "0"}
+          viewAllRecords={() => openRecordsModal("all")}
+          viewValidRecords={() => openRecordsModal("valid")}
+          viewInvalidRecords={() => openRecordsModal("invalid")}
         />
         {error?.status && <Alert color="danger">{error.message}</Alert>}
 
-        {selectedBatch?.status?.toLowerCase() == "submitted" &&
-          role?.can_initiate && (
+        {batch?.status?.toLowerCase() == "submitted" &&
+          permissions?.can_initiate && (
             <div className="my-4 flex h-1/6 w-full items-end justify-end gap-4">
-              <Button onClick={handleSubmitForApproval}>
+              <Button isLoading={loading} onClick={handleSubmitForApproval}>
                 Submit For Approval
               </Button>
             </div>

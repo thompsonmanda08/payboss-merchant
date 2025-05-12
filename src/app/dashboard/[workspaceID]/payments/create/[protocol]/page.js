@@ -58,6 +58,7 @@ function CreateBulkPayment({}) {
     paymentAction,
     setPaymentAction,
     setError,
+    selectedBatch,
   } = usePaymentsStore();
 
   //************ STEPS TO CREATE A BULK PAYMENT ACTION *****************/
@@ -91,15 +92,14 @@ function CreateBulkPayment({}) {
     />,
     <ValidationDetails
       key={"step-4"}
-      navigateBackwards={goBack}
+      batch={selectedBatch}
       navigateForward={goForward}
       workspaceID={workspaceID}
     />,
     <ApproverAction
       key={"step-5"}
+      batch={selectedBatch}
       workspaceID={workspaceID}
-      // navigateForward={goForward}
-      // navigateBackwards={goBack}
     />,
   ]);
 
@@ -168,7 +168,9 @@ function CreateBulkPayment({}) {
       {/**************** IF TOP_OVER RENDERING IS REQUIRED *******************/}
       {(openAllRecordsModal ||
         openValidRecordsModal ||
-        openInvalidRecordsModal) && <RecordDetailsViewer />}
+        openInvalidRecordsModal) && (
+        <RecordDetailsViewer batch={selectedBatch} />
+      )}
       {/************************************************************************/}
     </>
   );

@@ -1,46 +1,42 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import { useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { formatCurrency, notify } from "@/lib/utils";
-import { reviewBatch } from "@/app/_actions/transaction-actions";
+import {
+  reviewBatch,
+  submitBatchForApproval,
+} from "@/app/_actions/transaction-actions";
 import usePaymentsStore from "@/context/payment-store";
 import { Input } from "@/components/ui/input-field";
-import { PAYMENT_SERVICE_TYPES, QUERY_KEYS } from "@/lib/constants";
+import { QUERY_KEYS } from "@/lib/constants";
 import PromptModal from "@/components/base/prompt-modal";
-import { useBatchDetails, useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 import Loader from "@/components/ui/loader";
 
-const ApproverAction = ({ workspaceID, batchID }) => {
+const ApproverAction = ({ workspaceID, batch }) => {
   const queryClient = useQueryClient();
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
   const {
-    selectedBatch,
     closeRecordsModal,
-    batchDetails: batchState,
     setOpenBatchDetailsModal,
     openBatchDetailsModal,
-    selectedActionType,
+    setLoading,
+    loading,
     transactionDetails,
     setError,
   } = usePaymentsStore();
 
-  const [queryID] = useState(
-    batchID || selectedBatch?.ID || batchState?.ID || transactionDetails?.ID
-  );
-
-  const { data: batchResponse } = useBatchDetails(queryID);
-  const batchDetails = batchResponse?.data;
-
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
 
-  const role = workspaceInit?.data?.workspacePermissions;
+  const permissions = workspaceInit?.data?.workspacePermissions;
   const activeWorkspace = workspaceInit?.data?.activeWorkspace || {};
   const workspaceWalletBalance = activeWorkspace?.balance;
 
-  const { isOpen, onClose, onOpen } = useDisclosure();
   const [isLoading, setIsLoading] = React.useState(false);
   const [isApproval, setIsApproval] = React.useState(true);
   const [approve, setApprove] = React.useState({
@@ -51,7 +47,7 @@ const ApproverAction = ({ workspaceID, batchID }) => {
   async function handleApproval() {
     setIsLoading(true);
 
-    if (!role?.can_approve) {
+    if (!permissions?.can_approve) {
       notify({
         color: "danger",
         title: "Unauthorized!",
@@ -68,10 +64,7 @@ const ApproverAction = ({ workspaceID, batchID }) => {
 
     if (
       isApproval &&
-      (parseFloat(selectedBatch?.total_amount) >
-        parseFloat(workspaceWalletBalance) ||
-        parseFloat(batchDetails?.total_amount) >
-          parseFloat(workspaceWalletBalance))
+      parseFloat(batch?.total_amount) > parseFloat(workspaceWalletBalance)
     ) {
       setIsLoading(false);
       notify({
@@ -94,11 +87,11 @@ const ApproverAction = ({ workspaceID, batchID }) => {
       return;
     }
 
-    const response = await reviewBatch(queryID, approve);
+    const response = await reviewBatch(batch?.id, approve);
 
     // selectedActionType.name == PAYMENT_SERVICE_TYPES[0].name
-    //   ? await reviewBatch(queryID, approve)
-    //   : await reviewSingleTransaction(queryID, approve);
+    //   ? await reviewBatch(batch?.id, approve)
+    //   : await reviewSingleTransaction(batch?.id, approve);
 
     if (!response?.success) {
       setIsLoading(false);
@@ -127,7 +120,7 @@ const ApproverAction = ({ workspaceID, batchID }) => {
       });
     } else {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BATCH_DETAILS, queryID],
+        queryKey: [QUERY_KEYS.BATCH_DETAILS, batch?.id],
       });
     }
     closeRecordsModal();
@@ -152,31 +145,96 @@ const ApproverAction = ({ workspaceID, batchID }) => {
   }
 
   const isApprovedOrRejected =
-    selectedBatch?.status?.toLowerCase() == "approved" ||
-    batchDetails?.status?.toLowerCase() == "approved" ||
-    selectedBatch?.status?.toLowerCase() == "rejected" ||
+    batch?.status?.toLowerCase() == "approved" ||
+    batch?.status?.toLowerCase() == "rejected" ||
     transactionDetails?.status?.toLowerCase() == "approved" ||
-    transactionDetails?.status?.toLowerCase() == "rejected" ||
-    batchDetails?.status?.toLowerCase() == "rejected";
+    transactionDetails?.status?.toLowerCase() == "rejected";
 
   const isInReview =
-    selectedBatch?.status == "review" ||
-    batchDetails?.status == "review" ||
-    transactionDetails?.status == "submitted" ||
-    transactionDetails?.status == "review";
+    batch?.status == "review" || transactionDetails?.status == "review";
 
   const isProcessed =
-    selectedBatch?.status == "processed" ||
-    batchDetails?.status == "processed" ||
+    batch?.status == "processed" ||
     transactionDetails?.status == "processed" ||
     transactionDetails?.status == "processed";
+
+  async function handleSubmitForApproval() {
+    setLoading(true);
+    if (batch?.number_of_records != batch?.number_of_valid_records) {
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Some records are still invalid!",
+      });
+      setLoading(false);
+
+      return;
+    }
+
+    if (parseFloat(batch?.valid_amount) > parseFloat(workspaceWalletBalance)) {
+      notify({
+        title: "Error",
+        color: "danger",
+        description: "Insufficient funds in the wallet!",
+      });
+      setLoading(false);
+
+      return;
+    }
+
+    if (!permissions.can_initiate) {
+      notify({
+        title: "NOT ALLOWED",
+        color: "danger",
+        description: "You do not have permissions to perform this action",
+      });
+      setError({
+        status: true,
+        message: "You do not have permissions to perform this action",
+      });
+      setLoading(false);
+
+      return;
+    }
+
+    const response = await submitBatchForApproval(batch?.id);
+
+    if (!response?.success) {
+      notify({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
+      setLoading(false);
+
+      return;
+    }
+
+    // PERFORM QUERY INVALIDATION TO UPDATE THE STATE OF THE UI
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.BATCH_DETAILS, batch?.id],
+    });
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, workspaceID],
+    });
+
+    notify({
+      title: "Success",
+      color: "success",
+      description: "Records submitted successfully!",
+    });
+    onClose();
+    setLoading(false);
+
+    return;
+  }
 
   const renderBatchApproval = useMemo(() => {
     return (
       <div className="flex max-w-lg flex-col items-center justify-center gap-2">
         <h3 className="leading-0 m-0 text-[clamp(1rem,1rem+1vw,1.25rem)] font-bold uppercase tracking-tight">
           {isApprovedOrRejected
-            ? `Batch ${selectedBatch?.status || batchDetails?.status}`
+            ? `Batch ${batch?.status}`
             : isProcessed
               ? `Batch Processed`
               : "Batch payout requires approval"}
@@ -190,13 +248,13 @@ const ApproverAction = ({ workspaceID, batchID }) => {
           <p className="text-center text-[15px] text-foreground/50">
             This batch has been processed and funds have been released.
           </p>
-        ) : role?.can_approve ? (
+        ) : permissions?.can_approve ? (
           <p className="text-center text-[15px] text-foreground/50">
             Batch payouts have been validated and are awaiting your approval.
             Once approved, they will process through your PayBoss wallet to
             release the funds.
           </p>
-        ) : role?.can_initiate ? (
+        ) : permissions?.can_initiate ? (
           <p className="text-center text-[15px] text-foreground/50">
             Batch Payouts have been validated and awaiting approval, however you
             have no permissions to approve this transaction.
@@ -210,77 +268,22 @@ const ApproverAction = ({ workspaceID, batchID }) => {
         )}
       </div>
     );
-  }, [isApprovedOrRejected, role?.can_approve]);
+  }, [
+    isApprovedOrRejected,
+    permissions?.can_approve,
+    permissions?.can_initiate,
+  ]);
 
-  const renderApproval = useMemo(() => {
-    return (
-      <div className="flex max-w-lg flex-col items-center justify-center gap-2">
-        <h3 className="leading-0 m-0 text-[clamp(1rem,1rem+1vw,1.25rem)] font-bold uppercase tracking-tight">
-          {isApprovedOrRejected
-            ? `Transaction ${transactionDetails?.status}`
-            : "This Transaction requires approval"}
-        </h3>
-
-        {isApprovedOrRejected ? (
-          <p className="text-center text-[15px] text-foreground/50">
-            Check the status and transaction details for more information.
-          </p>
-        ) : role?.can_approve ? (
-          <p className="text-center text-[15px] text-foreground/50">
-            The transaction has been validated and is awaiting your approval.
-            Once approved, it will process through your PayBoss wallet to
-            release the funds.
-          </p>
-        ) : role?.can_initiate ? (
-          <p className="text-center text-[15px] text-foreground/50">
-            Transaction has been validated and awaiting approval, however you
-            have no permissions to approve this transaction.
-          </p>
-        ) : (
-          <p className="text-center text-[15px] text-foreground/50">
-            The payout has been submitted for approval. The total amount will be
-            reserved and blocked until the transaction is approved or rejected.
-          </p>
-        )}
-      </div>
-    );
-  }, [isApprovedOrRejected, role]);
-
-  return !batchDetails || (batchID && !selectedBatch?.status) ? (
-    <Loader />
+  return !batch?.batch_name || loading ? (
+    <Loader
+      classNames={{
+        wrapper: "lg:min-h-96",
+      }}
+      size={100}
+      loadingText={"Please wait..."}
+    />
   ) : (
     <>
-      <PromptModal
-        confirmText="Confirm"
-        isDisabled={isLoading}
-        isDismissable={false}
-        isLoading={isLoading}
-        isOpen={isOpen}
-        title="Approve Bulk Transaction"
-        onClose={handleClosePrompt}
-        onConfirm={handleApproval}
-        onOpen={onOpen}
-      >
-        <p className="-mt-4 mb-2 text-sm leading-6 text-foreground/70">
-          Are you sure you want to {approve.action} the batch transaction{" "}
-          <code className="rounded-md bg-primary/10 p-1 px-2 font-semibold text-primary-700">
-            {`${
-              selectedBatch?.batch_name || batchDetails?.batch_name
-            } - (${formatCurrency(
-              selectedBatch?.total_amount || batchDetails?.total_amount
-            )})`}
-          </code>{" "}
-          {isApproval ? "to run against your PayBoss Wallet balance." : ""}
-        </p>
-        <Input
-          isDisabled={isLoading}
-          label="Review"
-          placeholder="Enter a review remark"
-          onChange={(e) =>
-            setApprove((prev) => ({ ...prev, review: e.target.value }))
-          }
-        />
-      </PromptModal>
       <div className="flex h-full w-full flex-col justify-between gap-8">
         <div className="flex w-full select-none flex-col items-center gap-9 rounded-2xl bg-primary-50/70 p-9">
           <Image
@@ -290,12 +293,23 @@ const ApproverAction = ({ workspaceID, batchID }) => {
             src={"/images/illustrations/approval.svg"}
             width={200}
           />
-          {selectedActionType?.name == PAYMENT_SERVICE_TYPES[0].name
-            ? renderBatchApproval
-            : renderApproval}
+
+          {renderBatchApproval}
+          {batch?.status?.toLowerCase() == "submitted" &&
+            permissions?.can_initiate && (
+              <div className="mx-auto gap-4">
+                <Button
+                  isLoading={loading}
+                  size={"lg"}
+                  onClick={handleSubmitForApproval}
+                >
+                  Submit For Approval
+                </Button>
+              </div>
+            )}
         </div>
 
-        {role?.can_approve && isInReview && (
+        {permissions?.can_approve && isInReview && (
           <div className="mb-4 ml-auto flex w-full max-w-xs items-end justify-end gap-4">
             <Button
               className={"flex-1 bg-red-500/10"}
@@ -317,6 +331,34 @@ const ApproverAction = ({ workspaceID, batchID }) => {
           </div>
         )}
       </div>
+
+      <PromptModal
+        confirmText="Confirm"
+        isDisabled={isLoading}
+        isDismissable={false}
+        isLoading={isLoading}
+        isOpen={isOpen}
+        title="Approve Bulk Transaction"
+        onClose={handleClosePrompt}
+        onConfirm={handleApproval}
+        onOpen={onOpen}
+      >
+        <p className="-mt-4 mb-2 text-sm leading-6 text-foreground/70">
+          Are you sure you want to {approve.action} the batch transaction{" "}
+          <code className="rounded-md bg-primary/10 p-1 px-2 font-semibold text-primary-700">
+            {`${batch?.batch_name} - (${formatCurrency(batch?.total_amount)})`}
+          </code>{" "}
+          {isApproval ? "to run against your PayBoss Wallet balance." : ""}
+        </p>
+        <Input
+          isDisabled={isLoading}
+          label="Review"
+          placeholder="Enter a review remark"
+          onChange={(e) =>
+            setApprove((prev) => ({ ...prev, review: e.target.value }))
+          }
+        />
+      </PromptModal>
     </>
   );
 };

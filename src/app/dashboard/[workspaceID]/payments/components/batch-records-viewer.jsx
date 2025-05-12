@@ -2,26 +2,22 @@
 import { Modal, ModalContent, ModalHeader, ModalBody } from "@heroui/modal";
 
 import usePaymentsStore from "@/context/payment-store";
-import { useBatchDetails } from "@/hooks/useQueryHooks";
 import CardHeader from "@/components/base/card-header";
 import { SINGLE_TRANSACTIONS_VALIDATION_COLUMNS } from "@/lib/table-columns";
 import SingleTransactionsTable from "@/components/tables/single-transaction-table";
+import Loader from "@/components/ui/loader";
 
-function RecordDetailsViewer({ batchID }) {
+function RecordDetailsViewer({ batch }) {
   const {
     openAllRecordsModal,
     openValidRecordsModal,
     openInvalidRecordsModal,
     closeRecordsModal,
-    selectedBatch,
   } = usePaymentsStore();
-
-  const { data: batchResponse } = useBatchDetails(selectedBatch?.ID || batchID);
-  const batchData = selectedBatch || batchResponse?.data;
 
   // Determine which modal view to open
   const openModalView =
-    (openInvalidRecordsModal && batchData?.invalid?.length) ||
+    (openInvalidRecordsModal && batch?.invalid?.length) ||
     openValidRecordsModal ||
     openAllRecordsModal;
 
@@ -55,31 +51,37 @@ function RecordDetailsViewer({ batchID }) {
               <CardHeader infoText={infoText} title={title} />
             </ModalHeader>
             <ModalBody className="gap-0">
-              {/* IF MODAL OPENED AND TOTAL RECORDS ARRAY IS NOT EMPTY */}
-              {openAllRecordsModal && batchData?.total && (
-                <SingleTransactionsTable
-                  removeWrapper
-                  columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
-                  rowData={batchData?.total}
-                />
-              )}
+              {!batch?.total ? (
+                <Loader size={80} loadingText={"Processing batch..."} />
+              ) : (
+                <>
+                  {/* IF MODAL OPENED AND TOTAL RECORDS ARRAY IS NOT EMPTY */}
+                  {openAllRecordsModal && batch?.total && (
+                    <SingleTransactionsTable
+                      removeWrapper
+                      columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
+                      rowData={batch?.total}
+                    />
+                  )}
 
-              {/* IF MODAL OPENED AND TOTAL VALID RECORDS ARRAY IS NOT EMPTY */}
-              {openValidRecordsModal && batchData?.valid && (
-                <SingleTransactionsTable
-                  removeWrapper
-                  columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
-                  rowData={batchData?.valid}
-                />
-              )}
+                  {/* IF MODAL OPENED AND TOTAL VALID RECORDS ARRAY IS NOT EMPTY */}
+                  {openValidRecordsModal && batch?.valid && (
+                    <SingleTransactionsTable
+                      removeWrapper
+                      columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
+                      rowData={batch?.valid}
+                    />
+                  )}
 
-              {/* IF MODAL OPENED AND TOTAL INVALID RECORDS ARRAY IS NOT EMPTY */}
-              {openInvalidRecordsModal && batchData?.invalid?.length && (
-                <SingleTransactionsTable
-                  removeWrapper
-                  columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
-                  rowData={batchData?.invalid}
-                />
+                  {/* IF MODAL OPENED AND TOTAL INVALID RECORDS ARRAY IS NOT EMPTY */}
+                  {openInvalidRecordsModal && batch?.invalid?.length && (
+                    <SingleTransactionsTable
+                      removeWrapper
+                      columnData={SINGLE_TRANSACTIONS_VALIDATION_COLUMNS}
+                      rowData={batch?.invalid}
+                    />
+                  )}
+                </>
               )}
             </ModalBody>
           </>
