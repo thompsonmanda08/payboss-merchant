@@ -199,8 +199,8 @@ export const TASK_ICON_BG_COLOR_MAP = {
 
 export const TRANSACTION_STATUS_COLOR_MAP = {
   submitted: "from-primary/10 to-primary-700/10 text-primary-700",
+  processing: "from-primary to-primary-700 text-white",
 
-  proccessing: "from-secondary/10 to-orange-600/10 text-orange-700",
   pending: "from-secondary/10 to-orange-600/10 text-orange-700",
   review: "from-secondary/10 to-orange-600/10 text-orange-700",
   ready: "from-secondary to-orange-600 text-white",

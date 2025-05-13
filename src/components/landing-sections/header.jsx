@@ -41,7 +41,7 @@ function MobileNavIcon({ open }) {
       <path
         className={cn(
           "origin-center transition",
-          !open && "scale-90 opacity-0",
+          !open && "scale-90 opacity-0"
         )}
         d="M2 2L12 12M12 2L2 12"
       />
@@ -74,6 +74,7 @@ function MobileNavigation({ session }) {
           <div className="absolute right-0 w-full max-w-[200px]">
             <div className="mt-2 flex origin-top flex-col rounded-xl gap-2 bg-background/90 backdrop-blur-md p-4 text-lg tracking-tight text-foreground shadow-xl">
               <MobileNavLink href="#features">Features</MobileNavLink>
+              <MobileNavLink href="/docs">Documentation</MobileNavLink>
               <MobileNavLink href="#why-payboss">Why PayBoss</MobileNavLink>
               <MobileNavLink href="#faqs">FAQs</MobileNavLink>
               <hr className="m-2 border-slate-300/40" />
@@ -120,7 +121,7 @@ export function Header({ session }) {
         {
           "top-4 sm:top-2 sm:mx-10 rounded-xl bg-background/80": isFloating,
           "z-50": pathname === "/" && !isFloating,
-        },
+        }
       )}
     >
       <nav className="relative z-50 flex w-full justify-between container">
@@ -128,6 +129,7 @@ export function Header({ session }) {
           <Logo aria-label="Home" className="h-10 w-auto" />
           <div className="hidden lg:flex md:gap-x-6">
             <NavLink href="#features">Features</NavLink>
+            <NavLink href="/docs">Documentation</NavLink>
             <NavLink href="#why-payboss">Why PayBoss</NavLink>
             <NavLink href="#faqs">FAQs</NavLink>
           </div>
