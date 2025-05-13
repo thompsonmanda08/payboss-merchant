@@ -10,11 +10,13 @@ const PUBLIC_ROUTES = [
   "/sentry-example-page",
   "/checkout",
   "/invoice",
+  "/docs",
 ];
 
 const PUBLIC_PREFIXES = [
   "/invoice/", // This will catch all /invoice/[id] routes
   "/checkout/",
+  "/docs/",
 ];
 
 export async function middleware(request) {
