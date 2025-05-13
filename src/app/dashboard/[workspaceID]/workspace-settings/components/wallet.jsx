@@ -621,17 +621,9 @@ export function WalletTransactionHistory({
                                       }
                                     ),
                                   }}
-                                  content={`${capitalize(item?.status)}: ${
-                                    item?.isPrefunded && !item?.isExpired
-                                      ? "Active funds"
-                                      : item?.isExpired
-                                        ? "Expired funds"
-                                        : item?.status == "approved"
-                                          ? "Awaiting fund activation"
-                                          : item?.status == "rejected"
-                                            ? item?.remarks
-                                            : "Awaiting admin action"
-                                  }`}
+                                  content={`${capitalize(item?.status)}: ${capitalize(
+                                    item?.remarks
+                                  )}`}
                                   placement="left"
                                 >
                                   <Chip

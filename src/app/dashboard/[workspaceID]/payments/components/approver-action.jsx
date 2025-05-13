@@ -32,7 +32,6 @@ const ApproverAction = ({ workspaceID, batch }) => {
   } = usePaymentsStore();
 
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
-
   const permissions = workspaceInit?.data?.workspacePermissions;
   const activeWorkspace = workspaceInit?.data?.activeWorkspace || {};
   const workspaceWalletBalance = activeWorkspace?.balance;
@@ -41,7 +40,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
   const [isApproval, setIsApproval] = React.useState(true);
   const [approve, setApprove] = React.useState({
     action: "approve", //approve or reject
-    review: "",
+    remarks: "",
   });
 
   async function handleApproval() {
@@ -76,7 +75,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
       return;
     }
 
-    if (!approve.review) {
+    if (!approve.remarks) {
       setIsLoading(false);
       notify({
         title: "Error",
@@ -105,24 +104,20 @@ const ApproverAction = ({ workspaceID, batch }) => {
     }
 
     setIsLoading(false);
-    let action = isApproval ? "approved" : "rejected";
 
     notify({
       title: "Success",
       color: "success",
-      description: `Bulk transaction ${action}!`,
+      description: `Bulk transaction ${isApproval ? "approved" : "rejected"}!`,
     });
 
     // PERFORM QUERY INVALIDATION TO UPDATE THE STATE OF THE UI
-    if (openBatchDetailsModal) {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, workspaceID],
-      });
-    } else {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BATCH_DETAILS, batch?.id],
-      });
-    }
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.BATCH_DETAILS, batch?.id],
+    });
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, workspaceID],
+    });
     closeRecordsModal();
     setOpenBatchDetailsModal(false);
     onClose();
@@ -355,7 +350,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
           label="Review"
           placeholder="Enter a review remark"
           onChange={(e) =>
-            setApprove((prev) => ({ ...prev, review: e.target.value }))
+            setApprove((prev) => ({ ...prev, remarks: e.target.value }))
           }
         />
       </PromptModal>
