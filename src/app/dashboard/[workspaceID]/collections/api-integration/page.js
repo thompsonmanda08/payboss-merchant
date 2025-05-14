@@ -31,6 +31,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { cn, formatDate, maskString, notify } from "@/lib/utils";
@@ -580,11 +581,16 @@ const APIIntegration = () => {
                     <TableCell>
                       {item?.username && (
                         <div className="flex items-center gap-4">
-                          <Tooltip color="secondary" content="API Config">
-                            <Cog6ToothIcon
-                              className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
-                              onClick={() => setOpenViewConfig(true)}
-                            />
+                          <Tooltip
+                            color="secondary"
+                            content="See Documentation"
+                          >
+                            <Link href="/docs/collections" target="_blank">
+                              <Cog6ToothIcon
+                                className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
+                                // onClick={() => setOpenViewConfig(true)}
+                              />
+                            </Link>
                           </Tooltip>
                           <Tooltip
                             color="default"

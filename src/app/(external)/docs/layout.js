@@ -11,7 +11,7 @@ export default function DocsLayout({ children }) {
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b border-foreground/10 bg-background shadow-sm shadow-black/5 px-4 md:px-6">
         <MobileNavMenu />
-        <Logo aria-label="Home" className="" />
+        <Logo aria-label="Home" className="" href={"/"} />
         <Link className="flex items-center gap-2 font-semibold" href="#">
           <span className="text-xl">Documentation</span>
         </Link>
