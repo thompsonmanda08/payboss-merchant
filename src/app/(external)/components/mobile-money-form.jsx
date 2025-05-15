@@ -27,11 +27,13 @@ export default function MobileMoneyForm({ checkoutData }) {
   const [transaction, setTransaction] = React.useState({
     status: "PENDING",
     message: "Please wait while we process your payment request",
+    serviceProviderDescription: "",
   });
 
-  // GET TRANSACTION STATUS HOOK
+  const [paymentRefID, setPaymentRefID] = React.useState("");
+  //!! GET TRANSACTION STATUS HOOK
   const { transactionResponse, isSuccess, isFailed, isProcessing } =
-    useCheckoutTransactionStatus(transactionID, pinPromptSent);
+    useCheckoutTransactionStatus(paymentRefID, pinPromptSent);
 
   const [formData, setFormData] = useState({
     phoneNumber: "",
@@ -109,6 +111,7 @@ export default function MobileMoneyForm({ checkoutData }) {
         description: `Pin prompt sent to${formData?.phoneNumber}`,
         color: "success",
       });
+      setPaymentRefID(response?.data?.transactionID);
       onOpen();
       setIsSubmitting(false);
       setPinPromptSent(true); // THIS WILL ENABLE THE TRANSACTION STATUS HOOK - FIRES IN INTERVALS
@@ -134,20 +137,17 @@ export default function MobileMoneyForm({ checkoutData }) {
   }
 
   useEffect(() => {
+    // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING AFTER STATE CHANGES
     if (isSuccess && pinPromptSent) {
-      // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
-
       setPinPromptSent(false);
       setTransaction(transactionResponse);
     }
+
     if (isFailed && pinPromptSent) {
-      // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setPinPromptSent(false);
       setTransaction(transactionResponse);
     }
   }, [isSuccess, isFailed]);
-
-  console.log("TXN RES", transactionResponse);
 
   return (
     <>
@@ -220,7 +220,7 @@ export default function MobileMoneyForm({ checkoutData }) {
 
       <PromptModal
         backdrop="blur"
-        isDismissable={!pinPromptSent}
+        isDismissable={false}
         isOpen={isOpen}
         onClose={
           transaction?.status == "PENDING"
@@ -234,12 +234,12 @@ export default function MobileMoneyForm({ checkoutData }) {
             : handleClosePrompt
         }
         onOpen={onOpen}
-        className={"max-w-xs aspect-square"}
+        className={"max-w-max"}
         size="sm"
         removeActionButtons
       >
         <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max m-auto p-4 pb-6">
-          <div className="aspect-square flex justify-center items-center mx-auto mb-4">
+          <div className="aspect-square flex justify-center items-center mx-auto mb-4 max-w-xs">
             {transaction?.status == "SUCCESSFUL" ? (
               <CheckBadgeIcon className="w-32 text-success" />
             ) : transaction?.status == "FAILED" ? (
@@ -262,31 +262,31 @@ export default function MobileMoneyForm({ checkoutData }) {
                 : transaction?.status == "FAILED"
                   ? "Payment failed. Try again later!"
                   : transaction?.message}
-              {isFailed && (
-                // REASON FOR FAILURE
+              {transaction?.serviceProviderDescription && (
                 <>
                   <br />
-                  {/* {data?.message} */}
-                  {`Reason: ${transaction?.mno_status_description}`}
+                  {`Reason: ${transaction?.serviceProviderDescription}`}
                 </>
               )}
             </small>
           </div>
 
           {!isProcessing && transaction?.status != "PENDING" && (
-            <Button
-              color="danger"
-              isDisabled={isProcessing}
-              onPress={() => {
-                if (isSuccess) {
-                  router.push(checkoutData?.redirect_url);
-                }
-                handleClosePrompt();
-              }}
-              className={"w-full "}
-            >
-              Close
-            </Button>
+            <>
+              <Button
+                color="danger"
+                isDisabled={isProcessing}
+                onPress={() => {
+                  if (isSuccess && checkoutData?.redirect_url) {
+                    router.push(`${checkoutData?.redirect_url}?success=true`);
+                  }
+                  handleClosePrompt();
+                }}
+                className={"w-full "}
+              >
+                Close
+              </Button>
+            </>
           )}
         </div>
       </PromptModal>

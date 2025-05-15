@@ -48,13 +48,16 @@ export default function CardPaymentForm({ checkoutData }) {
   const [transaction, setTransaction] = React.useState({
     status: "PENDING",
     message: "Please wait while we process your payment request",
+    serviceProviderDescription: "",
   });
 
   const router = useRouter();
 
-  // GET TRANSACTION STATUS HOOK
+  const [paymentRefID, setPaymentRefID] = React.useState("");
+
+  //!! GET TRANSACTION STATUS HOOK
   const { transactionResponse, isSuccess, isFailed, isProcessing } =
-    useCheckoutTransactionStatus(transactionID, isPaymentStarted);
+    useCheckoutTransactionStatus(paymentRefID, isPaymentStarted);
 
   const popUpWindowRef = React.useRef(null);
 
@@ -174,18 +177,19 @@ export default function CardPaymentForm({ checkoutData }) {
     });
 
     if (response?.success) {
+      setPaymentRefID(response?.data?.transactionID);
+
       const payload = {
         ...checkoutData,
         ...formData,
         // FROM PAYBOSS BACKEND
-        paymentUrl: response?.transactionResponse?.redirect_url,
-        ...response?.transactionResponse,
+        paymentUrl: response?.data?.redirect_url,
+        ...response?.data,
       };
 
-      // OPEN PAYMENT WINDOW
-      onOpen();
+      onOpen(); // OPEN PAYMENT WINDOW
       setIsSubmitting(false); // THIS WILL TRIGGER THE WEB HOOK
-      setIsPaymentStarted(true);
+      setIsPaymentStarted(true); //
       await openPaymentWindow(payload);
     } else {
       notify({
@@ -199,16 +203,12 @@ export default function CardPaymentForm({ checkoutData }) {
   }
 
   useEffect(() => {
+    // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING AFTER STATUS UPDATES
     if (isSuccess && isPaymentStarted) {
-      // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
-
       setIsPaymentStarted(false);
       setTransaction(transactionResponse);
-
-      /* TODO: AUTO CLOSE THE OPEN WINDOW USING THE REF OBJECT */
     }
     if (isFailed && isPaymentStarted) {
-      // PREVENT THE TRANSACTION STATUS HOOK FROM FIRING
       setIsPaymentStarted(false);
       setTransaction(transactionResponse);
     }
@@ -336,25 +336,6 @@ export default function CardPaymentForm({ checkoutData }) {
           />
         </div>
 
-        {/* <div>
-          <label
-            className="block text-sm font-medium leading-6 text-foreground/50 "
-            htmlFor="narration"
-          >
-            Payment Description
-          </label>
-          <div className="mt-2">
-            <textarea
-              className="block w-full rounded-md border-0 py-1.5 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary/80 sm:text-sm sm:leading-6"
-              onChange={handleChange}
-              value={formData?.narration}
-              id="narration"
-              name="narration"
-              rows={2}
-            />
-          </div>
-        </div> */}
-
         <Button
           type="submit"
           isLoading={isSubmitting}
@@ -369,7 +350,7 @@ export default function CardPaymentForm({ checkoutData }) {
 
       <PromptModal
         backdrop="blur"
-        isDismissable={!isPaymentStarted}
+        isDismissable={false}
         isOpen={isOpen}
         onClose={
           transaction?.status == "PENDING"
@@ -383,7 +364,7 @@ export default function CardPaymentForm({ checkoutData }) {
             : handleClosePrompt
         }
         onOpen={onOpen}
-        className={"max-w-xs aspect-square"}
+        className={"max-w-max"}
         size="sm"
         removeActionButtons
       >
@@ -411,12 +392,10 @@ export default function CardPaymentForm({ checkoutData }) {
                 : transaction?.status == "FAILED"
                   ? "Payment failed. Try again later!"
                   : "Transaction is processing. " + transaction?.message}
-              {isFailed && (
-                // REASON FOR FAILURE
+              {transaction?.serviceProviderDescription && (
                 <>
                   <br />
-                  {/* {transactionResponse?.message} */}
-                  {`Reason: ${transaction?.mno_status_description}`}
+                  {`Reason: ${transaction?.serviceProviderDescription}`}
                 </>
               )}
             </small>
@@ -425,9 +404,10 @@ export default function CardPaymentForm({ checkoutData }) {
           {!isProcessing && transaction?.status != "PENDING" && (
             <Button
               color="danger"
+              isDisabled={isProcessing}
               onPress={() => {
-                if (isSuccess) {
-                  router.push(checkoutData?.redirect_url);
+                if (isSuccess && checkoutData?.redirect_url) {
+                  router.push(`${checkoutData?.redirect_url}?success=true`);
                 }
                 handleClosePrompt();
               }}

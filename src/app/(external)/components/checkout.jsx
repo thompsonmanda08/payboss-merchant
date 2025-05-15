@@ -34,7 +34,7 @@ export default function Checkout({ checkoutData }) {
   return (
     <div className="container px-0 sm:px-4 md:px-8 lg:px-12 max-w-5xl">
       <div className="flex flex-col lg:flex-row gap-6 w-full">
-        <Card className="border-0 border-primary-50/50 w-full max-w-lg p-4 overflow-hidden">
+        <Card className="border-0 border-primary-50/50 w-full lg:max-w-lg p-4 overflow-hidden">
           <CardHeader className="flex-col items-start">
             <h4 className="text-large font-bold">Payment Method</h4>
             <small className="text-default-500 text-xs">
@@ -44,7 +44,7 @@ export default function Checkout({ checkoutData }) {
           <CardBody className="p-0">
             <Tabs
               aria-label="payment-methods"
-              className="max-w-lg w-full "
+              className="lg:max-w-lg w-full"
               classNames={{
                 tabList: "w-full p-0.5 ",
               }}
@@ -86,7 +86,7 @@ export default function Checkout({ checkoutData }) {
           </CardBody>
         </Card>
 
-        <Card className="border-0 border-primary-50/50 overflow-hidden p-4 w-full max-w-md max-h-fit">
+        <Card className="border-0 border-primary-50/50 overflow-hidden p-4 w-full lg:max-w-md max-h-fit">
           <CardHeader className="flex-col items-start">
             <h4 className="text-large font-bold">Payment Summary</h4>
             <small className="text-default-500 text-xs">

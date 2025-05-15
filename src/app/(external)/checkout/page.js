@@ -42,7 +42,7 @@ async function CheckoutPage(props) {
   }
 
   const [checkout] = await Promise.all([
-    getCheckoutInfo(checkoutData?.checkoutID),
+    getCheckoutInfo(checkoutData?.checkoutID, checkoutData?.serviceID),
   ]);
 
   checkoutData = {

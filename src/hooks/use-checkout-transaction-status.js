@@ -9,7 +9,7 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
       if (!enable) {
         return {
           success: false,
-          message: "Transaction ID is required",
+          message: "Transaction has not been initiated",
           data: {
             status: "NOT STARTED",
           },
@@ -21,7 +21,7 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
       if (!transactionID) {
         return {
           success: false,
-          message: "Transaction ID is required",
+          message: "Transaction REF ID is required",
           data: [],
           status: 400,
           statusText: "BAD_REQUEST",
@@ -53,7 +53,7 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
     data,
     transactionResponse,
 
-    // TRANSACTION RESPONSES
+    // TRANSACTION STATUS RESPONSES
     isProcessing,
     isSuccess,
     isFailed,
