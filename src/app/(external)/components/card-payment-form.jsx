@@ -183,7 +183,7 @@ export default function CardPaymentForm({ checkoutData }) {
         ...checkoutData,
         ...formData,
         // FROM PAYBOSS BACKEND
-        paymentUrl: response?.data?.redirect_url,
+        paymentUrl: response?.data?.redirectUrl,
         ...response?.data,
       };
 
