@@ -117,8 +117,8 @@ export default function CardPaymentForm({ checkoutData }) {
   };
 
   const openPaymentWindow = async (paymentData) => {
-    const width = 768;
-    const height = 600;
+    const width = 800;
+    const height = 720;
 
     // Calculate center position
     const left = (window.innerWidth - width) / 2 + window.screenX;
