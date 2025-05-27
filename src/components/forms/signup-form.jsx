@@ -29,7 +29,7 @@ export const STEPS = [
   "user-information",
 ];
 
-export default function SignUpForm() {
+export default function SignUpForm({ superMerchantID }) {
   const {
     businessInfo,
     newAdminUser,

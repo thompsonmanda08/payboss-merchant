@@ -25,13 +25,6 @@ const INITIAL_STATE = {
     website: "",
     provinceID: "",
     cityID: "",
-    merchant_type: "",
-    signatory_name: "",
-    signatory_email: "",
-    signatory_contact: "",
-    cfo_name: "",
-    cfo_email: "",
-    cfo_contact: "",
   },
 
   bankDetails: {
