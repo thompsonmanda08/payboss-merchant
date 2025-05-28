@@ -30,7 +30,7 @@ export async function validateCheckoutData(checkoutData) {
     };
   }
 
-  const url = `merchant/transaction/collection/checkout/validation`;
+  const url = `transaction/collection/checkout/validation`;
 
   try {
     const res = await apiServiceClient.post(url, checkoutData);
