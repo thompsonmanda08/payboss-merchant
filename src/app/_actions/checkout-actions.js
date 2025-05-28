@@ -30,7 +30,7 @@ export async function validateCheckoutData(checkoutData) {
     };
   }
 
-  const url = `transaction/collection/checkout/validation`;
+  const url = `merchant/transaction/collection/checkout/validation`;
 
   try {
     const res = await apiServiceClient.post(url, checkoutData);
@@ -90,7 +90,7 @@ export async function getCheckoutInfo(checkoutID, serviceID) {
     };
   }
 
-  const url = `transaction/collection/checkout/${checkoutID}/details/${serviceID}`;
+  const url = `merchant/transaction/collection/checkout/${checkoutID}/details/${serviceID}`;
 
   try {
     const res = await apiClient.get(url);

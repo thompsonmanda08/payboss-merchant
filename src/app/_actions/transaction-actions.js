@@ -9,67 +9,6 @@ import authenticatedApiClient, {
 // ****************** ******************************** ************************** //
 
 /**
- * Retrieves a list of all payment transactions for the given workspace ID.
- *
- * @param {string} workspaceID - The ID of the workspace for which the payment
- * transactions are being fetched.
- *
- * @returns {Promise<Object>} - A promise resolving to an object with the
- * following properties:
- *
- * - `success`: A boolean indicating whether the operation was successful.
- * - `message`: A string providing a message about the result of the operation.
- * - `data`: An array of payment transaction objects.
- * - `status`: The HTTP status code for the operation.
- * - `statusText`: The HTTP status text for the operation.
- */
-export async function getAllPaymentTransactions(workspaceID) {
-  if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
-  }
-  const url = `transaction/merchant/payment/transactions/${workspaceID}`;
-
-  try {
-    const res = await authenticatedApiClient({ url });
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      endpoint: "GET | BULK TRANSACTIONS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-// ************* GET ALL BULK TRANSACTIONS (PAYMENTS - DIRECT & VOUCHER) *************** //
-
-/**
  * Retrieves a list of all bulk transactions for the given workspace ID.
  *
  * @param {string} workspaceID - The ID of the workspace for which the bulk
@@ -97,7 +36,7 @@ export async function getAllBulkTransactions(workspaceID) {
     };
   }
 
-  const url = `transaction/payments/bulk/batches/${workspaceID}`;
+  const url = `merchant/transaction/payments/bulk/batches/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({ url });
@@ -158,7 +97,7 @@ export async function getBatchDetails(batchID) {
     };
   }
 
-  const url = `transaction/payments/bulk/batch/details/${batchID}`;
+  const url = `merchant/transaction/payments/bulk/batch/details/${batchID}`;
 
   try {
     const res = await authenticatedApiClient({ url });
@@ -455,78 +394,6 @@ export async function getWalletPrefundHistory(workspaceID) {
   }
 }
 
-// ****************** ******************************** ************************** //
-// ****************** SINGLE TRANSACTION API ENDPOINTS ************************** //
-// ****************** ******************************** ************************** //
-
-// ************* GET ALL SINGLE TRANSACTIONS (PAYMENTS - DIRECT & VOUCHER) *************** //
-
-/**
- * Retrieves a list of all single transactions for the given workspace ID.
- *
- * @param {string} workspaceID - The ID of the workspace for which the single
- * transactions are being fetched.
- *
- * @returns {Promise<Object>} - A promise resolving to an object with the
- * following properties:
- *
- * - `success`: A boolean indicating whether the operation was successful.
- * - `message`: A string providing a message about the result of the operation.
- * - `data`: An array of single transaction objects.
- * - `status`: The HTTP status code for the operation.
- * - `statusText`: The HTTP status text for the operation.
- */
-export async function getAllSingleTransactions(workspaceID) {
-  if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
-  }
-
-  const url = `transaction/payments/single/transactions/${workspaceID}`;
-
-  try {
-    const res = await authenticatedApiClient({ url });
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      endpoint: "GET | SINGLE TRANSACTIONS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
-  }
-}
-
-// ****************** ******************************** ************************** //
-// ******************  TRANSACTION REPORTS API ENDPOINTS ************************** //
-// ****************** ******************************** ************************** //
-
-// ******************************** BULK REPORTS ****************************** //
-
 /**
  * Retrieves bulk analytic reports for a specific workspace within a given date range.
  *
@@ -694,7 +561,7 @@ export async function getCollectionLatestTransactions(
     };
   }
 
-  const url = `transaction/merchant/collection/${service}/${workspaceID}`;
+  const url = `merchant/transaction/collections/${service}/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({
@@ -878,7 +745,7 @@ export async function getRecentInvoices(workspaceID, dateFilter) {
     };
   }
 
-  const url = `transaction/collection/invoices/${workspaceID}`;
+  const url = `merchant/transaction/collection/invoices/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({

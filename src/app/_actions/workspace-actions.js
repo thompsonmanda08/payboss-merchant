@@ -478,7 +478,7 @@ export async function setupWorkspaceAPIKey(workspaceID) {
     };
   }
 
-  const url = `transaction/collection/create/api-key/${workspaceID}`;
+  const url = `merchant/transaction/collection/create/api-key/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({ url });
@@ -539,7 +539,7 @@ export async function refreshWorkspaceAPIKey(workspaceID, keyID) {
     };
   }
 
-  const url = `/transaction/collection/generate/${workspaceID}/api-key/${keyID}`;
+  const url = `/merchant/transaction/collection/generate/${workspaceID}/api-key/${keyID}`;
 
   try {
     const res = await authenticatedApiClient({ url });
@@ -598,7 +598,7 @@ export async function getWorkspaceAPIKey(workspaceID) {
     };
   }
 
-  const url = `transaction/collection/api-key/${workspaceID}`;
+  const url = `merchant/transaction/collection/api-key/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({ url });
@@ -657,7 +657,7 @@ export async function generateWorkspaceTillNumber(workspaceID) {
     };
   }
 
-  const url = `transaction/collection/create/till-number/${workspaceID}`;
+  const url = `merchant/transaction/collection/create/till-number/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({ url });
@@ -717,7 +717,7 @@ export async function getWorkspaceTillNumber(workspaceID) {
     };
   }
 
-  const url = `transaction/collection/till-number/${workspaceID}`;
+  const url = `merchant/transaction/collection/till-number/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({ url });

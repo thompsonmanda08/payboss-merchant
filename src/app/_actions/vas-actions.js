@@ -16,7 +16,7 @@ export async function generateCheckoutURL(workspaceID, checkoutData) {
     };
   }
 
-  const url = `transaction/collection/create/checkout/${workspaceID}`;
+  const url = `merchant/merchant/transaction/collection/create/checkout/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({
@@ -68,7 +68,7 @@ export async function updateCheckoutURL(workspaceID, checkoutID, checkoutData) {
     };
   }
 
-  const url = `transaction/collection/update/${workspaceID}/checkout/${checkoutID}`;
+  const url = `merchant/transaction/collection/update/${workspaceID}/checkout/${checkoutID}`;
 
   try {
     const res = await authenticatedApiClient({
@@ -118,7 +118,7 @@ export async function getCheckoutURL(workspaceID) {
     };
   }
 
-  const url = `/transaction/collection/checkout/${workspaceID}`;
+  const url = `/merchant/transaction/collection/checkout/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({ url });
@@ -164,7 +164,7 @@ export async function createInvoice(workspaceID, formData) {
     };
   }
 
-  const url = `/transaction/collection/create/invoice/${workspaceID}
+  const url = `/merchant/transaction/collection/create/invoice/${workspaceID}
 `;
 
   try {
@@ -217,7 +217,7 @@ export async function getInvoiceDetails(ID) {
     };
   }
 
-  const url = `/transaction/collection/invoice/${ID}/details`;
+  const url = `/merchant/transaction/collection/invoice/${ID}/details`;
 
   try {
     const res = await apiClient.get(url);
@@ -251,51 +251,3 @@ export async function getInvoiceDetails(ID) {
     };
   }
 }
-
-// export async function getCheckoutInfo(checkoutID, checkoutData) {
-//   if (!checkoutID) {
-//     return {
-//       success: false,
-//       message: "checkout ID is required",
-//       data: null,
-//       status: 400,
-//       statusText: "BAD REQUEST",
-//     };
-//   }
-
-//   const url = `transaction/collection/create/checkout/${checkoutID}`;
-
-//   try {
-//     const res = await apiClient.post(url, checkoutData);
-
-//     revalidatePath("/checkout", "page");
-
-//     return {
-//       success: true,
-//       message: res.message,
-//       data: res.data,
-//       status: res.status,
-//       statusText: res.statusText,
-//     };
-//   } catch (error) {
-//     console.error({
-//       endpoint: "POST | CHECKOUT  DATA ~ " + url,
-//       status: error?.response?.status,
-//       statusText: error?.response?.statusText,
-//       headers: error?.response?.headers,
-//       config: error?.response?.config,
-//       data: error?.response?.data || error,
-//     });
-
-//     return {
-//       success: false,
-//       message:
-//         error?.response?.data?.error ||
-//         error?.response?.config?.data?.error ||
-//         "Error Occurred: See Console for details",
-//       data: error?.response?.data,
-//       status: error?.response?.status,
-//       statusText: error?.response?.statusText,
-//     };
-//   }
-// }
