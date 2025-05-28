@@ -11,7 +11,6 @@ import {
 import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
 import {
   getAllBulkTransactions,
-  getAllSingleTransactions,
   getBatchDetails,
   getWalletPrefundHistory,
 } from "@/app/_actions/transaction-actions";
@@ -135,13 +134,6 @@ export const useBulkTransactions = (workspaceID) =>
   useQuery({
     queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, workspaceID],
     queryFn: async () => await getAllBulkTransactions(workspaceID),
-    refetchOnMount: true,
-  });
-
-export const useSingleTransactions = (workspaceID) =>
-  useQuery({
-    queryKey: [QUERY_KEYS.SINGLE_TRANSACTIONS, workspaceID],
-    queryFn: async () => await getAllSingleTransactions(workspaceID),
     refetchOnMount: true,
   });
 
