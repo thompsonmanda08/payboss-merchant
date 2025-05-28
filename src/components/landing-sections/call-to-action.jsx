@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
 
 export function CallToAction() {
   return (
@@ -30,7 +31,7 @@ export function CallToAction() {
           <Button
             as={Link}
             className="mt-10 bg-white text-primary"
-            href="/register"
+            href={`/register/${BGS_SUPER_MERCHANT_ID}`}
             size={"lg"}
           >
             Get Started Now

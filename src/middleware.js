@@ -17,6 +17,7 @@ const PUBLIC_PREFIXES = [
   "/invoice/", // This will catch all /invoice/[id] routes
   "/checkout/",
   "/docs/",
+  "/register/",
 ];
 
 export async function middleware(request) {

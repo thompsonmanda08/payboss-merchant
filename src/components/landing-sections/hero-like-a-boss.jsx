@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { DefaultCover } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Image as HeroImage } from "@heroui/react";
+import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
 
 export function HeroLikeABoss() {
   return (
@@ -49,7 +50,7 @@ export function HeroLikeABoss() {
 
                 <Button
                   as={Link}
-                  href={`/register`}
+                  href={`/register/${BGS_SUPER_MERCHANT_ID}`}
                   className={"dark:text-white/80"}
                   color="primary"
                   size="lg"

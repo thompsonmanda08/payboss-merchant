@@ -16,6 +16,7 @@ import useFloatingHeader from "@/hooks/useFloatingHeader";
 import Logo from "@/components/base/payboss-logo";
 import ThemeSwitcher from "@/components/base/theme-switcher";
 import NavIconButton from "@/components/ui/nav-icon-button";
+import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
 
 function MobileNavLink({ href, className, children }) {
   return (
@@ -93,7 +94,10 @@ function MobileNavigation({ session }) {
                     </NavIconButton>
                     <span>Sign in</span>
                   </NavLink>
-                  <NavLink className="hidden :flex" href="/register">
+                  <NavLink
+                    className="hidden :flex"
+                    href={`/register/${BGS_SUPER_MERCHANT_ID}`}
+                  >
                     <NavIconButton>
                       <UserPlusIcon className="h-5 w-5 " />
                     </NavIconButton>
@@ -151,7 +155,10 @@ export function Header({ session }) {
                   </NavIconButton>
                   <span className="hidden lg:flex">Sign in</span>
                 </NavLink>
-                <NavLink className="hidden gap-2 lg:flex" href="/register">
+                <NavLink
+                  className="hidden gap-2 lg:flex"
+                  href={`/register/${BGS_SUPER_MERCHANT_ID}`}
+                >
                   <NavIconButton>
                     <UserPlusIcon className="h-5 w-5 " />
                   </NavIconButton>

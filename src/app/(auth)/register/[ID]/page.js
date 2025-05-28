@@ -9,12 +9,12 @@ import useConfigOptions from "@/hooks/useConfigOptions";
 import useAuthStore from "@/context/auth-store";
 import Logo from "@/components/base/payboss-logo";
 import EmptyState from "@/components/empty-state";
-
-import { AccountCreatedSuccess } from "../../page";
+import { Button } from "@/components/ui/button";
+import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
 
 export default function Register() {
   const params = useParams();
-  const superMerchantID = params.ID;
+  const superMerchantID = params.ID || BGS_SUPER_MERCHANT_ID;
   const { isLoading, isError } = useConfigOptions();
   const { accountCreated } = useAuthStore((state) => state);
   const router = useRouter();
@@ -69,5 +69,36 @@ export default function Register() {
         </p>
       </div>
     </div>
+  );
+}
+
+export function AccountCreatedSuccess() {
+  return (
+    <>
+      <Card className="m-auto mt-24 flex max-w-[600px] flex-col items-center justify-center lg:mt-40">
+        <div className="mx-auto mb-4 flex">
+          <Logo />
+        </div>
+        <h2
+          className={
+            "w-full bg-gradient-to-tr from-primary via-primary/80 to-primary-light bg-clip-text text-center text-[clamp(18px,18px+0.5vw,36px)] font-bold text-transparent"
+          }
+        >
+          Account Created Successfully!
+        </h2>
+        <p className="max-w-md py-4 pb-6 text-center text-sm leading-6 tracking-tight text-foreground/70 md:text-base">
+          You will need to login and upload verification documents to verify
+          your account. Approval takes up to{" "}
+          <span className="font-bold">2 working days</span>, however you have
+          limited access to your account until approval is completed.
+        </p>
+
+        <div className="grid w-full">
+          <Button as={Link} className={"w-full flex-1"} href={"/login"}>
+            Login
+          </Button>
+        </div>
+      </Card>
+    </>
   );
 }

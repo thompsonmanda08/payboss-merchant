@@ -1,4 +1,5 @@
 "use client";
+import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
 import FrameContainer from "@/components/base/framer-container";
 import { Button } from "@/components/ui/button";
 
@@ -27,7 +28,9 @@ export function Hero() {
           for all businesses.
         </p>
         <div className="mt-10 flex justify-center gap-x-6">
-          <Button href="/register">Book a free demo</Button>
+          <Button href={`/register/${BGS_SUPER_MERCHANT_ID}`}>
+            Book a free demo
+          </Button>
           <Button
             href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
             variant="bordered"

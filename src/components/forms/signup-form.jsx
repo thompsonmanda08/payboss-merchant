@@ -30,6 +30,7 @@ export const STEPS = [
 ];
 
 export default function SignUpForm({ superMerchantID }) {
+  console.log("superMerchantID", superMerchantID);
   const {
     businessInfo,
     newAdminUser,
@@ -170,7 +171,10 @@ export default function SignUpForm({ superMerchantID }) {
 
     // ************** STEP: 1 ==>  CREATE NEW MERCHANT ACCOUNT *********************************** //
     if (currentTabIndex === 1 && STEPS[currentTabIndex] === STEPS[1]) {
-      const response = await createNewMerchant(businessInfo);
+      const response = await createNewMerchant({
+        ...businessInfo,
+        super_merchant_id: superMerchantID,
+      });
 
       let merchantID = response?.data?.merchantID;
 

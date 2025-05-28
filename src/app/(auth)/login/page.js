@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import Logo from "@/components/base/payboss-logo";
 import LoginForm from "@/components/forms/login-form";
+import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
 
 function LoginPage() {
   return (
@@ -27,7 +28,7 @@ function LoginPage() {
           Don&apos;t have an account?
           <Link
             className="relative z-10 ml-1 bg-gradient-to-br from-primary to-primary/80 bg-clip-text font-bold text-transparent"
-            href="/register"
+            href={`/register/${BGS_SUPER_MERCHANT_ID}`}
           >
             Create Account
           </Link>
