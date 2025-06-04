@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Card } from "@heroui/react";
+import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 
 import SignUpForm from "@/components/forms/signup-form";
 import Spinner from "@/components/ui/custom-spinner";
@@ -51,7 +51,7 @@ export default function Register() {
             onButtonClick={() => router.refresh()}
           />
         </Card>
-      ) : accountCreated ? (
+      ) : !accountCreated ? (
         <AccountCreatedSuccess />
       ) : (
         <SignUpForm superMerchantID={superMerchantID} />
@@ -74,31 +74,31 @@ export default function Register() {
 
 export function AccountCreatedSuccess() {
   return (
-    <>
-      <Card className="m-auto mt-24 flex max-w-[600px] flex-col items-center justify-center lg:mt-40">
-        <div className="mx-auto mb-4 flex">
-          <Logo />
-        </div>
+    <Card className="m-auto mt-24 flex max-w-[600px] flex-col items-center justify-center lg:mt-40">
+      <CardHeader className="items-center justify-center">
+        <Logo href={"#"} />
+      </CardHeader>
+      <CardBody>
         <h2
           className={
-            "w-full bg-gradient-to-tr from-primary via-primary/80 to-primary-light bg-clip-text text-center text-[clamp(18px,18px+0.5vw,36px)] font-bold text-transparent"
+            "w-full bg-gradient-to-tr from-primary via-primary/80 to-primary-light bg-clip-text text-center text-[clamp(18px,18px+0.5vw,36px)] font-bold text-transparent py-2"
           }
         >
           Account Created Successfully!
         </h2>
-        <p className="max-w-md py-4 pb-6 text-center text-sm leading-6 tracking-tight text-foreground/70 md:text-base">
+        <p className="max-w-md text-center text-xs leading-6 tracking-tight text-foreground/70 xl:text-sm">
           You will need to login and upload verification documents to verify
           your account. Approval takes up to{" "}
           <span className="font-bold">2 working days</span>, however you have
           limited access to your account until approval is completed.
         </p>
+      </CardBody>
 
-        <div className="grid w-full">
-          <Button as={Link} className={"w-full flex-1"} href={"/login"}>
-            Login
-          </Button>
-        </div>
-      </Card>
-    </>
+      <CardFooter className="px-6">
+        <Button as={Link} className={"w-full flex-1 my-2"} href={"/login"}>
+          Login
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

@@ -5,7 +5,7 @@ import {
   // useAllCollectionsTransactions,
   // useAllPaymentTransactions,
   useBulkTransactions,
-  useSingleTransactions,
+  // useSingleTransactions,
   // useWalletPrefundHistory,
   // useWorkspaceTransactions,
 } from "./useQueryHooks";
