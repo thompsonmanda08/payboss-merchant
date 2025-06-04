@@ -36,7 +36,7 @@ const SERVICE_FILTERS = [
   },
 ];
 
-export default function BulkTransactionsTable({ workspaceID, rowssss }) {
+export default function BulkTransactionsTable({ workspaceID }) {
   // DATA FETCHING
   const { data: bulkTransactionsResponse, isLoading } =
     useBulkTransactions(workspaceID);
@@ -288,9 +288,11 @@ export default function BulkTransactionsTable({ workspaceID, rowssss }) {
 
             {permissions?.can_initiate && (
               <Button
+                as={Link} // BY PASS VOUCHER
+                href={`/dashboard/${workspaceID}/payments/create/direct?protocol=direct`}
                 color="primary"
                 endContent={<PlusIcon className="h-5 w-5" />}
-                onPress={() => setOpenPaymentsModal(true)}
+                // onPress={() => setOpenPaymentsModal(true)}
               >
                 New Batch
               </Button>
