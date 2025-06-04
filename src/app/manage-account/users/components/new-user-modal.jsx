@@ -98,6 +98,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
       setError({ status: false, message: "" });
       onClose();
       queryClient.invalidateQueries();
+      setNewUser(USER_INIT);
       setLoading(false);
 
       return;
@@ -163,7 +164,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
     let response = await changeUserRoleInWorkspace(
       userMapping,
       recordID,
-      workspaceID,
+      workspaceID
     );
 
     if (response?.success) {

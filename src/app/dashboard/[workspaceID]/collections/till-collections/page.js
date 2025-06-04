@@ -209,7 +209,7 @@ export default function TillPaymentCollections({}) {
                       )}
                       color="primary"
                     >
-                      <span>*</span> 484 <span>*</span>
+                      <span>*</span> 848 <span>*</span>
                       <span className="text-[clamp(1rem,1vw,1.5rem)] font-bold">{` ${
                         TILL_NUMBER || "TILL NUMBER"
                       } * `}</span>

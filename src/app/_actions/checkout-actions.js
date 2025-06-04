@@ -1,6 +1,6 @@
 "use server";
 
-import { apiClient, apiServiceClient } from "@/lib/utils";
+import { apiClient } from "@/lib/utils";
 
 /**
  * Validates the provided checkout data by ensuring required parameters are present
@@ -33,7 +33,7 @@ export async function validateCheckoutData(checkoutData) {
   const url = `transaction/collection/checkout/validation`;
 
   try {
-    const res = await apiServiceClient.post(url, checkoutData);
+    const res = await apiClient.post(url, checkoutData);
 
     // revalidatePath("/checkout", "page");
 
@@ -159,7 +159,7 @@ export async function payWithMobileMoney(checkoutData) {
   const url = `transaction/collection/checkout/mobile/${transactionID}/${phoneNumber}/${amount}`;
 
   try {
-    const res = await apiServiceClient.get(url);
+    const res = await apiClient.get(url);
 
     return {
       success: true,
@@ -217,7 +217,7 @@ export async function payWithBankCard(checkoutData) {
   const url = `transaction/collection/checkout/card`;
 
   try {
-    const res = await apiServiceClient.post(url, checkoutData);
+    const res = await apiClient.post(url, checkoutData);
 
     return {
       success: true,
@@ -273,7 +273,7 @@ export async function getTransactionStatus(transactionID) {
   const url = `transaction/collection/checkout/status/${transactionID}`;
 
   try {
-    const res = await apiServiceClient.get(url);
+    const res = await apiClient.get(url);
 
     return {
       success: true,
@@ -331,7 +331,7 @@ export async function getTransactionStatus(transactionID) {
 //   const url = `transaction/collection/checkout/transaction/${transactionID}/status/${status}`;
 
 //   try {
-//     const res = await apiServiceClient.get(url);
+//     const res = await apiClient.get(url);
 
 //     return {
 //       success: true,

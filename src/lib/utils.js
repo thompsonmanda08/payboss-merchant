@@ -9,10 +9,6 @@ export const apiClient = axios.create({
   baseURL: BASE_URL,
 });
 
-export const apiServiceClient = axios.create({
-  baseURL: process.env.SERVICES_BASE_URL,
-});
-
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
@@ -216,7 +212,7 @@ export function syntaxHighlight(json) {
       }
 
       return '<span class="' + cls + '">' + match + "</span>";
-    },
+    }
   );
 }
 

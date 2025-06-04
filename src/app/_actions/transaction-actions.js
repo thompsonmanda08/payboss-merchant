@@ -1,8 +1,6 @@
 "use server";
 
-import authenticatedApiClient, {
-  authenticatedServiceClient,
-} from "@/lib/api-config";
+import authenticatedApiClient from "@/lib/api-config";
 
 // ****************** ******************************** ************************** //
 // ****************** BULK TRANSACTION API ENDPOINTS ************************** //
@@ -163,7 +161,7 @@ export async function reviewBatch(batchID, reviewDetails) {
   const url = `transaction/payments/bulk/review-submission/${batchID}`;
 
   try {
-    const res = await authenticatedServiceClient({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: reviewDetails,
@@ -234,7 +232,7 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
   const url = `transaction/${protocol}/payments/bulk/${workspaceID}`;
 
   try {
-    const res = await authenticatedServiceClient({
+    const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: transactionData,
@@ -301,7 +299,7 @@ export async function submitBatchForApproval(batchID) {
   const url = `transaction/payments/bulk/review-submission/${batchID}`;
 
   try {
-    const res = await authenticatedServiceClient({ url });
+    const res = await authenticatedApiClient({ url });
 
     return {
       success: true,

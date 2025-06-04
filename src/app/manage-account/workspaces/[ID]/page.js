@@ -23,6 +23,8 @@ async function WorkSpaceIDPage({ params }) {
     getWorkspaceMembers(workspaceID),
   ]);
 
+
+
   const workspaces = workspacesResponse?.data?.workspaces || [];
   const selectedWorkspace = workspaces.find((w) => w.ID === workspaceID);
 
@@ -33,7 +35,7 @@ async function WorkSpaceIDPage({ params }) {
         selectedWorkspace={selectedWorkspace}
         workspaceID={workspaceID}
         workspaceMembers={workspaceMembers?.data?.users}
-        workspaceRoles={workspaceRoleData?.data?.roles}
+        workspaceRoles={workspaceRoleData?.data?.workspace_role}
       />
     </div>
   );
