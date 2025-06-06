@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { staggerContainerItemVariants } from "@/lib/constants";
 
 import { Button } from "../ui/button";
+import Loader from "../ui/loader";
 
 const variants = {
   base: cn(
@@ -187,11 +188,17 @@ export const SingleFileDropzone = React.forwardRef(
 
           {isLoading ? (
             // Image Preview
-            <Progress
-              // size="sm"
-              isIndeterminate
+            <Loader
+              className={"items-center"}
+              classNames={{
+                wrapper: "min-w-full min-h-full p-2.5 items-center",
+                text: "mt-0 font-medium text-sm",
+              }}
+              size={28}
+              removeWrapper
+              loadingText="Uploading..."
               aria-label="Loading..."
-              className="w-full max-w-md"
+              isLandscape
             />
           ) : showPreview && imagePreview && (acceptedFiles[0] || file) ? (
             <div className="w-80 h-[120px] rounded-md">
@@ -228,9 +235,9 @@ export const SingleFileDropzone = React.forwardRef(
                     Your file is ready
                   </p>
                 )}
-                <span className="flex gap-2 font-bold text-primary">
+                <span className="flex items-center w-full gap-2 font-semibold text-xs lg:text-sm max-w-sm text-primary">
                   {isLandscape && (
-                    <CheckCircleIcon className="h-6 w-6 font-bold text-green-500" />
+                    <CheckCircleIcon className="h-6 w-6 text-green-500" />
                   )}{" "}
                   {acceptedFiles[0]?.name || file?.name}
                 </span>

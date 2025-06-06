@@ -10,8 +10,9 @@ import useAccountProfile from "@/hooks/useProfileDetails";
 import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import TimelineItem from "@/components/base/timeline-item";
+import { Button } from "@/components/ui/button";
 
-function ProgressStageTracker() {
+function ProgressStageTracker({ onCompletionNavigateTo }) {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split("T")[0]);
   const date = formatDate(fullDate).replaceAll("-", " ");
   const time = fullDate.toLocaleTimeString();
@@ -22,14 +23,14 @@ function ProgressStageTracker() {
       ID: 1,
       name: "Account Details & Document Submission",
       infoText:
-        "Documents as well as business information submission. This process usually takes up to 24 hours, try reloading the page or come back later for a status update.",
+        "Documents as well as business information submission. Try reloading the page or come back later for a status update.",
       Icon: ClipboardDocumentCheckIcon,
     },
     {
       ID: 2,
       name: "Account Screening Pending Approval",
       infoText:
-        "Your account and your KYC data is being reviewed by the PayBoss support team. This process usually takes up to 24 hours, You will receive an email notification when your application has been reviewed",
+        "Your account and your KYC data is being reviewed by the PayBoss support team. You will receive an email notification when your application has been reviewed",
       Icon: ShieldExclamationIcon,
     },
 
@@ -42,8 +43,13 @@ function ProgressStageTracker() {
   ];
 
   return (
-    <Card className={"w-full gap-5 pb-5"}>
+    <div className="w-full lg:px-8 mx-auto p-2">
       <CardHeader
+        className={"py-0 mb-6"}
+        classNames={{
+          infoClasses: "mb-0",
+          innerWrapper: "gap-0",
+        }}
         infoText={
           "Your account is under review! We will notify you when your account is approved."
         }
@@ -66,7 +72,7 @@ function ProgressStageTracker() {
         </div>
         <div
           className={cn(
-            "flex w-full select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9",
+            "flex w-full select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9"
           )}
         >
           <Image
@@ -80,13 +86,16 @@ function ProgressStageTracker() {
             <h3 className="text-[clamp(16px,11px+0.5vw,1.5rem)] font-bold">
               {STAGES[KYCStageID - 1]?.name}
             </h3>
-            <p className="text-center text-[clamp(11px,8px+0.5vw,1rem)] max-w-md text-foreground-500">
+            <p className="text-center text-xs lg:text-sm max-w-md text-foreground-500 mb-4">
               {STAGES[KYCStageID - 1]?.infoText}
             </p>
+            <Button size={"lg"} onPress={onCompletionNavigateTo}>
+              Proceed to Account Verification
+            </Button>
           </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 

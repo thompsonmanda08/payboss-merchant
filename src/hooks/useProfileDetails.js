@@ -7,6 +7,8 @@ const useAccountProfile = () => {
   const { data: setup } = useSetupConfig();
   const { data: kycData } = useKYCData();
 
+  console.log("kycData", kycData?.data);
+
   const user = setup?.data?.userDetails || [];
   const permissions = setup?.data?.userPermissions;
   const merchantKYC = setup?.data?.kyc;
@@ -16,6 +18,7 @@ const useAccountProfile = () => {
 
   const businessDetails = kycData?.data?.details || {};
   const documents = kycData?.data?.documents || {};
+
   const [merchantID, setMerchantID] = useState("");
   const [merchant, setMerchant] = useState("");
   const [isCompleteKYC, setIsCompleteKYC] = useState("");
@@ -54,7 +57,7 @@ const useAccountProfile = () => {
       setAllowUserToSubmitKYC(
         merchantKYC?.stageID < 3 &&
           merchantKYC?.can_edit &&
-          (isOwner || isAccountAdmin),
+          (isOwner || isAccountAdmin)
       );
     }
 

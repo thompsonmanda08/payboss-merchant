@@ -230,6 +230,27 @@ export function generateRandomString(length = 10) {
   return randomString;
 }
 
+export function extractPocketBaseFileIdFromUrl(url) {
+  // Split the URL by '/'
+  const parts = url.split("/");
+
+  // The ID we want is the part after 'api/files/pbc_697151930/'
+  // So it should be at index 6 (0-based index) in the parts array
+  if (parts.length >= 7) {
+    return parts[6];
+  }
+
+  // Return null or throw an error if the URL format doesn't match
+  return null;
+}
+
+/* 
+Example usage:
+const url = "https://services-uat.bgspayboss.com/api/files/pbc_697151930/0iql1l0r2o72u67/standard_bank_zambia_walkthrough_neg9dv2lp5.pdf";
+const id = extractIdFromUrl(url);
+console.log(id); // Output: "0iql1l0r2o72u67"
+*/
+
 export function assertValue(v, errorMessage) {
   if (v === undefined || !v) {
     throw new Error(errorMessage);

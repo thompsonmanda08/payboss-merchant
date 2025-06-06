@@ -20,7 +20,7 @@ function BusinessAccountDetails({
     <div className="mr-auto flex flex-col gap-y-10">
       <div className="flex flex-col gap-6">
         <CardHeader
-          className={"py-0"}
+          className={"py-0 mb-6"}
           classNames={{
             infoClasses: "mb-0",
             innerWrapper: "gap-0",

@@ -42,7 +42,7 @@ function PromptModal({
             {title}
           </ModalHeader>
         )}
-        <ModalBody className="gap-0">{children}</ModalBody>
+        <ModalBody className="gap-0 py-0 my-0">{children}</ModalBody>
         {!removeActionButtons && (
           <ModalFooter>
             <Button color="danger" isDisabled={isDisabled} onPress={onClose}>

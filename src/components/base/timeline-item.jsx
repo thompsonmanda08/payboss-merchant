@@ -9,7 +9,7 @@ function TimelineItem({ stage, isLastItem, isCompleted, isPending, Icon }) {
     <div
       className={cn("flex cursor-pointer p-2 py-4", {
         "before:bg-primary/20": isCompleted,
-        "bg-gradient-to-r from-card to-primary-50 dark:to-primary-400/5":
+        "bg-gradient-to-r from-transparent via-primary-50 to-primary-50 dark:to-primary-400/5":
           isPending,
       })}
     >

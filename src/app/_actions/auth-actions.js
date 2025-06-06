@@ -314,6 +314,43 @@ export async function createMerchantAdminUser(newUser, merchantID) {
   }
 }
 
+export async function getBusinessDocumentRefs() {
+  const session = await getUserSession();
+  const merchantID = session?.user?.merchantID;
+  const url = `merchant/${merchantID}/submitted/document/details`;
+
+  try {
+    const res = await authenticatedApiClient({ url });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "GET | MERCHANT BUSINESS DOCS ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
 /**
  * Sends the business document references by sending a POST request to the API.
  * If the operation is successful, an API response containing the updated document references is returned.
@@ -324,7 +361,7 @@ export async function createMerchantAdminUser(newUser, merchantID) {
  */
 export async function sendBusinessDocumentRefs(payloadUrls) {
   const session = await getUserSession();
-  const merchantID = session?.user?.merchantID;
+  const merchantID = session?.merchantID;
   const url = `merchant/${merchantID}/document/submission`;
 
   try {
@@ -344,6 +381,47 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
   } catch (error) {
     console.error({
       endpoint: "POST | MERCHANT BUSINESS DOCS ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
+export async function deleteBusinessDocumentRefs(keys) {
+  const session = await getUserSession();
+  const merchantID = session?.user?.merchantID;
+  const url = `merchant/${merchantID}/documents/for/resubmission`;
+
+  try {
+    const res = await authenticatedApiClient({
+      url,
+      method: "PATCH",
+      data: { document_names: [...keys] },
+    });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "PATCH | BUSINESS DOC ~ " + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,

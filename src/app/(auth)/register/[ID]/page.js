@@ -87,10 +87,9 @@ export function AccountCreatedSuccess() {
           Account Created Successfully!
         </h2>
         <p className="max-w-md text-center text-xs leading-6 tracking-tight text-foreground/70 xl:text-sm">
-          You will need to login and upload verification documents to verify
-          your account. Approval takes up to{" "}
-          <span className="font-bold">2 working days</span>, however you have
-          limited access to your account until approval is completed.
+          You will need to login and complete KYC to activate your account.
+          Approval takes up to <span className="font-bold">48 Hours</span> after
+          KYC is complete and submitted for review.
         </p>
       </CardBody>
 
