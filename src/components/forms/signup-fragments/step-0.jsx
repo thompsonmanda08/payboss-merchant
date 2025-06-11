@@ -24,8 +24,9 @@ export default function Step0({ updateDetails }) {
         description={
           <p className="text-sm">
             <span className="font-bold text-primary">Important Notice:</span>{" "}
-            Registration information cannot be changed after submission.
-            Double-check all entries for accuracy before proceeding.
+            Registration information will not be editable after registration and
+            KYC is completed. Ensure to double-check all entries for accuracy
+            before proceeding.
           </p>
         }
         label="How would you like to proceed?"

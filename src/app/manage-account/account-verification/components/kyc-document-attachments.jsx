@@ -53,14 +53,6 @@ const ALL_DOCUMENT_CONFIGS = [
     tooltip:
       "Upload a certified copies of all the company Directors' National IDs",
   },
-  {
-    id: "PROFESSIONAL_LICENSE",
-    label: "Professional License",
-    backendKey: "professional_license_url",
-    required: false,
-    tooltip:
-      "(Optional) A professional license is required for certain businesses. Please provide a copy of the professional license if applicable.",
-  },
 
   {
     id: "TAX_CLEARANCE",
@@ -102,6 +94,14 @@ const ALL_DOCUMENT_CONFIGS = [
     tooltip:
       "Bank Statement document must be no more than 3 months old with all bank details clearly visible.",
   },
+  {
+    id: "PROFESSIONAL_LICENSE",
+    label: "Professional License",
+    backendKey: "professional_license_url",
+    required: false,
+    tooltip:
+      "(Optional) A professional license is required for certain businesses. Please provide a copy of the professional license if applicable.",
+  },
 ];
 
 // BUSINESS DOCUMENTS AND ATTACHMENTS
@@ -124,23 +124,6 @@ export default function DocumentAttachments({
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletePromptOpen, setDeletePromptOpen] = useState(false);
   const [docToDelete, setDocToDelete] = useState(null);
-
-  // NEW: Memoized document configurations based on merchantKYC
-  // const {
-  //   KYC_DOCUMENTS_COL1_CONFIG,
-  //   KYC_DOCUMENTS_COL2_CONFIG,
-  //   ALL_DOCUMENT_CONFIGS,
-  // } = useMemo(() => {
-  //   const col1 = [...KYC_COL1_BASE_DOCS];
-  //   const col2 = [...KYC_COL2_BASE_DOCS];
-  //   const allActive = [...KYC_COL1_BASE_DOCS, ...KYC_COL2_BASE_DOCS];
-
-  //   return {
-  //     KYC_DOCUMENTS_COL1_CONFIG: col1,
-  //     KYC_DOCUMENTS_COL2_CONFIG: col2,
-  //     ALL_DOCUMENT_CONFIGS: allActive,
-  //   };
-  // }, []);
 
   function updateDocs(fields) {
     setDocFiles({ ...docFiles, ...fields });
@@ -364,6 +347,7 @@ export default function DocumentAttachments({
                   });
                   setViewerModalOpen(true);
                 }}
+                allowDelete={allowUserToSubmitKYC}
                 onDelete={() =>
                   handleDeleteRequest(docConfig.backendKey, docConfig.label)
                 }
@@ -380,7 +364,7 @@ export default function DocumentAttachments({
                     [docConfig.id]: await handleFileUpload(
                       file,
                       docFiles[docConfig.id]?.file_record_id,
-                      docConfig.id,
+                      docConfig.id
                     ),
                   })
                 }
@@ -393,7 +377,7 @@ export default function DocumentAttachments({
                     "w-5 h-5 text-gray-300 dark:text-gray-600 hover:text-secondary absolute top-8 right-2 focus:outline-none transition-all duration-300 ease-in-out",
                     {
                       "right-8": docFiles[docConfig.id]?.file_url,
-                    },
+                    }
                   )}
                 />
               </Tooltip>
@@ -445,7 +429,7 @@ export default function DocumentAttachments({
             className={"justify-end ml-auto"}
             onPress={() =>
               onCompletionNavigateTo(
-                allowUserToSubmitKYC ? "summary" : "contract",
+                allowUserToSubmitKYC ? "summary" : "contract"
               )
             }
           >

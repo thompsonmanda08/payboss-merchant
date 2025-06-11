@@ -12,6 +12,7 @@ const DocumentDisplayButton = ({
   documentUrl,
   onOpenModal,
   onDelete,
+  allowDelete = false,
   imageUrl = "/images/attachment.png",
   buttonKey,
 }) => {
@@ -34,7 +35,7 @@ const DocumentDisplayButton = ({
             <Link2Icon className="h-5 w-5 text-foreground/20 hover:text-primary" />
           </Link>
 
-          {onDelete && (
+          {onDelete && allowDelete && (
             <span
               onClick={(e) => {
                 e.stopPropagation();
