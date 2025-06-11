@@ -544,6 +544,44 @@ export async function getRefreshToken() {
   }
 }
 
+export async function submitKYCForReview() {
+  const session = await getUserSession();
+  const merchantID = session?.user?.merchantID;
+
+  const url = `merchant/${merchantID}/document/submit/for/review`;
+
+  try {
+    const res = await authenticatedApiClient({ url });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "POST | SUBMIT KYC FOR REVIEW ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+}
+
 /**
  * Logs the user out of the system by deleting the session and
  * returning true if the logout is successful. If the user is not

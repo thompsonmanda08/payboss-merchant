@@ -6,17 +6,17 @@ import {
 } from "@heroicons/react/24/outline";
 
 import { cn, formatDate } from "@/lib/utils";
-import useAccountProfile from "@/hooks/useProfileDetails";
-import Card from "@/components/base/custom-card";
+
 import CardHeader from "@/components/base/card-header";
 import TimelineItem from "@/components/base/timeline-item";
 import { Button } from "@/components/ui/button";
+import useKYCInfo from "@/hooks/useKYCInfo";
 
 function ProgressStageTracker({ onCompletionNavigateTo }) {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split("T")[0]);
   const date = formatDate(fullDate).replaceAll("-", " ");
   const time = fullDate.toLocaleTimeString();
-  const { KYCStageID } = useAccountProfile();
+  const { KYCStageID, allowUserToSubmitKYC } = useKYCInfo();
 
   const STAGES = [
     {
@@ -43,7 +43,7 @@ function ProgressStageTracker({ onCompletionNavigateTo }) {
   ];
 
   return (
-    <div className="w-full lg:px-8 mx-auto p-2">
+    <div className="w-full flex flex-1 flex-col gap-4">
       <CardHeader
         className={"py-0 mb-6"}
         classNames={{
@@ -89,9 +89,11 @@ function ProgressStageTracker({ onCompletionNavigateTo }) {
             <p className="text-center text-xs lg:text-sm max-w-md text-foreground-500 mb-4">
               {STAGES[KYCStageID - 1]?.infoText}
             </p>
-            <Button size={"lg"} onPress={onCompletionNavigateTo}>
-              Proceed to Account Verification
-            </Button>
+            {allowUserToSubmitKYC && (
+              <Button size={"lg"} onPress={onCompletionNavigateTo}>
+                Proceed to Account Verification
+              </Button>
+            )}
           </div>
         </div>
       </div>

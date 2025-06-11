@@ -20,14 +20,19 @@ import EmptyLogs from "@/components/base/empty-logs";
 import WorkspaceItem from "./workspace-card-item";
 import CreateNewWorkspaceModal from "./create-new-workspace-modal";
 import WorkspacesLoading from "@/app/manage-account/loading";
+import useKYCInfo from "@/hooks/useKYCInfo";
 
 function WorkspacesList({ user, showHeader = false, className, workspaces }) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
-  const { merchantKYC, isAccountAdmin, isOwner } = useAccountProfile();
-  const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isAccountAdmin, isOwner } = useAccountProfile();
+  const { merchantKYC, isCompleteKYC } = useKYCInfo();
+
+  const [loading, setLoading] = useState(false);
+
   const isManagePage = pathname.split("/").includes("manage-account");
+
   const {
     workspaces: activeWorkspaces,
     isLoading,
@@ -35,13 +40,12 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
   } = useWorkspace();
 
   const canCreateWorkspace =
-    (isAccountAdmin || isOwner) && merchantKYC?.stageID == 3;
+    (isAccountAdmin || isOwner) && merchantKYC?.stage_id == 3;
 
   const [newWorkspace, setNewWorkspace] = useState({
     workspace: "",
     description: "",
     workspaceType: "",
-    isMerchantWorkspace: merchantKYC?.merchant_type == "super",
   });
 
   function editWorkspaceField(fields) {
@@ -142,7 +146,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
         )}
 
         {/* ACCOUNT VERIFICATION PROMPTING BANNER */}
-        {user && !user?.isCompleteKYC && (
+        {user && !isCompleteKYC && (
           <InfoBanner
             buttonText="Submit Documents"
             href={"manage-account/account-verification"}
@@ -210,7 +214,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                     />
                     <>
                       {/* ONLY ON EMPTY STATES */}
-                      {merchantKYC?.stage.toLowerCase() == "review" && (
+                      {merchantKYC?.stage?.toLowerCase() == "review" && (
                         <Popover placement="top">
                           <PopoverTrigger>
                             <Button
@@ -238,7 +242,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                       )}
 
                       {canCreateWorkspace &&
-                        merchantKYC?.stage.toLowerCase() == "approved" && (
+                        merchantKYC?.stage?.toLowerCase() == "approved" && (
                           <Button
                             className={
                               "bg-primary-50 p-8 min-w-[300px] dark:bg-primary dark:text-primary-foreground px-4"

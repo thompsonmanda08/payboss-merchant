@@ -17,11 +17,17 @@ export default function Step0({ updateDetails }) {
   }, []);
 
   return (
-    <div className="max-w-">
+    <div className="">
       <RadioGroup
         className="flex w-full"
         defaultValue={"NEW"}
-        description="PayBoss gives you the tools to simplify money management, no matter your business size or structure."
+        description={
+          <p className="text-sm">
+            <span className="font-bold text-primary">Important Notice:</span>{" "}
+            Registration information cannot be changed after submission.
+            Double-check all entries for accuracy before proceeding.
+          </p>
+        }
         label="How would you like to proceed?"
         onChange={(e) =>
           updateDetails(STEPS[0], {

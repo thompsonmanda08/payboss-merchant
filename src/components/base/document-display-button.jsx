@@ -5,6 +5,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
+import { Link2Icon } from "lucide-react";
 
 const DocumentDisplayButton = ({
   documentName,
@@ -22,15 +23,15 @@ const DocumentDisplayButton = ({
       onPress={onOpenModal}
     >
       {documentUrl && (
-        <>
+        <div className="absolute right-2 top-2 z-50 flex flex-col gap-y-1 items-center">
           <Link
             href={documentUrl || "#"}
             target="_blank"
-            rel="noopener noreferrer" // Best practice for security when using target="_blank"
-            onClick={(e) => e.stopPropagation()} // Prevent modal from opening when direct link is clicked
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
             aria-label={`Open ${documentName} in a new tab`}
           >
-            <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 z-50 h-5 w-5 text-foreground/20 hover:text-primary" />
+            <Link2Icon className="h-5 w-5 text-foreground/20 hover:text-primary" />
           </Link>
 
           {onDelete && (
@@ -39,31 +40,33 @@ const DocumentDisplayButton = ({
                 e.stopPropagation();
                 onDelete();
               }}
-              className="absolute bottom-2 right-2 z-50 rounded-full p-1 text-danger transition-colors hover:bg-danger/20"
+              className="rounded-full p-1 text-danger transition-colors hover:bg-danger/20"
               aria-label={`Delete ${documentName}`}
             >
               <TrashIcon className="h-4 w-4" />
             </span>
           )}
-        </>
+        </div>
       )}
-      <div className="h-[65%]">
+      <div className="h-18 md:h-full -ml-2 py-1 ">
         <Image
           unoptimized
           alt={`${documentName} preview`} // More descriptive alt text
-          className="h-full w-full object-cover"
+          className="h-full w-full md:max-w-[100px] max-w-[60px] aspect-square md:aspect-auto object-contain"
           height={100}
           src={imageUrl}
           width={100}
         />
       </div>
       <div className="flex flex-col gap-y-1 justify-start items-start w-max">
-        <span className="text-[13px] text-foreground/90 truncate">
+        <span className="text-xs sm:text-[13px] text-foreground/90 truncate">
           {" "}
           {/* Added truncate for long names */}
           {documentName}
         </span>
-        <span className="text-[12px] text-primary/50">2MB Max</span>
+        <span className="text-[9px] sm:text-xs md:text-[12px] text-primary/50">
+          2MB Max
+        </span>
       </div>
     </Button>
   );

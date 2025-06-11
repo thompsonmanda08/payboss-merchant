@@ -92,30 +92,7 @@ const DocumentsViewer = ({ documents, contractDocument }) => {
         </div>
       </div>
 
-      {/* **************************************************** */}
-
-      <Modal
-        removeCallToAction
-        cancelText="Close"
-        infoText="Ensure the document aligns with the submitted details"
-        isDismissible={true}
-        show={isOpen}
-        title={selectedDoc?.name}
-        width={1200}
-        onClose={() => {
-          setIsOpen(false);
-          setSelectedDoc(null);
-        }}
-      >
-        {selectedDoc?.url && (
-          <iframe
-            className="min-h-[60vh]  w-full py-4"
-            src={selectedDoc?.url}
-            style={{ border: "none" }}
-            title={selectedDoc?.name}
-          />
-        )}
-      </Modal>
+    
     </>
   );
 };

@@ -1,12 +1,11 @@
 "use client";
 import { useState, useMemo } from "react";
-import { Checkbox } from "@heroui/react";
+import { Checkbox, Tooltip } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { uploadBusinessFile } from "@/app/_actions/pocketbase-actions";
-import { notify } from "@/lib/utils";
+import { cn, notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import useAccountProfile from "@/hooks/useProfileDetails";
 import {
   deleteBusinessDocumentRefs,
   sendBusinessDocumentRefs,
@@ -19,74 +18,89 @@ import UploadField from "@/components/base/file-dropzone";
 import Modal from "@/components/base/custom-modal";
 import DocumentDisplayButton from "@/components/base/document-display-button";
 import PromptModal from "@/components/base/prompt-modal";
-import useKYCInfo from "@/hooks/useKYCInfo";
 import { QUERY_KEYS } from "@/lib/constants";
+import { InfoIcon } from "lucide-react";
 
-// Define document configurations
-const KYC_COL1_BASE_DOCS = [
+const ALL_DOCUMENT_CONFIGS = [
   {
     id: "CERTIFICATE_INC",
     label: "Business Incorporation Certificate",
     backendKey: "cert_of_incorporation_url",
     required: true,
+    tooltip:
+      "Upload a copy of the company's Business Incorporation Certificate.",
   },
   {
     id: "ARTICLES_ASSOCIATION",
-    label: "Articles of Association",
+    label: "Articles of Association (Stamped)",
     backendKey: "articles_of_association_url",
     required: true,
+    tooltip: "Upload a stamped copy of the company's Articles of Association.",
   },
   {
     id: "SHAREHOLDER_AGREEMENT",
     label: "Shareholders Agreement",
     backendKey: "share_holder_url",
     required: true,
+    tooltip: "Upload a copy of the company's Shareholders Agreement.",
   },
 
   {
     id: "DIRECTOR_NRC",
-    label: "Directors' ID",
+    label: "Directors' National IDS (Certified)",
     backendKey: "director_nrc_url",
     required: true,
+    tooltip:
+      "Upload a certified copies of all the company Directors' National IDs",
   },
   {
     id: "PROFESSIONAL_LICENSE",
     label: "Professional License",
     backendKey: "professional_license_url",
     required: false,
+    tooltip:
+      "(Optional) A professional license is required for certain businesses. Please provide a copy of the professional license if applicable.",
   },
-];
 
-const KYC_COL2_BASE_DOCS = [
   {
     id: "TAX_CLEARANCE",
-    label: "Tax Clearance Certificate",
+    label: "Clearance Certificate",
     backendKey: "tax_clearance_certificate_url",
     required: true,
+    tooltip:
+      "Tax Clearance Certificate must be a ZRA issued document with the TPIN and the company's name.",
   },
   {
     id: "COMPANY_PROFILE",
-    label: "Company Profile",
+    label: "Copy of Company Profile",
     backendKey: "company_profile_url",
     required: true,
+    tooltip:
+      "Company Profile could be a any document that shows the company's name, address, and contact information. It should also include the company's logo and other relevant information on the nature of business of the company.",
   },
   {
     id: "COMPANY_STRUCTURE",
     label: "Company Structure",
     backendKey: "organisation_structure_url",
     required: true,
+    tooltip:
+      "Company Structure could be a any document that shows the company's leadership structure and their responsibilities.",
   },
   {
     id: "PROOF_OF_ADDRESS",
     label: "Proof of Address",
     backendKey: "proof_of_address_url",
     required: true,
+    tooltip:
+      "Proof of Address must be a certified document, utility bill, lease agreement, or bank statement with the company's name and address. The document must be no more than 3 months old.",
   },
   {
     id: "BANK_STATEMENT",
-    label: "Bank Statement",
+    label: "Copy of Bank Statement",
     backendKey: "bank_statement_url",
     required: true,
+    tooltip:
+      "Bank Statement document must be no more than 3 months old with all bank details clearly visible.",
   },
 ];
 
@@ -112,21 +126,21 @@ export default function DocumentAttachments({
   const [docToDelete, setDocToDelete] = useState(null);
 
   // NEW: Memoized document configurations based on merchantKYC
-  const {
-    KYC_DOCUMENTS_COL1_CONFIG,
-    KYC_DOCUMENTS_COL2_CONFIG,
-    ALL_DOCUMENT_CONFIGS,
-  } = useMemo(() => {
-    const col1 = [...KYC_COL1_BASE_DOCS];
-    const col2 = [...KYC_COL2_BASE_DOCS];
-    const allActive = [...KYC_COL1_BASE_DOCS, ...KYC_COL2_BASE_DOCS];
+  // const {
+  //   KYC_DOCUMENTS_COL1_CONFIG,
+  //   KYC_DOCUMENTS_COL2_CONFIG,
+  //   ALL_DOCUMENT_CONFIGS,
+  // } = useMemo(() => {
+  //   const col1 = [...KYC_COL1_BASE_DOCS];
+  //   const col2 = [...KYC_COL2_BASE_DOCS];
+  //   const allActive = [...KYC_COL1_BASE_DOCS, ...KYC_COL2_BASE_DOCS];
 
-    return {
-      KYC_DOCUMENTS_COL1_CONFIG: col1,
-      KYC_DOCUMENTS_COL2_CONFIG: col2,
-      ALL_DOCUMENT_CONFIGS: allActive,
-    };
-  }, []);
+  //   return {
+  //     KYC_DOCUMENTS_COL1_CONFIG: col1,
+  //     KYC_DOCUMENTS_COL2_CONFIG: col2,
+  //     ALL_DOCUMENT_CONFIGS: allActive,
+  //   };
+  // }, []);
 
   function updateDocs(fields) {
     setDocFiles({ ...docFiles, ...fields });
@@ -317,7 +331,7 @@ export default function DocumentAttachments({
     documents.bank_statement_url;
 
   return allowUserToSubmitKYC ? (
-    <div className="w-full lg:px-8 mx-auto p-2">
+    <div className="w-full flex flex-1 flex-col gap-4">
       <CardHeader
         className={"py-0 mb-6"}
         classNames={{
@@ -330,34 +344,34 @@ export default function DocumentAttachments({
         title="Business Documents and Attachments"
       />
 
-      <div className="flex w-full flex-col gap-2 md:flex-row">
-        <div className="flex w-full flex-1 flex-col gap-2">
-          {KYC_DOCUMENTS_COL1_CONFIG.map((docConfig) => {
-            const displayUrl = documents?.[docConfig.backendKey];
+      <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-x-4 gap-y-1 w-full ">
+        {ALL_DOCUMENT_CONFIGS.map((docConfig) => {
+          const displayUrl = documents?.[docConfig.backendKey];
 
-            const displayName = docConfig.label;
+          const displayName = docConfig.label;
 
-            if (displayUrl) {
-              return (
-                <DocumentDisplayButton
-                  key={docConfig.id + "-display"}
-                  buttonKey={docConfig.id + "-btn"}
-                  documentName={displayName}
-                  documentUrl={displayUrl}
-                  onOpenModal={() => {
-                    setCurrentDocInModal({
-                      name: displayName,
-                      url: displayUrl,
-                    });
-                    setViewerModalOpen(true);
-                  }}
-                  onDelete={() =>
-                    handleDeleteRequest(docConfig.backendKey, docConfig.label)
-                  }
-                />
-              );
-            }
+          if (displayUrl) {
             return (
+              <DocumentDisplayButton
+                key={docConfig.id + "-display"}
+                buttonKey={docConfig.id + "-btn"}
+                documentName={displayName}
+                documentUrl={displayUrl}
+                onOpenModal={() => {
+                  setCurrentDocInModal({
+                    name: displayName,
+                    url: displayUrl,
+                  });
+                  setViewerModalOpen(true);
+                }}
+                onDelete={() =>
+                  handleDeleteRequest(docConfig.backendKey, docConfig.label)
+                }
+              />
+            );
+          }
+          return (
+            <div key={docConfig.id + "-upload-field"} className="relative">
               <UploadField
                 key={docConfig.id + "-upload"}
                 required={docConfig.required}
@@ -373,54 +387,19 @@ export default function DocumentAttachments({
                 isLoading={fieldLoadingStates[docConfig.id] || false}
                 label={docConfig.label}
               />
-            );
-          })}
-        </div>
-
-        <div className="flex w-full flex-1 flex-col gap-2">
-          {KYC_DOCUMENTS_COL2_CONFIG.map((docConfig) => {
-            const displayUrl = documents?.[docConfig.backendKey];
-            const displayName = docConfig.label;
-
-            if (displayUrl) {
-              return (
-                <DocumentDisplayButton
-                  key={docConfig.id + "-display"}
-                  buttonKey={docConfig.id + "-btn"}
-                  documentName={displayName}
-                  documentUrl={displayUrl}
-                  onOpenModal={() => {
-                    setCurrentDocInModal({
-                      name: displayName,
-                      url: displayUrl,
-                    });
-                    setViewerModalOpen(true);
-                  }}
-                  onDelete={() =>
-                    handleDeleteRequest(docConfig.backendKey, docConfig.label)
-                  }
+              <Tooltip content={docConfig.tooltip} placement="top" className="">
+                <InfoIcon
+                  className={cn(
+                    "w-5 h-5 text-gray-300 dark:text-gray-600 hover:text-secondary absolute top-8 right-2 focus:outline-none transition-all duration-300 ease-in-out",
+                    {
+                      "right-8": docFiles[docConfig.id]?.file_url,
+                    }
+                  )}
                 />
-              );
-            }
-            return (
-              <UploadField
-                key={docConfig.id + "-upload"}
-                required={docConfig.required}
-                handleFile={async (file) =>
-                  updateDocs({
-                    [docConfig.id]: await handleFileUpload(
-                      file,
-                      docFiles[docConfig.id]?.file_record_id,
-                      docConfig.id
-                    ),
-                  })
-                }
-                isLoading={fieldLoadingStates[docConfig.id] || false}
-                label={docConfig.label}
-              />
-            );
-          })}
-        </div>
+              </Tooltip>
+            </div>
+          );
+        })}
       </div>
       {error.status && (
         <div className="mx-auto flex w-full flex-col items-center justify-center gap-4">
@@ -430,7 +409,7 @@ export default function DocumentAttachments({
 
       {/* IF THE DOCUMENTS OBJECT HAS LESS THAN 10 ENTRIES, SHOW THE SUBMIT DOCUMENTS BUTTON */}
       {!isCompleteDocumentUploads(documents) && (
-        <div className="mt-4 flex w-full justify-between items-start gap-4">
+        <div className="mt-4 flex w-full flex-col  lg:flex-row justify-between items-start gap-4">
           <Checkbox
             size="lg"
             color="primary"
@@ -453,6 +432,7 @@ export default function DocumentAttachments({
             isLoading={isSubmitting}
             loadingText={"Submitting..."}
             onPress={submitKYCDocuments}
+            className="w-full lg:w-auto"
           >
             Submit Documents
           </Button>
@@ -463,7 +443,11 @@ export default function DocumentAttachments({
         <div className="mt-4 flex w-full justify-end items-start gap-4">
           <Button
             className={"justify-end ml-auto"}
-            onPress={() => onCompletionNavigateTo()}
+            onPress={() =>
+              onCompletionNavigateTo(
+                allowUserToSubmitKYC ? "summary" : "contract"
+              )
+            }
           >
             Next Section
           </Button>

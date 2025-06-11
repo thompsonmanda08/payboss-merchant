@@ -17,7 +17,7 @@ async function UsersSettingsPage() {
   const permissions = {
     isOwner: session?.user?.role?.toLowerCase() == "owner",
     isAccountAdmin: session?.user?.role?.toLowerCase() == "admin",
-    isApprovedUser: kyc?.stageID == 3,
+    isApprovedUser: kyc?.stage_id == 3,
     ...session?.userPermissions,
   };
 
@@ -25,4 +25,5 @@ async function UsersSettingsPage() {
 }
 
 export const dynamic = "force-dynamic";
+
 export default UsersSettingsPage;

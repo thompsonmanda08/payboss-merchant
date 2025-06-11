@@ -25,7 +25,6 @@ import {
 } from "@/app/_actions/user-actions";
 import useWorkspaceStore from "@/context/workspaces-store";
 import { changeUserRoleInWorkspace } from "@/app/_actions/workspace-actions";
-import useAllUsersAndRoles from "@/hooks/useAllUsersAndRoles";
 
 const USER_INIT = {
   first_name: "",
@@ -45,7 +44,6 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
   const queryClient = useQueryClient();
   const pathname = usePathname();
 
-  const isAccountLevelSettingsRoute = pathname.startsWith("/manage-account");
   const isUsersRoute = pathname.split("/manage-account/users");
 
   const [loading, setLoading] = useState(false);

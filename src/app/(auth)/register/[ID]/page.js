@@ -51,7 +51,7 @@ export default function Register() {
             onButtonClick={() => router.refresh()}
           />
         </Card>
-      ) : !accountCreated ? (
+      ) : accountCreated ? (
         <AccountCreatedSuccess />
       ) : (
         <SignUpForm superMerchantID={superMerchantID} />

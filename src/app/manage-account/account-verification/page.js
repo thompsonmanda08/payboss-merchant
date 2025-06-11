@@ -11,7 +11,6 @@ import {
   CheckBadgeIcon,
   DocumentCheckIcon,
   FlagIcon,
-  UserGroupIcon,
 } from "@heroicons/react/24/outline";
 
 import useConfigOptions from "@/hooks/useConfigOptions";
@@ -20,11 +19,12 @@ import { cn } from "@/lib/utils";
 import useKYCInfo from "@/hooks/useKYCInfo";
 
 import DocumentAttachments from "./components/kyc-document-attachments";
-import BusinessInformationForm from "./components/BusinessInformationForm";
-import BankAccountForm from "./components/BankAccountForm";
-import ComplianceSummary from "./components/ComplianceSummary";
-import ContactPersonProfile from "./components/ContactPersonProfile";
-import TermsAndAgreement from "./components/TermsAndAgreement";
+import {
+  BusinessInformationForm,
+  BankAccountForm,
+} from "./components/business-account-details";
+import ComplianceSummary from "./components/compliance-summary";
+import TermsAndAgreement from "./components/terms-conditions";
 import ProgressStageTracker from "./components/account-verification-tracker";
 import AccountVerificationLoading from "./loading";
 
@@ -40,25 +40,28 @@ const SIDEBAR_ITEMS = [
     id: "business",
     status: "pending",
     Icon: BuildingOffice2Icon,
+    description: "Provide your business details.",
   },
   {
     name: "Bank Account",
     id: "bankAccount",
     status: "pending",
     Icon: CreditCardIcon,
+    description: "Your business bank account for transactions.",
   },
   {
-    name: "Contact Person",
-    id: "contactPerson",
+    name: "Documents",
+    id: "documents",
     status: "pending",
-    Icon: UserGroupIcon,
+    Icon: DocumentIcon,
+    description: "Upload and verify required documents.",
   },
-  { name: "Documents", id: "documents", status: "pending", Icon: DocumentIcon },
   {
     name: "Contract & Agreement",
     id: "contract",
     status: "pending",
     Icon: DocumentCheckIcon,
+    description: "Review and accept the terms and conditions.",
   },
   {
     name: "Summary",
@@ -86,6 +89,8 @@ function AccountVerification({}) {
     refDocsExist,
     businessDetails,
     isLoading: loadingKYCInfo,
+    isCompleteKYC,
+    allowUserToSubmitKYC,
   } = useKYCInfo();
 
   const [sections, setSections] = useState(SIDEBAR_ITEMS);
@@ -99,23 +104,18 @@ function AccountVerification({}) {
     setActiveSection(sectionId);
   };
 
-  function updateSectionStatus(sectionId, status) {
-    const updatedSections = sections.map((section) => {
-      if (section.id === sectionId) {
-        return { ...section, status };
-      }
-
-      return section;
-    });
-
-    return updatedSections;
-  }
-
   // UPDATE SECTION STATUS BASED ON THE KYC STAGE ID AND BUSINESS DETAILS
   useEffect(() => {
     setSections((currentSections) => {
       let hasChanged = false;
       let newSections = [...currentSections];
+
+      // FILTER OUT CONTRACTS IN KYC NOT COMPLETED
+      if (!isCompleteKYC) {
+        newSections = newSections.filter(
+          (section) => section.id !== "contract"
+        );
+      }
 
       const updateStatus = (sectionId, status) => {
         const sectionIndex = newSections.findIndex((s) => s.id === sectionId);
@@ -136,6 +136,10 @@ function AccountVerification({}) {
 
       if (KYCStageID > 2) {
         updateStatus("start", "completed");
+      }
+
+      if (!allowUserToSubmitKYC) {
+        updateStatus("summary", "completed");
       }
 
       // IF ALL BUSINESS DETAILS FIELDS ARE PROVIDED IN THE BUSINESS DETAILS OBJECT
@@ -170,15 +174,17 @@ function AccountVerification({}) {
 
       // IF DOCUMENTS OBJECT HAS BEEN UPDATED AND HAS ALL ENTRY KEYS
       if (
-        documents.company_profile_url &&
-        documents.cert_of_incorporation_url &&
-        documents.share_holder_url &&
-        documents.tax_clearance_certificate_url &&
-        documents.articles_of_association_url &&
-        documents.organisation_structure_url &&
-        documents.director_nrc_url &&
-        documents.proof_of_address_url &&
-        documents.bank_statement_url
+        Boolean(
+          documents.company_profile_url &&
+            documents.cert_of_incorporation_url &&
+            documents.share_holder_url &&
+            documents.tax_clearance_certificate_url &&
+            documents.articles_of_association_url &&
+            documents.organisation_structure_url &&
+            documents.director_nrc_url &&
+            documents.proof_of_address_url &&
+            documents.bank_statement_url
+        )
       ) {
         updateStatus("documents", "completed");
       }
@@ -187,8 +193,6 @@ function AccountVerification({}) {
     });
     // IF THE BUSINESS DETAILS / DOCUMENTS / KYC STATE HAS BEEN UPDATED, UPDATE THE SECTIONS STATE WITH THE UPDATED SECTIONS
   }, [KYCStageID, businessDetails, documents]);
-
-  // console.log("BIZNESS", businessDetails);
 
   const renderActiveComponent = () => {
     switch (activeSection) {
@@ -221,14 +225,6 @@ function AccountVerification({}) {
             businessDetails={businessDetails}
             currencies={currencies}
             onCompletionNavigateTo={(targetSectionId) =>
-              navigateToSection(targetSectionId || "contactPerson")
-            }
-          />
-        );
-      case "contactPerson":
-        return (
-          <ContactPersonProfile
-            onCompletionNavigateTo={(targetSectionId) =>
               navigateToSection(targetSectionId || "documents")
             }
           />
@@ -236,18 +232,16 @@ function AccountVerification({}) {
 
       case "documents":
         return (
-          <div className="w-full lg:px-8 mx-auto p-2">
-            <DocumentAttachments
-              key={"documents"}
-              allowUserToSubmitKYC={isOwner || isAccountAdmin}
-              documents={documents}
-              merchantID={merchantID}
-              refDocsExist={refDocsExist}
-              onCompletionNavigateTo={(targetSectionId) =>
-                navigateToSection(targetSectionId || "contract")
-              }
-            />
-          </div>
+          <DocumentAttachments
+            key={"documents"}
+            allowUserToSubmitKYC={isOwner || isAccountAdmin}
+            documents={documents}
+            merchantID={merchantID}
+            refDocsExist={refDocsExist}
+            onCompletionNavigateTo={(targetSectionId) =>
+              navigateToSection(targetSectionId || "contract")
+            }
+          />
         );
       case "contract":
         return (
@@ -258,7 +252,12 @@ function AccountVerification({}) {
           />
         );
       case "summary":
-        return <ComplianceSummary navigateToSection={navigateToSection} />;
+        return (
+          <ComplianceSummary
+            navigateToSection={navigateToSection}
+            sections={sections}
+          />
+        );
       default:
         return (
           <ProgressStageTracker
@@ -288,92 +287,129 @@ function AccountVerification({}) {
         </p>
       </section>
 
-      <div className="flex w-full flex-col md:flex-row gap-y-6 md:gap-x-8 px-4 md:px-0">
-        <aside className="w-full md:w-72 md:pr-4">
-          <nav aria-label="Vertical stepper">
-            <ol className="space-y-0" role="list">
-              {sections.map((item, index) => {
-                const isActive = activeSection === item.id;
-                const isCompleted = item.status === "completed";
+      <div className="flex w-full flex-col lg:flex-row gap-4 xl:gap-x-8 px-4 md:px-0">
+        <aside className="w-full lg:w-72">
+          <nav aria-label="Stepper" className="">
+            <ol
+              className="flex items-center lg:flex-col lg:items-stretch w-full flex-1"
+              role="list"
+            >
+              {sections
+                .flatMap((item, index) => {
+                  const isActive = activeSection === item.id;
+                  const isCompleted = item.status === "completed";
 
-                return (
-                  <li key={item.id} className="relative flex flex-col pb-0">
-                    {/* Line between steps */}
-                    {index !== SIDEBAR_ITEMS.length - 1 && (
-                      <div
-                        aria-hidden="true"
+                  const step = (
+                    <li
+                      key={item.id}
+                      className="relative shrink-0 flex-1 lg:pb-0 "
+                    >
+                      {/* Vertical Line between steps for lg screens */}
+                      {index !== sections.length - 1 && (
+                        <div
+                          aria-hidden="true"
+                          className={cn(
+                            "hidden lg:block absolute left-[40px] transition-all duration-300 ease-in-out top-8 -ml-px mt-0.5 h-full w-0.5 bg-primary-300 dark:bg-primary-600",
+                            {
+                              "bg-primary-600 dark:bg-primary-400": isCompleted,
+                            }
+                          )}
+                        />
+                      )}
+
+                      {/* Step button */}
+                      <button
+                        aria-current={isActive ? "step" : undefined}
                         className={cn(
-                          "absolute left-[32px] top-8 -ml-px mt-0.5 h-full w-0.5 bg-primary-300 dark:bg-primary-600",
+                          "group relative flex w-full items-center rounded-md p-2 focus:outline-none lg:items-start lg:py-3 lg:my-4 transition-all duration-300 ease-in-out",
+                          "flex-col lg:flex-row outline-none border-none",
                           {
-                            "bg-primary-600 dark:bg-primary-400": isCompleted,
+                            "bg-blue-50 dark:bg-gray-800 min-w-40 lg:min-w-auto":
+                              isActive,
+                            "hover:bg-gray-50 dark:hover:bg-gray-800":
+                              !isActive,
                           }
                         )}
-                      />
-                    )}
+                        onClick={() => setActiveSection(item.id)}
+                      >
+                        <span className="flex items-center lg:mx-4">
+                          <span
+                            className={cn(
+                              "relative z-10 flex aspect-square w-9 items-center justify-center rounded-full bg-primary-100 transition-all duration-300 group-hover:bg-primary-400 dark:bg-gray-700 dark:group-hover:bg-primary-600",
+                              {
+                                "bg-primary-600 text-white dark:bg-primary-400":
+                                  isActive || isCompleted,
+                              }
+                            )}
+                          >
+                            {isCompleted ? (
+                              <CheckBadgeIcon className="h-5 w-5 text-white" />
+                            ) : isActive ? (
+                              <PencilIcon className="h-4 w-4 text-white" />
+                            ) : (
+                              <item.Icon className="h-4 w-4 text-primary-500 group-hover:text-white dark:group-hover:text-white" />
+                            )}
+                          </span>
+                        </span>
+                        <span
+                          className={cn(
+                            "mt-2 flex flex-col items-center lg:mt-0 lg:items-start",
+                            { "hidden lg:flex": !isActive }
+                          )}
+                        >
+                          <span
+                            className={cn(
+                              "text-sm font-medium text-gray-600 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200",
+                              {
+                                "text-primary-700 dark:text-primary-300":
+                                  isActive || isCompleted,
+                              }
+                            )}
+                          >
+                            {item.name}
+                          </span>
+                          <span
+                            className={cn(
+                              "text-xs text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-400",
+                              {
+                                "text-primary-500 dark:text-primary-400":
+                                  isActive || isCompleted,
+                              }
+                            )}
+                          >
+                            {isCompleted
+                              ? "Completed"
+                              : isActive
+                                ? "In Progress"
+                                : "Pending"}
+                          </span>
+                        </span>
+                      </button>
+                    </li>
+                  );
 
-                    {/* Step button */}
-                    <button
-                      aria-current={isActive ? "step" : undefined}
-                      className={cn(
-                        "group relative flex w-full items-start py-3 my-2 sm:my-3 lg:my-4 xl:my-5 rounded-md transition-colors focus:outline-none",
-                        {
-                          "bg-blue-50 dark:bg-gray-800": isActive,
-                          "hover:bg-gray-50 dark:hover:bg-gray-800": !isActive,
-                        }
-                      )}
-                      onClick={() => setActiveSection(item.id)}
+                  if (index === sections.length - 1) {
+                    return [step];
+                  }
+
+                  const connector = (
+                    <li
+                      key={`${item.id}-connector`}
+                      aria-hidden="true"
+                      className=" flex-1 w-full lg:hidden sm:block"
                     >
-                      <span className="flex items-center mx-4">
-                        <span
-                          className={cn(
-                            "relative z-10 flex aspect-square w-9 items-center justify-center transition-all duration-300 rounded-full bg-primary-100 dark:bg-gray-700 group-hover:bg-primary-400 dark:group-hover:bg-primary-600",
-                            {
-                              "bg-primary-600 dark:bg-primary-400 text-white":
-                                isActive || isCompleted,
-                            }
-                          )}
-                        >
-                          {isCompleted ? (
-                            <CheckBadgeIcon className="h-5 w-5 text-white" />
-                          ) : isActive ? (
-                            <PencilIcon className="h-4 w-4 text-white" />
-                          ) : (
-                            <item.Icon className="h-4 w-4 text-primary-500 group-hover:text-white dark:group-hover:text-white" />
-                          )}
-                        </span>
-                      </span>
-                      <span className="flex flex-col items-start">
-                        <span
-                          className={cn(
-                            "text-sm font-medium text-gray-600 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200",
-                            {
-                              "text-primary-700 dark:text-primary-300":
-                                isActive || isCompleted,
-                            }
-                          )}
-                        >
-                          {item.name}
-                        </span>
-                        <span
-                          className={cn(
-                            "text-xs text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400",
-                            {
-                              "text-primary-500 dark:text-primary-400":
-                                isActive || isCompleted,
-                            }
-                          )}
-                        >
-                          {isCompleted
-                            ? "Completed"
-                            : isActive
-                              ? "In Progress"
-                              : "Pending"}
-                        </span>
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
+                      <div
+                        className={cn("h-0.5 w-full", {
+                          "bg-primary-600": isCompleted,
+                          "bg-primary-300": !isCompleted,
+                        })}
+                      />
+                    </li>
+                  );
+
+                  return [step, connector];
+                })
+                .reduce((acc, val) => acc.concat(val), [])}
             </ol>
           </nav>
         </aside>

@@ -11,6 +11,7 @@ function Textarea({ className, onError, ...props }) {
         {
           "border-red-500 focus:border-red-500/70 focus-visible:ring-red-500/30":
             onError,
+          "opacity-50": isDisabled || props?.isDisabled || props?.disabled,
         },
         className
       )}

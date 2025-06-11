@@ -29,27 +29,36 @@ const useKYCInfo = () => {
     uploadedDocsResponse?.data || response?.data.documents || {};
 
   const users = response?.data?.users || [];
+  const merchantKYC = response?.data?.merchant_kyc || {
+    is_complete_kyc: false,
+    stage: "",
+    stage_id: 1,
+    kyc_approval_status: "pending",
+    can_edit: true,
+  };
 
   const refDocsExist = Object.keys(documents).length > 0;
 
   /* ****** SET STATE VARIABLES**************** */
-  const isApprovedUser =
-    businessDetails?.stageID == 3 &&
-    businessDetails?.isCompleteKYC &&
-    businessDetails?.kyc_approval_status?.toLowerCase() == "approved";
 
   const merchantID = businessDetails?.ID || "";
   const merchant = businessDetails?.name || "";
 
-  const isCompleteKYC = businessDetails?.isCompleteKYC;
-  const KYCStage = businessDetails?.stage;
-  const KYCStageID = businessDetails?.stageID;
-  const KYCApprovalStatus = businessDetails?.kyc_approval_status?.toLowerCase();
+  const isCompleteKYC = merchantKYC?.is_complete_kyc;
+  const KYCStage = merchantKYC?.stage?.toLowerCase();
+  const KYCStageID = merchantKYC?.stage_id;
+  const KYCApprovalStatus = merchantKYC?.kyc_approval_status?.toLowerCase();
+
+  const isApprovedUser =
+    KYCStageID == 3 && isCompleteKYC && KYCApprovalStatus == "approved";
 
   const contactPerson =
-    users?.filter((user) => user?.role?.toLowerCase() == "owner")[0] || {};
+    users?.find((user) => user?.role?.toLowerCase() == "owner") || {};
 
-  const signedContractDoc = documents?.signed_contract || null;
+  const signedContractDoc = documents?.signed_contract || "";
+
+  const allowUserToSubmitKYC =
+    merchantKYC?.can_edit && contactPerson?.role?.toLowerCase() == "owner";
 
   return {
     businessDetails,
@@ -67,6 +76,7 @@ const useKYCInfo = () => {
     isLoading,
     isError,
     isSuccess,
+    allowUserToSubmitKYC,
   };
 };
 

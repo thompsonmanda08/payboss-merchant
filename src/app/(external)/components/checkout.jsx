@@ -53,8 +53,8 @@ export default function Checkout({ checkoutData }) {
               selectedKey={selectedMethod}
               size="lg"
               variant="bordered"
-              onSelectionChange={(type) => {
-                setSelectedMethod(type);
+              onSelectionChange={(k) => {
+                setSelectedMethod(k);
               }}
             >
               <Tab

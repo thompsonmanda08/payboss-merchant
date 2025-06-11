@@ -7,15 +7,15 @@ import { DefaultCover } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export default function ProfileBanner({ className }) {
-  const { user, merchant } = useAccountProfile();
+  const { user } = useAccountProfile();
 
-  return !user || !merchant ? (
+  return !user ? (
     <ProfileBannerLoader className={className} />
   ) : (
     <div
       className={cn(
         "absolute left-0 right-0 top-[24%] z-20 m-7 rounded-2xl border border-input/40 bg-background/10 p-4 backdrop-blur-md",
-        className,
+        className
       )}
     >
       <div className="flex w-full items-center gap-4">
@@ -34,7 +34,7 @@ export default function ProfileBanner({ className }) {
               {`${user?.first_name} ${user?.last_name}`}
             </h2>
             <div className="heading-5 font-semibold capitalize text-slate-200">
-              {merchant}{" "}
+              {/* {merchant}{" "} */}
               <Chip
                 className="ml-2 text-sm text-green-500 font-bold"
                 color={"success"}
@@ -55,7 +55,7 @@ function ProfileBannerLoader({ className }) {
     <div
       className={cn(
         "absolute left-0 right-0 top-[24%] z-20 m-7 rounded-2xl border border-input/40 bg-background/10 p-4 backdrop-blur-md",
-        className,
+        className
       )}
     >
       <div className="flex w-full items-center gap-4">

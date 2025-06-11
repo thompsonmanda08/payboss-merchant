@@ -6,7 +6,6 @@ import useAuthStore from "@/context/auth-store";
 import { uploadBusinessFile } from "@/app/_actions/pocketbase-actions";
 import { notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import useAccountProfile from "@/hooks/useProfileDetails";
 import {
   sendBusinessDocumentRefs,
   updateBusinessDocumentRefs,
@@ -15,11 +14,12 @@ import CardHeader from "@/components/base/card-header";
 import StatusMessage from "@/components/base/status-message";
 import EmptyLogs from "@/components/base/empty-logs";
 import UploadField from "@/components/base/file-dropzone";
+import useKYCInfo from "@/hooks/useKYCInfo";
 
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
   const queryClient = useQueryClient();
-  const { merchantID, refDocsExist } = useAccountProfile();
+  const { merchantID, refDocsExist } = useKYCInfo();
   const { isKYCSent, setIsKYCSent } = useAuthStore((state) => state);
   const [docFiles, setDocFiles] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);

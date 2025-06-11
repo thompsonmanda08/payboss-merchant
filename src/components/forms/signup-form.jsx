@@ -316,19 +316,6 @@ export default function SignUpForm({ superMerchantID }) {
           )}
 
           <div className="mt-5 flex w-full items-end justify-center gap-4 md:justify-end">
-            {/* {!isFirstStep && (
-              <Button
-                aria-label="back"
-                color="light"
-                className={
-                  'w-full max-w-xs text-primary sm:w-auto sm:max-w-fit'
-                }
-                disabled={isLoading}
-                onClick={() => navigateBackwards()}
-              >
-                <ArrowUturnLeftIcon className="h-5 w-5" /> Back
-              </Button>
-            )} */}
             <Button
               className="w-full"
               color="primary"
