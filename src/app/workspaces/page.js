@@ -44,7 +44,7 @@ async function WorkSpacesPage() {
 
         <section
           className={cn(
-            "z-20 mx-auto mb-20 mt-[-160px] w-full max-w-[1540px] px-4 md:px-6"
+            "z-20 mx-auto mb-20 mt-[-160px] w-full max-w-[1540px] px-4 md:px-6",
           )}
           role="workspaces-list"
         >

@@ -121,7 +121,7 @@ export default function CollectionsReports({}) {
     const response = await getCollectionsReport(
       workspaceID,
       serviceType,
-      dateRange
+      dateRange,
     );
 
     return response || [];
@@ -154,7 +154,7 @@ export default function CollectionsReports({}) {
             .includes(debouncedSearchQuery?.toLowerCase()) ||
           row?.service_provider
             ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase())
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -177,7 +177,7 @@ export default function CollectionsReports({}) {
             .includes(debouncedTerminalQuery?.toLowerCase()) ||
           terminal?.terminalID
             ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase())
+            .includes(debouncedTerminalQuery?.toLowerCase()),
       );
     }
 
@@ -239,7 +239,7 @@ export default function CollectionsReports({}) {
             <DropdownTrigger>
               <HeroButton
                 className={cn(
-                  "border border-primary-300 max-h-[60px] w-full items-center justify-start p-1"
+                  "border border-primary-300 max-h-[60px] w-full items-center justify-start p-1",
                 )}
                 radius="sm"
                 size="lg"

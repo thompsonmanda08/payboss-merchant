@@ -72,7 +72,7 @@ const renderTaskType = (taskName) => {
 
 const ActivityLog = () => {
   const formattedActivityData = formatActivityData(
-    activityLogStore.activityLogs
+    activityLogStore.activityLogs,
   );
 
   return (

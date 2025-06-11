@@ -68,7 +68,7 @@ export default async function RootLayout({ children }) {
       <body
         className={cn(
           "flex min-h-screen flex-col bg-background font-inter overflow-x-hidden",
-          inter.variable
+          inter.variable,
         )}
       >
         <Providers authSession={authSession} session={session}>

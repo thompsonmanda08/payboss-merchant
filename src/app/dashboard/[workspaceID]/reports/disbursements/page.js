@@ -7,7 +7,6 @@ import {
   ListBulletIcon,
   PresentationChartBarIcon,
 } from "@heroicons/react/24/outline";
-import { useDateFormatter } from "@react-aria/i18n";
 import { useMutation } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { useParams } from "next/navigation";
@@ -54,7 +53,7 @@ export default function DisbursementReports({}) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [openReportsModal, setOpenReportsModal] = useState(false);
   const [selectedBatch, setSelectedBatch] = useState(null); // ON ROW SELECTED
-  let formatter = useDateFormatter({ dateStyle: "long" });
+  // let formatter = useDateFormatter({ dateStyle: "long" });
 
   // HANDLE FETCH BULK REPORT DATA
   const mutation = useMutation({
@@ -78,7 +77,9 @@ export default function DisbursementReports({}) {
           row?.transactionID
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.name?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
+          row?.name
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -94,7 +95,9 @@ export default function DisbursementReports({}) {
           row?.transactionID
             ?.toLowerCase()
             .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.name?.toLowerCase().includes(debouncedSearchQuery?.toLowerCase())
+          row?.name
+            ?.toLowerCase()
+            .includes(debouncedSearchQuery?.toLowerCase()),
       );
     }
 
@@ -272,7 +275,7 @@ export default function DisbursementReports({}) {
                         }}
                         label={"Processed Direct Transactions"}
                         value={formatCurrency(
-                          report?.direct?.proccessed?.value || 0
+                          report?.direct?.proccessed?.value || 0,
                         )}
                       />
                       <TotalValueStat
@@ -283,7 +286,7 @@ export default function DisbursementReports({}) {
                         }}
                         label={"Processed Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucher?.proccessed?.value || 0
+                          report?.voucher?.proccessed?.value || 0,
                         )}
                       />
                     </div>
@@ -299,7 +302,7 @@ export default function DisbursementReports({}) {
                         }}
                         label={"Successful Direct Transactions"}
                         value={formatCurrency(
-                          report?.directTransactions?.successful?.value || 0
+                          report?.directTransactions?.successful?.value || 0,
                         )}
                       />
                       <TotalValueStat
@@ -310,7 +313,7 @@ export default function DisbursementReports({}) {
                         }}
                         label={"Failed Direct Transactions"}
                         value={formatCurrency(
-                          report?.directTransactions?.failed?.value || 0
+                          report?.directTransactions?.failed?.value || 0,
                         )}
                       />
                     </div>
@@ -326,7 +329,7 @@ export default function DisbursementReports({}) {
                         }}
                         label={"Successful Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucherTransactions?.successful?.value || 0
+                          report?.voucherTransactions?.successful?.value || 0,
                         )}
                       />
                       <TotalValueStat
@@ -337,7 +340,7 @@ export default function DisbursementReports({}) {
                         }}
                         label={"Failed Voucher Transactions"}
                         value={formatCurrency(
-                          report?.voucherTransactions?.failed?.value || 0
+                          report?.voucherTransactions?.failed?.value || 0,
                         )}
                       />
                     </div>

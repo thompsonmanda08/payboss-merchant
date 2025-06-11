@@ -21,7 +21,7 @@ export default function CheckoutLoading({}) {
       <div
         className={cn(
           "container px-0 sm:px-4 md:px-8 lg:px-12 max-w-5xl",
-          "grid md:grid-cols-2 gap-6 "
+          "grid md:grid-cols-2 gap-6 ",
         )}
       >
         {/* Payment Method Card */}

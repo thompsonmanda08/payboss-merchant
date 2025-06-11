@@ -13,7 +13,7 @@ function Textarea({ className, onError, ...props }) {
             onError,
           "opacity-50": isDisabled || props?.isDisabled || props?.disabled,
         },
-        className
+        className,
       )}
       {...props}
     />

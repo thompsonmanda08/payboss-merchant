@@ -20,7 +20,7 @@ const Input = React.forwardRef(
       errorText = "",
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <div
@@ -30,7 +30,7 @@ const Input = React.forwardRef(
           classNames?.wrapper,
           {
             "cursor-not-allowed opacity-50": isDisabled,
-          }
+          },
         )}
       >
         {label && (
@@ -41,7 +41,7 @@ const Input = React.forwardRef(
                 "text-red-500": onError,
                 "opacity-50":
                   isDisabled || props?.isDisabled || props?.disabled,
-              }
+              },
             )}
             htmlFor={name}
           >
@@ -60,7 +60,7 @@ const Input = React.forwardRef(
                 onError,
             },
             className,
-            classNames?.input
+            classNames?.input,
           )}
           disabled={isDisabled || props?.isDisabled || props?.disabled}
           id={name}
@@ -85,7 +85,7 @@ const Input = React.forwardRef(
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";

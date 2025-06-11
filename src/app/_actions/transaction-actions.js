@@ -547,7 +547,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
 export async function getCollectionLatestTransactions(
   workspaceID,
   service,
-  dateFilter
+  dateFilter,
 ) {
   if (!workspaceID) {
     return {

@@ -52,8 +52,8 @@ Content-Type: application/json`}
                                   apikey: "YOUR_API_KEY",
                                 },
                                 undefined,
-                                4
-                              )
+                                4,
+                              ),
                             ),
                           }}
                         />
@@ -77,8 +77,8 @@ Content-Type: application/json`}
                                   expiresIn: 180,
                                 },
                                 undefined,
-                                4
-                              )
+                                4,
+                              ),
                             ),
                           }}
                         />
@@ -121,8 +121,8 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                                   transactionID: "your transaction ID",
                                 },
                                 undefined,
-                                4
-                              )
+                                4,
+                              ),
                             ),
                           }}
                         />
@@ -146,8 +146,8 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                                   transactionID: "your transaction ID",
                                 },
                                 undefined,
-                                4
-                              )
+                                4,
+                              ),
                             ),
                           }}
                         />
@@ -201,8 +201,8 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                                     "serviceProvider transaction status description",
                                 },
                                 undefined,
-                                4
-                              )
+                                4,
+                              ),
                             ),
                           }}
                         />

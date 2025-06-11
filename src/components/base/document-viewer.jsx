@@ -91,8 +91,6 @@ const DocumentsViewer = ({ documents, contractDocument }) => {
           )}
         </div>
       </div>
-
-    
     </>
   );
 };

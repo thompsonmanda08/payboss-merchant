@@ -27,7 +27,7 @@ export default function UserProfile({
     <Card
       className={cn(
         "max-w-[360px] mx-auto flex-1 overflow-hidden border-none outline-none shadow",
-        classNames?.card
+        classNames?.card,
       )}
     >
       {/* Header with gradient background */}

@@ -53,7 +53,7 @@ async function InvoicePage(props) {
       price: parseFloat(String(item?.unit_price || "0")),
       amount: parseFloat(
         parseInt(String(item?.quantity || "0")) *
-          parseFloat(String(item?.unit_price || "0"))
+          parseFloat(String(item?.unit_price || "0")),
       ),
     })),
     taxRate: parseFloat(String(response?.data?.tax_rate || "0")),

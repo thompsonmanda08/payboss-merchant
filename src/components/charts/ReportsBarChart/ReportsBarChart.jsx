@@ -27,9 +27,9 @@ function ReportsBarChart({ color, title, description, chart, items }) {
               />
             </div>
           ),
-          [items]
+          [items],
         )
-      : []
+      : [],
   );
 
   const renderBarChart = useMemo(
@@ -40,7 +40,7 @@ function ReportsBarChart({ color, title, description, chart, items }) {
         <Bar data={data} options={options} />
       </div>
     ),
-    [chart, color]
+    [chart, color],
   );
 
   return (

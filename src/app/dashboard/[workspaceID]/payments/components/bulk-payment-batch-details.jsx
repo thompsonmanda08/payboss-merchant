@@ -67,7 +67,7 @@ const PaymentDetails = ({
     // Create payment batch here if user is create access
     const response = await initializeBulkTransaction(
       workspaceID,
-      paymentAction
+      paymentAction,
     );
 
     if (response?.success) {

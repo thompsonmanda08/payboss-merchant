@@ -27,7 +27,7 @@ function SelectField({
       className={cn(
         "flex w-full max-w-md flex-col items-start",
         wrapperClassName,
-        classNames?.wrapper
+        classNames?.wrapper,
       )}
     >
       {label && (
@@ -37,7 +37,7 @@ function SelectField({
             {
               "opacity-50": props?.isDisabled || props?.disabled,
             },
-            classNames?.label
+            classNames?.label,
           )}
           htmlFor={name}
         >
@@ -53,17 +53,17 @@ function SelectField({
           classNames={{
             base: cn(
               "text-lg shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium text-foreground placeholder:text-muted-foreground",
-              classNames?.base
+              classNames?.base,
             ),
             value: cn(
               "text-foreground group-data-[has-value=true]:text-foreground font-inter tracking-tight capitalize",
-              classNames?.value
+              classNames?.value,
             ),
             trigger: cn(
               cn(
                 "focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary capitalize data-[hover=true]:border-primary/70",
-                classNames?.trigger
-              )
+                classNames?.trigger,
+              ),
               // {
               //   'border-red-500 focus:border-red-500/70 focus-visible:ring-red-500/30':
               //     onError,

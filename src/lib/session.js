@@ -13,7 +13,7 @@ const secretKey =
 // 2. Validate the secret exists
 if (!secretKey || secretKey.length < 32) {
   throw new Error(
-    "JWT_SECRET or AUTH_SECRET environment variable must be at least 32 characters"
+    "JWT_SECRET or AUTH_SECRET environment variable must be at least 32 characters",
   );
 }
 
@@ -214,7 +214,7 @@ export async function updateWorkspaceSession(fields) {
       fields?.workspacePermissions ?? oldSession?.workspacePermissions,
     activeWorkspace: fields?.activeWorkspaceID
       ? oldSession?.workspaces?.find(
-          (workspace) => workspace?.ID == fields?.activeWorkspaceID
+          (workspace) => workspace?.ID == fields?.activeWorkspaceID,
         )
       : oldSession?.activeWorkspace,
   };

@@ -56,7 +56,7 @@ export default function BulkTransactionsTable({ workspaceID }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS),
   );
 
   const [serviceProtocolFilter, setServiceProtocolFilter] =
@@ -77,7 +77,7 @@ export default function BulkTransactionsTable({ workspaceID }) {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -88,7 +88,7 @@ export default function BulkTransactionsTable({ workspaceID }) {
       filteredRows = filteredRows.filter(
         (row) =>
           row?.batch_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-          row?.amount?.toLowerCase().includes(filterValue?.toLowerCase())
+          row?.amount?.toLowerCase().includes(filterValue?.toLowerCase()),
       );
     }
     if (
@@ -98,7 +98,7 @@ export default function BulkTransactionsTable({ workspaceID }) {
       let filters = Array.from(serviceProtocolFilter);
 
       filteredRows = filteredRows.filter((row) =>
-        filters.includes(row?.service)
+        filters.includes(row?.service),
       );
     }
 
@@ -155,7 +155,7 @@ export default function BulkTransactionsTable({ workspaceID }) {
           <Button
             className={cn(
               "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
-              TRANSACTION_STATUS_COLOR_MAP[row.status]
+              TRANSACTION_STATUS_COLOR_MAP[row.status],
             )}
             size="sm"
             variant="light"
@@ -331,7 +331,7 @@ export default function BulkTransactionsTable({ workspaceID }) {
       isHeaderSticky
       classNames={{
         table: cn(
-          "align-top min-h-[300px] w-full overflow-scroll items-center justify-center"
+          "align-top min-h-[300px] w-full overflow-scroll items-center justify-center",
         ),
         base: cn("overflow-x-auto", { "": pages <= 1 }),
       }}

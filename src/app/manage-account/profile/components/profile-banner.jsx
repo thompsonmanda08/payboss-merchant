@@ -15,7 +15,7 @@ export default function ProfileBanner({ className }) {
     <div
       className={cn(
         "absolute left-0 right-0 top-[24%] z-20 m-7 rounded-2xl border border-input/40 bg-background/10 p-4 backdrop-blur-md",
-        className
+        className,
       )}
     >
       <div className="flex w-full items-center gap-4">
@@ -55,7 +55,7 @@ function ProfileBannerLoader({ className }) {
     <div
       className={cn(
         "absolute left-0 right-0 top-[24%] z-20 m-7 rounded-2xl border border-input/40 bg-background/10 p-4 backdrop-blur-md",
-        className
+        className,
       )}
     >
       <div className="flex w-full items-center gap-4">

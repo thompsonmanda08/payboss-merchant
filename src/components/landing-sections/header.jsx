@@ -42,7 +42,7 @@ function MobileNavIcon({ open }) {
       <path
         className={cn(
           "origin-center transition",
-          !open && "scale-90 opacity-0"
+          !open && "scale-90 opacity-0",
         )}
         d="M2 2L12 12M12 2L2 12"
       />
@@ -125,7 +125,7 @@ export function Header({ session }) {
         {
           "top-4 sm:top-2 sm:mx-10 rounded-xl bg-background/80": isFloating,
           "z-50": pathname === "/" && !isFloating,
-        }
+        },
       )}
     >
       <nav className="relative z-50 flex w-full justify-between container">

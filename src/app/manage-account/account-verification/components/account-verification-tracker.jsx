@@ -72,7 +72,7 @@ function ProgressStageTracker({ onCompletionNavigateTo }) {
         </div>
         <div
           className={cn(
-            "flex w-full select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9"
+            "flex w-full select-none flex-col items-center gap-9 rounded-2xl dark:bg-primary-400/5 bg-primary-50 p-9",
           )}
         >
           <Image

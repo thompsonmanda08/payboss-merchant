@@ -27,7 +27,7 @@ const SelectPrefund = ({
   function handleProceed() {
     if (paymentAction?.prefund_id !== "" || selectedKeys.size !== 0) {
       let prefund = walletActivePrefunds.find(
-        (prefund) => prefund.ID === paymentAction?.prefund_id
+        (prefund) => prefund.ID === paymentAction?.prefund_id,
       );
 
       if (prefund) {

@@ -107,7 +107,7 @@ function DashboardAnalytics({
         label: "Transactions",
         data: MONTHS.map((month) => {
           const transaction = monthlyTransactionRecords?.find((item) =>
-            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase())
+            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase()),
           );
 
           return transaction ? transaction.count : 0;

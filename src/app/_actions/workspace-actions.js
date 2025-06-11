@@ -104,7 +104,7 @@ export async function submitPOP(popDetails, workspaceID) {
 
     revalidatePath(
       "/manage-account/workspaces/[ID]/workspace-settings",
-      "page"
+      "page",
     );
 
     return {
@@ -220,7 +220,7 @@ export async function getWalletPrefunds(workspaceID) {
 export async function approveWalletPrefund(
   prefundData,
   prefundID,
-  workspaceID
+  workspaceID,
 ) {
   if (!prefundID || !workspaceID) {
     return {
@@ -409,7 +409,7 @@ export async function deleteUserFromWorkspace(recordID, workspaceID) {
 export async function changeUserRoleInWorkspace(
   mapping,
   recordID,
-  workspaceID
+  workspaceID,
 ) {
   if (!workspaceID) {
     return {

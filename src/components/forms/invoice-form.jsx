@@ -68,7 +68,7 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
   const calculateSubtotal = () => {
     return formData.lineItems.reduce(
       (total, item) => total + item.quantity * item.unitPrice,
-      0
+      0,
     );
   };
 

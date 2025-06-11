@@ -24,7 +24,7 @@ function InfoBanner({
       <div
         className={cn(
           "mb-4 flex max-h-16 flex-1 items-center justify-between rounded-lg bg-secondary/10 p-2 pl-5 text-orange-600",
-          className
+          className,
         )}
       >
         {children ? (
@@ -35,7 +35,7 @@ function InfoBanner({
             <div
               className={cn(
                 "flex select-none items-center text-xs font-semibold tracking-tight text-orange-600 md:text-sm",
-                infoTextClasses
+                infoTextClasses,
               )}
             >
               <span className="-mt-1 mr-2 text-2xl">⚠️ </span> {infoText}

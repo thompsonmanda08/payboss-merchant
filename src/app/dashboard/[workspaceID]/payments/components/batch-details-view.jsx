@@ -105,7 +105,7 @@ export default function BatchDetailsPage({ isOpen, onClose, protocol }) {
         batch?.status?.toLowerCase() != "submitted"
           ? COMPONENT_LIST_RENDERER.length - 1
           : currentTabIndex
-      ]
+      ],
     );
   }, [currentTabIndex]);
 

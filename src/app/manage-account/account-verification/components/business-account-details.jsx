@@ -28,7 +28,7 @@ const Stepper = ({ currentStep }) => {
                 {
                   "border-primary-600 hover:border-primary-800":
                     index <= currentStep - 1,
-                }
+                },
               )}
             >
               <span
@@ -37,7 +37,7 @@ const Stepper = ({ currentStep }) => {
                   {
                     "text-primary-600 group-hover:text-primary-800":
                       index <= currentStep - 1,
-                  }
+                  },
                 )}
               >
                 Step {index + 1}

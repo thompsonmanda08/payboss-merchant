@@ -28,7 +28,7 @@ export default function Step1({ updateDetails, backToStart }) {
 
   const cities = useMemo(() => {
     const selectedProvince = provinces?.find(
-      (province) => province?.id == formData?.provinceID
+      (province) => province?.id == formData?.provinceID,
     );
 
     return selectedProvince?.cities || [];

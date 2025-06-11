@@ -205,7 +205,7 @@ export default function TillPaymentCollections({}) {
                     <Chip
                       className={cn(
                         "m-0 flex flex-row items-center justify-center rounded-md text-[clamp(1.25rem,1vw,2rem)]",
-                        { "-mb-3 mt-1": !TILL_NUMBER }
+                        { "-mb-3 mt-1": !TILL_NUMBER },
                       )}
                       color="primary"
                     >

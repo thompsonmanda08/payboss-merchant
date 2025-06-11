@@ -306,7 +306,7 @@ function WorkspaceSummary({
         <div className="flex w-full justify-between gap-4">
           <div
             className={cn(
-              "flex group select-none items-start gap-2 text-slate-600"
+              "flex group select-none items-start gap-2 text-slate-600",
             )}
           >
             <WalletIcon className="h-12 w-12 dark:text-foreground text-primary" />{" "}

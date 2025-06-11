@@ -119,7 +119,7 @@ const APIIntegration = () => {
       getCollectionLatestTransactions(
         workspaceID,
         "api-integration",
-        dateRange
+        dateRange,
       ),
   });
 
@@ -701,7 +701,7 @@ const APIIntegration = () => {
                             <ComputerDesktopIcon
                               className={cn(
                                 iconClasses,
-                                "group-hover:text-white font-bold group-hover:border-white"
+                                "group-hover:text-white font-bold group-hover:border-white",
                               )}
                             />
                           }
@@ -725,7 +725,7 @@ const APIIntegration = () => {
                             <TrashIcon
                               className={cn(
                                 iconClasses,
-                                "text-danger group-hover:text-white"
+                                "text-danger group-hover:text-white",
                               )}
                             />
                           }

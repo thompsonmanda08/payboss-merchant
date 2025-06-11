@@ -43,14 +43,14 @@ function ComplianceSummary({ sections, navigateToSection }) {
       });
       console.warn(
         "Navigation unavailable or sectionLink missing for:",
-        sectionLink
+        sectionLink,
       );
     }
   };
 
   // FILTER OUT "start" and "summary"
   const filteredSections = sections.filter(
-    (section) => section.id !== "start" && section.id !== "summary"
+    (section) => section.id !== "start" && section.id !== "summary",
   );
 
   const handleSubmitKYC = async () => {

@@ -159,7 +159,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
           <div
             className={cn(
               "max-h-[600px] overflow-y-auto no-scrollbar flex w-full min-w-[400px]  flex-col lg:px-2",
-              { "max-h-auto lg:max-h-max ": isManagePage }
+              { "max-h-auto lg:max-h-max ": isManagePage },
             )}
           >
             {isLoading ? (
@@ -175,7 +175,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                   {
                     "grid-cols-[repeat(auto-fill,minmax(400px,1fr))]":
                       WORKSPACES?.length > 0,
-                  }
+                  },
                 )}
               >
                 {WORKSPACES.length ? (
@@ -184,7 +184,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                       <WorkspaceItem
                         key={index}
                         description={`${capitalize(
-                          item?.workspaceType
+                          item?.workspaceType,
                         )}'s Workspace`}
                         href={
                           isManagePage
@@ -266,7 +266,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                   <Button
                     className={cn(
                       "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
-                      { "col-span-full": workspaces?.length < 0 }
+                      { "col-span-full": workspaces?.length < 0 },
                     )}
                     onPress={onOpen}
                   >
