@@ -16,9 +16,9 @@ bun dev
 ## RUN DOCKER BUILD IN DEV
 
 ```bash
-docker build -t payboss-merchant .
+docker build -t merchant-web-portal .
 
-docker run . -p 3000:3000 payboss-merchant
+docker run docker run -p 3000:3000 --name merchant-web-portal merchant-web-portal
 
 ```
 

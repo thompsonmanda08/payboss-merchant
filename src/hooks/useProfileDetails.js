@@ -3,7 +3,7 @@
 import { useSetupConfig } from "./useQueryHooks";
 
 const useAccountProfile = () => {
-  const { data: setup } = useSetupConfig();
+  const { data: setup, isFetching, isLoading } = useSetupConfig();
 
   const user = setup?.data?.userDetails || [];
   const permissions = setup?.data?.userPermissions;
@@ -23,6 +23,8 @@ const useAccountProfile = () => {
     isOwner,
     isAccountAdmin,
     isCompleteKYC,
+    isFetching,
+    isLoading,
   };
 };
 

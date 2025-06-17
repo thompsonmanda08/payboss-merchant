@@ -145,7 +145,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
         )}
 
         {/* ACCOUNT VERIFICATION PROMPTING BANNER */}
-        {user && !isCompleteKYC && (
+        {merchantKYC?.can_edit && !isLoading && (
           <Alert
             className="my-4"
             color="warning"
