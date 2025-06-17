@@ -191,6 +191,7 @@ export default function CardPaymentForm({ checkoutData }) {
       setIsSubmitting(false); // THIS WILL TRIGGER THE WEB HOOK
       setIsPaymentStarted(true); //
       await openPaymentWindow(payload);
+      
     } else {
       notify({
         title: "Error",

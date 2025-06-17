@@ -212,7 +212,7 @@ export function syntaxHighlight(json) {
       }
 
       return '<span class="' + cls + '">' + match + "</span>";
-    },
+    }
   );
 }
 
@@ -243,13 +243,6 @@ export function extractPocketBaseFileIdFromUrl(url) {
   // Return null or throw an error if the URL format doesn't match
   return null;
 }
-
-/* 
-Example usage:
-const url = "https://services-uat.bgspayboss.com/api/files/pbc_697151930/0iql1l0r2o72u67/standard_bank_zambia_walkthrough_neg9dv2lp5.pdf";
-const id = extractIdFromUrl(url);
-console.log(id); // Output: "0iql1l0r2o72u67"
-*/
 
 export function assertValue(v, errorMessage) {
   if (v === undefined || !v) {

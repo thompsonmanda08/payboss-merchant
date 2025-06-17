@@ -1,7 +1,7 @@
 "use client";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { ExclamationTriangleIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { useDisclosure } from "@heroui/react";
+import { Alert, Link, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
@@ -14,7 +14,6 @@ import useWorkspace from "@/hooks/useWorkspaces";
 import OverlayLoader from "@/components/ui/overlay-loader";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import Card from "@/components/base/custom-card";
-import InfoBanner from "@/components/base/info-banner";
 import EmptyLogs from "@/components/base/empty-logs";
 
 import WorkspaceItem from "./workspace-card-item";
@@ -147,11 +146,26 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
 
         {/* ACCOUNT VERIFICATION PROMPTING BANNER */}
         {user && !isCompleteKYC && (
-          <InfoBanner
-            buttonText="Submit Documents"
-            href={"manage-account/account-verification"}
-            infoText="Just one more step, please submit your business documents to aid us with the approval process"
-          />
+          <Alert
+            className="my-4"
+            color="warning"
+            classNames={{
+              mainWrapper: "flex flex-row items-center",
+            }}
+          >
+            <span>
+              Just one more step, please submit your business documents to aid
+              us with the approval process
+            </span>
+            <Button
+              as={Link}
+              color="warning"
+              href={"/manage-account/account-verification"}
+              className={"text-white bg-warning m-0 ml-auto"}
+            >
+              Complete Verification
+            </Button>
+          </Alert>
         )}
 
         <div className="flex w-full flex-col items-center justify-center">
@@ -159,7 +173,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
           <div
             className={cn(
               "max-h-[600px] overflow-y-auto no-scrollbar flex w-full min-w-[400px]  flex-col lg:px-2",
-              { "max-h-auto lg:max-h-max ": isManagePage },
+              { "max-h-auto lg:max-h-max ": isManagePage }
             )}
           >
             {isLoading ? (
@@ -175,7 +189,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                   {
                     "grid-cols-[repeat(auto-fill,minmax(400px,1fr))]":
                       WORKSPACES?.length > 0,
-                  },
+                  }
                 )}
               >
                 {WORKSPACES.length ? (
@@ -184,7 +198,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                       <WorkspaceItem
                         key={index}
                         description={`${capitalize(
-                          item?.workspaceType,
+                          item?.workspaceType
                         )}'s Workspace`}
                         href={
                           isManagePage
@@ -266,7 +280,7 @@ function WorkspacesList({ user, showHeader = false, className, workspaces }) {
                   <Button
                     className={cn(
                       "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
-                      { "col-span-full": workspaces?.length < 0 },
+                      { "col-span-full": workspaces?.length < 0 }
                     )}
                     onPress={onOpen}
                   >

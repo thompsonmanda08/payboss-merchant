@@ -30,7 +30,6 @@ export const STEPS = [
 ];
 
 export default function SignUpForm({ superMerchantID }) {
-  console.log("superMerchantID", superMerchantID);
   const {
     businessInfo,
     newAdminUser,
