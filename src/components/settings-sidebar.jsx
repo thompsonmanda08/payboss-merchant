@@ -13,71 +13,58 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useQueryClient } from "@tanstack/react-query";
 
 import useAuthStore from "@/context/auth-store";
-import useNavigation from "@/hooks/useNavigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 import NavIconButton from "./ui/nav-icon-button";
 import Logo from "./base/payboss-logo";
 
-function SettingsSideBar({ title, backButtonText, session }) {
+// SETTINGS OPTIONS
+const SETTINGS_LINKS = [
+  {
+    name: "Workspaces",
+    Icon: BriefcaseIcon,
+    href: "/manage-account",
+  },
+  {
+    name: "Users",
+    Icon: UserGroupIcon,
+    href: "/manage-account/users",
+  },
+  {
+    name: "Profile Settings",
+    Icon: UserCircleIcon,
+    href: "/manage-account/profile",
+  },
+
+  {
+    name: "Account Verification",
+    Icon: CheckBadgeIcon,
+    href: "/manage-account/account-verification",
+  },
+];
+
+function SettingsSideBar() {
   const pathname = usePathname();
-  const queryClient = useQueryClient();
   const [openSettingsSideBar, setOpenSettingsSideBar] = useState(false);
   const { handleUserLogOut } = useAuthStore();
-  const { settingsPathname, isProfile, isAccountLevelSettingsRoute } =
-    useNavigation();
 
   function toggleSideBar() {
     setOpenSettingsSideBar(!openSettingsSideBar);
   }
 
-  const dashboardHome = settingsPathname?.split("/")?.slice(0, 3)?.join("/");
-  const homeRoute = dashboardHome || "/workspaces";
-  const systemState = session?.kyc?.state;
-
-  // SETTINGS OPTIONS
-  const SETTINGS_LINKS = [
-    {
-      name: "Workspaces",
-      Icon: BriefcaseIcon,
-      href: "/manage-account",
-    },
-    {
-      name: "Users",
-      Icon: UserGroupIcon,
-      href: "/manage-account/users",
-    },
-    {
-      name: "Profile Settings",
-      Icon: UserCircleIcon,
-      href: "/manage-account/profile",
-    },
-
-    {
-      name: "Account Verification",
-      Icon: CheckBadgeIcon,
-      href: "/manage-account/account-verification",
-    },
-  ];
-
   return (
     <>
       <div
         className={cn(
-          "fixed z-[77] flex h-16 w-screen bg-card/60 dark:shadow-black/10 dark:shadow-xl backdrop-blur-md shadow-sm lg:hidden",
-          {
-            "bg-transparent": isProfile,
-          },
+          "fixed z-[77] flex h-16 w-screen bg-card/60 dark:shadow-black/10 dark:shadow-xl backdrop-blur-md shadow-sm lg:hidden"
         )}
       >
         <Button
           className={cn(
-            "absolute left-6 top-3 z-50 h-8 min-w-5 items-center bg-transparent p-2 py-3 text-foreground/70 hover:bg-transparent lg:hidden",
-            { "text-white": isProfile },
+            "absolute left-6 top-3 z-50 h-8 min-w-5 items-center bg-transparent p-2 py-3 text-foreground/70 hover:bg-transparent lg:hidden"
           )}
           startContent={<Bars3BottomLeftIcon className="h-7 w-7" />}
           onClick={toggleSideBar}
@@ -98,7 +85,7 @@ function SettingsSideBar({ title, backButtonText, session }) {
       <motion.nav
         className={cn(
           `sticky -left-[110%] z-50 hidden h-full min-h-screen w-[380px] rounded-r-3xl bg-card py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
-          { "absolute left-0 z-[100] block": openSettingsSideBar },
+          { "absolute left-0 z-[100] block": openSettingsSideBar }
         )}
       >
         <div className="relative flex h-full w-full flex-col px-5">
@@ -113,11 +100,11 @@ function SettingsSideBar({ title, backButtonText, session }) {
           <Button
             as={Link}
             className="h-12 w-full justify-start p-2 text-foreground-500 hover:text-primary data-[hover=true]:bg-primary/10 dark:data-[hover=true]:text-primary-50"
-            href={homeRoute}
+            href={"/workspaces"}
             startContent={<ArrowLeftIcon className="h-5 w-5" />}
             variant="light"
           >
-            {backButtonText || "Back to Workspaces"}
+            Back to Workspaces
           </Button>
           <hr className="my-2 dark:border-primary/20" />
           {/* ******************** WORKSPACE SETTINGS ******************************* */}
@@ -126,7 +113,7 @@ function SettingsSideBar({ title, backButtonText, session }) {
             role="`workspace_settings`"
           >
             <p className="py-2 text-[13px] font-medium uppercase tracking-wide text-foreground-400">
-              {!isAccountLevelSettingsRoute ? title : "ACCOUNT SETTINGS"}
+              ACCOUNT SETTINGS
             </p>
             <hr className="my-2 dark:border-primary/20" />
             {SETTINGS_LINKS?.map(({ href, Icon, name }, index) => {
@@ -139,7 +126,7 @@ function SettingsSideBar({ title, backButtonText, session }) {
                     {
                       "dark:bg-primary/50 bg-primary/10 dark:text-foreground text-primary-600":
                         pathname == href,
-                    },
+                    }
                   )}
                   href={href}
                   startContent={<Icon className="h-5 w-5" />}
@@ -152,33 +139,15 @@ function SettingsSideBar({ title, backButtonText, session }) {
           </div>
           {/* ************************************************************* */}
           <hr className="mt-auto mb-4 dark:border-primary/20" />
-
           {/* ************************************************************* */}
-          {/* <Chip
-            radius="sm"
-            color={systemState == "prod" ? "success" : "warning"}
-            variant="dot"
-          >
-            {systemState == "prod" ? "System Live Environment" : "Staging Mode"}
-          </Chip>
-
-          <hr className="my-4 dark:border-primary/20" /> */}
 
           <div className="flex items-center gap-2 px-5 pt-2">
-            <NavIconButton
-              className={"bg-primary"}
-              onClick={() => {
-                handleUserLogOut();
-              }}
-            >
+            <NavIconButton className={"bg-primary"} onClick={handleUserLogOut}>
               <PowerIcon className="h-5 w-5 text-white" />
             </NavIconButton>
             <Button
-              onClick={() => {
-                handleUserLogOut();
-              }}
+              onClick={handleUserLogOut}
               variant="light"
-              // size="sm"
               className="my-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
             >
               Log out

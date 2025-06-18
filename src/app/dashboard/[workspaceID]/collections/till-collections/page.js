@@ -17,12 +17,13 @@ import {
   Spinner,
   Tooltip,
   useDisclosure,
+  addToast,
 } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { cn, formatDate, notify } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import PromptModal from "@/components/base/prompt-modal";
 import CustomTable from "@/components/tables/table";
 import { useTillNumber } from "@/hooks/useQueryHooks";
@@ -73,7 +74,7 @@ export default function TillPaymentCollections({}) {
     const response = await generateWorkspaceTillNumber(workspaceID);
 
     if (!response?.success) {
-      notify({
+      addToast({
         color: "danger",
         title: "Failed to generate Till Number!",
         description: response?.message,
@@ -85,7 +86,7 @@ export default function TillPaymentCollections({}) {
 
     queryClient.invalidateQueries();
 
-    notify({
+    addToast({
       color: "success",
       title: "Success",
       description: "Till Number has been generated!",
@@ -205,7 +206,7 @@ export default function TillPaymentCollections({}) {
                     <Chip
                       className={cn(
                         "m-0 flex flex-row items-center justify-center rounded-md text-[clamp(1.25rem,1vw,2rem)]",
-                        { "-mb-3 mt-1": !TILL_NUMBER },
+                        { "-mb-3 mt-1": !TILL_NUMBER }
                       )}
                       color="primary"
                     >

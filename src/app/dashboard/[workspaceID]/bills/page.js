@@ -23,7 +23,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { formatDate, maskString, notify } from "@/lib/utils";
+import { formatDate, maskString } from "@/lib/utils";
 import CustomTable from "@/components/tables/table";
 import { useWorkspaceAPIKey } from "@/hooks/useQueryHooks";
 import {
@@ -82,7 +82,7 @@ const BillPayments = ({}) => {
   const copyToClipboard = (key) => {
     navigator.clipboard.writeText(key);
     setCopiedKey(key);
-    notify({
+    addToastst({
       color: "success",
       title: "Success",
       description: "Copied to clipboard",
@@ -93,7 +93,7 @@ const BillPayments = ({}) => {
     setIsLoading(true);
     // THERE CAN ONLY BE ONE API KEY
     if (apiKey?.key && isNew) {
-      notify({
+      addToaststst({
         color: "danger",
         title: "Failed to generate API key!",
         description: "You already have an API key for this workspace.",
@@ -107,7 +107,7 @@ const BillPayments = ({}) => {
       const response = await refreshWorkspaceAPIKey(workspaceID);
 
       if (!response?.success) {
-        notify({
+        addToastst({
           color: "danger",
           title: "Failed to refresh API key!",
           description: response?.message,
@@ -121,7 +121,7 @@ const BillPayments = ({}) => {
         queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
       });
 
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "API key has been updated!",
@@ -136,7 +136,7 @@ const BillPayments = ({}) => {
     const response = await setupWorkspaceAPIKey(workspaceID);
 
     if (!response?.success) {
-      notify({
+      addToastst({
         color: "danger",
         title: "Failed to generate API key!",
         description: response?.message,
@@ -153,7 +153,7 @@ const BillPayments = ({}) => {
     setApiKeyData(response?.data);
     setApiKey(response?.data?.API);
 
-    notify({
+    addToast({
       color: "success",
       title: "Success",
       description: "API key has been generated!",

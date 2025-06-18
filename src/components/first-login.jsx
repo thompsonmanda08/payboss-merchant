@@ -7,13 +7,13 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  addToast,
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { PASSWORD_PATTERN } from "@/lib/constants";
 import useAuthStore from "@/context/auth-store";
 import { changeUserPassword } from "@/app/_actions/user-actions";
-import { notify } from "@/lib/utils";
 
 import { Input } from "./ui/input-field";
 import { Button } from "./ui/button";
@@ -38,7 +38,7 @@ export default function FirstLogin({ open }) {
       password.confirmPassword.length < 8 ||
       !PASSWORD_PATTERN.test(password.newPassword)
     ) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Operation Failed! Try again",
@@ -57,11 +57,11 @@ export default function FirstLogin({ open }) {
     // Send New password details to the backend
     const res = await changeUserPassword(password.confirmPassword);
 
-    // If password change success - invalidate query caches - close modals and notify user
+    // If password change success - invalidate query caches - close modals
     if (res.success) {
       onClose();
 
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "Password Changed Successfully",
@@ -73,7 +73,7 @@ export default function FirstLogin({ open }) {
     }
 
     setIsLoading(false);
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: res.message,

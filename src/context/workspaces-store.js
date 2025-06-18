@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { addToast } from "@heroui/react";
 
 import {
   adminResetUserPassword,
@@ -7,7 +8,7 @@ import {
   unlockSystemUser,
 } from "@/app/_actions/user-actions";
 import { deleteUserFromWorkspace } from "@/app/_actions/workspace-actions";
-import { generateRandomString, notify } from "@/lib/utils";
+import { generateRandomString } from "@/lib/utils";
 
 const INITIAL_STATE = {
   addedUsers: [],
@@ -43,7 +44,7 @@ const useWorkspaceStore = create((set, get) => ({
     const userExists = existingUsers.find((u) => u.userID === user.ID);
 
     if (exitingUser) {
-      notify({
+      addToast({
         title: "Warning",
         color: "warning",
         description: `${exitingUser?.first_name} is already added!`,
@@ -53,7 +54,7 @@ const useWorkspaceStore = create((set, get) => ({
     }
 
     if (userExists) {
-      notify({
+      addToast({
         title: "Warning",
         color: "warning",
         description: `${userExists?.first_name} already exists in workspace!`,
@@ -64,7 +65,7 @@ const useWorkspaceStore = create((set, get) => ({
 
     // Filter out the user with role == "owner", if exists then don't add
     // if (user?.role?.toLowerCase() == 'owner') {
-    // notify({
+    // addToast({
     //   title: "Warning",
     //   color: "warning",
     //   description: 'Owner is already part of the workspace!',
@@ -78,7 +79,7 @@ const useWorkspaceStore = create((set, get) => ({
       };
     });
 
-    notify({
+    addToast({
       color: "success",
       title: "Success",
       description: `You added ${user?.first_name}!`,
@@ -102,7 +103,7 @@ const useWorkspaceStore = create((set, get) => ({
       };
     });
 
-    notify({
+    addToast({
       color: "success",
       title: "Success",
       description: `You removed ${user?.first_name}!`,
@@ -173,11 +174,11 @@ const useWorkspaceStore = create((set, get) => ({
 
     const response = await adminResetUserPassword(
       selectedUser?.ID,
-      passwordInfo,
+      passwordInfo
     );
 
     if (response?.success) {
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: `You Reset ${selectedUser?.first_name}'s Password!`,
@@ -186,7 +187,7 @@ const useWorkspaceStore = create((set, get) => ({
       return response?.success;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: response?.message,
@@ -201,11 +202,11 @@ const useWorkspaceStore = create((set, get) => ({
 
     const response = await deleteUserFromWorkspace(
       selectedUser?.ID,
-      workspaceID,
+      workspaceID
     );
 
     if (response?.success) {
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: `You Removed ${selectedUser?.first_name}!`,
@@ -214,7 +215,7 @@ const useWorkspaceStore = create((set, get) => ({
       return response?.success;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: response?.message,
@@ -230,7 +231,7 @@ const useWorkspaceStore = create((set, get) => ({
     const response = await unlockSystemUser(selectedUser?.ID);
 
     if (response?.success) {
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: `You unlocked ${selectedUser?.first_name}!`,
@@ -239,7 +240,7 @@ const useWorkspaceStore = create((set, get) => ({
       return response?.success;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: response?.message,
@@ -256,7 +257,7 @@ const useWorkspaceStore = create((set, get) => ({
     const response = await deleteSystemUserData(selectedUser?.ID);
 
     if (response?.success) {
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: `You Removed ${selectedUser?.first_name}!`,
@@ -265,7 +266,7 @@ const useWorkspaceStore = create((set, get) => ({
       return response?.success;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: response?.message,

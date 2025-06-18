@@ -1,11 +1,11 @@
 "use client";
 import React, { useMemo } from "react";
 import Image from "next/image";
-import { useDisclosure } from "@heroui/react";
+import { useDisclosure, addtoast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
-import { formatCurrency, notify } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import {
   reviewBatch,
   submitBatchForApproval,
@@ -47,7 +47,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
     setIsLoading(true);
 
     if (!permissions?.can_approve) {
-      notify({
+      addToast({
         color: "danger",
         title: "Unauthorized!",
         description: "You do not have permissions to perform this action",
@@ -66,7 +66,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
       parseFloat(batch?.total_amount) > parseFloat(workspaceWalletBalance)
     ) {
       setIsLoading(false);
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Insufficient funds in workspace wallet",
@@ -77,7 +77,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
 
     if (!approve.remarks) {
       setIsLoading(false);
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Review reason is required!",
@@ -94,7 +94,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
 
     if (!response?.success) {
       setIsLoading(false);
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: response?.message,
@@ -105,7 +105,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
 
     setIsLoading(false);
 
-    notify({
+    addToast({
       title: "Success",
       color: "success",
       description: `Bulk transaction ${isApproval ? "approved" : "rejected"}!`,
@@ -156,7 +156,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
   async function handleSubmitForApproval() {
     setLoading(true);
     if (batch?.number_of_records != batch?.number_of_valid_records) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Some records are still invalid!",
@@ -167,7 +167,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
     }
 
     if (parseFloat(batch?.valid_amount) > parseFloat(workspaceWalletBalance)) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Insufficient funds in the wallet!",
@@ -178,7 +178,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
     }
 
     if (!permissions.can_initiate) {
-      notify({
+      addToast({
         title: "NOT ALLOWED",
         color: "danger",
         description: "You do not have permissions to perform this action",
@@ -195,7 +195,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
     const response = await submitBatchForApproval(batch?.id);
 
     if (!response?.success) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: response?.message,
@@ -213,7 +213,7 @@ const ApproverAction = ({ workspaceID, batch }) => {
       queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, workspaceID],
     });
 
-    notify({
+    addToast({
       title: "Success",
       color: "success",
       description: "Records submitted successfully!",

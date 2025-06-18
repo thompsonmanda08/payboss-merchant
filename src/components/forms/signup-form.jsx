@@ -1,11 +1,10 @@
 "use client";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Card } from "@heroui/react";
+import { Card, addToast } from "@heroui/react";
 
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
 import { containerVariants } from "@/lib/constants";
-import { notify } from "@/lib/utils";
 import useAuthStore from "@/context/auth-store";
 import {
   createMerchantAdminUser,
@@ -182,7 +181,7 @@ export default function SignUpForm({ superMerchantID }) {
       }
 
       if (response?.success && (response?.data?.merchantID || merchantID)) {
-        notify({
+        addToast({
           color: "success",
           title: "Success",
           description: "Business Details Submitted!",
@@ -192,7 +191,7 @@ export default function SignUpForm({ superMerchantID }) {
 
         return;
       } else {
-        notify({
+        addToast({
           color: "danger",
           title: "Failed",
           description: "Error Submitting Business Details",
@@ -210,7 +209,7 @@ export default function SignUpForm({ superMerchantID }) {
       const response = await submitMerchantBankDetails(bankDetails, merchantID);
 
       if (response?.success) {
-        notify({
+        addToast({
           color: "success",
           title: "Success",
           description: "Bank information Submitted!",
@@ -220,7 +219,7 @@ export default function SignUpForm({ superMerchantID }) {
 
         return;
       } else {
-        notify({
+        addToast({
           color: "error",
           title: "Failed",
           description: "Error Submitting Bank information!",
@@ -249,7 +248,7 @@ export default function SignUpForm({ superMerchantID }) {
       let response = await createMerchantAdminUser(newAdminUser, merchantID);
 
       if (response?.success) {
-        notify({
+        addToast({
           color: "success",
           title: "Success",
           description: "Account Created Successfully",
@@ -259,7 +258,7 @@ export default function SignUpForm({ superMerchantID }) {
 
         return;
       } else {
-        notify({
+        addToast({
           color: "error",
           title: "Failed",
           description: "Error Creating Account!",

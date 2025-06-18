@@ -6,11 +6,11 @@ import usePaymentsStore from "@/context/payment-store";
 import { Button } from "@/components/ui/button";
 import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 import { submitBatchForApproval } from "@/app/_actions/transaction-actions";
-import { notify } from "@/lib/utils";
+
 import { QUERY_KEYS } from "@/lib/constants";
 import Loader from "@/components/ui/loader";
 import StatusCard from "@/components/status-card";
-import { Alert } from "@heroui/react";
+import { Alert, addToast } from "@heroui/react";
 
 const ValidationDetails = ({ navigateForward, workspaceID, batch }) => {
   const queryClient = useQueryClient();
@@ -30,7 +30,7 @@ const ValidationDetails = ({ navigateForward, workspaceID, batch }) => {
   async function handleSubmitForApproval() {
     setLoading(true);
     if (batch?.number_of_records != batch?.number_of_valid_records) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Some records are still invalid!",
@@ -41,7 +41,7 @@ const ValidationDetails = ({ navigateForward, workspaceID, batch }) => {
     }
 
     if (parseFloat(batch?.valid_amount) > parseFloat(workspaceWalletBalance)) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Insufficient funds in the wallet!",
@@ -52,7 +52,7 @@ const ValidationDetails = ({ navigateForward, workspaceID, batch }) => {
     }
 
     if (!permissions.can_initiate) {
-      notify({
+      addToast({
         title: "NOT ALLOWED",
         color: "danger",
         description: "You do not have permissions to perform this action",
@@ -69,7 +69,7 @@ const ValidationDetails = ({ navigateForward, workspaceID, batch }) => {
     const response = await submitBatchForApproval(batch?.id);
 
     if (!response?.success) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: response?.message,
@@ -87,7 +87,7 @@ const ValidationDetails = ({ navigateForward, workspaceID, batch }) => {
       queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, workspaceID],
     });
 
-    notify({
+    addToast({
       title: "Success",
       color: "success",
       description: "Records submitted successfully!",

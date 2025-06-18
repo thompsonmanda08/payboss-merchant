@@ -1,7 +1,6 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
-import { addToast } from "@heroui/react";
 
 import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from "./constants";
 
@@ -12,20 +11,6 @@ export const apiClient = axios.create({
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
-
-export const notify = ({
-  title,
-  description,
-  color = "default",
-  ...config
-}) => {
-  return addToast({
-    title,
-    description,
-    color,
-    ...config,
-  });
-};
 
 export function formatCurrency(amount) {
   const currencyFormat = new Intl.NumberFormat("en-US", {

@@ -17,29 +17,24 @@ const useKYCInfo = () => {
     staleTime: Infinity,
   });
 
-  const { data: uploadedDocsResponse } = useQuery({
+  const { data: docsResponse } = useQuery({
     queryKey: ["uploaded-docs"],
     queryFn: () => getBusinessDocumentRefs(),
     staleTime: Infinity,
   });
 
-  const businessDetails = response?.data?.details || {};
-
-  const documents =
-    uploadedDocsResponse?.data || response?.data.documents || {};
-
   const users = response?.data?.users || [];
-  const merchantKYC = response?.data?.merchant_kyc || {
+  const businessDetails = response?.data?.details || {};
+  const documents = docsResponse?.data || response?.data?.documents || {};
+  const refDocsExist = Object.keys(documents).length > 0;
+
+  let merchantKYC = response?.data?.merchant_kyc || {
     is_complete_kyc: false,
     stage: "",
     stage_id: 1,
     kyc_approval_status: "pending",
-    can_edit: true,
+    can_edit: false,
   };
-
-  const refDocsExist = Object.keys(documents).length > 0;
-
-  /* ****** SET STATE VARIABLES**************** */
 
   const merchantID = businessDetails?.ID || "";
   const merchant = businessDetails?.name || "";
@@ -77,6 +72,7 @@ const useKYCInfo = () => {
     isError,
     isSuccess,
     allowUserToSubmitKYC,
+    merchantKYC,
   };
 };
 

@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import { useQueryClient } from "@tanstack/react-query";
 
 import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-import { notify } from "@/lib/utils";
+import { addToast } from "@heroui/react";
 import Loader from "@/components/ui/loader";
 import CardHeader from "@/components/base/card-header";
 import { SingleFileDropzone } from "@/components/base/file-dropzone";
@@ -88,7 +88,7 @@ export default function TerminalConfigViewModal({
     let response = await registerTerminals(workspaceID, terminalUrl);
 
     if (!response?.success) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: response?.message,
@@ -99,7 +99,7 @@ export default function TerminalConfigViewModal({
     }
 
     queryClient.invalidateQueries();
-    notify({
+    addToast({
       color: "success",
       title: "Success",
       description: "Config file uploaded!",
@@ -172,7 +172,7 @@ const UploadTerminalConfigs = ({
     let response = await uploadTerminalConfigFile(file);
 
     if (!response?.success) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: response?.message,
@@ -182,7 +182,7 @@ const UploadTerminalConfigs = ({
       return;
     }
 
-    notify({
+    addToast({
       color: "success",
       title: "Success",
       description: "Config file uploaded!",

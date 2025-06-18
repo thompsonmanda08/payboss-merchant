@@ -8,6 +8,7 @@ import {
   Tab,
   Tabs,
   NumberInput,
+  addToast,
 } from "@heroui/react";
 
 import {
@@ -17,7 +18,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
-import { formatCurrency, formatDate, notify } from "@/lib/utils";
+import { formatCurrency, formatDate } from "@/lib/utils";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
 import { createInvoice } from "@/app/_actions/vas-actions";
@@ -68,7 +70,7 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
   const calculateSubtotal = () => {
     return formData.lineItems.reduce(
       (total, item) => total + item.quantity * item.unitPrice,
-      0,
+      0
     );
   };
 
@@ -129,7 +131,7 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
     const response = await createInvoice(workspaceID, invoiceData);
 
     if (response?.success) {
-      notify({
+      addToast({
         title: "Invoice created",
         description: "Invoice created successfully.",
         color: "success",
@@ -139,7 +141,7 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
       });
       handleClosePrompts();
     } else {
-      notify({
+      addToast({
         title: "Error",
         description: response.message,
         color: "danger",
@@ -177,7 +179,7 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
         variant="bordered"
         onSelectionChange={(key) => {
           if (!isValidDetails() && key == "invoice-items") {
-            notify({
+            addToast({
               color: "warning",
               title: "Missing Fields",
               description: "Required fields are missing!",

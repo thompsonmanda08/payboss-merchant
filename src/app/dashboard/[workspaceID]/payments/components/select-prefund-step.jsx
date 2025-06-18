@@ -5,9 +5,8 @@ import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
-import { notify } from "@/lib/utils";
 import PrefundsTable from "@/components/tables/prefunds-table";
-import { Alert } from "@heroui/react";
+import { Alert, addToast } from "@heroui/react";
 import { useActivePrefunds } from "@/hooks/useQueryHooks";
 
 const SelectPrefund = ({
@@ -27,7 +26,7 @@ const SelectPrefund = ({
   function handleProceed() {
     if (paymentAction?.prefund_id !== "" || selectedKeys.size !== 0) {
       let prefund = walletActivePrefunds.find(
-        (prefund) => prefund.ID === paymentAction?.prefund_id,
+        (prefund) => prefund.ID === paymentAction?.prefund_id
       );
 
       if (prefund) {
@@ -38,7 +37,7 @@ const SelectPrefund = ({
     }
 
     setError({ status: true, message: "You need to select a prefund!" });
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "You need to select a prefund!",

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { notify } from "@/lib/utils";
+import { addToast } from "@heroui/react";
 import { PASSWORD_PATTERN, slideDownInView } from "@/lib/constants";
 
 import { Input } from "./ui/input-field";
@@ -65,7 +65,7 @@ function ChangePasswordField({ updatePassword, setUpdatePassword }) {
     }
 
     setTimeout(() => {
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "Password Changed Successfully!",

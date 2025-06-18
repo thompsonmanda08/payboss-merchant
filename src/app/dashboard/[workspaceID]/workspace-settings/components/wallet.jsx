@@ -1,4 +1,4 @@
-import { Chip, Tooltip, useDisclosure } from "@heroui/react";
+import { Chip, Tooltip, useDisclosure, addToast } from "@heroui/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { useQueryClient } from "@tanstack/react-query";
 import { formatDistance } from "date-fns";
@@ -7,13 +7,7 @@ import { PaperClipIcon } from "@heroicons/react/24/outline";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
-import {
-  capitalize,
-  cn,
-  formatCurrency,
-  formatDate,
-  notify,
-} from "@/lib/utils";
+import { capitalize, cn, formatCurrency, formatDate } from "@/lib/utils";
 import { QUERY_KEYS, TASK_TYPE, WORKSPACE_TYPES } from "@/lib/constants";
 import { formatActivityData } from "@/lib/utils";
 import PromptModal from "@/components/base/prompt-modal";
@@ -83,7 +77,7 @@ function Wallet({
 
     if (response?.success) {
       setWalletLoading(false);
-      notify({
+      addToast({
         title: "Success",
         color: "success",
         description: response?.message,
@@ -93,7 +87,7 @@ function Wallet({
     }
 
     setWalletLoading(false);
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: response?.message,
@@ -106,7 +100,7 @@ function Wallet({
     setIsLoading(true);
 
     if (!formData.url) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Attach proof of payment!",
@@ -122,7 +116,7 @@ function Wallet({
     }
 
     if (!formData.bank_rrn) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Enter a valid bank reference number!",
@@ -138,7 +132,7 @@ function Wallet({
     }
 
     if (!formData.date_of_deposit) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Enter a valid date of deposit!",
@@ -154,7 +148,7 @@ function Wallet({
     }
 
     if (!formData.name) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Enter a valid prefund name!",
@@ -174,7 +168,7 @@ function Wallet({
       formData.amount < 0 ||
       !formData.amount.toString().length > 0
     ) {
-      notify({
+      addToast({
         title: "Invalid Amount",
         color: "danger",
         description: "Verify that you have entered a valid amount!",
@@ -190,7 +184,7 @@ function Wallet({
     }
 
     if (workspaceType == WORKSPACE_TYPES[0]?.ID) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "You are not allowed to prefund your collections wallet!",
@@ -210,7 +204,7 @@ function Wallet({
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.WALLET_HISTORY, workspaceID],
       });
-      notify({
+      addToast({
         title: "Success",
         color: "success",
         description: "Proof of payment submitted successfully.",
@@ -233,7 +227,7 @@ function Wallet({
       status: true,
       message: response?.message,
     });
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: response?.message,
@@ -252,7 +246,7 @@ function Wallet({
             {
               "items-center justify-center gap-x-0": hideHistory,
               "rounded-none border-none p-0 shadow-none": removeWrapper,
-            },
+            }
           )}
         >
           {/* ONLY THE INITIATOR CAN SEE THIS FORM IN DISBURSEMENT WORKSPACE */}
@@ -273,7 +267,7 @@ function Wallet({
                     "flex w-full flex-col gap-y-4 p-[25px] lg:border lg:border-y-0 lg:border-l-0 lg:border-border",
                     {
                       "lg:border-r-0": hideHistory,
-                    },
+                    }
                   )}
                 >
                   <div className="flex flex-col gap-4" role="pre-fund-wallet">
@@ -334,7 +328,7 @@ function Wallet({
                       handleFile={async (file) => {
                         const file_record = await handleFileUpload(
                           file,
-                          formData.file?.file_record_id,
+                          formData.file?.file_record_id
                         );
 
                         updateFormData({ url: file_record?.file_url });
@@ -443,7 +437,7 @@ export function WalletTransactionHistory({
   const walletData = transactionData || [];
 
   const walletHistory = walletData.sort(
-    (a, b) => new Date(b.created_at) - new Date(a.created_at),
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
   );
 
   const data = [
@@ -484,7 +478,7 @@ export function WalletTransactionHistory({
 
     if (!prefundApproval.remarks) {
       setIsLoading(false);
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Review reason is required.",
@@ -495,7 +489,7 @@ export function WalletTransactionHistory({
 
     if (!prefundApproval?.action) {
       setIsLoading(false);
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Action is required!",
@@ -507,12 +501,12 @@ export function WalletTransactionHistory({
     const response = await approveWalletPrefund(
       prefundApproval,
       selectedPrefund?.ID,
-      workspaceID,
+      workspaceID
     );
 
     if (!response?.success) {
       setIsLoading(false);
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Failed to submit approval action!",
@@ -530,7 +524,7 @@ export function WalletTransactionHistory({
       queryKey: [QUERY_KEYS.ACTIVE_PREFUND, workspaceID],
     });
     setIsLoading(false);
-    notify({
+    addToast({
       title: "Success",
       color: "success",
       description: "Submitted successfully!",
@@ -553,7 +547,7 @@ export function WalletTransactionHistory({
             "my-0": formattedActivityData?.length > 0,
           },
           className,
-          wrapper,
+          wrapper
         )}
       >
         {formattedActivityData.length > 0 ? (
@@ -601,7 +595,7 @@ export function WalletTransactionHistory({
                                 ...
                                 {formatDistance(
                                   new Date(item?.created_at),
-                                  new Date(),
+                                  new Date()
                                 )}{" "}
                                 ago
                               </span>
@@ -618,11 +612,11 @@ export function WalletTransactionHistory({
                                         "bg-secondary/10 text-secondary":
                                           isYellow,
                                         "bg-danger/10 text-danger": isRed,
-                                      },
+                                      }
                                     ),
                                   }}
                                   content={`${capitalize(item?.status)}: ${capitalize(
-                                    item?.remarks,
+                                    item?.remarks
                                   )}`}
                                   placement="left"
                                 >
@@ -637,7 +631,7 @@ export function WalletTransactionHistory({
                                           "bg-secondary/10 text-secondary":
                                             isYellow,
                                           "bg-danger/10 text-danger": isRed,
-                                        },
+                                        }
                                       ),
                                       content: cn("text-base font-bold", {}),
                                     }}
@@ -745,7 +739,7 @@ export function LogTaskType({ type, classNames }) {
           `inline-flex h-8 w-fit items-center justify-center gap-2 text-nowrap rounded-[4px]  px-2 py-1.5`,
           `cursor-pointer px-4`,
           `bg-${taskType?.color}/10`,
-          wrapper,
+          wrapper
         )}
       >
         <span className={cn(`text-${taskType?.color}`, icon)}>
@@ -755,7 +749,7 @@ export function LogTaskType({ type, classNames }) {
           className={cn(
             `text-sm font-medium leading-6`,
             `text-${taskType?.color}`,
-            text,
+            text
           )}
         >
           {taskType?.label}

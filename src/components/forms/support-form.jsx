@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-import { notify } from "@/lib/utils";
+import { addToast } from "@heroui/react";
 
 import { Button } from "../ui/button";
 import Card from "../base/custom-card";
@@ -32,7 +32,7 @@ function SupportForm() {
       if (response?.ok == true) {
         e.currentTarget?.reset();
 
-        notify({
+        addToast({
           color: "success",
           title: "Success",
           description: "Message was sent Successfully!",

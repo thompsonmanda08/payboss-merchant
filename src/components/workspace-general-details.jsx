@@ -1,4 +1,4 @@
-import { Snippet, Switch, useDisclosure } from "@heroui/react";
+import { Snippet, Switch, useDisclosure, addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input-field";
 import AddUserToWorkspace from "@/components/add-users-workspace-modal";
 import useWorkspaces from "@/hooks/useWorkspaces";
 import { QUERY_KEYS, WORKSPACE_TYPES } from "@/lib/constants";
-import { cn, notify, syntaxHighlight } from "@/lib/utils";
+import { cn, syntaxHighlight } from "@/lib/utils";
 import SelectField from "@/components/ui/select-field";
 import { useWorkspaceCallbackURL } from "@/hooks/useQueryHooks";
 import { updateWorkspaceCallback } from "@/app/_actions/workspace-actions";
@@ -49,7 +49,7 @@ function WorkspaceDetails({
   const { data: callbackResponse } = useWorkspaceCallbackURL(workspaceID);
 
   const [isSandbox, setIsSandbox] = useState(
-    activeWorkspace?.workspace?.toLowerCase() == "sandbox",
+    activeWorkspace?.workspace?.toLowerCase() == "sandbox"
   );
 
   const [newWorkspace, setNewWorkspace] = useState({
@@ -77,7 +77,7 @@ function WorkspaceDetails({
       newWorkspace.workspace?.length < 3 ||
       newWorkspace.description?.length < 3
     ) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Provide valid name and description!",
@@ -97,13 +97,13 @@ function WorkspaceDetails({
         queryKey: [QUERY_KEYS.WORKSPACES],
       });
 
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "Workspace updated successfully!",
       });
     } else {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Failed to Update Workspace!",
@@ -121,7 +121,7 @@ function WorkspaceDetails({
 
     // VALIDATE INPUTS
     if (!callbackURL?.url || !isValidURL) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Provide valid url!",
@@ -137,7 +137,7 @@ function WorkspaceDetails({
     if (response?.success) {
       queryClient.invalidateQueries();
       setIsLoadingCallback(false);
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "Callback URL updated!",
@@ -146,7 +146,7 @@ function WorkspaceDetails({
       return;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "Failed to Update callback URL!",
@@ -179,7 +179,7 @@ function WorkspaceDetails({
       });
       setDeleteLoading(false);
 
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "Workspaces Deactivated successfully!",
@@ -189,7 +189,7 @@ function WorkspaceDetails({
       return;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "Failed to Deactivate Workspace!",
@@ -343,7 +343,7 @@ function WorkspaceDetails({
                     {
                       "bg-primary-300 bg-opacity-50 rounded-md ":
                         callbackURL.method == "POST",
-                    },
+                    }
                   )}
                   classNames={{
                     value: cn(
@@ -351,7 +351,7 @@ function WorkspaceDetails({
                       {
                         "text-primary-600 group-data-[has-value=true]:text-primary-600":
                           callbackURL.method == "POST",
-                      },
+                      }
                     ),
                   }}
                   defaultValue={"GET"}
@@ -431,8 +431,8 @@ function WorkspaceDetails({
                               mno_status_description: "string",
                             },
                             undefined,
-                            2,
-                          ),
+                            2
+                          )
                         ),
                       }}
                     />

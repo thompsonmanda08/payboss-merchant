@@ -51,7 +51,7 @@ function ProgressStageTracker({ onCompletionNavigateTo }) {
           innerWrapper: "gap-0",
         }}
         infoText={
-          "Your account is under review! We will notify you when your account is approved."
+          "Your account is under review! You will be notified you when your account is approved."
         }
         title="Account Verification Status"
       />

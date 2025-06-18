@@ -1,6 +1,12 @@
 "use client";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { Modal, ModalContent, ModalBody, useDisclosure } from "@heroui/react";
+import {
+  Modal,
+  ModalContent,
+  ModalBody,
+  useDisclosure,
+  addToast,
+} from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -11,7 +17,7 @@ import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import { INVOICE_COLUMNS, TILL_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 import InvoiceForm from "@/components/forms/invoice-form";
-import { formatDate, notify } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
 import {
   getCollectionLatestTransactions,
@@ -84,7 +90,7 @@ export default function InvoicingPage({}) {
   function handleOpenCreateModal() {
     // IF NOT CHECKOUT URL - CANNOT CREATE INVOICE
     if (!configData?.url) {
-      notify({
+      addToast({
         title: "Checkout Config not Found",
         description: "Please generate a checkout URL from workspace settings.",
         color: "danger",
@@ -126,7 +132,7 @@ export default function InvoicingPage({}) {
         price: parseFloat(String(item?.unit_price || "0")),
         amount: parseFloat(
           parseInt(String(item?.quantity || "0")) *
-            parseFloat(String(item?.unit_price || "0")),
+            parseFloat(String(item?.unit_price || "0"))
         ),
       })),
       taxRate: parseFloat(String(invoiceData?.tax_rate || "0")),

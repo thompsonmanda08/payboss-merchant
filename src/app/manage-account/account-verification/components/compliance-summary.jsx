@@ -3,7 +3,7 @@ import React, { useState } from "react"; // Removed useState as tabs are removed
 import { Button } from "@/components/ui/button";
 import CardHeader from "@/components/base/card-header";
 import { ArrowRightIcon, CheckBadgeIcon } from "@heroicons/react/24/outline";
-import { notify } from "@/lib/utils";
+import { addToast } from "@heroui/react";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { useDisclosure } from "@heroui/react";
 import PromptModal from "@/components/base/prompt-modal";
@@ -37,20 +37,20 @@ function ComplianceSummary({ sections, navigateToSection }) {
     if (navigateToSection && sectionLink) {
       navigateToSection(sectionLink);
     } else {
-      notify({
+      addToast({
         message: "Navigation unavailable or sectionLink missing for:",
         description: sectionLink,
       });
       console.warn(
         "Navigation unavailable or sectionLink missing for:",
-        sectionLink,
+        sectionLink
       );
     }
   };
 
   // FILTER OUT "start" and "summary"
   const filteredSections = sections.filter(
-    (section) => section.id !== "start" && section.id !== "summary",
+    (section) => section.id !== "start" && section.id !== "summary"
   );
 
   const handleSubmitKYC = async () => {
@@ -59,14 +59,14 @@ function ComplianceSummary({ sections, navigateToSection }) {
     const response = await submitKYCForReview();
 
     if (response.success) {
-      notify({
+      addToast({
         title: "Success",
         color: "success",
         description: "KYC submitted for review",
       });
       queryClient.invalidateQueries();
     } else {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: response.message,

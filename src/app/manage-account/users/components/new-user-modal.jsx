@@ -15,7 +15,7 @@ import SelectField from "@/components/ui/select-field";
 import {
   generateRandomString,
   isValidZambianMobileNumber,
-  notify,
+  addToast,
 } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import StatusMessage from "@/components/base/status-message";
@@ -69,7 +69,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
   async function handleCreateUser() {
     setLoading(true);
     if (!isValidData()) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Invalid user details.",
@@ -88,7 +88,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
     let response = await createNewUser(userData);
 
     if (response?.success) {
-      notify({
+      addToast({
         title: "Success",
         color: "success",
         description: "User created successfully!",
@@ -102,7 +102,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
       return;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "Problem occurred while creating user.",
@@ -127,7 +127,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
 
     if (response?.success) {
       queryClient.invalidateQueries();
-      notify({
+      addToast({
         title: "Success",
         color: "success",
         description: "User updated successfully!",
@@ -139,7 +139,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
       return;
     }
 
-    notify({
+    addToast({
       title: "Error updating user",
       color: "danger",
       description: response?.message || "Invalid user details.",
@@ -162,12 +162,12 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
     let response = await changeUserRoleInWorkspace(
       userMapping,
       recordID,
-      workspaceID,
+      workspaceID
     );
 
     if (response?.success) {
       queryClient.invalidateQueries();
-      notify({
+      addToast({
         title: "Success",
         color: "success",
         description: "User updated successfully!",
@@ -179,7 +179,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
       return;
     }
 
-    notify({
+    addToast({
       title: "Error updating user",
       color: "danger",
       description: response?.message || "Failed to update user details.",

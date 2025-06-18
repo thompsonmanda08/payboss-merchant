@@ -4,9 +4,9 @@ import { BanknotesIcon, WalletIcon } from "@heroicons/react/24/outline";
 import usePaymentsStore from "@/context/payment-store";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
-import { formatCurrency, notify } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import { initializeBulkTransaction } from "@/app/_actions/transaction-actions";
-import { Alert } from "@heroui/react";
+import { Alert, addToast } from "@heroui/react";
 import { useWorkspaceInit } from "@/hooks/useQueryHooks";
 
 const PaymentDetails = ({
@@ -39,7 +39,7 @@ const PaymentDetails = ({
       paymentAction?.batch_name?.length < 3
     ) {
       setLoading(false);
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "A valid filename is required!",
@@ -49,7 +49,7 @@ const PaymentDetails = ({
     }
 
     if (!role?.can_initiate) {
-      notify({
+      addToast({
         title: "NOT ALLOWED",
         color: "danger",
         description: "You do not have permissions to perform this action",
@@ -67,11 +67,11 @@ const PaymentDetails = ({
     // Create payment batch here if user is create access
     const response = await initializeBulkTransaction(
       workspaceID,
-      paymentAction,
+      paymentAction
     );
 
     if (response?.success) {
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "Payment Batch Created!",
@@ -85,7 +85,7 @@ const PaymentDetails = ({
       return;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "Failed to create payment batch!",

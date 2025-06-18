@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
 import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
-import { cn, notify } from "@/lib/utils";
-import { Image, useDisclosure } from "@heroui/react";
+import { cn } from "@/lib/utils";
+import { Image, useDisclosure, addToast } from "@heroui/react";
 import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
 import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { payWithMobileMoney } from "@/app/_actions/checkout-actions";
@@ -106,7 +106,7 @@ export default function MobileMoneyForm({ checkoutData }) {
     });
 
     if (response?.success) {
-      notify({
+      addToastst({
         title: "Mobile Payment",
         description: `Pin prompt sent to${formData?.phoneNumber}`,
         color: "success",
@@ -116,7 +116,7 @@ export default function MobileMoneyForm({ checkoutData }) {
       setIsSubmitting(false);
       setPinPromptSent(true); // THIS WILL ENABLE THE TRANSACTION STATUS HOOK - FIRES IN INTERVALS
     } else {
-      notify({
+      addToast({
         title: "Error",
         description: response.message,
         color: "danger",
@@ -225,7 +225,7 @@ export default function MobileMoneyForm({ checkoutData }) {
         onClose={
           transaction?.status == "PENDING"
             ? () => {
-                notify({
+                addToast({
                   color: "warning",
                   title: "Pending Transaction",
                   description: "Transaction is still pending, please wait.",
@@ -251,7 +251,7 @@ export default function MobileMoneyForm({ checkoutData }) {
           <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words text-center uppercase font-bold text-foreground/80",
+                " max-w-sm break-words text-center uppercase font-bold text-foreground/80"
               )}
             >
               {transaction?.status}

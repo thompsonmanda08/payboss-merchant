@@ -27,6 +27,7 @@ import {
   TableRow,
   TableCell,
   Chip,
+  addToast,
 } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
@@ -34,7 +35,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { cn, formatDate, maskString, notify } from "@/lib/utils";
+import { cn, formatDate, maskString } from "@/lib/utils";
 import CustomTable from "@/components/tables/table";
 import {
   useWorkspaceAPIKey,
@@ -119,7 +120,7 @@ const APIIntegration = () => {
       getCollectionLatestTransactions(
         workspaceID,
         "api-integration",
-        dateRange,
+        dateRange
       ),
   });
 
@@ -127,13 +128,13 @@ const APIIntegration = () => {
     try {
       navigator?.clipboard?.writeText(key);
       setCopiedKey(key);
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "API key copied to clipboard!",
       });
     } catch (error) {
-      notify({
+      addToast({
         color: "danger",
         title: "Error",
         description: "Failed to copy API key!",
@@ -146,7 +147,7 @@ const APIIntegration = () => {
     setIsLoading(true);
 
     if (!permissions?.update || !permissions?.delete) {
-      notify({
+      addToast({
         color: "danger",
         title: "Error",
         description: "Only admins are allowed to generate API keys!",
@@ -160,7 +161,7 @@ const APIIntegration = () => {
 
     // THERE CAN ONLY BE 2 API KEYS ==> UAT AND PRODUCTION
     if (API_KEYS?.length == 2) {
-      notify({
+      addToast({
         color: "danger",
         title: "Error",
         description: "You already have an API key for this workspace!",
@@ -172,7 +173,7 @@ const APIIntegration = () => {
     const response = await setupWorkspaceAPIKey(workspaceID);
 
     if (!response?.success) {
-      notify({
+      addToast({
         color: "danger",
         title: "Failed to generate API key",
         description: response?.message,
@@ -185,7 +186,7 @@ const APIIntegration = () => {
     queryClient.invalidateQueries({
       queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     });
-    notify({
+    addToast({
       color: "success",
       title: "Success",
       description: "API key has been generated",
@@ -200,7 +201,7 @@ const APIIntegration = () => {
     setIsLoading(true);
 
     if (!permissions?.update || !permissions?.delete) {
-      notify({
+      addToast({
         color: "danger",
         title: "Error",
         description: "Only admins are allowed to refresh API keys.",
@@ -212,7 +213,7 @@ const APIIntegration = () => {
     }
 
     if (API_KEYS?.length == 0) {
-      notify({
+      addToast({
         color: "danger",
         title: "Error",
         description: "You have no API key.",
@@ -225,7 +226,7 @@ const APIIntegration = () => {
     const response = await refreshWorkspaceAPIKey(workspaceID, refreshKeyID);
 
     if (response?.success) {
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "API key has been updated",
@@ -234,7 +235,7 @@ const APIIntegration = () => {
         queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
       });
     } else {
-      notify({
+      addToast({
         color: "danger",
         title: "Error",
         description: response?.message || "Failed to refresh API key.",
@@ -251,7 +252,7 @@ const APIIntegration = () => {
     setIsLoading(true);
 
     if (!permissions?.update || !permissions?.delete) {
-      notify({
+      addToast({
         color: "danger",
         title: "Error",
         description: "Only admins are allowed to activate terminals.",
@@ -263,7 +264,7 @@ const APIIntegration = () => {
     }
 
     if (API_KEYS_DATA?.terminals || hasTerminals) {
-      notify({
+      addToast({
         color: "danger",
         title: "Error",
         description: "Terminals already activated for this workspace.",
@@ -277,7 +278,7 @@ const APIIntegration = () => {
     const response = await activateWorkspaceTerminals(workspaceID);
 
     if (!response?.success) {
-      notify({
+      addToast({
         color: "danger",
         title: "Error",
         description: response?.message,
@@ -289,7 +290,7 @@ const APIIntegration = () => {
 
     queryClient.invalidateQueries();
 
-    notify({
+    addToast({
       color: "success",
       title: "Success",
       description: "Collection Terminals activated.",
@@ -304,7 +305,7 @@ const APIIntegration = () => {
     setIsLoading(true);
 
     if (!permissions?.update || !permissions?.delete) {
-      notify({
+      addToast({
         color: "danger",
         title: "NOT ALLOWED",
         description: "Only admins are allowed to deactivate terminals.",
@@ -318,7 +319,7 @@ const APIIntegration = () => {
     const response = await deactivateWorkspaceTerminals(workspaceID);
 
     if (!response?.success) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: response?.message,
@@ -332,7 +333,7 @@ const APIIntegration = () => {
       queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     });
 
-    notify({
+    addToast({
       title: "Success",
       color: "success",
       description: "Collection Terminals activated!",
@@ -345,7 +346,7 @@ const APIIntegration = () => {
 
   function handleTerminalStatus(actionKey) {
     if (hasTerminals && actionKey == "activate-terminals") {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Terminals already activated for this workspace!",
@@ -361,7 +362,7 @@ const APIIntegration = () => {
       terminalsConfigured &&
       actionKey == "deactivate-terminals"
     ) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Contact support to deactivate terminals!",
@@ -383,7 +384,7 @@ const APIIntegration = () => {
 
   function handleManageTerminals(selectedKey) {
     if (!permissions?.update || !permissions?.delete) {
-      notify({
+      addToast({
         color: "danger",
         title: "NOT ALLOWED!",
         description: "You cannot perform this action",
@@ -701,7 +702,7 @@ const APIIntegration = () => {
                             <ComputerDesktopIcon
                               className={cn(
                                 iconClasses,
-                                "group-hover:text-white font-bold group-hover:border-white",
+                                "group-hover:text-white font-bold group-hover:border-white"
                               )}
                             />
                           }
@@ -725,7 +726,7 @@ const APIIntegration = () => {
                             <TrashIcon
                               className={cn(
                                 iconClasses,
-                                "text-danger group-hover:text-white",
+                                "text-danger group-hover:text-white"
                               )}
                             />
                           }

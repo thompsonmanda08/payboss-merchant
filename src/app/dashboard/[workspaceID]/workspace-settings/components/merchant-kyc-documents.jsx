@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useAuthStore from "@/context/auth-store";
 import { uploadBusinessFile } from "@/app/_actions/pocketbase-actions";
-import { notify } from "@/lib/utils";
+import { addToast } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import {
   sendBusinessDocumentRefs,
@@ -43,7 +43,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
     };
 
     if (!isKYCSent) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Checkbox is unmarked",
@@ -58,7 +58,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
     }
 
     if (Object.keys(documentUrls).length < 5 && isKYCSent) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Provide all required files!",
@@ -79,7 +79,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
       response = await updateBusinessDocumentRefs(documentUrls);
 
       if (response?.success) {
-        notify({
+        addToast({
           title: "Success",
           color: "success",
           description: "Documents updated successfully!",
@@ -93,7 +93,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
       response = await sendBusinessDocumentRefs(documentUrls);
 
       if (response?.success) {
-        notify({
+        addToast({
           title: "Success",
           color: "success",
           description: "Documents submitted successfully!",
@@ -107,7 +107,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
 
     setError({ message: response?.message, status: true });
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "Failed to submit documents",
@@ -122,7 +122,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
     let response = await uploadBusinessFile(file, merchantID, recordID);
 
     if (response?.success) {
-      notify({
+      addToast({
         title: "Success",
         color: "success",
         description: response?.message,
@@ -132,7 +132,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
       return response?.data;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: response?.message,
@@ -162,7 +162,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
               updateDocs({
                 CERTIFICATE_INC: await handleFileUpload(
                   file,
-                  docFiles["CERTIFICATE_INC"]?.file_record_id,
+                  docFiles["CERTIFICATE_INC"]?.file_record_id
                 ),
               })
             }
@@ -174,7 +174,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
               updateDocs({
                 ARTICLES_ASSOCIATION: await handleFileUpload(
                   file,
-                  docFiles["ARTICLES_ASSOCIATION"]?.file_record_id,
+                  docFiles["ARTICLES_ASSOCIATION"]?.file_record_id
                 ),
               })
             }
@@ -186,7 +186,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
               updateDocs({
                 SHAREHOLDER_AGREEMENT: await handleFileUpload(
                   file,
-                  docFiles["SHAREHOLDER_AGREEMENT"]?.file_record_id,
+                  docFiles["SHAREHOLDER_AGREEMENT"]?.file_record_id
                 ),
               })
             }
@@ -201,7 +201,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
               updateDocs({
                 TAX_CLEARANCE: await handleFileUpload(
                   file,
-                  docFiles["TAX_CLEARANCE"]?.file_record_id,
+                  docFiles["TAX_CLEARANCE"]?.file_record_id
                 ),
               })
             }
@@ -214,7 +214,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
               updateDocs({
                 COMPANY_PROFILE: await handleFileUpload(
                   file,
-                  docFiles["COMPANY_PROFILE"]?.file_record_id,
+                  docFiles["COMPANY_PROFILE"]?.file_record_id
                 ),
               })
             }

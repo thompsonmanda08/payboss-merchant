@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Switch, useDisclosure } from "@heroui/react";
+import { Switch, useDisclosure, addToast } from "@heroui/react";
 import {
   ArrowRightStartOnRectangleIcon,
   PencilIcon,
@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
 
 import useWorkspaceStore from "@/context/workspaces-store";
-import { cn, formatCurrency, notify } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
 import AddUserToWorkspace from "@/components/add-users-workspace-modal";
@@ -100,7 +100,7 @@ function WorkspaceSummary({
     if (noChangesToSave) {
       setLoading(false);
       setChangeWorkspaceDetails(false);
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "Changes Saved!",
@@ -114,7 +114,7 @@ function WorkspaceSummary({
       newWorkspace.workspace.length <= 3 ||
       newWorkspace.description.length <= 3
     ) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Provide valid name and description!",
@@ -132,7 +132,7 @@ function WorkspaceSummary({
     if (response?.success) {
       queryClient.invalidateQueries();
       setLoading(false);
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "Changes Saved!",
@@ -141,7 +141,7 @@ function WorkspaceSummary({
       return;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "Failed to Update Workspace!",
@@ -169,7 +169,7 @@ function WorkspaceSummary({
       queryClient.invalidateQueries();
       setDeleteLoading(false);
 
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "Workspaces Deactivated successfully!",
@@ -179,7 +179,7 @@ function WorkspaceSummary({
       return;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "Failed to Deactivate Workspace!",
@@ -195,7 +195,7 @@ function WorkspaceSummary({
     if (!response?.success) {
       setIsVisible(!isVisible);
 
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Failed to update visibility",
@@ -206,7 +206,7 @@ function WorkspaceSummary({
 
     queryClient.invalidateQueries();
 
-    notify({
+    addToast({
       color: "success",
       title: "Success",
       description: "Visibility updated successfully",
@@ -306,7 +306,7 @@ function WorkspaceSummary({
         <div className="flex w-full justify-between gap-4">
           <div
             className={cn(
-              "flex group select-none items-start gap-2 text-slate-600",
+              "flex group select-none items-start gap-2 text-slate-600"
             )}
           >
             <WalletIcon className="h-12 w-12 dark:text-foreground text-primary" />{" "}

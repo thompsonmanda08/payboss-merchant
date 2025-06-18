@@ -8,6 +8,7 @@ export function Button({ children, loadingText, size, className, ...props }) {
 
   return (
     <NextUIButton
+      type={props.type || "button"}
       className={cn("min-w-max font-semibold", className)}
       radius="sm"
       size={size}

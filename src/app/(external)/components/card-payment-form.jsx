@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import useConfigOptions from "@/hooks/useConfigOptions";
 import { payWithBankCard } from "@/app/_actions/checkout-actions";
 import SelectField from "@/components/ui/select-field";
-import { cn, notify } from "@/lib/utils";
-import { useDisclosure } from "@heroui/react";
+import { cn, } from "@/lib/utils";
+import { useDisclosure, addToast } from "@heroui/react";
 import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
 import PromptModal from "@/components/base/prompt-modal";
 import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
@@ -132,7 +132,7 @@ export default function CardPaymentForm({ checkoutData }) {
     const paymentWindow = window.open(
       paymentUrl,
       "PayBoss Checkout",
-      `width=${width},height=${height},left=${left},top=${top}`,
+      `width=${width},height=${height},left=${left},top=${top}`
     );
 
     if (!paymentWindow) {
@@ -157,7 +157,7 @@ export default function CardPaymentForm({ checkoutData }) {
     e.preventDefault();
 
     if (!validateForm()) {
-      notify({
+      addToast({
         title: "Card Payment Error",
         description: "Missing Fields",
         color: "danger",
@@ -191,9 +191,8 @@ export default function CardPaymentForm({ checkoutData }) {
       setIsSubmitting(false); // THIS WILL TRIGGER THE WEB HOOK
       setIsPaymentStarted(true); //
       await openPaymentWindow(payload);
-      
     } else {
-      notify({
+      addToast({
         title: "Error",
         description: response.message,
         color: "danger",
@@ -356,7 +355,7 @@ export default function CardPaymentForm({ checkoutData }) {
         onClose={
           transaction?.status == "PENDING"
             ? () => {
-                notify({
+                addToast({
                   color: "warning",
                   title: "Pending Transaction",
                   description: "Transaction is still pending, please wait.",
@@ -382,7 +381,7 @@ export default function CardPaymentForm({ checkoutData }) {
           <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words text-center uppercase font-bold text-foreground/80",
+                " max-w-sm break-words text-center uppercase font-bold text-foreground/80"
               )}
             >
               {transaction?.status}

@@ -14,12 +14,11 @@ import {
   ModalFooter,
   Chip,
   Tooltip,
+  addToast,
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-
-import { notify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import StatusMessage from "@/components/base/status-message";
 import EmptyState from "@/components/empty-state";
@@ -186,7 +185,7 @@ function AddUserToWorkspace({
         message: response?.message,
       });
 
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: response?.message,
@@ -196,7 +195,7 @@ function AddUserToWorkspace({
       return;
     }
 
-    notify({
+    addToast({
       color: "success",
       title: "Success",
       description: `Users were added to ${workspaceName}!`,

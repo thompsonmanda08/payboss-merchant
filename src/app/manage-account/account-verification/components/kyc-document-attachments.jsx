@@ -1,10 +1,10 @@
 "use client";
-import { useState, useMemo } from "react";
-import { Checkbox, Tooltip } from "@heroui/react";
+import { useState } from "react";
+import { Checkbox, Tooltip, addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { uploadBusinessFile } from "@/app/_actions/pocketbase-actions";
-import { cn, notify } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   deleteBusinessDocumentRefs,
@@ -141,7 +141,7 @@ export default function DocumentAttachments({
     });
 
     if (!agreed) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Checkbox is unmarked",
@@ -169,7 +169,7 @@ export default function DocumentAttachments({
     }
 
     if (!requiredDocsProvided && agreed) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: "Provide all required files!",
@@ -190,7 +190,7 @@ export default function DocumentAttachments({
       response = await updateBusinessDocumentRefs(documentUrls);
 
       if (response?.success) {
-        notify({
+        addToast({
           title: "Success",
           color: "success",
           description: "Documents updated successfully!",
@@ -210,7 +210,7 @@ export default function DocumentAttachments({
       response = await sendBusinessDocumentRefs(documentUrls);
 
       if (response?.success) {
-        notify({
+        addToast({
           title: "Success",
           color: "success",
           description: "Documents submitted successfully!",
@@ -232,7 +232,7 @@ export default function DocumentAttachments({
 
     const action = refDocsExist ? "update" : "submit";
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: `Failed to ${action} documents`,
@@ -247,7 +247,7 @@ export default function DocumentAttachments({
     let response = await uploadBusinessFile(file, merchantID, recordID);
 
     if (response?.success) {
-      notify({
+      addToast({
         title: "Success",
         color: "success",
         description: response?.message,
@@ -257,7 +257,7 @@ export default function DocumentAttachments({
       return response?.data;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: response?.message,
@@ -280,7 +280,7 @@ export default function DocumentAttachments({
     const response = await deleteBusinessDocumentRefs([docToDelete.backendKey]);
 
     if (response?.success) {
-      notify({
+      addToast({
         title: "Success",
         color: "success",
         description: "Document removed successfully.",
@@ -289,7 +289,7 @@ export default function DocumentAttachments({
       queryClient.invalidateQueries({ queryKey: ["uploaded-docs"] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.SETUP] });
     } else {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: response?.message || "Failed to remove document.",

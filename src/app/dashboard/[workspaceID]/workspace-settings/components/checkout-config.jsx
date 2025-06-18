@@ -28,6 +28,7 @@ import {
   Snippet,
   ModalHeader,
   ModalFooter,
+  addToast,
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -35,7 +36,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
-import { cn, maskString, notify } from "@/lib/utils";
+import { cn, maskString } from "@/lib/utils";
 import { uploadCheckoutLogoFile } from "@/app/_actions/pocketbase-actions";
 import PromptModal from "@/components/base/prompt-modal";
 import {
@@ -82,7 +83,7 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
     let response = await uploadCheckoutLogoFile(file, recordID);
 
     if (response?.success) {
-      notify({
+      addToast({
         color: "success",
         title: "Logo Uploaded!",
         description: "Logo File uploaded successfully!",
@@ -98,7 +99,7 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
       return response?.data;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "Failed to upload file.",
@@ -124,7 +125,7 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
     if (key == "generate-checkout-url") {
       // CHECK IF URL ALREADY EXISTS
       if (configData?.url && key == "generate-checkout-url") {
-        notify({
+        addToast({
           color: "danger",
           title: "Error",
           description: "URL already exists for this workspace.",
@@ -156,13 +157,13 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
     try {
       navigator?.clipboard?.writeText(key);
       setCopiedKey(key);
-      notify({
+      addToast({
         color: "success",
         title: "Success",
         description: "Checkout URL copied to clipboard!",
       });
     } catch (error) {
-      notify({
+      addToast({
         color: "danger",
         title: "Error",
         description: "Failed to copy Checkout URL to clipboard!",
@@ -175,7 +176,7 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
     setIsLoading(true);
 
     if (!permissions?.create || !permissions?.update) {
-      notify({
+      addToast({
         color: "danger",
         title: "NOT ALLOWED",
         description: "Only admins are allowed to generate URLs.",
@@ -202,13 +203,13 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
     }
 
     if (!response?.success) {
-      notify({
+      addToast({
         title: "Error",
         color: "danger",
         description: response?.message,
       });
     } else {
-      notify({
+      addToast({
         title: "Success",
         color: "success",
         description: "Checkout URL Configured Successfully!",
@@ -500,7 +501,7 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
         </div>
         <label
           className={cn(
-            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70",
+            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70"
           )}
         >
           Logo (Optional)

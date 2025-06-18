@@ -4,11 +4,11 @@ import Link from "next/link";
 import React from "react";
 
 import { Button } from "@/components/ui/button";
-import { notify } from "@/lib/utils";
 import usePaymentsStore from "@/context/payment-store";
 import { uploadPaymentBatchFile } from "@/app/_actions/pocketbase-actions";
 import useAccountProfile from "@/hooks/useProfileDetails";
 import { SingleFileDropzone } from "@/components/base/file-dropzone";
+import { addToast } from "@heroui/react";
 
 const UploadCSVFile = ({ navigateForward, handleCancel, protocol }) => {
   const { paymentAction, updatePaymentFields } = usePaymentsStore();
@@ -22,7 +22,7 @@ const UploadCSVFile = ({ navigateForward, handleCancel, protocol }) => {
       return;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "A valid file is required!",
@@ -35,7 +35,7 @@ const UploadCSVFile = ({ navigateForward, handleCancel, protocol }) => {
     let response = await uploadPaymentBatchFile(file, merchantID, recordID);
 
     if (response?.success) {
-      notify({
+      addToast({
         color: "success",
         title: "File Added!",
         description: "File uploaded successfully!",
@@ -50,7 +50,7 @@ const UploadCSVFile = ({ navigateForward, handleCancel, protocol }) => {
       return response?.data;
     }
 
-    notify({
+    addToast({
       title: "Error",
       color: "danger",
       description: "Failed to upload file.",
