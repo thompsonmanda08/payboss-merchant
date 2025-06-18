@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
-import SideNavBar from "@/components/side-navbar";
-import TopNavBar from "@/components/top-bar";
+import SideNavBar from "@/components/elements/side-navbar";
+import TopNavBar from "@/components/elements/top-bar";
 
 import {
   getAuthSession,

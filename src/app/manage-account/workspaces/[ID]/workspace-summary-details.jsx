@@ -15,8 +15,8 @@ import useWorkspaceStore from "@/context/workspaces-store";
 import { cn, formatCurrency } from "@/lib/utils";
 import { Input } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
-import AddUserToWorkspace from "@/components/add-users-workspace-modal";
-import PromptModal from "@/components/base/prompt-modal";
+import AddUserToWorkspace from "@/components/modals/add-users-workspace-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 import NavIconButton from "@/components/ui/nav-icon-button";
 import {
   changeWorkspaceVisibility,

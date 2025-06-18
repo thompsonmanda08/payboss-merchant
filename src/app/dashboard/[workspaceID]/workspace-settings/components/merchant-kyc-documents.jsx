@@ -14,7 +14,7 @@ import CardHeader from "@/components/base/card-header";
 import StatusMessage from "@/components/base/status-message";
 import EmptyLogs from "@/components/base/empty-logs";
 import UploadField from "@/components/base/file-dropzone";
-import useKYCInfo from "@/hooks/useKYCInfo";
+import useKYCInfo from "@/hooks/use-kyc-info";
 
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
@@ -162,7 +162,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
               updateDocs({
                 CERTIFICATE_INC: await handleFileUpload(
                   file,
-                  docFiles["CERTIFICATE_INC"]?.file_record_id
+                  docFiles["CERTIFICATE_INC"]?.file_record_id,
                 ),
               })
             }
@@ -174,7 +174,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
               updateDocs({
                 ARTICLES_ASSOCIATION: await handleFileUpload(
                   file,
-                  docFiles["ARTICLES_ASSOCIATION"]?.file_record_id
+                  docFiles["ARTICLES_ASSOCIATION"]?.file_record_id,
                 ),
               })
             }
@@ -186,7 +186,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
               updateDocs({
                 SHAREHOLDER_AGREEMENT: await handleFileUpload(
                   file,
-                  docFiles["SHAREHOLDER_AGREEMENT"]?.file_record_id
+                  docFiles["SHAREHOLDER_AGREEMENT"]?.file_record_id,
                 ),
               })
             }
@@ -201,7 +201,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
               updateDocs({
                 TAX_CLEARANCE: await handleFileUpload(
                   file,
-                  docFiles["TAX_CLEARANCE"]?.file_record_id
+                  docFiles["TAX_CLEARANCE"]?.file_record_id,
                 ),
               })
             }
@@ -214,7 +214,7 @@ export default function MerchantDocumentAttachments({ isWorkspaceAdmin }) {
               updateDocs({
                 COMPANY_PROFILE: await handleFileUpload(
                   file,
-                  docFiles["COMPANY_PROFILE"]?.file_record_id
+                  docFiles["COMPANY_PROFILE"]?.file_record_id,
                 ),
               })
             }

@@ -11,7 +11,7 @@ import { cn, formatDate, isValidZambianMobileNumber } from "@/lib/utils";
 import DateSelectField from "@/components/ui/date-select-field";
 import useAuthStore from "@/context/auth-store";
 import SelectField from "@/components/ui/select-field";
-import useConfigOptions from "@/hooks/useConfigOptions";
+import useConfigOptions from "@/hooks/use-config-options";
 import CardHeader from "@/components/base/card-header";
 import AutoCompleteField from "@/components/base/auto-complete";
 

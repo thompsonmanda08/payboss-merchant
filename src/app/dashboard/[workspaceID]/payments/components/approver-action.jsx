@@ -13,8 +13,8 @@ import {
 import usePaymentsStore from "@/context/payment-store";
 import { Input } from "@/components/ui/input-field";
 import { QUERY_KEYS } from "@/lib/constants";
-import PromptModal from "@/components/base/prompt-modal";
-import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+import PromptModal from "@/components/modals/prompt-modal";
+import { useWorkspaceInit } from "@/hooks/use-query-data";
 import Loader from "@/components/ui/loader";
 
 const ApproverAction = ({ workspaceID, batch }) => {

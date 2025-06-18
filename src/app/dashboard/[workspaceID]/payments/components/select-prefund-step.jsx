@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
 import PrefundsTable from "@/components/tables/prefunds-table";
 import { Alert, addToast } from "@heroui/react";
-import { useActivePrefunds } from "@/hooks/useQueryHooks";
+import { useActivePrefunds } from "@/hooks/use-query-data";
 
 const SelectPrefund = ({
   navigateForward,
@@ -26,7 +26,7 @@ const SelectPrefund = ({
   function handleProceed() {
     if (paymentAction?.prefund_id !== "" || selectedKeys.size !== 0) {
       let prefund = walletActivePrefunds.find(
-        (prefund) => prefund.ID === paymentAction?.prefund_id
+        (prefund) => prefund.ID === paymentAction?.prefund_id,
       );
 
       if (prefund) {

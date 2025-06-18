@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Modal, useDisclosure } from "@heroui/react";
 import React from "react";
 import CardHeader from "@/components/base/card-header";
-import useKYCInfo from "@/hooks/useKYCInfo";
+import useKYCInfo from "@/hooks/use-kyc-info";
 import Link from "next/link";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";

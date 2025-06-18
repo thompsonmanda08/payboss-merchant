@@ -11,7 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { useParams } from "next/navigation";
 
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import useCustomTabsHook from "@/hooks/use-custom-tabs";
 import Search from "@/components/ui/search";
 import CustomTable from "@/components/tables/table";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ import { getBulkAnalyticReports } from "@/app/_actions/transaction-actions";
 import { bulkTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
 import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
-import Tabs from "@/components/tabs";
+import Tabs from "@/components/elements/tabs";
 import TotalValueStat from "@/app/dashboard/components/total-stats";
 import {
   BULK_REPORTS_COLUMNS,

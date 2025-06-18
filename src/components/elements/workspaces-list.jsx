@@ -15,16 +15,16 @@ import { Button } from "@/components/ui/button";
 import { capitalize, cn } from "@/lib/utils";
 import { createNewWorkspace } from "@/app/_actions/merchant-actions";
 import { QUERY_KEYS } from "@/lib/constants";
-import useWorkspace from "@/hooks/useWorkspaces";
+import useWorkspace from "@/hooks/use-workspaces";
 import OverlayLoader from "@/components/ui/overlay-loader";
-import useAccountProfile from "@/hooks/useProfileDetails";
+import useAccountProfile from "@/hooks/use-profile-info";
 import Card from "@/components/base/custom-card";
 import EmptyLogs from "@/components/base/empty-logs";
 
 import WorkspaceItem from "./workspace-card-item";
-import CreateNewWorkspaceModal from "./create-new-workspace-modal";
+import CreateNewWorkspaceModal from "../modals/create-new-workspace-modal";
 import WorkspacesLoading from "@/app/manage-account/loading";
-import useKYCInfo from "@/hooks/useKYCInfo";
+import useKYCInfo from "@/hooks/use-kyc-info";
 
 const INIT_DATA = {
   workspace: "",
@@ -173,7 +173,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
           <div
             className={cn(
               "max-h-[600px] overflow-y-auto no-scrollbar flex w-full min-w-[400px]  flex-col lg:px-2",
-              { "max-h-auto lg:max-h-max ": isManagePage }
+              { "max-h-auto lg:max-h-max ": isManagePage },
             )}
           >
             {isLoading ? (
@@ -189,7 +189,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                   {
                     "grid-cols-[repeat(auto-fill,minmax(400px,1fr))]":
                       WORKSPACES?.length > 0,
-                  }
+                  },
                 )}
               >
                 {WORKSPACES.length ? (
@@ -198,7 +198,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                       <WorkspaceItem
                         key={index}
                         description={`${capitalize(
-                          item?.workspaceType
+                          item?.workspaceType,
                         )}'s Workspace`}
                         href={
                           isManagePage
@@ -285,7 +285,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                   <Button
                     className={cn(
                       "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
-                      { "col-span-full": workspaces?.length < 0 }
+                      { "col-span-full": workspaces?.length < 0 },
                     )}
                     onPress={onOpen}
                   >

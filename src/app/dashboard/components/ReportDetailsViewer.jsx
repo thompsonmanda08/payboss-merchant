@@ -1,5 +1,5 @@
 "use client";
-import Modal from "@/components/base/custom-modal";
+import Modal from "@/components/modals/custom-modal";
 import SingleTransactionsTable from "@/components/tables/single-transaction-table";
 
 function ReportDetailsViewer({

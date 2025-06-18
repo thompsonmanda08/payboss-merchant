@@ -11,7 +11,7 @@ import {
 import { motion } from "framer-motion";
 import { useQueryClient } from "@tanstack/react-query";
 
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import useCustomTabsHook from "@/hooks/use-custom-tabs";
 import { addToast } from "@heroui/react";
 import Loader from "@/components/ui/loader";
 import CardHeader from "@/components/base/card-header";
@@ -19,7 +19,7 @@ import { SingleFileDropzone } from "@/components/base/file-dropzone";
 import { Button } from "@/components/ui/button";
 import { registerTerminals } from "@/app/_actions/workspace-actions";
 import { uploadTerminalConfigFile } from "@/app/_actions/pocketbase-actions";
-import ProgressStep from "@/components/progress-step";
+import ProgressStep from "@/components/elements/progress-step";
 
 export const CONFIG_VIEWS = [
   {

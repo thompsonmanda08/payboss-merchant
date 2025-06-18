@@ -23,7 +23,7 @@ import Loader from "@/components/ui/loader";
 import Search from "@/components/ui/search";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import SelectField from "@/components/ui/select-field";
-import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useWorkspaceInit } from "@/hooks/use-query-data";
 import EmptyLogs from "@/components/base/empty-logs";
 import { SINGLE_TRANSACTIONS_COLUMNS } from "@/lib/table-columns";
 import { convertSingleTransactionToCSV } from "@/app/_actions/file-conversion-actions";

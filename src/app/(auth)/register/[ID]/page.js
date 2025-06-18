@@ -5,10 +5,10 @@ import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 
 import SignUpForm from "@/components/forms/signup-form";
 import Spinner from "@/components/ui/custom-spinner";
-import useConfigOptions from "@/hooks/useConfigOptions";
+import useConfigOptions from "@/hooks/use-config-options";
 import useAuthStore from "@/context/auth-store";
 import Logo from "@/components/base/payboss-logo";
-import EmptyState from "@/components/empty-state";
+import EmptyState from "@/components/elements/empty-state";
 import { Button } from "@/components/ui/button";
 import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
 

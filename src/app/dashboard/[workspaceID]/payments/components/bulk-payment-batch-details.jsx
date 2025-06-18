@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import { initializeBulkTransaction } from "@/app/_actions/transaction-actions";
 import { Alert, addToast } from "@heroui/react";
-import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useWorkspaceInit } from "@/hooks/use-query-data";
 
 const PaymentDetails = ({
   navigateForward,
@@ -67,7 +67,7 @@ const PaymentDetails = ({
     // Create payment batch here if user is create access
     const response = await initializeBulkTransaction(
       workspaceID,
-      paymentAction
+      paymentAction,
     );
 
     if (response?.success) {

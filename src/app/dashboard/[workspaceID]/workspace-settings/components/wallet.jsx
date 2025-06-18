@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input-field";
 import { capitalize, cn, formatCurrency, formatDate } from "@/lib/utils";
 import { QUERY_KEYS, TASK_TYPE, WORKSPACE_TYPES } from "@/lib/constants";
 import { formatActivityData } from "@/lib/utils";
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 import { uploadPOPDocument } from "@/app/_actions/pocketbase-actions";
 import {
   approveWalletPrefund,
@@ -24,7 +24,7 @@ import StatusMessage from "@/components/base/status-message";
 import CardHeader from "@/components/base/card-header";
 import EmptyLogs from "@/components/base/empty-logs";
 import UploadField from "@/components/base/file-dropzone";
-import Modal from "@/components/base/custom-modal";
+import Modal from "@/components/modals/custom-modal";
 import useWalletStore from "@/context/wallet-store";
 
 function Wallet({

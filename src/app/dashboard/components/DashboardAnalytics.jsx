@@ -19,7 +19,7 @@ import { MONTHS, WORKSPACE_TYPES } from "@/lib/constants";
 import ReportsBarChart from "@/components/charts/ReportsBarChart/ReportsBarChart";
 
 import { WalletTransactionHistory } from "../[workspaceID]/workspace-settings/components/wallet";
-import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useWorkspaceInit } from "@/hooks/use-query-data";
 
 const pendingApprovals = [
   {

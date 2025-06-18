@@ -3,15 +3,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-field";
-import AddUserToWorkspace from "@/components/add-users-workspace-modal";
-import useWorkspaces from "@/hooks/useWorkspaces";
+import AddUserToWorkspace from "@/components/modals/add-users-workspace-modal";
+import useWorkspaces from "@/hooks/use-workspaces";
 import { QUERY_KEYS, WORKSPACE_TYPES } from "@/lib/constants";
 import { cn, syntaxHighlight } from "@/lib/utils";
 import SelectField from "@/components/ui/select-field";
-import { useWorkspaceCallbackURL } from "@/hooks/useQueryHooks";
+import { useWorkspaceCallbackURL } from "@/hooks/use-query-data";
 import { updateWorkspaceCallback } from "@/app/_actions/workspace-actions";
 import {
   deleteWorkspace,

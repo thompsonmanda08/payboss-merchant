@@ -6,8 +6,8 @@ import { ArrowRightIcon, CheckBadgeIcon } from "@heroicons/react/24/outline";
 import { addToast } from "@heroui/react";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import { useDisclosure } from "@heroui/react";
-import PromptModal from "@/components/base/prompt-modal";
-import useKYCInfo from "@/hooks/useKYCInfo";
+import PromptModal from "@/components/modals/prompt-modal";
+import useKYCInfo from "@/hooks/use-kyc-info";
 import { InfoIcon } from "lucide-react";
 import { submitKYCForReview } from "@/app/_actions/auth-actions";
 import { useQueryClient } from "@tanstack/react-query";
@@ -43,14 +43,14 @@ function ComplianceSummary({ sections, navigateToSection }) {
       });
       console.warn(
         "Navigation unavailable or sectionLink missing for:",
-        sectionLink
+        sectionLink,
       );
     }
   };
 
   // FILTER OUT "start" and "summary"
   const filteredSections = sections.filter(
-    (section) => section.id !== "start" && section.id !== "summary"
+    (section) => section.id !== "start" && section.id !== "summary",
   );
 
   const handleSubmitKYC = async () => {

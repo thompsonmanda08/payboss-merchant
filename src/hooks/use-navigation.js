@@ -1,7 +1,7 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 
-import { useWorkspaceInit } from "./useQueryHooks";
+import { useWorkspaceInit } from "./use-query-data";
 
 const useNavigation = (query) => {
   const pathname = usePathname();

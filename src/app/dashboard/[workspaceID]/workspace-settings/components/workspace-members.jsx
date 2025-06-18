@@ -3,7 +3,7 @@ import { useDisclosure } from "@heroui/react";
 
 import CardHeader from "@/components/base/card-header";
 import UsersTable from "@/components/tables/users-table";
-import AddUserToWorkspace from "@/components/add-users-workspace-modal";
+import AddUserToWorkspace from "@/components/modals/add-users-workspace-modal";
 
 export default function WorkspaceMembers({
   workspaceID,

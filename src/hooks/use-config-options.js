@@ -1,5 +1,5 @@
 "use client";
-import { useGeneralConfigOptions } from "./useQueryHooks";
+import { useGeneralConfigOptions } from "./use-query-data";
 
 const useConfigOptions = () => {
   const {

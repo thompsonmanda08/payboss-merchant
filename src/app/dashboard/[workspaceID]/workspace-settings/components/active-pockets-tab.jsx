@@ -1,6 +1,6 @@
 "use client";
 import CardHeader from "@/components/base/card-header";
-import { useActivePrefunds } from "@/hooks/useQueryHooks";
+import { useActivePrefunds } from "@/hooks/use-query-data";
 import PrefundsTable from "@/components/tables/prefunds-table";
 
 export default function ActivePockets({ workspaceID }) {

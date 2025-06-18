@@ -20,7 +20,7 @@ import { getCollectionsReport } from "@/app/_actions/transaction-actions";
 import TotalStatsLoader from "@/app/dashboard/components/total-stats-loader";
 import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
-import Tabs from "@/components/tabs";
+import Tabs from "@/components/elements/tabs";
 import TotalValueStat from "@/app/dashboard/components/total-stats";
 import { billTransactionsReportToCSV } from "@/app/_actions/file-conversion-actions";
 import { BILLS_TRANSACTION_COLUMNS } from "@/lib/table-columns";

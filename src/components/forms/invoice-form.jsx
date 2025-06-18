@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input-field";
 import { createInvoice } from "@/app/_actions/vas-actions";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants";
-import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useWorkspaceInit } from "@/hooks/use-query-data";
 
 const INIT_INVOICE = {
   customerName: "",
@@ -70,7 +70,7 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
   const calculateSubtotal = () => {
     return formData.lineItems.reduce(
       (total, item) => total + item.quantity * item.unitPrice,
-      0
+      0,
     );
   };
 

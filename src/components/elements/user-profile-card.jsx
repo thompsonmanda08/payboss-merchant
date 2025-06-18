@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { User, Mail, Phone, Edit, Briefcase } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import { cn } from "@/lib/utils";
-import useKYCInfo from "@/hooks/useKYCInfo";
+import useKYCInfo from "@/hooks/use-kyc-info";
 
 export default function UserProfile({
   showBusinessDetails = false,
@@ -27,7 +27,7 @@ export default function UserProfile({
     <Card
       className={cn(
         "max-w-[360px] mx-auto flex-1 overflow-hidden border-none outline-none shadow",
-        classNames?.card,
+        classNames?.card
       )}
     >
       {/* Header with gradient background */}

@@ -10,7 +10,7 @@ import { cn, formatDate } from "@/lib/utils";
 import CardHeader from "@/components/base/card-header";
 import TimelineItem from "@/components/base/timeline-item";
 import { Button } from "@/components/ui/button";
-import useKYCInfo from "@/hooks/useKYCInfo";
+import useKYCInfo from "@/hooks/use-kyc-info";
 
 function ProgressStageTracker({ onCompletionNavigateTo }) {
   const fullDate = new Date(now(getLocalTimeZone()).toString().split("T")[0]);

@@ -38,12 +38,12 @@ import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
 import { cn, maskString } from "@/lib/utils";
 import { uploadCheckoutLogoFile } from "@/app/_actions/pocketbase-actions";
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 import {
   generateCheckoutURL,
   updateCheckoutURL,
 } from "@/app/_actions/vas-actions";
-import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
+import { useWorkspaceCheckout } from "@/hooks/use-query-data";
 import { Input } from "@/components/ui/input-field";
 import { SingleFileDropzone } from "@/components/base/file-dropzone";
 
@@ -501,7 +501,7 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
         </div>
         <label
           className={cn(
-            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70"
+            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70",
           )}
         >
           Logo (Optional)

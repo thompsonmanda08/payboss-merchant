@@ -17,8 +17,8 @@ import { usePathname } from "next/navigation";
 
 import { lockScreenOnUserIdle } from "@/app/_actions/auth-actions";
 
-import { Button } from "./ui/button";
-import { useRefreshToken } from "@/hooks/useQueryHooks";
+import { Button } from "@/components/ui/button";
+import { useRefreshToken } from "@/hooks/use-query-data";
 
 function ScreenLock({ open }) {
   const { isOpen, onClose } = useDisclosure();

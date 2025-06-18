@@ -6,7 +6,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
 import { uploadPaymentBatchFile } from "@/app/_actions/pocketbase-actions";
-import useAccountProfile from "@/hooks/useProfileDetails";
+import useAccountProfile from "@/hooks/use-profile-info";
 import { SingleFileDropzone } from "@/components/base/file-dropzone";
 import { addToast } from "@heroui/react";
 

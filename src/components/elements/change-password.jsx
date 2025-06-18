@@ -5,8 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { addToast } from "@heroui/react";
 import { PASSWORD_PATTERN, slideDownInView } from "@/lib/constants";
 
-import { Input } from "./ui/input-field";
-import { Button } from "./ui/button";
+import { Input } from "@/components/ui/input-field";
+import { Button } from "@/components/ui/button";
 
 function ChangePasswordField({ updatePassword, setUpdatePassword }) {
   const [isValidPassword, setIsValidPassword] = useState(false);

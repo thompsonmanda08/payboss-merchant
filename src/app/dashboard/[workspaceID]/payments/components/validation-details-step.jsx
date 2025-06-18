@@ -4,12 +4,12 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import usePaymentsStore from "@/context/payment-store";
 import { Button } from "@/components/ui/button";
-import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useWorkspaceInit } from "@/hooks/use-query-data";
 import { submitBatchForApproval } from "@/app/_actions/transaction-actions";
 
 import { QUERY_KEYS } from "@/lib/constants";
 import Loader from "@/components/ui/loader";
-import StatusCard from "@/components/status-card";
+import StatusCard from "@/components/base/status-card";
 import { Alert, addToast } from "@heroui/react";
 
 const ValidationDetails = ({ navigateForward, workspaceID, batch }) => {

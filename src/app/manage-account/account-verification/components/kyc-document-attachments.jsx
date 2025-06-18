@@ -15,9 +15,9 @@ import CardHeader from "@/components/base/card-header";
 import StatusMessage from "@/components/base/status-message";
 import EmptyLogs from "@/components/base/empty-logs";
 import UploadField from "@/components/base/file-dropzone";
-import Modal from "@/components/base/custom-modal";
+import Modal from "@/components/modals/custom-modal";
 import DocumentDisplayButton from "@/components/base/document-display-button";
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 import { QUERY_KEYS } from "@/lib/constants";
 import { InfoIcon } from "lucide-react";
 

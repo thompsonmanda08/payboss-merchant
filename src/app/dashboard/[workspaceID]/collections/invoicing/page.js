@@ -18,7 +18,7 @@ import CardHeader from "@/components/base/card-header";
 import { INVOICE_COLUMNS, TILL_TRANSACTION_COLUMNS } from "@/lib/table-columns";
 import InvoiceForm from "@/components/forms/invoice-form";
 import { formatDate } from "@/lib/utils";
-import { useWorkspaceCheckout } from "@/hooks/useQueryHooks";
+import { useWorkspaceCheckout } from "@/hooks/use-query-data";
 import {
   getCollectionLatestTransactions,
   getRecentInvoices,
@@ -132,7 +132,7 @@ export default function InvoicingPage({}) {
         price: parseFloat(String(item?.unit_price || "0")),
         amount: parseFloat(
           parseInt(String(item?.quantity || "0")) *
-            parseFloat(String(item?.unit_price || "0"))
+            parseFloat(String(item?.unit_price || "0")),
         ),
       })),
       taxRate: parseFloat(String(invoiceData?.tax_rate || "0")),

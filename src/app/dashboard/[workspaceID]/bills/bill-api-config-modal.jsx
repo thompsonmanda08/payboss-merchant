@@ -8,9 +8,9 @@ import {
   ModalFooter,
 } from "@heroui/react";
 
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import useCustomTabsHook from "@/hooks/use-custom-tabs";
 import Loader from "@/components/ui/loader";
-import Tabs from "@/components/tabs";
+import Tabs from "@/components/elements/tabs";
 import CardHeader from "@/components/base/card-header";
 
 import {

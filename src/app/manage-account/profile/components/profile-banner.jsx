@@ -2,7 +2,7 @@
 import { Chip } from "@heroui/react";
 import Image from "next/image";
 
-import useAccountProfile from "@/hooks/useProfileDetails";
+import useAccountProfile from "@/hooks/use-profile-info";
 import { DefaultCover } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 

@@ -23,7 +23,7 @@ import {
   staggerContainerItemVariants,
   containerVariants,
 } from "@/lib/constants";
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import useCustomTabsHook from "@/hooks/use-custom-tabs";
 
 const collections = [
   [

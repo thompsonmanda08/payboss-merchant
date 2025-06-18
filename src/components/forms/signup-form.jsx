@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Card, addToast } from "@heroui/react";
 
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import useCustomTabsHook from "@/hooks/use-custom-tabs";
 import { containerVariants } from "@/lib/constants";
 import useAuthStore from "@/context/auth-store";
 import {

@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 import { cn } from "@/lib/utils";
-import useWorkspaces from "@/hooks/useWorkspaces";
-import useNavigation from "@/hooks/useNavigation";
+import useWorkspaces from "@/hooks/use-workspaces";
+import useNavigation from "@/hooks/use-navigation";
 
 export default function BreadCrumbLinks() {
   const router = useRouter();

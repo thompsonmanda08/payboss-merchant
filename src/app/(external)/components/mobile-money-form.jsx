@@ -12,7 +12,7 @@ import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { payWithMobileMoney } from "@/app/_actions/checkout-actions";
 
 import Spinner from "@/components/ui/custom-spinner";
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 import { useRouter } from "next/navigation";
 
 export default function MobileMoneyForm({ checkoutData }) {
@@ -251,7 +251,7 @@ export default function MobileMoneyForm({ checkoutData }) {
           <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words text-center uppercase font-bold text-foreground/80"
+                " max-w-sm break-words text-center uppercase font-bold text-foreground/80",
               )}
             >
               {transaction?.status}

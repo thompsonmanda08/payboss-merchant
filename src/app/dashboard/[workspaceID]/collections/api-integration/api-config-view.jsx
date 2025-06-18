@@ -9,10 +9,10 @@ import {
   ModalFooter,
 } from "@heroui/react";
 
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import useCustomTabsHook from "@/hooks/use-custom-tabs";
 import { syntaxHighlight } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
-import Tabs from "@/components/tabs";
+import Tabs from "@/components/elements/tabs";
 import CardHeader from "@/components/base/card-header";
 
 export const API_CONFIG_VIEWS = [

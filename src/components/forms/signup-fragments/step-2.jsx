@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input-field";
 import { staggerContainerItemVariants } from "@/lib/constants";
 import useAuthStore from "@/context/auth-store";
 import SelectField from "@/components/ui/select-field";
-import useConfigOptions from "@/hooks/useConfigOptions";
+import useConfigOptions from "@/hooks/use-config-options";
 import CardHeader from "@/components/base/card-header";
 
 import { STEPS } from "../signup-form";

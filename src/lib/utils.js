@@ -197,7 +197,7 @@ export function syntaxHighlight(json) {
       }
 
       return '<span class="' + cls + '">' + match + "</span>";
-    }
+    },
   );
 }
 

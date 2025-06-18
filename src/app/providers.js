@@ -6,9 +6,11 @@ import { motion } from "framer-motion";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useEffect, useState } from "react";
 
-import { useNetwork } from "@/hooks/useNetwork";
-import ScreenLock, { IdleTimerContainer } from "@/components/screen-lock";
-import FirstLogin from "@/components/first-login";
+import { useNetwork } from "@/hooks/use-network";
+import ScreenLock, {
+  IdleTimerContainer,
+} from "@/components/elements/screen-lock";
+import FirstLogin from "@/components/elements/first-login";
 
 const queryClient = new QueryClient();
 

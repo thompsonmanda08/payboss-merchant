@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Skeleton } from "@heroui/react";
 
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import useCustomTabsHook from "@/hooks/use-custom-tabs";
 import usePaymentsStore from "@/context/payment-store";
 import UploadCSVFile from "@/app/dashboard/[workspaceID]/payments/components/upload-batch-file-step";
 import PaymentDetails from "@/app/dashboard/[workspaceID]/payments/components/bulk-payment-batch-details";
@@ -12,7 +12,7 @@ import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/componen
 import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/approver-action";
 import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
-import ProgressStep from "@/components/progress-step";
+import ProgressStep from "@/components/elements/progress-step";
 import SelectPrefund from "@/app/dashboard/[workspaceID]/payments/components/select-prefund-step";
 
 export const STEPS = [

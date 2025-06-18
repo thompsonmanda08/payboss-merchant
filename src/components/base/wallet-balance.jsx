@@ -3,7 +3,7 @@
 import { WalletIcon } from "@heroicons/react/24/outline";
 
 import { cn, formatCurrency } from "@/lib/utils";
-import useWorkspaces from "@/hooks/useWorkspaces";
+import useWorkspaces from "@/hooks/use-workspaces";
 
 import SoftBoxIcon from "./soft-box-icon";
 import Card from "./custom-card";

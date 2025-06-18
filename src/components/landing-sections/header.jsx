@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/base/nav-link";
 import { cn } from "@/lib/utils";
-import useFloatingHeader from "@/hooks/useFloatingHeader";
+import useFloatingHeader from "@/hooks/use-floating-header";
 import Logo from "@/components/base/payboss-logo";
 import ThemeSwitcher from "@/components/base/theme-switcher";
 import NavIconButton from "@/components/ui/nav-icon-button";

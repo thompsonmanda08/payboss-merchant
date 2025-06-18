@@ -2,8 +2,8 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { DefaultCover } from "@/lib/constants";
-import WorkspaceHeader from "@/components/welcome-header";
-import WorkspacesList from "@/components/workspaces-list";
+import WorkspaceHeader from "@/components/elements/welcome-header";
+import WorkspacesList from "@/components/elements/workspaces-list";
 import { cn } from "@/lib/utils";
 
 import { getAuthSession, getUserDetails } from "../_actions/config-actions";

@@ -4,8 +4,8 @@ import { useState } from "react";
 
 import useSettingsStore from "@/context/settings-store";
 import { Input } from "@/components/ui/input-field";
-import useWorkspaces from "@/hooks/useWorkspaces";
-import useAccountProfile from "@/hooks/useProfileDetails";
+import useWorkspaces from "@/hooks/use-workspaces";
+import useAccountProfile from "@/hooks/use-profile-info";
 import Card from "@/components/base/custom-card";
 
 function ProfileDetails() {

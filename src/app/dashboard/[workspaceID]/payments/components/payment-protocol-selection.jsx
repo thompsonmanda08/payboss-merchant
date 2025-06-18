@@ -8,10 +8,10 @@ import { useEffect } from "react";
 
 import { cn } from "@/lib/utils";
 import usePaymentsStore from "@/context/payment-store";
-import useNavigation from "@/hooks/useNavigation";
+import useNavigation from "@/hooks/use-navigation";
 import { Button } from "@/components/ui/button";
 import { PAYMENT_PROTOCOL } from "@/lib/constants";
-import Modal from "@/components/base/custom-modal";
+import Modal from "@/components/modals/custom-modal";
 import CustomRadioGroup from "@/components/ui/custom-radio-group";
 
 const SelectPaymentType = ({ setCreatePaymentLoading }) => {
@@ -133,7 +133,7 @@ function PaymentTypeOption({
         className,
         {
           "bg-primary text-white shadow-xl shadow-slate-500/10": selected,
-        },
+        }
       )}
       onClick={handleSelect}
     >
@@ -142,7 +142,7 @@ function PaymentTypeOption({
           "absolute left-20 z-0 scale-[2.5] font-bold text-gray-200/50 transition-all duration-150 ease-in-out",
           {
             "left-10": selected,
-          },
+          }
         )}
       />
       <span className="z-10 font-bold">{fieldOption}</span>

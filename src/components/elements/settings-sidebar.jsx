@@ -18,8 +18,8 @@ import useAuthStore from "@/context/auth-store";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-import NavIconButton from "./ui/nav-icon-button";
-import Logo from "./base/payboss-logo";
+import NavIconButton from "@/components/ui/nav-icon-button";
+import Logo from "@/components/base/payboss-logo";
 
 // SETTINGS OPTIONS
 const SETTINGS_LINKS = [

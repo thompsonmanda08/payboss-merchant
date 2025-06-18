@@ -25,7 +25,7 @@ import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { formatDate, maskString } from "@/lib/utils";
 import CustomTable from "@/components/tables/table";
-import { useWorkspaceAPIKey } from "@/hooks/useQueryHooks";
+import { useWorkspaceAPIKey } from "@/hooks/use-query-data";
 import {
   refreshWorkspaceAPIKey,
   setupWorkspaceAPIKey,
@@ -34,7 +34,7 @@ import { QUERY_KEYS } from "@/lib/constants";
 import { getBillsLatestTransactions } from "@/app/_actions/transaction-actions";
 import CardHeader from "@/components/base/card-header";
 import { BILLS_TRANSACTION_COLUMNS } from "@/lib/table-columns";
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 import Card from "@/components/base/custom-card";
 
 import BillPaymentAPIConfigModal from "./bill-api-config-modal";

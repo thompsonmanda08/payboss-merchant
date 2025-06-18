@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 import AutoCompleteField from "@/components/base/auto-complete";
 import { staggerContainerItemVariants } from "@/lib/constants";
 import { motion } from "framer-motion";
-import UserProfile from "@/components/user-profile";
-import useKYCInfo from "@/hooks/useKYCInfo";
+import UserProfile from "@/components/elements/user-profile-card";
+import useKYCInfo from "@/hooks/use-kyc-info";
 
 // Stepper component (basic version for now)
 const Stepper = ({ currentStep }) => {

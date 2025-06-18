@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
-import { useSetupConfig } from "./useQueryHooks";
+import { useSetupConfig } from "./use-query-data";
 
 const useWorkspaces = (query) => {
   const pathname = usePathname();

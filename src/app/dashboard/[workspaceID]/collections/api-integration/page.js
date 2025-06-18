@@ -41,7 +41,7 @@ import {
   useWorkspaceAPIKey,
   useWorkspaceInit,
   useWorkspaceTerminals,
-} from "@/hooks/useQueryHooks";
+} from "@/hooks/use-query-data";
 import {
   activateWorkspaceTerminals,
   deactivateWorkspaceTerminals,
@@ -58,7 +58,7 @@ import {
 } from "@/lib/table-columns";
 import TerminalsTable from "@/components/tables/terminal-tables";
 import Loader from "@/components/ui/loader";
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 
 import TerminalConfigViewModal from "./terminal-config-view";
 import APIConfigViewModal from "./api-config-view";
@@ -120,7 +120,7 @@ const APIIntegration = () => {
       getCollectionLatestTransactions(
         workspaceID,
         "api-integration",
-        dateRange
+        dateRange,
       ),
   });
 
@@ -702,7 +702,7 @@ const APIIntegration = () => {
                             <ComputerDesktopIcon
                               className={cn(
                                 iconClasses,
-                                "group-hover:text-white font-bold group-hover:border-white"
+                                "group-hover:text-white font-bold group-hover:border-white",
                               )}
                             />
                           }
@@ -726,7 +726,7 @@ const APIIntegration = () => {
                             <TrashIcon
                               className={cn(
                                 iconClasses,
-                                "text-danger group-hover:text-white"
+                                "text-danger group-hover:text-white",
                               )}
                             />
                           }

@@ -19,7 +19,7 @@ import Loader from "@/components/ui/loader";
 import Search from "@/components/ui/search";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import SelectField from "@/components/ui/select-field";
-import { useBulkTransactions, useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useBulkTransactions, useWorkspaceInit } from "@/hooks/use-query-data";
 import EmptyLogs from "@/components/base/empty-logs";
 import { BULK_TRANSACTIONS_COLUMN } from "@/lib/table-columns";
 

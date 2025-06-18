@@ -21,13 +21,16 @@ import { UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import StatusMessage from "@/components/base/status-message";
-import EmptyState from "@/components/empty-state";
+import EmptyState from "@/components/elements/empty-state";
 import CardHeader from "@/components/base/card-header";
 import SelectField from "@/components/ui/select-field";
 import useWorkspaceStore from "@/context/workspaces-store";
 
-import Spinner from "./ui/custom-spinner";
-import { roleColorMap, UserAvatarComponent } from "./tables/users-table";
+import Spinner from "@/components/ui/custom-spinner";
+import {
+  roleColorMap,
+  UserAvatarComponent,
+} from "@/components/tables/users-table";
 
 const columns = [
   { name: "NAME", uid: "name" },

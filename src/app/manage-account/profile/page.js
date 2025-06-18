@@ -1,6 +1,6 @@
 import ProfileSecuritySettings from "@/app/manage-account/profile/components/security-settings";
 import { getUserSession } from "@/lib/session";
-import UserProfile from "@/components/user-profile";
+import UserProfile from "@/components/elements/user-profile-card";
 
 async function AccountSettings() {
   const session = await getUserSession();

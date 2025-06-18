@@ -13,10 +13,10 @@ import {
   FlagIcon,
 } from "@heroicons/react/24/outline";
 
-import useConfigOptions from "@/hooks/useConfigOptions";
-import useAccountProfile from "@/hooks/useProfileDetails";
+import useConfigOptions from "@/hooks/use-config-options";
+import useAccountProfile from "@/hooks/use-profile-info";
 import { cn } from "@/lib/utils";
-import useKYCInfo from "@/hooks/useKYCInfo";
+import useKYCInfo from "@/hooks/use-kyc-info";
 
 import DocumentAttachments from "./components/kyc-document-attachments";
 import {

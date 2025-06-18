@@ -1,6 +1,6 @@
 "use client";
 
-import { useSetupConfig } from "./useQueryHooks";
+import { useSetupConfig } from "./use-query-data";
 
 const useAccountProfile = () => {
   const { data: setup, isFetching, isLoading } = useSetupConfig();

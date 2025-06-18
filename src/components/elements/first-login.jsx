@@ -15,9 +15,9 @@ import { PASSWORD_PATTERN } from "@/lib/constants";
 import useAuthStore from "@/context/auth-store";
 import { changeUserPassword } from "@/app/_actions/user-actions";
 
-import { Input } from "./ui/input-field";
-import { Button } from "./ui/button";
-import StatusMessage from "./base/status-message";
+import { Input } from "@/components/ui/input-field";
+import { Button } from "@/components/ui/button";
+import StatusMessage from "@/components/base/status-message";
 
 export default function FirstLogin({ open }) {
   const queryClient = useQueryClient();

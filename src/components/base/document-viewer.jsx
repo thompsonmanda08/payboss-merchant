@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import CardHeader from "@/components/base/card-header";
-import Modal from "@/components/base/custom-modal";
+import Modal from "@/components/modals/custom-modal";
 
 const DocumentsViewer = ({ documents, contractDocument }) => {
   const [selectedDoc, setSelectedDoc] = useState(documents[0]);

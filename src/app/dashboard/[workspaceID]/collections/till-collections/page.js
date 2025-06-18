@@ -24,9 +24,9 @@ import { useParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { cn, formatDate } from "@/lib/utils";
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 import CustomTable from "@/components/tables/table";
-import { useTillNumber } from "@/hooks/useQueryHooks";
+import { useTillNumber } from "@/hooks/use-query-data";
 import { generateWorkspaceTillNumber } from "@/app/_actions/workspace-actions";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getCollectionLatestTransactions } from "@/app/_actions/transaction-actions";
@@ -206,7 +206,7 @@ export default function TillPaymentCollections({}) {
                     <Chip
                       className={cn(
                         "m-0 flex flex-row items-center justify-center rounded-md text-[clamp(1.25rem,1vw,2rem)]",
-                        { "-mb-3 mt-1": !TILL_NUMBER }
+                        { "-mb-3 mt-1": !TILL_NUMBER },
                       )}
                       color="primary"
                     >

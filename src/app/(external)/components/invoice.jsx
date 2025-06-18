@@ -16,7 +16,7 @@ import { slideDownInView } from "@/lib/constants";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input-field";
 import CustomRadioButton from "@/components/ui/radio-button";
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 
 export default function Invoice({ invoice, className, classNames }) {
   const captureRef = useRef(null);
@@ -27,7 +27,7 @@ export default function Invoice({ invoice, className, classNames }) {
   const formatter = useDateFormatter({ dateStyle: "long" });
   const [paymentType, setPaymentType] = useState("FULL_PAYMENT");
   const [amount, setAmount] = useState(
-    invoice?.dueAmount || invoice?.totalAmount || 0
+    invoice?.dueAmount || invoice?.totalAmount || 0,
   );
 
   const generatePDF = async () => {
@@ -73,7 +73,7 @@ export default function Invoice({ invoice, className, classNames }) {
         className={cn(
           "max-w-[800px] relative mx-auto p-8 bg-white min-h-screen rounded-lg shadow-xl shadow-primary/5 w-full",
           className,
-          classNames?.wrapper
+          classNames?.wrapper,
         )}
       >
         {invoice?.status?.toUpperCase() === "PAID" && (
@@ -134,8 +134,8 @@ export default function Invoice({ invoice, className, classNames }) {
             {invoice?.date
               ? formatter.format(
                   parseDate(invoice?.date.split("T")[0]).toDate(
-                    getLocalTimeZone()
-                  )
+                    getLocalTimeZone(),
+                  ),
                 )
               : "---"}
           </div>

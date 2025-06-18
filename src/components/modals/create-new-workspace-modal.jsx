@@ -5,7 +5,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Checkbox,
 } from "@heroui/react";
 
 import { Input } from "@/components/ui/input-field";

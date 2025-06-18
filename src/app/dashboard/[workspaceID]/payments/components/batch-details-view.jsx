@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
+import useCustomTabsHook from "@/hooks/use-custom-tabs";
 import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/validation-details-step";
 import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/approver-action";
 import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer";
 import usePaymentsStore from "@/context/payment-store";
 import CardHeader from "@/components/base/card-header";
-import Tabs from "@/components/tabs";
-import { useBatchDetails, useWorkspaceInit } from "@/hooks/useQueryHooks";
+import Tabs from "@/components/elements/tabs";
+import { useBatchDetails, useWorkspaceInit } from "@/hooks/use-query-data";
 import { useParams } from "next/navigation";
 
 export const BATCH_DETAILS_STEPS = [

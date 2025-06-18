@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input-field";
 import AutoCompleteField from "@/components/base/auto-complete";
 import { Button } from "@/components/ui/button";
-import useConfigOptions from "@/hooks/useConfigOptions";
+import useConfigOptions from "@/hooks/use-config-options";
 import { payWithBankCard } from "@/app/_actions/checkout-actions";
 import SelectField from "@/components/ui/select-field";
-import { cn, } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useDisclosure, addToast } from "@heroui/react";
 import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import Spinner from "@/components/ui/custom-spinner";
 import { useRouter } from "next/navigation";
@@ -132,7 +132,7 @@ export default function CardPaymentForm({ checkoutData }) {
     const paymentWindow = window.open(
       paymentUrl,
       "PayBoss Checkout",
-      `width=${width},height=${height},left=${left},top=${top}`
+      `width=${width},height=${height},left=${left},top=${top}`,
     );
 
     if (!paymentWindow) {
@@ -381,7 +381,7 @@ export default function CardPaymentForm({ checkoutData }) {
           <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words text-center uppercase font-bold text-foreground/80"
+                " max-w-sm break-words text-center uppercase font-bold text-foreground/80",
               )}
             >
               {transaction?.status}

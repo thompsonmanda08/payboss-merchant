@@ -26,7 +26,7 @@ import { usePathname } from "next/navigation";
 
 import { cn, getUserInitials } from "@/lib/utils";
 import useWorkspaceStore from "@/context/workspaces-store";
-import PromptModal from "@/components/base/prompt-modal";
+import PromptModal from "@/components/modals/prompt-modal";
 import { QUERY_KEYS, rowsPerPageOptions } from "@/lib/constants";
 import Loader from "@/components/ui/loader";
 import EmptyLogs from "@/components/base/empty-logs";
@@ -126,7 +126,7 @@ export default function UsersTable({
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS),
   );
 
   const [roleFilter, setRoleFilter] = React.useState("all");
@@ -144,7 +144,7 @@ export default function UsersTable({
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -159,7 +159,7 @@ export default function UsersTable({
           row?.first_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.last_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.email?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-          row?.username?.toLowerCase().includes(filterValue?.toLowerCase())
+          row?.username?.toLowerCase().includes(filterValue?.toLowerCase()),
       );
     }
 
@@ -306,7 +306,7 @@ export default function UsersTable({
         </Tooltip>
       );
     },
-    [permissions?.edit, permissions?.create, isUsersRoute]
+    [permissions?.edit, permissions?.create, isUsersRoute],
   );
 
   // TABLE CELL RENDERER
@@ -369,7 +369,7 @@ export default function UsersTable({
           return cellValue;
       }
     },
-    [isUsersRoute]
+    [isUsersRoute],
   );
 
   async function resetUserPassword() {
@@ -735,7 +735,7 @@ export function UserAvatarComponent({
     <div
       className={cn(
         "flex max-w-max cursor-pointer items-center justify-start gap-4 transition-all duration-200 ease-in-out",
-        wrapper
+        wrapper,
       )}
       onClick={(e) => {
         e.stopPropagation();
@@ -760,7 +760,7 @@ export function UserAvatarComponent({
         <p
           className={cn(
             "text-base font-semibold leading-6 text-foreground/80",
-            {}
+            {},
           )}
         >{`${firstName} ${lastName}`}</p>
         <p className={cn("text-[11px] font-medium text-foreground/50", {})}>

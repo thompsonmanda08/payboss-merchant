@@ -2,7 +2,7 @@ import { Chip, CircularProgress, Tooltip } from "@heroui/react";
 
 import { cn, formatCurrency } from "@/lib/utils";
 
-import Card from "./base/custom-card";
+import Card from "./custom-card";
 
 function StatusCard({
   totalTitle,

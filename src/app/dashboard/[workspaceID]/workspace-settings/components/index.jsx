@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useDisclosure } from "@heroui/react";
+import { Tabs, Tab, useDisclosure } from "@heroui/react";
 import {
   BanknotesIcon,
   UserGroupIcon,
@@ -9,8 +9,7 @@ import {
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 
-import useCustomTabsHook from "@/hooks/useCustomTabsHook";
-import Tabs from "@/components/tabs";
+import useCustomTabsHook from "@/hooks/use-custom-tabs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Card from "@/components/base/custom-card";
@@ -18,13 +17,13 @@ import { WORKSPACE_TYPES } from "@/lib/constants";
 import useWorkspaceStore from "@/context/workspaces-store";
 
 import CreateNewUserModal from "../../../../manage-account/users/components/new-user-modal";
-import WorkspaceDetails from "../../../../../components/workspace-general-details";
+import WorkspaceDetails from "../../../../../components/elements/workspace-general-details";
 
 import Wallet from "./wallet";
 import ActivePockets from "./active-pockets-tab";
 import WorkspaceMembers from "./workspace-members";
 import CheckoutConfig from "./checkout-config";
-import { useWorkspaceInit } from "@/hooks/useQueryHooks";
+import { useWorkspaceInit } from "@/hooks/use-query-data";
 import SettingsLoading from "../loading";
 
 function WorkspaceSettings({
@@ -172,14 +171,27 @@ function WorkspaceSettings({
       {/* CONTENT */}
 
       <Card className={"gap-4"}>
-        <div className="relative mb-2 flex items-center justify-between">
+        <div className="flex w-full flex-row justify-between items-center relative mb-">
           <Tabs
-            className={"md:w-full"}
-            currentTab={currentTabIndex}
-            navigateTo={navigateTo}
-            tabs={TABS}
-          />
-
+            aria-label="Options"
+            color="primary"
+            variant="bordered"
+            selectedKey={String(currentTabIndex)}
+            onSelectionChange={navigateTo}
+            radius="md"
+          >
+            {TABS.map((tab) => (
+              <Tab
+                key={String(tab.index)}
+                title={
+                  <div className="flex items-center space-x-2">
+                    <tab.icon className="w-6 h-6 aspect-square" />
+                    <span>{tab.name}</span>
+                  </div>
+                }
+              />
+            ))}
+          </Tabs>
           {currentTabIndex == 1 && permissions?.create && (
             <Button className={"absolute right-0"} onClick={onOpen}>
               Create New User

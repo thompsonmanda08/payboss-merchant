@@ -1,4 +1,4 @@
-import Workspaces from "@/components/workspaces-list";
+import Workspaces from "@/components/elements/workspaces-list";
 
 import { getUserDetails } from "../_actions/config-actions";
 import { getAllWorkspaces } from "../_actions/merchant-actions";
