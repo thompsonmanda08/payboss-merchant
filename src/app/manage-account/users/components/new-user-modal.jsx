@@ -159,7 +159,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
     let response = await changeUserRoleInWorkspace(
       userMapping,
       recordID,
-      workspaceID
+      workspaceID,
     );
 
     if (response?.success) {

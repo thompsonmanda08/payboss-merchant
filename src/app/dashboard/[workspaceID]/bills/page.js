@@ -18,6 +18,7 @@ import {
   Spinner,
   Tooltip,
   useDisclosure,
+  addToast,
 } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -82,7 +83,7 @@ const BillPayments = ({}) => {
   const copyToClipboard = (key) => {
     navigator.clipboard.writeText(key);
     setCopiedKey(key);
-    addToastst({
+    addToast({
       color: "success",
       title: "Success",
       description: "Copied to clipboard",
@@ -93,7 +94,7 @@ const BillPayments = ({}) => {
     setIsLoading(true);
     // THERE CAN ONLY BE ONE API KEY
     if (apiKey?.key && isNew) {
-      addToaststst({
+      addToast({
         color: "danger",
         title: "Failed to generate API key!",
         description: "You already have an API key for this workspace.",
@@ -107,7 +108,7 @@ const BillPayments = ({}) => {
       const response = await refreshWorkspaceAPIKey(workspaceID);
 
       if (!response?.success) {
-        addToastst({
+        addToast({
           color: "danger",
           title: "Failed to refresh API key!",
           description: response?.message,
@@ -136,7 +137,7 @@ const BillPayments = ({}) => {
     const response = await setupWorkspaceAPIKey(workspaceID);
 
     if (!response?.success) {
-      addToastst({
+      addToast({
         color: "danger",
         title: "Failed to generate API key!",
         description: response?.message,

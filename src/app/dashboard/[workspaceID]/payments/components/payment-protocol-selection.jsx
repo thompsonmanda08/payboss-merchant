@@ -133,7 +133,7 @@ function PaymentTypeOption({
         className,
         {
           "bg-primary text-white shadow-xl shadow-slate-500/10": selected,
-        }
+        },
       )}
       onClick={handleSelect}
     >
@@ -142,7 +142,7 @@ function PaymentTypeOption({
           "absolute left-20 z-0 scale-[2.5] font-bold text-gray-200/50 transition-all duration-150 ease-in-out",
           {
             "left-10": selected,
-          }
+          },
         )}
       />
       <span className="z-10 font-bold">{fieldOption}</span>

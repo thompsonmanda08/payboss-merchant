@@ -46,6 +46,7 @@ const eslintConfig = [
       "react-hooks/exhaustive-deps": "off",
       "jsx-a11y/click-events-have-key-events": "warn",
       "jsx-a11y/interactive-supports-focus": "warn",
+      "trailing-comma": "off",
       "prettier/prettier": [
         "warn",
         {
@@ -61,7 +62,7 @@ const eslintConfig = [
       "unused-imports/no-unused-imports": "warn",
 
       "import/order": [
-        "error",
+        "warn",
         {
           groups: [
             "type",

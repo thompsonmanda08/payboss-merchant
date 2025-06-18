@@ -27,8 +27,8 @@ function ScreenLock({ open }) {
 
   async function handleRefreshAuthToken() {
     setIsLoading(true);
-    await lockScreenOnUserIdle(false);
     onClose();
+    await lockScreenOnUserIdle(false);
     setIsLoading(false);
   }
 

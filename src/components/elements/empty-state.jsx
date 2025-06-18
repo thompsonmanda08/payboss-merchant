@@ -20,7 +20,7 @@ function EmptyState({
       <h3
         className={cn(
           `text-center text-2xl font-bold leading-8 text-primary-800 md:text-[48px]`,
-          heading
+          heading,
         )}
       >
         {title || "Whoops-a-daisy!"}
@@ -28,7 +28,7 @@ function EmptyState({
       <p
         className={cn(
           `my-6 mb-4 max-w-[380px] p-2 px-5 text-center text-sm text-gray-400/80 md:max-w-[480px] md:text-base`,
-          paragraph
+          paragraph,
         )}
       >
         {message || "There is nothing here yet. Please try again later."}

@@ -288,8 +288,8 @@ export default function CollectionsReports({}) {
                   return (
                     <DropdownItem
                       key={String(service?.index || index)}
-                      startContent={<service.icon className={iconClasses} />}
                       description={service?.description}
+                      startContent={<service.icon className={iconClasses} />}
                       // shortcut="⌘N"
                       onPress={() => setSelectedServiceIndex(index)}
                     >
@@ -496,6 +496,7 @@ export default function CollectionsReports({}) {
 
         {/* CUSTOM TABLE TO RENDER TRANSACTIONS */}
         <CustomTable
+          removeWrapper
           columns={
             hasTerminals
               ? API_KEY_TERMINAL_TRANSACTION_COLUMNS
@@ -504,7 +505,6 @@ export default function CollectionsReports({}) {
           isError={mutation.isError}
           isLoading={mutation.isPending}
           rows={filteredItems || []}
-          removeWrapper
           // onRowAction={(key) => {}}
         />
       </Card>

@@ -31,7 +31,7 @@ export default function Tabs({
           value={tabs.find((tab) => tab?.index == currentTab)?.index.toString()}
           onChange={(e) => {
             let tab = tabs.find(
-              (tab) => tab?.index == parseInt(e.target.value)
+              (tab) => tab?.index == parseInt(e.target.value),
             );
 
             navigateTo(tab?.index);
@@ -43,7 +43,7 @@ export default function Tabs({
           aria-label="Tabs"
           className={cn(
             "min-w-md -mb-px flex gap-x-4 rounded-lg dark:bg-default/30 bg-default/40  p-1",
-            nav
+            nav,
           )}
         >
           {tabs.map((tab, index) => (
@@ -55,7 +55,7 @@ export default function Tabs({
                   "border-primary dark:broder-primary-300 dark:bg-card bg-background dark:text-primary-400 text-primary shadow-sm":
                     tab?.index == currentTab,
                 },
-                button
+                button,
               )}
               startContent={
                 tab?.icon && (
@@ -65,7 +65,7 @@ export default function Tabs({
                       {
                         "bg-background text-primary": tab?.index == currentTab,
                       },
-                      icon
+                      icon,
                     )}
                   />
                 )

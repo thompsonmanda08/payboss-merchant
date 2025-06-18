@@ -59,12 +59,12 @@ function SettingsSideBar() {
     <>
       <div
         className={cn(
-          "fixed z-[77] flex h-16 w-screen bg-card/60 dark:shadow-black/10 dark:shadow-xl backdrop-blur-md shadow-sm lg:hidden"
+          "fixed z-[77] flex h-16 w-screen bg-card/60 dark:shadow-black/10 dark:shadow-xl backdrop-blur-md shadow-sm lg:hidden",
         )}
       >
         <Button
           className={cn(
-            "absolute left-6 top-3 z-50 h-8 min-w-5 items-center bg-transparent p-2 py-3 text-foreground/70 hover:bg-transparent lg:hidden"
+            "absolute left-6 top-3 z-50 h-8 min-w-5 items-center bg-transparent p-2 py-3 text-foreground/70 hover:bg-transparent lg:hidden",
           )}
           startContent={<Bars3BottomLeftIcon className="h-7 w-7" />}
           onClick={toggleSideBar}
@@ -85,7 +85,7 @@ function SettingsSideBar() {
       <motion.nav
         className={cn(
           `sticky -left-[110%] z-50 hidden h-full min-h-screen w-[380px] rounded-r-3xl bg-card py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
-          { "absolute left-0 z-[100] block": openSettingsSideBar }
+          { "absolute left-0 z-[100] block": openSettingsSideBar },
         )}
       >
         <div className="relative flex h-full w-full flex-col px-5">
@@ -126,7 +126,7 @@ function SettingsSideBar() {
                     {
                       "dark:bg-primary/50 bg-primary/10 dark:text-foreground text-primary-600":
                         pathname == href,
-                    }
+                    },
                   )}
                   href={href}
                   startContent={<Icon className="h-5 w-5" />}
