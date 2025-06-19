@@ -5,10 +5,15 @@ import Logo from "@/components/base/payboss-logo";
 import ThemeSwitcher from "@/components/base/theme-switcher";
 import { cn } from "@/lib/utils";
 
-export function Footer({ showLogo = true, showLinks = true }) {
+export function Footer({ showLogo = true, showLinks = true, classNames }) {
   return (
-    <footer className="bg-background">
-      <div className={cn("mx-auto container px-4 sm:px-6 lg:px-8")}>
+    <footer className={cn("", classNames?.wrapper)}>
+      <div
+        className={cn(
+          "mx-auto container px-4 sm:px-6 lg:px-8",
+          classNames?.container
+        )}
+      >
         {(showLogo || showLinks) && (
           <div className="py-16">
             {showLogo && (

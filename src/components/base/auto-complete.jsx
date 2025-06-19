@@ -1,5 +1,6 @@
 "use client";
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
@@ -14,13 +15,15 @@ function AutoCompleteField({
   classNames,
   onErrorMessage,
   placeholder = "Search...",
+  onError,
+  errorText,
   ...props
 }) {
   return (
     <div
       className={cn(
         "flex w-full max-w-md flex-col items-start",
-        classNames?.wrapper,
+        classNames?.wrapper
       )}
     >
       {label && (
@@ -30,7 +33,7 @@ function AutoCompleteField({
             {
               "opacity-50": props?.isDisabled,
             },
-            classNames?.label,
+            classNames?.label
           )}
           htmlFor={label}
         >
@@ -55,7 +58,7 @@ function AutoCompleteField({
 
             inputWrapper: cn(
               "focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70",
-              classNames?.trigger,
+              classNames?.trigger
             ),
           },
         }}
@@ -80,6 +83,19 @@ function AutoCompleteField({
           </AutocompleteItem>
         )}
       </Autocomplete>
+
+      {errorText && onError && (
+        <motion.span
+          className={cn("ml-1 text-xs text-red-500", classNames?.errorText)}
+          whileInView={{
+            scale: [0, 1],
+            opacity: [0, 1],
+            transition: { duration: 0.3 },
+          }}
+        >
+          {errorText}
+        </motion.span>
+      )}
     </div>
   );
 }
