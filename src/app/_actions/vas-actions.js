@@ -16,7 +16,7 @@ export async function generateCheckoutURL(workspaceID, checkoutData) {
     };
   }
 
-  const url = `merchant/merchant/transaction/collection/create/checkout/${workspaceID}`;
+  const url = `/merchant/transaction/collection/create/checkout/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({

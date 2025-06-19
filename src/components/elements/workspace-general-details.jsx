@@ -28,6 +28,7 @@ function WorkspaceDetails({
 }) {
   const { back } = useRouter();
   const queryClient = useQueryClient();
+  
   const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {

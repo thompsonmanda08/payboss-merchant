@@ -43,7 +43,7 @@ import {
   generateCheckoutURL,
   updateCheckoutURL,
 } from "@/app/_actions/vas-actions";
-import { useWorkspaceCheckout } from "@/hooks/use-query-data";
+import { useWorkspaceCheckout, useWorkspaceInit } from "@/hooks/use-query-data";
 import { Input } from "@/components/ui/input-field";
 import { SingleFileDropzone } from "@/components/base/file-dropzone";
 
@@ -57,12 +57,16 @@ const INIT_FORM = {
   recordID: null,
 };
 
-export default function CheckoutConfig({ workspaceID, permissions }) {
+export default function CheckoutConfig({ workspaceID }) {
   const queryClient = useQueryClient();
 
   const { onOpen, onClose, isOpen } = useDisclosure();
   const { data: checkoutResponse, isLoading: isLoadingConfig } =
     useWorkspaceCheckout(workspaceID);
+
+  const { data: workspaceInit, isLoading: loadingSession } =
+    useWorkspaceInit(workspaceID);
+  const permissions = workspaceInit?.data?.workspacePermissions;
 
   const configData = checkoutResponse?.data || {};
 
@@ -171,6 +175,8 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
       console.error("FAILED", error);
     }
   }
+
+  console.log("PERMISSIONS DATA", permissions);
 
   async function handleCheckoutURLGenerate() {
     setIsLoading(true);
@@ -501,7 +507,7 @@ export default function CheckoutConfig({ workspaceID, permissions }) {
         </div>
         <label
           className={cn(
-            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70",
+            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70"
           )}
         >
           Logo (Optional)

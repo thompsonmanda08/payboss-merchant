@@ -4,6 +4,7 @@ import { useDisclosure } from "@heroui/react";
 import CardHeader from "@/components/base/card-header";
 import UsersTable from "@/components/tables/users-table";
 import AddUserToWorkspace from "@/components/modals/add-users-workspace-modal";
+import { useWorkspaceInit } from "@/hooks/use-query-data";
 
 export default function WorkspaceMembers({
   workspaceID,
@@ -13,13 +14,16 @@ export default function WorkspaceMembers({
   workspaceMembers,
   workspaceRoles,
   systemRoles,
-  permissions,
 }) {
   const {
     isOpen: openAdd,
     onOpen: onOpenAdd,
     onClose: onCloseAdd,
   } = useDisclosure();
+
+  const { data: workspaceInit, isLoading: loadingSession } =
+    useWorkspaceInit(workspaceID);
+  const permissions = workspaceInit?.data?.workspacePermissions;
 
   return (
     <div>

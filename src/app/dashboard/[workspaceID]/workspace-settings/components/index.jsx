@@ -34,13 +34,11 @@ function WorkspaceSettings({
   workspaceRoles,
   walletHistory,
   systemRoles,
-  permissions,
+  // permissions,
 }) {
   const { existingUsers, setExistingUsers } = useWorkspaceStore();
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
-  const { data: workspaceInit, isLoading } = useWorkspaceInit(workspaceID);
 
   const activeWorkspace =
     selectedWorkspace || workspaceInit?.data?.activeWorkspace || {};
@@ -72,6 +70,9 @@ function WorkspaceSettings({
     ...DISBURSEMENT_TABS,
   ];
 
+  const { data: workspaceInit, isLoading } = useWorkspaceInit(workspaceID);
+  const permissions = workspaceInit?.data?.workspacePermissions;
+
   // Components to be rendered for the workspace type
   const TAB_COMPONENTS =
     // * DISBURSEMENTS & HYBRID WORKSPACES
@@ -89,9 +90,9 @@ function WorkspaceSettings({
             workspaceID={workspaceID}
             workspaceName={activeWorkspace?.workspace}
             transactionData={walletHistory}
-            permissions={
-              permissions || workspaceInit?.data?.workspacePermissions
-            }
+            // permissions={
+            //   permissions || workspaceInit?.data?.workspacePermissions
+            // }
           />,
         ]
       : // * BILL PAYMENTS WORKSPACE TABS
@@ -104,7 +105,7 @@ function WorkspaceSettings({
               workspaceID={workspaceID}
               workspaceName={activeWorkspace?.workspace}
               transactionData={walletHistory}
-              permissions={permissions}
+              // permissions={permissions}
             />,
           ]
         : // * COLLECTION WORKSPACE TABS
@@ -112,7 +113,7 @@ function WorkspaceSettings({
             <CheckoutConfig
               key={"hosted-checkout"}
               workspaceID={workspaceID}
-              permissions={permissions}
+              // permissions={permissions}
             />,
           ];
 
@@ -129,7 +130,7 @@ function WorkspaceSettings({
       workspaceID={workspaceID}
       workspaceName={activeWorkspace?.workspace}
       workspaceRoles={workspaceRoles}
-      permissions={permissions}
+      // permissions={permissions}
     />,
     <WorkspaceMembers
       key={"members"}
@@ -139,7 +140,7 @@ function WorkspaceSettings({
       workspaceID={workspaceID}
       workspaceRoles={workspaceRoles}
       systemRoles={systemRoles}
-      permissions={permissions}
+      // permissions={permissions}
     />,
 
     // Provides the disbursement tabs
