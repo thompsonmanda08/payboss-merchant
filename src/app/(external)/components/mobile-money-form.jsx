@@ -106,7 +106,7 @@ export default function MobileMoneyForm({ checkoutData }) {
     });
 
     if (response?.success) {
-      addToastst({
+      addToast({
         title: "Mobile Payment",
         description: `Pin prompt sent to${formData?.phoneNumber}`,
         color: "success",
@@ -251,7 +251,7 @@ export default function MobileMoneyForm({ checkoutData }) {
           <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words text-center uppercase font-bold text-foreground/80",
+                " max-w-sm break-words text-center uppercase font-bold text-foreground/80"
               )}
             >
               {transaction?.status}
@@ -277,8 +277,12 @@ export default function MobileMoneyForm({ checkoutData }) {
                 color="danger"
                 isDisabled={isProcessing}
                 onPress={() => {
-                  if (isSuccess && checkoutData?.redirect_url) {
-                    router.push(`${checkoutData?.redirect_url}?success=true`);
+                  const redirect =
+                    checkoutData?.redirect_url ||
+                    checkoutData?.redirectUrl ||
+                    "#";
+                  if (isSuccess && redirect) {
+                    router.push(`${redirect}?success=true`);
                   }
                   handleClosePrompt();
                 }}

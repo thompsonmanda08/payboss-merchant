@@ -124,15 +124,16 @@ export default function CardPaymentForm({ checkoutData }) {
     const left = (window.innerWidth - width) / 2 + window.screenX;
     const top = (window.innerHeight - height) / 2 + window.screenY;
 
+    /* CYBER-SOURCE PAYMENT LINK */
     const paymentUrl =
-      paymentData?.paymentUrl || paymentData?.redirect_url || ""; // Route where the client runs
+      paymentData?.redirectUrl || paymentData?.redirect_url || "";
 
     if (!paymentUrl) throw new Error("Payment URL not found");
 
     const paymentWindow = window.open(
       paymentUrl,
       "PayBoss Checkout",
-      `width=${width},height=${height},left=${left},top=${top}`,
+      `width=${width},height=${height},left=${left},top=${top}`
     );
 
     if (!paymentWindow) {
@@ -171,7 +172,6 @@ export default function CardPaymentForm({ checkoutData }) {
     const response = await payWithBankCard({
       transactionID,
       amount,
-      postal_code: formData.postalCode,
       ...checkoutData,
       ...formData,
     });
@@ -182,8 +182,6 @@ export default function CardPaymentForm({ checkoutData }) {
       const payload = {
         ...checkoutData,
         ...formData,
-        // FROM PAYBOSS BACKEND
-        paymentUrl: response?.data?.redirectUrl,
         ...response?.data,
       };
 
@@ -381,7 +379,7 @@ export default function CardPaymentForm({ checkoutData }) {
           <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words text-center uppercase font-bold text-foreground/80",
+                " max-w-sm break-words text-center uppercase font-bold text-foreground/80"
               )}
             >
               {transaction?.status}
@@ -406,8 +404,12 @@ export default function CardPaymentForm({ checkoutData }) {
               color="danger"
               isDisabled={isProcessing}
               onPress={() => {
-                if (isSuccess && checkoutData?.redirect_url) {
-                  router.push(`${checkoutData?.redirect_url}?success=true`);
+                const redirect =
+                  checkoutData?.redirect_url ||
+                  checkoutData?.redirectUrl ||
+                  "#";
+                if (isSuccess && redirect) {
+                  router.push(`${redirect}?success=true`);
                 }
                 handleClosePrompt();
               }}

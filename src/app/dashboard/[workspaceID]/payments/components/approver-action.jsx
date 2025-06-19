@@ -1,7 +1,7 @@
 "use client";
 import React, { useMemo } from "react";
 import Image from "next/image";
-import { useDisclosure, addtoast } from "@heroui/react";
+import { useDisclosure, addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";

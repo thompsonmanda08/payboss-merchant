@@ -8,23 +8,23 @@ import { capitalize } from "@/lib/utils";
 import Checkout from "../components/checkout";
 
 async function CheckoutPage(props) {
-  const searchParams = await props.searchParams;
+  const queryParams = await props.searchParams;
 
   let checkoutData = {
-    workspaceID: searchParams?.workspace_id || "",
-    checkoutID: searchParams?.checkout_id || "",
-    amount: searchParams?.amount || "",
-    transactionID: searchParams?.transaction_id || "",
-    serviceID: searchParams?.service_id || "",
+    workspaceID: queryParams?.workspace_id || "",
+    checkoutID: queryParams?.checkout_id || "",
+    amount: queryParams?.amount || "",
+    transactionID: queryParams?.transaction_id || "",
+    serviceID: queryParams?.service_id || "",
   };
 
   // FIRST POST CHECKOUT DATA TO LOG CHECKOUT INFO FOR VALIDATION
   const validation = await validateCheckoutData({
-    workspaceID: searchParams?.workspace_id || "",
-    checkout_id: searchParams?.checkout_id || "",
-    amount: searchParams?.amount || "",
-    transactionID: searchParams?.transaction_id || "",
-    serviceID: searchParams?.service_id || "",
+    workspaceID: queryParams?.workspace_id || "",
+    checkoutID: queryParams?.checkout_id || "",
+    amount: queryParams?.amount || "",
+    transactionID: queryParams?.transaction_id || "",
+    serviceID: queryParams?.service_id || "",
   });
 
   if (!validation?.success) {
