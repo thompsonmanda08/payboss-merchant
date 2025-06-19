@@ -118,7 +118,7 @@ export default function CardPaymentForm({ checkoutData }) {
 
   const openPaymentWindow = async (paymentData) => {
     const width = 800;
-    const height = 720;
+    const height = 860;
 
     // Calculate center position
     const left = (window.innerWidth - width) / 2 + window.screenX;
@@ -172,6 +172,7 @@ export default function CardPaymentForm({ checkoutData }) {
     const response = await payWithBankCard({
       transactionID,
       amount,
+      currency: "zmw", // REQUIRED
       ...checkoutData,
       ...formData,
     });
