@@ -48,9 +48,7 @@ export const initializeWorkspace = cache(async (workspaceID) => {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -104,7 +102,7 @@ export async function submitPOP(popDetails, workspaceID) {
 
     revalidatePath(
       "/manage-account/workspaces/[ID]/workspace-settings",
-      "page",
+      "page"
     );
 
     return {
@@ -129,7 +127,7 @@ export async function submitPOP(popDetails, workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -191,7 +189,7 @@ export async function getWalletPrefunds(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -220,7 +218,7 @@ export async function getWalletPrefunds(workspaceID) {
 export async function approveWalletPrefund(
   prefundData,
   prefundID,
-  workspaceID,
+  workspaceID
 ) {
   if (!prefundID || !workspaceID) {
     return {
@@ -263,7 +261,7 @@ export async function approveWalletPrefund(
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -324,7 +322,7 @@ export async function getWorkspaceMembers(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -386,7 +384,7 @@ export async function deleteUserFromWorkspace(recordID, workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -409,7 +407,7 @@ export async function deleteUserFromWorkspace(recordID, workspaceID) {
 export async function changeUserRoleInWorkspace(
   mapping,
   recordID,
-  workspaceID,
+  workspaceID
 ) {
   if (!workspaceID) {
     return {
@@ -452,7 +450,7 @@ export async function changeUserRoleInWorkspace(
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -505,7 +503,7 @@ export async function setupWorkspaceAPIKey(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -566,7 +564,7 @@ export async function refreshWorkspaceAPIKey(workspaceID, keyID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -625,7 +623,7 @@ export async function getWorkspaceAPIKey(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -684,7 +682,7 @@ export async function generateWorkspaceTillNumber(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -744,7 +742,7 @@ export async function getWorkspaceTillNumber(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -803,7 +801,7 @@ export async function activateWorkspaceTerminals(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -861,7 +859,7 @@ export async function deactivateWorkspaceTerminals(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -920,7 +918,7 @@ export async function getAllWorkspaceTerminals(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -984,7 +982,7 @@ export async function registerTerminals(workspaceID, terminalUrl) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -1048,7 +1046,7 @@ export async function updateWorkspaceCallback(workspaceID, callbackData) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -1094,7 +1092,7 @@ export async function getWorkspaceCallback(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

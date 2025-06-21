@@ -1,46 +1,28 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import useCustomTabsHook from "@/hooks/use-custom-tabs";
-import { Button } from "@/components/ui/button";
 
-import EduLandingSection from "./components/edu-landing-section";
-import EduPaymentForm from "./components/edu-form";
+import SubScriptionLandingSection from "./components/landing-section";
+import SubscriptionPaymentForm from "./components/subscription-payment-form";
+import HowItWorksSection from "./components/how-it-works";
 
-export default function EduPayMiniApp() {
-  const router = useRouter();
+export default function SubscriptionsMiniApp() {
+  const { activeTab, navigateTo } = useCustomTabsHook([
+    <SubScriptionLandingSection key={"landing"} navigateTo={goTo} />,
+    <SubscriptionPaymentForm key={"payment"} navigateTo={goTo} />,
+    <HowItWorksSection key={"how-it-works"} navigateTo={goTo} />,
+  ]);
 
-  const { activeTab, currentTabIndex, navigateForward, navigateBackwards } =
-    useCustomTabsHook([
-      <EduLandingSection
-        key={"landing"}
-        handleStartPayment={startPaymentProcess}
-      />,
-      <EduPaymentForm key={"payment"} />,
-    ]);
-
-  function startPaymentProcess() {
-    navigateForward();
+  function goTo(index) {
+    navigateTo(index);
   }
 
-  return (
-    <div className="container mx-auto px-4">
-      {" "}
-      {currentTabIndex > 0 && (
-        <Button
-          className="border-none outline-none shadow-none"
-          // color="default"
-          size="lg"
-          startContent={<ArrowLeft className="w-4 h-4" />}
-          variant="light"
-          onClick={navigateBackwards}
-        >
-          Back to Home
-        </Button>
-      )}
-      {activeTab}
-    </div>
-  );
+  // SCROLL TO TOP
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTab]);
+
+  return <div className="container mx-auto px-4">{activeTab}</div>;
 }

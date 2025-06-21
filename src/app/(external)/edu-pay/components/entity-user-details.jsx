@@ -12,10 +12,22 @@ import {
   User,
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
-import { SCHOOLS } from "./edu-form";
+import { SCHOOLS } from "./subscription-payment-form";
 import { Input } from "@/components/ui/input-field";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardBody, CardHeader } from "@heroui/react";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+  Image,
+  Link,
+  Radio,
+  RadioGroup,
+} from "@heroui/react";
+import React from "react";
+import EmptyLogs from "@/components/base/empty-logs";
 export default function EntityUserDetails({
   formData,
   updateFormData,
@@ -23,135 +35,216 @@ export default function EntityUserDetails({
   setErrors,
   handleNextStep,
 }) {
-  const handleSchoolChange = (value) => {
-    updateFormData({ school: value });
+  const [selected, setSelected] = React.useState("EXISTING");
+  const [isValidating, setIsValidating] = React.useState(false);
+  const handleSelectInstitution = (value) => {
+    updateFormData({ institution: value });
     setErrors((prev) => {
-      if (prev.school) {
+      if (prev.institution) {
         const newErrors = { ...prev };
-        delete newErrors.school;
+        delete newErrors.institution;
         return newErrors;
       }
       return prev;
     });
   };
 
-  const updateDetails = (field, value) => {
-    updateFormData({
-      payerDetails: { ...formData.payerDetails, [field]: value },
-    });
-    // Clear error when user starts typing
-    setErrors((prev) => {
-      if (prev[field]) {
-        const newErrors = { ...prev };
+  function validateUser() {
+    setIsValidating(true);
+    console.log("validating user: ", formData?.user_id);
 
-        delete newErrors[field];
-
-        return newErrors;
-      }
-
-      return prev;
-    });
-  };
+    setIsValidating(false);
+  }
   return (
-    <Card className="shadow-none max-w-4xl mx-auto">
+    <Card className="shadow-none border-gray-200 p-4 border max-w-lg mx-auto">
       <CardHeader>
         <h3 className="flex items-center text-lg font-bold">
-          <School className="w-5 h-5 mr-2 text-emerald-600" />
+          <School className="w-5 h-5 mr-2 text-primary-600" />
           School Information
         </h3>
       </CardHeader>
       <CardBody className="space-y-6">
         {/* School Selection */}
-        <div className="grid md:grid-cols-2 mb-2">
+        <div className="grid gap-6 mb-2">
           <div>
             <AutoCompleteField
               label={"Select School/Institution"}
               options={SCHOOLS}
-              value={formData.school}
-              onChange={handleSchoolChange}
-              onError={errors.school}
-              errorText={errors.school}
+              value={formData.institution}
+              onChange={handleSelectInstitution}
+              onError={errors.institution}
+              errorText={errors.institution}
             />
-          
           </div>
+          <RadioGroup
+            color="primary"
+            label="Are you a new applicant or Existing Applicant"
+            value={selected}
+            onValueChange={setSelected}
+          >
+            <Radio
+              description="Existing membership/application"
+              value="EXISTING"
+            >
+              Existing
+            </Radio>
+            <Radio description="New membership/application" value="NEW">
+              New
+            </Radio>
+          </RadioGroup>
         </div>
         {/* Personal Details Grid */}
 
         <div className="flex flex-col gap-4">
           <h3 className="flex items-center text-lg font-bold">
-            <User className="w-5 h-5 mr-2 text-emerald-600" />
-            Personal Information
+            <User className="w-5 h-5 mr-2 text-primary-600" />
+            ID Information
           </h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Input
-                id="fullName"
-                label="Full Names"
-                placeholder="Enter your full names"
-                type="text"
-                onError={errors.fullName}
-                errorText={errors.fullName}
-                value={formData.payerDetails.fullName}
-                onChange={(e) => updateDetails("fullName", e.target.value)}
+          <div className="grid gap-4">
+            {selected === "NEW" && formData?.institution ? (
+              <div className="space-y-2">
+                <Input
+                  id="fullName"
+                  label="Full Names"
+                  placeholder="Enter your full names"
+                  type="text"
+                  onError={errors.fullName}
+                  errorText={errors.fullName}
+                  value={formData.fullName}
+                  onChange={(e) => updateFormData({ fullName: e.target.value })}
+                />
+                <Input
+                  id="user_id"
+                  label="Registration/ National ID"
+                  placeholder="Enter your Registration/NRC/Passport number"
+                  type="text"
+                  onError={errors.user_id}
+                  errorText={errors.user_id}
+                  value={formData.user_id}
+                  onChange={(e) => updateFormData({ user_id: e.target.value })}
+                />
+                <div className="flex justify-end pt-4">
+                  <Button
+                    className={"w-full"}
+                    // endContent={<ChevronRight className="ml-2 w-4 h-4" />}
+                    onClick={handleNextStep}
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
+            ) : selected === "EXISTING" && formData?.institution ? (
+              <>
+                {false ? (
+                  /* USER LOOK UP COMPLETED  */
+                  <>
+                    <Card className="max-w-[400px] shadow-none">
+                      <CardHeader className="flex gap-2">
+                        <Image
+                          alt="heroui logo"
+                          height={40}
+                          radius="sm"
+                          src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                          className="aspect-square w-20 object-cover"
+                          width={40}
+                        />
+                        {
+                          /* USER FOUND */
+                          false ? (
+                            <div className="flex flex-col">
+                              <p className="text-md">
+                                {formData.payerDetails.fullName}
+                              </p>
+                              <p className="text-sm text-default-500">
+                                {formData?.user_id}
+                              </p>
+                            </div>
+                          ) : (
+                            /* USER NOT FOUND */
+                            <div className="flex flex-col rounded-sm bg-slate-100 w-full p-2 py-2.5">
+                              <p className="text-md text-primary/80 font-semibold">
+                                RECORD NOT FOUND
+                              </p>
+                            </div>
+                          )
+                        }
+                      </CardHeader>
+                      {false && (
+                        /* USER FOUND */
+                        <>
+                          <Divider />
+                          <CardBody>
+                            <p className="text-xs">
+                              <span className="text-primary-600 font-semibold">
+                                Note:
+                              </span>
+                              You are registered to pay for{" "}
+                              {formData?.institution?.name}
+                            </p>
+                          </CardBody>
+                        </>
+                      )}
+                      <Divider />
+                      <CardFooter>
+                        <Link
+                          className="text-md"
+                          isExternal
+                          showAnchorIcon
+                          href="https://github.com"
+                        >
+                          Visit Website
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                    {
+                      /* USER FOUND */
+                      false && (
+                        <div className="flex justify-end">
+                          <Button
+                            className={"w-full"}
+                            // endContent={<ChevronRight className="ml-2 w-4 h-4" />}
+                            onClick={handleNextStep}
+                          >
+                            Next
+                          </Button>
+                        </div>
+                      )
+                    }
+                  </>
+                ) : (
+                  /* USER: ENTERS THEIR ID NUMBER ==> TO BE VALIDATED AND LOOKED UP */
+                  <>
+                    <Input
+                      id="user_id"
+                      label="Registration/ National ID"
+                      placeholder="Enter your Registration/NRC/Passport number"
+                      type="text"
+                      onError={errors.user_id}
+                      errorText={errors.user_id}
+                      value={formData.user_id}
+                      onChange={(e) =>
+                        updateFormData({ user_id: e.target.value })
+                      }
+                    />
+                    <div className="flex justify-end">
+                      <Button className={"w-full"} onClick={validateUser}>
+                        Validate
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </>
+            ) : (
+              /* NO SCHOOL HAS BEEN SELECTED */
+              <EmptyLogs
+                className={"my-auto"}
+                subTitle={
+                  "You have not selected an entity/institution to make payments for."
+                }
+                title={"Choose an entity"}
               />
-            </div>
-            <div className="space-y-2">
-              <Input
-                id="nrc"
-                label="National ID"
-                placeholder="Enter your NRC/Passport number"
-                type="text"
-                onError={errors.nrc}
-                errorText={errors.nrc}
-                value={formData.payerDetails.nrc}
-                onChange={(e) => updateDetails("nrc", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Input
-                id="email"
-                label="Email Address"
-                placeholder="Enter your email address"
-                type="email"
-                onError={errors.email}
-                errorText={errors.email}
-                value={formData.payerDetails.email}
-                onChange={(e) => updateDetails("email", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Input
-                id="phone"
-                label="Phone Number"
-                placeholder="Enter your phone number"
-                type="tel"
-                value={formData.payerDetails.phone}
-                onError={errors.phone}
-                errorText={errors.phone}
-                onChange={(e) => updateDetails("phone", e.target.value)}
-              />
-            </div>
+            )}
           </div>
-          <div className="">
-            <Textarea
-              className={`min-h-[80px] `}
-              id="address"
-              label="Address"
-              onError={errors.address}
-              errorText={errors.address}
-              placeholder="Enter your full address"
-              value={formData.payerDetails.address}
-              onChange={(e) => updateDetails("address", e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="flex justify-end pt-4">
-          <Button
-            endContent={<ChevronRight className="ml-2 w-4 h-4" />}
-            onClick={handleNextStep}
-          >
-            Next Step
-          </Button>
         </div>
       </CardBody>
     </Card>

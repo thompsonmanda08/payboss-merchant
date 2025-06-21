@@ -59,7 +59,7 @@ export async function validateCheckoutData(checkoutData) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -117,7 +117,7 @@ export async function getCheckoutInfo(checkoutID, serviceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -183,7 +183,7 @@ export async function payWithMobileMoney(checkoutData) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -241,7 +241,7 @@ export async function payWithBankCard(checkoutData) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -297,7 +297,7 @@ export async function getTransactionStatus(transactionID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -355,7 +355,7 @@ export async function getTransactionStatus(transactionID) {
 //       message:
 //         error?.response?.data?.error ||
 //         error?.response?.config?.data?.error ||
-//         "Error Occurred: See Console for details",
+//         "No Server Response",
 //       data: error?.response?.data,
 //       status: error?.response?.status,
 //       statusText: error?.response?.statusText,

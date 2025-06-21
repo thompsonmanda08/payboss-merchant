@@ -46,7 +46,7 @@ export const setupAccountConfig = cache(async () => {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -90,7 +90,7 @@ export async function getUserAccountRoles() {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -133,7 +133,7 @@ export async function getWorkspaceRoles() {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -185,7 +185,7 @@ export async function changeWorkspaceVisibility(workspaceID, isVisible) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -238,7 +238,7 @@ export async function createNewWorkspace(newWorkspace) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -294,7 +294,7 @@ export async function updateWorkspace({ workspace, description, ID }) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -358,7 +358,7 @@ export async function deleteWorkspace(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -414,7 +414,7 @@ export const getAllWorkspaces = cache(async () => {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -467,7 +467,7 @@ export const getAllKYCData = cache(async () => {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -513,7 +513,7 @@ export const getWorkspaceDetails = cache(async (workspaceID) => {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

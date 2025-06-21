@@ -58,9 +58,7 @@ export async function getAllBulkTransactions(workspaceID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -119,9 +117,7 @@ export async function getBatchDetails(batchID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -186,9 +182,7 @@ export async function reviewBatch(batchID, reviewDetails) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -257,9 +251,7 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -320,9 +312,7 @@ export async function submitBatchForApproval(batchID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -382,9 +372,7 @@ export async function getWalletPrefundHistory(workspaceID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -445,9 +433,7 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -511,9 +497,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -547,7 +531,7 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
 export async function getCollectionLatestTransactions(
   workspaceID,
   service,
-  dateFilter,
+  dateFilter
 ) {
   if (!workspaceID) {
     return {
@@ -587,9 +571,7 @@ export async function getCollectionLatestTransactions(
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -771,9 +753,7 @@ export async function getRecentInvoices(workspaceID, dateFilter) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

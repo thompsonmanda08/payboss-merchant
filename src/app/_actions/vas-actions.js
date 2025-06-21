@@ -50,7 +50,7 @@ export async function generateCheckoutURL(workspaceID, checkoutData) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -99,7 +99,7 @@ export async function updateCheckoutURL(workspaceID, checkoutID, checkoutData) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -145,7 +145,7 @@ export async function getCheckoutURL(workspaceID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -198,7 +198,7 @@ export async function createInvoice(workspaceID, formData) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -244,7 +244,7 @@ export async function getInvoiceDetails(ID) {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

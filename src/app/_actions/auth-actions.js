@@ -97,9 +97,7 @@ export async function validateTPIN(tpin) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -140,9 +138,7 @@ export async function createNewMerchant(businessInfo) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -195,9 +191,7 @@ export async function submitMerchantBankDetails(data, merchantID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -249,9 +243,7 @@ export async function updateMerchantDetails(businessInfo, merchantID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -304,9 +296,7 @@ export async function createMerchantAdminUser(newUser, merchantID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -341,9 +331,7 @@ export async function getBusinessDocumentRefs() {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -390,9 +378,7 @@ export async function sendBusinessDocumentRefs(payloadUrls) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -431,9 +417,7 @@ export async function deleteBusinessDocumentRefs(keys) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -480,9 +464,7 @@ export async function updateBusinessDocumentRefs(payloadUrls) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -572,9 +554,7 @@ export async function submitKYCForReview() {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

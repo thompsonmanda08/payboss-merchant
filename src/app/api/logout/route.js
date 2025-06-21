@@ -28,7 +28,7 @@ export async function GET() {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "Error Occurred: See Console for details",
+        "No Server Response",
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

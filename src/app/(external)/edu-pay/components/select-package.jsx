@@ -13,7 +13,7 @@ import {
   DollarSign,
 } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
-import { PAYMENT_PACKAGES, SCHOOLS } from "./edu-form";
+import { PAYMENT_PACKAGES, SCHOOLS } from "./subscription-payment-form";
 import { useCallback } from "react";
 
 export default function SelectPaymentPackage({
@@ -50,6 +50,7 @@ export default function SelectPaymentPackage({
     formData.customAmount,
     formData.customReference,
   ]);
+
   const getSelectedPackageDetails = useCallback(() => {
     return formData.selectedPackages
       .map((packageId) => {
@@ -150,12 +151,12 @@ export default function SelectPaymentPackage({
   const handleProceedToCheckout = useCallback(() => {
     if (validateStep2()) {
       // Construct dummy URL with all collected data
-      const selectedSchool = SCHOOLS.find((s) => s.id === formData.school);
+      const selectedSchool = SCHOOLS.find((s) => s.id === formData.institution);
       const selectedPackageDetails = getSelectedPackageDetails();
       const finalAmount = getTotalAmount();
 
       const queryParams = new URLSearchParams({
-        school_id: formData.school,
+        school_id: formData.institution,
         school_name: selectedSchool?.name || "",
         payer_name: formData.payerDetails.fullName,
         payer_nrc: formData.payerDetails.nrc,
@@ -179,7 +180,7 @@ export default function SelectPaymentPackage({
   }, [formData, validateStep2, getSelectedPackageDetails, getTotalAmount]);
 
   return (
-    <Card className="shadow-none max-w-4xl mx-auto">
+    <Card className="shadow-none border border-gray-200 max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center text-lg">
           <CreditCard className="w-5 h-5 mr-2 text-primary-600" />
@@ -191,7 +192,7 @@ export default function SelectPaymentPackage({
         <div className="bg-primary-50 p-4 rounded-lg">
           <p className="text-sm text-primary-700 mb-1">Selected Institution:</p>
           <p className="font-semibold text-primary-900">
-            {SCHOOLS.find((s) => s.id === formData.school)?.name}
+            {SCHOOLS.find((s) => s.id === formData.institution)?.name}
           </p>
         </div>
         {/* Payment Packages */}
@@ -258,7 +259,7 @@ export default function SelectPaymentPackage({
           )}
         </div>
         {/* Custom Payment Option */}
-        <div className="space-y-3">
+        {/* <div className="space-y-3">
           <button
             className={cn(
               `border flex gap-2 rounded-lg w-full p-4 cursor-pointer transition-all duration-200 border-gray-200 hover:border-gray-300`,
@@ -282,7 +283,7 @@ export default function SelectPaymentPackage({
               </p>
             </div>
           </button>
-          {/* Custom Amount and Reference Inputs */}
+
           {formData.selectedPackages.includes("custom") && (
             <div className="grid md:grid-cols-2 gap-4 p-4 bg-primary-50/50 rounded-lg">
               <Input
@@ -312,7 +313,8 @@ export default function SelectPaymentPackage({
               />
             </div>
           )}
-        </div>
+        </div> */}
+
         {/* Payment Summary */}
         {formData.selectedPackages.length > 0 && (
           <div className="bg-gray-50 p-4 rounded-lg">

@@ -49,9 +49,7 @@ export async function createNewUser(newUser) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -95,9 +93,7 @@ export const getAllUsers = cache(async function fetchAllUsers() {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -142,9 +138,7 @@ export async function assignUsersToWorkspace(users, workspaceID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -184,9 +178,7 @@ export async function getUser(userID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -237,9 +229,7 @@ export async function updateProfileData(userID, userData) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -290,9 +280,7 @@ export async function updateSystemUserData(userID, userData) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -339,9 +327,7 @@ export async function deleteSystemUserData(userID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -389,9 +375,7 @@ export async function unlockSystemUser(userID) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -438,9 +422,7 @@ export async function changeUserPassword(password) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -486,9 +468,7 @@ export async function adminResetUserPassword(userID, newPasswordData) {
 
     return {
       success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
+      message: error?.response?.data?.error || "No Server Response",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
