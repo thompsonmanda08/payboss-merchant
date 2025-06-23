@@ -142,6 +142,8 @@ export async function getCheckoutInfo(checkoutID, serviceID) {
 export async function payWithMobileMoney(checkoutData) {
   if (
     !checkoutData?.transactionID ||
+    !checkoutData?.workspaceID ||
+    !checkoutData?.serviceID ||
     !checkoutData?.phoneNumber ||
     !checkoutData?.amount
   ) {
@@ -154,9 +156,10 @@ export async function payWithMobileMoney(checkoutData) {
     };
   }
 
-  const { transactionID, phoneNumber, amount } = checkoutData;
+  const { transactionID, serviceID, workspaceID, phoneNumber, amount } =
+    checkoutData;
 
-  const url = `transaction/collection/checkout/mobile/${transactionID}/${phoneNumber}/${amount}`;
+  const url = `transaction/collection/${workspaceID}/${serviceID}/mobile/${transactionID}/${phoneNumber}/${amount}`;
 
   try {
     const res = await apiClient.get(url);
@@ -205,16 +208,23 @@ export async function payWithMobileMoney(checkoutData) {
  * @returns {Object} An object containing the result of the request. If successful, includes a success status, message, data, status code, and status text. If unsuccessful, provides an error message and status information.
  */
 export async function payWithBankCard(checkoutData) {
-  if (!checkoutData?.transactionID) {
+  if (
+    !checkoutData?.transactionID ||
+    !checkoutData?.workspaceID ||
+    !checkoutData?.serviceID
+  ) {
     return {
       success: false,
-      message: "Missing Required Params: Transaction ID",
+      message: "Missing Required Params: Transaction/Service/Workspace ID",
       data: null,
       status: 400,
       statusText: "BAD REQUEST",
     };
   }
-  const url = `transaction/collection/checkout/card`;
+
+  const { serviceID, workspaceID } = checkoutData;
+
+  const url = `transaction/collection/${workspaceID}/${serviceID}/card`;
 
   try {
     const res = await apiClient.post(url, checkoutData);

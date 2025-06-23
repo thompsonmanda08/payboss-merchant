@@ -16,7 +16,7 @@ import PromptModal from "@/components/modals/prompt-modal";
 import { useRouter } from "next/navigation";
 
 export default function MobileMoneyForm({ checkoutData }) {
-  const { amount, transactionID } = checkoutData || "";
+  const { amount, transactionID, serviceID, workspaceID } = checkoutData || "";
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
@@ -101,6 +101,8 @@ export default function MobileMoneyForm({ checkoutData }) {
 
     const response = await payWithMobileMoney({
       transactionID,
+      serviceID,
+      workspaceID,
       phoneNumber: formData.phoneNumber,
       amount: formData.amount,
     });
