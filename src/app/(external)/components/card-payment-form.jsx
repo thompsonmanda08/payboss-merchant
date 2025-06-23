@@ -172,6 +172,7 @@ export default function CardPaymentForm({ checkoutData }) {
     const response = await payWithBankCard({
       transactionID,
       amount,
+      currency: "zmw", //REQUIRED
       ...checkoutData,
       ...formData,
     });
