@@ -67,8 +67,8 @@ export default function SelectPaymentPackage({
       .filter(Boolean);
   }, [
     formData.selectedPackages,
-    formData.customAmount,
-    formData.customReference,
+    // formData.customAmount,
+    // formData.customReference,
   ]);
 
   const handleCustomAmountChange = (value) => {

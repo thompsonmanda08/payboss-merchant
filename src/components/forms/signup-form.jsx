@@ -296,8 +296,8 @@ export default function SignUpForm({ superMerchantID }) {
           <AnimatePresence mode="wait">
             <motion.div
               key={currentTabIndex}
-              animate={"show"}
               className="flex w-full flex-col items-center justify-center gap-y-4"
+              animate={"show"}
               exit={"exit"}
               initial={"hidden"}
               transition={{ duration: 0.5 }}

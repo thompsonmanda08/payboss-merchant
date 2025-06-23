@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import ProgressStep from "@/components/elements/progress-step";
 import { Card, CardBody } from "@heroui/react";
 import { Check, ArrowLeft } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import useCustomTabsHook from "@/hooks/use-custom-tabs";
 import EntityUserDetails from "./entity-user-details";
 import SelectPaymentPackage from "./select-package";
@@ -68,15 +68,16 @@ export const PAYMENT_PACKAGES = [
 
 const STEPS = [
   {
-    title: "Entity Selection & User Details",
-    infoText: "Choose an entity and enter user details",
-    step: "Entity Selection",
+    title: "Institution Selection & User Details",
+    infoText:
+      "Choose an institution/organization and enter your user details to make a payment",
+    step: "Choose Institution",
   },
   {
     title: "Payment Selection",
     infoText:
       "Select a payment option and enter payment details of what you want to pay for.",
-    step: "Payment ",
+    step: "Make Payment",
   },
 ];
 
@@ -85,7 +86,7 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
   const [errors, setErrors] = useState({});
   const [showRedirectMessage, setShowRedirectMessage] = useState(false);
 
-  const { data } = useQuery({
+  const { data: institutionsResponse } = useQuery({
     queryKey: ["subscription-entities"],
     queryFn: async () => await getSubscriptionInstitutions(),
     refetchOnMount: true,
@@ -93,34 +94,36 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
     staleTime: Infinity,
   });
 
-  const INSTITUTIONS = data?.data?.institutions;
+  const INSTITUTIONS = useMemo(() => {
+    const all = [
+      ...(institutionsResponse?.data?.institutions || []),
+      ...SCHOOLS,
+    ];
+
+    return all.map((item) => {
+      return {
+        id: item.ID || item.id,
+        name: item.display_name || item.name,
+        type: item.type || "",
+        address: item.physical_address || "",
+        city: item.city || "",
+        redirect_url: item.redirect_url || "",
+        logo: item.logo || "",
+      };
+    });
+  }, [institutionsResponse?.data?.institutions]);
 
   // Form data state
   const [formData, setFormData] = useState({
-    institution: "",
+    institution: {},
     user_id: "",
     fullName: "",
-
     selectedPackages: [],
-    customAmount: 0,
-    customReference: "",
   });
 
   function updateFormData(fields) {
     setFormData((prev) => ({ ...prev, ...fields }));
   }
-
-  const validateStep1 = useCallback(() => {
-    const newErrors = {};
-
-    if (!formData.institution) newErrors.institution = "Please select a school";
-    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
-    if (!formData.user_id.trim()) newErrors.user_id = "Valid ID is required";
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  }, [formData.institution, formData.fullName, formData.user_id]);
 
   const { activeTab, currentTabIndex, navigateForward, navigateBackwards } =
     useCustomTabsHook([
@@ -145,10 +148,8 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
     ]);
 
   function handleNextStep() {
-    if (currentTabIndex == 0 && validateStep1()) {
-      navigateForward();
-      setErrors({});
-    }
+    navigateForward();
+    setErrors({});
   }
 
   function handlePreviousStep() {
@@ -158,7 +159,7 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
 
   //************ STEPS TO CREATE A PAYMENT ACTION *****************/
   return (
-    <div>
+    <div className="flex flex-col w-full container mx-auto">
       {!showRedirectMessage ? (
         <>
           <div className="flex justify-between w-full lg:container mb-8 lg:mb-1">
@@ -191,7 +192,7 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
             />
           </div>
           {/* FORM FIELDS */}
-          {activeTab}
+          <div className="container">{activeTab}</div>
         </>
       ) : (
         <Card className="shadow-lg border-0 border-t-4 border-t-primary-600 max-w-2xl mx-auto">

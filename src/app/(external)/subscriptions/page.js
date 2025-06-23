@@ -24,5 +24,5 @@ export default function SubscriptionsMiniApp() {
     window.scrollTo(0, 0);
   }, [activeTab]);
 
-  return <div className="container mx-auto px-4">{activeTab}</div>;
+  return <div className="flex flex-1">{activeTab}</div>;
 }

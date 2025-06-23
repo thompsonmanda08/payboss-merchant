@@ -11,14 +11,14 @@ const PUBLIC_ROUTES = [
   "/checkout",
   "/invoice",
   "/docs",
-  "/edu-pay",
+  "/subscriptions",
 ];
 
 const PUBLIC_PREFIXES = [
   "/invoice/", // This will catch all /invoice/[id] routes
   "/checkout/",
   "/docs/",
-  "/edu-pay/",
+  "/subscriptions/",
   "/register/",
 ];
 

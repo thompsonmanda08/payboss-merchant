@@ -397,10 +397,11 @@ export async function startSubscriptionPayment(workspaceID, formData) {
 }
 
 /**
- * Update a subscription payment transaction.
+ * COntinue an existing subscription payment transaction.
  *
  * @param {string} workspaceID The Workspace ID.
  * @param {object} formData The form data object to be submitted.
+ * @param {string} formData.total
  * @param {object[]} formData.services The array of service packs to be submitted.
  * @param {string} formData.services[index].name
  * @param {string} formData.services[index].price
@@ -408,12 +409,12 @@ export async function startSubscriptionPayment(workspaceID, formData) {
 
  * @returns {Promise<{success: boolean, message: string, data: object, status: number, statusText: string}>}
  */
-export async function updateSubscriptionPayment(transactionID, formData) {
+export async function continueSubscriptionPayment(transactionID, formData) {
   const url = `/merchant/transaction/collection/update/subscription/record/${transactionID}`;
 
   try {
     const res = await authenticatedApiClient({
-      method: "POST",
+      method: "PATCH",
       url,
       data: formData,
     });

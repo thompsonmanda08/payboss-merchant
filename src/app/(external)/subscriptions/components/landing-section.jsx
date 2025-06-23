@@ -22,7 +22,7 @@ export default function SubScriptionLandingSection({
   navigateTo,
 }) {
   return (
-    <div className="relative min-h-screen overflow-hidden ">
+    <div className="relative container mx-auto overflow-hidden ">
       {/* Large static subscription background illustration */}
       <SubscriptionBackgroundSVG />
 
