@@ -345,7 +345,7 @@ export async function getSubscriptionInstitutions() {
 }
 
 /**
- * Gets a list of institutions for subscriptions.
+ * Start a payment for a subscription
  *
  * @param {string} workspaceID The Workspace ID.
  * @param {object} formData The form data object to be submitted.
@@ -396,7 +396,6 @@ export async function startSubscriptionPayment(workspaceID, formData) {
   }
 }
 
-
 /**
  * Update a subscription payment transaction.
  *
@@ -409,8 +408,8 @@ export async function startSubscriptionPayment(workspaceID, formData) {
 
  * @returns {Promise<{success: boolean, message: string, data: object, status: number, statusText: string}>}
  */
-export async function continueSubscriptionPayment(workspaceID, formData) {
-  const url = `/merchant/transaction/collection/create/subscription/record/${workspaceID}`;
+export async function updateSubscriptionPayment(transactionID, formData) {
+  const url = `/merchant/transaction/collection/update/subscription/record/${transactionID}`;
 
   try {
     const res = await authenticatedApiClient({
