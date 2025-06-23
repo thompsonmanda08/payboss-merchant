@@ -28,17 +28,21 @@ import {
 } from "@heroui/react";
 import React from "react";
 import EmptyLogs from "@/components/base/empty-logs";
+import { validateSubscriptionMember } from "@/app/_actions/subscription-actions";
 export default function EntityUserDetails({
   formData,
   updateFormData,
   errors,
   setErrors,
   handleNextStep,
+  institutions,
 }) {
   const [selected, setSelected] = React.useState("EXISTING");
   const [isValidating, setIsValidating] = React.useState(false);
+  const workspaceID = formData?.institution?.workspaceID;
+
   const handleSelectInstitution = (value) => {
-    updateFormData({ institution: value });
+    updateFormData({ institution: institutions?.find((x) => x.ID == value) });
     setErrors((prev) => {
       if (prev.institution) {
         const newErrors = { ...prev };
@@ -49,9 +53,11 @@ export default function EntityUserDetails({
     });
   };
 
-  function validateUser() {
+  async function validateUser() {
     setIsValidating(true);
     console.log("validating user: ", formData?.user_id);
+
+    const response = await validateSubscriptionMember();
 
     setIsValidating(false);
   }
@@ -69,7 +75,7 @@ export default function EntityUserDetails({
           <div>
             <AutoCompleteField
               label={"Select School/Institution"}
-              options={SCHOOLS}
+              options={[...SCHOOLS, ...institutions]}
               value={formData.institution}
               onChange={handleSelectInstitution}
               onError={errors.institution}

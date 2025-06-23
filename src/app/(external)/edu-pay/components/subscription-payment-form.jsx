@@ -6,6 +6,8 @@ import { useCallback, useState } from "react";
 import useCustomTabsHook from "@/hooks/use-custom-tabs";
 import EntityUserDetails from "./entity-user-details";
 import SelectPaymentPackage from "./select-package";
+import { getSubscriptionInstitutions } from "@/app/_actions/subscription-actions";
+import { useQuery } from "@tanstack/react-query";
 
 export const SCHOOLS = [
   { id: "harmony-high", name: "Harmony High School", type: "Secondary" },
@@ -83,6 +85,16 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
   const [errors, setErrors] = useState({});
   const [showRedirectMessage, setShowRedirectMessage] = useState(false);
 
+  const { data } = useQuery({
+    queryKey: ["subscription-entities"],
+    queryFn: async () => await getSubscriptionInstitutions(),
+    refetchOnMount: true,
+    refetchIntervalInBackground: true,
+    staleTime: Infinity,
+  });
+
+  const INSTITUTIONS = data?.data?.institutions;
+
   // Form data state
   const [formData, setFormData] = useState({
     institution: "",
@@ -119,6 +131,7 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
         setErrors={setErrors}
         errors={errors}
         handleNextStep={handleNextStep}
+        institutions={INSTITUTIONS}
       />,
       <SelectPaymentPackage
         key={"payment"}
@@ -127,13 +140,12 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
         updateFormData={updateFormData}
         setErrors={setErrors}
         errors={errors}
-        handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
       />,
     ]);
 
   function handleNextStep() {
-    if (validateStep1()) {
+    if (currentTabIndex == 0 && validateStep1()) {
       navigateForward();
       setErrors({});
     }
@@ -203,10 +215,11 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
                 https://payment-gateway.example.com/checkout?school_id=
                 {formData.institution}&school_name=
                 {encodeURIComponent(
-                  SCHOOLS.find((s) => s.id === formData.institution)?.name || ""
+                  [...INSTITUTIONS].find((s) => s.id === formData.institution)
+                    ?.name || ""
                 )}
                 &payer_name=
-                {encodeURIComponent(formData.payerDetails.fullName)}
+                {encodeURIComponent(formData.fullName)}
                 &payment_amount={formData?.amount}...
               </p>
             </div>
