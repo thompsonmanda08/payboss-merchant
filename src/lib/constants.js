@@ -97,6 +97,7 @@ export const QUERY_KEYS = {
   WORKSPACE_TYPES: "workspace-types",
   WORKSPACE_CALLBACK: "workspace-callback",
   WORKSPACE_CHECKOUT: "workspace-checkout",
+  SUBSCRIPTION_PACKS: "subscription-packs",
 };
 
 // ANIMATION_VARIANTS

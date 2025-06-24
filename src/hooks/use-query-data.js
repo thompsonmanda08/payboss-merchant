@@ -27,6 +27,7 @@ import {
 import { QUERY_KEYS } from "@/lib/constants";
 import { getCheckoutURL } from "@/app/_actions/vas-actions";
 import { getRefreshToken } from "@/app/_actions/auth-actions";
+import { getSubscriptionPacks } from "@/app/_actions/subscription-actions";
 
 export const useGeneralConfigOptions = () =>
   useQuery({
@@ -196,15 +197,24 @@ export const useWorkspaceCallbackURL = (workspaceID) =>
     queryFn: async () => await getWorkspaceCallback(workspaceID),
     staleTime: Infinity,
   });
+
 export const useWorkspaceTypes = () =>
   useQuery({
     queryKey: [QUERY_KEYS.WORKSPACE_TYPES],
     queryFn: async () => await getWorkspaceCallback(),
     staleTime: Infinity,
   });
+
 export const useWorkspaceCheckout = (workspaceID) =>
   useQuery({
     queryKey: [QUERY_KEYS.WORKSPACE_CHECKOUT],
     queryFn: async () => await getCheckoutURL(workspaceID),
+    staleTime: Infinity,
+  });
+
+export const useWorkspaceSubscriptions = (workspaceID) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.SUBSCRIPTION_PACKS, workspaceID],
+    queryFn: async () => await getSubscriptionPacks(workspaceID),
     staleTime: Infinity,
   });

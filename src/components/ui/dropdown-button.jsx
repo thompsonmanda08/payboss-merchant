@@ -24,6 +24,7 @@ export default function DropdownButton({
   classNames,
   dropDownItems,
   isIconOnly,
+  isDisabled,
   backdropBlur,
   selectedValue,
   variant,
@@ -42,9 +43,10 @@ export default function DropdownButton({
     >
       <DropdownTrigger>
         <Button
+          isDisabled={isDisabled}
           className={cn(
             "border-[1px]] mb-1 h-auto max-h-[60px] w-full items-center justify-start border-border border hover:border-primary bg-transparent p-2 capitalize",
-            trigger,
+            trigger
           )}
           isIconOnly={isIconOnly}
           variant="bordered"
@@ -73,7 +75,7 @@ export default function DropdownButton({
               {
                 "text-danger": item?.key === "delete",
               },
-              dropdownItem,
+              dropdownItem
             )}
             color={item?.key === "new" ? "primary" : "default"}
             description={item?.description}
@@ -110,7 +112,7 @@ export default function DropdownButton({
                   opacity: [0, 1],
                 }}
                 className={cn(
-                  "absolute -top-1 left-0 group-hover:left-[100%] z-50 hidden max-h-96 w-full min-w-[200px] p-2 transition-all duration-300 ease-in-out group-hover:flex",
+                  "absolute -top-1 left-0 group-hover:left-[100%] z-50 hidden max-h-96 w-full min-w-[200px] p-2 transition-all duration-300 ease-in-out group-hover:flex"
                 )}
               >
                 <Card className="no-scrollbar w-full overflow-y-auto p-2">
@@ -185,7 +187,7 @@ export function SingleSelectionDropdown({
             <ChevronDownIcon
               className={cn(
                 "h-4 w-4  focus-within:rotate-180 focus:rotate-180 ",
-                chevronIcon,
+                chevronIcon
               )}
             />
           }
@@ -207,7 +209,7 @@ export function SingleSelectionDropdown({
       >
         {dropdownItems.map((item) => {
           let ItemLabel = capitalize(
-            item.name || item.label || item?.[listItemName] || item,
+            item.name || item.label || item?.[listItemName] || item
           );
           let itemValue =
             item.value ||
@@ -223,7 +225,7 @@ export function SingleSelectionDropdown({
               className={cn(
                 "!focus-within:bg-primary-100 !hover:bg-primary-100 !focus:bg-primary-100 !data-[hover=true]:border-primary-200 !data-[selectable=true]:focus:bg-primary-100 !data-[focus=true]:bg-primary-100 !data-[hover=true]:bg-primary-100 !data-[hover=true]:text-primary !data-[selected=true]:text-primary group min-w-max capitalize !data-[hover=true]:text-primary",
 
-                dropdownItem,
+                dropdownItem
               )}
               description={item?.description}
             >
@@ -265,7 +267,7 @@ export function SimpleDropdown({
             <ChevronDownIcon
               className={cn(
                 "h-4 w-4 focus-within:rotate-180 focus:rotate-180 ",
-                chevronIcon,
+                chevronIcon
               )}
             />
           }
@@ -291,12 +293,12 @@ export function SimpleDropdown({
             className={cn(
               "!focus-within:bg-primary-100 !hover:bg-primary-100 !focus:bg-primary-100 !data-[hover=true]:border-primary-200 !data-[selectable=true]:focus:bg-primary-100 !data-[focus=true]:bg-primary-100 !data-[hover=true]:bg-primary-100 !data-[hover=true]:text-primary !data-[selected=true]:text-primary group min-w-max capitalize",
 
-              dropdownItem,
+              dropdownItem
             )}
             href={item?.href || ""}
           >
             {capitalize(
-              item.name || item.label || item?.[listItemName] || item,
+              item.name || item.label || item?.[listItemName] || item
             )}
           </DropdownItem>
         ))}

@@ -1,22 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import {
-  PlusIcon,
-  Square2StackIcon,
-  ArrowPathIcon,
-  EyeIcon,
-  EyeSlashIcon,
-  Cog6ToothIcon,
-  WrenchScrewdriverIcon,
-  ComputerDesktopIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownSection,
-  DropdownTrigger,
   Spinner,
   Tooltip,
   useDisclosure,
@@ -28,40 +13,41 @@ import {
   TableCell,
   Chip,
   addToast,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Card as HeroUICard,
+  CardBody,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  DropdownSection,
+  Pagination,
 } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AnimatePresence, motion } from "framer-motion";
 import { useParams } from "next/navigation";
-import Link from "next/link";
+import { SquarePenIcon, UserCog, Users2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { cn, formatDate, maskString } from "@/lib/utils";
+import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import CustomTable from "@/components/tables/table";
 import {
-  useWorkspaceAPIKey,
   useWorkspaceInit,
-  useWorkspaceTerminals,
+  useWorkspaceSubscriptions,
 } from "@/hooks/use-query-data";
-import {
-  activateWorkspaceTerminals,
-  deactivateWorkspaceTerminals,
-  refreshWorkspaceAPIKey,
-  setupWorkspaceAPIKey,
-} from "@/app/_actions/workspace-actions";
 import { QUERY_KEYS } from "@/lib/constants";
 import { getCollectionLatestTransactions } from "@/app/_actions/transaction-actions";
 import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
+import { SUBSCRIPTION_PAYMENT_COLUMNS } from "@/lib/table-columns";
+import { Input } from "@/components/ui/input-field";
 import {
-  API_KEY_TERMINAL_TRANSACTION_COLUMNS,
-  API_KEY_TRANSACTION_COLUMNS,
-} from "@/lib/table-columns";
-import TerminalsTable from "@/components/tables/terminal-tables";
-import Loader from "@/components/ui/loader";
-import PromptModal from "@/components/modals/prompt-modal";
-
-import TerminalConfigViewModal from "./terminal-config-view";
-import APIConfigViewModal from "./api-config-view";
+  createSubscriptionPack,
+  updateSubscriptionPack,
+} from "@/app/_actions/subscription-actions";
 
 const Subscriptions = () => {
   const queryClient = useQueryClient();
@@ -72,33 +58,60 @@ const Subscriptions = () => {
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const permissions = workspaceInit?.data?.workspacePermissions;
 
-  const { onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isOpenAddTerminal,
-    onOpen: onAddTerminal,
-    onClose: onCloseTerminal,
-  } = useDisclosure();
+  const [selectedServicePack, setSelectedServicePack] = useState({
+    name: "",
+    price: 0,
+    key: "",
+    isUpdating: false,
+    isDeleting: false,
+    isLoading: false,
+  });
 
-  const { data: apiKeyResponse, isLoading: isLoadingConfig } =
-    useWorkspaceAPIKey(workspaceID);
-  const { data: terminalData, isLoading: isLoadingTerminals } =
-    useWorkspaceTerminals(workspaceID);
+  function updateServiceData(fields) {
+    setSelectedServicePack((prev) => {
+      return {
+        ...prev,
+        ...fields,
+      };
+    });
+  }
 
-  const [copiedKey, setCopiedKey] = useState("");
-  const [refreshKeyID, setRefreshKeyID] = useState("");
+  const [formData, setFormData] = useState({
+    isLoading: false,
+    isUpdating: false,
+    services: [{ name: "", price: 0, key: "" }],
+  });
+
+  function updateFormData(fields) {
+    setFormData((prev) => {
+      return {
+        ...prev,
+        ...fields,
+      };
+    });
+  }
+
+  const { onOpen, onClose, isOpen } = useDisclosure();
+
+  const { data: subPacksRes, isLoading: isLoadingConfig } =
+    useWorkspaceSubscriptions(workspaceID);
+
   const [isLoading, setIsLoading] = useState(false);
-  const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
-  const [openViewConfig, setOpenViewConfig] = useState(false);
-  const [currentActionIndex, setCurrentActionIndex] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(true);
 
-  const handleClosePrompt = () => {
+  function handleClose() {
     onClose();
-    setIsLoading(false);
-    setCurrentActionIndex(null);
-    setUnmaskAPIKey(false);
-    setRefreshKeyID("");
-  };
+
+    setFormData({
+      isLoading: false,
+      isUpdating: false,
+      services: [{ name: "", price: 0, key: "" }],
+    });
+    setSelectedServicePack({
+      name: "",
+      isLoading: false,
+      isUpdating: false,
+    });
+  }
 
   const thirtyDaysAgoDate = new Date();
 
@@ -106,12 +119,19 @@ const Subscriptions = () => {
   const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
   const end_date = formatDate(new Date(), "YYYY-MM-DD");
 
-  const API_KEYS_DATA = apiKeyResponse?.data || [];
-  const API_CONFIG = API_KEYS_DATA?.config || [];
-  const API_KEYS = API_KEYS_DATA?.data || [];
-  const terminals = terminalData?.data?.terminals || []; //
-  const hasTerminals = Boolean(API_KEYS_DATA?.hasTerminals);
-  const terminalsConfigured = Boolean(terminals.length > 0);
+  const ALL_SERVICE_PACKS = subPacksRes?.data.services || [];
+
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 6;
+
+  const pages = Math.ceil(ALL_SERVICE_PACKS.length / rowsPerPage);
+
+  const SERVICE_PACKS = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return ALL_SERVICE_PACKS.slice(start, end);
+  }, [page, ALL_SERVICE_PACKS]);
 
   // HANDLE FETCH SUBS COLLECTION LATEST TRANSACTION DATA
   const mutation = useMutation({
@@ -120,199 +140,23 @@ const Subscriptions = () => {
       getCollectionLatestTransactions(workspaceID, "subscription", dateRange),
   });
 
-  function copyToClipboard(key) {
-    try {
-      navigator?.clipboard?.writeText(key);
-      setCopiedKey(key);
-      addToast({
-        color: "success",
-        title: "Success",
-        description: "API key copied to clipboard!",
-      });
-    } catch (error) {
-      addToast({
-        color: "danger",
-        title: "Error",
-        description: "Failed to copy API key!",
-      });
-      console.error("FAILED", error);
-    }
-  }
-
-  async function handleGenerateAPIKey() {
-    setIsLoading(true);
-
-    if (!permissions?.update || !permissions?.delete) {
-      addToast({
-        color: "danger",
-        title: "Error",
-        description: "Only admins are allowed to generate API keys!",
-      });
-
-      setIsLoading(false);
-      handleClosePrompt();
-
-      return;
-    }
-
-    // THERE CAN ONLY BE 2 API KEYS ==> UAT AND PRODUCTION
-    if (API_KEYS?.length == 2) {
-      addToast({
-        color: "danger",
-        title: "Error",
-        description: "You already have an API key for this workspace!",
-      });
-
-      return;
-    }
-
-    const response = await setupWorkspaceAPIKey(workspaceID);
-
-    if (!response?.success) {
-      addToast({
-        color: "danger",
-        title: "Failed to generate API key",
-        description: response?.message,
-      });
-      setIsLoading(false);
-
-      return;
-    }
-
-    queryClient.invalidateQueries({
-      queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
-    });
-    addToast({
-      color: "success",
-      title: "Success",
-      description: "API key has been generated",
-    });
-    setIsLoading(false);
-    handleClosePrompt();
-
-    return;
-  }
-
-  async function handleRefreshAPIKey() {
-    setIsLoading(true);
-
-    if (!permissions?.update || !permissions?.delete) {
-      addToast({
-        color: "danger",
-        title: "Error",
-        description: "Only admins are allowed to refresh API keys.",
-      });
-      setIsLoading(false);
-      handleClosePrompt();
-
-      return;
-    }
-
-    if (API_KEYS?.length == 0) {
-      addToast({
-        color: "danger",
-        title: "Error",
-        description: "You have no API key.",
-      });
-      setIsLoading(false);
-
-      return;
-    }
-
-    const response = await refreshWorkspaceAPIKey(workspaceID, refreshKeyID);
-
-    if (response?.success) {
-      addToast({
-        color: "success",
-        title: "Success",
-        description: "API key has been updated",
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
-      });
-    } else {
-      addToast({
-        color: "danger",
-        title: "Error",
-        description: response?.message || "Failed to refresh API key.",
-      });
-    }
-
-    setIsLoading(false);
-    handleClosePrompt();
-
-    return;
-  }
-
-  async function handleTerminalActivation() {
-    setIsLoading(true);
-
-    if (!permissions?.update || !permissions?.delete) {
-      addToast({
-        color: "danger",
-        title: "Error",
-        description: "Only admins are allowed to activate terminals.",
-      });
-      setIsLoading(false);
-      handleClosePrompt();
-
-      return;
-    }
-
-    if (API_KEYS_DATA?.terminals || hasTerminals) {
-      addToast({
-        color: "danger",
-        title: "Error",
-        description: "Terminals already activated for this workspace.",
-      });
-      setIsLoading(false);
-      handleClosePrompt();
-
-      return;
-    }
-
-    const response = await activateWorkspaceTerminals(workspaceID);
-
-    if (!response?.success) {
-      addToast({
-        color: "danger",
-        title: "Error",
-        description: response?.message,
-      });
-      setIsLoading(false);
-
-      return;
-    }
-
-    queryClient.invalidateQueries();
-
-    addToast({
-      color: "success",
-      title: "Success",
-      description: "Collection Terminals activated.",
-    });
-    setIsLoading(false);
-    handleClosePrompt();
-
-    return;
-  }
-
-  async function handleTerminalDeactivation() {
-    setIsLoading(true);
-
+  async function handleCreateSubscription() {
     if (!permissions?.update || !permissions?.delete) {
       addToast({
         color: "danger",
         title: "NOT ALLOWED",
-        description: "Only admins are allowed to deactivate terminals.",
+        description: "Only admins are allowed to create subscriptions.",
       });
-      setIsLoading(false);
-      handleClosePrompt();
+      handleClose();
 
       return;
     }
+    const payload = {
+      services: formData?.services,
+    };
 
-    const response = await deactivateWorkspaceTerminals(workspaceID);
+    updateFormData({ isLoading: true });
+    const response = await createSubscriptionPack(workspaceID, payload);
 
     if (!response?.success) {
       addToast({
@@ -320,105 +164,100 @@ const Subscriptions = () => {
         color: "danger",
         description: response?.message,
       });
-      setIsLoading(false);
+      updateFormData({ isLoading: false });
 
       return;
     }
 
     queryClient.invalidateQueries({
-      queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
+      queryKey: [QUERY_KEYS.SUBSCRIPTION_PACKS, workspaceID],
     });
 
     addToast({
       title: "Success",
       color: "success",
-      description: "Collection Terminals activated!",
+      description: "Subscriptions created successfully!",
     });
-    setIsLoading(false);
-    handleClosePrompt();
+    updateFormData({ isLoading: false });
+    handleClose();
 
     return;
   }
 
-  function handleTerminalStatus(actionKey) {
-    if (hasTerminals && actionKey == "activate-terminals") {
-      addToast({
-        title: "Error",
-        color: "danger",
-        description: "Terminals already activated for this workspace!",
-      });
-      handleClosePrompt();
-
-      return;
-    }
-
-    // IF ACTIVE AND TERMINALS ARE CURRENTLY UPLOADED THEN NO DEACTIVATE
-    if (
-      hasTerminals &&
-      terminalsConfigured &&
-      actionKey == "deactivate-terminals"
-    ) {
-      addToast({
-        title: "Error",
-        color: "danger",
-        description: "Contact support to deactivate terminals!",
-      });
-      handleClosePrompt();
-
-      return;
-    }
-
-    // ALLOW DEACTIVATION IF TERMINALS ARE NOT UPLOADED
-    if (actionKey == "deactivate-terminals") {
-      setCurrentActionIndex(3);
-
-      return;
-    }
-
-    setCurrentActionIndex(2);
-  }
-
-  function handleManageTerminals(selectedKey) {
+  async function handleUpdateSubscription() {
     if (!permissions?.update || !permissions?.delete) {
       addToast({
         color: "danger",
-        title: "NOT ALLOWED!",
-        description: "You cannot perform this action",
+        title: "NOT ALLOWED",
+        description: "Only admins are allowed to update subscriptions.",
       });
-      handleClosePrompt();
+      handleClose();
 
       return;
     }
 
-    if (selectedKey == "add-terminal") {
-      onAddTerminal();
+    const payload = {
+      services: formData?.isUpdating
+        ? formData.services
+        : selectedServicePack?.isUpdating
+          ? [selectedServicePack]
+          : null,
+    };
+
+    if (payload == null) {
+      addToast({
+        title: "Error",
+        color: "danger",
+        description: "There are no subscriptions being edited",
+      });
 
       return;
     }
 
-    if (
-      selectedKey == "activate-terminals" ||
-      selectedKey == "deactivate-terminals"
-    ) {
-      handleTerminalStatus(selectedKey);
+    updateFormData({ isLoading: true });
+    updateServiceData({ isLoading: true });
+    const response = await updateSubscriptionPack(workspaceID, payload);
+
+    if (!response?.success) {
+      addToast({
+        title: "Error",
+        color: "danger",
+        description: response?.message,
+      });
+      updateFormData({ isLoading: false });
+      updateServiceData({ isLoading: false });
 
       return;
     }
+
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.SUBSCRIPTION_PACKS, workspaceID],
+    });
+
+    addToast({
+      title: "Success",
+      color: "success",
+      description: `Subscription${selectedServicePack?.isUpdating ? "" : "s"} updated successfully!`,
+    });
+    updateFormData({ isLoading: false });
+    updateServiceData({ isLoading: false });
+    handleClose();
+
+    return;
   }
 
-  useEffect(() => {
-    let timeoutId;
-
-    if (unmaskAPIKey) {
-      timeoutId = setTimeout(() => {
-        setUnmaskAPIKey(true);
-      }, 1000 * 60);
+  function handleSelectedAction(key) {
+    if (key == "update-subscriptions") {
+      setFormData((prev) => ({
+        ...prev,
+        isUpdating: true,
+        services: SERVICE_PACKS,
+      }));
+      onOpen();
     }
 
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [unmaskAPIKey]);
+    return;
+  }
 
   useEffect(() => {
     // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
@@ -429,72 +268,11 @@ const Subscriptions = () => {
 
   const LATEST_TRANSACTIONS = mutation.data?.data?.data || [];
 
-  // ACTIONS FOR API COLLECTIONS
-  const USER_PROMPT_ACTIONS = [
-    {
-      title: "Generate API Key",
-      icon: PlusIcon,
-      color: "primary",
-      confirmText: "Generate",
-      onConfirmAction: handleGenerateAPIKey,
-      description: "Generate a new API key for this workspace",
-      promptText: "Are you sure you want to generate a new API key?",
-      promptDescription:
-        "This API key will allow you channel funds to your workspace wallet from 3rd party applications and interfaces.",
-    },
-    {
-      title: "Refresh API Key",
-      icon: ArrowPathIcon,
-      color: "warning",
-      confirmText: "Refresh",
-      onConfirmAction: handleRefreshAPIKey,
-      description: "Refresh the API key for this workspace",
-      promptText: "Are you sure you want to refresh this API key?",
-      promptDescription:
-        "By confirming this, your API key will be changed to a new one and you will not be able to use the old API anymore.",
-    },
-    {
-      title: "Activate Terminals",
-      icon: ComputerDesktopIcon,
-      color: "primary",
-      confirmText: "Activate",
-      onConfirmAction: handleTerminalActivation,
-      description: "Activate Terminals for this workspace",
-      promptText: "Are you sure you want to activate Terminals?",
-      promptDescription:
-        "By confirming this, Terminals will be activated and you will be able to create and manage terminal transactions.",
-    },
-    {
-      title: "Deactivate Terminals",
-      icon: ComputerDesktopIcon,
-      color: "primary",
-      confirmText: "Deactivate",
-      onConfirmAction: handleTerminalDeactivation,
-      description: "Deactivate Terminals for this workspace",
-      promptText: "Are you sure you want to deactivate Terminals?",
-      promptDescription:
-        "By confirming this, Terminals will be deactivated and you will NOT be able to create and manage terminal transactions.",
-    },
-    {
-      title: "Delete API Key",
-      icon: TrashIcon,
-      color: "danger",
-      confirmText: "Delete",
-      onConfirmAction: () => {},
-      description: "Delete the API key for this workspace",
-      promptText: "Are you sure you want to delete this API key?",
-      promptDescription:
-        "This action is not reversible and will result in the non-operation of this key. Make sure you update any application making use of this Key.",
-    },
-  ];
-
-  const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
-
   return (
     <>
       <div className="flex w-full flex-col gap-4">
         <Card className="">
-          <div className="mb-8 flex justify-between">
+          <div className="mb-8 flex flex-col sm:flex-row justify-between">
             <CardHeader
               classNames={{
                 titleClasses: "xl:text-2xl lg:text-xl font-bold",
@@ -505,332 +283,307 @@ const Subscriptions = () => {
               }
               title={"Subscription Packs"}
             />
-            <Button
-              endContent={<PlusIcon className="h-5 w-5" />}
-              isDisabled={isLoadingConfig || Boolean(API_KEYS?.length == 2)}
-              onPress={() => {
-                setCurrentActionIndex(0);
-              }}
-            >
-              Create New
-            </Button>
-          </div>
-
-          <Table
-            removeWrapper
-            aria-label="SUBSCRIPTION PACK TABLE"
-            items={API_KEYS}
-          >
-            <TableHeader>
-              <TableColumn width={"30%"}>NAME</TableColumn>
-              <TableColumn width={"30%"}>AMOUNT</TableColumn>
-              <TableColumn width={"20%"}>KEY</TableColumn>
-              <TableColumn align="center">ACTIONS</TableColumn>
-            </TableHeader>
-            <TableBody
-              isLoading={isLoadingConfig}
-              loadingContent={
-                <div className="relative top-6 mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-neutral-50 py-3">
-                  <span className="flex gap-4 text-sm font-bold capitalize text-primary">
-                    <Spinner size="sm" /> Initializing services...
-                  </span>
-                </div>
-              }
-            >
-              {API_KEYS?.length > 0 ? (
-                API_KEYS?.map((item) => (
-                  <TableRow key={`${item?.state}-key`}>
-                    <TableCell>{item?.username}</TableCell>
-                    <TableCell className="flex gap-1">
-                      {item?.apikey && (
-                        <>
-                          <span className="flex items-center gap-4 font-medium">
-                            {unmaskAPIKey
-                              ? item?.apikey
-                              : maskString(item?.apikey, 0, 50)}
-                          </span>
-                          <Button
-                            className={"h-max max-h-max max-w-max p-1"}
-                            color="default"
-                            size="sm"
-                            variant="light"
-                            onClick={() => setUnmaskAPIKey(!unmaskAPIKey)}
-                          >
-                            {unmaskAPIKey ? (
-                              <EyeSlashIcon className="h-5 w-5 cursor-pointer text-primary" />
-                            ) : (
-                              <EyeIcon className="h-5 w-5 cursor-pointer text-primary" />
-                            )}
-                          </Button>
-                        </>
-                      )}
-                    </TableCell>
-
-                    <TableCell>
-                      <Chip
-                        classNames={{
-                          content: "uppercase text-white",
-                        }}
-                        color={item?.state === "prod" ? "success" : "warning"}
-                        size="sm"
-                        variant="solid"
-                      >
-                        {item?.state}
-                      </Chip>
-                    </TableCell>
-
-                    <TableCell>
-                      {item?.username && (
-                        <div className="flex items-center gap-4">
-                          <Tooltip
-                            color="secondary"
-                            content="See Documentation"
-                          >
-                            <Link href="/docs/collections" target="_blank">
-                              <Cog6ToothIcon
-                                className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
-                                // onClick={() => setOpenViewConfig(true)}
-                              />
-                            </Link>
-                          </Tooltip>
-                          <Tooltip
-                            color="default"
-                            content="Copy API Key to clipboard"
-                          >
-                            <Square2StackIcon
-                              className={`h-6 w-6 cursor-pointer ${
-                                copiedKey === item?.apikey
-                                  ? "text-primary"
-                                  : "text-gray-500"
-                              } hover:text-primary`}
-                              onClick={() => copyToClipboard(item?.apikey)}
-                            />
-                          </Tooltip>
-                          <Tooltip color="primary" content="Refresh API Key">
-                            <ArrowPathIcon
-                              className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300"
-                              onClick={() => {
-                                setCurrentActionIndex(1);
-                                setRefreshKeyID(item?.ID);
-                              }}
-                            />
-                          </Tooltip>
-                        </div>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow key="empty">
-                  <TableCell
-                    align="center"
-                    className="font-medium text-center"
-                    colSpan={4}
-                  >
-                    <span className="flex gap-4 text-xs text-center text-foreground/50 py-2 w-max mx-auto">
-                      You have no subscription packs
-                    </span>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </Card>
-
-        <Card className="">
-          <div className="mb-8 flex justify-between">
-            <CardHeader
-              classNames={{
-                titleClasses: "xl:text-2xl lg:text-xl font-bold",
-                infoClasses: "!text-sm xl:text-base",
-              }}
-              infoText={
-                "Activate terminals to manage  multiple collection points like POS machines, tills, etc."
-              }
-              title={"Terminals"}
-            />
-
             <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
-              {(permissions?.create ||
-                permissions?.update ||
-                permissions?.edit ||
-                permissions?.delete) && (
-                <Dropdown backdrop="blur">
-                  <DropdownTrigger>
-                    <Button
-                      color="primary"
-                      endContent={<WrenchScrewdriverIcon className="h-5 w-5" />}
-                      isDisabled={isLoadingTerminals || isLoadingConfig}
-                      loadingText={"Please wait..."}
-                    >
-                      Manage
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu
-                    aria-label="Action event example"
-                    onAction={(key) => handleManageTerminals(key)}
-                  >
-                    {hasTerminals && (
-                      <DropdownItem
-                        key="add-terminal"
-                        description="Add new terminals to workspace"
-                        startContent={<PlusIcon className={cn(iconClasses)} />}
+              {SERVICE_PACKS?.length == 0 && (
+                <Button
+                  endContent={<PlusIcon className="h-5 w-5" />}
+                  isDisabled={isLoadingConfig}
+                  onPress={() => {
+                    updateServiceData({ isUpdating: false });
+                    onOpen();
+                  }}
+                >
+                  Create New
+                </Button>
+              )}
+              {SERVICE_PACKS?.length > 0 &&
+                (permissions?.create ||
+                  permissions?.update ||
+                  permissions?.edit ||
+                  permissions?.delete) && (
+                  <Dropdown backdrop="blur">
+                    <DropdownTrigger>
+                      <Button
+                        endContent={<UserCog className="h-5 w-5" />}
+                        isDisabled={isLoadingConfig}
+                        isLoading={isLoadingConfig}
+                        onPress={() => {}}
                       >
-                        Add New Terminal
+                        Manage
+                      </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                      aria-label="Action event example"
+                      onAction={(key) => handleSelectedAction(key)}
+                    >
+                      <DropdownItem
+                        key="update-subscriptions"
+                        description="Add new terminals to workspace"
+                        startContent={
+                          <SquarePenIcon
+                            className={cn(
+                              "w-5 h-5 pointer-events-none flex-shrink-0"
+                            )}
+                          />
+                        }
+                      >
+                        Update Subscriptions
                       </DropdownItem>
-                    )}
+                      <DropdownItem
+                        key="add"
+                        description="Add new terminals to workspace"
+                        startContent={
+                          <PlusIcon
+                            className={cn(
+                              "w-5 h-5 pointer-events-none flex-shrink-0"
+                            )}
+                          />
+                        }
+                      >
+                        Add New Members
+                      </DropdownItem>
+                      <DropdownItem
+                        key="view"
+                        description="Add new terminals to workspace"
+                        startContent={
+                          <Users2
+                            className={cn(
+                              "w-5 h-5 pointer-events-none flex-shrink-0"
+                            )}
+                          />
+                        }
+                      >
+                        View Members
+                      </DropdownItem>
 
-                    {/* <DropdownItem
-                    key="workspace-settings"
-                    href={`${dashboardRoute}/workspace-settings`}
-                    description="Goto your workspace settings"
-                    startContent={<Cog6ToothIcon className={cn(iconClasses)} />}
-                  >
-                    Workspace Settings
-                  </DropdownItem> */}
-                    <DropdownSection title={hasTerminals ? "" : "Danger zone"}>
-                      {!hasTerminals ? (
+                      <DropdownSection title={"Danger zone"}>
                         <DropdownItem
-                          key="activate-terminals"
-                          classNames={{
-                            shortcut: "group-hover:text-white",
-                          }}
-                          color="primary"
-                          description="Activate collection terminals"
-                          shortcut="⌘⇧A"
-                          startContent={
-                            <ComputerDesktopIcon
-                              className={cn(
-                                iconClasses,
-                                "group-hover:text-white font-bold group-hover:border-white"
-                              )}
-                            />
-                          }
-                          variant="solid"
-                        >
-                          Activate Terminals
-                        </DropdownItem>
-                      ) : (
-                        <DropdownItem
-                          key="deactivate-terminals"
+                          key="delete-users"
+                          isReadOnly
                           className="text-danger"
                           classNames={{
                             shortcut:
                               "group-hover:text-white font-bold group-hover:border-white",
                           }}
                           color="danger"
-                          description="Deactivate collection terminals"
+                          description="Remove all members"
                           href="/support"
                           shortcut="⌘⇧D"
                           startContent={
                             <TrashIcon
-                              className={cn(
-                                iconClasses,
-                                "text-danger group-hover:text-white"
-                              )}
+                              className={
+                                "w-5 h-5 pointer-events-none flex-shrink-0 text-danger group-hover:text-white"
+                              }
                             />
                           }
                         >
-                          Deactivate Terminals
+                          Remove all Members
                         </DropdownItem>
-                      )}
-                    </DropdownSection>
-                  </DropdownMenu>
-                </Dropdown>
-              )}
-              <Tooltip
-                classNames={{
-                  content: "max-w-96 text-sm leading-6 p-3",
-                }}
-                color="secondary"
-                content="Show configured terminals"
-              >
-                <Button
-                  color={"secondary"}
-                  isDisabled={isLoadingTerminals || isLoadingConfig}
-                  variant="flat"
-                  onPress={() => setIsExpanded(!isExpanded)}
-                >
-                  {isExpanded ? (
-                    <EyeSlashIcon className="h-5 w-5 text-orange-600" />
-                  ) : (
-                    <ComputerDesktopIcon className="h-5 w-5 text-orange-600" />
-                  )}
-                </Button>
-              </Tooltip>
+                      </DropdownSection>
+                    </DropdownMenu>
+                  </Dropdown>
+                )}
             </div>
+
+            <Modal
+              backdrop="blur"
+              className={"z-[999]"}
+              isDismissable={false}
+              isOpen={isOpen || selectedServicePack?.isUpdating}
+              placement="top-center"
+              size={!selectedServicePack?.isUpdating ? "3xl" : undefined}
+              onClose={handleClose}
+            >
+              <ModalContent>
+                <ModalHeader className="flex flex-col">
+                  <h4 className="text-large font-bold">
+                    {selectedServicePack?.isUpdating
+                      ? "Edit Subscription Pack"
+                      : "Create New Subscription"}
+                  </h4>
+                  <small className="text-default-500 font-normal -mt-1">
+                    Add subscription packs that your members/users can pay for
+                  </small>
+                </ModalHeader>
+                <ModalBody>
+                  {selectedServicePack?.isUpdating ? (
+                    <>
+                      <Input
+                        required
+                        classNames={{
+                          wrapper: "col-span-5",
+                        }}
+                        label="Name"
+                        name={`service-pack-name`}
+                        placeholder="subscription Name"
+                        value={selectedServicePack?.name}
+                        onChange={(e) =>
+                          updateServiceData({ name: e.target.value })
+                        }
+                      />
+                      <Input
+                        required
+                        label="Key (Identifier)"
+                        name={`service-pack-key`}
+                        value={selectedServicePack?.key}
+                        onChange={(e) =>
+                          updateServiceData({ key: e.target.value })
+                        }
+                      />
+                      <Input
+                        required
+                        label="Price"
+                        min={1}
+                        name={`service-pack-price`}
+                        type="number"
+                        value={selectedServicePack?.price}
+                        onChange={(e) =>
+                          updateServiceData({ price: e.target.value })
+                        }
+                      />
+                    </>
+                  ) : (
+                    <SubscriptionPacks
+                      formData={formData}
+                      updateFormData={updateFormData}
+                    />
+                  )}
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color="danger"
+                    isDisabled={
+                      formData?.isLoading || selectedServicePack?.isLoading
+                    }
+                    onPress={handleClose}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    color="primary"
+                    isDisabled={
+                      formData?.isLoading || selectedServicePack?.isLoading
+                    }
+                    isLoading={
+                      formData?.isLoading || selectedServicePack?.isLoading
+                    }
+                    onPress={
+                      selectedServicePack?.isUpdating || formData?.isUpdating
+                        ? handleUpdateSubscription
+                        : handleCreateSubscription
+                    }
+                  >
+                    {formData?.isUpdating || selectedServicePack?.isUpdating
+                      ? "Save"
+                      : "Create"}
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
           </div>
 
-          <AnimatePresence>
-            <motion.div
-              animate={{
-                height: isExpanded ? "auto" : 0,
-                opacity: isExpanded ? 1 : 0,
-              }}
-              initial={{ height: 0, opacity: 0 }}
-            >
-              {hasTerminals && terminalsConfigured ? (
-                <TerminalsTable
-                  removeWrapper
-                  isLoading={isLoadingTerminals}
-                  rows={terminals}
+          <Table
+            removeWrapper
+            aria-label="SUBSCRIPTION PACK TABLE"
+            bottomContent={
+              <div className="flex w-full justify-center">
+                <Pagination
+                  isCompact
+                  showControls
+                  showShadow
+                  color="primary"
+                  page={page}
+                  total={pages}
+                  onChange={(page) => setPage(page)}
                 />
-              ) : (
-                <div className="-mt-4 flex h-full min-h-32 flex-1 items-center justify-center rounded-2xl bg-primary-50 text-sm font-medium dark:bg-foreground/5">
-                  {isLoadingTerminals || isLoadingConfig ? (
-                    <Loader
-                      classNames={{
-                        wrapper: "bg-foreground-200/50 rounded-xl h-full",
-                      }}
-                      loadingText={"Getting configuration..."}
-                      size={60}
-                    />
-                  ) : (
-                    <Tooltip
-                      classNames={{
-                        content: "max-w-96 text-sm leading-6 p-3",
-                      }}
-                      content="Terminals are like a POS/Till machines that can be used to collect payments from your customers."
-                    >
-                      <Button
-                        className={
-                          "flex-grow min-h-auto max-h-auto min-h-32 w-full flex-1 font-medium text-primary-600"
-                        }
-                        isDisabled={isLoadingConfig || mutation?.isPending}
-                        isLoading={isLoadingConfig || mutation?.isPending}
-                        loadingText={"Getting Configuration..."}
-                        startContent={
-                          terminalsConfigured && hasTerminals ? (
-                            <PlusIcon className={cn(iconClasses)} />
-                          ) : (
-                            <ComputerDesktopIcon className={cn(iconClasses)} />
-                          )
-                        }
-                        variant="light"
-                        onClick={
-                          terminalsConfigured && hasTerminals
-                            ? onAddTerminal
-                            : handleTerminalStatus
-                        }
-                      >
-                        {terminalsConfigured && hasTerminals
-                          ? "Add Terminals"
-                          : "Activate Terminals"}
-                      </Button>
-                    </Tooltip>
-                  )}
+              </div>
+            }
+            items={SERVICE_PACKS}
+          >
+            <TableHeader>
+              <TableColumn>##</TableColumn>
+              <TableColumn width={"50%"}>NAME</TableColumn>
+              <TableColumn width={"30%"}>KEY</TableColumn>
+              <TableColumn align="center" width={"10%"}>
+                AMOUNT
+              </TableColumn>
+              <TableColumn align="center">ACTIONS</TableColumn>
+            </TableHeader>
+            <TableBody
+              emptyContent={
+                "You have no subscription packs configured. Press the 'Create New' button to add a config"
+              }
+              isLoading={isLoadingConfig}
+              loadingContent={
+                <div className="relative flex w-full h-36 flex-1 items-center justify-center gap-2 rounded-lg bg-neutral-100/60">
+                  <span className="flex gap-4 text-sm sm:text-base font-bold capitalize text-primary">
+                    <Spinner size="sm" /> Initializing services...
+                  </span>
                 </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
+              }
+            >
+              {SERVICE_PACKS?.map((item, index) => (
+                <TableRow key={`${item?.name}-${index}-key`}>
+                  <TableCell>
+                    {/* <FileBoxIcon className="h-6 w-6" /> */}
+                    <span className="text-lg font-bold text-primary">
+                      #{index + 1}
+                    </span>
+                  </TableCell>
+                  <TableCell>{item?.name}</TableCell>
+                  <TableCell>{item?.key || "N/A"}</TableCell>
+
+                  <TableCell>
+                    <Chip
+                      classNames={{
+                        content:
+                          "uppercase rounded-sm text-lg font-semibold text-primary",
+                      }}
+                      color={"primary"}
+                      size="lg"
+                      variant="flat"
+                    >
+                      {formatCurrency(item?.price)}
+                    </Chip>
+                  </TableCell>
+
+                  <TableCell>
+                    {item?.name && (
+                      <div className="flex items-center gap-4">
+                        <Tooltip color="primary" content="Edit Subscription">
+                          <SquarePenIcon
+                            className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300 outline-none"
+                            onClick={() => {
+                              updateServiceData({ isUpdating: true, ...item });
+                              onOpen();
+                            }}
+                          />
+                        </Tooltip>
+                        <Tooltip color="danger" content="Delete Subscription">
+                          <TrashIcon
+                            className="h-5 w-5 cursor-pointer text-danger hover:text-red-300 outline-none"
+                            onClick={() => {
+                              // updateServiceData({ isUpdating: true, ...item });
+                              // onOpen();
+                            }}
+                          />
+                        </Tooltip>
+                      </div>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Card>
 
+        {/* RECENT TRANSACTIONS */}
         <Card>
           <div className="flex w-full items-center justify-between gap-4">
             <CardHeader
               className={"mb-4"}
               infoText={
-                "Transactions made to your workspace wallet in the last 30days."
+                "Subscription payment transactions made to your workspace wallet in the last 30days."
               }
               title={"Recent Transactions"}
             />
@@ -838,55 +591,160 @@ const Subscriptions = () => {
           <CustomTable
             // removeWrapper
             classNames={{ wrapper: "shadow-none px-0 mx-0" }}
-            columns={
-              hasTerminals && terminalsConfigured
-                ? API_KEY_TERMINAL_TRANSACTION_COLUMNS
-                : API_KEY_TRANSACTION_COLUMNS
-            }
+            columns={SUBSCRIPTION_PAYMENT_COLUMNS}
             isLoading={mutation.isPending}
             rows={LATEST_TRANSACTIONS}
           />
         </Card>
       </div>
-
-      <APIConfigViewModal
-        API_CONFIG={API_CONFIG}
-        isLoading={isLoadingConfig}
-        isOpen={openViewConfig}
-        onClose={() => {
-          setOpenViewConfig(false);
-          onClose();
-        }}
-      />
-
-      <TerminalConfigViewModal
-        isOpen={isOpenAddTerminal}
-        workspaceID={workspaceID}
-        onClose={onCloseTerminal}
-      />
-
-      {/* DELETE PROMPT MODAL */}
-      <PromptModal
-        confirmText={
-          USER_PROMPT_ACTIONS[currentActionIndex]?.confirmText || "Confirm"
-        }
-        isDisabled={isLoading}
-        isDismissable={false}
-        isLoading={isLoading}
-        isOpen={currentActionIndex !== null}
-        title={USER_PROMPT_ACTIONS[currentActionIndex]?.title}
-        onClose={handleClosePrompt}
-        onConfirm={USER_PROMPT_ACTIONS[currentActionIndex]?.onConfirmAction}
-        onOpen={onOpen}
-      >
-        <p className="-mt-4 text-sm leading-6 text-foreground/70">
-          <strong>{USER_PROMPT_ACTIONS[currentActionIndex]?.promptText}</strong>{" "}
-          <br />
-          {USER_PROMPT_ACTIONS[currentActionIndex]?.promptDescription}
-        </p>
-      </PromptModal>
     </>
   );
 };
+
+function SubscriptionPacks({ formData, updateFormData }) {
+  const [lineItems, setLineItems] = useState(
+    formData?.services || [{ name: "", price: 0, key: "" }]
+  );
+
+  const addLineItem = () => {
+    if (
+      formData?.services[formData.services.length - 1]?.name === "" ||
+      formData?.services[formData.services.length - 1]?.key === "" ||
+      formData?.services[formData.services.length - 1]?.price === 0
+    ) {
+      return;
+    }
+
+    // Both updates are good, but they need to happen after the check based on formData.services
+    const newLineItem = { name: "", price: 0, key: "" };
+
+    setLineItems((prev) => [...prev, newLineItem]); // Update local state for rendering
+    updateFormData({
+      services: [...(formData?.services || []), newLineItem], // Update form data
+    });
+  };
+
+  const removeLineItem = (index) => {
+    if (formData?.services.length > 1) {
+      const lineItemsCopy = [...formData?.services];
+
+      lineItemsCopy.splice(index, 1);
+
+      setLineItems(lineItemsCopy);
+      updateFormData({ services: lineItemsCopy });
+    }
+  };
+
+  // To keep lineItems in sync with formData.services
+  // whenever formData.services changes, as formData is a prop.
+  useEffect(() => {
+    if (
+      formData?.services &&
+      JSON.stringify(formData.services) !== JSON.stringify(lineItems)
+    ) {
+      setLineItems(formData.services);
+    }
+  }, [formData?.services]);
+
+  return (
+    <HeroUICard className="shadow-none bg-transparent min-h-60 -mt-4 rounded-none">
+      <CardBody className="max-h-[600px] px-0 mx-0 overflow-y-auto gap-4">
+        {lineItems?.map((_, index) => (
+          <div
+            key={"pack" + index}
+            className="grid grid-cols-1 md:grid-cols-9 gap-2 items-end border-b pb-4 pt-2 -mt-4 last:border-0"
+          >
+            <Input
+              required
+              classNames={{
+                wrapper: "col-span-3",
+              }}
+              label="Name"
+              name={`services.${index}.name`}
+              placeholder="Subscription Name"
+              value={formData?.services[index]?.name}
+              onChange={(e) => {
+                updateFormData({
+                  services: [
+                    ...formData?.services.slice(0, index),
+                    {
+                      ...formData?.services[index],
+                      name: e.target.value,
+                    },
+                    ...formData?.services.slice(index + 1),
+                  ],
+                });
+              }}
+            />
+            <Input
+              required
+              classNames={{
+                wrapper: "col-span-3",
+              }}
+              label="Key"
+              name={`services.${index}.key`}
+              placeholder="Identifier Key"
+              value={formData?.services[index]?.key}
+              onChange={(e) => {
+                updateFormData({
+                  services: [
+                    ...formData?.services.slice(0, index),
+                    {
+                      ...formData?.services[index],
+                      key: e.target.value,
+                    },
+                    ...formData?.services.slice(index + 1),
+                  ],
+                });
+              }}
+            />
+            <Input
+              required
+              classNames={{
+                wrapper: "col-span-2",
+              }}
+              label="Price"
+              min={1}
+              name={`services.${index}.price`}
+              type="number"
+              value={formData?.services[index]?.price}
+              onChange={(e) => {
+                updateFormData({
+                  services: [
+                    ...formData?.services.slice(0, index),
+                    {
+                      ...formData?.services[index],
+                      price: String(parseFloat(e.target.value)),
+                    },
+                    ...formData?.services.slice(index + 1),
+                  ],
+                });
+              }}
+            />
+
+            <div className={"flex gap-2 col-span-1"}>
+              <Button
+                isIconOnly
+                color="danger"
+                disabled={formData?.services.length === 1}
+                type="button"
+                variant="flat"
+                onClick={() => removeLineItem(index)}
+              >
+                <TrashIcon className="h-4 w-4" />
+              </Button>
+              <Button
+                isIconOnly
+                startContent={<PlusIcon className="h-4 w-4" />}
+                variant="flat"
+                onClick={addLineItem}
+              />
+            </div>
+          </div>
+        ))}
+      </CardBody>
+    </HeroUICard>
+  );
+}
 
 export default Subscriptions;

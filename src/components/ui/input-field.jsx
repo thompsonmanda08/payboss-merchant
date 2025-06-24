@@ -36,7 +36,7 @@ const Input = React.forwardRef(
         {label && (
           <label
             className={cn(
-              "pl-1 text-sm font-medium text-nowrap text-foreground/70",
+              "pl-1 text-sm font-medium text-nowrap text-foreground/70 mb-0.5",
               {
                 "text-red-500": onError || props?.isInvalid,
                 "opacity-50":

@@ -134,3 +134,13 @@ export const WALLET_STATEMENT_REPORT_COLUMNS = [
   { name: "STATUS", uid: "status", sortable: true },
   { name: "REMARKS", uid: "remarks", sortable: true },
 ];
+
+export const SUBSCRIPTION_PAYMENT_COLUMNS = [
+  { name: "DATE", uid: "created_at", sortable: true },
+  { name: "MEMBER NAME", uid: "name", sortable: true },
+  { name: "MEMBER ID", uid: "member_id", sortable: true },
+
+  { name: "SUBSCRIPTION", uid: "service" },
+  { name: "AMOUNT", uid: "total", sortable: true },
+  { name: "STATUS", uid: "status", sortable: true },
+];

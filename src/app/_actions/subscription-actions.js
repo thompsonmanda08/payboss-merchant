@@ -105,7 +105,7 @@ export async function updateSubscriptionPack(workspaceID, formData) {
  *
  * @returns {Promise<{success: boolean, message: string, data: object, status: number, statusText: string}>}
  */
-export async function getSubscriptionPack(workspaceID) {
+export async function getSubscriptionPacks(workspaceID) {
   const url = `merchant/transaction/collection/subscription/config/${workspaceID}`;
 
   try {

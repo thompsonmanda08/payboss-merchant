@@ -34,8 +34,9 @@ import MobileNavBar from "./mobile-menu";
 import { Button } from "@/components/ui/button";
 import { useWorkspaceInit } from "@/hooks/use-query-data";
 import { useParams, usePathname } from "next/navigation";
+import { TicketPercentIcon } from "lucide-react";
 
-function SideNavBar({ workspaceSession }) {
+function SideNavBar({}) {
   const pathname = usePathname();
 
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore();
@@ -52,12 +53,10 @@ function SideNavBar({ workspaceSession }) {
 
   const dashboardRoute = `/dashboard/${workspaceID}`;
 
-  // const [isLoading, setIsLoading] = useState(true);
-
-  const workspaces =
-    workspaceInit?.data?.workspaces || workspaceSession?.workspaces || [];
-  const activeWorkspace = workspaceInit?.data?.activeWorkspace || {};
-  const workspaceType = workspaceInit?.data?.workspaceType;
+  const workspaceSession = workspaceInit?.data || {};
+  const workspaces = workspaceSession.workspaces || [];
+  const activeWorkspace = workspaceSession?.activeWorkspace || {};
+  const workspaceType = workspaceSession?.workspaceType || "";
 
   // *************** COLLECTIONS AND INCOME *************** //
   const COLLECTION_SERVICES = [
@@ -75,6 +74,11 @@ function SideNavBar({ workspaceSession }) {
           name: "API Integration",
           href: `${dashboardRoute}/collections/api-integration`,
           Icon: AdjustmentsVerticalIcon,
+        },
+        {
+          name: "Subscriptions",
+          href: `${dashboardRoute}/collections/subscriptions`,
+          Icon: TicketPercentIcon,
         },
         {
           name: "Invoicing",
@@ -110,21 +114,6 @@ function SideNavBar({ workspaceSession }) {
           href: `${dashboardRoute}/payments`,
           Icon: ArrowsRightLeftIcon,
         },
-        // {
-        //   name: 'ZESCO',
-        //   href: `${dashboardRoute}/payments/zesco`,
-        //   Icon: ReceiptPercentIcon,
-        // },
-        // {
-        //   name: 'DSTV',
-        //   href: `${dashboardRoute}paymentsexpenses/dstv`,
-        //   Icon: ReceiptPercentIcon,
-        // },
-        // {
-        //   name: 'Airtime',
-        //   href: `${dashboardRoute}/payments/airtime`,
-        //   Icon: PhoneArrowDownLeftIcon,
-        // },
         // {
         //   name: 'Data Bundles',
         //   href: `${dashboardRoute}/payments/data-bundles`,
@@ -353,17 +342,7 @@ function SideNavBar({ workspaceSession }) {
   //   setTimeout(() => setIsLoading(false), 500);
   // }, []);
 
-  return Boolean(isLoading || isPending || !workspaceID) ? (
-    <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
-      <Skeleton className="mb-4 h-16 w-full rounded-xl" />
-      <div className="h-full space-y-4">
-        {Array.from({ length: 7 }).map((_, index) => (
-          <Skeleton key={index} className="h-9 w-full rounded-lg" />
-        ))}
-      </div>
-      <Skeleton className="mt-auto h-[48px] w-full rounded-xl" />
-    </div>
-  ) : (
+  return (
     <>
       <Button
         onClick={toggleMobileMenu}
@@ -381,13 +360,14 @@ function SideNavBar({ workspaceSession }) {
       >
         <nav
           className={cn(
-            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`,
+            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`
           )}
         >
           <Logo href={dashboardRoute} />
           <div className="relative py-2">
             <DropdownButton
               backdropBlur={true}
+              isDisabled={!workspaceID || isLoading || isPending}
               dropDownItems={WORKSPACES_OPTIONS}
             >
               <SoftBoxIcon className={"aspect-square h-9 w-10 p-2"}>
@@ -420,15 +400,27 @@ function SideNavBar({ workspaceSession }) {
               </div>
             </DropdownButton>
           </div>
-          <SideNavItems
-            expandedSection={expandedSection}
-            handleExpand={handleExpand}
-            handleMainLinkClick={handleMainLinkClick}
-            isMobileMenuOpen={openMobileMenu}
-            navBarItems={SIDE_BAR_OPTIONS}
-            pathname={pathname}
-            toggleMobileMenu={toggleMobileMenu}
-          />
+          {Boolean(isLoading || isPending || !workspaceID) ? (
+            <div className="flex h-full w-[380px] flex-col space-y-6 p-5">
+              <Skeleton className="mb-4 h-16 w-full rounded-xl" />
+              <div className="h-full space-y-4">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Skeleton key={index} className="h-8 w-full rounded-lg" />
+                ))}
+              </div>
+              <Skeleton className="mt-auto h-[40px] w-full rounded-xl" />
+            </div>
+          ) : (
+            <SideNavItems
+              expandedSection={expandedSection}
+              handleExpand={handleExpand}
+              handleMainLinkClick={handleMainLinkClick}
+              isMobileMenuOpen={openMobileMenu}
+              navBarItems={SIDE_BAR_OPTIONS}
+              pathname={pathname}
+              toggleMobileMenu={toggleMobileMenu}
+            />
+          )}
         </nav>
       </div>
       {/* MOBILE NAVIGATION */}
