@@ -26,7 +26,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Chip,
   addToast,
 } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -120,7 +119,7 @@ const APIIntegration = () => {
       getCollectionLatestTransactions(
         workspaceID,
         "api-integration",
-        dateRange,
+        dateRange
       ),
   });
 
@@ -524,7 +523,6 @@ const APIIntegration = () => {
             <TableHeader>
               <TableColumn width={"30%"}>NAME</TableColumn>
               <TableColumn width={"60%"}>API KEY</TableColumn>
-              <TableColumn width={"5%"}>STATE</TableColumn>
               <TableColumn align="center">ACTIONS</TableColumn>
             </TableHeader>
             <TableBody
@@ -564,19 +562,6 @@ const APIIntegration = () => {
                           </Button>
                         </>
                       )}
-                    </TableCell>
-
-                    <TableCell>
-                      <Chip
-                        classNames={{
-                          content: "uppercase text-white",
-                        }}
-                        color={item?.state === "prod" ? "success" : "warning"}
-                        size="sm"
-                        variant="solid"
-                      >
-                        {item?.state}
-                      </Chip>
                     </TableCell>
 
                     <TableCell>
@@ -625,7 +610,7 @@ const APIIntegration = () => {
                   <TableCell
                     align="center"
                     className="font-medium text-center"
-                    colSpan={4}
+                    colSpan={3}
                   >
                     <span className="flex gap-4 text-xs text-center text-foreground/50 py-2 w-max mx-auto">
                       You have no API keys generated
@@ -702,7 +687,7 @@ const APIIntegration = () => {
                             <ComputerDesktopIcon
                               className={cn(
                                 iconClasses,
-                                "group-hover:text-white font-bold group-hover:border-white",
+                                "group-hover:text-white font-bold group-hover:border-white"
                               )}
                             />
                           }
@@ -726,7 +711,7 @@ const APIIntegration = () => {
                             <TrashIcon
                               className={cn(
                                 iconClasses,
-                                "text-danger group-hover:text-white",
+                                "text-danger group-hover:text-white"
                               )}
                             />
                           }
