@@ -279,9 +279,9 @@ const Subscriptions = () => {
                 infoClasses: "!text-sm xl:text-base",
               }}
               infoText={
-                "Members will make payments to you by subscribing to the packs you create"
+                "Members will make payments to you by subscribing to the packages you create"
               }
-              title={"Subscription Packs"}
+              title={"Subscriptions"}
             />
             <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
               {SERVICE_PACKS?.length == 0 && (
