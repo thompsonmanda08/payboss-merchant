@@ -7,7 +7,7 @@ import {
   useDisclosure,
   addToast,
 } from "@heroui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
@@ -47,10 +47,9 @@ export default function InvoicingPage({}) {
   const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
   const end_date = formatDate(new Date(), "YYYY-MM-DD");
 
-  // HANDLE FETCH LATEST INVOICE TRANSACTIONS
-  const mutation = useMutation({
-    mutationKey: [QUERY_KEYS.INVOICES, workspaceID],
-    mutationFn: (dateRange) => getRecentInvoices(workspaceID, dateRange),
+  const { data: invoices, isLoading } = useQuery({
+    queryKey: [QUERY_KEYS.INVOICES, workspaceID],
+    queryFn: () => getRecentInvoices(workspaceID, { start_date, end_date }),
   });
 
   const transactionsMutation = useMutation({
@@ -61,8 +60,11 @@ export default function InvoicingPage({}) {
 
   useEffect(() => {
     // IF NO DATA IS FETCH THEN GET THE LATEST INVOICES
-    if (!mutation.data) {
-      mutation.mutateAsync({ start_date, end_date });
+    if (!invoices.data) {
+      // mutation.mutateAsync({ start_date, end_date });
+      queryClient.refetchQueries({
+        queryKey: [QUERY_KEYS.INVOICES, workspaceID],
+      });
     }
 
     // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
@@ -71,7 +73,7 @@ export default function InvoicingPage({}) {
     }
   }, []);
 
-  const LATEST_INVOICES = mutation.data?.data?.invoices || [];
+  const LATEST_INVOICES = invoices?.data?.invoices || [];
   const INVOICE_TRANSACTIONS = transactionsMutation.data?.data?.data || [];
 
   function handleClosePrompts() {
@@ -85,6 +87,7 @@ export default function InvoicingPage({}) {
     queryClient.invalidateQueries({
       queryKey: [QUERY_KEYS.INVOICE_COLLECTIONS, workspaceID],
     });
+    // mutation.mutateAsync({ start_date, end_date });
   }
 
   function handleOpenCreateModal() {
@@ -132,7 +135,7 @@ export default function InvoicingPage({}) {
         price: parseFloat(String(item?.unit_price || "0")),
         amount: parseFloat(
           parseInt(String(item?.quantity || "0")) *
-            parseFloat(String(item?.unit_price || "0")),
+            parseFloat(String(item?.unit_price || "0"))
         ),
       })),
       taxRate: parseFloat(String(invoiceData?.tax_rate || "0")),
@@ -190,7 +193,7 @@ export default function InvoicingPage({}) {
                 enabled: true,
               },
             }}
-            isLoading={mutation.isPending}
+            isLoading={isLoading}
             rows={LATEST_INVOICES}
             rowsPerPage={8}
             onRowAction={handleViewInvoice}
