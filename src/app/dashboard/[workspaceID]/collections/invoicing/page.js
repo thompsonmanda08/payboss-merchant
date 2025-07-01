@@ -59,8 +59,8 @@ export default function InvoicingPage({}) {
   });
 
   useEffect(() => {
-    // IF NO DATA IS FETCH THEN GET THE LATEST INVOICES
-    if (!invoices.data) {
+    // IF DATA IS NULL THEN GET THE LATEST INVOICES
+    if (!invoices?.data) {
       // mutation.mutateAsync({ start_date, end_date });
       queryClient.refetchQueries({
         queryKey: [QUERY_KEYS.INVOICES, workspaceID],
@@ -68,13 +68,13 @@ export default function InvoicingPage({}) {
     }
 
     // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
-    if (!transactionsMutation.data) {
+    if (!transactionsMutation?.data) {
       transactionsMutation.mutateAsync({ start_date, end_date });
     }
   }, []);
 
   const LATEST_INVOICES = invoices?.data?.invoices || [];
-  const INVOICE_TRANSACTIONS = transactionsMutation.data?.data?.data || [];
+  const INVOICE_TRANSACTIONS = transactionsMutation?.data?.data?.data || [];
 
   function handleClosePrompts() {
     onClose();
