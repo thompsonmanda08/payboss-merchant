@@ -35,7 +35,7 @@ import { Button } from "@/components/ui/button";
 import { useWorkspaceInit } from "@/hooks/use-query-data";
 import { useParams, usePathname } from "next/navigation";
 
-function SideNavBar({ workspaceSession }) {
+function SideNavBar({}) {
   const pathname = usePathname();
 
   const { openMobileMenu, toggleMobileMenu } = useNavigationStore();
@@ -46,9 +46,10 @@ function SideNavBar({ workspaceSession }) {
 
   const {
     data: workspaceInit,
-    isPending,
     isLoading,
+    isPending,
   } = useWorkspaceInit(workspaceID);
+  const workspaceSession = workspaceInit?.data;
 
   const dashboardRoute = `/dashboard/${workspaceID}`;
 
@@ -381,7 +382,7 @@ function SideNavBar({ workspaceSession }) {
       >
         <nav
           className={cn(
-            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`,
+            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`
           )}
         >
           <Logo href={dashboardRoute} />
