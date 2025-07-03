@@ -35,6 +35,7 @@ import { Button } from "@/components/ui/button";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import Search from "@/components/ui/search";
 import CreateNewUserModal from "@/app/manage-account/users/components/new-user-modal";
+import useKYCInfo from "@/hooks/use-kyc-info";
 
 const ACCOUNT_ROLES = [
   {
@@ -112,6 +113,7 @@ export default function UsersTable({
   const queryClient = useQueryClient();
   const [page, setPage] = React.useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isApprovedUser } = useKYCInfo();
   const [isCreateUser, setIsCreateUser] = useState(false);
   const [openUnlockUserPrompt, setOpenUnlockUserPrompt] = useState(false);
   const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false);
@@ -126,7 +128,7 @@ export default function UsersTable({
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS),
+    new Set(INITIAL_VISIBLE_COLUMNS)
   );
 
   const [roleFilter, setRoleFilter] = React.useState("all");
@@ -144,7 +146,7 @@ export default function UsersTable({
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
+      Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
 
@@ -159,7 +161,7 @@ export default function UsersTable({
           row?.first_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.last_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.email?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-          row?.username?.toLowerCase().includes(filterValue?.toLowerCase()),
+          row?.username?.toLowerCase().includes(filterValue?.toLowerCase())
       );
     }
 
@@ -306,7 +308,7 @@ export default function UsersTable({
         </Tooltip>
       );
     },
-    [permissions?.edit, permissions?.create, isUsersRoute],
+    [permissions?.edit, permissions?.create, isUsersRoute]
   );
 
   // TABLE CELL RENDERER
@@ -369,7 +371,7 @@ export default function UsersTable({
           return cellValue;
       }
     },
-    [isUsersRoute],
+    [isUsersRoute]
   );
 
   async function resetUserPassword() {
@@ -435,6 +437,8 @@ export default function UsersTable({
     }
   }
 
+  console.log("PEM", permissions, isApprovedUser);
+
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -469,20 +473,18 @@ export default function UsersTable({
               onSelectionChange={setVisibleColumns}
             />
 
-            {permissions?.create &&
-              permissions?.isApprovedUser &&
-              isUsersRoute && (
-                <Button
-                  color="primary"
-                  endContent={<PlusIcon className="h-5 w-5" />}
-                  onPress={() => {
-                    onOpen();
-                    setIsCreateUser(true);
-                  }}
-                >
-                  Create New User
-                </Button>
-              )}
+            {permissions?.create && isApprovedUser && isUsersRoute && (
+              <Button
+                color="primary"
+                endContent={<PlusIcon className="h-5 w-5" />}
+                onPress={() => {
+                  onOpen();
+                  setIsCreateUser(true);
+                }}
+              >
+                Create New User
+              </Button>
+            )}
             {(permissions?.create || permissions?.edit) && !isUsersRoute && (
               <Button
                 color="primary"
@@ -516,6 +518,7 @@ export default function UsersTable({
     filterValue,
     roleFilter,
     visibleColumns,
+    isApprovedUser,
     onRowsPerPageChange,
     users.length,
     onSearchChange,
@@ -735,7 +738,7 @@ export function UserAvatarComponent({
     <div
       className={cn(
         "flex max-w-max cursor-pointer items-center justify-start gap-4 transition-all duration-200 ease-in-out",
-        wrapper,
+        wrapper
       )}
       onClick={(e) => {
         e.stopPropagation();
@@ -760,7 +763,7 @@ export function UserAvatarComponent({
         <p
           className={cn(
             "text-base font-semibold leading-6 text-foreground/80",
-            {},
+            {}
           )}
         >{`${firstName} ${lastName}`}</p>
         <p className={cn("text-[11px] font-medium text-foreground/50", {})}>
