@@ -3,8 +3,10 @@ import React from "react";
 import { User, Mail, Phone, Edit, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
-import { cn } from "@/lib/utils";
+import { capitalize, cn } from "@/lib/utils";
 import useKYCInfo from "@/hooks/use-kyc-info";
+import { useWorkspaceInit } from "@/hooks/use-query-data";
+import { useParams } from "next/navigation";
 
 export default function UserProfile({
   showBusinessDetails = false,
@@ -23,11 +25,18 @@ export default function UserProfile({
 }) {
   const { businessDetails } = useKYCInfo();
 
+  const params = useParams();
+  const workspaceID = params?.workspaceID;
+
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+  const workspaceSession = workspaceInit?.data;
+  const permissions = workspaceSession?.workspacePermissions;
+
   return (
     <Card
       className={cn(
         "max-w-[360px] mx-auto flex-1 overflow-hidden border-none outline-none shadow",
-        classNames?.card,
+        classNames?.card
       )}
     >
       {/* Header with gradient background */}
@@ -66,7 +75,9 @@ export default function UserProfile({
           <h2 className="text-2xl font-bold text-white mt-4">
             {user.first_name} {user.last_name}
           </h2>
-          <p className="text-blue-100 capitalize">{user.role}</p>
+          <p className="text-blue-100 capitalize">
+            {capitalize(permissions?.role || user?.role)}
+          </p>
         </div>
       </CardHeader>
 

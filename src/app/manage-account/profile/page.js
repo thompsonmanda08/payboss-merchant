@@ -9,7 +9,7 @@ async function AccountSettings() {
   return (
     <>
       <section
-        className="flex w-full flex-col mb-6 px-4 md:px-0 gap-2"
+        className="flex w-full flex-col mb-6 px-4 md:px-4 gap-2"
         role="account-profile-header"
       >
         <h2 className="heading-3 !font-bold tracking-tight text-foreground ">
@@ -19,7 +19,10 @@ async function AccountSettings() {
           Manage your account profile and security settings.
         </p>
       </section>
-      <section className="flex flex-col gap-4" role="account-profile-content">
+      <section
+        className="flex flex-col gap-4 px-4"
+        role="account-profile-content"
+      >
         <div className="flex w-full flex-col md:flex-row gap-4">
           <UserProfile showBusinessDetails user={user} />
           <ProfileSecuritySettings />
