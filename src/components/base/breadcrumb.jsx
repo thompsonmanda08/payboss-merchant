@@ -9,7 +9,7 @@ import useNavigation from "@/hooks/use-navigation";
 
 export default function BreadCrumbLinks() {
   const router = useRouter();
-  const { pathname, pathArr, isProfile } = useNavigation();
+  const { pathname, pathArr } = useNavigation();
   const { workspaces, workspaceID } = useWorkspaces();
 
   const [path, setPath] = useState([""]);
@@ -18,7 +18,7 @@ export default function BreadCrumbLinks() {
     /********************* WORKSPACE NAME ********************** */
     if (pathArr.length > 2 && pathname?.startsWith("/dashboard")) {
       let workspace = workspaces?.find(
-        (item) => item?.ID == workspaceID,
+        (item) => item?.ID == workspaceID
       )?.workspace;
 
       pathArr[2] = workspace;
@@ -39,8 +39,7 @@ export default function BreadCrumbLinks() {
                   ` cursor-pointer px-2 font-medium capitalize text-slate-400`,
                   {
                     "text-foreground/70": idx === path.length - 1,
-                    "text-white": isProfile,
-                  },
+                  }
                 )}
               >
                 {segment?.replace(/-|%20/g, " ")}
@@ -48,10 +47,7 @@ export default function BreadCrumbLinks() {
               {idx < path.length - 1 && (
                 <ChevronRightIcon
                   className={cn(
-                    "h-3 w-3 text-foreground/50 hover:text-primary",
-                    {
-                      "text-white": isProfile,
-                    },
+                    "h-3 w-3 text-foreground/50 hover:text-primary"
                   )}
                 />
               )}

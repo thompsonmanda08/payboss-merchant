@@ -30,14 +30,15 @@ import Avatar from "@/components/ui/avatar";
 import NavIconButton from "@/components/ui/nav-icon-button";
 import { useParams } from "next/navigation";
 
-export default function TopNavBar({ user, workspaceSession }) {
+export default function TopNavBar({ user }) {
   const params = useParams();
   const workspaceID = params.workspaceID;
 
+  const { data: workspaceInit, isLoading } = useWorkspaceInit(workspaceID);
+  const workspaceSession = workspaceInit?.data;
+
   const { isProfile, currentPath, dashboardRoute, router } =
     useNavigation(workspaceSession);
-
-  const { data: workspaceInit, isLoading } = useWorkspaceInit(workspaceID);
 
   const activeWorkspace =
     workspaceInit?.data?.activeWorkspace || workspaceSession?.activeWorkspace;
@@ -49,27 +50,20 @@ export default function TopNavBar({ user, workspaceSession }) {
   return (
     <nav
       className={cn(
-        `rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center rounded-xl bg-background/80 py-3 pr-5 shadow-sm backdrop-blur-md transition-all md:pl-2 lg:sticky lg:-top-2.5 lg:justify-start lg:shadow-none`,
-        {
-          "bg-transparent lg:static px-10 pl-20 pr-10 text-white backdrop-blur-none":
-            isProfile,
-        },
-        // { 'bg-red-600 ': isFloating },
+        `rounded-blur top-navigation fixed left-0 right-0 top-5 z-50 flex w-full -translate-y-5 items-center rounded-xl bg-background/80 py-3 pr-5 shadow-sm backdrop-blur-md transition-all md:pl-2 lg:sticky lg:-top-2.5 lg:justify-start lg:shadow-none`
       )}
     >
       <div className="flex w-full items-center">
         {/* LEFT SIDE */}
         <div
           className={cn(
-            "relative left-16 hidden transition-all duration-300 ease-in-out lg:left-0 lg:block",
-            { "pl-5": isProfile },
+            "relative left-16 hidden transition-all duration-300 ease-in-out lg:left-0 lg:block"
           )}
         >
-          <BreadCrumbLinks isProfile={isProfile} />
+          <BreadCrumbLinks />
           <h2
             className={cn(
-              "pl-2 text-lg font-bold uppercase leading-8 text-foreground/80",
-              { "text-white": isProfile },
+              "pl-2 text-lg font-bold uppercase leading-8 text-foreground/80"
             )}
           >
             {currentPath}
@@ -79,24 +73,16 @@ export default function TopNavBar({ user, workspaceSession }) {
         {/* FAR RIGHT SIDE */}
         <div
           className={cn(
-            "relative z-50 ml-auto flex  items-center justify-center rounded-full",
-            {
-              "bg-card/5 pl-4 pr-1 py-0.5": isProfile,
-            },
+            "relative z-50 ml-auto flex  items-center justify-center rounded-full"
           )}
         >
           <div
-            className={cn("flex items-center gap-4 text-foreground-400", {
-              "text-white": isProfile,
-            })}
+            className={cn("flex items-center gap-4 text-foreground-400", {})}
           >
             <Button
               variant="link"
               className={cn(
-                "flex group cursor-pointer items-start gap-2 text-foreground-600",
-                {
-                  "text-white": isProfile,
-                },
+                "flex group cursor-pointer items-start gap-2 text-foreground-600"
               )}
               onPress={() => {
                 router.push(`${dashboardRoute}/workspace-settings?wallet=true`);
@@ -104,25 +90,17 @@ export default function TopNavBar({ user, workspaceSession }) {
             >
               <span
                 className={cn(
-                  "rounded-lg w-9 h-9 grid place-items-center aspect-square bg-primary",
+                  "rounded-lg w-9 h-9 grid place-items-center aspect-square bg-primary"
                 )}
               >
                 <WalletIcon className="h-5 w-5 text-white" />
               </span>
 
               <div className="flex flex-col items-start gap-1 ">
-                <span
-                  className={cn("text-sm leading-4 tracking-wide", {
-                    "text-white group-hover:text-white": isProfile,
-                  })}
-                >
+                <span className={cn("text-sm leading-4 tracking-wide")}>
                   Wallet Balance
                 </span>
-                <span
-                  className={cn("-mt-1 text-sm font-bold text-primary", {
-                    "text-white": isProfile,
-                  })}
-                >
+                <span className={cn("-mt-1 text-sm font-bold text-primary")}>
                   {formatCurrency(workspaceWalletBalance || "0.00")}
                 </span>
               </div>
@@ -150,14 +128,14 @@ export function AvatarDropdown({ user, isProfile, workspaceSession }) {
 
   const { handleUserLogOut } = useAuthStore((state) => state);
 
+  const permissions = workspaceSession?.workspacePermissions;
+
   const { dashboardRoute } = useNavigation(workspaceSession);
 
   const { theme, setTheme } = useTheme();
   const [isSelected, setIsSelected] = React.useState(
-    theme == "dark" ? true : false,
+    theme == "dark" ? true : false
   );
-
-  const permissions = workspaceSession?.workspacePermissions;
 
   return (
     <Dropdown
@@ -168,7 +146,7 @@ export function AvatarDropdown({ user, isProfile, workspaceSession }) {
           "p-0 border-sm border-divider bg-card border-[1px] border-border",
           {
             "bg-card/80 backdrop-blur-md": isProfile,
-          },
+          }
         ),
       }}
       radius="sm"
@@ -305,7 +283,7 @@ export function NavbarLoader({ isProfile }) {
             "mb-2 aspect-square h-[5px] w-full max-w-xl rounded-lg",
             {
               "bg-foreground-200 p-4 backdrop-blur-md": isProfile,
-            },
+            }
           )}
         />
         <Skeleton

@@ -47,9 +47,10 @@ function SideNavBar({}) {
 
   const {
     data: workspaceInit,
-    isPending,
     isLoading,
+    isPending,
   } = useWorkspaceInit(workspaceID);
+  const workspaceSession = workspaceInit?.data;
 
   const dashboardRoute = `/dashboard/${workspaceID}`;
 
