@@ -533,6 +533,7 @@ export default function CheckoutConfig({ workspaceID }) {
       <Modal
         isDismissable
         isKeyboardDismissDisabled
+        placement="center"
         className={"z-[99999999] max-w-full 2xl:max-w-[calc(100svw-200px)]"}
         isOpen={isOpen && openViewConfig}
         onClose={onClose}

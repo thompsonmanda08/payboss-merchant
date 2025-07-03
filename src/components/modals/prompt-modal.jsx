@@ -23,6 +23,7 @@ function PromptModal({
   isKeyboardDismissDisabled = true,
   className,
   backdrop,
+  placement = "bottom-center",
   removeActionButtons = false,
   children,
 }) {
@@ -32,6 +33,7 @@ function PromptModal({
       className={cn("z-[99999999] max-w-[600px]", className)}
       isDismissable={isDismissable}
       isKeyboardDismissDisabled={isKeyboardDismissDisabled}
+      placement={placement}
       isOpen={isOpen}
       size={size}
       onClose={onClose}

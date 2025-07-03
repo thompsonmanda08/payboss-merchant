@@ -46,7 +46,7 @@ const eslintConfig = [
       "react-hooks/exhaustive-deps": "off",
       "jsx-a11y/click-events-have-key-events": "warn",
       "jsx-a11y/interactive-supports-focus": "warn",
-      "trailing-comma": "off",
+      "trailing-comma": "on",
       "prettier/prettier": [
         "warn",
         {
