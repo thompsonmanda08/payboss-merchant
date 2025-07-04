@@ -27,8 +27,6 @@ export async function authenticateUser(loginCredentials) {
   try {
     const res = await apiClient.post(url, loginCredentials);
 
-    console.log("LOGIN RESPONSE ==>", res);
-
     const response = res.data;
 
     const accessToken = response?.token;
