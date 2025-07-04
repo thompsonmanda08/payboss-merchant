@@ -21,8 +21,6 @@ export const setupAccountConfig = cache(async () => {
   try {
     const res = await authenticatedApiClient({ url });
 
-    console.log("SETUP RESPONSE ==>", res);
-
     // CREATE A USER SESSION COOKIE TO STORE THE LOGGED IN USER DATA
     await setupUserSessions(res?.data);
 

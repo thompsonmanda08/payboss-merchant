@@ -437,8 +437,6 @@ export default function UsersTable({
     }
   }
 
-  console.log("PEM", permissions, isApprovedUser);
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
