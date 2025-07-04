@@ -60,6 +60,7 @@ function LoginForm() {
 
       return;
     }
+    console.log("REDIRECTING TO WORKSPACES ==>", response);
 
     // queryClient.invalidateQueries();
     setAuth(response?.data);
