@@ -912,9 +912,12 @@ function SubscriptionPacks({ formData, updateFormData }) {
     }
   };
 
-  /// each service in formdata should have a unique key
-  function isUniqueKey(keyInput) {
-    return !formData?.services?.some((service) => service.key === keyInput);
+  function isUniqueKey(keyInput, currentIndex) {
+    return (
+      formData?.services?.filter(
+        (service, idx) => service.key === keyInput && idx !== currentIndex
+      ).length === 0
+    );
   }
 
   // To keep lineItems in sync with formData.services
@@ -966,7 +969,7 @@ function SubscriptionPacks({ formData, updateFormData }) {
               label="Key"
               name={`services.${index}.key`}
               placeholder="Identifier Key"
-              onError={isUniqueKey(formData?.services[index]?.key)}
+              onError={!isUniqueKey(formData?.services[index]?.key, index)}
               errorText="Key must be unique"
               value={formData?.services[index]?.key}
               onChange={(e) => {
