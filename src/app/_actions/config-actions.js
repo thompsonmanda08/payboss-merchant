@@ -121,7 +121,6 @@ export const revokeAccessToken = async () => {
 export async function setupUserSessions(sessionData) {
   // CREATE A USER SESSION COOKIE TO STORE THE LOGGED IN USER DATA
   try {
-    console.log("SETTING UP SESSION COOKIE ==>", sessionData);
     await Promise.all([
       createUserSession({
         user: sessionData?.userDetails,
@@ -143,8 +142,6 @@ export async function setupUserSessions(sessionData) {
     console.error("Error setting up user sessions:", error);
     if (error) throw error;
   }
-
-  console.log("DONE SETTING UP SESSION COOKIE ==>", true);
 
   return;
 }
