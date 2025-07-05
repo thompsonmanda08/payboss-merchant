@@ -18,7 +18,7 @@ import { usePathname } from "next/navigation";
 import { lockScreenOnUserIdle } from "@/app/_actions/auth-actions";
 
 import { Button } from "@/components/ui/button";
-// import { useRefreshToken } from "@/hooks/use-query-data";
+import { useRefreshToken } from "@/hooks/use-query-data";
 
 function ScreenLock({ open }) {
   const { isOpen, onClose } = useDisclosure();
@@ -159,7 +159,7 @@ export function IdleTimerContainer({ authSession }) {
 
   const loggedIn = authSession?.accessToken;
 
-  // const {} = useRefreshToken(loggedIn && state !== "Idle");
+  useRefreshToken(loggedIn && state !== "Idle");
 
   const onIdle = async () => {
     setState("Idle");
