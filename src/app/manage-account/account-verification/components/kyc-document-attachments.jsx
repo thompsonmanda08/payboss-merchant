@@ -53,6 +53,14 @@ const ALL_DOCUMENT_CONFIGS = [
     tooltip:
       "Upload a certified copies of all the company Directors' National IDs",
   },
+  {
+    id: "PASSPORT_PHOTOS",
+    label: "Directors' Passport Size Photos",
+    backendKey: "passport_photos_url",
+    required: true,
+    tooltip:
+      "Upload a copies of all the company Directors' passport size photos as one PDF file.",
+  },
 
   {
     id: "TAX_CLEARANCE",
@@ -310,6 +318,7 @@ export default function DocumentAttachments({
     documents.organisation_structure_url &&
     documents.professional_license_url &&
     documents.director_nrc_url &&
+    documents.passport_photos_url &&
     documents.proof_of_address_url &&
     documents.bank_statement_url;
 
@@ -364,7 +373,7 @@ export default function DocumentAttachments({
                     [docConfig.id]: await handleFileUpload(
                       file,
                       docFiles[docConfig.id]?.file_record_id,
-                      docConfig.id,
+                      docConfig.id
                     ),
                   })
                 }
@@ -377,7 +386,7 @@ export default function DocumentAttachments({
                     "w-5 h-5 text-gray-300 dark:text-gray-600 hover:text-secondary absolute top-8 right-2 focus:outline-none transition-all duration-300 ease-in-out",
                     {
                       "right-8": docFiles[docConfig.id]?.file_url,
-                    },
+                    }
                   )}
                 />
               </Tooltip>
@@ -429,7 +438,7 @@ export default function DocumentAttachments({
             className={"justify-end ml-auto"}
             onPress={() =>
               onCompletionNavigateTo(
-                allowUserToSubmitKYC ? "summary" : "contract",
+                allowUserToSubmitKYC ? "summary" : "contract"
               )
             }
           >

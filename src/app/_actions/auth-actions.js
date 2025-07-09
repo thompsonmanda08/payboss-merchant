@@ -509,8 +509,6 @@ export async function getRefreshToken() {
   try {
     const res = await authenticatedApiClient({ url });
 
-    console.log("REFRESH TOKEN RESPONSE ==>", res);
-
     const response = res.data;
 
     const accessToken = response?.token;
