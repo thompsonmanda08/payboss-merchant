@@ -3,7 +3,18 @@ import { Button } from "@/components/ui/button";
 import ProgressStep from "@/components/elements/progress-step";
 import AutoCompleteField from "@/components/base/auto-complete";
 import CustomCardHeader from "@/components/base/card-header";
-import { Checkbox, Chip, Input, Textarea } from "@heroui/react";
+import {
+  Card as HerouiCard,
+  CardBody,
+  CardFooter,
+  Checkbox,
+  Chip,
+  Divider,
+  Image,
+  Input,
+  Link,
+  Textarea,
+} from "@heroui/react";
 import {
   CreditCard,
   School,
@@ -180,7 +191,7 @@ export default function SelectPaymentPackage({
   }, [formData, validateStep2, getSelectedPackageDetails, getTotalAmount]);
 
   return (
-    <Card className="shadow-none border border-gray-200 max-w-4xl mx-auto">
+    <Card className="shadow-none border border-gray-200 max-w-xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center text-lg">
           <CreditCard className="w-5 h-5 mr-2 text-primary-600" />
@@ -188,13 +199,49 @@ export default function SelectPaymentPackage({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Selected School Display */}
-        <div className="bg-primary-50 p-4 rounded-lg">
-          <p className="text-sm text-primary-700 mb-1">Selected Institution:</p>
-          <p className="font-semibold text-primary-900">
-            {SCHOOLS.find((s) => s.id === formData.institution)?.name}
-          </p>
-        </div>
+        <HerouiCard className="shadow-none border rounded-lg border-gray-200">
+          <CardBody className="flex flex-row items-center gap-2">
+            <Image
+              alt="Logo"
+              height={60}
+              radius="sm"
+              src={
+                formData?.institution?.logo || "/images/logos/payboss-icon.svg"
+              }
+              className="aspect-square w-20 object-cover bg-primary-50"
+              width={60}
+            />
+            <div className="flex flex-col">
+              <p className="text-lg font-semibold">
+                {formData.formData?.member_details?.name || formData?.fullName}
+              </p>
+              <p className="text-sm text-default-500">
+                ID: {formData?.member_details?.member_id || formData?.user_id}
+              </p>
+            </div>
+          </CardBody>
+
+          <Divider />
+          <CardFooter>
+            <p className="text-sm font-bold flex items-center gap-2 w-full justify-between">
+              Institution: {formData?.institution?.name}{" "}
+              <Link
+                className="text-md"
+                isExternal
+                showAnchorIcon
+                href={
+                  formData?.institution?.website ||
+                  formData?.institution?.redirect_url ||
+                  "#"
+                }
+                target="_blank"
+              >
+                Visit Website
+              </Link>
+            </p>
+          </CardFooter>
+        </HerouiCard>
+
         {/* Payment Packages */}
         <div className="space-y-3">
           <CustomCardHeader
@@ -233,21 +280,13 @@ export default function SelectPaymentPackage({
                         </p>
                       </div>
                       <p className="text-sm text-foreground/60 mb-2 text-left">
-                        {pkg.name.includes("Annual")
-                          ? "Annual tuition fee for secondary education"
-                          : pkg.name.includes("Enrollment")
-                            ? "One-time enrollment fee for university admission"
-                            : pkg.name.includes("Sports")
-                              ? "Annual sports club membership fee"
-                              : pkg.name.includes("Materials")
-                                ? "Books, lab materials, and digital resources"
-                                : "Voluntary contribution to school development"}
+                        {pkg.key}
                       </p>
-                      <div className="flex">
-                        <Chip size="sm" radius="sm" className="mr-auto rounded">
-                          {pkg.category}
-                        </Chip>
-                      </div>
+                      {/* <div className="flex">
+                        <p className="text-lg font-semibold text-primary-600">
+                          {formatCurrency(pkg?.amount)}
+                        </p>
+                      </div> */}
                     </div>
                   </div>
                 </button>

@@ -97,7 +97,7 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
   const INSTITUTIONS = useMemo(() => {
     const all = [
       ...(institutionsResponse?.data?.institutions || []),
-      ...SCHOOLS,
+      // ...SCHOOLS,
     ];
 
     return all.map((item) => {
@@ -157,6 +157,8 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
     setErrors({});
   }
 
+  console.log("formData", formData);
+
   //************ STEPS TO CREATE A PAYMENT ACTION *****************/
   return (
     <div className="flex flex-col w-full container mx-auto">
@@ -170,13 +172,13 @@ export default function SubscriptionPaymentForm({ navigateTo }) {
             >
               ← Back to Home
             </Button>
-            <Button
+            {/* <Button
               variant="light"
-              onPress={() => navigateTo(2)}
+              onPress={() => navigateTo()}
               className="text-gray-600  hover:text-gray-900"
             >
               See How It Works →
-            </Button>
+            </Button> */}
           </div>
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">

@@ -10,9 +10,9 @@ import HowItWorksSection from "./components/how-it-works";
 
 export default function SubscriptionsMiniApp() {
   const { activeTab, navigateTo } = useCustomTabsHook([
-    <SubScriptionLandingSection key={"landing"} navigateTo={goTo} />,
-    <SubscriptionPaymentForm key={"payment"} navigateTo={goTo} />,
     <HowItWorksSection key={"how-it-works"} navigateTo={goTo} />,
+    // <SubScriptionLandingSection key={"landing"} navigateTo={goTo} />,
+    <SubscriptionPaymentForm key={"payment"} navigateTo={goTo} />,
   ]);
 
   function goTo(index) {

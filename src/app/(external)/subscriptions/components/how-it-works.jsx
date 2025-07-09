@@ -6,7 +6,7 @@ import { ArrowDown, ArrowRight } from "lucide-react";
 const HowItWorksSection = ({ navigateTo }) => {
   return (
     <div className="grid flex-1">
-      <div className="container relative w-full flex flex-col lg:flex-row items-center gap-8 mx-auto px-6 bg-red-500">
+      <div className="container relative w-full flex flex-col lg:flex-row items-center gap-8 mx-auto px-6">
         {/* LEFT SIDE */}
         <div className="text-center mb-8 flex-1">
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -89,10 +89,10 @@ const HowItWorksSection = ({ navigateTo }) => {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <div className="w-2 h-8 bg-green-400 rounded"></div>
-                  <div className="w-2 h-8 bg-green-400 rounded"></div>
-                  <div className="w-2 h-8 bg-blue-500 rounded"></div>
-                  <div className="w-2 h-8 bg-gray-300 rounded"></div>
+                  <div className="w-2 h-8 bg-green-400 rounded animate-pulse"></div>
+                  <div className="w-2 h-8 bg-green-400 rounded animate-pulse delay-150"></div>
+                  <div className="w-2 h-8 bg-blue-500 rounded animate-pulse delay-300"></div>
+                  <div className="w-2 h-8 bg-gray-300 rounded animate-pulse delay-450"></div>
                 </div>
               </div>
             </Card>
@@ -141,14 +141,14 @@ const HowItWorksSection = ({ navigateTo }) => {
       {/* Company logos */}
       <div className=" text-center">
         <div className="flex items-center justify-center gap-8 opacity-40">
-          <span className="text-lg font-medium text-gray-600">ZICA</span>
+          <span className="text-lg font-medium text-gray-600">GRZ</span>
           <span className="text-lg font-medium text-gray-600">Corporates</span>
           <span className="text-lg font-medium text-gray-600">Schools</span>
           <span className="text-lg font-medium text-gray-600">NGOs</span>
         </div>
       </div>
 
-      <div className="flex w-full items-center justify-center mt-4">
+      {/* <div className="flex w-full items-center justify-center mt-4">
         <Button
           variant="light"
           onPress={() => navigateTo(0)}
@@ -156,7 +156,7 @@ const HowItWorksSection = ({ navigateTo }) => {
         >
           ← Back to Home
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };

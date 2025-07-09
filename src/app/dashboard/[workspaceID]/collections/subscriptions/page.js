@@ -610,7 +610,7 @@ const Subscriptions = () => {
               </span>
             </div>
           ) : SERVICE_PACKS.length > 0 ? (
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] py-2  gap-4 max-h-[600px] overflow-y-auto no-scrollbar">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] py-2  gap-4 max-h-[600px] overflow-y-auto no-scrollbar">
               {SERVICE_PACKS.map((subscription) => (
                 <div key={subscription.key} className="p-1 group ">
                   <div className=" p-4 relative backdrop-blur-xl rounded-2xl border border-slate-500/10 hover:shadow-md hover:shadow-primary/5 overflow-clip transition-all duration-300 hover:scale-[1.01] bg-card">
@@ -618,7 +618,7 @@ const Subscriptions = () => {
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-600 via-primary-400 to-purple-300" />
 
                     {/* Subscription Info */}
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                       <div className="flex items-center gap-2 justify-between">
                         <div className="flex gap-2">
                           <SoftBoxIcon className={"w-10 h-10 p-1"}>
@@ -628,7 +628,7 @@ const Subscriptions = () => {
                             {subscription.name}
                           </h3>
                         </div>
-                        <div className="relative group-hover:opacity-100 opacity- transition-all duration-300 ease-in-out flex gap-2">
+                        <div className="relative group-hover:opacity-100 opacity-0 transition-all duration-300 ease-in-out flex gap-2">
                           <button
                             className="p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors duration-200 hover:scale-105"
                             onClick={() => {
