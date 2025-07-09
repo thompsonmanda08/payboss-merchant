@@ -176,8 +176,6 @@ export default function CheckoutConfig({ workspaceID }) {
     }
   }
 
-  console.log("PERMISSIONS DATA", permissions);
-
   async function handleCheckoutURLGenerate() {
     setIsLoading(true);
 

@@ -97,7 +97,7 @@ function AccountVerification({}) {
 
   const [activeSection, setActiveSection] = useState(
     SIDEBAR_ITEMS.find((item) => item.status === "inProgress")?.id ||
-      SIDEBAR_ITEMS[0].id,
+      SIDEBAR_ITEMS[0].id
   );
 
   const navigateToSection = (sectionId) => {
@@ -113,7 +113,7 @@ function AccountVerification({}) {
       // FILTER OUT CONTRACTS IN KYC NOT COMPLETED
       if (!isCompleteKYC) {
         newSections = newSections.filter(
-          (section) => section.id !== "contract",
+          (section) => section.id !== "contract"
         );
       }
 
@@ -182,8 +182,9 @@ function AccountVerification({}) {
             documents.articles_of_association_url &&
             documents.organisation_structure_url &&
             documents.director_nrc_url &&
+            documents.passport_photos_url &&
             documents.proof_of_address_url &&
-            documents.bank_statement_url,
+            documents.bank_statement_url
         )
       ) {
         updateStatus("documents", "completed");
@@ -201,7 +202,7 @@ function AccountVerification({}) {
           <ProgressStageTracker
             onCompletionNavigateTo={() =>
               navigateToSection(
-                sections.find((s) => s.status === "pending")?.id || "business",
+                sections.find((s) => s.status === "pending")?.id || "business"
               )
             }
           />
@@ -312,7 +313,7 @@ function AccountVerification({}) {
                             "hidden lg:block absolute left-[40px] transition-all duration-300 ease-in-out top-8 -ml-px mt-0.5 h-full w-0.5 bg-primary-300 dark:bg-primary-600",
                             {
                               "bg-primary-600 dark:bg-primary-400": isCompleted,
-                            },
+                            }
                           )}
                         />
                       )}
@@ -328,7 +329,7 @@ function AccountVerification({}) {
                               isActive,
                             "hover:bg-gray-50 dark:hover:bg-gray-800":
                               !isActive,
-                          },
+                          }
                         )}
                         onClick={() => setActiveSection(item.id)}
                       >
@@ -339,7 +340,7 @@ function AccountVerification({}) {
                               {
                                 "bg-primary-600 text-white dark:bg-primary-400":
                                   isActive || isCompleted,
-                              },
+                              }
                             )}
                           >
                             {isCompleted ? (
@@ -354,7 +355,7 @@ function AccountVerification({}) {
                         <span
                           className={cn(
                             "mt-2 flex flex-col items-center lg:mt-0 lg:items-start",
-                            { "hidden lg:flex": !isActive },
+                            { "hidden lg:flex": !isActive }
                           )}
                         >
                           <span
@@ -363,7 +364,7 @@ function AccountVerification({}) {
                               {
                                 "text-primary-700 dark:text-primary-300":
                                   isActive || isCompleted,
-                              },
+                              }
                             )}
                           >
                             {item.name}
@@ -374,7 +375,7 @@ function AccountVerification({}) {
                               {
                                 "text-primary-500 dark:text-primary-400":
                                   isActive || isCompleted,
-                              },
+                              }
                             )}
                           >
                             {isCompleted

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 
@@ -13,7 +13,6 @@ import Card from "../base/custom-card";
 import StatusMessage from "../base/status-message";
 
 function LoginForm() {
-  const { push } = useRouter();
   const {
     loginDetails,
     updateLoginDetails,
@@ -25,9 +24,6 @@ function LoginForm() {
     setAuth,
     resetAuthData,
   } = useAuthStore();
-
-  const urlParams = useSearchParams();
-  const queryClient = useQueryClient();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -51,21 +47,18 @@ function LoginForm() {
 
     const response = await authenticateUser(loginDetails);
 
-    if (!response?.success) {
-      updateErrorStatus({
-        status: !response?.success,
-        message: response?.message,
-      });
-      setIsLoading(false);
-
+    if (response?.success) {
+      window.location.href = "/workspaces";
       return;
     }
 
-    // queryClient.invalidateQueries();
-    setAuth(response?.data);
-    const loginUrl = urlParams.get("callbackUrl") || "/workspaces";
+    updateErrorStatus({
+      status: !response?.success,
+      message: response?.message,
+    });
+    setIsLoading(false);
 
-    push(loginUrl);
+    return;
   }
 
   useEffect(() => {

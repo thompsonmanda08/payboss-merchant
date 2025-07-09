@@ -41,6 +41,22 @@ export const setupAccountConfig = cache(async () => {
       data: error?.response?.data || error,
     });
 
+    // Manually catch the error
+    if (error.message.includes("unexpected response was received")) {
+      console.error("Server returned malformed response:", error);
+      // Add your custom handling here
+      alert("Server returned an unexpected response. Please try again.");
+    } else if (error.response) {
+      // Handle HTTP errors (4xx, 5xx)
+      console.error("HTTP error:", error.response.status);
+    } else if (error.request) {
+      // Handle network errors
+      console.error("Network error:", error.message);
+    } else {
+      // Handle other errors
+      console.error("Unknown error:", error);
+    }
+
     return {
       success: false,
       message:
