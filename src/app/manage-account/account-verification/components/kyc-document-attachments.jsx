@@ -64,7 +64,7 @@ const ALL_DOCUMENT_CONFIGS = [
 
   {
     id: "TAX_CLEARANCE",
-    label: "Clearance Certificate",
+    label: "Tax Clearance Certificate",
     backendKey: "tax_clearance_certificate_url",
     required: true,
     tooltip:
