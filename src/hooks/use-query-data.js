@@ -17,6 +17,7 @@ import {
 import { getAllUsers, getUser } from "@/app/_actions/user-actions";
 import {
   getAllWorkspaceTerminals,
+  getAssignedWorkspaces,
   getWalletPrefunds,
   getWorkspaceAPIKey,
   getWorkspaceCallback,
@@ -24,7 +25,7 @@ import {
   getWorkspaceTillNumber,
   initializeWorkspace,
 } from "@/app/_actions/workspace-actions";
-import { QUERY_KEYS } from "@/lib/constants";
+import { AUTH_SESSION, QUERY_KEYS } from "@/lib/constants";
 import { getCheckoutURL } from "@/app/_actions/vas-actions";
 import { getRefreshToken } from "@/app/_actions/auth-actions";
 
@@ -42,10 +43,17 @@ export const useSetupConfig = () =>
     staleTime: Infinity,
   });
 
-export const useGetWorkspaces = () =>
+export const useAllWorkspaces = () =>
   useQuery({
     queryKey: [QUERY_KEYS.WORKSPACES],
     queryFn: async () => await getAllWorkspaces(),
+    staleTime: Infinity,
+  });
+
+export const useAssignedWorkspaces = () =>
+  useQuery({
+    queryKey: [QUERY_KEYS.WORKSPACES, AUTH_SESSION],
+    queryFn: async () => await getAssignedWorkspaces(),
     staleTime: Infinity,
   });
 

@@ -58,6 +58,41 @@ export const initializeWorkspace = cache(async (workspaceID) => {
   }
 });
 
+export const getAssignedWorkspaces = cache(async () => {
+  const url = `merchant/user/assigned/workspaces`;
+
+  try {
+    const res = await authenticatedApiClient({ url });
+
+    return {
+      success: true,
+      message: res.message,
+      data: res.data,
+      status: res.status,
+      statusText: res.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "GET | WORKSPACES ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+});
+
 /**
  * Submits a Proof of Payment (POP) for a workspace.
  *
@@ -104,7 +139,7 @@ export async function submitPOP(popDetails, workspaceID) {
 
     revalidatePath(
       "/manage-account/workspaces/[ID]/workspace-settings",
-      "page",
+      "page"
     );
 
     return {
@@ -220,7 +255,7 @@ export async function getWalletPrefunds(workspaceID) {
 export async function approveWalletPrefund(
   prefundData,
   prefundID,
-  workspaceID,
+  workspaceID
 ) {
   if (!prefundID || !workspaceID) {
     return {
@@ -409,7 +444,7 @@ export async function deleteUserFromWorkspace(recordID, workspaceID) {
 export async function changeUserRoleInWorkspace(
   mapping,
   recordID,
-  workspaceID,
+  workspaceID
 ) {
   if (!workspaceID) {
     return {

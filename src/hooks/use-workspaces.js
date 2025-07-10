@@ -2,14 +2,17 @@
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
-import { useSetupConfig } from "./use-query-data";
+import { useAssignedWorkspaces, useSetupConfig } from "./use-query-data";
 
 const useWorkspaces = (query) => {
   const pathname = usePathname();
   const [isSandboxVisible, setIsSandboxVisible] = useState(false);
   const { data: setup, isFetching, isLoading } = useSetupConfig();
 
-  const workspaces = setup?.data?.workspaces || [];
+  const { data: workspacesResponse, isLoading: isLoadingWorkspaces } =
+    useAssignedWorkspaces();
+
+  const workspaces = workspacesResponse?.data?.workspaces || [];
   const workspaceTypes = setup?.data?.workspace_type || [];
 
   const isUserInWorkspace =
@@ -20,13 +23,13 @@ const useWorkspaces = (query) => {
     : query?.workspaceID || "";
 
   const activeWorkspace = workspaces?.find(
-    (workspace) => workspace?.ID == workspaceID,
+    (workspace) => workspace?.ID == workspaceID
   );
 
   const userInSandbox = activeWorkspace?.workspace?.toLowerCase() === "sandbox";
 
   const sandbox = workspaces?.find(
-    (item) => item?.workspace?.toLowerCase() === "sandbox",
+    (item) => item?.workspace?.toLowerCase() === "sandbox"
   );
 
   const workspaceWalletBalance =
@@ -43,7 +46,7 @@ const useWorkspaces = (query) => {
 
   return {
     isFetching,
-    isLoading,
+    isLoading: isLoadingWorkspaces || isLoading,
     activeWorkspace,
     workspaces,
     workspaceTypes,
