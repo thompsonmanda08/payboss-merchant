@@ -118,6 +118,7 @@ export default function DocumentAttachments({
   documents,
   refDocsExist,
   onCompletionNavigateTo,
+  isAdminOrOwner,
   allowUserToSubmitKYC,
 }) {
   const queryClient = useQueryClient();
@@ -318,7 +319,7 @@ export default function DocumentAttachments({
     documents.proof_of_address_url &&
     documents.bank_statement_url;
 
-  return allowUserToSubmitKYC ? (
+  return isAdminOrOwner ? (
     <div className="w-full flex flex-1 flex-col gap-4">
       <CardHeader
         className={"py-0 mb-6"}
@@ -352,7 +353,7 @@ export default function DocumentAttachments({
                   });
                   setViewerModalOpen(true);
                 }}
-                allowDelete={allowUserToSubmitKYC}
+                allowDelete={isAdminOrOwner && allowUserToSubmitKYC}
                 onDelete={() =>
                   handleDeleteRequest(docConfig.backendKey, docConfig.label)
                 }
@@ -433,9 +434,7 @@ export default function DocumentAttachments({
           <Button
             className={"justify-end ml-auto"}
             onPress={() =>
-              onCompletionNavigateTo(
-                allowUserToSubmitKYC ? "summary" : "contract"
-              )
+              onCompletionNavigateTo(isAdminOrOwner ? "summary" : "contract")
             }
           >
             Next Section

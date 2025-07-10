@@ -235,8 +235,9 @@ function AccountVerification({}) {
         return (
           <DocumentAttachments
             key={"documents"}
-            allowUserToSubmitKYC={isOwner || isAccountAdmin}
+            allowUserToSubmitKYC={allowUserToSubmitKYC}
             documents={documents}
+            isAdminOrOwner={isOwner || isAccountAdmin}
             merchantID={merchantID}
             refDocsExist={refDocsExist}
             onCompletionNavigateTo={(targetSectionId) =>
@@ -247,6 +248,7 @@ function AccountVerification({}) {
       case "contract":
         return (
           <TermsAndAgreement
+            isAdminOrOwner={isOwner || isAccountAdmin}
             onCompletionNavigateTo={(targetSectionId) =>
               navigateToSection(targetSectionId || "summary")
             }

@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 import Spinner from "./custom-spinner";
 
 const modalVariants = {
-  hidden: { opacity: 0, y: "-20%", scale: 0.5 },
-  visible: { opacity: 1, y: "0%", scale: 1 },
-  exit: { opacity: 0, y: "-20%", scale: 0.5 },
+  hidden: { opacity: 0, scale: 0.85 },
+  visible: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.5 },
 };
 
 const overlayVariants = {
@@ -62,7 +62,14 @@ function OverlayLoader({
           transition={{ duration: 0.25 }}
           variants={overlayVariants}
         >
-          <div className="w-full max-w-md space-y-8 text-center">
+          <motion.div
+            animate="visible"
+            exit="exit"
+            initial="hidden"
+            transition={{ duration: 0.3 }}
+            variants={modalVariants}
+            className="w-full max-w-md space-y-8 text-center"
+          >
             {/* Main Loading Spinner */}
             <div className="relative">
               <div className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 blur-xl"></div>
@@ -106,7 +113,7 @@ function OverlayLoader({
                 style={{ animationDelay: "0.2s" }}
               ></div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Background Pattern */}
           <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
