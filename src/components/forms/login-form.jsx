@@ -46,9 +46,11 @@ function LoginForm() {
     }
 
     const response = await authenticateUser(loginDetails);
+    console.log("LOGGING RESPONSE===>", response);
 
     if (response?.success) {
       window.location.href = "/workspaces";
+      console.log("REDIRECTING ...===>", response?.success);
       return;
     }
 

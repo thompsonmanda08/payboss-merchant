@@ -33,14 +33,15 @@ export async function authenticateUser(loginCredentials) {
     const refreshToken = response?.refreshToken;
     const expiresIn = response?.expires_in;
 
-    await createAuthSession(accessToken, expiresIn, refreshToken);
-
-    const setup = await setupAccountConfig();
+    const [session, setup] = await Promise.all([
+      createAuthSession(accessToken, expiresIn, refreshToken),
+      setupAccountConfig(),
+    ]);
 
     return {
       success: true,
-      message: res.message || setup?.message,
-      data: res.data,
+      message: "Login Successful",
+      data: { ...response, session, setup },
       status: res.status,
       statusText: res.statusText,
     };

@@ -13,10 +13,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { capitalize, cn } from "@/lib/utils";
-import {
-  createNewWorkspace,
-  setupAccountConfig,
-} from "@/app/_actions/merchant-actions";
+import { createNewWorkspace } from "@/app/_actions/merchant-actions";
 import { QUERY_KEYS } from "@/lib/constants";
 import useWorkspace from "@/hooks/use-workspaces";
 import OverlayLoader from "@/components/ui/overlay-loader";
@@ -38,11 +35,12 @@ const INIT_DATA = {
 function WorkspacesList({ showHeader = false, className, workspaces }) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
-
-  // const setup = use(setupAccountConfig);
+  console.log("WORKSPACES MOUNTED ...");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isAccountAdmin, isOwner } = useAccountProfile();
+  // const { isAccountAdmin, isOwner } = useAccountProfile(); TODO: REMOVE COMMENT
+  const isAccountAdmin = false;
+  const isOwner = false;
   const { merchantKYC, isCompleteKYC, isLoading: isLoadingKYC } = useKYCInfo();
 
   const [loading, setLoading] = useState(false);

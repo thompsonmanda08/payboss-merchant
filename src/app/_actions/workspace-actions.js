@@ -23,18 +23,18 @@ export const initializeWorkspace = cache(async (workspaceID) => {
 
     const workspaceSession = {
       activeWorkspaceID: workspaceID,
-      workspaceType: res.data.workspaceType,
-      workspacePermissions: res.data,
+      workspaceType: res?.data?.workspaceType,
+      workspacePermissions: res?.data,
     };
 
     const updatedSession = await updateWorkspaceSession(workspaceSession);
 
     return {
       success: true,
-      message: res.message,
+      message: res?.message,
       data: updatedSession,
-      status: res.status,
-      statusText: res.statusText,
+      status: res?.status,
+      statusText: res?.statusText,
     };
   } catch (error) {
     console.error({
@@ -64,12 +64,16 @@ export const getAssignedWorkspaces = cache(async () => {
   try {
     const res = await authenticatedApiClient({ url });
 
+    const workspaces = res?.data?.workspaces;
+
+    await updateWorkspaceSession({ workspaces });
+
     return {
       success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
+      message: res?.message,
+      data: workspaces,
+      status: res?.status,
+      statusText: res?.statusText,
     };
   } catch (error) {
     console.error({

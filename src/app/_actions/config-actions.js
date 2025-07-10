@@ -138,10 +138,12 @@ export async function setupUserSessions(sessionData) {
           workspacePermissions: null,
         }),
     ]);
+
+    return true;
   } catch (error) {
     console.error("Error setting up user sessions:", error);
     if (error) throw error;
-  }
 
-  return;
+    return false;
+  }
 }

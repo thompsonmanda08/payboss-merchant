@@ -22,6 +22,8 @@ async function WorkSpacesPage() {
   // Parallelize data fetching
   const [session] = await Promise.all([getUserDetails()]);
 
+  console.log("WORKSPACES PAGE RENDERING ...");
+
   return (
     <Suspense>
       <main className="flex h-full min-h-screen items-start justify-start overflow-x-clip bg-background text-foreground">
