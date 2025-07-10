@@ -1,21 +1,14 @@
 "use client";
 import { usePathname } from "next/navigation";
 
-import { useAssignedWorkspaces } from "./use-query-data";
+import { useSetupConfig } from "./use-query-data";
 
 const useWorkspaces = (query) => {
   const pathname = usePathname();
 
-  // const { data: setup } = useSetupConfig();
-  const setup = {};
+  const { data: setup, isLoading, isFetching } = useSetupConfig();
 
-  const {
-    data: workspacesResponse,
-    isLoading,
-    isFetching,
-  } = useAssignedWorkspaces();
-
-  const workspaces = workspacesResponse?.data || [];
+  const workspaces = setup?.data?.workspaces || [];
   const workspaceTypes = setup?.data?.workspace_type || [];
 
   const isUserInWorkspace =

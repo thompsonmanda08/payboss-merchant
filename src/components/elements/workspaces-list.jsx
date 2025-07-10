@@ -35,10 +35,13 @@ const INIT_DATA = {
 function WorkspacesList({ showHeader = false, className, workspaces }) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
-  console.log("WORKSPACES MOUNTED ...");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isAccountAdmin, isOwner } = useAccountProfile();
+  const {
+    isAccountAdmin,
+    isOwner,
+    isLoading: loadingAccountProfile,
+  } = useAccountProfile();
 
   const { merchantKYC, isCompleteKYC, isLoading: isLoadingKYC } = useKYCInfo();
 
@@ -47,7 +50,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
   const isManagePage = pathname.split("/").includes("manage-account");
 
   const {
-    workspaces: activeWorkspaces,
+    workspaces: assignedWorkspaces,
     isLoading,
     workspaceTypes,
   } = useWorkspace();
@@ -113,7 +116,9 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
   }
 
   // IF ON MANAGE WORKSPACES PAGE, SHOW ALL WORKSPACES AND IF ON DASHBOARD SHOW ONLY PROVIDED WORKSPACES OR ACTIVE WORKSPACES
-  const WORKSPACES = isManagePage ? workspaces : workspaces || activeWorkspaces;
+  const WORKSPACES = isManagePage
+    ? workspaces
+    : workspaces || assignedWorkspaces;
 
   return (
     <>
@@ -130,14 +135,14 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
               </p>
             </div>
 
-            {canCreateWorkspace && (
+            {canCreateWorkspace && !loadingAccountProfile && (
               <Button
                 className={
                   "mt-auto bg-primary-50 dark:bg-primary dark:text-primary-foreground px-4"
                 }
                 color="primary"
                 endContent={<PlusIcon className="h-5 w-5" />}
-                isDisabled={loading || isLoadingKYC}
+                isDisabled={loading || isLoadingKYC || loadingAccountProfile}
                 size="lg"
                 variant="flat"
                 onPress={onOpen}
@@ -153,7 +158,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
           <Alert
             className="my-4"
             color="warning"
-            classNames={{ mainWrapper: "flex flex-row items-center" }}
+            classNames={{ mainWrapper: "flex flex-row items-center max-h-16" }}
           >
             <span>
               Just one more step, please submit your business documents to aid
@@ -178,7 +183,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
               { "max-h-auto lg:max-h-max ": isManagePage }
             )}
           >
-            {isLoading ? (
+            {isLoading || loadingAccountProfile ? (
               <WorkspacesLoading
                 showHeader={false}
                 loadingText={"Loading Workspaces..."}
@@ -283,7 +288,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                   </div>
                 )}
 
-                {canCreateWorkspace && isManagePage && (
+                {canCreateWorkspace && (
                   <Button
                     className={cn(
                       "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
@@ -302,7 +307,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
       </Card>
 
       {/* OVERLAYS AND MODALS  */}
-      {<OverlayLoader show={loading} />}
+      {<OverlayLoader show={!loading} />}
 
       <CreateNewWorkspaceModal
         editWorkspaceField={editWorkspaceField}
