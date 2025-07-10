@@ -38,9 +38,8 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
   console.log("WORKSPACES MOUNTED ...");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const { isAccountAdmin, isOwner } = useAccountProfile(); TODO: REMOVE COMMENT
-  const isAccountAdmin = false;
-  const isOwner = false;
+  const { isAccountAdmin, isOwner } = useAccountProfile();
+
   const { merchantKYC, isCompleteKYC, isLoading: isLoadingKYC } = useKYCInfo();
 
   const [loading, setLoading] = useState(false);

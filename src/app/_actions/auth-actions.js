@@ -8,7 +8,6 @@ import {
 } from "@/lib/session";
 import { apiClient } from "@/lib/utils";
 
-import { setupAccountConfig } from "./merchant-actions";
 import { revokeAccessToken } from "./config-actions";
 
 /**
@@ -34,7 +33,7 @@ export async function authenticateUser(loginCredentials) {
     const expiresIn = response?.expires_in;
 
     await createAuthSession(accessToken, expiresIn, refreshToken);
-    await setupAccountConfig();
+    // await setupAccountConfig();
 
     return {
       success: true,
