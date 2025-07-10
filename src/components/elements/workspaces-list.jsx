@@ -307,7 +307,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
       </Card>
 
       {/* OVERLAYS AND MODALS  */}
-      {<OverlayLoader show={!loading} />}
+      {<OverlayLoader show={loading} />}
 
       <CreateNewWorkspaceModal
         editWorkspaceField={editWorkspaceField}

@@ -6,6 +6,7 @@ import { DefaultCover } from "@/lib/constants";
 import WorkspaceHeader from "@/components/elements/welcome-header";
 import WorkspacesList from "@/components/elements/workspaces-list";
 import { cn } from "@/lib/utils";
+import OverlayLoader from "@/components/ui/overlay-loader";
 
 import { getAuthSession, getUserDetails } from "../_actions/config-actions";
 
@@ -23,7 +24,15 @@ async function WorkSpacesPage() {
   const [session] = await Promise.all([getUserDetails()]);
 
   return (
-    <Suspense>
+    <Suspense
+      fallback={
+        <OverlayLoader
+          description="Please be patient while we configure your session"
+          show={true}
+          title="Initializing Account"
+        />
+      }
+    >
       <main className="flex h-full min-h-screen items-start justify-start overflow-x-clip bg-background text-foreground">
         <div className="flex h-full max-h-screen w-full flex-col">
           <section role="workspace-header">
