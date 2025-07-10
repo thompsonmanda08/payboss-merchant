@@ -18,7 +18,13 @@ const overlayVariants = {
   exit: { opacity: 0 },
 };
 
-function OverlayLoader({ show, className, classNames }) {
+function OverlayLoader({
+  show,
+  className,
+  classNames,
+  title = "Please wait",
+  description = "Please wait while we prepare everything for you",
+}) {
   const [isOpen, setIsOpen] = useState(show || false);
 
   useEffect(() => {
@@ -29,7 +35,18 @@ function OverlayLoader({ show, className, classNames }) {
     };
   }, [show]);
 
-  const { wrapper, conatiner, spinner } = classNames || "";
+  const [dots, setDots] = useState("");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDots((prev) => {
+        if (prev === "...") return "";
+        return prev + ".";
+      });
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     isOpen && (
@@ -37,29 +54,68 @@ function OverlayLoader({ show, className, classNames }) {
         <motion.div
           animate="visible"
           className={cn(
-            "absolute inset-0 z-[9999999] flex h-screen w-full items-center justify-center bg-black/50 backdrop-blur-sm",
-            wrapper,
+            "absolute inset-0 z-[9999999] flex h-screen w-full items-center justify-center bg-gradient-to-br from-transparent via-card/80 to-secondary/20 backdrop-blur-sm",
+            classNames?.wrapper
           )}
           exit="exit"
           initial="hidden"
           transition={{ duration: 0.25 }}
           variants={overlayVariants}
         >
-          <motion.div
-            animate="visible"
-            className={cn(
-              "grid h-full w-full place-content-center place-items-center",
-              className,
-              conatiner,
-            )}
-            exit="exit"
-            initial="hidden"
-            transition={{ duration: 0.2 }}
-            variants={modalVariants}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Spinner className={spinner} color="#ffffff" size={150} />
-          </motion.div>
+          <div className="w-full max-w-md space-y-8 text-center">
+            {/* Main Loading Spinner */}
+            <div className="relative">
+              <div className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 blur-xl"></div>
+              <div className="relative mx-auto flex h-24 w-24 items-center justify-center rounded-full border bg-card p-8 shadow-2xl shadow-primary/10">
+                {/* <Loader2 className="h-10 w-10 animate-spin text-primary" /> */}
+                <Spinner
+                  className={classNames?.spinner}
+                  // color="#ffffff"
+                  size={60}
+                />
+              </div>
+            </div>
+
+            {/* Title and Subtitle */}
+            <div className="space-y-3">
+              <h1 className="text-lg font-semibold tracking-tight text-foreground">
+                {title}
+                <span className="inline-block w-8 text-left">{dots}</span>
+              </h1>
+              <p className="text-sm font-medium text-foreground/80">
+                {description}
+              </p>
+            </div>
+
+            {/* Progress Indicator */}
+            <div className="space-y-3">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary/50">
+                <div className="h-1.5 animate-pulse rounded-full bg-gradient-to-r from-primary to-primary/80"></div>
+              </div>
+            </div>
+
+            {/* Decorative Elements */}
+            <div className="flex justify-center space-x-3 opacity-60">
+              <div className="h-4 w-4 animate-bounce rounded-full bg-secondary/80"></div>
+              <div
+                className="h-4 w-4 animate-bounce rounded-full bg-secondary/80"
+                style={{ animationDelay: "0.1s" }}
+              ></div>
+              <div
+                className="h-4 w-4 animate-bounce rounded-full bg-secondary/80"
+                style={{ animationDelay: "0.2s" }}
+              ></div>
+            </div>
+          </div>
+
+          {/* Background Pattern */}
+          <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+            <div className="absolute -right-4 -top-4 h-72 w-72 animate-pulse rounded-full bg-gradient-to-br from-primary/5 to-secondary/5 blur-3xl"></div>
+            <div
+              className="absolute -bottom-4 -left-4 h-72 w-72 animate-pulse rounded-full bg-gradient-to-tr from-secondary/5 to-primary/5 blur-3xl"
+              style={{ animationDelay: "1s" }}
+            ></div>
+          </div>
         </motion.div>
       </AnimatePresence>
     )
