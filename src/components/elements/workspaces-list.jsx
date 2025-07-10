@@ -1,6 +1,6 @@
 "use client";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { use, useState } from "react";
 import { Alert, Link, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
@@ -13,7 +13,10 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { capitalize, cn } from "@/lib/utils";
-import { createNewWorkspace } from "@/app/_actions/merchant-actions";
+import {
+  createNewWorkspace,
+  setupAccountConfig,
+} from "@/app/_actions/merchant-actions";
 import { QUERY_KEYS } from "@/lib/constants";
 import useWorkspace from "@/hooks/use-workspaces";
 import OverlayLoader from "@/components/ui/overlay-loader";
@@ -35,6 +38,8 @@ const INIT_DATA = {
 function WorkspacesList({ showHeader = false, className, workspaces }) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
+
+  // const setup = use(setupAccountConfig);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isAccountAdmin, isOwner } = useAccountProfile();
@@ -173,7 +178,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
           <div
             className={cn(
               "max-h-[600px] overflow-y-auto no-scrollbar flex w-full min-w-[400px]  flex-col lg:px-2",
-              { "max-h-auto lg:max-h-max ": isManagePage },
+              { "max-h-auto lg:max-h-max ": isManagePage }
             )}
           >
             {isLoading ? (
@@ -189,7 +194,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                   {
                     "grid-cols-[repeat(auto-fill,minmax(400px,1fr))]":
                       WORKSPACES?.length > 0,
-                  },
+                  }
                 )}
               >
                 {WORKSPACES.length ? (
@@ -198,7 +203,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                       <WorkspaceItem
                         key={index}
                         description={`${capitalize(
-                          item?.workspaceType,
+                          item?.workspaceType
                         )}'s Workspace`}
                         href={
                           isManagePage
@@ -285,7 +290,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                   <Button
                     className={cn(
                       "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
-                      { "col-span-full": workspaces?.length < 0 },
+                      { "col-span-full": workspaces?.length < 0 }
                     )}
                     onPress={onOpen}
                   >

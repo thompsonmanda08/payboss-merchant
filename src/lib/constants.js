@@ -8,7 +8,8 @@ import {
 export const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL;
 
-export const POCKET_BASE_URL = "https://services-uat.bgspayboss.com";
+export const POCKET_BASE_URL =
+  process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL;
 
 export const BGS_SUPER_MERCHANT_ID = "2da3b36c-ef7f-4222-a5b1-59702109e576";
 

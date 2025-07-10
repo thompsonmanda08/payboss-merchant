@@ -2,18 +2,21 @@
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
-import { useAssignedWorkspaces, useSetupConfig } from "./use-query-data";
+import { useAssignedWorkspaces } from "./use-query-data";
 
 const useWorkspaces = (query) => {
   const pathname = usePathname();
   const [isSandboxVisible, setIsSandboxVisible] = useState(false);
-  const { data: setup, isFetching, isLoading } = useSetupConfig();
+  // const { data: setup, isFetching, isLoading } = useSetupConfig();
 
-  const { data: workspacesResponse, isLoading: isLoadingWorkspaces } =
-    useAssignedWorkspaces();
+  const {
+    data: workspacesResponse,
+    isLoading,
+    isFetching,
+  } = useAssignedWorkspaces();
 
   const workspaces = workspacesResponse?.data?.workspaces || [];
-  const workspaceTypes = setup?.data?.workspace_type || [];
+  // const workspaceTypes = setup?.data?.workspace_type || [];
 
   const isUserInWorkspace =
     pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
@@ -46,10 +49,10 @@ const useWorkspaces = (query) => {
 
   return {
     isFetching,
-    isLoading: isLoadingWorkspaces || isLoading,
+    isLoading,
     activeWorkspace,
     workspaces,
-    workspaceTypes,
+    // workspaceTypes,
     workspaceID: activeWorkspace?.ID,
     workspaceWalletBalance,
     isUserInWorkspace,
