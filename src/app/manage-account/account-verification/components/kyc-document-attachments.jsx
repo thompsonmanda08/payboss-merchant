@@ -166,11 +166,7 @@ export default function DocumentAttachments({
     let requiredDocsProvided = true;
 
     for (const docConfig of ALL_DOCUMENT_CONFIGS) {
-      if (
-        docConfig.required &&
-        !docFiles[docConfig.id]?.file_url &&
-        !documents?.[docConfig.backendKey]
-      ) {
+      if (docConfig.required && !documentUrls?.[docConfig.backendKey]) {
         requiredDocsProvided = false;
         break;
       }
