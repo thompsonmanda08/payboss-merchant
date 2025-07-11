@@ -8,8 +8,9 @@ import useKYCInfo from "@/hooks/use-kyc-info";
 import Link from "next/link";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import EmptyLogs from "@/components/base/empty-logs";
 
-function TermsAndAgreement() {
+function TermsAndAgreement({ isAdminOrOwner }) {
   const { signedContractDoc } = useKYCInfo();
 
   const contractDocument = {
@@ -20,7 +21,7 @@ function TermsAndAgreement() {
 
   const { isOpen, onOpen, onClose } = useDisclosure(false);
 
-  return (
+  return isAdminOrOwner ? (
     <div className="w-full lg:px-8 mx-auto p-2">
       <CardHeader
         title="Contract & Agreement"
@@ -74,6 +75,16 @@ function TermsAndAgreement() {
           onClose={onClose}
         ></Modal>
       )}
+    </div>
+  ) : (
+    <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
+      <EmptyLogs
+        className={"my-auto"}
+        subTitle={
+          "Only the admin or account owner can submit company documentation."
+        }
+        title={"Oops! Looks like your are not an Admin"}
+      />
     </div>
   );
 }

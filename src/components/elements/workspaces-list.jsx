@@ -1,6 +1,6 @@
 "use client";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { use, useMemo, useState } from "react";
 import { Alert, Link, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
@@ -23,8 +23,8 @@ import EmptyLogs from "@/components/base/empty-logs";
 
 import WorkspaceItem from "./workspace-card-item";
 import CreateNewWorkspaceModal from "../modals/create-new-workspace-modal";
-import WorkspacesLoading from "@/app/manage-account/loading";
 import useKYCInfo from "@/hooks/use-kyc-info";
+import WorkspacesLoading from "@/app/manage-account/loading";
 
 const INIT_DATA = {
   workspace: "",
@@ -37,38 +37,38 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
   const queryClient = useQueryClient();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isAccountAdmin, isOwner } = useAccountProfile();
-  const { merchantKYC, isCompleteKYC, isLoading: isLoadingKYC } = useKYCInfo();
-
-  const [loading, setLoading] = useState(false);
-
-  const isManagePage = pathname.split("/").includes("manage-account");
 
   const {
-    workspaces: activeWorkspaces,
-    isLoading,
+    workspaces: assignedWorkspaces,
+    isLoading: loadingWorkspaces,
     workspaceTypes,
   } = useWorkspace();
+
+  const {
+    isAccountAdmin,
+    isOwner,
+    isLoading: loadingAccountProfile,
+  } = useAccountProfile();
+  const { merchantKYC, isCompleteKYC, isLoading: loadingKYC } = useKYCInfo();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [newWorkspace, setNewWorkspace] = useState(INIT_DATA);
+  const editWorkspaceField = (fields) =>
+    setNewWorkspace((prev) => ({ ...prev, ...fields }));
+
+  const isManagePage = pathname.split("/").includes("manage-account");
 
   const canCreateWorkspace =
     (isAccountAdmin || isOwner) && merchantKYC?.stage_id == 3;
 
-  const [newWorkspace, setNewWorkspace] = useState(INIT_DATA);
-
-  function editWorkspaceField(fields) {
-    setNewWorkspace((prev) => {
-      return { ...prev, ...fields };
-    });
-  }
-
   function handleClose() {
     setNewWorkspace(INIT_DATA);
-    setLoading(false);
+    setIsLoading(false);
     onClose();
   }
 
   async function handleCreateWorkspace() {
-    setLoading(true);
+    setIsLoading(true);
 
     if (
       newWorkspace.workspace.length < 3 &&
@@ -79,7 +79,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
         color: "danger",
         description: "Provide valid name and description!",
       });
-      setLoading(false);
+      setIsLoading(false);
       return;
     }
 
@@ -95,7 +95,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
         description: "Workspaces created successfully!",
       });
       handleClose();
-      setLoading(false);
+      setIsLoading(false);
 
       return;
     }
@@ -106,12 +106,28 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
       description: "Failed to create Workspace!",
     });
 
-    setLoading(false);
+    setIsLoading(false);
     handleClose();
   }
 
   // IF ON MANAGE WORKSPACES PAGE, SHOW ALL WORKSPACES AND IF ON DASHBOARD SHOW ONLY PROVIDED WORKSPACES OR ACTIVE WORKSPACES
-  const WORKSPACES = isManagePage ? workspaces : workspaces || activeWorkspaces;
+  const WORKSPACES = isManagePage
+    ? workspaces
+    : workspaces || assignedWorkspaces;
+
+  const isLoadingData = useMemo(() => {
+    return loadingWorkspaces || loadingKYC || loadingAccountProfile;
+  }, [loadingWorkspaces, loadingKYC, loadingAccountProfile]);
+
+  if (isLoadingData) {
+    return (
+      <OverlayLoader
+        description="Please be patient while we configure your session"
+        show={true}
+        title="Initializing Account"
+      />
+    );
+  }
 
   return (
     <>
@@ -128,14 +144,14 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
               </p>
             </div>
 
-            {canCreateWorkspace && (
+            {canCreateWorkspace && !isLoadingData && (
               <Button
                 className={
                   "mt-auto bg-primary-50 dark:bg-primary dark:text-primary-foreground px-4"
                 }
                 color="primary"
                 endContent={<PlusIcon className="h-5 w-5" />}
-                isDisabled={loading || isLoadingKYC}
+                isDisabled={isLoadingData}
                 size="lg"
                 variant="flat"
                 onPress={onOpen}
@@ -151,7 +167,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
           <Alert
             className="my-4"
             color="warning"
-            classNames={{ mainWrapper: "flex flex-row items-center" }}
+            classNames={{ mainWrapper: "flex flex-row items-center max-h-16" }}
           >
             <span>
               Just one more step, please submit your business documents to aid
@@ -173,15 +189,27 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
           <div
             className={cn(
               "max-h-[600px] overflow-y-auto no-scrollbar flex w-full min-w-[400px]  flex-col lg:px-2",
-              { "max-h-auto lg:max-h-max ": isManagePage },
+              { "max-h-auto lg:max-h-max ": isManagePage }
             )}
           >
-            {isLoading ? (
-              <WorkspacesLoading
-                showHeader={false}
-                loadingText={"Loading Workspaces..."}
-                size={80}
-              />
+            {loadingWorkspaces || loadingAccountProfile ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {Array.from({ length }, (_, index) => (
+                  <div
+                    key={index}
+                    className="border rounded-lg p-4 flex items-center justify-between animate-pulse"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-primary-100 h-16 w-16 rounded-md" />
+                      <div className="space-y-2">
+                        <div className="bg-gray-200 h-6 w-24 rounded-md" />
+                        <div className="bg-gray-200 h-4 w-40 rounded-md" />
+                      </div>
+                    </div>
+                    <div className="bg-gray-200 h-6 w-6 rounded-md" />
+                  </div>
+                ))}
+              </div>
             ) : (
               <div
                 className={cn(
@@ -189,7 +217,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                   {
                     "grid-cols-[repeat(auto-fill,minmax(400px,1fr))]":
                       WORKSPACES?.length > 0,
-                  },
+                  }
                 )}
               >
                 {WORKSPACES.length ? (
@@ -198,7 +226,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                       <WorkspaceItem
                         key={index}
                         description={`${capitalize(
-                          item?.workspaceType,
+                          item?.workspaceType
                         )}'s Workspace`}
                         href={
                           isManagePage
@@ -207,7 +235,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                         }
                         isVisible={item?.isVisible}
                         name={item?.workspace}
-                        onClick={() => setLoading(true)}
+                        onClick={() => setIsLoading(true)}
                       />
                     );
                   })
@@ -268,7 +296,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                           }
                           color="primary"
                           endContent={<PlusIcon className="h-5 w-5" />}
-                          isDisabled={loading}
+                          isDisabled={isLoading}
                           size="lg"
                           variant="flat"
                           onPress={onOpen}
@@ -281,11 +309,11 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                   </div>
                 )}
 
-                {canCreateWorkspace && isManagePage && (
+                {canCreateWorkspace && (
                   <Button
                     className={cn(
                       "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
-                      { "col-span-full": workspaces?.length < 0 },
+                      { "col-span-full": workspaces?.length < 0 }
                     )}
                     onPress={onOpen}
                   >
@@ -300,7 +328,13 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
       </Card>
 
       {/* OVERLAYS AND MODALS  */}
-      {<OverlayLoader show={loading} />}
+      {
+        <OverlayLoader
+          show={isLoading}
+          title="Initializing Workspace"
+          description="Your workspace is being prepared. Please wait..."
+        />
+      }
 
       <CreateNewWorkspaceModal
         editWorkspaceField={editWorkspaceField}
@@ -308,7 +342,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
         handleClose={handleClose}
         handleCreateWorkspace={handleCreateWorkspace}
         isOpen={isOpen}
-        loading={loading}
+        isLoading={isLoading}
         workspaceTypes={workspaceTypes}
         onOpen={onOpen}
       />

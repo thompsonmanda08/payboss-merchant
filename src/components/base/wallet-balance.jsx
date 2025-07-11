@@ -10,12 +10,15 @@ import Card from "./custom-card";
 
 function Balance({ title, amount, isLandscape }) {
   const { workspaceWalletBalance, activeWorkspace } = useWorkspaces();
+  // const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+  // const permissions = workspaceInit?.data?.workspacePermissions;
+  // const activeWorkspace = workspaceInit?.data?.activeWorkspace || {};
 
   return (
     <Card
       className={cn(
         "w-fit min-w-[180px] max-w-xs items-start gap-4 rounded-2xl p-4 pr-5 shadow-none",
-        { "w-full max-w-full flex-row": isLandscape },
+        { "w-full max-w-full flex-row": isLandscape }
       )}
     >
       <SoftBoxIcon className={"-mt-1 scale-80 p-0"}>
@@ -37,7 +40,7 @@ function Balance({ title, amount, isLandscape }) {
 
         <div
           className={cn(
-            "my-2 h-px w-full bg-gradient-to-l from-transparent via-gray-200 to-transparent",
+            "my-2 h-px w-full bg-gradient-to-l from-transparent via-gray-200 to-transparent"
           )}
         />
 

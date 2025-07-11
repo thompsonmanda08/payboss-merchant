@@ -23,18 +23,18 @@ export const initializeWorkspace = cache(async (workspaceID) => {
 
     const workspaceSession = {
       activeWorkspaceID: workspaceID,
-      workspaceType: res.data.workspaceType,
-      workspacePermissions: res.data,
+      workspaceType: res?.data?.workspaceType,
+      workspacePermissions: res?.data,
     };
 
     const updatedSession = await updateWorkspaceSession(workspaceSession);
 
     return {
       success: true,
-      message: res.message,
+      message: res?.message,
       data: updatedSession,
-      status: res.status,
-      statusText: res.statusText,
+      status: res?.status,
+      statusText: res?.statusText,
     };
   } catch (error) {
     console.error({
@@ -49,6 +49,45 @@ export const initializeWorkspace = cache(async (workspaceID) => {
     return {
       success: false,
       message: error?.response?.data?.error || "No Server Response",
+      data: null,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+    };
+  }
+});
+
+export const getAssignedWorkspaces = cache(async () => {
+  const url = `merchant/user/assigned/workspaces`;
+
+  try {
+    const res = await authenticatedApiClient({ url });
+
+    const workspaces = res?.data?.workspaces;
+
+    await updateWorkspaceSession({ workspaces });
+
+    return {
+      success: true,
+      message: res?.message,
+      data: workspaces,
+      status: res?.status,
+      statusText: res?.statusText,
+    };
+  } catch (error) {
+    console.error({
+      endpoint: "GET | WORKSPACES ~ " + url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      headers: error?.response?.headers,
+      config: error?.response?.config,
+      data: error?.response?.data || error,
+    });
+
+    return {
+      success: false,
+      message:
+        error?.response?.data?.error ||
+        "Error Occurred: See Console for details",
       data: null,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

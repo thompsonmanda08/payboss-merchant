@@ -22,7 +22,11 @@ export const setupAccountConfig = cache(async () => {
     const res = await authenticatedApiClient({ url });
 
     // CREATE A USER SESSION COOKIE TO STORE THE LOGGED IN USER DATA
-    await setupUserSessions(res?.data);
+    const configured = await setupUserSessions(res?.data);
+
+    if (!configured) {
+      throw new Error("Error setting up user sessions");
+    }
 
     return {
       success: true,
@@ -40,22 +44,6 @@ export const setupAccountConfig = cache(async () => {
       config: error?.response?.config,
       data: error?.response?.data || error,
     });
-
-    // Manually catch the error
-    if (error.message.includes("unexpected response was received")) {
-      console.error("Server returned malformed response:", error);
-      // Add your custom handling here
-      alert("Server returned an unexpected response. Please try again.");
-    } else if (error.response) {
-      // Handle HTTP errors (4xx, 5xx)
-      console.error("HTTP error:", error.response.status);
-    } else if (error.request) {
-      // Handle network errors
-      console.error("Network error:", error.message);
-    } else {
-      // Handle other errors
-      console.error("Unknown error:", error);
-    }
 
     return {
       success: false,

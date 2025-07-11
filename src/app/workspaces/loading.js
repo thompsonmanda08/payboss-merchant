@@ -1,7 +1,13 @@
 "use client";
 
-import WorkspacesLoading from "../manage-account/loading";
+import OverlayLoader from "@/components/ui/overlay-loader";
 
 export default function LoadingPage({}) {
-  return <WorkspacesLoading />;
+  return (
+    <OverlayLoader
+      description="Please be patient while we configure your session"
+      show={true}
+      title="Please wait"
+    />
+  );
 }

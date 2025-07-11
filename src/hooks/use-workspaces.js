@@ -1,13 +1,12 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
 
 import { useSetupConfig } from "./use-query-data";
 
 const useWorkspaces = (query) => {
   const pathname = usePathname();
-  const [isSandboxVisible, setIsSandboxVisible] = useState(false);
-  const { data: setup, isFetching, isLoading } = useSetupConfig();
+
+  const { data: setup, isLoading, isFetching } = useSetupConfig();
 
   const workspaces = setup?.data?.workspaces || [];
   const workspaceTypes = setup?.data?.workspace_type || [];
@@ -20,26 +19,13 @@ const useWorkspaces = (query) => {
     : query?.workspaceID || "";
 
   const activeWorkspace = workspaces?.find(
-    (workspace) => workspace?.ID == workspaceID,
-  );
-
-  const userInSandbox = activeWorkspace?.workspace?.toLowerCase() === "sandbox";
-
-  const sandbox = workspaces?.find(
-    (item) => item?.workspace?.toLowerCase() === "sandbox",
+    (workspace) => workspace?.ID == workspaceID
   );
 
   const workspaceWalletBalance =
     activeWorkspace?.balance ||
     workspaces?.find((workspace) => workspace?.ID == query?.workspaceID)
       ?.balance;
-
-  // CHECK IF SANDBOX WORKSPACE IS UNDEFINED
-  useEffect(() => {
-    if (sandbox != undefined) {
-      setIsSandboxVisible(true);
-    }
-  }, [sandbox]);
 
   return {
     isFetching,
@@ -50,10 +36,6 @@ const useWorkspaces = (query) => {
     workspaceID: activeWorkspace?.ID,
     workspaceWalletBalance,
     isUserInWorkspace,
-    sandbox,
-    isSandboxVisible,
-    setIsSandboxVisible,
-    userInSandbox,
   };
 };
 

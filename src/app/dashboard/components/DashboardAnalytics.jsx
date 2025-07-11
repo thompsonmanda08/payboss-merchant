@@ -107,7 +107,7 @@ function DashboardAnalytics({
         label: "Transactions",
         data: MONTHS.map((month) => {
           const transaction = monthlyTransactionRecords?.find((item) =>
-            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase()),
+            String(item.month)?.toLowerCase().startsWith(month?.toLowerCase())
           );
 
           return transaction ? transaction.count : 0;
@@ -127,7 +127,11 @@ function DashboardAnalytics({
 
   return (
     <>
-      <OverlayLoader show={isLoading} />
+      <OverlayLoader
+        show={isLoading}
+        title="Please wait"
+        description="Your dashboard is being populated with recent data."
+      />
 
       <div className="flex w-full flex-col gap-4 md:gap-4">
         {/* TOP ROW - WALLET BALANCE && OVERALL VALUES */}

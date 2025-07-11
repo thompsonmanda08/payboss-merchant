@@ -11,8 +11,6 @@ export const BASE_URL =
 export const POCKET_BASE_URL =
   process.env.POCKET_BASE_URL || process.env.NEXT_PUBLIC_POCKET_BASE_URL;
 
-// export const POCKET_BASE_URL = "https://payboss-uat-backend.bgsgroup.co.zm";
-
 export const BGS_SUPER_MERCHANT_ID = "2da3b36c-ef7f-4222-a5b1-59702109e576";
 
 export const AUTH_SESSION = "__com.bgs.payboss-merchant-portal.com__";

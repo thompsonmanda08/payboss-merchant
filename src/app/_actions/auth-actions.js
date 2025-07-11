@@ -8,7 +8,6 @@ import {
 } from "@/lib/session";
 import { apiClient } from "@/lib/utils";
 
-import { setupAccountConfig } from "./merchant-actions";
 import { revokeAccessToken } from "./config-actions";
 
 /**
@@ -34,13 +33,12 @@ export async function authenticateUser(loginCredentials) {
     const expiresIn = response?.expires_in;
 
     await createAuthSession(accessToken, expiresIn, refreshToken);
-
-    const setup = await setupAccountConfig();
+    // await setupAccountConfig();
 
     return {
       success: true,
-      message: res.message || setup?.message,
-      data: res.data,
+      message: "Login Successful",
+      data: { accessToken, refreshToken, expiresIn },
       status: res.status,
       statusText: res.statusText,
     };
