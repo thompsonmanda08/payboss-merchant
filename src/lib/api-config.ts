@@ -32,12 +32,21 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Network error (no connection)
+
+    // Network error (no response)
     if (!error.response) {
-      throw {
-        ...error,
+      return Promise.reject({
         type: "Network Error",
         message: "Please check your internet connection.",
+      });
+    }
+
+    // Timeout error
+    if (error.code === "ECONNABORTED") {
+      throw {
+        ...error,
+        type: "Timeout Error",
+        message: "Request timed out! Please try again.",
       };
     }
 

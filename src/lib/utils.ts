@@ -8,6 +8,7 @@ import { ActivityLogGroup } from "@/app/dashboard/[workspaceID]/workspace-settin
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
+  timeout: 60000,
 }) as AxiosInstance;
 
 export function cn(...inputs: ClassValue[]) {
