@@ -5,7 +5,7 @@ import {
 import { ErrorCard } from "@/components/base/error-card";
 import { capitalize } from "@/lib/utils";
 
-import Checkout from "../components/checkout";
+import Checkout from "../_components/checkout";
 
 async function CheckoutPage(props) {
   const queryParams = await props.searchParams;

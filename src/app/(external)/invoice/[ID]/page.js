@@ -2,7 +2,7 @@ import { ErrorCard } from "@/components/base/error-card";
 import { capitalize } from "@/lib/utils";
 import { getInvoiceDetails } from "@/app/_actions/vas-actions";
 
-import Invoice from "../../components/invoice";
+import Invoice from "../../_components/invoice";
 
 async function InvoicePage(props) {
   const params = await props.params;
@@ -53,7 +53,7 @@ async function InvoicePage(props) {
       price: parseFloat(String(item?.unit_price || "0")),
       amount: parseFloat(
         parseInt(String(item?.quantity || "0")) *
-          parseFloat(String(item?.unit_price || "0")),
+          parseFloat(String(item?.unit_price || "0"))
       ),
     })),
     taxRate: parseFloat(String(response?.data?.tax_rate || "0")),

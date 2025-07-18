@@ -510,7 +510,7 @@ const APIIntegration = () => {
             />
             <Button
               endContent={<PlusIcon className="h-5 w-5" />}
-              isDisabled={isLoadingConfig || Boolean(API_KEYS?.length == 2)}
+              isDisabled={isLoadingConfig || Boolean(API_KEYS?.length > 0)}
               onPress={() => {
                 setCurrentActionIndex(0);
               }}

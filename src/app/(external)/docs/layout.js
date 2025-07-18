@@ -1,16 +1,15 @@
 import Link from "next/link";
-import { Bars3BottomRightIcon } from "@heroicons/react/24/outline";
 
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Search from "@/components/ui/search";
 import Logo from "@/components/base/payboss-logo";
+
+import DocsMobileNav from "../_components/docs-mobile-nav";
 
 export default function DocsLayout({ children }) {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b border-foreground/10 bg-background shadow-sm shadow-black/5 px-4 md:px-6">
-        <MobileNavMenu />
+        <DocsMobileNav />
         <Logo aria-label="Home" className="" href={"/"} />
         <Link className="flex items-center gap-2 font-semibold" href="#">
           <span className="text-xl">Documentation</span>
@@ -33,7 +32,7 @@ export default function DocsLayout({ children }) {
                   >
                     PayBoss Collections API
                   </Link>
-                  <Link
+                  {/* <Link
                     className="flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground hover:text-foreground"
                     href="#"
                   >
@@ -50,7 +49,7 @@ export default function DocsLayout({ children }) {
                     href="#"
                   >
                     Error Handling
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </nav>
@@ -60,45 +59,5 @@ export default function DocsLayout({ children }) {
         {children}
       </div>
     </div>
-  );
-}
-
-function MobileNavMenu() {
-  return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button className="md:hidden" size="icon" variant="outline">
-          <Bars3BottomRightIcon className="h-5 w-5" />
-          <span className="sr-only">Toggle navigation menu</span>
-        </Button>
-      </SheetTrigger>
-      <SheetContent className="w-72" side="left">
-        <nav className="grid gap-6 text-sm">
-          <div className="grid gap-3 p-4">
-            <h3 className="text-lg font-semibold">API Documentation</h3>
-            <div className="grid gap-1">
-              <Link
-                className="flex items-center gap-2 rounded-md bg-muted px-3 py-2 text-primary font-medium"
-                href="#"
-              >
-                PayBoss Collections API
-              </Link>
-              <Link
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground hover:text-foreground"
-                href="#"
-              >
-                Authentication
-              </Link>
-              <Link
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground hover:text-foreground"
-                href="#"
-              >
-                Webhooks
-              </Link>
-            </div>
-          </div>
-        </nav>
-      </SheetContent>
-    </Sheet>
   );
 }
