@@ -1,10 +1,11 @@
+"use client";
 import Link from "next/link";
 import { Snippet } from "@heroui/react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { syntaxHighlight } from "@/lib/utils";
 
-import StatusCodesTable from "../components/status-codes";
+import StatusCodesTable from "../../_components/status-codes";
 
 export default function CollectionsDocs({}) {
   return (
@@ -52,8 +53,8 @@ Content-Type: application/json`}
                                   apikey: "YOUR_API_KEY",
                                 },
                                 undefined,
-                                4,
-                              ),
+                                4
+                              )
                             ),
                           }}
                         />
@@ -77,8 +78,8 @@ Content-Type: application/json`}
                                   expiresIn: 180,
                                 },
                                 undefined,
-                                4,
-                              ),
+                                4
+                              )
                             ),
                           }}
                         />
@@ -121,8 +122,8 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                                   transactionID: "your transaction ID",
                                 },
                                 undefined,
-                                4,
-                              ),
+                                4
+                              )
                             ),
                           }}
                         />
@@ -146,8 +147,8 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                                   transactionID: "your transaction ID",
                                 },
                                 undefined,
-                                4,
-                              ),
+                                4
+                              )
                             ),
                           }}
                         />
@@ -201,8 +202,8 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                                     "serviceProvider transaction status description",
                                 },
                                 undefined,
-                                4,
-                              ),
+                                4
+                              )
                             ),
                           }}
                         />

@@ -24,7 +24,7 @@ import {
   getRecentInvoices,
 } from "@/app/_actions/transaction-actions";
 import { QUERY_KEYS } from "@/lib/constants";
-import Invoice from "@/app/(external)/components/invoice";
+import Invoice from "@/app/(external)/_components/invoice";
 
 export default function InvoicingPage({}) {
   const params = useParams();
