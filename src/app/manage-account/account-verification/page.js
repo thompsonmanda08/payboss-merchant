@@ -24,7 +24,7 @@ import {
   BankAccountForm,
 } from "./components/business-account-details";
 import ComplianceSummary from "./components/compliance-summary";
-import TermsAndAgreement from "./components/terms-conditions";
+import TermsAndAgreement from "./components/contract";
 import ProgressStageTracker from "./components/account-verification-tracker";
 import AccountVerificationLoading from "./loading";
 
@@ -111,7 +111,7 @@ function AccountVerification({}) {
       let newSections = [...currentSections];
 
       // FILTER OUT CONTRACTS IN KYC NOT COMPLETED
-      if (!isCompleteKYC) {
+      if (KYCStageID < 1) {
         newSections = newSections.filter(
           (section) => section.id !== "contract"
         );
@@ -188,6 +188,10 @@ function AccountVerification({}) {
         )
       ) {
         updateStatus("documents", "completed");
+      }
+
+      if (KYCStageID == 3 && isCompleteKYC && documents.signed_contract) {
+        updateStatus("contract", "completed");
       }
 
       return hasChanged ? newSections : currentSections;
