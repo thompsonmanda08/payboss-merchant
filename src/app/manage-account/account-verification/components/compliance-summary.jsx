@@ -43,14 +43,14 @@ function ComplianceSummary({ sections, navigateToSection }) {
       });
       console.warn(
         "Navigation unavailable or sectionLink missing for:",
-        sectionLink,
+        sectionLink
       );
     }
   };
 
   // FILTER OUT "start" and "summary"
   const filteredSections = sections.filter(
-    (section) => section.id !== "start" && section.id !== "summary",
+    (section) => section.id !== "start" && section.id !== "summary"
   );
 
   const handleSubmitKYC = async () => {
@@ -64,7 +64,10 @@ function ComplianceSummary({ sections, navigateToSection }) {
         color: "success",
         description: "KYC submitted for review",
       });
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries({ queryKey: ["KYC"] });
+      queryClient.invalidateQueries({ queryKey: ["uploaded-docs"] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.SETUP] });
+      
     } else {
       addToast({
         title: "Error",
