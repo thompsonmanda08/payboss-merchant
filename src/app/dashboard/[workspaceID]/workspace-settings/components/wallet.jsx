@@ -27,6 +27,7 @@ import UploadField from "@/components/base/file-dropzone";
 import Modal from "@/components/modals/custom-modal";
 import useWalletStore from "@/context/wallet-store";
 import { useWorkspaceInit } from "@/hooks/use-query-data";
+import IframeWithFallback from "@/components/base/IframeWithFallback";
 
 function Wallet({
   workspaceID,
@@ -789,10 +790,8 @@ export function AttachmentModal() {
       }}
     >
       {selectedPrefund?.url && (
-        <iframe
-          className="h-full min-h-[60vh] w-full flex-1"
+        <IframeWithFallback
           src={selectedPrefund?.url}
-          style={{ border: "none" }}
           title={selectedPrefund?.name}
         />
       )}
