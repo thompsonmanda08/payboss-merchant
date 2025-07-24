@@ -16,7 +16,7 @@ import Card from "@/components/base/custom-card";
 import { WORKSPACE_TYPES } from "@/lib/constants";
 import useWorkspaceStore from "@/context/workspaces-store";
 
-import CreateNewUserModal from "../../../../manage-account/users/components/new-user-modal";
+import CreateOrUpdateUser from "../../../../manage-account/users/components/new-user-modal";
 import WorkspaceDetails from "../../../../../components/elements/workspace-general-details";
 
 import Wallet from "./wallet";
@@ -37,8 +37,6 @@ function WorkspaceSettings({
   // permissions,
 }) {
   const { existingUsers, setExistingUsers } = useWorkspaceStore();
-
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const activeWorkspace =
     selectedWorkspace || workspaceInit?.data?.activeWorkspace || {};
@@ -193,26 +191,12 @@ function WorkspaceSettings({
               />
             ))}
           </Tabs>
-          {currentTabIndex == 1 && permissions?.create && (
-            <Button className={"absolute right-0"} onClick={onOpen}>
-              Create New User
-            </Button>
-          )}
         </div>
 
         <div className="flex w-full flex-grow flex-col justify-start">
           {activeTab}
         </div>
       </Card>
-
-      {/* MODALS */}
-      <CreateNewUserModal
-        isOpen={isOpen}
-        workspaceID={workspaceID}
-        onClose={onClose}
-        onOpenChange={onOpenChange}
-        roles={systemRoles}
-      />
     </div>
   );
 }

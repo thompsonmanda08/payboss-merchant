@@ -40,7 +40,7 @@ function Modal({
 }: any) {
   const [isOpen, setIsOpen] = useState(show || false);
   const [noCallToAction, setNoCallToAction] = useState(
-    removeCallToAction || false,
+    removeCallToAction || false
   );
 
   useEffect(() => {
@@ -66,8 +66,8 @@ function Modal({
         <motion.div
           animate="visible"
           className={cn(
-            "absolute inset-0 z-50 flex h-screen w-full items-center justify-center bg-foreground-800/50",
-            overlay,
+            "absolute inset-0 z-50 flex h-screen w-full items-center justify-center backdrop-blur-sm bg-foreground-800/5",
+            overlay
           )}
           exit="exit"
           initial="hidden"
@@ -81,7 +81,7 @@ function Modal({
               "z-50 flex w-full flex-col items-center justify-start gap-1 rounded-lg bg-[#ffffff] p-4",
               className,
               base,
-              card,
+              card
             )}
             exit="exit"
             initial="hidden"
@@ -103,7 +103,7 @@ function Modal({
             <div
               className={cn(
                 "mb-2 mt-5 flex h-full w-full flex-grow flex-col",
-                container,
+                container
               )}
               onClick={(e) => e.stopPropagation()}
             >

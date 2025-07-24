@@ -34,6 +34,7 @@ import useWalletStore from "@/context/wallet-store";
 import { useWorkspaceInit } from "@/hooks/use-query-data";
 import { WorkspaceSession } from "@/types";
 import { formatActivityData } from "./wallet-transaction-log";
+import IframeWithFallback from "@/components/base/IframeWithFallback";
 
 function Wallet({
   workspaceID,
@@ -816,10 +817,8 @@ export function AttachmentModal() {
       }}
     >
       {selectedPrefund?.url && (
-        <iframe
-          className="h-full min-h-[60vh] w-full flex-1"
+        <IframeWithFallback
           src={selectedPrefund?.url}
-          style={{ border: "none" }}
           title={selectedPrefund?.name}
         />
       )}

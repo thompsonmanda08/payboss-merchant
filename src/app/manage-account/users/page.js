@@ -5,14 +5,12 @@ import { getUserDetails } from "@/app/_actions/config-actions";
 
 async function UsersSettingsPage() {
   const userRolesResponse = await getUserAccountRoles();
-  const roles = await userRolesResponse?.data?.system_roles;
+  const systemRoles = userRolesResponse?.data?.system_roles;
 
   const usersResponse = await getAllUsers();
   const users = usersResponse?.data?.users;
 
   const session = await getUserDetails();
-  // const user = session?.user;
-  const kyc = session?.kyc;
 
   const permissions = {
     isOwner: session?.user?.role?.toLowerCase() == "owner",
@@ -21,7 +19,9 @@ async function UsersSettingsPage() {
     ...session?.userPermissions,
   };
 
-  return <ManagePeople permissions={permissions} roles={roles} users={users} />;
+  return (
+    <ManagePeople permissions={permissions} roles={systemRoles} users={users} />
+  );
 }
 
 export const dynamic = "force-dynamic";

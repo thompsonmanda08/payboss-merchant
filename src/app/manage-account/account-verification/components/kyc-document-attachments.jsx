@@ -20,6 +20,7 @@ import DocumentDisplayButton from "@/components/base/document-display-button";
 import PromptModal from "@/components/modals/prompt-modal";
 import { QUERY_KEYS } from "@/lib/constants";
 import { InfoIcon } from "lucide-react";
+import IframeWithFallback from "@/components/base/IframeWithFallback";
 
 const ALL_DOCUMENT_CONFIGS = [
   {
@@ -374,7 +375,7 @@ export default function DocumentAttachments({
                     ),
                   })
                 }
-                isLoading={fieldLoadingStates[docConfig.id] || false}
+                isLoadingDoc={fieldLoadingStates[docConfig.id] || false}
                 label={docConfig.label}
               />
               <Tooltip content={docConfig.tooltip} placement="top" className="">
@@ -419,7 +420,7 @@ export default function DocumentAttachments({
 
           <Button
             isDisabled={!agreed || isSubmitting}
-            isLoading={isSubmitting}
+            isLoadingDoc={isSubmitting}
             loadingText={"Submitting..."}
             onPress={submitKYCDocuments}
             className="w-full lg:w-auto"
@@ -455,14 +456,10 @@ export default function DocumentAttachments({
           setCurrentDocInModal(null);
         }}
       >
-        {currentDocInModal?.url && (
-          <iframe
-            className="min-h-[60vh] w-full py-4"
-            src={currentDocInModal?.url}
-            style={{ border: "none" }}
-            title={currentDocInModal?.name}
-          />
-        )}
+        <IframeWithFallback
+          src={currentDocInModal?.url}
+          title={currentDocInModal?.name}
+        />
       </Modal>
 
       <PromptModal
@@ -471,7 +468,7 @@ export default function DocumentAttachments({
         onConfirm={confirmDelete}
         title={`Delete ${docToDelete?.name}?`}
         confirmText="Delete"
-        isLoading={isDeleting}
+        isLoadingDoc={isDeleting}
         className={"max-w-md"}
       >
         <p className="-mt-2 text-xs text-foreground/85 lg:text-sm">

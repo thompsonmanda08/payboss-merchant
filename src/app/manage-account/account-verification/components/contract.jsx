@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CardHeader from "@/components/base/card-header";
 import useKYCInfo from "@/hooks/use-kyc-info";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import EmptyLogs from "@/components/base/empty-logs";
 import Modal from "@/components/modals/custom-modal";
+import IframeWithFallback from "@/components/base/IframeWithFallback";
 
 function TermsAndAgreement({ isAdminOrOwner }) {
   const { signedContractDoc } = useKYCInfo();
@@ -16,7 +17,7 @@ function TermsAndAgreement({ isAdminOrOwner }) {
   const contractDocument = {
     name: "Signed Contract Document",
     type: "SIGNED_CONTRACT",
-    url: signedContractDoc || "#",
+    url: signedContractDoc || null,
   };
 
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -39,30 +40,28 @@ function TermsAndAgreement({ isAdminOrOwner }) {
           Please ensure the document aligns with the submitted details.
         </p>
 
-        {contractDocument?.url && (
-          <Button
-            className="relative flex h-40 w-80 cursor-pointer flex-col gap-y-2 rounded-[10px] border dark:hover:bg-primary/30 border-primary-100 dark:bg-primary/10 dark:border-primary-600/20 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
-            variant="light"
-            onClick={() => setIsOpenModal(true)}
-          >
-            <Link href={contractDocument?.url} target="_blank">
-              <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 z-50 h-5 w-5 text-foreground/20 hover:text-primary" />
-            </Link>
-            <div className="h-[65%]">
-              <Image
-                unoptimized
-                alt="file"
-                className="h-full w-full object-cover"
-                height={100}
-                src={"/images/attachment.png"}
-                width={80}
-              />
-            </div>
-            <span className="text-[13px] text-foreground/90">
-              {contractDocument?.name}
-            </span>
-          </Button>
-        )}
+        <Button
+          className="relative flex h-40 w-80 cursor-pointer flex-col gap-y-2 rounded-[10px] border dark:hover:bg-primary/30 border-primary-100 dark:bg-primary/10 dark:border-primary-600/20 bg-foreground-100 p-4 transition-all duration-300 ease-in-out"
+          variant="light"
+          onClick={() => setIsOpenModal(true)}
+        >
+          <Link href={contractDocument?.url || "#"} target="_blank">
+            <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 z-50 h-5 w-5 text-foreground/20 hover:text-primary" />
+          </Link>
+          <div className="h-[65%]">
+            <Image
+              unoptimized
+              alt="file"
+              className="h-full w-full object-cover"
+              height={100}
+              src={"/images/attachment.png"}
+              width={80}
+            />
+          </div>
+          <span className="text-[13px] text-foreground/90">
+            {contractDocument?.name}
+          </span>
+        </Button>
       </div>
 
       <Modal
@@ -77,24 +76,10 @@ function TermsAndAgreement({ isAdminOrOwner }) {
           setIsOpenModal(false);
         }}
       >
-        {contractDocument?.url ? (
-          <iframe
-            className="min-h-[60vh] w-full py-4"
-            src={contractDocument?.url}
-            style={{ border: "none" }}
-            title={contractDocument?.name}
-          />
-        ) : (
-          <>
-            <EmptyLogs
-              className={"my-auto"}
-              subTitle={
-                "Looks like the contract document is not available. Check again later or contact support."
-              }
-              title={"Oops! Contract Document Not Found"}
-            />
-          </>
-        )}
+        <IframeWithFallback
+          src={contractDocument?.url}
+          title={contractDocument?.name}
+        />
       </Modal>
     </>
   ) : (
