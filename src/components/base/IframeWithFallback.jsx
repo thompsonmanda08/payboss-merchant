@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import Spinner from "../ui/custom-spinner";
+import EmptyLogs from "./empty-logs";
 
 const IframeWithFallback = ({ src, className, classNames, ...props }) => {
   const [hasError, setHasError] = useState(false);
@@ -34,15 +35,17 @@ const IframeWithFallback = ({ src, className, classNames, ...props }) => {
     );
   }
 
-  if (hasError) {
+  if (hasError || !src) {
     return (
-      <EmptyLogs
-        className={"my-auto"}
-        subTitle={
-          "The requested content could not be loaded. Please try again later."
-        }
-        title={"Oops! No content available"}
-      />
+      <div className="flex min-h-[80vh] w-full items-center justify-center pt-2">
+        <EmptyLogs
+          className={"my-auto"}
+          subTitle={
+            "The requested content could not be loaded. Please try again later."
+          }
+          title={"Oops! No content available"}
+        />
+      </div>
     );
   }
 
