@@ -34,7 +34,7 @@ import SelectField from "@/components/ui/select-field";
 import { Button } from "@/components/ui/button";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import Search from "@/components/ui/search";
-import CreateNewUserModal from "@/app/manage-account/users/components/new-user-modal";
+import CreateOrUpdateUser from "@/app/manage-account/users/components/new-user-modal";
 import useKYCInfo from "@/hooks/use-kyc-info";
 
 const ACCOUNT_ROLES = [
@@ -94,7 +94,9 @@ export default function UsersTable({
   rowLimit = 10,
   onAddUser,
   permissions = {},
-  roles = [],
+  workspaceRoles,
+  systemRoles,
+  roles = undefined, // BY DEFAULT ==> SUPPLIED TO OVERRIDE THE GET ROLES FUNCTION,
 }) {
   const {
     isLoading,
@@ -121,6 +123,15 @@ export default function UsersTable({
   const isUsersRoute = pathname == "/manage-account/users";
 
   const ROLE_FILTERS = isUsersRoute ? ACCOUNT_ROLES : WORKSPACE_ROLES;
+
+  const getRoles = () => {
+    // EDITING USER FROM WORKSPACE
+    if (!isUsersRoute && isEditingUser) {
+      return workspaceRoles;
+    }
+
+    return systemRoles;
+  };
 
   // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
@@ -235,19 +246,17 @@ export default function UsersTable({
         return (
           <div className="relative flex items-center justify-center gap-4">
             {/* EDIT USER ROLE */}
-            {!isUsersRoute && (
-              <Tooltip color="default" content="Edit user">
-                <span
-                  className="cursor-pointer text-lg text-primary active:opacity-50"
-                  onClick={() => {
-                    setSelectedUser(user);
-                    setIsEditingUser(true);
-                  }}
-                >
-                  <PencilSquareIcon className="h-5 w-5" />
-                </span>
-              </Tooltip>
-            )}
+            <Tooltip color="default" content="Edit user">
+              <span
+                className="cursor-pointer text-lg text-primary active:opacity-50"
+                onClick={() => {
+                  setSelectedUser(user);
+                  setIsEditingUser(true);
+                }}
+              >
+                <PencilSquareIcon className="h-5 w-5" />
+              </span>
+            </Tooltip>
 
             {/* RESET USER PASSWORD BY ACCOUNT ADMIN */}
             {isUsersRoute && (
@@ -595,6 +604,10 @@ export default function UsersTable({
     setOpenResetPasswordPrompt(false);
   }
 
+  const USER_ROLES = roles || getRoles();
+  console.log("USERS ROUTE==>", !isUsersRoute && isEditingUser);
+  console.log("ROLES TO USE==>", USER_ROLES);
+
   return (
     <>
       <Table
@@ -695,26 +708,28 @@ export default function UsersTable({
         isDismissable={false}
         isLoading={isLoading}
         isOpen={isOpen && selectedUser !== null}
-        title="Remove Workspace User"
+        title={`Remove ${isUsersRoute ? "Account" : "Workspace"} User?`}
         onClose={handleClosePrompts}
         onConfirm={handleRemoveUser}
         onOpen={onOpen}
+        className={"max-w-lg"}
       >
         <p className="-mt-4 text-sm leading-6 text-foreground/70">
-          Are you sure you want to remove{" "}
+          You are about to remove{" "}
           <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
             {`${selectedUser?.first_name} ${selectedUser?.last_name}`}
           </code>{" "}
-          from this {isUsersRoute ? "account" : "workspace"}.
+          from this {isUsersRoute ? "account" : "workspace"}.?
         </p>
       </PromptModal>
 
       {/* CREATE  A NEW USER  */}
-      <CreateNewUserModal
+      <CreateOrUpdateUser
+        isUsersRoute={isUsersRoute}
         isOpen={(isEditingUser || isCreateUser) && isOpen}
         workspaceID={workspaceID}
         onClose={handleClosePrompts}
-        roles={roles}
+        roles={USER_ROLES}
       />
     </>
   );

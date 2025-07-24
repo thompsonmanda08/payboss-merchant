@@ -173,7 +173,7 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                     <div className="flex flex-col gap-4 w-full">
                       <pre className="text-sm bg-primary-50 p-4 rounded-md">
                         <code>
-                          {`GET ~/collections
+                          {`GET ~ {%BASE_URL%}/api/v1/transaction/collection/status/{%transactionID%}
 Content-Type: application/json
 Authorization: Bearer YOUR_ACCESS_TOKEN `}
                         </code>

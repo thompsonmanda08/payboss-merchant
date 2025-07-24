@@ -35,13 +35,31 @@ const USER_INIT = {
   password: "P4y-B055_*848#=@B/G/S&zm",
 };
 
-function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
+// CREATE NEW USER
+// UPDATE EXISTING USER
+// UPDATE WORKSPACE USER
+
+/**
+ * A modal component for creating a new user or editing an existing user.
+ *
+ * @param {{ isOpen: boolean, onClose: Function, workspaceID: number, roles: Array<Object> }} props
+ * @prop {boolean} isOpen - Whether the modal should be open
+ * @prop {Function} onClose - Function to call when the close button is clicked
+ * @prop {number} workspaceID - The ID of the workspace the user belongs to
+ * @prop {Array<Object>} roles - An array of role objects
+ *
+ * @returns {JSX.Element} A modal component
+ */
+function CreateOrUpdateUser({
+  isOpen,
+  isUsersRoute,
+  onClose,
+  workspaceID,
+  roles,
+}) {
   const { isEditingUser, selectedUser, setSelectedUser, setIsEditingUser } =
     useWorkspaceStore();
   const queryClient = useQueryClient();
-  const pathname = usePathname();
-
-  const isUsersRoute = pathname.split("/manage-account/users");
 
   const [loading, setLoading] = useState(false);
   const [newUser, setNewUser] = useState(USER_INIT);
@@ -159,7 +177,7 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
     let response = await changeUserRoleInWorkspace(
       userMapping,
       recordID,
-      workspaceID,
+      workspaceID
     );
 
     if (response?.success) {
@@ -420,4 +438,4 @@ function CreateNewUserModal({ isOpen, onClose, workspaceID, roles }) {
   );
 }
 
-export default CreateNewUserModal;
+export default CreateOrUpdateUser;

@@ -41,7 +41,8 @@ export default function WorkspaceMembers({
         users={workspaceMembers}
         workspaceID={workspaceID}
         onAddUser={onOpenAdd}
-        roles={systemRoles}
+        workspaceRoles={workspaceRoles}
+        systemRoles={systemRoles}
       />
       <AddUserToWorkspace
         allUsers={allUsers}
