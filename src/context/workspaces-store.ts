@@ -22,7 +22,7 @@ const INITIAL_STATE = {
   selectedUser: null,
 };
 
-const useWorkspaceStore = create((set, get) => ({
+const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
   ...INITIAL_STATE,
 
   //SETTERS
@@ -294,5 +294,33 @@ const useWorkspaceStore = create((set, get) => ({
       ...INITIAL_STATE,
     }),
 }));
+
+type WorkspaceStore = {
+  addedUsers: any[];
+  existingUsers: any[];
+  error: {
+    status: boolean;
+    message: string;
+  };
+  isLoading: boolean;
+  isEditingUser: boolean;
+  selectedUser: any;
+  setAddedUsers: (users: any[]) => void;
+  setExistingUsers: (users: any[]) => void;
+  setError: (error: any) => void;
+  setIsLoading: (status: boolean) => void;
+  setIsEditingUser: (status: boolean) => void;
+  setSelectedUser: (user: any) => void;
+  handleRemoveFromWorkspace: (user: any) => void;
+  handleUserRoleChange: (user: any, id: string) => void;
+  handleAddToWorkspace: (user: any) => void;
+  handleSubmitAddedUsers: (workspaceID: string) => Promise<any>;
+  handleResetUserPassword: () => Promise<any>;
+  handleDeleteFromWorkspace: (workspaceID: string) => Promise<any>;
+  handleUnlockSystemUser: () => Promise<any>;
+  handleDeleteFromAccount: () => Promise<any>;
+  handleClearAllSelected: () => void;
+  resetWorkspaces: () => void;
+};
 
 export default useWorkspaceStore;

@@ -20,7 +20,6 @@ import {
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 
-import useNavigationStore from "@/context/navigation-store.js";
 import DropdownButton from "@/components/ui/dropdown-button";
 import Spinner from "@/components/ui/custom-spinner";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
@@ -39,7 +38,7 @@ import { TicketPercentIcon } from "lucide-react";
 function SideNavBar({}) {
   const pathname = usePathname();
 
-  const { openMobileMenu, toggleMobileMenu } = useNavigationStore();
+  const [openMobileMenu, toggleMobileMenu] = useState(false);
   const [expandedSection, setExpandedSection] = useState(null);
 
   const params = useParams();
@@ -360,7 +359,7 @@ function SideNavBar({}) {
       >
         <nav
           className={cn(
-            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`
+            `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`,
           )}
         >
           <Logo href={dashboardRoute} />

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import useSettingsStore from "@/context/settings-store";
 import { Input } from "@/components/ui/input-field";
 import useAccountProfile from "@/hooks/use-profile-info";
 import Card from "@/components/base/custom-card";
@@ -10,8 +9,8 @@ import Card from "@/components/base/custom-card";
 function ProfileDetails() {
   const { user, isLoading, isFetching } = useAccountProfile();
 
-  const { openEditModal, setOpenEditModal } = useSettingsStore();
   const [newUserDetails, setNewUserDetails] = useState({});
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   function handleToggleModal() {
     setOpenEditModal(!openEditModal);
