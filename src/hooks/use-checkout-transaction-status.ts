@@ -2,7 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getTransactionStatus } from "@/app/_actions/checkout-actions";
 
-export const useCheckoutTransactionStatus = (transactionID, enable) => {
+export const useCheckoutTransactionStatus = (
+  transactionID: string,
+  enable: boolean,
+) => {
   const { data, isError } = useQuery({
     queryKey: ["transaction-status", transactionID],
     queryFn: async () => {
@@ -30,7 +33,7 @@ export const useCheckoutTransactionStatus = (transactionID, enable) => {
 
       const response = await getTransactionStatus(transactionID);
 
-      return response.data;
+      return response?.data;
     },
     // add any other options to handle query behavior
     refetchInterval: 15 * 1000, // every 15 seconds

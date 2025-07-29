@@ -2,13 +2,14 @@
 import { usePathname } from "next/navigation";
 
 import { useSetupConfig } from "./use-query-data";
+import { Workspace } from "@/types";
 
-const useWorkspaces = (query) => {
+const useWorkspaces = (query: any) => {
   const pathname = usePathname();
 
   const { data: setup, isLoading, isFetching } = useSetupConfig();
 
-  const workspaces = setup?.data?.workspaces || [];
+  const workspaces = (setup?.data?.workspaces as Workspace[]) || [];
   const workspaceTypes = setup?.data?.workspace_type || [];
 
   const isUserInWorkspace =
@@ -19,7 +20,7 @@ const useWorkspaces = (query) => {
     : query?.workspaceID || "";
 
   const activeWorkspace = workspaces?.find(
-    (workspace) => workspace?.ID == workspaceID
+    (workspace) => workspace?.ID == workspaceID,
   );
 
   const workspaceWalletBalance =

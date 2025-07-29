@@ -2,7 +2,11 @@
 
 import { cache } from "react";
 
-import authenticatedApiClient from "@/lib/api-config";
+import authenticatedApiClient, {
+  handleBadRequest,
+  handleError,
+  successResponse,
+} from "@/lib/api-config";
 import { APIResponse } from "@/types";
 
 /**
@@ -22,13 +26,7 @@ export async function fetchDashboardAnalytics(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   try {
@@ -36,32 +34,9 @@ export async function fetchDashboardAnalytics(
       url: `analytics/merchant/dashboard/workspace/${workspaceID}`,
     });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | DASHBOARD ANALYTICS", "");
   }
 }
 

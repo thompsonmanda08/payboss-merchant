@@ -16,7 +16,7 @@ const useConfigOptions = () => {
   const otherCountries = response?.data?.countries || [];
 
   const zambia = response?.data?.countries.find(
-    (country) =>
+    (country: any) =>
       country.country_code === "ZM" ||
       country?.country.toLowerCase() === "zambia",
   );

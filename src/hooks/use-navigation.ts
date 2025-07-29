@@ -3,7 +3,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { useWorkspaceInit } from "./use-query-data";
 
-const useNavigation = (query) => {
+const useNavigation = (query:any) => {
   const pathname = usePathname();
   const pathArr = pathname?.split("/");
 

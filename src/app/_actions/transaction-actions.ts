@@ -1,6 +1,11 @@
 "use server";
 
-import authenticatedApiClient from "@/lib/api-config";
+import authenticatedApiClient, {
+  handleBadRequest,
+  handleError,
+  successResponse,
+} from "@/lib/api-config";
+import { APIResponse } from "@/types";
 
 // ****************** ******************************** ************************** //
 // ****************** BULK TRANSACTION API ENDPOINTS ************************** //
@@ -21,17 +26,13 @@ import authenticatedApiClient from "@/lib/api-config";
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function getAllBulkTransactions(workspaceID) {
+export async function getAllBulkTransactions(
+  workspaceID: string,
+): Promise<APIResponse> {
   // const session = await getUserSession()
   // const merchantID = session?.user?.merchantID
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/transaction/payments/bulk/batches/${workspaceID}`;
@@ -39,30 +40,9 @@ export async function getAllBulkTransactions(workspaceID) {
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "GET | BULK TRANSACTION DATA ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | BULK TRANSACTIONS", url);
   }
 }
 
@@ -82,15 +62,9 @@ export async function getAllBulkTransactions(workspaceID) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function getBatchDetails(batchID) {
+export async function getBatchDetails(batchID: string): Promise<APIResponse> {
   if (!batchID) {
-    return {
-      success: false,
-      message: "batch ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Batch ID is required");
   }
 
   const url = `merchant/transaction/payments/bulk/batch/details/${batchID}`;
@@ -98,30 +72,9 @@ export async function getBatchDetails(batchID) {
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "GET | BATCH DETAILS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | BATCH DETAILS", url);
   }
 }
 
@@ -142,16 +95,13 @@ export async function getBatchDetails(batchID) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function reviewBatch(batchID, reviewDetails) {
+export async function reviewBatch(
+  batchID: string,
+  reviewDetails: any,
+): Promise<APIResponse> {
   // const { action, review } = reviewDetails
   if (!batchID) {
-    return {
-      success: false,
-      message: "batch ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Batch ID is required");
   }
 
   const url = `transaction/payments/bulk/review-submission/${batchID}`;
@@ -163,30 +113,9 @@ export async function reviewBatch(batchID, reviewDetails) {
       data: reviewDetails,
     });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST | REVIEW BATCH ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | REVIEW BATCH", url);
   }
 }
 
@@ -210,17 +139,14 @@ export async function reviewBatch(batchID, reviewDetails) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function initializeBulkTransaction(workspaceID, transactionData) {
+export async function initializeBulkTransaction(
+  workspaceID: string,
+  transactionData: any,
+): Promise<APIResponse> {
   const { protocol } = transactionData;
 
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `transaction/${protocol}/payments/bulk/${workspaceID}`;
@@ -232,30 +158,9 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
       data: transactionData,
     });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST | INITIALIZE BATCH TRANSACTION ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | INITIALIZE BATCH TRANSACTION", url);
   }
 }
 
@@ -276,16 +181,12 @@ export async function initializeBulkTransaction(workspaceID, transactionData) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function submitBatchForApproval(batchID) {
+export async function submitBatchForApproval(
+  batchID: string,
+): Promise<APIResponse> {
   // At this point mew records would have been sent to the BE server so we just need to fetch the updated batch
   if (!batchID) {
-    return {
-      success: false,
-      message: "batch ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Batch ID is required");
   }
 
   const url = `transaction/payments/bulk/review-submission/${batchID}`;
@@ -293,30 +194,9 @@ export async function submitBatchForApproval(batchID) {
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "GET | SUBMIT BATCH TRANSACTION ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | SUBMIT BATCH TRANSACTION", url);
   }
 }
 
@@ -337,15 +217,11 @@ export async function submitBatchForApproval(batchID) {
  * - `statusText`: The HTTP status text for the operation.
  */
 
-export async function getWalletPrefundHistory(workspaceID) {
+export async function getWalletPrefundHistory(
+  workspaceID: string,
+): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/workspace/${workspaceID}/wallet/prefund/history`;
@@ -353,30 +229,9 @@ export async function getWalletPrefundHistory(workspaceID) {
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "GET | WALLET PREFUND HISTORY ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | WALLET PREFUND HISTORY", url);
   }
 }
 
@@ -394,15 +249,12 @@ export async function getWalletPrefundHistory(workspaceID) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function getBulkAnalyticReports(workspaceID, dateFilter) {
+export async function getBulkAnalyticReports(
+  workspaceID: string,
+  dateFilter: any,
+): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "workspaceID ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `analytics/merchant/workspace/${workspaceID}/bulk/payments`;
@@ -414,30 +266,9 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
       data: dateFilter,
     });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST | BULK DISBURSEMENT REPORTS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | BULK ANALYTIC REPORTS", url);
   }
 }
 
@@ -458,15 +289,13 @@ export async function getBulkAnalyticReports(workspaceID, dateFilter) {
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function getCollectionsReport(workspaceID, service, dateFilter) {
+export async function getCollectionsReport(
+  workspaceID: string,
+  service: string,
+  dateFilter: any,
+): Promise<APIResponse> {
   if (!workspaceID || !service) {
-    return {
-      success: false,
-      message: "workspaceID Or Service are required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID and Service are required");
   }
 
   const url = `analytics/merchant/workspace/${workspaceID}/${service}/report`;
@@ -478,30 +307,9 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
       data: dateFilter,
     });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST | COLLECTIONS REPORT ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | COLLECTIONS REPORT", url);
   }
 }
 
@@ -529,18 +337,12 @@ export async function getCollectionsReport(workspaceID, service, dateFilter) {
  */
 
 export async function getCollectionLatestTransactions(
-  workspaceID,
-  service,
-  dateFilter
-) {
+  workspaceID: string,
+  service: string,
+  dateFilter: any,
+): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "workspaceID ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/transaction/collections/${service}/${workspaceID}`;
@@ -552,30 +354,9 @@ export async function getCollectionLatestTransactions(
       data: dateFilter,
     });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST | API COLLECTION TRANSACTIONS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | API COLLECTION TRANSACTIONS", url);
   }
 }
 
@@ -595,15 +376,12 @@ export async function getCollectionLatestTransactions(
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function getWalletStatementReport(workspaceID, dateFilter) {
+export async function getWalletStatementReport(
+  workspaceID: string,
+  dateFilter: any,
+) {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "workspaceID ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
   const url = `/analytics/merchant/workspace/${workspaceID}/wallet-report`;
 
@@ -614,33 +392,9 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
       data: dateFilter,
     });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST | WALLET STATEMENT REPORT ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.message ||
-        error?.response?.data?.error ||
-        error ||
-        "NextError! See Console for more details",
-      data: null,
-      status: error?.response?.status || 500,
-    };
+    return handleError(error, "POST | WALLET STATEMENT REPORT", url);
   }
 }
 
@@ -664,15 +418,12 @@ export async function getWalletStatementReport(workspaceID, dateFilter) {
  * - `statusText`: The HTTP status text for the operation.
  */
 
-export async function getBillsLatestTransactions(workspaceID, dateFilter) {
+export async function getBillsLatestTransactions(
+  workspaceID: string,
+  dateFilter: any,
+): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "workspaceID ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `transaction/merchant/bills/${workspaceID}`;
@@ -684,45 +435,15 @@ export async function getBillsLatestTransactions(workspaceID, dateFilter) {
       data: dateFilter,
     });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST | BILL PAYMENTS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.message ||
-        error?.response?.data?.error ||
-        error ||
-        "NextError! See Console for more details",
-      data: null,
-      status: error?.response?.status || 500,
-    };
+    return handleError(error, "POST | BILL PAYMENTS", url);
   }
 }
 
-export async function getRecentInvoices(workspaceID, dateFilter) {
+export async function getRecentInvoices(workspaceID: string, dateFilter: any) {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "workspaceID ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/transaction/collection/invoices/${workspaceID}`;
@@ -734,29 +455,8 @@ export async function getRecentInvoices(workspaceID, dateFilter) {
       data: dateFilter,
     });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST | INVOICES ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | INVOICES", url);
   }
 }

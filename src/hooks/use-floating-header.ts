@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
-const useFloatingHeader = (point) => {
+const useFloatingHeader = (point: number) => {
   const [isFloating, setIsFloating] = useState(false);
 
   useEffect(() => {
-    const scrollYPos = window.addEventListener("scroll", () => {
+    const scrollYPos: any = window.addEventListener("scroll", () => {
       window.scrollY > point ? setIsFloating(true) : setIsFloating(false);
     });
 

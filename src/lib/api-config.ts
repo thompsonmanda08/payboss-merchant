@@ -4,6 +4,7 @@ import { getAuthSession } from "@/app/_actions/config-actions";
 
 import { apiClient } from "./utils";
 import { AxiosHeaders, AxiosRequestConfig, AxiosRequestHeaders } from "axios";
+import { APIResponse } from "@/types";
 
 // Add request interceptor for authenticated requests
 // apiClient.interceptors.request.use(
@@ -31,7 +32,6 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
 
     // Network error (no response)
     if (!error.response) {
@@ -95,3 +95,78 @@ const authenticatedApiClient = async (request: RequestType) => {
 };
 
 export default authenticatedApiClient;
+
+// Response helpers
+export function successResponse(
+  data: any | null,
+  message: string = "Action completed successfully",
+): APIResponse {
+  return {
+    success: true,
+    message,
+    data,
+    status: 200,
+    statusText: "OK",
+  };
+}
+
+export function handleBadRequest(
+  message: string = "Missing required parameters",
+): APIResponse {
+  return {
+    success: false,
+    message,
+    data: null,
+    status: 400,
+    statusText: "BAD_REQUEST",
+  };
+}
+export function unauthorizedResponse(
+  message: string = "Unauthorized",
+): APIResponse {
+  return {
+    success: false,
+    message,
+    data: null,
+    status: 401,
+    statusText: "UNAUTHORIZED",
+  };
+}
+
+export function notFoundResponse(message: string): APIResponse {
+  return {
+    success: false,
+    message,
+    data: null,
+    status: 404,
+    statusText: "NOT FOUND",
+  };
+}
+
+export function handleError(
+  error: any,
+  method = "GET",
+  url: string,
+): APIResponse {
+  console.error({
+    endpoint: `${method} | ~ ${url}`,
+    status: error?.response?.status,
+    statusText: error?.response?.statusText,
+    headers: error?.response?.headers,
+    config: error?.response?.config,
+    data: error?.response?.data || error,
+  });
+
+  return {
+    success: false,
+    message:
+      error?.response?.data?.error ||
+      error?.response?.data?.message ||
+      error?.response?.config?.data?.error ||
+      error?.message ||
+      "No Server Response",
+    data: null,
+    status: error?.response?.status || 500,
+    statusText: error?.response?.statusText || "INTERNAL SERVER ERROR",
+  };
+}

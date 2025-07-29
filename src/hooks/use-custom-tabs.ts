@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
 
-export default function useCustomTabsHook(tabs) {
+export default function useCustomTabsHook(tabs: React.ReactNode[]) {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  function navigateTo(tabIndex) {
+  function navigateTo(tabIndex: number) {
     setIsLoading(true);
     try {
       setCurrentTabIndex(tabIndex);

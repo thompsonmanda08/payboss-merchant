@@ -12,6 +12,8 @@ import {
   getWorkspaceSessionData,
 } from "@/lib/session";
 import { apiClient } from "@/lib/utils";
+import { handleError, successResponse } from "@/lib/api-config";
+import { APIResponse, Workspace } from "@/types";
 
 /**
  * Retrieves the general configurations from the configuration service.
@@ -21,40 +23,15 @@ import { apiClient } from "@/lib/utils";
  * @returns {Promise<Object>} A promise that resolves to an object indicating the success or failure of the operation,
  * including the message, data, status, and statusText.
  */
-
-export const getGeneralConfigs = cache(async () => {
+export const getGeneralConfigs = cache(async (): Promise<APIResponse> => {
   const url = `/configuration/all-configs`;
 
   try {
     const res = await apiClient.get(url);
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "GET | GENERAL CONFIGS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | GENERAL CONFIGS", url);
   }
 });
 
@@ -65,7 +42,7 @@ export const getGeneralConfigs = cache(async () => {
  *
  * @returns {Promise<Object|null>} A promise that resolves to the session object if available, or null if not.
  */
-export const getAuthSession = cache(async () => {
+export const getAuthSession = cache(async (): Promise<Object | null> => {
   const session = await getServerSession();
 
   if (session) return session;
@@ -86,7 +63,7 @@ export const getAuthSession = cache(async () => {
 //   return null;
 // }
 
-export const getUserDetails = cache(async () => {
+export const getUserDetails = cache(async (): Promise<Object | null> => {
   const session = await getUserSession();
 
   if (session) return session;
@@ -102,7 +79,7 @@ export const getUserDetails = cache(async () => {
  * @returns {Promise<Object|null>} A promise that resolves to the workspace session object if available, or null if not.
  */
 
-export const getWorkspaceSession = cache(async () => {
+export const getWorkspaceSession = cache(async (): Promise<Object | null> => {
   const session = await getWorkspaceSessionData();
 
   if (session) return session;
@@ -110,7 +87,7 @@ export const getWorkspaceSession = cache(async () => {
   return null;
 });
 
-export const revokeAccessToken = async () => {
+export const revokeAccessToken = async (): Promise<Object | null> => {
   const response = await deleteSession();
 
   revalidatePath("/", "layout");
@@ -118,7 +95,7 @@ export const revokeAccessToken = async () => {
   return response;
 };
 
-export async function setupUserSessions(sessionData) {
+export async function setupUserSessions(sessionData: any) {
   // CREATE A USER SESSION COOKIE TO STORE THE LOGGED IN USER DATA
   try {
     await Promise.all([
@@ -132,10 +109,10 @@ export async function setupUserSessions(sessionData) {
       sessionData?.workspaces &&
         createWorkspaceSession({
           workspaces: sessionData?.workspaces,
-          workspaceIDs: sessionData?.workspaces.map((item) => item?.ID),
-          activeWorkspace: null,
-          activeWorkspaceID: null,
-          workspacePermissions: null,
+          workspaceIDs: sessionData?.workspaces.map(
+            (item: Workspace) => item?.ID,
+          ),
+          workspaceType: sessionData?.workspaceType ?? "", // Provide a default or actual value
         }),
     ]);
 

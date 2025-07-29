@@ -1,6 +1,12 @@
 "use server";
 
+import {
+  handleBadRequest,
+  handleError,
+  successResponse,
+} from "@/lib/api-config";
 import { apiClient } from "@/lib/utils";
+import { APIResponse } from "@/types";
 
 /**
  * Validates the provided checkout data by ensuring required parameters are present
@@ -14,20 +20,15 @@ import { apiClient } from "@/lib/utils";
  * includes a success status, message, data, status code, and status text. If unsuccessful,
  * provides an error message and status information.
  */
-
-export async function validateCheckoutData(checkoutData) {
+export async function validateCheckoutData(
+  checkoutData: any,
+): Promise<APIResponse> {
   if (
     !checkoutData?.workspaceID ||
     !checkoutData?.transactionID ||
     !checkoutData?.serviceID
   ) {
-    return {
-      success: false,
-      message: "Missing Required Params",
-      data: null,
-      status: 400,
-      statusText: "BAD REQUEST",
-    };
+    return handleBadRequest();
   }
 
   const url = `transaction/collection/checkout/validation`;
@@ -35,35 +36,9 @@ export async function validateCheckoutData(checkoutData) {
   try {
     const res = await apiClient.post(url, checkoutData);
 
-    // revalidatePath("/checkout", "page");
-
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST | CHECKOUT DATA VALIDATION ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | CHECKOUT VALIDATION", url);
   }
 }
 
@@ -79,15 +54,12 @@ export async function validateCheckoutData(checkoutData) {
  * includes a success status, message, data, status code, and status text. If
  * unsuccessful, provides an error message and status information.
  */
-export async function getCheckoutInfo(checkoutID, serviceID) {
+export async function getCheckoutInfo(
+  checkoutID: string,
+  serviceID: string,
+): Promise<APIResponse> {
   if (!checkoutID) {
-    return {
-      success: false,
-      message: "checkout ID is required",
-      data: null,
-      status: 400,
-      statusText: "BAD REQUEST",
-    };
+    return handleBadRequest("checkout ID is required");
   }
 
   const url = `merchant/transaction/collection/checkout/${checkoutID}/details/${serviceID}`;
@@ -95,33 +67,9 @@ export async function getCheckoutInfo(checkoutID, serviceID) {
   try {
     const res = await apiClient.get(url);
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST | CHECKOUT  DATA ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | CHECKOUT INFO", url);
   }
 }
 
@@ -139,7 +87,9 @@ export async function getCheckoutInfo(checkoutID, serviceID) {
  * @returns {Promise<Object>} A promise that resolves to an object indicating the success or failure of the operation, along with relevant data or error details.
  */
 
-export async function payWithMobileMoney(checkoutData) {
+export async function payWithMobileMoney(
+  checkoutData: any,
+): Promise<APIResponse> {
   if (
     !checkoutData?.transactionID ||
     !checkoutData?.workspaceID ||
@@ -147,13 +97,7 @@ export async function payWithMobileMoney(checkoutData) {
     !checkoutData?.phoneNumber ||
     !checkoutData?.amount
   ) {
-    return {
-      success: false,
-      message: "Missing Required Params",
-      data: null,
-      status: 400,
-      statusText: "BAD REQUEST",
-    };
+    return handleBadRequest();
   }
 
   const { transactionID, serviceID, workspaceID, phoneNumber, amount } =
@@ -164,33 +108,9 @@ export async function payWithMobileMoney(checkoutData) {
   try {
     const res = await apiClient.get(url);
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      endpoint: "GET | PAY WITH MOBILE ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return successResponse(res.data);
+  } catch (error: Error | any) {
+    return handleError(error, "GET | PAY WITH MOBILE", url);
   }
 }
 
@@ -207,19 +127,15 @@ export async function payWithMobileMoney(checkoutData) {
  * @param {string} checkoutData.serviceID - The service ID for the checkout.
  * @returns {Object} An object containing the result of the request. If successful, includes a success status, message, data, status code, and status text. If unsuccessful, provides an error message and status information.
  */
-export async function payWithBankCard(checkoutData) {
+export async function payWithBankCard(checkoutData: any): Promise<APIResponse> {
   if (
     !checkoutData?.transactionID ||
     !checkoutData?.workspaceID ||
     !checkoutData?.serviceID
   ) {
-    return {
-      success: false,
-      message: "Missing Required Params: Transaction/Service/Workspace ID",
-      data: null,
-      status: 400,
-      statusText: "BAD REQUEST",
-    };
+    return handleBadRequest(
+      "Missing Required Params: Transaction/Service/Workspace ID",
+    );
   }
 
   const { serviceID, workspaceID } = checkoutData;
@@ -229,33 +145,9 @@ export async function payWithBankCard(checkoutData) {
   try {
     const res = await apiClient.post(url, checkoutData);
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
-  } catch (error) {
-    console.error({
-      endpoint: "POST | CHECKOUT WITH CARD ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return successResponse(res.data);
+  } catch (error: Error | any) {
+    return handleError(error, `POST | CHECKOUT WITH CARD`, url);
   }
 }
 
@@ -269,7 +161,9 @@ export async function payWithBankCard(checkoutData) {
  * @param {string} transactionID - The transaction ID for which to retrieve the status.
  * @returns {Object} An object containing the result of the request. If successful, includes a success status, message, data, status code, and status text. If unsuccessful, provides an error message and status information.
  */
-export async function getTransactionStatus(transactionID) {
+export async function getTransactionStatus(
+  transactionID: string,
+): Promise<APIResponse> {
   if (!transactionID) {
     return {
       success: false,
@@ -287,12 +181,12 @@ export async function getTransactionStatus(transactionID) {
 
     return {
       success: true,
-      message: res.message,
+      message: "Transaction status fetched",
       data: res.data,
       status: res.status,
       statusText: res.statusText,
     };
-  } catch (error) {
+  } catch (error: Error | any) {
     console.error({
       endpoint: "GET | TRANSACTION STATUS ~ " + url,
       status: error?.response?.status,
@@ -314,61 +208,3 @@ export async function getTransactionStatus(transactionID) {
     };
   }
 }
-
-/**
- * Completes the checkout process by updating the status of a transaction using the provided transaction ID and status.
- * If the request is successful, this function will return an object containing the result of the request, including
- * a success status, message, data, status code, and status text. If the request fails, this function will return an
- * object containing an error message and status information.
- *
- * @param {string} transactionID - The transaction ID for which to update the status.
- * @param {string} status - The new status to set for the transaction.
- * @returns {Object} An object containing the result of the request. If successful, includes a success status, message,
- * data, status code, and status text. If unsuccessful, provides an error message and status information.
- */
-
-// export async function completeCheckoutProcess(transactionID, status) {
-//   if (!transactionID || !status) {
-//     return {
-//       success: false,
-//       message: "Missing Required Params: Transaction ID or Status",
-//       data: null,
-//       status: 400,
-//       statusText: "BAD REQUEST",
-//     };
-//   }
-
-//   const url = `transaction/collection/checkout/transaction/${transactionID}/status/${status}`;
-
-//   try {
-//     const res = await apiClient.get(url);
-
-//     return {
-//       success: true,
-//       message: res.message,
-//       data: res.data,
-//       status: res.status,
-//       statusText: res.statusText,
-//     };
-//   } catch (error) {
-//     console.error({
-//       endpoint: "GET | SEND TRANSACTION STATUS ~ " + url,
-//       status: error?.response?.status,
-//       statusText: error?.response?.statusText,
-//       headers: error?.response?.headers,
-//       config: error?.response?.config,
-//       data: error?.response?.data || error,
-//     });
-
-//     return {
-//       success: false,
-//       message:
-//         error?.response?.data?.error ||
-//         error?.response?.config?.data?.error ||
-//         "No Server Response",
-//       data: error?.response?.data,
-//       status: error?.response?.status,
-//       statusText: error?.response?.statusText,
-//     };
-//   }
-// }

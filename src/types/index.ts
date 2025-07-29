@@ -53,10 +53,10 @@ export type UserSession = {
 };
 
 export type WorkspaceSession = {
-  workspaceIDs: string[];
-  workspaceType: string;
+  workspaceType: string | null;
   workspaces: any[];
-  activeWorkspace?: Workspace;
+  workspaceIDs: string[];
+  activeWorkspace?: Workspace | null;
   workspacePermissions?: any;
   [x: string]: any;
 };

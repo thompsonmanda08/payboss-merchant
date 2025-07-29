@@ -8,7 +8,7 @@ import {
 } from "@/lib/table-columns";
 import { formatDate } from "@/lib/utils";
 
-export function downloadCSV(data, fileName) {
+export function downloadCSV(data: any, fileName: string) {
   const csvData = new Blob([data], { type: "text/csv" });
   const csvURL = URL.createObjectURL(csvData);
   const link = document.createElement("a");
@@ -36,7 +36,7 @@ export function convertToCSVString({
 }) {
   if (!Array.isArray(objArray) || objArray.length === 0) {
     console.error("Invalid or empty data provided for CSV conversion.");
-
+    alert("Invalid or empty data provided for CSV conversion.");
     return;
   }
 

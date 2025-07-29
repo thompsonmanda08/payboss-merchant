@@ -3,7 +3,21 @@ import { useEffect, useRef, useState } from "react";
 import Spinner from "../ui/custom-spinner";
 import EmptyLogs from "./empty-logs";
 
-const IframeWithFallback = ({ src, className, classNames, ...props }) => {
+const IframeWithFallback = ({
+  title,
+  src,
+  className,
+  classNames,
+  ...props
+}: {
+  title?: string;
+  src: string;
+  className?: string;
+  classNames?: {
+    base?: string;
+    iframe?: string;
+  };
+}) => {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const iframeRef = useRef(null);
@@ -51,10 +65,11 @@ const IframeWithFallback = ({ src, className, classNames, ...props }) => {
 
   return (
     <iframe
+      title={title || "Iframe"}
       className={cn(
         "min-h-[80vh] w-full h-full flex flex-1",
         className,
-        classNames?.iframe
+        classNames?.iframe,
       )}
       src={src}
       onError={handleIframeError}

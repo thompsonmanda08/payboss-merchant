@@ -2,20 +2,18 @@
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
-import authenticatedApiClient from "@/lib/api-config";
+import authenticatedApiClient, {
+  handleBadRequest,
+  handleError,
+  successResponse,
+} from "@/lib/api-config";
 import { updateWorkspaceSession } from "@/lib/session";
 import { APIResponse } from "@/types";
 
 export const initializeWorkspace = cache(
   async (workspaceID: string): Promise<APIResponse> => {
     if (!workspaceID) {
-      return {
-        success: false,
-        message: "Workspace ID is required!",
-        data: null,
-        status: 400,
-        statusText: "Bad Request",
-      };
+      return handleBadRequest("Workspace ID is required");
     }
 
     const url = `merchant/workspace/${workspaceID}/init`;
@@ -31,30 +29,9 @@ export const initializeWorkspace = cache(
 
       const updatedSession = await updateWorkspaceSession(workspaceSession);
 
-      return {
-        success: true,
-        message: res.data?.message,
-        data: updatedSession,
-        status: res?.status,
-        statusText: res?.statusText,
-      };
+      return successResponse(updatedSession);
     } catch (error: Error | any) {
-      console.error({
-        endpoint: "GET | INITIALIZE WORKSPACE ~ " + url,
-        status: error?.response?.status,
-        statusText: error?.response?.statusText,
-        headers: error?.response?.headers,
-        config: error?.response?.config,
-        data: error?.response?.data || error,
-      });
-
-      return {
-        success: false,
-        message: error?.response?.data?.error || "No Server Response",
-        data: null,
-        status: error?.response?.status,
-        statusText: error?.response?.statusText,
-      };
+      return handleError(error, "POST | INIT WORKSPACE", url);
     }
   },
 );
@@ -69,32 +46,9 @@ export const getAssignedWorkspaces = cache(async (): Promise<APIResponse> => {
 
     await updateWorkspaceSession({ workspaces });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: workspaces,
-      status: res?.status,
-      statusText: res?.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | WORKSPACES ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        "Error Occurred: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | WORKSPACES", url);
   }
 });
 
@@ -127,13 +81,7 @@ export async function submitPOP(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/workspace/${workspaceID}/wallet/prefund`;
@@ -150,33 +98,9 @@ export async function submitPOP(
       "page",
     );
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "POST | PREFUND POP ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | PREFUND POP", url);
   }
 }
 
@@ -200,13 +124,7 @@ export async function getWalletPrefunds(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/workspace/${workspaceID}/wallet/prefund/list`;
@@ -214,33 +132,9 @@ export async function getWalletPrefunds(
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | WALLET PREFUND LIST ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | WALLET PREFUND LIST", url);
   }
 }
 
@@ -268,13 +162,7 @@ export async function approveWalletPrefund(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!prefundID || !workspaceID) {
-    return {
-      success: false,
-      message: "Prefund/workspaceID ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Prefund/workspaceID ID is required!");
   }
 
   const url = `merchant/workspace/${workspaceID}/wallet/prefund/${prefundID}/review`;
@@ -286,33 +174,9 @@ export async function approveWalletPrefund(
       data: prefundData,
     });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "PATCH | APPROVE PREFUND ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH | APPROVE WALLET PREFUND", url);
   }
 }
 
@@ -335,13 +199,7 @@ export async function getWorkspaceMembers(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/workspace/${workspaceID}/users`;
@@ -349,33 +207,9 @@ export async function getWorkspaceMembers(
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "PATCH | WORKSPACE USERS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | WORKSPACE MEMBERS", url);
   }
 }
 
@@ -393,14 +227,8 @@ export async function deleteUserFromWorkspace(
   recordID: string,
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID || !recordID) {
-    return {
-      success: false,
-      message: "Workspace/Record ID is required!",
-      data: null,
-      status: 400,
-      statusText: "BAD REQUEST",
-    };
+  if (!workspaceID) {
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `/merchant/workspace/${workspaceID}/user/${recordID}`;
@@ -414,33 +242,9 @@ export async function deleteUserFromWorkspace(
     revalidatePath("/manage-account/workspaces/[ID]", "page");
     revalidatePath("/dashboard/[workspaceID]/workspace-settings", "page");
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "DELETE | USER ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "DELETE | USER", url);
   }
 }
 
@@ -462,13 +266,7 @@ export async function changeUserRoleInWorkspace(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/workspace/${workspaceID}/user/role/${recordID}`;
@@ -480,33 +278,9 @@ export async function changeUserRoleInWorkspace(
       data: mapping,
     });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "PATCH | USER ROLE ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH | USER ROLE", url);
   }
 }
 
@@ -521,13 +295,7 @@ export async function setupWorkspaceAPIKey(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/transaction/collection/create/api-key/${workspaceID}`;
@@ -535,33 +303,9 @@ export async function setupWorkspaceAPIKey(
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | SETUP API KEY ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | SETUP API KEY", url);
   }
 }
 
@@ -585,13 +329,7 @@ export async function refreshWorkspaceAPIKey(
   keyID: string,
 ): Promise<APIResponse> {
   if (!workspaceID || !keyID) {
-    return {
-      success: false,
-      message: "Workspace/Refresh Key ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace/Refresh Key ID is required!");
   }
 
   const url = `/merchant/transaction/collection/generate/${workspaceID}/api-key/${keyID}`;
@@ -599,33 +337,9 @@ export async function refreshWorkspaceAPIKey(
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | REFRESH API KEY ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | FRESH API KEY", url);
   }
 }
 
@@ -646,13 +360,7 @@ export async function getWorkspaceAPIKey(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/transaction/collection/api-key/${workspaceID}`;
@@ -660,33 +368,9 @@ export async function getWorkspaceAPIKey(
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | API KEY ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | API KEY", url);
   }
 }
 
@@ -707,13 +391,7 @@ export async function generateWorkspaceTillNumber(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "workspaceID ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/transaction/collection/create/till-number/${workspaceID}`;
@@ -721,33 +399,9 @@ export async function generateWorkspaceTillNumber(
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | GENERATE TILL NUMBER ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | GENERATE TILL NUMBER", url);
   }
 }
 
@@ -769,13 +423,7 @@ export async function getWorkspaceTillNumber(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "workspaceID ID is required",
-      data: [],
-      status: 400,
-      statusText: "BAD_REQUEST",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/transaction/collection/till-number/${workspaceID}`;
@@ -783,33 +431,9 @@ export async function getWorkspaceTillNumber(
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | TILL NUMBER ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | TILL NUMBER", url);
   }
 }
 
@@ -830,13 +454,7 @@ export async function activateWorkspaceTerminals(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/workspace/${workspaceID}/terminal/activation`;
@@ -844,33 +462,9 @@ export async function activateWorkspaceTerminals(
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "POST | TERMINAL ACTIVATION ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | TERMINAL ACTIVATION", url);
   }
 }
 
@@ -891,13 +485,7 @@ export async function deactivateWorkspaceTerminals(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   try {
@@ -905,32 +493,9 @@ export async function deactivateWorkspaceTerminals(
       url: `merchant/workspace/${workspaceID}/terminal/deactivation`,
     });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | TERMINAL DEACTIVATION", "");
   }
 }
 
@@ -951,13 +516,7 @@ export async function getAllWorkspaceTerminals(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/workspace/${workspaceID}/terminals`;
@@ -965,33 +524,9 @@ export async function getAllWorkspaceTerminals(
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | WORKSPACE TERMINALS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | WORKSPACE TERMINALS", url);
   }
 }
 
@@ -1014,13 +549,7 @@ export async function registerTerminals(
   terminalUrl: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/workspace/${workspaceID}/terminal`;
@@ -1032,33 +561,9 @@ export async function registerTerminals(
       data: { terminalUrl },
     });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "POST | REGISTER TERMINALS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | REGISTER TERMINALS", url);
   }
 }
 
@@ -1081,13 +586,7 @@ export async function updateWorkspaceCallback(
   callbackData: any,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/workspace/callback/${workspaceID}`;
@@ -1099,47 +598,31 @@ export async function updateWorkspaceCallback(
       data: callbackData,
     });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "PATCH | CALLBACK URL ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH | CALLBACK URL", url);
   }
 }
+
+/**
+ * Retrieves the callback URL for the given workspace.
+ *
+ * @param {string} workspaceID - The ID of the workspace for which the callback URL is being fetched.
+ *
+ * @returns {Promise<Object>} - A promise resolving to an object with the following properties:
+ *
+ * - `success`: A boolean indicating whether the operation was successful.
+ * - `message`: A string providing a message about the result of the operation.
+ * - `data`: The callback URL data for the workspace.
+ * - `status`: The HTTP status code for the operation.
+ * - `statusText`: The HTTP status text for the operation.
+ */
 
 export async function getWorkspaceCallback(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return {
-      success: false,
-      message: "Workspace ID is required!",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Workspace ID is required");
   }
 
   const url = `merchant/workspace/${workspaceID}/callback`;
@@ -1147,32 +630,8 @@ export async function getWorkspaceCallback(
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | CALLBACK URL ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.response?.config?.data?.error ||
-        "No Server Response",
-      data: error?.response?.data,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | CALLBACK URL", url);
   }
 }

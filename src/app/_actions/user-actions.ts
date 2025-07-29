@@ -3,9 +3,15 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-import authenticatedApiClient from "@/lib/api-config";
+import authenticatedApiClient, {
+  handleBadRequest,
+  handleError,
+  successResponse,
+} from "@/lib/api-config";
 import { USER_SESSION } from "@/lib/constants";
 import { getUserSession } from "@/lib/session";
+import { APIResponse } from "@/types";
+import { AnyARecord } from "dns";
 
 /**
  * Creates a new user for a merchant by calling the API endpoint.
@@ -16,7 +22,7 @@ import { getUserSession } from "@/lib/session";
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  *
  */
-export async function createNewUser(newUser) {
+export async function createNewUser(newUser: AnyARecord): Promise<APIResponse> {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
   const url = `merchant/${merchantID}/user/other`;
@@ -30,30 +36,9 @@ export async function createNewUser(newUser) {
 
     revalidatePath("/manage-account/users", "page");
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "POST USER DATA ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | CREATE NEW USER", url);
   }
 }
 
@@ -65,39 +50,22 @@ export async function createNewUser(newUser) {
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  * */
 
-export const getAllUsers = cache(async function fetchAllUsers() {
+export const getAllUsers = cache(async (): Promise<APIResponse> => {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+
+  if (!merchantID) {
+    return handleBadRequest("Merchant ID is required");
+  }
 
   const url = `merchant/${merchantID}/users`;
 
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: `GET | ALL USERS ~ ${url}`,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | ALL USERS", url);
   }
 });
 
@@ -110,7 +78,10 @@ export const getAllUsers = cache(async function fetchAllUsers() {
  * @param {string} workspaceID - The ID of the workspace to assign the users to.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  * */
-export async function assignUsersToWorkspace(users, workspaceID) {
+export async function assignUsersToWorkspace(
+  users: any,
+  workspaceID: string,
+): Promise<APIResponse> {
   try {
     const res = await authenticatedApiClient({
       url: `merchant/workspace/${workspaceID}/user/mapping`,
@@ -120,29 +91,9 @@ export async function assignUsersToWorkspace(users, workspaceID) {
       },
     });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | ASSIGN USERS TO WORKSPACE", "");
   }
 }
 
@@ -154,35 +105,15 @@ export async function assignUsersToWorkspace(users, workspaceID) {
  * @param {string} userID - The ID of the user to retrieve.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  * */
-export async function getUser(userID) {
+export async function getUser(userID: string): Promise<APIResponse> {
   try {
     const res = await authenticatedApiClient({
       url: `merchant/user/${userID}`,
     });
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | USER DETAILS", "");
   }
 }
 
@@ -196,7 +127,10 @@ export async function getUser(userID) {
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
 
-export async function updateProfileData(userID, userData) {
+export async function updateProfileData(
+  userID: string,
+  userData: any,
+): Promise<APIResponse> {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
   const url = `merchant/${merchantID}/user/${userID}`;
@@ -210,30 +144,9 @@ export async function updateProfileData(userID, userData) {
 
     revalidatePath("/manage-account/profile", "page");
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "PATCH PROFILE ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH | UPDATE PROFILE", url);
   }
 }
 
@@ -247,9 +160,16 @@ export async function updateProfileData(userID, userData) {
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
 
-export async function updateSystemUserData(userID, userData) {
+export async function updateSystemUserData(
+  userID: string,
+  userData: any,
+): Promise<APIResponse> {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+
+  if (!merchantID || !userID) {
+    return handleBadRequest("Merchant ID and User ID are required");
+  }
   const url = `merchant/${merchantID}/user/${userID}`;
 
   try {
@@ -261,30 +181,9 @@ export async function updateSystemUserData(userID, userData) {
 
     revalidatePath("/manage-account/users", "page");
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "PATCH SYSTEM USER ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH | UPDATE SYSTEM USER", url);
   }
 }
 
@@ -296,8 +195,7 @@ export async function updateSystemUserData(userID, userData) {
  * @param {string} userID - The ID of the system user to delete.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
-
-export async function deleteSystemUserData(userID) {
+export async function deleteSystemUserData(userID: string) {
   // const session = await getUserSession();
   // const merchantID = session?.user?.merchantID;
 
@@ -309,29 +207,9 @@ export async function deleteSystemUserData(userID) {
 
     revalidatePath("/manage-account/users", "page");
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "DELETE | DELETE SYSTEM USER", "");
   }
 }
 
@@ -343,10 +221,14 @@ export async function deleteSystemUserData(userID) {
  * @param {string} userID - The ID of the user to unlock.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
-
-export async function unlockSystemUser(userID) {
+export async function unlockSystemUser(userID: string): Promise<APIResponse> {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+
+  if (!merchantID || !userID) {
+    return handleBadRequest("Merchant ID and User ID are required");
+  }
+
   const url = `merchant/${merchantID}/user/${userID}/unlock`;
 
   try {
@@ -356,30 +238,9 @@ export async function unlockSystemUser(userID) {
 
     revalidatePath("/manage-account/users", "page");
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      endpoint: "GET | UNLOCK SYSTEM USER ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH | UNLOCK SYSTEM USER", url);
   }
 }
 
@@ -391,8 +252,9 @@ export async function unlockSystemUser(userID) {
  * @param {string} password - The new password to be set for the user.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
-
-export async function changeUserPassword(password) {
+export async function changeUserPassword(
+  password: string,
+): Promise<APIResponse> {
   (await cookies()).delete(USER_SESSION);
 
   try {
@@ -404,29 +266,9 @@ export async function changeUserPassword(password) {
 
     revalidatePath("/manage-account/profile", "page");
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH | CHANGE PASSWORD", "");
   }
 }
 
@@ -439,8 +281,10 @@ export async function changeUserPassword(password) {
  * @param {Object} newPasswordData - An object containing the new password details.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
-
-export async function adminResetUserPassword(userID, newPasswordData) {
+export async function adminResetUserPassword(
+  userID: string,
+  newPasswordData: any,
+): Promise<APIResponse> {
   try {
     const res = await authenticatedApiClient({
       url: `merchant/user/${userID}/reset/password`,
@@ -450,28 +294,8 @@ export async function adminResetUserPassword(userID, newPasswordData) {
 
     revalidatePath("/manage-account/users", "page");
 
-    return {
-      success: true,
-      message: res.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error) {
-    console.error({
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH | RESET PASSWORD", "");
   }
 }

@@ -1,5 +1,9 @@
 "use server";
-import authenticatedApiClient from "@/lib/api-config";
+import authenticatedApiClient, {
+  handleBadRequest,
+  handleError,
+  successResponse,
+} from "@/lib/api-config";
 import {
   createAuthSession,
   getUserSession,
@@ -42,33 +46,9 @@ export async function authenticateUser(
 
     await createAuthSession(accessToken);
 
-    return {
-      success: true,
-      message: "Login Successful",
-      data: { accessToken },
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse({ accessToken }, res.data?.message);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: `POST | LOGIN ~ ${url}`,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message:
-        error?.response?.data?.error ||
-        error?.message ||
-        "Login Failed: See Console for details",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | LOGIN", url);
   }
 }
 
@@ -85,30 +65,9 @@ export async function validateTPIN(tpin: string): Promise<APIResponse> {
   try {
     const res = await apiClient.get(url);
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | TPIN VALIDATION ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | VALIDATE TPIN", url);
   }
 }
 
@@ -128,30 +87,9 @@ export async function createNewMerchant(
   try {
     const res = await apiClient.post(url, businessInfo);
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "POST | NEW MERCHANT ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | CREATE MERCHANT", url);
   }
 }
 
@@ -164,19 +102,12 @@ export async function createNewMerchant(
  * @param {string} merchantID - The ID of the merchant whose bank details are being submitted.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
-
 export async function submitMerchantBankDetails(
   data: BankAccountDetails,
   merchantID: string,
 ): Promise<APIResponse> {
   if (!merchantID) {
-    return {
-      success: false,
-      message: "Merchant ID is required",
-      data: null,
-      status: 400,
-      statusText: "Bad Request",
-    };
+    return handleBadRequest("Merchant ID is required");
   }
 
   const url = `merchant/onboard/bank-details/${merchantID}`;
@@ -184,30 +115,9 @@ export async function submitMerchantBankDetails(
   try {
     const res = await apiClient.post(url, data);
 
-    return {
-      success: true,
-      message: res?.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "POST | MERCHANT BANK DATA ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | SUBMIT BANK DETAILS", url);
   }
 }
 
@@ -220,18 +130,12 @@ export async function submitMerchantBankDetails(
  * @param {string} merchantID - The ID of the merchant whose details are being updated.
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
-
 export async function updateMerchantDetails(
   businessInfo: Partial<BusinessDetails>,
   merchantID: string,
 ): Promise<APIResponse> {
   if (!merchantID) {
-    return {
-      success: false,
-      message: "Merchant ID is required",
-      data: null,
-      status: 400,
-    };
+    return handleBadRequest("Merchant ID is required");
   }
 
   const url = `kyc/merchant/${merchantID}`;
@@ -239,30 +143,9 @@ export async function updateMerchantDetails(
   try {
     const res = await apiClient.patch(url, businessInfo);
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "PATCH | MERCHANT KYC DATA ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH | UPDATE MERCHANT DETAILS", url);
   }
 }
 
@@ -277,17 +160,22 @@ export async function updateMerchantDetails(
  *
  */
 
+/**
+ * Creates a new admin user for a merchant by calling the API endpoint.
+ * If the operation is successful, an API response containing the new user's details is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @param {AccountOwner} newUser - An object containing the new user's details.
+ * @param {string} merchantID - The ID of the merchant whose admin user is being created.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ *
+ */
 export async function createMerchantAdminUser(
   newUser: AccountOwner,
   merchantID: string,
 ): Promise<APIResponse> {
   if (!merchantID) {
-    return {
-      success: false,
-      message: "Merchant ID is required",
-      data: null,
-      status: 400,
-    };
+    return handleBadRequest("Merchant ID is required");
   }
 
   const url = `merchant/${merchantID}/user/owner`;
@@ -295,65 +183,35 @@ export async function createMerchantAdminUser(
   try {
     const res = await apiClient.post(url, newUser);
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "POST | NEW MERCHANT ADMIN USER ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | CREATE ADMIN USER", url);
   }
 }
 
-export async function getBusinessDocumentRefs() {
+/**
+ * Retrieves the submitted business document references for a merchant by calling the API endpoint.
+ * If the operation is successful, an API response containing the document references is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ */
+export async function getBusinessDocumentRefs(): Promise<APIResponse> {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+
+  if (!merchantID) {
+    return handleBadRequest("Merchant ID is required");
+  }
+
   const url = `merchant/${merchantID}/submitted/document/details`;
 
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "GET | MERCHANT BUSINESS DOCS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "GET | DOCUMENT REFERENCES", url);
   }
 }
 
@@ -370,6 +228,11 @@ export async function sendBusinessDocumentRefs(
 ): Promise<APIResponse> {
   const session = await getUserSession();
   const merchantID = session?.merchantID;
+
+  if (!merchantID) {
+    return handleBadRequest("Merchant ID is required");
+  }
+
   const url = `merchant/${merchantID}/document/submission`;
 
   try {
@@ -379,38 +242,30 @@ export async function sendBusinessDocumentRefs(
       data: payloadUrls,
     });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "POST | MERCHANT BUSINESS DOCS ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | DOCUMENT REFERENCES", url);
   }
 }
 
+/**
+ * Deletes the specified business document references by sending a PATCH request to the API.
+ * If the operation is successful, an API response containing the updated document references is returned.
+ * If the operation fails, an API response with a message indicating the error is returned.
+ *
+ * @param {Partial<keyof DocumentUrls>} keys - An object containing the keys of the document references to be deleted.
+ * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
+ */
 export async function deleteBusinessDocumentRefs(
   keys: Partial<keyof DocumentUrls>,
-) {
+): Promise<APIResponse> {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+
+  if (!merchantID) {
+    return handleBadRequest("Merchant ID is required");
+  }
+
   const url = `merchant/${merchantID}/documents/for/resubmission`;
 
   try {
@@ -420,30 +275,9 @@ export async function deleteBusinessDocumentRefs(
       data: { document_names: [...keys] },
     });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "PATCH | BUSINESS DOC ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH/DELETE | DOCUMENT REFERENCES", url);
   }
 }
 
@@ -460,6 +294,10 @@ export async function updateBusinessDocumentRefs(
 ): Promise<APIResponse> {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;
+
+  if (!merchantID) {
+    return handleBadRequest("Merchant ID is required");
+  }
   const url = `merchant/${merchantID}/document/submission`;
 
   try {
@@ -469,30 +307,9 @@ export async function updateBusinessDocumentRefs(
       data: payloadUrls,
     });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "PATCH | BUSINESS DOC ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "PATCH | DOCUMENT REFERENCES", url);
   }
 }
 
@@ -521,30 +338,9 @@ export async function getRefreshToken(): Promise<APIResponse> {
 
     await createAuthSession(accessToken);
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: { accessToken },
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse({ accessToken }, res.data?.message);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "Error Refreshing Token",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | REFRESH TOKEN", url);
   }
 }
 
@@ -557,51 +353,10 @@ export async function submitKYCForReview() {
   try {
     const res = await authenticatedApiClient({ url });
 
-    return {
-      success: true,
-      message: res.data?.message,
-      data: res.data,
-      status: res.status,
-      statusText: res.statusText,
-    };
+    return successResponse(res.data);
   } catch (error: Error | any) {
-    console.error({
-      endpoint: "POST | SUBMIT KYC FOR REVIEW ~ " + url,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-      headers: error?.response?.headers,
-      config: error?.response?.config,
-      data: error?.response?.data || error,
-    });
-
-    return {
-      success: false,
-      message: error?.response?.data?.error || "No Server Response",
-      data: null,
-      status: error?.response?.status,
-      statusText: error?.response?.statusText,
-    };
+    return handleError(error, "POST | SUBMIT FOR REVIEW", url);
   }
-}
-
-/**
- * Logs the user out of the system by deleting the session and
- * returning true if the logout is successful. If the user is not
- * logged in, the function returns false.
- *
- * @returns {Promise<boolean>} - A promise that resolves to a boolean value
- * indicating whether the logout is successful.
- */
-export async function logUserOut() {
-  const isLoggedIn = await verifySession();
-
-  if (isLoggedIn) {
-    const response = await revokeAccessToken();
-
-    return response?.success;
-  }
-
-  return false;
 }
 
 /**
