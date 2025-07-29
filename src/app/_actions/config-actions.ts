@@ -42,7 +42,7 @@ export const getGeneralConfigs = cache(async (): Promise<APIResponse> => {
  *
  * @returns {Promise<Object|null>} A promise that resolves to the session object if available, or null if not.
  */
-export const getAuthSession = cache(async (): Promise<Object | null> => {
+export const getAuthSession = cache(async (): Promise<any> => {
   const session = await getServerSession();
 
   if (session) return session;
@@ -63,7 +63,7 @@ export const getAuthSession = cache(async (): Promise<Object | null> => {
 //   return null;
 // }
 
-export const getUserDetails = cache(async (): Promise<Object | null> => {
+export const getUserDetails = cache(async (): Promise<any> => {
   const session = await getUserSession();
 
   if (session) return session;
@@ -79,7 +79,7 @@ export const getUserDetails = cache(async (): Promise<Object | null> => {
  * @returns {Promise<Object|null>} A promise that resolves to the workspace session object if available, or null if not.
  */
 
-export const getWorkspaceSession = cache(async (): Promise<Object | null> => {
+export const getWorkspaceSession = cache(async (): Promise<any> => {
   const session = await getWorkspaceSessionData();
 
   if (session) return session;
@@ -87,7 +87,7 @@ export const getWorkspaceSession = cache(async (): Promise<Object | null> => {
   return null;
 });
 
-export const revokeAccessToken = async (): Promise<Object | null> => {
+export const revokeAccessToken = async (): Promise<any> => {
   const response = await deleteSession();
 
   revalidatePath("/", "layout");

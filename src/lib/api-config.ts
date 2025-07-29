@@ -1,5 +1,3 @@
-"use server";
-
 import { getAuthSession } from "@/app/_actions/config-actions";
 
 import { apiClient } from "./utils";
@@ -96,7 +94,14 @@ const authenticatedApiClient = async (request: RequestType) => {
 
 export default authenticatedApiClient;
 
-// Response helpers
+/**
+ * Constructs a standardized API response object for a successful operation.
+ *
+ * @param {any | null} data - The data to include in the response object, or null if no data is provided.
+ * @param {string} [message="Action completed successfully"] - The message to include in the response object.
+ * @returns {APIResponse} - The standardized API response object.
+ */
+
 export function successResponse(
   data: any | null,
   message: string = "Action completed successfully",
@@ -110,6 +115,11 @@ export function successResponse(
   };
 }
 
+/**
+ * Returns an API response indicating that a request has bad parameters.
+ * @param {string} [message="Missing required parameters"] The message to return
+ * @returns {APIResponse} The API response
+ */
 export function handleBadRequest(
   message: string = "Missing required parameters",
 ): APIResponse {
@@ -121,6 +131,14 @@ export function handleBadRequest(
     statusText: "BAD_REQUEST",
   };
 }
+
+/**
+ * Constructs a standardized API response object for a 401 UNAUTHORIZED status.
+ * Used when a request cannot be authenticated.
+ *
+ * @param {string} [message="Unauthorized"] - The message to include in the response object.
+ * @returns {APIResponse} - The standardized API response object.
+ */
 export function unauthorizedResponse(
   message: string = "Unauthorized",
 ): APIResponse {
@@ -133,6 +151,13 @@ export function unauthorizedResponse(
   };
 }
 
+/**
+ * Constructs a standardized API response object for a 404 NOT FOUND status.
+ * Used when the requested resource could not be found.
+ *
+ * @param {string} message - The error message to be sent in the response.
+ * @returns {APIResponse} - An object containing the success status, error message, and status details.
+ */
 export function notFoundResponse(message: string): APIResponse {
   return {
     success: false,
@@ -143,9 +168,19 @@ export function notFoundResponse(message: string): APIResponse {
   };
 }
 
+/**
+ * Handles and logs errors from API requests, constructs a standardized API response object.
+ * Logs the error details, including endpoint information, status, headers, and data.
+ *
+ * @param {any} error - The error object caught from an API request.
+ * @param {string} [method="GET"] - The HTTP method used for the request.
+ * @param {string} url - The URL endpoint of the API request.
+ * @returns {APIResponse} - An object containing the success status, error message, and status details.
+ */
+
 export function handleError(
   error: any,
-  method = "GET",
+  method: string = "GET",
   url: string,
 ): APIResponse {
   console.error({
@@ -154,7 +189,8 @@ export function handleError(
     statusText: error?.response?.statusText,
     headers: error?.response?.headers,
     config: error?.response?.config,
-    data: error?.response?.data || error,
+    data: error?.response?.data,
+    details: error,
   });
 
   return {
