@@ -4,6 +4,27 @@ import { cn, formatCurrency } from "@/lib/utils";
 
 import Card from "./custom-card";
 
+type StatusCardProps = {
+  totalTitle: string;
+  validTitle: string;
+  invalidTitle: string;
+  totalValue: number;
+  validValue: number;
+  invalidValue: number;
+  totalInfo: string;
+  validInfo: string;
+  invalidInfo: string;
+  viewAllRecords: () => void;
+  viewValidRecords: () => void;
+  viewInvalidRecords: () => void;
+  tooltipText: string;
+  Icon: React.ElementType;
+  IconColor?: string;
+  totalAmount?: number;
+  validAmount?: number;
+  invalidAmount?: number;
+};
+
 function StatusCard({
   totalTitle,
   validTitle,
@@ -23,7 +44,7 @@ function StatusCard({
   totalAmount,
   validAmount,
   invalidAmount,
-}) {
+}: StatusCardProps) {
   const totalPercentage = ((totalValue / totalValue) * 100).toFixed(0);
   const totalValidPercentage = ((validValue / totalValue) * 100).toFixed(0);
   const totalInvalidPercentage = ((invalidValue / totalValue) * 100).toFixed(0);
@@ -47,7 +68,7 @@ function StatusCard({
               }}
               showValueLabel={true}
               strokeWidth={4}
-              value={totalPercentage}
+              value={Number(totalPercentage)}
               onClick={viewAllRecords}
             />
 
@@ -91,7 +112,7 @@ function StatusCard({
               }}
               showValueLabel={true}
               strokeWidth={4}
-              value={totalValidPercentage}
+              value={Number(totalValidPercentage)}
               onClick={viewValidRecords}
             />
 
@@ -135,7 +156,7 @@ function StatusCard({
               }}
               showValueLabel={true}
               strokeWidth={4}
-              value={totalInvalidPercentage}
+              value={Number(totalInvalidPercentage)}
               onClick={viewInvalidRecords}
             />
 
@@ -174,7 +195,7 @@ function StatusCard({
             variant="flat"
             onClick={viewValidRecords}
           >
-            {formatCurrency(validAmount)}
+            {formatCurrency(Number(validAmount))}
           </Chip>
         </div>
 

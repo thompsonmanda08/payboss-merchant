@@ -10,7 +10,7 @@ import { Input } from "../ui/input-field";
 function SupportForm() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleOnSubmit = async (e) => {
+  const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 

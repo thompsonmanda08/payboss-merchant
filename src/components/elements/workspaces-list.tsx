@@ -25,6 +25,7 @@ import WorkspaceItem from "./workspace-card-item";
 import CreateNewWorkspaceModal from "../modals/create-new-workspace-modal";
 import useKYCInfo from "@/hooks/use-kyc-info";
 import WorkspacesLoading from "@/app/manage-account/loading";
+import { Workspace } from "@/types";
 
 const INIT_DATA = {
   workspace: "",
@@ -32,7 +33,15 @@ const INIT_DATA = {
   workspaceType: "",
 };
 
-function WorkspacesList({ showHeader = false, className, workspaces }) {
+function WorkspacesList({
+  showHeader = false,
+  className,
+  workspaces,
+}: {
+  showHeader?: boolean;
+  className?: string;
+  workspaces?: Workspace[];
+}) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
 
@@ -53,7 +62,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [newWorkspace, setNewWorkspace] = useState(INIT_DATA);
-  const editWorkspaceField = (fields) =>
+  const editWorkspaceField = (fields: Partial<typeof INIT_DATA>) =>
     setNewWorkspace((prev) => ({ ...prev, ...fields }));
 
   const isManagePage = pathname.split("/").includes("manage-account");
@@ -111,9 +120,10 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
   }
 
   // IF ON MANAGE WORKSPACES PAGE, SHOW ALL WORKSPACES AND IF ON DASHBOARD SHOW ONLY PROVIDED WORKSPACES OR ACTIVE WORKSPACES
-  const WORKSPACES = isManagePage
-    ? workspaces
-    : workspaces || assignedWorkspaces;
+  const WORKSPACES: Workspace[] =
+    isManagePage && workspaces
+      ? workspaces
+      : workspaces || (assignedWorkspaces as Workspace[]);
 
   const isLoadingData = useMemo(() => {
     return loadingWorkspaces || loadingKYC || loadingAccountProfile;
@@ -189,7 +199,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
           <div
             className={cn(
               "max-h-[600px] overflow-y-auto no-scrollbar flex w-full min-w-[400px]  flex-col lg:px-2",
-              { "max-h-auto lg:max-h-max ": isManagePage }
+              { "max-h-auto lg:max-h-max ": isManagePage },
             )}
           >
             {loadingWorkspaces || loadingAccountProfile ? (
@@ -217,7 +227,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                   {
                     "grid-cols-[repeat(auto-fill,minmax(400px,1fr))]":
                       WORKSPACES?.length > 0,
-                  }
+                  },
                 )}
               >
                 {WORKSPACES.length ? (
@@ -226,7 +236,7 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                       <WorkspaceItem
                         key={index}
                         description={`${capitalize(
-                          item?.workspaceType
+                          item?.workspaceType,
                         )}'s Workspace`}
                         href={
                           isManagePage
@@ -313,7 +323,9 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
                   <Button
                     className={cn(
                       "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
-                      { "col-span-full": workspaces?.length < 0 }
+                      {
+                        "col-span-full": !workspaces || workspaces?.length < 0,
+                      },
                     )}
                     onPress={onOpen}
                   >
@@ -342,9 +354,8 @@ function WorkspacesList({ showHeader = false, className, workspaces }) {
         handleClose={handleClose}
         handleCreateWorkspace={handleCreateWorkspace}
         isOpen={isOpen}
-        isLoading={isLoading}
+        loading={isLoading}
         workspaceTypes={workspaceTypes}
-        onOpen={onOpen}
       />
     </>
   );

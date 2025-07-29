@@ -40,6 +40,16 @@ export default function TerminalsTable({
   emptyTitleText,
   selectedKeys,
   setSelectedKeys,
+}: {
+  rows: any[];
+  isLoading: boolean;
+  removeWrapper?: boolean;
+  onRowAction?: (item: any) => void;
+  handleAddTerminal?: () => void;
+  emptyDescriptionText?: string;
+  emptyTitleText?: string;
+  selectedKeys?: any;
+  setSelectedKeys?: any;
 }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(3);
   const [sortDescriptor, setSortDescriptor] = React.useState({
@@ -57,7 +67,7 @@ export default function TerminalsTable({
     return rows?.slice(start, end);
   }, [page, rows, rowsPerPage]);
 
-  const renderCell = React.useCallback((item, columnKey) => {
+  const renderCell = React.useCallback((item: any, columnKey: any) => {
     const cellValue = item[columnKey];
 
     switch (columnKey) {
@@ -185,7 +195,7 @@ export default function TerminalsTable({
       color="primary"
       removeWrapper={removeWrapper}
       onRowAction={(key) => onRowAction(key)}
-      onSortChange={setSortDescriptor}
+      onSortChange={setSortDescriptor as any}
     >
       <TableHeader columns={columns}>
         {(column) => (
@@ -193,7 +203,7 @@ export default function TerminalsTable({
             key={column.uid}
             align={column.uid === "action" ? "center" : "start"}
             allowsSorting={column.sortable}
-            width={column.uid === "name" ? "60%" : "auto"}
+            width={(column.uid === "name" ? "60%" : "auto") as any}
           >
             {column.name}
           </TableColumn>
@@ -226,6 +236,13 @@ export function TerminalInfo({
   value,
   className,
   ...props
+}: {
+  onClick?: () => void;
+  terminalName?: string;
+  terminalID?: string;
+  count?: number;
+  value?: number;
+  className?: string;
 }) {
   return (
     <Button

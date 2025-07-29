@@ -1,3 +1,4 @@
+import { WalletStore } from "@/types/stores";
 import { create } from "zustand";
 
 export const POP_INIT = {
@@ -55,23 +56,5 @@ const useWalletStore = create<WalletStore>((set) => ({
       ...INITIAL_STATE,
     }),
 }));
-
-type WalletStore = {
-  selectedPrefund: any;
-  prefundApproval: any;
-  openAttachmentModal: boolean;
-  walletLoading: boolean;
-  isLoading: boolean;
-  formData: any;
-  setSelectedPrefund: (selectedPrefund: any) => void;
-  setOpenAttachmentModal: (open: boolean) => void;
-  setWalletLoading: (status: boolean) => void;
-  setIsLoading: (status: boolean) => void;
-  setFormData: (data: any) => void;
-  setPrefundApproval: (data: any) => void;
-  updateFormData: (fields: any) => void;
-  updatePrefundApproval: (fields: any) => void;
-  clearWalletStore: () => void;
-};
 
 export default useWalletStore;

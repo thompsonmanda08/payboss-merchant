@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-const Option = (props) => {
+const Option = (props: any) => {
   const isSelected = props.index === props.selectedIndex;
 
   return (
@@ -13,7 +13,7 @@ const Option = (props) => {
         { "bg-sky-100/20": isSelected },
         `${isSelected && props?.selected}`,
       )}
-      onClick={() => props.onSelect(props.index)}
+      onClick={() => props.onSelect(Number(props.index))}
     >
       {/* OUTLINE CIRCLE */}
       <div
@@ -42,15 +42,27 @@ function CustomRadioGroup({
   labelText,
   className,
   classNames,
+}: {
+  options: string[];
+  onChange?: any;
+  value?: number;
+  labelText?: string;
+  className?: string;
+  classNames?: {
+    base?: string;
+    wrapper?: string;
+    label?: string;
+    selected?: string;
+  };
 }) {
   const [selectedIndex, setSelectedIndex] = useState(value);
 
-  function onSelect(index) {
+  function onSelect(index: number) {
     setSelectedIndex(index);
     onChange && onChange(index);
   }
 
-  const { base, wrapper, label, selected } = classNames || "";
+  const { base, wrapper, label, selected } = classNames || {};
 
   return (
     <div className={cn("flex w-full flex-col gap-y-1", wrapper)}>
@@ -77,7 +89,7 @@ function CustomRadioGroup({
             index={index}
             selected={selected}
             selectedIndex={selectedIndex}
-            onSelect={(index) => onSelect(index)}
+            onSelect={(index: number) => onSelect(index)}
           >
             {el}
           </Option>

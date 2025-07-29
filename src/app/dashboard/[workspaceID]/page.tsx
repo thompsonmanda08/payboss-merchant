@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import DashboardAnalytics from "@/app/dashboard/components/DashboardAnalytics";
 import { getWorkspaceSession } from "@/app/_actions/config-actions";
 import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
-import { PropsWithoutRef } from "react";
+import { PageProps } from "@/types";
 
 export const revalidate = 15;
 export const dynamicParams = true;
@@ -15,7 +15,7 @@ export const metadata = {
   description: "Summary dashboard analytics data from the last 30 days",
 };
 
-export default async function DashboardHome({ params }: PropsWithoutRef<any>) {
+export default async function DashboardHome({ params }: PageProps) {
   const workspaceID = (await params).workspaceID;
 
   if (!workspaceID) return redirect("/workspaces");

@@ -1,6 +1,14 @@
 import { cn } from "@/lib/utils";
+import { PropsWithChildren } from "react";
 
-function SoftBoxIcon({ className, classNames, children }) {
+function SoftBoxIcon({
+  className,
+  classNames,
+  children,
+}: PropsWithChildren & {
+  className?: string;
+  classNames?: string;
+}) {
   return (
     <div
       className={cn(

@@ -15,6 +15,8 @@ export type BusinessDetails = {
   provinceID: string;
   cityID: string;
   website: string;
+  super_merchant_id: string;
+  stage?: string;
 };
 
 export type BankAccountDetails = {

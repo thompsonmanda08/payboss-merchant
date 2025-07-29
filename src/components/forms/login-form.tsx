@@ -1,7 +1,5 @@
 "use client";
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/input-field";
@@ -11,6 +9,7 @@ import { authenticateUser } from "@/app/_actions/auth-actions";
 import { Button } from "../ui/button";
 import Card from "../base/custom-card";
 import StatusMessage from "../base/status-message";
+import { LoginPayload } from "@/types/account";
 
 function LoginForm() {
   const {
@@ -21,18 +20,18 @@ function LoginForm() {
     error,
     setError,
     isLoading,
-    setAuth,
+
     resetAuthData,
   } = useAuthStore();
 
-  async function handleLogin(e) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
 
-    const formData = new FormData(e.target);
-    const emailusername = formData.get("emailusername");
-    const password = formData.get("password");
-    const loginDetails = { emailusername, password };
+    const formData = new FormData(e.currentTarget);
+    const emailusername = formData.get("emailusername") as string;
+    const password = formData.get("password") as string;
+    const loginDetails: LoginPayload = { emailusername, password };
 
     if (!emailusername || !password) {
       updateErrorStatus({

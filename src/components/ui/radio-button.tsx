@@ -1,6 +1,6 @@
-import { Radio, cn } from "@heroui/react";
+import { Radio, cn, RadioProps } from "@heroui/react";
 
-const CustomRadioButton = (props) => {
+const CustomRadioButton = (props: RadioProps) => {
   const { children, ...otherProps } = props;
 
   return (

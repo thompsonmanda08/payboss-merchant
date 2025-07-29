@@ -15,13 +15,28 @@ export default function Search({
   classNames,
   className,
   ...props
+}: {
+  placeholder?: string;
+  onChange?: any;
+  value?: string;
+  handleSearch?: any;
+  isClearable?: boolean;
+  classNames?: {
+    icon?: string;
+    input?: string;
+    base?: string;
+    wrapper?: string;
+    button?: string;
+  };
+  className?: string;
+  [key: string]: any;
 }) {
-  function resolveSearch(e) {
+  function resolveSearch(e: React.FormEvent) {
     e.preventDefault();
     if (handleSearch) return handleSearch();
   }
 
-  const { icon, input, base, wrapper, button } = classNames || "";
+  const { icon, input, base, wrapper, button } = classNames || {};
 
   return (
     <form

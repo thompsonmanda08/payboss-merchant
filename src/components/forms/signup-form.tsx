@@ -28,7 +28,11 @@ export const STEPS = [
   "user-information",
 ];
 
-export default function SignUpForm({ superMerchantID }) {
+export default function SignUpForm({
+  superMerchantID,
+}: {
+  superMerchantID: string;
+}) {
   const {
     businessInfo,
     newAdminUser,
@@ -112,11 +116,14 @@ export default function SignUpForm({ superMerchantID }) {
     resetAuthData();
     navigateTo(0);
   }
-  function goTo(i) {
+  function goTo(i: number) {
     navigateTo(i);
   }
 
-  function updateAccountDetails(step, fields) {
+  function updateAccountDetails(
+    step: (typeof STEPS)[number],
+    fields: Partial<typeof businessInfo>,
+  ) {
     // BUSINESS INFO
     if (STEPS[0] == step || STEPS[1] == step) {
       setBusinessInfo({ ...businessInfo, ...fields });
@@ -136,7 +143,7 @@ export default function SignUpForm({ superMerchantID }) {
     }
   }
 
-  async function handleCreateAccount(e) {
+  async function handleCreateAccount(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
     updateErrorStatus({ status: false, message: "" });
@@ -220,7 +227,7 @@ export default function SignUpForm({ superMerchantID }) {
         return;
       } else {
         addToast({
-          color: "error",
+          color: "danger",
           title: "Failed",
           description: "Error Submitting Bank information!",
         });
@@ -259,7 +266,7 @@ export default function SignUpForm({ superMerchantID }) {
         return;
       } else {
         addToast({
-          color: "error",
+          color: "danger",
           title: "Failed",
           description: "Error Creating Account!",
         });

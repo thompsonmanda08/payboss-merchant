@@ -15,11 +15,18 @@ export default function CreateNewWorkspaceModal({
   workspaceTypes,
   handleCreateWorkspace,
   isOpen,
-  onOpen,
   editWorkspaceField,
   formData,
   handleClose,
   loading,
+}: {
+  workspaceTypes: any[];
+  handleCreateWorkspace: any;
+  isOpen: any;
+  editWorkspaceField: any;
+  formData: any;
+  handleClose: any;
+  loading: any;
 }) {
   return (
     <Modal isOpen={isOpen} placement="top-center" onClose={handleClose}>

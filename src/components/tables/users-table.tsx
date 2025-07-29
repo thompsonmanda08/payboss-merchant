@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import type { Key } from "@react-types/shared";
 import {
   Table,
   TableHeader,
@@ -12,6 +13,7 @@ import {
   useDisclosure,
   Pagination,
   addToast,
+  AvatarProps,
 } from "@heroui/react";
 import {
   ArrowPathIcon,
@@ -97,7 +99,7 @@ export default function UsersTable({
   workspaceRoles,
   systemRoles,
   roles = undefined, // BY DEFAULT ==> SUPPLIED TO OVERRIDE THE GET ROLES FUNCTION,
-}) {
+}: any) {
   const {
     isLoading,
     isEditingUser,
@@ -139,14 +141,14 @@ export default function UsersTable({
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS),
   );
 
   const [roleFilter, setRoleFilter] = React.useState("all");
 
   const [rowsPerPage, setRowsPerPage] = React.useState(rowLimit);
 
-  const [sortDescriptor, setSortDescriptor] = React.useState({
+  const [sortDescriptor, setSortDescriptor] = React.useState<{ column: Key; direction: "ascending" | "descending" }>({
     column: "amount",
     direction: "ascending",
   });
@@ -154,10 +156,11 @@ export default function UsersTable({
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columns;
+    // if (visibleColumns === "all") return columns;
+    if (visibleColumns.size === columns.length) return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -172,7 +175,7 @@ export default function UsersTable({
           row?.first_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.last_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
           row?.email?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-          row?.username?.toLowerCase().includes(filterValue?.toLowerCase())
+          row?.username?.toLowerCase().includes(filterValue?.toLowerCase()),
       );
     }
 
@@ -201,8 +204,9 @@ export default function UsersTable({
   // ITEMS ARRAY THAT HAS BEEN SORTED
   const sortedItems = React.useMemo(() => {
     return [...items].sort((a, b) => {
-      const first = a[sortDescriptor.column];
-      const second = b[sortDescriptor.column];
+      const columnKey = sortDescriptor.column as string;
+      const first = a[columnKey];
+      const second = b[columnKey];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
@@ -224,13 +228,13 @@ export default function UsersTable({
   }, [page]);
 
   // CHANGE THE ROW NUMBER LIMIT
-  const onRowsPerPageChange = React.useCallback((e) => {
+  const onRowsPerPageChange = React.useCallback((e: any) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
   }, []);
 
   // HANDLE EXPLICIT SEARCH
-  const onSearchChange = React.useCallback((value) => {
+  const onSearchChange = React.useCallback((value: any) => {
     if (value) {
       setFilterValue(value);
       setPage(1);
@@ -241,7 +245,7 @@ export default function UsersTable({
 
   // RENDER ACTION BUTTONS
   const renderActionButtons = React.useCallback(
-    (user) => {
+    (user: any) => {
       if (permissions?.edit || permissions?.create) {
         return (
           <div className="relative flex items-center justify-center gap-4">
@@ -317,13 +321,13 @@ export default function UsersTable({
         </Tooltip>
       );
     },
-    [permissions?.edit, permissions?.create, isUsersRoute]
+    [permissions?.edit, permissions?.create, isUsersRoute],
   );
 
   // TABLE CELL RENDERER
   const renderCell = React.useCallback(
-    (user, columnKey) => {
-      const cellValue = user[columnKey];
+    (user: any, columnKey: Key) => {
+      const cellValue = user[String(columnKey)];
 
       switch (columnKey) {
         case "first_name":
@@ -366,7 +370,11 @@ export default function UsersTable({
           return (
             <Chip
               className="capitalize"
-              color={roleColorMap[user?.role?.toLowerCase()]}
+              color={
+                roleColorMap[
+                  user?.role?.toLowerCase() as keyof typeof roleColorMap
+                ] as any
+              }
               size="sm"
               variant="flat"
             >
@@ -380,7 +388,7 @@ export default function UsersTable({
           return cellValue;
       }
     },
-    [isUsersRoute]
+    [isUsersRoute],
   );
 
   async function resetUserPassword() {
@@ -453,7 +461,9 @@ export default function UsersTable({
           <Search
             placeholder="Search by name..."
             value={filterValue}
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onSearchChange(e.target.value)
+            }
           />
           <div className="relative flex gap-3">
             <SingleSelectionDropdown
@@ -624,7 +634,7 @@ export default function UsersTable({
         selectedKeys={selectedKeys}
         sortDescriptor={sortDescriptor}
         topContent={topContent}
-        onSelectionChange={setSelectedKeys}
+        onSelectionChange={setSelectedKeys as any}
         onSortChange={setSortDescriptor}
       >
         <TableHeader className="fixed" columns={headerColumns}>
@@ -668,7 +678,7 @@ export default function UsersTable({
         title="Unlock User Account"
         onClose={handleClosePrompts}
         onConfirm={handleUnlockSystemUser}
-        onOpen={setOpenUnlockUserPrompt}
+        // onOpen={setOpenUnlockUserPrompt}
       >
         <p className="-mt-4 text-sm leading-5 text-foreground/70">
           By unlocking{" "}
@@ -690,7 +700,7 @@ export default function UsersTable({
         title="Reset User Password"
         onClose={handleClosePrompts}
         onConfirm={resetUserPassword}
-        onOpen={onOpen}
+        // onOpen={onOpen}
       >
         <p className="-mt-4 text-sm leading-5 text-foreground/70">
           Are you sure you want to reset{" "}
@@ -711,7 +721,7 @@ export default function UsersTable({
         title={`Remove ${isUsersRoute ? "Account" : "Workspace"} User?`}
         onClose={handleClosePrompts}
         onConfirm={handleRemoveUser}
-        onOpen={onOpen}
+        // onOpen={onOpen}
         className={"max-w-lg"}
       >
         <p className="-mt-4 text-sm leading-6 text-foreground/70">
@@ -744,14 +754,24 @@ export function UserAvatarComponent({
   handleOnSelect,
 
   ...props
+}: AvatarProps & {
+  firstName: string;
+  lastName: string;
+  src?: string;
+  email: any;
+  classNames?: {
+    wrapper?: string;
+    avatar?: string;
+  };
+  handleOnSelect?: () => void;
 }) {
-  const { wrapper, avatar } = classNames || "";
+  const { wrapper, avatar } = classNames || {};
 
   return (
     <div
       className={cn(
         "flex max-w-max cursor-pointer items-center justify-start gap-4 transition-all duration-200 ease-in-out",
-        wrapper
+        wrapper,
       )}
       onClick={(e) => {
         e.stopPropagation();
@@ -776,7 +796,7 @@ export function UserAvatarComponent({
         <p
           className={cn(
             "text-base font-semibold leading-6 text-foreground/80",
-            {}
+            {},
           )}
         >{`${firstName} ${lastName}`}</p>
         <p className={cn("text-[11px] font-medium text-foreground/50", {})}>

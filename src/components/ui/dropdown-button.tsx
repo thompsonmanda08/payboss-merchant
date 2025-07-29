@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 import { capitalize, cn } from "@/lib/utils";
+import { Key } from "react";
 
 const buttonClasses =
   "items-center justify-between gap-2 rounded-lg font-medium capitalize text-primary shadow-sm dark:bg-primary-400/5 bg-primary/10";
@@ -30,15 +31,15 @@ export default function DropdownButton({
   variant,
   children,
   ...props
-}) {
-  const { trigger, wrapper, innerWrapper, dropdownItem } = classNames || "";
+}: any) {
+  const { trigger, wrapper, innerWrapper, dropdownItem } = classNames || {};
 
   const iconClasses =
     "text-foreground/50 pointer-events-none hover:text-primary data-[hover=true]:text-primary data-[focus=true]:text-primary flex-shrink-0 w-5 aspect-square";
 
   return (
     <Dropdown
-      backdrop={backdropBlur ? "blur" : ""}
+      backdrop={backdropBlur ? "blur" : undefined}
       className={cn("z-10", wrapper, className)}
     >
       <DropdownTrigger>
@@ -46,7 +47,7 @@ export default function DropdownButton({
           isDisabled={isDisabled}
           className={cn(
             "border-[1px]] mb-1 h-auto max-h-[60px] w-full items-center justify-start border-border border hover:border-primary bg-transparent p-2 capitalize",
-            trigger
+            trigger,
           )}
           isIconOnly={isIconOnly}
           variant="bordered"
@@ -67,7 +68,7 @@ export default function DropdownButton({
         onClose
         {...props}
       >
-        {(item) => (
+        {(item: any) => (
           <DropdownItem
             key={item?.key}
             className={cn(
@@ -75,7 +76,7 @@ export default function DropdownButton({
               {
                 "text-danger": item?.key === "delete",
               },
-              dropdownItem
+              dropdownItem,
             )}
             color={item?.key === "new" ? "primary" : "default"}
             description={item?.description}
@@ -112,12 +113,12 @@ export default function DropdownButton({
                   opacity: [0, 1],
                 }}
                 className={cn(
-                  "absolute -top-1 left-0 group-hover:left-[100%] z-50 hidden max-h-96 w-full min-w-[200px] p-2 transition-all duration-300 ease-in-out group-hover:flex"
+                  "absolute -top-1 left-0 group-hover:left-[100%] z-50 hidden max-h-96 w-full min-w-[200px] p-2 transition-all duration-300 ease-in-out group-hover:flex",
                 )}
               >
                 <Card className="no-scrollbar w-full overflow-y-auto p-2">
                   <motion.ul className="flex w-full flex-col text-sm font-semibold transition-all duration-300 ease-in-out">
-                    {item.subMenuItems.map((subItem, index) => (
+                    {item.subMenuItems.map((subItem: any, index: number) => (
                       <Button
                         key={subItem.key || index}
                         // as={Link}
@@ -168,9 +169,9 @@ export function SingleSelectionDropdown({
   startContent,
   listItemName,
   ...props
-}) {
+}: any) {
   const { trigger, innerWrapper, dropdownItem, chevronIcon, base } =
-    classNames || "";
+    classNames || {};
 
   return (
     <Dropdown
@@ -187,7 +188,7 @@ export function SingleSelectionDropdown({
             <ChevronDownIcon
               className={cn(
                 "h-4 w-4  focus-within:rotate-180 focus:rotate-180 ",
-                chevronIcon
+                chevronIcon,
               )}
             />
           }
@@ -207,9 +208,9 @@ export function SingleSelectionDropdown({
         onSelectionChange={setSelectedKeys}
         {...props}
       >
-        {dropdownItems.map((item) => {
+        {dropdownItems.map((item: any) => {
           let ItemLabel = capitalize(
-            item.name || item.label || item?.[listItemName] || item
+            item.name || item.label || item?.[listItemName] || item,
           );
           let itemValue =
             item.value ||
@@ -225,7 +226,7 @@ export function SingleSelectionDropdown({
               className={cn(
                 "!focus-within:bg-primary-100 !hover:bg-primary-100 !focus:bg-primary-100 !data-[hover=true]:border-primary-200 !data-[selectable=true]:focus:bg-primary-100 !data-[focus=true]:bg-primary-100 !data-[hover=true]:bg-primary-100 !data-[hover=true]:text-primary !data-[selected=true]:text-primary group min-w-max capitalize !data-[hover=true]:text-primary",
 
-                dropdownItem
+                dropdownItem,
               )}
               description={item?.description}
             >
@@ -254,7 +255,7 @@ export function SimpleDropdown({
 
   listItemName,
   ...props
-}) {
+}: any) {
   const { trigger, innerWrapper, dropdownItem, chevronIcon } = classNames || "";
 
   return (
@@ -267,7 +268,7 @@ export function SimpleDropdown({
             <ChevronDownIcon
               className={cn(
                 "h-4 w-4 focus-within:rotate-180 focus:rotate-180 ",
-                chevronIcon
+                chevronIcon,
               )}
             />
           }
@@ -287,18 +288,18 @@ export function SimpleDropdown({
         onSelectionChange={setSelectedKeys}
         {...props}
       >
-        {dropdownItems.map((item) => (
+        {dropdownItems.map((item: any) => (
           <DropdownItem
             key={item?.uid || item?.ID || item?.id || item?.key || item}
             className={cn(
               "!focus-within:bg-primary-100 !hover:bg-primary-100 !focus:bg-primary-100 !data-[hover=true]:border-primary-200 !data-[selectable=true]:focus:bg-primary-100 !data-[focus=true]:bg-primary-100 !data-[hover=true]:bg-primary-100 !data-[hover=true]:text-primary !data-[selected=true]:text-primary group min-w-max capitalize",
 
-              dropdownItem
+              dropdownItem,
             )}
             href={item?.href || ""}
           >
             {capitalize(
-              item.name || item.label || item?.[listItemName] || item
+              item.name || item.label || item?.[listItemName] || item,
             )}
           </DropdownItem>
         ))}

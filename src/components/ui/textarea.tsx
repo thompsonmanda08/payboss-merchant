@@ -11,6 +11,20 @@ function Textarea({
   classNames,
   isDisabled,
   ...props
+}: {
+  label?: string;
+  className?: string;
+  onError?: boolean;
+  errorText?: string;
+  classNames?: {
+    base?: string;
+    wrapper?: string;
+    input?: string;
+    label?: string;
+    errorText?: string;
+  };
+  isDisabled?: boolean;
+  [key: string]: any;
 }) {
   return (
     <div className={cn(classNames?.wrapper)}>
@@ -21,7 +35,7 @@ function Textarea({
             {
               "text-red-500": onError || props?.isInvalid,
               "opacity-50": props?.isDisabled || props?.disabled,
-            }
+            },
           )}
           htmlFor={props?.name}
         >
@@ -43,7 +57,7 @@ function Textarea({
             "opacity-50": props?.isDisabled || props?.disabled,
           },
           className,
-          classNames?.base
+          classNames?.base,
         )}
         {...props}
       />

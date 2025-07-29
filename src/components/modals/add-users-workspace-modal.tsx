@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect } from "react";
+import { Key, useCallback, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -52,6 +52,15 @@ function AddUserToWorkspace({
   workspaceMembers,
   allUsers,
   workspaceRoles,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  workspaceID: string;
+  workspaceName: string;
+  navigateTo: (index: number) => void;
+  workspaceMembers: any[];
+  allUsers: any[];
+  workspaceRoles: any[];
 }) {
   const queryClient = useQueryClient();
 
@@ -70,8 +79,8 @@ function AddUserToWorkspace({
     setExistingUsers,
   } = useWorkspaceStore();
 
-  const renderCell = useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = useCallback((user: any, columnKey: Key) => {
+    const cellValue = user[String(columnKey)];
 
     switch (columnKey) {
       case "name": // FIRST_NAME IDENTIFIED THE ALL USERS TABLE AND LAST NAME IDENTIFIES THE ADDED_USERS TABLE
@@ -116,7 +125,11 @@ function AddUserToWorkspace({
           <Chip
             key={cellValue}
             className="capitalize"
-            color={roleColorMap[user?.role?.toLowerCase()]}
+            color={
+              roleColorMap[
+                user?.role?.toLowerCase() as keyof typeof roleColorMap
+              ] as any
+            }
             size="sm"
             variant="flat"
           >
@@ -223,7 +236,7 @@ function AddUserToWorkspace({
 
   useEffect(() => {
     // UPDATE EXISTING USERS LIST
-    if (workspaceMembers != [] && existingUsers?.length == 0) {
+    if (workspaceMembers.length > 0 && existingUsers?.length == 0) {
       setExistingUsers(workspaceMembers);
     }
   }, [workspaceMembers]);

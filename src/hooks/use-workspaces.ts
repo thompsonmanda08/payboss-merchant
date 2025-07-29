@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useSetupConfig } from "./use-query-data";
 import { Workspace } from "@/types";
 
-const useWorkspaces = (query: any) => {
+const useWorkspaces = (query?: any) => {
   const pathname = usePathname();
 
   const { data: setup, isLoading, isFetching } = useSetupConfig();

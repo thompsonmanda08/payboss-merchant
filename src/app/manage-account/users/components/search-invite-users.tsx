@@ -5,10 +5,14 @@ import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import { Input } from "@/components/ui/input-field";
 import Search from "@/components/ui/search";
 
-function SearchOrInviteUsers({ setSearchQuery, resolveAddToWorkspace }) {
-  const [selectedKeys, setSelectedKeys] = useState(
-    new Set([["admin"].map((role) => role.label)[0]]),
-  );
+function SearchOrInviteUsers({
+  setSearchQuery,
+  resolveAddToWorkspace,
+}: {
+  setSearchQuery: (query: string) => void;
+  resolveAddToWorkspace: (e: React.FormEvent<HTMLFormElement>) => void;
+}) {
+  const [selectedKeys, setSelectedKeys] = useState(new Set([["admin"]]));
 
   const selectedValue = React.useMemo(
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
@@ -19,7 +23,8 @@ function SearchOrInviteUsers({ setSearchQuery, resolveAddToWorkspace }) {
     <div className="relative flex min-h-20 w-full flex-col justify-between gap-4 py-8 md:flex-row">
       {/*  USER SEARCH */}
       <Search
-        onChange={(e) => {
+        placeholder={"Search users..."}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setSearchQuery(e.target.value);
         }}
       />

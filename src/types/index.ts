@@ -1,5 +1,12 @@
 import { JWTPayload } from "jose";
 import { User } from "./account";
+import React, { PropsWithChildren } from "react";
+
+export type PageProps = {
+  params?: Promise<any>;
+  searchParams?: Promise<any>;
+  children?: React.ReactNode;
+};
 
 export type APIResponse = {
   success: boolean;

@@ -1,6 +1,26 @@
-import { Select, SelectItem } from "@heroui/react";
+import { Select, SelectItem, SelectProps } from "@heroui/react";
 
 import { cn } from "@/lib/utils";
+
+type SelectComProps = Partial<SelectProps> & {
+  value?: any;
+  onChange?: any;
+  options?: any;
+  placeholder?: string;
+  listItemName?: string; // CHOOSE THE VALUE TO BE DISPLAYED
+  selector?: string; // CHOOSE THE VALUE TO BE SELECTED
+  name?: string;
+  label?: string;
+  type?: string;
+  selectedItem?: any;
+  defaultValue?: any;
+  className?: string;
+  classNames?: any;
+  wrapperClassName?: string;
+  onError?: boolean;
+  prefilled?: boolean;
+  isDisabled?: boolean;
+};
 
 function SelectField({
   value,
@@ -21,7 +41,7 @@ function SelectField({
   onError,
   prefilled = false,
   ...props
-}) {
+}: SelectComProps) {
   return (
     <div
       className={cn(
@@ -69,13 +89,11 @@ function SelectField({
               //     onError,
               // },
             ),
-            placeholder: cn("text-muted-foreground", classNames?.placeholder),
+
             listbox: "font-medium",
             popoverContent: "rounded-md text-foreground-700 font-medium",
             selectorIcon: "w-4 h-4",
           }}
-          defaultValue={defaultValue}
-          id={name}
           isInvalid={onError}
           isRequired={props?.required}
           name={name}
@@ -88,9 +106,9 @@ function SelectField({
         >
           {/* OPTIONS ARRAY MUST BE AN ARRAY OF OBJECTS WITH ID, NAME AND VALUE PROPERTIES. */}
           {options &&
-            options.map((item) => {
+            options.map((item: any) => {
               let ItemValue =
-                item?.[selector] ||
+                item?.[String(selector)] ||
                 item?.key ||
                 item?.id ||
                 item?.ID ||
@@ -98,7 +116,10 @@ function SelectField({
                 item;
 
               let ItemLabel =
-                item?.[listItemName] || item?.name || item?.label || item;
+                item?.[String(listItemName)] ||
+                item?.name ||
+                item?.label ||
+                item;
 
               return (
                 <SelectItem
@@ -107,7 +128,6 @@ function SelectField({
                   classNames={{
                     base: "data-[hover=true]:bg-primary/10 data-[selected=true]:text-white data-[selected=true]:bg-primary data-[selected=true]:font-semibold data-[selectable=true]:focus:text-primary data-[selectable=true]:focus:bg-primary/20 data-[selectable=true]:hover:text-primary data-[selected=true]:focus:text-white data-[selectable=true]:hover:bg-primary/20 data-[selectable=true]:font-[600] data-[selected=true]:focus:bg-primary data-[hover=true]:hover:text-white capitalize",
                   }}
-                  value={ItemValue}
                 >
                   {ItemLabel}
                 </SelectItem>

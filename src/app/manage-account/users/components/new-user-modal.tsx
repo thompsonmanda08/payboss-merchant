@@ -22,8 +22,10 @@ import {
 } from "@/app/_actions/user-actions";
 import useWorkspaceStore from "@/context/workspaces-store";
 import { changeUserRoleInWorkspace } from "@/app/_actions/workspace-actions";
+import { ErrorState } from "@/types";
 
 const USER_INIT = {
+  userID: "",
   first_name: "",
   last_name: "",
   username: "",
@@ -56,6 +58,12 @@ function CreateOrUpdateUser({
   onClose,
   workspaceID,
   roles,
+}: {
+  isOpen: boolean;
+  isUsersRoute: boolean;
+  onClose: () => void;
+  workspaceID: string;
+  roles: Array<any>;
 }) {
   const { isEditingUser, selectedUser, setSelectedUser, setIsEditingUser } =
     useWorkspaceStore();
@@ -63,13 +71,16 @@ function CreateOrUpdateUser({
 
   const [loading, setLoading] = useState(false);
   const [newUser, setNewUser] = useState(USER_INIT);
-  const [error, setError] = useState({ status: false, message: "" });
+  const [error, setError] = useState<ErrorState>({
+    status: false,
+    message: "",
+  });
 
   const phoneNoError =
     !isValidZambianMobileNumber(newUser?.phone_number) &&
     newUser?.phone_number?.length > 3;
 
-  function updateDetails(fields) {
+  function updateDetails(fields: Partial<typeof USER_INIT>) {
     setNewUser((prev) => ({ ...prev, ...fields }));
   }
 
@@ -100,7 +111,7 @@ function CreateOrUpdateUser({
       password: generateRandomString(16), // Generates unique user password
     };
 
-    let response = await createNewUser(userData);
+    let response = await createNewUser(userData as any);
 
     if (response?.success) {
       addToast({
@@ -177,7 +188,7 @@ function CreateOrUpdateUser({
     let response = await changeUserRoleInWorkspace(
       userMapping,
       recordID,
-      workspaceID
+      workspaceID,
     );
 
     if (response?.success) {

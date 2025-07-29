@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
 
-function GoToRegisterPage() {
+async function GoToRegisterPage() {
   return redirect(`/register/${BGS_SUPER_MERCHANT_ID}`);
 }
 

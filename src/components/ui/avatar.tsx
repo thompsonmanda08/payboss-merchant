@@ -1,10 +1,24 @@
 "use client";
 
-import { Avatar as NextAvatar } from "@heroui/react";
+import { AvatarProps, Avatar as NextAvatar } from "@heroui/react";
 
 import { cn, getUserInitials } from "@/lib/utils";
 
-function Avatar({ firstName, lastName, src, email, showUserInfo, isProfile }) {
+function Avatar({
+  firstName,
+  lastName,
+  src,
+  email,
+  showUserInfo,
+  isProfile,
+}: AvatarProps & {
+  firstName: string;
+  lastName: string;
+  src?: string;
+  email: any;
+  showUserInfo?: boolean;
+  isProfile?: boolean;
+}) {
   return (
     <div
       className="flex cursor-pointer items-center justify-start gap-2
@@ -15,9 +29,7 @@ function Avatar({ firstName, lastName, src, email, showUserInfo, isProfile }) {
         <NextAvatar
           alt={`Image - ${firstName} ${lastName}`}
           className="h-9 w-9 flex-none rounded-xl bg-gray-50"
-          height={200}
           src={src}
-          width={200}
         />
       ) : (
         <div className="ml-px grid h-9 w-9 flex-none scale-90 place-items-center items-center justify-center rounded-full bg-primary-800 font-medium uppercase text-white ring-2  ring-primary ring-offset-1">

@@ -2,8 +2,16 @@
 import { cn } from "@/lib/utils";
 
 import { Button } from "./button";
+import { PropsWithChildren } from "react";
 
-function NavIconButton({ className, onClick, children }) {
+function NavIconButton({
+  className,
+  onClick,
+  children,
+}: PropsWithChildren & {
+  className?: string;
+  onClick?: () => void;
+}) {
   return (
     <Button
       className={cn(

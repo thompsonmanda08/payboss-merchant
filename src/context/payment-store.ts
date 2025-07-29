@@ -1,3 +1,4 @@
+import { PaymentStore } from "@/types/stores";
 import { create } from "zustand";
 
 const INITIAL_STATE = {
@@ -104,47 +105,5 @@ const usePaymentsStore = create<PaymentStore>((set) => ({
       };
     }),
 }));
-
-type PaymentStore = {
-  selectedProtocol: string;
-  selectedActionType: any;
-  selectedBatch: any;
-  selectedRecord: any;
-  paymentAction: any;
-  error: any;
-  transactionDetails: any;
-  createPaymentLoading: boolean;
-  openPaymentsModal: boolean;
-  openAllRecordsModal: boolean;
-  openValidRecordsModal: boolean;
-  openInvalidRecordsModal: boolean;
-  openAddOrEditModal: boolean;
-  openBatchDetailsModal: boolean;
-  openTransactionDetailsModal: boolean;
-  loading: boolean;
-  dateFilter: string;
-
-  setOpenPaymentsModal: (open: boolean) => void;
-  setCreatePaymentLoading: (open: boolean) => void;
-  setPaymentAction: (action: any) => void;
-  setError: (error: any) => void;
-  setOpenAllRecordsModal: (open: boolean) => void;
-  setOpenValidRecordsModal: (open: boolean) => void;
-  setOpenInvalidRecordsModal: (open: boolean) => void;
-  setOpenAddOrEditModal: (open: boolean) => void;
-  setOpenBatchDetailsModal: (open: boolean) => void;
-  setLoading: (loading: boolean) => void;
-  setSelectedProtocol: (protocol: string) => void;
-  setSelectedRecord: (record: any) => void;
-  setSelectedBatch: (record: any) => void;
-  setSelectedActionType: (type: any) => void;
-  setTransactionDetails: (details: any) => void;
-  setOpenTransactionDetailsModal: (open: boolean) => void;
-  updateDateFilter: (dateFilter: string) => void;
-  openRecordsModal: (type: string) => void;
-  closeRecordsModal: () => void;
-  updatePaymentFields: (values: any) => void;
-  resetPaymentData: () => void;
-};
 
 export default usePaymentsStore;

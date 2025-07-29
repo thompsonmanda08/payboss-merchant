@@ -27,7 +27,23 @@ import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants";
 import { useWorkspaceInit } from "@/hooks/use-query-data";
 
-const INIT_INVOICE = {
+const INIT_INVOICE: {
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  customerAddress: string;
+  // invoiceNumber: string;
+  // invoiceDate: string;
+  dueDate: string;
+  notes: string;
+  taxRate: number;
+  tax: number;
+  lineItems: {
+    description: string;
+    quantity: number;
+    unitPrice: number;
+  }[];
+} = {
   customerName: "",
   customerEmail: "",
   customerPhone: "",
@@ -42,7 +58,13 @@ const INIT_INVOICE = {
   lineItems: [{ description: "", quantity: 1, unitPrice: 0 }],
 };
 
-export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
+export default function InvoiceForm({
+  workspaceID,
+  handleClosePrompts,
+}: {
+  workspaceID: string;
+  handleClosePrompts: () => void;
+}) {
   const queryClient = useQueryClient();
 
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
@@ -58,12 +80,12 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
   const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
   const end_date = formatDate(new Date(), "YYYY-MM-DD");
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function updateFormData(fields) {
+  function updateFormData(fields: Partial<typeof formData>) {
     setFormData((prev) => ({ ...prev, ...fields }));
   }
 
@@ -74,12 +96,12 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
     );
   };
 
-  const calculateTax = (subtotal, taxRate = 0) => {
+  const calculateTax = (subtotal: number, taxRate = 0) => {
     // Defaults taxRate to 0 if no value is provided
     return subtotal * taxRate;
   };
 
-  const calculateTotal = (subtotal, tax) => {
+  const calculateTotal = (subtotal: number, tax: number) => {
     return subtotal + tax;
   };
 
@@ -96,7 +118,7 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
     return true;
   }
 
-  async function onSubmit(e) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     setIsLoading(true);
@@ -186,7 +208,7 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
             });
             return;
           }
-          setSelectedTab(key);
+          setSelectedTab(key as string);
         }}
       >
         <Tab
@@ -299,7 +321,15 @@ export default function InvoiceForm({ workspaceID, handleClosePrompts }) {
   );
 }
 
-function InvoiceDetails({ formData, updateFormData, handleChange }) {
+function InvoiceDetails({
+  formData,
+  updateFormData,
+  handleChange,
+}: {
+  formData: Partial<typeof INIT_INVOICE>;
+  updateFormData: (fields: Partial<typeof formData>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
   return (
     <div className="shadow-none bg-transparent">
       <div className="flex flex-col gap-4">
@@ -340,88 +370,18 @@ function InvoiceDetails({ formData, updateFormData, handleChange }) {
             onChange={handleChange}
           />
         </div>
-
-        {/* INVOICE NUMBERS AND DATES */}
-        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-          <Input
-            required
-            label={"Invoice Number "}
-            name={"invoiceNumber"}
-            value={formData?.invoiceNumber}
-            onChange={handleChange}
-          />
-          <DateSelectField
-            className="max-w-sm"
-            defaultValue={formData?.invoiceDate}
-            classNames={{
-              label: "-mt-1.5",
-            }}
-            // description={"Date the invoice was issued"}
-            label={"Invoice Date"}
-            labelPlacement={"outside"}
-            maxValue={today(getLocalTimeZone())}
-            required={true}
-            value={
-              formData?.invoiceDate &&
-              `${formData?.invoiceDate}`?.split("").length > 9
-                ? formData?.invoiceDate
-                : ""
-            }
-            onChange={(date) => {
-              updateFormData({
-                invoiceDate: formatDate(date, "YYYY-MM-DD"),
-              });
-            }}
-          />
-          <DateSelectField
-            className="max-w-sm"
-            defaultValue={formData?.dueDate}
-            classNames={{
-              label: "-mt-1.5",
-            }}
-            // description={"Date the invoice is due"}
-            label={"Due Date"}
-            labelPlacement={"outside"}
-            minValue={today(getLocalTimeZone())}
-            required={true}
-            value={
-              formData?.dueDate &&
-              String(formData?.dueDate)?.split("").length > 9
-                ? formData?.dueDate
-                : ""
-            }
-            onChange={(date) => {
-              updateFormData({
-                dueDate: formatDate(date, "YYYY-MM-DD"),
-              });
-            }}
-          />
-        </div> */}
-
-        {/* INVOICE NOTES */}
-        {/* <div className="">
-          <label
-            className="block text-sm font-medium leading-6 text-foreground/50 "
-            htmlFor="message"
-          >
-            Notes
-          </label>
-          <textarea
-            required
-            className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary/80 sm:text-sm sm:leading-6 p-3"
-            name="notes"
-            placeholder="Additional notes or payment instructions"
-            rows={3}
-            value={formData?.notes}
-            onChange={handleChange}
-          />
-        </div> */}
       </div>
     </div>
   );
 }
 
-function InvoiceItems({ formData, updateFormData }) {
+function InvoiceItems({
+  formData,
+  updateFormData,
+}: {
+  formData: Partial<typeof INIT_INVOICE>;
+  updateFormData: (fields: Partial<typeof formData>) => void;
+}) {
   const [lineItems, setLineItems] = useState([
     { description: "", quantity: 1, unitPrice: 0 },
   ]);
@@ -433,14 +393,14 @@ function InvoiceItems({ formData, updateFormData }) {
     ]);
     updateFormData({
       lineItems: [
-        ...formData?.lineItems,
+        ...(formData?.lineItems ?? []),
         { description: "", quantity: 1, unitPrice: 0 },
       ],
     });
   };
 
-  const removeLineItem = (index) => {
-    if (formData?.lineItems.length > 1) {
+  const removeLineItem = (index: number) => {
+    if (formData?.lineItems && formData?.lineItems?.length > 1) {
       // const updatedLineItems = formData.lineItems.filter((_, i) => i !== index);
       // Create a copy of the array first
       const lineItemsCopy = [...lineItems];
@@ -481,16 +441,17 @@ function InvoiceItems({ formData, updateFormData }) {
               label="Description"
               name={`lineItems.${index}.description`}
               placeholder="Item description"
-              value={formData?.lineItems[index]?.description}
+              value={formData?.lineItems?.[index]?.description}
               onChange={(e) => {
                 updateFormData({
                   lineItems: [
-                    ...formData?.lineItems.slice(0, index),
+                    ...(formData?.lineItems ?? [])?.slice(0, index),
                     {
-                      ...formData?.lineItems[index],
                       description: e.target.value,
+                      quantity: formData?.lineItems?.[index]?.quantity ?? 1,
+                      unitPrice: formData?.lineItems?.[index]?.unitPrice ?? 0,
                     },
-                    ...formData?.lineItems.slice(index + 1),
+                    ...(formData?.lineItems ?? [])?.slice(index + 1),
                   ],
                 });
               }}
@@ -504,16 +465,19 @@ function InvoiceItems({ formData, updateFormData }) {
               min={1}
               name={`lineItems.${index}.description`}
               type="number"
-              value={formData?.lineItems[index]?.quantity}
+              value={formData?.lineItems?.[index]?.quantity}
               onChange={(e) => {
                 updateFormData({
                   lineItems: [
-                    ...formData?.lineItems.slice(0, index),
+                    ...(formData?.lineItems ?? [])?.slice(0, index),
                     {
-                      ...formData?.lineItems[index],
-                      quantity: e.target.value,
+                      ...formData?.lineItems?.[index],
+                      quantity: Number(e.target.value) ?? 1,
+                      unitPrice: formData?.lineItems?.[index]?.unitPrice ?? 0,
+                      description:
+                        formData?.lineItems?.[index]?.description ?? "",
                     },
-                    ...formData?.lineItems.slice(index + 1),
+                    ...(formData?.lineItems ?? [])?.slice(index + 1),
                   ],
                 });
               }}
@@ -526,16 +490,19 @@ function InvoiceItems({ formData, updateFormData }) {
               label="Unit Price"
               name={`lineItems.${index}.unitPrice`}
               type="number"
-              value={formData?.lineItems[index]?.unitPrice}
+              value={formData?.lineItems?.[index]?.unitPrice}
               onChange={(e) => {
                 updateFormData({
                   lineItems: [
-                    ...formData?.lineItems.slice(0, index),
+                    ...(formData?.lineItems ?? []).slice(0, index),
                     {
-                      ...formData?.lineItems[index],
-                      unitPrice: e.target.value,
+                      ...formData?.lineItems?.[index],
+                      quantity: formData?.lineItems?.[index]?.quantity ?? 1,
+                      unitPrice: Number(e.target.value) ?? 1,
+                      description:
+                        formData?.lineItems?.[index]?.description ?? "",
                     },
-                    ...formData?.lineItems.slice(index + 1),
+                    ...(formData?.lineItems ?? [])?.slice(index + 1),
                   ],
                 });
               }}
@@ -544,7 +511,7 @@ function InvoiceItems({ formData, updateFormData }) {
               isIconOnly
               className={"col-span-1"}
               color="danger"
-              disabled={formData?.lineItems.length === 1}
+              disabled={formData?.lineItems && formData?.lineItems.length === 1}
               type="button"
               variant="flat"
               onClick={() => removeLineItem(index)}
