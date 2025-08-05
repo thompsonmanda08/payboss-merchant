@@ -49,18 +49,18 @@ function AddUserToWorkspace({
   workspaceID,
   workspaceName,
   navigateTo,
-  workspaceMembers,
-  allUsers,
-  workspaceRoles,
+  allUsers = [],
+  workspaceRoles = [],
+  workspaceMembers = [],
 }: {
   isOpen: boolean;
   onClose: () => void;
   workspaceID: string;
   workspaceName: string;
-  navigateTo: (index: number) => void;
-  workspaceMembers: any[];
-  allUsers: any[];
-  workspaceRoles: any[];
+  navigateTo?: (index: number) => void;
+  workspaceMembers?: any[];
+  allUsers?: any[];
+  workspaceRoles?: any[];
 }) {
   const queryClient = useQueryClient();
 
@@ -290,7 +290,7 @@ function AddUserToWorkspace({
                             <TableRow
                               key={user?.ID}
                               // TODO: DISABLED OWNER ROW
-                              isDisabled={user?.role == "owner"}
+                              // isDisabled={user?.role == "owner"}
                             >
                               {(columnKey) => (
                                 <TableCell>

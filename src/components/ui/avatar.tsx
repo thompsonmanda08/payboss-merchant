@@ -15,7 +15,7 @@ function Avatar({
   firstName: string;
   lastName: string;
   src?: string;
-  email: any;
+  email?: any;
   showUserInfo?: boolean;
   isProfile?: boolean;
 }) {

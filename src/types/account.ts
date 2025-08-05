@@ -25,7 +25,7 @@ export type BankAccountDetails = {
   bank_name?: string;
   bankID: string;
   branch_name?: string;
-  bank_code?: string;
+  branch_code?: string;
   currencyID?: string;
 };
 

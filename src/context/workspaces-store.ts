@@ -44,6 +44,17 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
     const exitingUser = addedUsers.find((u) => u.ID === user.ID);
     const userExists = existingUsers.find((u) => u.userID === user.ID);
 
+    // Check if the user is owner
+    if (user?.role?.toLowerCase() == "owner") {
+      addToast({
+        title: "Warning",
+        color: "warning",
+        description: "Owner is already part of the workspace!",
+      });
+      return;
+    }
+
+    // Check if the user is already added
     if (exitingUser) {
       addToast({
         title: "Warning",
@@ -54,6 +65,7 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
       return;
     }
 
+    // Check if the user already exists
     if (userExists) {
       addToast({
         title: "Warning",
@@ -63,16 +75,6 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
 
       return;
     }
-
-    // Filter out the user with role == "owner", if exists then don't add
-    // if (user?.role?.toLowerCase() == 'owner') {
-    // addToast({
-    //   title: "Warning",
-    //   color: "warning",
-    //   description: 'Owner is already part of the workspace!',
-    // });
-    //   return
-    // }
 
     set((state) => {
       return {

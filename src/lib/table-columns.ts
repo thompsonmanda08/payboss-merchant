@@ -1,4 +1,13 @@
-export const API_KEY_TRANSACTION_COLUMNS = [
+export type ColumnType = {
+  name: string;
+  uid: string;
+  sortable?: boolean;
+  [x: string]: any;
+};
+
+export type Columns = ColumnType[];
+
+export const API_KEY_TRANSACTION_COLUMNS: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "NARRATION", uid: "narration" },
   { name: "PROVIDER", uid: "service_provider" },
@@ -10,7 +19,7 @@ export const API_KEY_TRANSACTION_COLUMNS = [
   { name: "MNO STATUS DESCRIPTION", uid: "mno_status_description" },
   { name: "TRANSACTION ID", uid: "transactionID" },
 ];
-export const API_KEY_TERMINAL_TRANSACTION_COLUMNS = [
+export const API_KEY_TERMINAL_TRANSACTION_COLUMNS: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "TERMINAL ID", uid: "terminalID", sortable: true },
   { name: "NARRATION", uid: "narration" },
@@ -24,7 +33,7 @@ export const API_KEY_TERMINAL_TRANSACTION_COLUMNS = [
   { name: "TRANSACTION ID", uid: "transactionID" },
 ];
 
-export const TILL_TRANSACTION_COLUMNS = [
+export const TILL_TRANSACTION_COLUMNS: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "NARRATION", uid: "narration" },
   { name: "PROVIDER", uid: "service_provider", sortable: true },
@@ -37,7 +46,7 @@ export const TILL_TRANSACTION_COLUMNS = [
   { name: "STATUS", uid: "status", sortable: true },
 ];
 
-export const BULK_REPORTS_COLUMNS = [
+export const BULK_REPORTS_COLUMNS: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "NAME", uid: "name", sortable: true },
   { name: "TOTAL RECORDS", uid: "allRecords", sortable: true },
@@ -49,7 +58,7 @@ export const BULK_REPORTS_COLUMNS = [
   { name: "STATUS", uid: "status", sortable: true },
 ];
 
-export const BULK_TRANSACTIONS_COLUMN = [
+export const BULK_TRANSACTIONS_COLUMN: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "NAME", uid: "batch_name", sortable: true },
   { name: "TOTAL RECORDS", uid: "number_of_records", sortable: true },
@@ -59,7 +68,7 @@ export const BULK_TRANSACTIONS_COLUMN = [
   { name: "STATUS", uid: "status", sortable: true },
   { name: "ACTIONS", uid: "actions" },
 ];
-export const INVOICE_COLUMNS = [
+export const INVOICE_COLUMNS: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "NAME", uid: "customer_name", sortable: true },
   { name: "CUSTOMER EMAIL", uid: "customer_email", sortable: true },
@@ -71,7 +80,7 @@ export const INVOICE_COLUMNS = [
   { name: "STATUS", uid: "status", sortable: true },
 ];
 
-export const BILLS_TRANSACTION_COLUMNS = [
+export const BILLS_TRANSACTION_COLUMNS: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "PROVIDER", uid: "service_provider", sortable: true },
   { name: "VOUCHER TYPE", uid: "voucher_type", sortable: true },
@@ -85,7 +94,7 @@ export const BILLS_TRANSACTION_COLUMNS = [
   { name: "TRANSACTION ID", uid: "transactionID" },
 ];
 
-export const SINGLE_TRANSACTIONS_VALIDATION_COLUMNS = [
+export const SINGLE_TRANSACTIONS_VALIDATION_COLUMNS: Columns = [
   { name: "FIRST NAME", uid: "first_name", sortable: true },
   { name: "LAST NAME", uid: "last_name", sortable: true },
   { name: "EMAIL", uid: "email", sortable: true },
@@ -98,7 +107,7 @@ export const SINGLE_TRANSACTIONS_VALIDATION_COLUMNS = [
   { name: "AMOUNT", uid: "amount", sortable: true },
 ];
 
-export const SINGLE_TRANSACTIONS_COLUMNS = [
+export const SINGLE_TRANSACTIONS_COLUMNS: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "FIRST NAME", uid: "first_name", sortable: true },
   { name: "LAST NAME", uid: "last_name", sortable: true },
@@ -112,7 +121,7 @@ export const SINGLE_TRANSACTIONS_COLUMNS = [
   // { name: 'ACTIONS', uid: 'actions' },
 ];
 
-export const SINGLE_TRANSACTION_REPORTS_COLUMNS = [
+export const SINGLE_TRANSACTION_REPORTS_COLUMNS: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "FIRST NAME", uid: "first_name", sortable: true },
   { name: "LAST NAME", uid: "last_name", sortable: true },
@@ -126,7 +135,7 @@ export const SINGLE_TRANSACTION_REPORTS_COLUMNS = [
   { name: "STATUS DESCRIPTION", uid: "status_description" },
 ];
 
-export const WALLET_STATEMENT_REPORT_COLUMNS = [
+export const WALLET_STATEMENT_REPORT_COLUMNS: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "NARRATION", uid: "narration", sortable: true },
   { name: "TRANSACTION INITIATOR", uid: "initiator", sortable: true },
@@ -135,7 +144,7 @@ export const WALLET_STATEMENT_REPORT_COLUMNS = [
   { name: "REMARKS", uid: "remarks", sortable: true },
 ];
 
-export const SUBSCRIPTION_PAYMENT_COLUMNS = [
+export const SUBSCRIPTION_PAYMENT_COLUMNS: Columns = [
   { name: "DATE", uid: "created_at", sortable: true },
   { name: "MEMBER NAME", uid: "name", sortable: true },
   { name: "MEMBER ID", uid: "member_id", sortable: true },

@@ -43,7 +43,7 @@ function CustomRadioGroup({
   className,
   classNames,
 }: {
-  options: string[];
+  options: any;
   onChange?: any;
   value?: number;
   labelText?: string;
@@ -82,7 +82,7 @@ function CustomRadioGroup({
           base,
         )}
       >
-        {options.map((el, index) => (
+        {options?.map((el: any, index: number) => (
           <Option
             key={index}
             className={className}
