@@ -6,100 +6,68 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Chip,
   Pagination,
-  Tooltip,
 } from "@heroui/react";
-import { ArrowDownTrayIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { ComputerDesktopIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { format } from "date-fns";
 
-import {
-  SERVICE_PROVIDER_COLOR_MAP,
-  TRANSACTION_STATUS_COLOR_MAP,
-} from "@/lib/constants";
-import { cn, formatCurrency, formatDate } from "@/lib/utils";
+import { TRANSACTION_STATUS_COLOR_MAP } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import usePaymentsStore from "@/context/payment-store";
 import Loader from "@/components/ui/loader";
 import Search from "@/components/ui/search";
 import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
 import SelectField from "@/components/ui/select-field";
-import { useWorkspaceInit } from "@/hooks/use-query-data";
+import { useBulkTransactions, useWorkspaceInit } from "@/hooks/use-query-data";
 import EmptyLogs from "@/components/base/empty-logs";
-import {
-  Columns,
-  ColumnType,
-  SINGLE_TRANSACTIONS_COLUMNS,
-} from "@/lib/table-columns";
-import { convertSingleTransactionToCSV } from "@/app/_actions/file-conversion-actions";
-import { useDebounce } from "@/hooks/use-debounce";
-import { A } from "framer-motion/dist/types.d-D0HXPxHm";
-import { useParams } from "next/navigation";
+import { BULK_TRANSACTIONS_COLUMN, ColumnType } from "@/lib/table-columns";
+import Link from "next/link";
 
 // DEFINE FILTERABLE SERVICES
-const SERVICE_FILTERS: Columns = [
+const SERVICE_FILTERS = [
   {
-    name: "direct disbursement",
-    uid: "direct disbursement",
+    name: "direct bulk disbursement",
+    uid: "direct bulk disbursement",
   },
+
   {
-    name: "voucher disbursement",
-    uid: "voucher disbursement",
+    name: "voucher bulk disbursement",
+    uid: "voucher bulk disbursement",
   },
 ];
 
-export default function SingleTransactionsTable({
+export default function BulkTransactionsTable({
   workspaceID,
-  onRowAction,
-  rowData,
-  columnData,
-  removeWrapper,
-  isLoading,
 }: {
-  workspaceID?: string;
-  onRowAction?: (item: any, value?: any) => void;
-  rowData: any;
-  columnData: any;
-  removeWrapper: boolean;
-  isLoading?: any;
+  workspaceID: string;
 }) {
-  // DEFINE FILTERABLE ROWS AND COLUMNS
-  const columns = (columnData || SINGLE_TRANSACTIONS_COLUMNS) as Columns;
-  const rows = rowData || [];
+  // DATA FETCHING
+  const { data: bulkTransactionsResponse, isLoading } =
+    useBulkTransactions(workspaceID);
 
-  const params = useParams();
-  // Safely extract workspaceID from params (could be string | string[] | undefined)
-  const paramWorkspaceID = params?.workspaceID
-    ? Array.isArray(params.workspaceID)
-      ? params.workspaceID[0]
-      : params.workspaceID
-    : "";
+  const rows = bulkTransactionsResponse?.data?.batches || [];
 
-  const {
-    setTransactionDetails,
-    setOpenTransactionDetailsModal,
-    setOpenPaymentsModal,
-  } = usePaymentsStore();
+  const columns = BULK_TRANSACTIONS_COLUMN;
+  const { setSelectedBatch, setOpenBatchDetailsModal, setOpenPaymentsModal } =
+    usePaymentsStore();
 
-  const { data: initialization } = useWorkspaceInit(
-    workspaceID || paramWorkspaceID || "",
-  );
-  const permissions = initialization?.data?.workspacePermissions;
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+  const permissions = workspaceInit?.data?.workspacePermissions;
 
+  // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
 
   const [filterValue, setFilterValue] = React.useState("");
-  const debouncedSearchQuery = useDebounce(filterValue, 500);
-
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-
-  const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set<Array<string> | string>(INITIAL_VISIBLE_COLUMNS),
-  );
+  const [visibleColumns, setVisibleColumns] = React.useState<
+    Set<string> | "all"
+  >(new Set(INITIAL_VISIBLE_COLUMNS));
 
   const [serviceProtocolFilter, setServiceProtocolFilter] =
     React.useState("all");
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(8);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "amount",
@@ -108,10 +76,10 @@ export default function SingleTransactionsTable({
 
   const [page, setPage] = React.useState(1);
 
-  const hasSearchFilter = Boolean(debouncedSearchQuery);
+  const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (String(visibleColumns) === "all") return columns;
+    if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid),
@@ -124,38 +92,23 @@ export default function SingleTransactionsTable({
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter(
         (row) =>
-          row?.first_name
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.last_name
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.nrc
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.destination
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.mno_rrn
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.amount
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()),
+          row?.batch_name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
+          row?.amount?.toLowerCase().includes(filterValue?.toLowerCase()),
       );
     }
-
     if (
       serviceProtocolFilter !== "all" &&
       Array.from(serviceProtocolFilter).length !== SERVICE_FILTERS.length
     ) {
+      let filters = Array.from(serviceProtocolFilter);
+
       filteredRows = filteredRows.filter((row) =>
-        Array.from(serviceProtocolFilter).includes(row?.service),
+        filters.includes(row?.service),
       );
     }
 
     return filteredRows;
-  }, [rows, debouncedSearchQuery, serviceProtocolFilter]);
+  }, [rows, filterValue, serviceProtocolFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -176,34 +129,32 @@ export default function SingleTransactionsTable({
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((row: any, columnKey: any) => {
-    const cellValue = row[columnKey];
+  const renderCell = React.useCallback((row: any, columnKey: string | Key) => {
+    const cellValue = row[String(columnKey)];
 
     switch (columnKey) {
       case "created_at":
         return (
           <span className={cn("text-nowrap capitalize")}>
-            {formatDate(cellValue).replaceAll("-", " ")}
+            {format(cellValue, "dd-MMM-yyyy hh:mm:ss a")}
           </span>
         );
       case "updated_at":
         return (
           <span className={cn("text-nowrap capitalize")}>
-            {formatDate(cellValue).replaceAll("-", " ")}
+            {format(cellValue, "dd-MMM-yyyy hh:mm:ss a")}
           </span>
         );
-
-      case "amount":
+      case "batch_name":
         return (
           <span className={cn("text-nowrap font-medium capitalize")}>
-            {formatCurrency(cellValue)}
+            {cellValue}
           </span>
         );
       case "service":
         return (
           <span className={cn("text-nowrap capitalize")}>{cellValue}</span>
         );
-
       case "status":
         return (
           <Button
@@ -216,71 +167,33 @@ export default function SingleTransactionsTable({
             size="sm"
             variant="light"
             onPress={() => {
-              setTransactionDetails(row);
-              setOpenTransactionDetailsModal(true);
+              setSelectedBatch(row);
+              setOpenBatchDetailsModal(true);
             }}
           >
             {cellValue}
           </Button>
         );
-      case "service_provider":
+      case "actions":
         return (
-          <Tooltip
-            closeDelay={500}
-            color="default"
-            content={row?.remarks}
-            delay={500}
-            placement="right"
-            showArrow={true}
+          <Button
+            isIconOnly
+            className={"max-w-fit p-2"}
+            variant="light"
+            onPress={() => {
+              setSelectedBatch(row);
+              setOpenBatchDetailsModal(true);
+            }}
+            startContent={<ComputerDesktopIcon className="h-6 w-5 mr-2" />}
           >
-            <Chip
-              className={cn(
-                "mx-auto self-center capitalize",
-                SERVICE_PROVIDER_COLOR_MAP[
-                  row?.service_provider?.toLowerCase() as keyof typeof SERVICE_PROVIDER_COLOR_MAP
-                ],
-              )}
-              classNames={{
-                content: "font-semibold",
-              }}
-              color="primary"
-              variant="flat"
-            >
-              {cellValue}
-            </Chip>
-          </Tooltip>
+            View
+          </Button>
         );
-      // case 'actions':
-      //   return (
-      //     <Button
-      //       variant="light"
-      //       className={'max-w-fit p-2'}
-      //       isIconOnly
-      //       onPress={() => {
-      //         setTransactionDetails(row)
-      //         setOpenTransactionDetailsModal(true)
-      //       }}
-      //     >
-      //       <EyeIcon className="h-6 w-5" />
-      //     </Button>
-      //   )
 
       default:
         return cellValue;
     }
   }, []);
-
-  const onNextPage = React.useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = React.useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
 
   const onRowsPerPageChange = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -327,53 +240,38 @@ export default function SingleTransactionsTable({
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="flex w-full items-center justify-between px-2 py-2">
-        <Pagination
-          isCompact
-          showControls
-          showShadow
-          color="primary"
-          page={page}
-          total={pages}
-          onChange={setPage}
-        />
-        <div className="hidden w-[30%] justify-end gap-2 sm:flex">
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onPreviousPage}
-          >
-            Previous
-          </Button>
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onNextPage}
-          >
-            Next
-          </Button>
-        </div>
+      <div className="flex items-center justify-center px-2 py-2">
+        {pages > 1 && (
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            page={page}
+            total={pages}
+            onChange={(page) => setPage(page)}
+          />
+        )}
       </div>
     );
-  }, [items.length, page, pages]);
+  }, [rows, pages]);
 
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex gap-3">
           <Search
-            // TODO => Implement Clear button on input
-            isClearable={true}
             placeholder="Search by name..."
             value={filterValue}
             onChange={(v) => onSearchChange(v)}
           />
-          <div className="relative flex gap-3">
+          <div className="relative flex items-center gap-3">
             <SingleSelectionDropdown
               buttonVariant="flat"
-              className={"min-w-[160px]"}
+              className={"hidden min-w-[160px] md:flex"}
+              classNames={{
+                trigger: "hidden lg:flex",
+              }}
               closeOnSelect={false}
               disallowEmptySelection={true}
               dropdownItems={SERVICE_FILTERS}
@@ -384,7 +282,10 @@ export default function SingleTransactionsTable({
             />
             <SingleSelectionDropdown
               buttonVariant="flat"
-              className={"min-w-[160px]"}
+              className={"hidden min-w-[160px] lg:flex"}
+              classNames={{
+                trigger: "hidden lg:flex",
+              }}
               closeOnSelect={false}
               disallowEmptySelection={true}
               dropdownItems={columns}
@@ -395,28 +296,20 @@ export default function SingleTransactionsTable({
               onSelectionChange={setVisibleColumns}
             />
 
-            <Button
-              onPress={() =>
-                convertSingleTransactionToCSV({
-                  objArray: rows,
-                })
-              }
-            >
-              <ArrowDownTrayIcon className="h-5 w-5" /> Export
-            </Button>
-
             {permissions?.can_initiate && (
               <Button
+                as={Link} // BY PASS VOUCHER
+                href={`/dashboard/${workspaceID}/payments/create/direct?protocol=direct`}
                 color="primary"
                 endContent={<PlusIcon className="h-5 w-5" />}
-                onPress={() => setOpenPaymentsModal(true)}
+                // onPress={() => setOpenPaymentsModal(true)}
               >
-                Create New
+                New Batch
               </Button>
             )}
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="hidden items-center justify-between md:flex">
           <span className="text-small text-default-400">
             Total: {rows.length} transactions
           </span>
@@ -437,6 +330,7 @@ export default function SingleTransactionsTable({
     filterValue,
     serviceProtocolFilter,
     visibleColumns,
+    permissions,
     onRowsPerPageChange,
     rows.length,
     onSearchChange,
@@ -446,30 +340,23 @@ export default function SingleTransactionsTable({
   return (
     <Table
       isHeaderSticky
+      classNames={{
+        table: cn(
+          "align-top min-h-[300px] w-full overflow-scroll items-center justify-center",
+        ),
+        base: cn("overflow-x-auto", { "": pages <= 1 }),
+      }}
       isStriped
+      removeWrapper
       aria-label="Transactions table with custom cells"
       bottomContent={bottomContent}
-      className="max-h-[780px]"
-      classNames={{
-        table: cn("align-top min-h-[300px] items-center justify-center", {
-          "min-h-max": pages <= 1,
-          "min-h-[300px]": isLoading || !rows,
-        }),
-        // wrapper: cn('min-h-max', { 'min-h-max': pages <= 1 }),
-      }}
-      removeWrapper={removeWrapper}
       selectedKeys={selectedKeys}
       sortDescriptor={sortDescriptor as any}
       topContent={topContent}
-      onRowAction={
-        onRowAction
-          ? (((key: Key, value: any) => onRowAction(key, value)) as any) //REQUIRED TO SHUT THE TS SERVER UP
-          : undefined
-      }
       onSelectionChange={setSelectedKeys as any}
       onSortChange={setSortDescriptor as any}
     >
-      <TableHeader className="fixed" columns={headerColumns}>
+      <TableHeader className="fixed w-full" columns={headerColumns}>
         {(column) => (
           <TableColumn
             key={column.uid}
@@ -485,6 +372,7 @@ export default function SingleTransactionsTable({
         )}
       </TableHeader>
       <TableBody
+        // align="top"
         emptyContent={emptyContent}
         isLoading={isLoading}
         items={isLoading ? [] : sortedItems}
@@ -492,8 +380,8 @@ export default function SingleTransactionsTable({
       >
         {(item) => (
           <TableRow
-            key={item?.ID || item?.key}
-            // className="hover:bg-primary-50"
+            key={item?.id || item}
+            // align="top"
           >
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>

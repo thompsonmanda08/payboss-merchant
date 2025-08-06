@@ -2,6 +2,7 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import { cn } from "@/lib/utils";
+import React from "react";
 
 function CardHeader({
   title,
@@ -10,8 +11,8 @@ function CardHeader({
   className,
   classNames,
 }: {
-  title: string;
-  infoText?: string;
+  title: string | React.ReactNode;
+  infoText?: string | React.ReactNode;
   className?: string;
   classNames?: {
     titleClasses?: string;

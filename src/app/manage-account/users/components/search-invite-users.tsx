@@ -24,9 +24,7 @@ function SearchOrInviteUsers({
       {/*  USER SEARCH */}
       <Search
         placeholder={"Search users..."}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setSearchQuery(e.target.value);
-        }}
+        onChange={(v) => setSearchQuery(v)}
       />
 
       {/******** ADD USER TO WORKSPACE ************/}

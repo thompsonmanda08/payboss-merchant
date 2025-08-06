@@ -17,7 +17,7 @@ export default function Search({
   ...props
 }: {
   placeholder?: string;
-  onChange?: any;
+  onChange?: (v: string) => void;
   value?: string;
   handleSearch?: any;
   isClearable?: boolean;
@@ -62,7 +62,7 @@ export default function Search({
         classNames={{ wrapper: "max-w-xl" }}
         placeholder={placeholder || "Search..."}
         value={value}
-        onChange={onChange}
+        onChange={(e: any) => onChange?.(e.target.value)}
         {...props}
       />
       {handleSearch && (

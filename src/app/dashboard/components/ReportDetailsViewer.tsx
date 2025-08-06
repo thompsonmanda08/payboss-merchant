@@ -1,6 +1,8 @@
 "use client";
 import Modal from "@/components/modals/custom-modal";
 import SingleTransactionsTable from "@/components/tables/single-transaction-table";
+import { Columns } from "@/lib/table-columns";
+import { Dispatch, SetStateAction } from "react";
 
 function ReportDetailsViewer({
   columns,
@@ -10,12 +12,12 @@ function ReportDetailsViewer({
   setOpenReportsModal,
   isLoading,
 }: {
-  columns: any;
   batch: any;
-  setSelectedBatch: any;
-  openReportsModal: any;
-  setOpenReportsModal: any;
-  isLoading: any;
+  columns: Columns;
+  isLoading?: boolean;
+  openReportsModal: boolean;
+  setSelectedBatch: Dispatch<SetStateAction<any>>;
+  setOpenReportsModal: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
     <Modal

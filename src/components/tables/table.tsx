@@ -305,7 +305,7 @@ export default function CustomTable({
           <Search
             placeholder="Search..."
             value={filterValue}
-            onChange={(e: any) => onSearchChange(e.target.value)}
+            onChange={(v) => onSearchChange(v)}
           />
           <div className="relative flex gap-3">
             {filters?.status?.enabled && (

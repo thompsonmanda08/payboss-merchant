@@ -46,7 +46,25 @@ const ERROR_MESSAGES = {
   },
 };
 
-export const SingleFileDropzone = React.forwardRef<any, any>(
+type DropZoneProps = {
+  dropzoneOptions?: any;
+  width?: any;
+  height?: any;
+  value?: any;
+  className?: any;
+  disabled?: boolean;
+  onChange?: (file?: File, imagePreview?: string) => void;
+  file?: any;
+  otherAcceptedFiles?: object;
+  isMultipleFiles?: boolean;
+  isLandscape?: boolean;
+  isLoading?: boolean;
+  showPreview?: boolean;
+  isUploaded?: boolean;
+  preview?: string;
+};
+
+export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
   (
     {
       dropzoneOptions,
@@ -203,7 +221,7 @@ export const SingleFileDropzone = React.forwardRef<any, any>(
             <div className="w-80 h-[120px] rounded-md">
               <img
                 className="h-full w-full rounded-md object-contain"
-                src={imagePreview || imageUrl}
+                src={imagePreview || imageUrl || ""}
                 alt={acceptedFiles[0]?.name || file?.name}
               />
             </div>
@@ -362,7 +380,7 @@ export default function UploadField(
           "application/pdf": [],
           ...acceptedFiles,
         }}
-        onChange={(file: File) => handleFile(file)}
+        onChange={(file) => handleFile(file as File)}
       />
     </motion.div>
   );

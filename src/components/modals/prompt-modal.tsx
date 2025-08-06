@@ -13,7 +13,7 @@ import { PropsWithChildren } from "react";
 
 type PromptModalProps = ModalProps &
   PropsWithChildren & {
-    onConfirm: () => void;
+    onConfirm?: () => void;
     title?: string;
     cancelText?: string;
     confirmText?: string;
@@ -22,8 +22,8 @@ type PromptModalProps = ModalProps &
     isDismissable?: boolean;
     isKeyboardDismissDisabled?: boolean;
     className?: string;
-    backdrop?: boolean;
-    placement?: string;
+    // backdrop?: "transparent" | "opaque" | "blur";
+    // placement?: string;
     removeActionButtons?: boolean;
   };
 

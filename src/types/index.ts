@@ -67,3 +67,9 @@ export type WorkspaceSession = {
   workspacePermissions?: any;
   [x: string]: any;
 };
+
+export type DateRangeFilter = {
+  start_date?: string;
+  end_date?: string;
+  [x: string]: any;
+};

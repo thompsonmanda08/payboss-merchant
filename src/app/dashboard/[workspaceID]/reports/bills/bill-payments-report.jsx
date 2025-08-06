@@ -163,8 +163,8 @@ export default function BillPaymentReports({ workspaceID }) {
               // className={'mt-auto'}
               classNames={{ input: "h-10" }}
               placeholder={"Search by name, or type..."}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
+              onChange={(v) => {
+                setSearchQuery(v);
               }}
             />
             <Button

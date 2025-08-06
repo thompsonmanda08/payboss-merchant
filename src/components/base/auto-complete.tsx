@@ -8,7 +8,10 @@ import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
-type AutoCompleteFieldProps = Omit<AutocompleteProps, "children"> & {
+type AutoCompleteFieldProps = Omit<
+  AutocompleteProps,
+  "children" | "onChange"
+> & {
   options: {
     ID?: string;
     name: string;
@@ -18,8 +21,8 @@ type AutoCompleteFieldProps = Omit<AutocompleteProps, "children"> & {
   label?: string;
   listItemName: string;
   selector?: string;
-  value: any;
-  onChange: any;
+  value: string;
+  onChange: (value: string) => void;
   className?: string;
   classNames?: any;
   onErrorMessage?: any;
@@ -89,7 +92,7 @@ function AutoCompleteField({
         placeholder={placeholder}
         selectedKey={value}
         variant="bordered"
-        onSelectionChange={onChange}
+        onSelectionChange={(key) => onChange(String(key))}
         {...props}
       >
         {(item: any) => (

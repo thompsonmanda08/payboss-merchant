@@ -148,7 +148,10 @@ export default function UsersTable({
 
   const [rowsPerPage, setRowsPerPage] = React.useState(rowLimit);
 
-  const [sortDescriptor, setSortDescriptor] = React.useState<{ column: Key; direction: "ascending" | "descending" }>({
+  const [sortDescriptor, setSortDescriptor] = React.useState<{
+    column: Key;
+    direction: "ascending" | "descending";
+  }>({
     column: "amount",
     direction: "ascending",
   });
@@ -461,9 +464,7 @@ export default function UsersTable({
           <Search
             placeholder="Search by name..."
             value={filterValue}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onSearchChange(e.target.value)
-            }
+            onChange={(v) => onSearchChange(v)}
           />
           <div className="relative flex gap-3">
             <SingleSelectionDropdown
