@@ -16,7 +16,7 @@ function ReportsBarChart({
   title?: string;
   description?: string;
   chart: {
-    labels: string[];
+    labels: { [key: string]: string };
     datasets: {
       label: string;
       data: number[];
@@ -57,7 +57,7 @@ function ReportsBarChart({
       <div
         className={`mb-3 h-48 rounded-lg bg-gradient-to-b from-primary-800 to-primary-900 py-2 pr-1`}
       >
-        <Bar data={data} options={options as any} />
+        <Bar data={data as any} options={options as any} />
       </div>
     ),
     [chart, color],

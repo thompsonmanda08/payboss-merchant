@@ -1,6 +1,7 @@
 import SettingsSideBar from "@/components/elements/settings-sidebar";
+import { PropsWithChildren } from "react";
 
-async function AccountSettingsLayout({ children }) {
+async function AccountSettingsLayout({ children }: PropsWithChildren) {
   return (
     <main className="flex h-screen items-start justify-start overflow-hidden bg-background text-foreground">
       <SettingsSideBar />

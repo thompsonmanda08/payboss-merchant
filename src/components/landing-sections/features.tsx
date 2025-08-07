@@ -191,7 +191,7 @@ export function Features() {
           selectedKey={String(currentTabIndex)}
           size="lg"
           variant="bordered"
-          onSelectionChange={navigateTo}
+          onSelectionChange={(key) => navigateTo(Number(key))}
         >
           {(item) => (
             <Tab

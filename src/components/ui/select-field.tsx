@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 type SelectComProps = Partial<SelectProps> & {
   value?: any;
-  onChange?: (value: string) => void;
+  // onChange?: (value: string) => void;
   options?: any;
   placeholder?: string;
   listItemName?: string; // CHOOSE THE VALUE TO BE DISPLAYED

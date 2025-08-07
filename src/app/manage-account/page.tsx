@@ -26,7 +26,7 @@ async function AllWorkspacesPage() {
 
       <Workspaces
         className={"m-0 border-none bg-transparent p-0 shadow-none"}
-        user={session?.user}
+        // user={session?.user}
         workspaces={workspaces}
       />
     </div>

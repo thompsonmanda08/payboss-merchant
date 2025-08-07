@@ -6,9 +6,10 @@ import {
 } from "@/app/_actions/merchant-actions";
 
 import WorkspaceSummary from "./workspace-summary-details";
+import { PageProps } from "@/types";
 
-async function WorkSpaceIDPage({ params }) {
-  const workspaceID = (await params).ID;
+async function WorkSpaceIDPage({ params }: PageProps) {
+  const workspaceID = String((await params)?.ID);
 
   // Parallelize data fetching
   const [
@@ -24,7 +25,7 @@ async function WorkSpaceIDPage({ params }) {
   ]);
 
   const workspaces = workspacesResponse?.data?.workspaces || [];
-  const selectedWorkspace = workspaces.find((w) => w.ID === workspaceID);
+  const selectedWorkspace = workspaces.find((w: any) => w.ID === workspaceID);
 
   return (
     <div className="flex w-full flex-col gap-8">

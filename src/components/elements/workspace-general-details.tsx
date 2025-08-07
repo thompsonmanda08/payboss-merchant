@@ -377,7 +377,7 @@ function WorkspaceDetails({
                   onChange={(e) =>
                     updateCallbackURL({ method: e.target.value })
                   }
-                  onError={error?.onCallbackURL}
+                  isInvalid={error?.onCallbackURL}
                 />
 
                 <Input

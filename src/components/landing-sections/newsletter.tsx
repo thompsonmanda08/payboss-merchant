@@ -5,7 +5,7 @@ export default function Newsletter() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email) {
       setIsSubmitted(true);

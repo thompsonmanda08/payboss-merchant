@@ -12,9 +12,10 @@ import { staggerContainerItemVariants } from "@/lib/constants";
 import { motion } from "framer-motion";
 import UserProfile from "@/components/elements/user-profile-card";
 import useKYCInfo from "@/hooks/use-kyc-info";
+import { BusinessDetails } from "@/types/account";
 
 // Stepper component (basic version for now)
-const Stepper = ({ currentStep }) => {
+const Stepper = ({ currentStep }: { currentStep: number }) => {
   const steps = ["Business Profile", "Address", "Contact Person"];
   return (
     <nav aria-label="Progress" className="mb-6">
@@ -81,7 +82,7 @@ export function BusinessInformationForm({
 
   const [province, city] = useMemo(() => {
     const province = provinces?.find((p) => p.id === business?.provinceID);
-    const city = province?.cities?.find((c) => c.id === business?.cityID);
+    const city = province?.cities?.find((c: any) => c.id === business?.cityID);
     return [province, city];
   }, [business?.provinceID, business?.cityID, provinces]);
 
@@ -208,7 +209,7 @@ export function BusinessInformationForm({
                 variants={staggerContainerItemVariants}
               >
                 <AutoCompleteField
-                  defaultValue={province?.id}
+                  // defaultValue={province?.id}
                   label="Province"
                   listItemName={"province"}
                   name="provinceID"
@@ -223,12 +224,12 @@ export function BusinessInformationForm({
                 variants={staggerContainerItemVariants}
               >
                 <AutoCompleteField
-                  defaultValue={city?.id}
+                  // defaultValue={city?.id}
                   label="City/Town"
                   listItemName={"city"}
                   name="cityID"
                   options={province?.cities}
-                  prefilled={true}
+                  // prefilled={true}
                   required={true}
                   value={business?.cityID}
                   isDisabled={true}
@@ -297,6 +298,11 @@ export function BankAccountForm({
   banks = [],
   currencies = [],
   onCompletionNavigateTo: navigateToPage,
+}: {
+  businessDetails: any;
+  banks: any[];
+  currencies: any[];
+  onCompletionNavigateTo: (targetSectionId: string) => void;
 }) {
   return (
     <div className="w-full lg:px-8 mx-auto p-2">

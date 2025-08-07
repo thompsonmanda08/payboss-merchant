@@ -30,6 +30,12 @@ function WorkspaceSummary({
   workspaceRoles,
   workspaceMembers,
   selectedWorkspace,
+}: {
+  workspaceID: string;
+  allUsers: any[];
+  workspaceRoles: any[];
+  workspaceMembers: any[];
+  selectedWorkspace: any;
 }) {
   const queryClient = useQueryClient();
   const pathname = usePathname();
@@ -65,7 +71,7 @@ function WorkspaceSummary({
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  function editWorkspaceField(fields) {
+  function editWorkspaceField(fields: Partial<typeof newWorkspace>) {
     setNewWorkspace((prev) => {
       return { ...prev, ...fields };
     });
@@ -93,7 +99,7 @@ function WorkspaceSummary({
   }, []);
 
   // UPDATE WORKSPACE DETAIL CHANGES
-  async function handleUpdateWorkspace(e) {
+  async function handleUpdateWorkspace(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
 
@@ -408,7 +414,7 @@ function WorkspaceSummary({
         title="Delete/Deactivate Workspace"
         onClose={onClose}
         onConfirm={handleDeleteWorkspace}
-        onOpen={onOpen}
+        // onOpen={onOpen}
       >
         <p className="leading-2 m-0">
           <strong>Are you sure you want to perform this action?</strong>
@@ -426,7 +432,7 @@ function WorkspaceSummary({
           isDisabled={deleteLoading}
           label="Confirm Delete"
           onChange={(e) => setDeleteWorkspaceName(e.target.value)}
-          onError={deleteError.status}
+          isInvalid={deleteError.status}
         />
       </PromptModal>
 
@@ -438,7 +444,7 @@ function WorkspaceSummary({
         workspaceName={selectedWorkspace?.workspace}
         workspaceRoles={workspaceRoles}
         onClose={onCloseAdd}
-        onOpen={onOpenAdd}
+        // onOpen={onOpenAdd}
       />
     </div>
   );

@@ -22,7 +22,7 @@ type AutoCompleteFieldProps = Omit<
   listItemName: string;
   selector?: string;
   value: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   className?: string;
   classNames?: any;
   onErrorMessage?: any;
@@ -92,7 +92,7 @@ function AutoCompleteField({
         placeholder={placeholder}
         selectedKey={value}
         variant="bordered"
-        onSelectionChange={(key) => onChange(String(key))}
+        onSelectionChange={(key) => onChange?.(String(key))}
         {...props}
       >
         {(item: any) => (

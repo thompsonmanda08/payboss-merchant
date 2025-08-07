@@ -1,18 +1,31 @@
 import { Chart as ChartJS, registerables } from "chart.js";
 ChartJS.register(...registerables);
 
-function configs(labels, datasets) {
+function configs(labels: { [key: string]: string }, datasets: any) {
   return {
     data: {
       labels,
-      datasets: [...datasets],
+      datasets: [
+        {
+          label: datasets.label,
+          tension: 0.4,
+          borderWidth: 0,
+          borderRadius: 4,
+          borderSkipped: false,
+          backgroundColor: "#fff",
+          data: datasets.data,
+          maxBarThickness: 8,
+        },
+      ],
     },
+
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
           display: false,
+          position: "bottom",
         },
       },
       interaction: {
@@ -23,20 +36,22 @@ function configs(labels, datasets) {
         y: {
           grid: {
             drawBorder: false,
-            display: true,
-            drawOnChartArea: true,
+            display: false,
+            drawOnChartArea: false,
             drawTicks: false,
-            borderDash: [5, 5],
           },
           ticks: {
-            display: true,
-            padding: 10,
-            color: "#b2b9bf",
+            suggestedMin: 0,
+            suggestedMax: 500,
+            beginAtZero: true,
+            padding: 15,
             font: {
-              size: 11,
+              size: 14,
+              family: "Roboto",
               style: "normal",
               lineHeight: 2,
             },
+            color: "#fff",
           },
         },
         x: {
@@ -45,17 +60,9 @@ function configs(labels, datasets) {
             display: false,
             drawOnChartArea: false,
             drawTicks: false,
-            borderDash: [5, 5],
           },
           ticks: {
-            display: true,
-            color: "#b2b9bf",
-            padding: 20,
-            font: {
-              size: 11,
-              style: "normal",
-              lineHeight: 2,
-            },
+            display: false,
           },
         },
       },

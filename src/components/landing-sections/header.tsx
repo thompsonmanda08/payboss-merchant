@@ -18,7 +18,15 @@ import ThemeSwitcher from "@/components/base/theme-switcher";
 import NavIconButton from "@/components/ui/nav-icon-button";
 import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
 
-function MobileNavLink({ href, className, children }) {
+function MobileNavLink({
+  href,
+  className,
+  children,
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
   return (
     <Button as={Link} className={cn("w-full p-2")} href={href} variant="light">
       {children}
@@ -26,7 +34,7 @@ function MobileNavLink({ href, className, children }) {
   );
 }
 
-function MobileNavIcon({ open }) {
+function MobileNavIcon({ open }: { open: boolean }) {
   return (
     <svg
       aria-hidden="true"
@@ -50,7 +58,7 @@ function MobileNavIcon({ open }) {
   );
 }
 
-function MobileNavigation({ session }) {
+function MobileNavigation({ session }: { session: any }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -113,7 +121,7 @@ function MobileNavigation({ session }) {
   );
 }
 
-export function Header({ session }) {
+export function Header({ session }: { session: any }) {
   const pathname = usePathname();
 
   const isFloating = useFloatingHeader(100);

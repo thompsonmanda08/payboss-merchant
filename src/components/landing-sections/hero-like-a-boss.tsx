@@ -81,7 +81,7 @@ export function HeroLikeABoss() {
   );
 }
 
-export function LadyBoss({ className }) {
+export function LadyBoss({ className }: { className?: string }) {
   return (
     <HeroImage
       // priority

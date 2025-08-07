@@ -1,10 +1,10 @@
 import { JWTPayload } from "jose";
 import { User } from "./account";
-import React, { PropsWithChildren } from "react";
+import React from "react";
 
 export type PageProps = {
-  params?: Promise<any>;
-  searchParams?: Promise<any>;
+  params?: Promise<{ [key: string]: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
   children?: React.ReactNode;
 };
 

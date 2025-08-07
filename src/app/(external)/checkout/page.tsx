@@ -6,10 +6,9 @@ import { ErrorCard } from "@/components/base/error-card";
 import { capitalize } from "@/lib/utils";
 
 import Checkout from "../_components/checkout";
-import { PageProps } from "@/types";
 
-async function CheckoutPage(props: PageProps) {
-  const queryParams = await props.searchParams;
+async function CheckoutPage({ searchParams }: any) {
+  const queryParams = await searchParams;
 
   let checkoutData = {
     workspaceID: queryParams?.workspace_id || "",

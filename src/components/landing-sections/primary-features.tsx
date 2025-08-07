@@ -46,7 +46,7 @@ export function PrimaryFeatures() {
   useEffect(() => {
     let lgMediaQuery = window.matchMedia("(min-width: 1024px)");
 
-    function onMediaQueryChange({ matches }) {
+    function onMediaQueryChange({ matches }: { matches: boolean }) {
       setIsVertical(matches);
     }
 
@@ -89,7 +89,7 @@ export function PrimaryFeatures() {
             aria-label="PayBoss Features"
             className="max-w-full w-full overflow-auto lg:max-w-[460px]"
             classNames={{
-              wrapper: "h-full max-h-full flex-1 w-full",
+              // wrapper: "h-full max-h-full flex-1 w-full",
               // base: "bg-red-300 p-3 h-full max-h-full border-red-500",
               cursor: "",
               tab: "h-full w-full text-left px-0",
@@ -101,7 +101,7 @@ export function PrimaryFeatures() {
             items={features}
             selectedKey={String(selectedIndex)}
             variant="bordered"
-            onSelectionChange={setSelectedIndex}
+            onSelectionChange={(key) => setSelectedIndex(Number(key))}
           >
             {(feature) => (
               <Tab
