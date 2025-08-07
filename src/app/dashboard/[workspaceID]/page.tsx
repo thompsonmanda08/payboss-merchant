@@ -16,7 +16,7 @@ export const metadata = {
 };
 
 export default async function DashboardHome({ params }: PageProps) {
-  const workspaceID = (await params).workspaceID;
+  const workspaceID = (await params)?.workspaceID;
 
   if (!workspaceID) return redirect("/workspaces");
 

@@ -12,7 +12,6 @@ import { useActivePrefunds } from "@/hooks/use-query-data";
 const SelectPrefund = ({
   navigateForward,
   workspaceID,
-
   protocol,
 }: {
   navigateForward: () => void;

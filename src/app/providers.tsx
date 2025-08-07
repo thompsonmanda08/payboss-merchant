@@ -44,17 +44,15 @@ function Providers({
           {!online && (
             <motion.div
               className="relative -top-1 left-0 right-0 z-[999] mb-4 bg-red-500 p-2 py-2 text-xs font-bold capitalize text-white"
+              transition={{
+                type: "spring",
+                stiffness: 100,
+                ease: "easeInOut",
+                duration: 0.3,
+              }}
               whileInView={{
                 y: [-20, 1],
                 opacity: [0, 1],
-                transition: {
-                  duration: 0.3,
-                  easings: "easeInOut",
-                  stiffness: {
-                    type: "spring",
-                    // stiffness: 100,
-                  },
-                },
               }}
             >
               NETWORK ERROR: Check your internet connection and try again!

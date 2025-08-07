@@ -21,6 +21,7 @@ import PromptModal from "@/components/modals/prompt-modal";
 import { QUERY_KEYS } from "@/lib/constants";
 import { InfoIcon } from "lucide-react";
 import IframeWithFallback from "@/components/base/IframeWithFallback";
+import { ErrorState } from "@/types";
 
 const ALL_DOCUMENT_CONFIGS = [
   {
@@ -121,32 +122,47 @@ export default function DocumentAttachments({
   onCompletionNavigateTo,
   isAdminOrOwner,
   allowUserToSubmitKYC,
+}: {
+  merchantID: string;
+  documents: any;
+  refDocsExist: boolean;
+  onCompletionNavigateTo?: (targetSectionId?: string) => void;
+  isAdminOrOwner: boolean;
+  allowUserToSubmitKYC: boolean;
 }) {
   const queryClient = useQueryClient();
 
-  const [docFiles, setDocFiles] = useState({});
+  const [docFiles, setDocFiles] = useState<Record<string, any>>({});
   const [agreed, setAgreed] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fieldLoadingStates, setFieldLoadingStates] = useState({});
-  const [error, setError] = useState({ status: false, message: null });
+  const [error, setError] = useState<ErrorState>({
+    status: false,
+    message: "",
+  });
   const [isViewerModalOpen, setViewerModalOpen] = useState(false);
-  const [currentDocInModal, setCurrentDocInModal] = useState(null);
+  const [currentDocInModal, setCurrentDocInModal] = useState<{
+    name: string;
+    url: string;
+  } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletePromptOpen, setDeletePromptOpen] = useState(false);
-  const [docToDelete, setDocToDelete] = useState(null);
+  const [docToDelete, setDocToDelete] = useState<Record<string, any> | null>(
+    null,
+  );
 
-  function updateDocs(fields) {
+  function updateDocs(fields: Partial<typeof docFiles>) {
     setDocFiles({ ...docFiles, ...fields });
   }
 
   async function submitKYCDocuments() {
     setIsSubmitting(true);
-    setError({ message: "", status: "" });
+    setError({ message: "", status: false });
 
-    const documentUrls = {};
+    const documentUrls = {} as any;
 
     ALL_DOCUMENT_CONFIGS.forEach((docConfig) => {
-      documentUrls[docConfig.backendKey] =
+      documentUrls[docConfig.backendKey as keyof typeof documentUrls] =
         docFiles[docConfig.id]?.file_url || documents?.[docConfig.backendKey];
     });
 
@@ -207,7 +223,7 @@ export default function DocumentAttachments({
         setIsSubmitting(false);
 
         if (isCompleteDocumentUploads(documents)) {
-          onCompletionNavigateTo();
+          onCompletionNavigateTo?.();
         }
 
         return;
@@ -227,7 +243,7 @@ export default function DocumentAttachments({
         setIsSubmitting(false);
 
         if (isCompleteDocumentUploads(documents)) {
-          onCompletionNavigateTo();
+          onCompletionNavigateTo?.();
         }
 
         return;
@@ -247,10 +263,14 @@ export default function DocumentAttachments({
     setIsSubmitting(false);
   }
 
-  async function handleFileUpload(file, recordID, fieldId) {
+  async function handleFileUpload(
+    file: File,
+    fieldId: string,
+    recordID?: string,
+  ) {
     setFieldLoadingStates((prev) => ({ ...prev, [fieldId]: true }));
-    setError({ message: "", status: "" });
-    let response = await uploadBusinessFile(file, merchantID, recordID);
+    setError({ message: "", status: false });
+    let response = await uploadBusinessFile(file, recordID);
 
     if (response?.success) {
       addToast({
@@ -271,7 +291,7 @@ export default function DocumentAttachments({
     setFieldLoadingStates((prev) => ({ ...prev, [fieldId]: false }));
   }
 
-  function handleDeleteRequest(backendKey, name) {
+  function handleDeleteRequest(backendKey: string, name: string) {
     setDocToDelete({ backendKey, name });
     setDeletePromptOpen(true);
   }
@@ -280,7 +300,7 @@ export default function DocumentAttachments({
     if (!docToDelete) return;
 
     setIsDeleting(true);
-    setError({ message: "", status: "" });
+    setError({ message: "", status: false });
 
     // Send and array of keys to Backend to delete the file
     const response = await deleteBusinessDocumentRefs([docToDelete.backendKey]);
@@ -307,7 +327,7 @@ export default function DocumentAttachments({
     setDocToDelete(null);
   }
 
-  const isCompleteDocumentUploads = (documents) =>
+  const isCompleteDocumentUploads = (documents: Record<string, string>) =>
     documents.company_profile_url &&
     documents.cert_of_incorporation_url &&
     documents.share_holder_url &&
@@ -371,11 +391,15 @@ export default function DocumentAttachments({
                     [docConfig.id]: await handleFileUpload(
                       file,
                       docFiles[docConfig.id]?.file_record_id,
-                      docConfig.id
+                      docConfig.id,
                     ),
                   })
                 }
-                isLoadingDoc={fieldLoadingStates[docConfig.id] || false}
+                isLoading={
+                  fieldLoadingStates[
+                    docConfig.id as keyof typeof fieldLoadingStates
+                  ] || false
+                }
                 label={docConfig.label}
               />
               <Tooltip content={docConfig.tooltip} placement="top" className="">
@@ -384,7 +408,7 @@ export default function DocumentAttachments({
                     "w-5 h-5 text-gray-300 dark:text-gray-600 hover:text-secondary absolute top-8 right-2 focus:outline-none transition-all duration-300 ease-in-out",
                     {
                       "right-8": docFiles[docConfig.id]?.file_url,
-                    }
+                    },
                   )}
                 />
               </Tooltip>
@@ -420,7 +444,7 @@ export default function DocumentAttachments({
 
           <Button
             isDisabled={!agreed || isSubmitting}
-            isLoadingDoc={isSubmitting}
+            isLoading={isSubmitting}
             loadingText={"Submitting..."}
             onPress={submitKYCDocuments}
             className="w-full lg:w-auto"
@@ -435,7 +459,7 @@ export default function DocumentAttachments({
           <Button
             className={"justify-end ml-auto"}
             onPress={() =>
-              onCompletionNavigateTo(isAdminOrOwner ? "summary" : "contract")
+              onCompletionNavigateTo?.(isAdminOrOwner ? "summary" : "contract")
             }
           >
             Next Section
@@ -457,7 +481,7 @@ export default function DocumentAttachments({
         }}
       >
         <IframeWithFallback
-          src={currentDocInModal?.url}
+          src={currentDocInModal?.url as string}
           title={currentDocInModal?.name}
         />
       </Modal>
@@ -468,7 +492,7 @@ export default function DocumentAttachments({
         onConfirm={confirmDelete}
         title={`Delete ${docToDelete?.name}?`}
         confirmText="Delete"
-        isLoadingDoc={isDeleting}
+        isLoading={isDeleting}
         className={"max-w-md"}
       >
         <p className="-mt-2 text-xs text-foreground/85 lg:text-sm">

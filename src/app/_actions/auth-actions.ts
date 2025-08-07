@@ -257,7 +257,7 @@ export async function sendBusinessDocumentRefs(
  * @returns {Promise<APIResponse>} A promise that resolves to an APIResponse object indicating the success or failure of the operation.
  */
 export async function deleteBusinessDocumentRefs(
-  keys: Partial<keyof DocumentUrls>,
+  keys: Partial<keyof DocumentUrls>[],
 ): Promise<APIResponse> {
   const session = await getUserSession();
   const merchantID = session?.user?.merchantID;

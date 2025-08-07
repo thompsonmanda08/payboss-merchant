@@ -1,6 +1,9 @@
 import { cn } from "@/lib/utils";
 
-function TransactionStatusTag({ status, className }) {
+function TransactionStatusTag({ status, className }:{
+  status: string;
+  className?: string;
+}) {
   return (
     <span
       className={cn(

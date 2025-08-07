@@ -134,7 +134,15 @@ export default function SubscriptionPaymentForm({
 
   // Form data state
   const [formData, setFormData] = useState({
-    institution: {},
+    institution: {
+      id: "",
+      name: "",
+      type: "",
+      address: "",
+      city: "",
+      redirect_url: "",
+      logo: "",
+    },
     user_id: "",
     fullName: "",
     amount: "",
@@ -235,8 +243,8 @@ export default function SubscriptionPaymentForm({
                 Payment URL:
               </p>
               <p className="text-xs text-primary-600 break-all font-mono bg-white/10 p-2 rounded border">
-                https://payment-gateway.example.com/checkout?school_id=
-                {formData.institution}&school_name=
+                https://payment-gateway.example.com/checkout?instituition_id=
+                {formData.institution?.id}&school_name=
                 {encodeURIComponent(
                   [...INSTITUTIONS].find((s) => s.id === formData.institution)
                     ?.name || "",

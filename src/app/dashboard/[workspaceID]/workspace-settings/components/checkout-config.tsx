@@ -31,7 +31,7 @@ import {
   addToast,
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import Card from "@/components/base/custom-card";
@@ -54,10 +54,14 @@ const INIT_FORM = {
   physical_address: "",
   city_country: "",
   redirect_url: "",
-  recordID: null,
+  recordID: "",
 };
 
-export default function CheckoutConfig({ workspaceID }) {
+export default function CheckoutConfig({
+  workspaceID,
+}: {
+  workspaceID: string;
+}) {
   const queryClient = useQueryClient();
 
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -70,7 +74,7 @@ export default function CheckoutConfig({ workspaceID }) {
 
   const configData = checkoutResponse?.data || {};
 
-  const [selectedKey, setSelectedKey] = useState(null);
+  const [selectedKey, setSelectedKey] = useState<Key | null>(null);
   const [copiedKey, setCopiedKey] = useState("");
   const [newCheckoutFormData, setNewCheckoutFormData] = useState(INIT_FORM);
 
@@ -81,7 +85,7 @@ export default function CheckoutConfig({ workspaceID }) {
 
   const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
 
-  async function handleFileUpload(file, recordID) {
+  async function handleFileUpload(file: File, recordID?: string) {
     setIsUploading(true);
 
     let response = await uploadCheckoutLogoFile(file, recordID);
@@ -113,7 +117,7 @@ export default function CheckoutConfig({ workspaceID }) {
     return {};
   }
 
-  function handleManageDropdown(key) {
+  function handleManageDropdown(key: Key) {
     if (configData?.url && key == "update-checkout-url") {
       setNewCheckoutFormData({
         ...configData,
@@ -157,7 +161,7 @@ export default function CheckoutConfig({ workspaceID }) {
     setOpenViewConfig(false);
   }
 
-  function copyToClipboard(key) {
+  function copyToClipboard(key: string) {
     try {
       navigator?.clipboard?.writeText(key);
       setCopiedKey(key);
@@ -228,7 +232,7 @@ export default function CheckoutConfig({ workspaceID }) {
   }
 
   useEffect(() => {
-    let timeoutId;
+    let timeoutId: any;
 
     if (unmaskURL) {
       timeoutId = setTimeout(() => {
@@ -243,7 +247,7 @@ export default function CheckoutConfig({ workspaceID }) {
 
   /* Clear copied key after 5 seconds */
   useEffect(() => {
-    let timeoutId;
+    let timeoutId: any;
 
     if (copiedKey) {
       timeoutId = setTimeout(() => {
@@ -447,7 +451,7 @@ export default function CheckoutConfig({ workspaceID }) {
         title={"Checkout URL Information"}
         onClose={handleClosePrompts}
         onConfirm={handleCheckoutURLGenerate}
-        onOpen={onOpen}
+        // onOpen={onOpen}
       >
         <div className="flex flex-col gap-4 w-full mb-4">
           <Input
@@ -505,7 +509,7 @@ export default function CheckoutConfig({ workspaceID }) {
         </div>
         <label
           className={cn(
-            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70"
+            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70",
           )}
         >
           Logo (Optional)
@@ -522,7 +526,7 @@ export default function CheckoutConfig({ workspaceID }) {
             "image/webp": [],
           }}
           onChange={async (file) =>
-            await handleFileUpload(file, newCheckoutFormData?.recordID)
+            await handleFileUpload(file as File, newCheckoutFormData?.recordID)
           }
         />
       </PromptModal>

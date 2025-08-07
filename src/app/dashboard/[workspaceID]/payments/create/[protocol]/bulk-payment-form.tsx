@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Skeleton } from "@heroui/react";
 
 import useCustomTabsHook from "@/hooks/use-custom-tabs";
@@ -44,9 +44,13 @@ export const STEPS = [
   },
 ];
 
-function CreateBulkPayment({}) {
-  const params = useParams();
-  const { workspaceID, protocol } = params;
+export default function BulkPaymentForm({
+  workspaceID,
+  protocol,
+}: {
+  workspaceID: string;
+  protocol: string;
+}) {
   const router = useRouter();
 
   // ** INITIALIZEs PAYMENT STATE **//
@@ -71,7 +75,7 @@ function CreateBulkPayment({}) {
   } = useCustomTabsHook([
     <SelectPrefund
       key={"step-1"}
-      navigateBackwards={goBack}
+      // navigateBackwards={goBack}
       navigateForward={goForward}
       protocol={protocol}
       workspaceID={workspaceID}
@@ -79,7 +83,7 @@ function CreateBulkPayment({}) {
     <UploadCSVFile
       key={"step-2"}
       handleCancel={handleCancel}
-      navigateBackwards={goBack}
+      // navigateBackwards={goBack}
       navigateForward={goForward}
       protocol={protocol}
     />,
@@ -175,5 +179,3 @@ function CreateBulkPayment({}) {
     </>
   );
 }
-
-export default CreateBulkPayment;

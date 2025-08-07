@@ -56,7 +56,7 @@ export default function Invoice({
         orientation: "portrait",
         unit: "mm",
         format: [canvas.width, canvas.height],
-      });
+      } as any);
 
       pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
       pdf.save(`${invoice?.invoiceID}.pdf`);

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 
 import Providers from "./providers";
 import { getAuthSession, getUserDetails } from "./_actions/config-actions";
+import { PropsWithChildren } from "react";
 
 const inter = localFont({
   src: "font/Inter-VariableFont_slnt,wght.ttf",
@@ -23,7 +24,7 @@ export const metadata = {
   manifest: "/manifest.json",
 };
 
-export default async function RootLayout({ children }) {
+export default async function RootLayout({ children }: PropsWithChildren) {
   const session = await getUserDetails();
   const authSession = await getAuthSession();
 

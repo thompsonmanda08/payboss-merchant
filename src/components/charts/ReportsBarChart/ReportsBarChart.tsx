@@ -16,11 +16,8 @@ function ReportsBarChart({
   title?: string;
   description?: string;
   chart: {
-    labels: { [key: string]: string };
-    datasets: {
-      label: string;
-      data: number[];
-    }[];
+    labels: { [x: string]: any };
+    datasets: any;
   };
   items?: {
     icon: { color: string; component: React.ReactNode };

@@ -11,9 +11,11 @@ import useKYCInfo from "@/hooks/use-kyc-info";
 import { InfoIcon } from "lucide-react";
 import { submitKYCForReview } from "@/app/_actions/auth-actions";
 import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constants";
+import { capitalize } from "@/lib/utils";
 
 // Helper to determine badge class based on status
-const getStatusBadgeClass = (status) => {
+const getStatusBadgeClass = (status: string) => {
   switch (status) {
     case "completed":
       return "bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100";
@@ -25,7 +27,13 @@ const getStatusBadgeClass = (status) => {
   }
 };
 
-function ComplianceSummary({ sections, navigateToSection }) {
+function ComplianceSummary({
+  sections,
+  navigateToSection,
+}: {
+  sections: any[];
+  navigateToSection?: (id: string) => void;
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { allowUserToSubmitKYC, KYCStage } = useKYCInfo();
@@ -33,24 +41,24 @@ function ComplianceSummary({ sections, navigateToSection }) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleNavigate = (sectionLink) => {
+  const handleNavigate = (sectionLink: string) => {
     if (navigateToSection && sectionLink) {
       navigateToSection(sectionLink);
     } else {
       addToast({
-        message: "Navigation unavailable or sectionLink missing for:",
-        description: sectionLink,
+        title: capitalize(sectionLink).replace("-", " "),
+        description: "Navigation unavailable or sectionLink missing for:",
       });
       console.warn(
         "Navigation unavailable or sectionLink missing for:",
-        sectionLink
+        sectionLink,
       );
     }
   };
 
   // FILTER OUT "start" and "summary"
   const filteredSections = sections.filter(
-    (section) => section.id !== "start" && section.id !== "summary"
+    (section) => section.id !== "start" && section.id !== "summary",
   );
 
   const handleSubmitKYC = async () => {
@@ -67,7 +75,6 @@ function ComplianceSummary({ sections, navigateToSection }) {
       queryClient.invalidateQueries({ queryKey: ["KYC"] });
       queryClient.invalidateQueries({ queryKey: ["uploaded-docs"] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.SETUP] });
-      
     } else {
       addToast({
         title: "Error",
@@ -130,7 +137,7 @@ function ComplianceSummary({ sections, navigateToSection }) {
                 </span>
               </span>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={() => handleNavigate(section.id)}
                 className="text-blue-600 border-blue-600 hover:bg-blue-50 focus:ring-blue-500 dark:text-blue-400 dark:border-blue-500 dark:hover:bg-gray-700 dark:focus:ring-blue-600"
@@ -161,7 +168,7 @@ function ComplianceSummary({ sections, navigateToSection }) {
             </div>
             <div className="flex flex-col lg:flex-row items-center ml-4 ">
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={() => handleNavigate("start")}
                 className="text-blue-600 border-blue-600 hover:bg-blue-50 focus:ring-blue-500 dark:text-blue-400 dark:border-blue-500 dark:hover:bg-gray-700 dark:focus:ring-blue-600"
@@ -187,11 +194,11 @@ function ComplianceSummary({ sections, navigateToSection }) {
 
         <PromptModal
           isOpen={isOpen}
-          onOpen={onOpen}
+          // onOpen={onOpen}
           onClose={onClose}
           isLoading={isSubmitting}
           isDisabled={isSubmitting}
-          isLoadingText="Submitting KYC..."
+          // isLoadingText="Submitting KYC..."
           title="Submit KYC for Review?"
           onConfirm={handleSubmitKYC}
           className="max-w-[500px]"

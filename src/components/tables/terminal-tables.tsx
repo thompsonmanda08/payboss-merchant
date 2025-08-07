@@ -22,8 +22,9 @@ import { format } from "date-fns";
 import { cn, formatCurrency } from "@/lib/utils";
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import Loader from "@/components/ui/loader";
+import { Columns } from "@/lib/table-columns";
 
-const columns = [
+const columns: Columns = [
   { name: "TERMINAL", uid: "terminal_name" },
   { name: "CREATED BY", uid: "created_by" },
   { name: "DATE CREATED", uid: "created_at" },
@@ -202,7 +203,7 @@ export default function TerminalsTable({
           <TableColumn
             key={column.uid}
             align={column.uid === "action" ? "center" : "start"}
-            allowsSorting={column.sortable}
+            allowsSorting={column?.sortable}
             width={(column.uid === "name" ? "60%" : "auto") as any}
           >
             {column.name}
@@ -210,14 +211,17 @@ export default function TerminalsTable({
         )}
       </TableHeader>
       <TableBody
-        align="top"
+        // align="top"
         emptyContent={emptyContent}
         isLoading={isLoading}
         items={items}
         loadingContent={loadingContent}
       >
         {(item) => (
-          <TableRow key={item.terminalID} isDisabled={item?.isLocked}>
+          <TableRow
+            key={item.terminalID}
+            //  isDisabled={item?.isLocked}
+          >
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

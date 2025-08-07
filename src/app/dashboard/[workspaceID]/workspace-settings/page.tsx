@@ -6,16 +6,13 @@ import {
   getWorkspaceDetails,
   getWorkspaceRoles,
 } from "@/app/_actions/merchant-actions";
-import { getWorkspaceSession } from "@/app/_actions/config-actions";
 import { getWalletPrefundHistory } from "@/app/_actions/transaction-actions";
-import { PropsWithoutRef } from "react";
+import { PageProps } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-export default async function ManageWorkspacePage({
-  params,
-}: PropsWithoutRef<any>) {
-  const workspaceID = (await params).workspaceID;
+export default async function ManageWorkspacePage({ params }: PageProps) {
+  const workspaceID = (await params)?.workspaceID as string;
 
   const [
     allUsersData,

@@ -12,7 +12,8 @@ import {
   CardFooter,
   Chip,
 } from "@heroui/react";
-import { useIdleTimer } from "react-idle-timer/legacy";
+// import { useIdleTimer } from "react-idle-timer/legacy";
+import { useIdleTimer } from "react-idle-timer";
 import { usePathname } from "next/navigation";
 
 import { lockScreenOnUserIdle } from "@/app/_actions/auth-actions";
@@ -20,7 +21,7 @@ import { lockScreenOnUserIdle } from "@/app/_actions/auth-actions";
 import { Button } from "@/components/ui/button";
 import { useRefreshToken } from "@/hooks/use-query-data";
 
-function ScreenLock({ open }) {
+function ScreenLock({ open }: { open: boolean }) {
   const { isOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [seconds, setSeconds] = useState(90);
@@ -150,7 +151,7 @@ function ScreenLock({ open }) {
   );
 }
 
-export function IdleTimerContainer({ authSession }) {
+export function IdleTimerContainer({ authSession }: { authSession: any }) {
   const pathname = usePathname();
 
   const [state, setState] = useState("Active");

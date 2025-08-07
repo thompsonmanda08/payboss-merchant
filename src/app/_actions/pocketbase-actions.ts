@@ -169,7 +169,7 @@ export async function uploadPOPDocument(
  */
 export async function uploadBusinessFile(
   file: File,
-  fileRecordId: string,
+  fileRecordId?: string,
 ): Promise<APIResponse> {
   const session = await getUserDetails();
   const merchantID = session?.user?.merchantID as string;
@@ -288,7 +288,7 @@ export async function uploadTerminalConfigFile(
 
 export async function uploadCheckoutLogoFile(
   file: File,
-  fileRecordId: string,
+  fileRecordId?: string,
 ): Promise<APIResponse> {
   const session = await getUserDetails();
   const merchantID = session?.user?.merchantID as string;

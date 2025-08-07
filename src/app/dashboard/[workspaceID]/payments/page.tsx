@@ -1,25 +1,12 @@
-"use client";
-
-import { useState } from "react";
-import { useDisclosure } from "@heroui/react";
-import { useParams } from "next/navigation";
-
-import usePaymentsStore from "@/context/payment-store";
-import { PAYMENT_SERVICE_TYPES } from "@/lib/constants";
-import Card from "@/components/base/custom-card";
 import CardHeader from "@/components/base/card-header";
-import OverlayLoader from "@/components/ui/overlay-loader";
-
+import { PageProps } from "@/types";
+import Card from "@/components/base/custom-card";
+import { PAYMENT_SERVICE_TYPES } from "@/lib/constants";
 import BulkTransactionsTable from "./components/bulk-transactions-table";
-import BatchDetailsPage from "./components/batch-details-view";
-import SelectPaymentType from "./components/payment-protocol-selection";
+import PaymentWidgets from "./payment-widgets";
 
-export default function DisbursementsWrapper({}) {
-  const params = useParams();
-  const workspaceID = params.workspaceID;
-  const { onClose } = useDisclosure();
-  const { openPaymentsModal, openBatchDetailsModal } = usePaymentsStore();
-  const [createPaymentLoading, setCreatePaymentLoading] = useState(false);
+export default async function DisbursementsPage({ params }: PageProps) {
+  const workspaceID = (await params)?.workspaceID as string;
 
   return (
     <>
@@ -39,32 +26,10 @@ export default function DisbursementsWrapper({}) {
 
         <BulkTransactionsTable
           key={PAYMENT_SERVICE_TYPES[0]?.name}
-          // rows={bulkTransactions}
           workspaceID={workspaceID}
         />
       </Card>
-
-      {/************************************************************************/}
-      {/* MODALS && OVERLAYS */}
-
-      {createPaymentLoading && <OverlayLoader show={createPaymentLoading} />}
-
-      {openPaymentsModal && (
-        <SelectPaymentType
-          // protocol={"direct"}
-          setCreatePaymentLoading={setCreatePaymentLoading}
-        />
-      )}
-
-      {openBatchDetailsModal && (
-        <BatchDetailsPage
-          isOpen={openBatchDetailsModal}
-          protocol={"direct"}
-          onClose={onClose}
-        />
-      )}
-
-      {/************************************************************************/}
+      <PaymentWidgets workspaceID={workspaceID} />
     </>
   );
 }

@@ -29,7 +29,7 @@ function SupportForm() {
         }, 3000);
       });
 
-      if (response?.ok == true) {
+      if (response) {
         e.currentTarget?.reset();
 
         addToast({
