@@ -46,19 +46,19 @@ const nextConfig = {
     // forceSwcTransforms: true, // Enabled
   },
   // Ensure static files use HTTP
-  async headers() {
-    return [
-      {
-        source: "/:path*",
-        headers: [
-          // {
-          //   key: "Content-Security-Policy",
-          //   value: "upgrade-insecure-requests; block-all-mixed-content",
-          // },
-        ],
-      },
-    ];
-  },
+  // async headers() {
+  //   return [
+  //     {
+  //       source: "/:path*",
+  //       headers: [
+  //         // {
+  //         //   key: "Content-Security-Policy",
+  //         //   value: "upgrade-insecure-requests; block-all-mixed-content",
+  //         // },
+  //       ],
+  //     },
+  //   ];
+  // },
 } as NextConfig;
 
 export default withSentryConfig(nextConfig, {
