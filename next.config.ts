@@ -39,35 +39,35 @@ const nextConfig = {
 
   experimental: {
     // Disable SWC transforms that might force HTTPS
-    forceSwcTransforms: false,
+    // forceSwcTransforms: false, //Disabled
+    forceSwcTransforms: true, // Enabled
     // Enable manual chunk handling
     // manualClientBasePath: true,
   },
   // Ensure static files use HTTP
-  // async headers() {
-  //   return [
-  //     {
-  //       source: "/_next/static/(.*)",
-  //       headers: [
-  //         {
-  //           key: "Content-Security-Policy",
-  //           value: "upgrade-insecure-requests; block-all-mixed-content",
-  //         },
-  //       ],
-  //     },
-  // {
-  //       // Apply these headers to all routes of your application
-  //       source: "/:path*",
-  //       headers: [
-  //         {
-  //           key: "Content-Security-Policy",
-  //           value: "upgrade-insecure-requests",
-  //         },
-  //       ],
-  //     },
-
-  //   ];
-  // },
+  async headers() {
+    return [
+      {
+        source: "/_next/static/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "upgrade-insecure-requests; block-all-mixed-content",
+          },
+        ],
+      },
+      // {
+      //   // Apply these headers to all routes of your application
+      //   source: "/:path*",
+      //   headers: [
+      //     {
+      //       key: "Content-Security-Policy",
+      //       value: "upgrade-insecure-requests",
+      //     },
+      //   ],
+      // },
+    ];
+  },
 } as NextConfig;
 
 export default withSentryConfig(nextConfig, {
