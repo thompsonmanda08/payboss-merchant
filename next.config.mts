@@ -1,5 +1,6 @@
 import { withSentryConfig } from "@sentry/nextjs";
-/** @type {import('next').NextConfig} */
+import { NextConfig } from "next";
+
 const nextConfig = {
   output: "standalone",
   // distDir: "build",
@@ -15,7 +16,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: process.env.SERVER_URL,
+        hostname: String(process.env.SERVER_URL || "http://localhost:3000"),
         port: "",
         pathname: "/**",
       },
@@ -29,17 +30,17 @@ const nextConfig = {
   },
   turbopack: {
     rules: {
-      "*.svg": {
-        loaders: ["@svgr/webpack"],
-        as: "*.js",
-      },
+      // "*.svg": {
+      //   loaders: ["@svgr/webpack"],
+      //   as: "*.js",
+      // },
     },
   },
 
   experimental: {
     forceSwcTransforms: true,
   },
-};
+} as NextConfig;
 
 export default withSentryConfig(nextConfig, {
   // For all available options, see:
