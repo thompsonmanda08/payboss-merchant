@@ -3,6 +3,8 @@ import { withSentryConfig } from "@sentry/nextjs";
 const nextConfig = {
   output: "standalone",
   // distDir: "build",
+  assetPrefix:
+    process.env.NODE_ENV === "production" ? process.env.SERVER_URL : "",
   images: {
     unoptimized: true,
 

@@ -969,7 +969,7 @@ function SubscriptionPacks({ formData, updateFormData }) {
               label="Key"
               name={`services.${index}.key`}
               placeholder="Identifier Key"
-              onError={!isUniqueKey(formData?.services[index]?.key, index)}
+              isInvalid={!isUniqueKey(formData?.services[index]?.key, index)}
               errorText="Key must be unique"
               value={formData?.services[index]?.key}
               onChange={(e) => {

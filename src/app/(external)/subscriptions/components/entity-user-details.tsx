@@ -134,7 +134,7 @@ export default function EntityUserDetails({
             listItemName={"name"}
             value={formData.institution?.id || ""}
             onChange={handleSelectInstitution}
-            onError={errors.institution}
+            isInvalid={errors.institution}
             errorText={errors.institution}
           />
 
@@ -189,7 +189,7 @@ export default function EntityUserDetails({
                       label="Full Names"
                       placeholder="Enter your full names"
                       type="text"
-                      onError={errors.fullName}
+                      isInvalid={errors.fullName}
                       errorText={errors.fullName}
                       value={formData.fullName}
                       onChange={(e) =>
@@ -201,7 +201,7 @@ export default function EntityUserDetails({
                       label="Registration/ National ID"
                       placeholder="Enter your Registration/NRC/Passport number"
                       type="text"
-                      onError={errors.user_id}
+                      isInvalid={errors.user_id}
                       errorText={errors.user_id}
                       value={formData.user_id}
                       onChange={(e) =>
@@ -281,7 +281,7 @@ export default function EntityUserDetails({
                           label="Registration/ National ID"
                           placeholder="Enter your Registration/NRC/Passport number"
                           type="text"
-                          onError={errors.user_id}
+                          isInvalid={errors.user_id}
                           errorText={errors.user_id}
                           value={formData.user_id}
                           onChange={(e) =>

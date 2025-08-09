@@ -342,7 +342,7 @@ function CreateOrUpdateUser({
                     roleID: e.target.value,
                   });
                 }}
-                onError={error?.onRole}
+                isInvalid={error?.onRole}
               />
 
               <div className="flex flex-col gap-3 sm:flex-row">
@@ -356,7 +356,7 @@ function CreateOrUpdateUser({
                   onChange={(e) => {
                     updateDetails({ first_name: e.target.value });
                   }}
-                  onError={error?.onFName}
+                  isInvalid={error?.onFName}
                 />
                 <Input
                   errorText="Invalid Last Name"
@@ -367,7 +367,7 @@ function CreateOrUpdateUser({
                   onChange={(e) => {
                     updateDetails({ last_name: e.target.value });
                   }}
-                  onError={error?.onLName}
+                  isInvalid={error?.onLName}
                 />
               </div>
               <Input
@@ -379,7 +379,7 @@ function CreateOrUpdateUser({
                 onChange={(e) => {
                   updateDetails({ username: e.target.value });
                 }}
-                onError={error?.onUsername}
+                isInvalid={error?.onUsername}
               />
               <Input
                 errorText="Invalid Mobile Number"
@@ -393,7 +393,7 @@ function CreateOrUpdateUser({
                 onChange={(e) => {
                   updateDetails({ phone_number: e.target.value });
                 }}
-                onError={phoneNoError || error?.onMobileNo}
+                isInvalid={phoneNoError || error?.onMobileNo}
               />
               <Input
                 errorText="Invalid Email Address"
@@ -405,7 +405,7 @@ function CreateOrUpdateUser({
                 onChange={(e) => {
                   updateDetails({ email: e.target.value });
                 }}
-                onError={error?.onEmail}
+                isInvalid={error?.onEmail}
               />
 
               {isEditingUser ? (

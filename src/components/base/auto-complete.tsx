@@ -27,7 +27,6 @@ type AutoCompleteFieldProps = Omit<
   classNames?: any;
   onErrorMessage?: any;
   placeholder?: string;
-  onError?: any;
   errorText?: string;
 };
 
@@ -42,7 +41,7 @@ function AutoCompleteField({
   classNames,
   onErrorMessage,
   placeholder = "Search...",
-  onError,
+
   errorText,
   ...props
 }: AutoCompleteFieldProps) {
@@ -80,11 +79,19 @@ function AutoCompleteField({
         defaultItems={options}
         inputProps={{
           classNames: {
-            input:
+            input: cn(
               "-ml-2 focus:ring-none border-none outline-none focus:border-none focus:outline-none focus-visible:ring-none px-2 data-[focus=true]:border-none focus:ring-transparent",
+              {
+                "cursor-not-allowed": props?.isDisabled,
+              },
+            ),
 
             inputWrapper: cn(
               "focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70",
+              {
+                "cursor-not-allowed": props?.isDisabled,
+                "border-red-500": onErrorMessage && props?.isInvalid,
+              },
               classNames?.trigger,
             ),
           },
@@ -111,7 +118,7 @@ function AutoCompleteField({
         )}
       </Autocomplete>
 
-      {errorText && onError && (
+      {errorText && props.isInvalid && (
         <motion.span
           className={cn("ml-1 text-xs text-red-500", classNames?.errorText)}
           whileInView={{
