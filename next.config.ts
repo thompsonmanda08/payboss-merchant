@@ -41,22 +41,22 @@ const nextConfig = {
     // Disable SWC transforms that might force HTTPS
     forceSwcTransforms: false,
     // Enable manual chunk handling
-    manualClientBasePath: true,
+    // manualClientBasePath: true,
   },
   // Ensure static files use HTTP
-  async headers() {
-    return [
-      {
-        source: "/_next/static/(.*)",
-        headers: [
-          {
-            key: "Content-Security-Policy",
-            value: "upgrade-insecure-requests; block-all-mixed-content",
-          },
-        ],
-      },
-    ];
-  },
+  // async headers() {
+  //   return [
+  //     {
+  //       source: "/_next/static/(.*)",
+  //       headers: [
+  //         {
+  //           key: "Content-Security-Policy",
+  //           value: "upgrade-insecure-requests; block-all-mixed-content",
+  //         },
+  //       ],
+  //     },
+  //   ];
+  // },
 } as NextConfig;
 
 export default withSentryConfig(nextConfig, {
