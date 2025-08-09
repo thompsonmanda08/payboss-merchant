@@ -18,7 +18,7 @@ bun dev
 ```bash
 docker build -t merchant-web-portal .
 
-docker run docker run -p 3000:3000 --name merchant-web-portal merchant-web-portal
+docker run -p 3000:3000 --name merchant-web-portal merchant-web-portal
 
 ```
 
