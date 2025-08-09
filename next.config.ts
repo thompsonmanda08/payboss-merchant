@@ -38,7 +38,24 @@ const nextConfig = {
   },
 
   experimental: {
-    forceSwcTransforms: true,
+    // Disable SWC transforms that might force HTTPS
+    forceSwcTransforms: false,
+    // Enable manual chunk handling
+    manualClientBasePath: true,
+  },
+  // Ensure static files use HTTP
+  async headers() {
+    return [
+      {
+        source: "/_next/static/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "upgrade-insecure-requests; block-all-mixed-content",
+          },
+        ],
+      },
+    ];
   },
 } as NextConfig;
 
