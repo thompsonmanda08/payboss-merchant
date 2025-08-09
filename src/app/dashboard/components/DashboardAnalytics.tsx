@@ -63,7 +63,7 @@ function DashboardAnalytics({
   workspaceID,
   dashboardAnalytics,
   workspaceSession,
-}:{
+}: {
   workspaceID: string;
   dashboardAnalytics: any;
   workspaceSession: any;
@@ -111,13 +111,15 @@ function DashboardAnalytics({
         {
           label: "Transactions",
           data: MONTHS.map((month) => {
-            const transaction = monthlyTransactionRecords?.find((item:any) =>
-              String(item.month)?.toLowerCase().startsWith(month?.toLowerCase())
+            const transaction = monthlyTransactionRecords?.find((item: any) =>
+              String(item.month)
+                ?.toLowerCase()
+                .startsWith(month?.toLowerCase()),
             );
 
             return transaction ? transaction.count : 0;
           }), // Total Transactions
-        }
+        },
       ],
     },
   };

@@ -213,14 +213,14 @@ export const useWorkspaceCallbackURL = (workspaceID: string) =>
 //     staleTime: Infinity,
 //   });
 
-export const useWorkspaceCheckout = (workspaceID:string) =>
+export const useWorkspaceCheckout = (workspaceID: string) =>
   useQuery({
     queryKey: [QUERY_KEYS.WORKSPACE_CHECKOUT],
     queryFn: async () => await getCheckoutURL(workspaceID),
     staleTime: Infinity,
   });
 
-export const useWorkspaceSubscriptions = (workspaceID:string) =>
+export const useWorkspaceSubscriptions = (workspaceID: string) =>
   useQuery({
     queryKey: [QUERY_KEYS.SUBSCRIPTION_PACKS, workspaceID],
     queryFn: async () => await getSubscriptionPacks(workspaceID),

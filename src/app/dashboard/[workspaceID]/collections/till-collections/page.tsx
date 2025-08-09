@@ -40,7 +40,8 @@ import TillNumberBanner from "./till-number-banner";
 
 export default function TillPaymentCollections({}) {
   const params = useParams();
-  const workspaceID = params.workspaceID;
+  const workspaceID = String(params.workspaceID);
+
   const queryClient = useQueryClient();
   const { data: tillNumberResponse, isFetching } = useTillNumber(workspaceID);
 
@@ -100,7 +101,7 @@ export default function TillPaymentCollections({}) {
   useEffect(() => {
     // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
     if (!mutation.data) {
-      mutation.mutateAsync({ start_date, end_date });
+      mutation.mutateAsync({ start_date, end_date } as any);
     }
   }, []);
 
@@ -183,7 +184,7 @@ export default function TillPaymentCollections({}) {
               }
             >
               {
-                <TableRow name="1">
+                <TableRow>
                   <TableCell>
                     <Button
                       isDisabled
@@ -288,7 +289,6 @@ export default function TillPaymentCollections({}) {
             columns={TILL_TRANSACTION_COLUMNS}
             isLoading={mutation.isPending}
             rows={LATEST_TRANSACTIONS || []}
-            rowsPerPage={6}
           />
         </Card>
       </div>
@@ -305,7 +305,7 @@ export default function TillPaymentCollections({}) {
           setIsNew(false);
         }}
         onConfirm={handleUserAction}
-        onOpen={onOpen}
+        // onOpen={onOpen}
       >
         <p className="-mt-4 text-sm leading-6 text-foreground/70">
           <strong>Are you sure you want to generate a new Till number?</strong>

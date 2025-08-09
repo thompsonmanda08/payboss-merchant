@@ -48,7 +48,7 @@ const useKYCInfo = () => {
     KYCStageID == 3 && isCompleteKYC && KYCApprovalStatus == "approved";
 
   const contactPerson =
-    users?.find((user:any) => user?.role?.toLowerCase() == "owner") || {};
+    users?.find((user: any) => user?.role?.toLowerCase() == "owner") || {};
 
   const signedContractDoc = documents?.signed_contract || "";
 

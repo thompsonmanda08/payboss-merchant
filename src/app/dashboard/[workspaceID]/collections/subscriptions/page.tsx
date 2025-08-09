@@ -58,9 +58,11 @@ import { uploadCheckoutLogoFile as uploadMembersListFile } from "@/app/_actions/
 import SoftBoxIcon from "@/components/base/soft-box-icon";
 import PromptModal from "@/components/modals/prompt-modal";
 
+type ActionKey = "create-new-sub" | "update-sub" | "delete-sub" | "add-members";
+
 const Subscriptions = () => {
   const params = useParams();
-  const workspaceID = params.workspaceID;
+  const workspaceID = String(params.workspaceID);
 
   const queryClient = useQueryClient();
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -71,6 +73,9 @@ const Subscriptions = () => {
   const [formData, setFormData] = useState({
     isLoading: false,
     isUpdating: false,
+    members_file: null as File | null,
+    members_file_name: "",
+    members_url: "",
     services: [{ name: "", price: 0, key: "" }],
   });
 
@@ -83,9 +88,10 @@ const Subscriptions = () => {
     isLoading: false,
   });
 
-  const [selectedActionKey, setSelectedActionKey] = useState("create-new-sub");
+  const [selectedActionKey, setSelectedActionKey] =
+    useState<ActionKey>("create-new-sub");
 
-  function updateServiceData(fields) {
+  function updateServiceData(fields: Partial<typeof selectedServicePack>) {
     setSelectedServicePack((prev) => {
       return {
         ...prev,
@@ -94,7 +100,7 @@ const Subscriptions = () => {
     });
   }
 
-  function updateFormData(fields) {
+  function updateFormData(fields: Partial<typeof formData>) {
     setFormData((prev) => {
       return {
         ...prev,
@@ -117,14 +123,15 @@ const Subscriptions = () => {
       isLoading: false,
       isUpdating: false,
       services: [{ name: "", price: 0, key: "" }],
-    });
+    } as typeof formData);
+
     setSelectedServicePack({
       name: "",
       isLoading: false,
       isUpdating: false,
-    });
+    } as typeof selectedServicePack);
 
-    setSelectedActionKey("");
+    setSelectedActionKey("" as ActionKey);
   }
 
   const thirtyDaysAgoDate = new Date();
@@ -144,30 +151,32 @@ const Subscriptions = () => {
     return mutation.data?.data?.data || [];
   }, [mutation?.data]);
 
-  function updateSingleService(servicePacks, selectedPack, action) {
+  function updateSingleService(
+    servicePacks: any,
+    selectedPack: any,
+    action: ActionKey,
+  ) {
     return servicePacks
-      ?.map((service) => {
+      ?.map((service: any) => {
         if (service.key !== selectedPack?.key) return service;
-        return action === "delete-subscription"
-          ? null
-          : { ...service, ...selectedPack };
+        return action === "delete-sub" ? null : { ...service, ...selectedPack };
       })
       ?.filter(Boolean);
   }
 
-  function isValidPayload(payload) {
+  function isValidPayload(payload: any) {
     const isValidPrices = payload?.services?.every(
-      (service) => service.price > 0
+      (service: any) => service.price > 0,
     );
 
     const isValidNames = payload?.services?.every(
-      (service) => service.name !== ""
+      (service: any) => service.name !== "",
     );
 
     const isUniqueValidKeys = (() => {
       if (!payload?.services) return false;
 
-      const keys = payload.services.map((s) => s?.key).filter(Boolean);
+      const keys = payload.services.map((s: any) => s?.key).filter(Boolean);
       const uniqueKeys = new Set(keys);
 
       return keys.length === uniqueKeys.size;
@@ -325,7 +334,7 @@ const Subscriptions = () => {
       return;
     }
 
-    const payload = { services: null };
+    const payload = { services: {} };
 
     if (formData?.isUpdating) {
       payload.services = formData.services;
@@ -333,7 +342,7 @@ const Subscriptions = () => {
       payload.services = updateSingleService(
         SERVICE_PACKS,
         selectedServicePack,
-        selectedActionKey
+        selectedActionKey,
       );
     }
 
@@ -371,15 +380,15 @@ const Subscriptions = () => {
     return;
   }
 
-  function handleSelectedAction(key) {
+  function handleSelectedAction(key: ActionKey) {
     setSelectedActionKey(key);
 
-    if (key == "create-new-subs") {
+    if (key == "create-new-sub") {
       updateServiceData({ isUpdating: false });
       onOpen();
     }
 
-    if (key == "update-subscriptions") {
+    if (key == "update-sub") {
       setFormData((prev) => ({
         ...prev,
         isUpdating: true,
@@ -395,7 +404,7 @@ const Subscriptions = () => {
     return;
   }
 
-  async function handleFileUpload(file, recordID) {
+  async function handleFileUpload(file: File, recordID: string) {
     updateFormData({ isLoading: true });
 
     let response = await uploadMembersListFile(file, recordID);
@@ -410,7 +419,7 @@ const Subscriptions = () => {
         members_file: file,
         members_file_name: response?.data?.file_name,
         members_url: response?.data?.file_url,
-        recordID: response?.data?.file_record_id,
+        // recordID: response?.data?.file_record_id,
         isLoading: false,
       });
 
@@ -430,12 +439,12 @@ const Subscriptions = () => {
   useEffect(() => {
     // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
     if (!mutation.data) {
-      mutation.mutateAsync({ start_date, end_date });
+      mutation.mutateAsync({ start_date, end_date } as any);
     }
   }, []);
 
-  const ACTION = {
-    "create-new-subs": {
+  const ACTION: Record<ActionKey, any> = {
+    "create-new-sub": {
       prompt: {
         title: "Create New Subscription",
         description: "Subscription packs that your members can pay for",
@@ -448,7 +457,7 @@ const Subscriptions = () => {
       buttonText: "Create",
     },
 
-    "update-subscriptions": {
+    "update-sub": {
       prompt: {
         title: "Update Subscriptions",
         description: "Modify subscriptions that your members pay for",
@@ -461,7 +470,7 @@ const Subscriptions = () => {
       buttonText: "Save",
     },
 
-    "delete-subscription": {
+    "delete-sub": {
       prompt: {
         title: "Delete Subscription",
         description: "Are you sure you want to delete this subscription?",
@@ -508,7 +517,7 @@ const Subscriptions = () => {
                 <Button
                   endContent={<PlusIcon className="h-5 w-5" />}
                   isDisabled={isLoading}
-                  onPress={() => handleSelectedAction("create-new-subs")}
+                  onPress={() => handleSelectedAction("create-new-sub")}
                 >
                   Create New
                 </Button>
@@ -531,15 +540,15 @@ const Subscriptions = () => {
                     </DropdownTrigger>
                     <DropdownMenu
                       aria-label="Action event example"
-                      onAction={(key) => handleSelectedAction(key)}
+                      onAction={(key) => handleSelectedAction(key as ActionKey)}
                     >
                       <DropdownItem
-                        key="update-subscriptions"
+                        key="update-sub"
                         description="Update subscription packages"
                         startContent={
                           <SquarePenIcon
                             className={cn(
-                              "w-5 h-5 pointer-events-none flex-shrink-0"
+                              "w-5 h-5 pointer-events-none flex-shrink-0",
                             )}
                           />
                         }
@@ -552,7 +561,7 @@ const Subscriptions = () => {
                         startContent={
                           <PlusIcon
                             className={cn(
-                              "w-5 h-5 pointer-events-none flex-shrink-0"
+                              "w-5 h-5 pointer-events-none flex-shrink-0",
                             )}
                           />
                         }
@@ -565,7 +574,7 @@ const Subscriptions = () => {
                         startContent={
                           <Users2
                             className={cn(
-                              "w-5 h-5 pointer-events-none flex-shrink-0"
+                              "w-5 h-5 pointer-events-none flex-shrink-0",
                             )}
                           />
                         }
@@ -611,7 +620,7 @@ const Subscriptions = () => {
             </div>
           ) : SERVICE_PACKS.length > 0 ? (
             <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] py-2  gap-4 max-h-[600px] overflow-y-auto no-scrollbar">
-              {SERVICE_PACKS.map((subscription) => (
+              {SERVICE_PACKS.map((subscription: any) => (
                 <div key={subscription.key} className="p-1 group ">
                   <div className=" p-4 relative backdrop-blur-xl rounded-2xl border border-slate-500/10 hover:shadow-md hover:shadow-primary/5 overflow-clip transition-all duration-300 hover:scale-[1.01] bg-card">
                     {/* Gradient Accent */}
@@ -632,7 +641,7 @@ const Subscriptions = () => {
                           <button
                             className="p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors duration-200 hover:scale-105"
                             onClick={() => {
-                              setSelectedActionKey("update-subscriptions");
+                              setSelectedActionKey("update-sub");
                               updateServiceData({
                                 isUpdating: true,
                                 ...subscription,
@@ -644,7 +653,7 @@ const Subscriptions = () => {
                           </button>
                           <button
                             onClick={() => {
-                              setSelectedActionKey("delete-subscription");
+                              setSelectedActionKey("delete-sub");
                               updateServiceData({
                                 isUpdating: true,
                                 ...subscription,
@@ -714,7 +723,7 @@ const Subscriptions = () => {
         isDismissable={false}
         isOpen={
           (isOpen || selectedServicePack?.isUpdating) &&
-          selectedActionKey !== "delete-subscription"
+          selectedActionKey !== "delete-sub"
         }
         placement="bottom-center"
         size={!selectedServicePack?.isUpdating ? "3xl" : undefined}
@@ -731,13 +740,13 @@ const Subscriptions = () => {
           </ModalHeader>
           <ModalBody>
             {selectedServicePack?.isUpdating &&
-            selectedActionKey == "update-subscriptions" ? (
+            selectedActionKey == "update-sub" ? (
               <EditSubscriptionFields
                 formData={selectedServicePack}
                 updateFormData={updateServiceData}
               />
-            ) : selectedActionKey == "create-new-subs" ||
-              selectedActionKey == "update-subscriptions" ? (
+            ) : selectedActionKey == "create-new-sub" ||
+              selectedActionKey == "update-sub" ? (
               <SubscriptionPacks
                 formData={formData}
                 updateFormData={updateFormData}
@@ -777,7 +786,7 @@ const Subscriptions = () => {
         isDisabled={selectedServicePack?.isLoading}
         isDismissable={false}
         isLoading={selectedServicePack?.isLoading}
-        isOpen={selectedActionKey == "delete-subscription"}
+        isOpen={selectedActionKey == "delete-sub"}
         title={"Delete Subscription?"}
         onClose={handleClose}
         onConfirm={handleUpdateSubscription}
@@ -805,7 +814,13 @@ const Subscriptions = () => {
   );
 };
 
-function EditSubscriptionFields({ formData, updateFormData }) {
+function EditSubscriptionFields({
+  formData,
+  updateFormData,
+}: {
+  formData: any;
+  updateFormData: any;
+}) {
   return (
     <>
       <Input
@@ -840,12 +855,18 @@ function EditSubscriptionFields({ formData, updateFormData }) {
   );
 }
 
-function UploadMembersCSV({ formData, handleFileUpload }) {
+function UploadMembersCSV({
+  formData,
+  handleFileUpload,
+}: {
+  formData: any;
+  handleFileUpload: any;
+}) {
   return (
     <div className="-mt-4">
       <label
         className={cn(
-          "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70"
+          "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70",
         )}
       >
         Members List File
@@ -878,9 +899,15 @@ function UploadMembersCSV({ formData, handleFileUpload }) {
   );
 }
 
-function SubscriptionPacks({ formData, updateFormData }) {
+function SubscriptionPacks({
+  formData,
+  updateFormData,
+}: {
+  formData: any;
+  updateFormData: any;
+}) {
   const [lineItems, setLineItems] = useState(
-    formData?.services || [{ name: "", price: 0, key: "" }]
+    formData?.services || [{ name: "", price: 0, key: "" }],
   );
 
   const addLineItem = () => {
@@ -895,13 +922,13 @@ function SubscriptionPacks({ formData, updateFormData }) {
     // Both updates are good, but they need to happen after the check based on formData.services
     const newLineItem = { name: "", price: 0, key: "" };
 
-    setLineItems((prev) => [...prev, newLineItem]); // Update local state for rendering
+    setLineItems((prev: any) => [...prev, newLineItem]); // Update local state for rendering
     updateFormData({
       services: [...(formData?.services || []), newLineItem], // Update form data
     });
   };
 
-  const removeLineItem = (index) => {
+  const removeLineItem = (index: number) => {
     if (formData?.services.length > 1) {
       const lineItemsCopy = [...formData?.services];
 
@@ -912,10 +939,11 @@ function SubscriptionPacks({ formData, updateFormData }) {
     }
   };
 
-  function isUniqueKey(keyInput, currentIndex) {
+  function isUniqueKey(keyInput: any, currentIndex: number) {
     return (
       formData?.services?.filter(
-        (service, idx) => service.key === keyInput && idx !== currentIndex
+        (service: any, idx: number) =>
+          service.key === keyInput && idx !== currentIndex,
       ).length === 0
     );
   }
@@ -934,7 +962,7 @@ function SubscriptionPacks({ formData, updateFormData }) {
   return (
     <HeroUICard className="shadow-none bg-transparent min-h-60 -mt-4 rounded-none">
       <CardBody className="max-h-[600px] px-0 mx-0 overflow-y-auto gap-4">
-        {lineItems?.map((_, index) => (
+        {lineItems?.map((_: any, index: number) => (
           <div
             key={"pack" + index}
             className="grid grid-cols-1 md:grid-cols-9 gap-2 items-end border-b pb-4 pt-2 -mt-4 last:border-0"

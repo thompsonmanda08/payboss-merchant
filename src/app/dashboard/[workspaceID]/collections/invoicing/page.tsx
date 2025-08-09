@@ -28,7 +28,7 @@ import Invoice from "@/app/(external)/_components/invoice";
 
 export default function InvoicingPage({}) {
   const params = useParams();
-  const workspaceID = params.workspaceID;
+  const workspaceID = String(params.workspaceID);
   const queryClient = useQueryClient();
 
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -39,7 +39,7 @@ export default function InvoicingPage({}) {
 
   const [openViewInvoice, setOpenViewInvoice] = useState(false);
   const [openCreateInvoice, setOpenCreateInvoice] = useState(false);
-  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
 
   const thirtyDaysAgoDate = new Date();
 
@@ -69,7 +69,7 @@ export default function InvoicingPage({}) {
 
     // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
     if (!transactionsMutation?.data) {
-      transactionsMutation.mutateAsync({ start_date, end_date });
+      transactionsMutation.mutateAsync({ start_date, end_date } as any);
     }
   }, []);
 
@@ -107,8 +107,10 @@ export default function InvoicingPage({}) {
     setOpenCreateInvoice(true);
   }
 
-  function handleViewInvoice(ID) {
-    const invoiceData = LATEST_INVOICES.find((invoice) => invoice.id === ID);
+  function handleViewInvoice(ID: string) {
+    const invoiceData = LATEST_INVOICES.find(
+      (invoice: any) => invoice.id === ID,
+    );
 
     const invoice = {
       id: invoiceData?.id || ID,
@@ -129,13 +131,15 @@ export default function InvoicingPage({}) {
         phone: invoiceData?.customer_phone_number,
         email: invoiceData?.customer_email,
       },
-      items: invoiceData?.items?.map((item) => ({
+      items: invoiceData?.items?.map((item: any) => ({
         description: item?.description,
         quantity: parseInt(String(item?.quantity || "0")),
         price: parseFloat(String(item?.unit_price || "0")),
         amount: parseFloat(
-          parseInt(String(item?.quantity || "0")) *
-            parseFloat(String(item?.unit_price || "0"))
+          String(
+            parseInt(String(item?.quantity || "0")) *
+              parseFloat(String(item?.unit_price || "0")),
+          ),
         ),
       })),
       taxRate: parseFloat(String(invoiceData?.tax_rate || "0")),
@@ -195,7 +199,7 @@ export default function InvoicingPage({}) {
             }}
             isLoading={isLoading}
             rows={LATEST_INVOICES}
-            rowsPerPage={8}
+            limitPerRow={8}
             onRowAction={handleViewInvoice}
           />
         </Card>
@@ -215,12 +219,14 @@ export default function InvoicingPage({}) {
             removeWrapper
             classNames={{ wrapper: "shadow-none px-0 mx-0" }}
             columns={TILL_TRANSACTION_COLUMNS}
-            enableFilters={{
-              status: true,
+            filters={{
+              status: {
+                enabled: true,
+              },
             }}
             isLoading={transactionsMutation.isPending}
             rows={INVOICE_TRANSACTIONS}
-            rowsPerPage={8}
+            limitPerRow={8}
           />
         </Card>
       </div>

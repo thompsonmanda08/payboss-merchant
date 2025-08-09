@@ -66,7 +66,7 @@ const APIIntegration = () => {
   const queryClient = useQueryClient();
 
   const params = useParams();
-  const workspaceID = params.workspaceID;
+  const workspaceID = String(params.workspaceID);
 
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const permissions = workspaceInit?.data?.workspacePermissions;
@@ -88,13 +88,13 @@ const APIIntegration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
   const [openViewConfig, setOpenViewConfig] = useState(false);
-  const [currentActionIndex, setCurrentActionIndex] = useState(null);
+  const [currentActionIndex, setCurrentActionIndex] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState(true);
 
   const handleClosePrompt = () => {
     onClose();
     setIsLoading(false);
-    setCurrentActionIndex(null);
+    setCurrentActionIndex(0);
     setUnmaskAPIKey(false);
     setRefreshKeyID("");
   };
@@ -119,11 +119,11 @@ const APIIntegration = () => {
       getCollectionLatestTransactions(
         workspaceID,
         "api-integration",
-        dateRange
+        dateRange,
       ),
   });
 
-  function copyToClipboard(key) {
+  function copyToClipboard(key: string) {
     try {
       navigator?.clipboard?.writeText(key);
       setCopiedKey(key);
@@ -343,7 +343,7 @@ const APIIntegration = () => {
     return;
   }
 
-  function handleTerminalStatus(actionKey) {
+  function handleTerminalStatus(actionKey?: string) {
     if (hasTerminals && actionKey == "activate-terminals") {
       addToast({
         title: "Error",
@@ -381,7 +381,7 @@ const APIIntegration = () => {
     setCurrentActionIndex(2);
   }
 
-  function handleManageTerminals(selectedKey) {
+  function handleManageTerminals(selectedKey: string) {
     if (!permissions?.update || !permissions?.delete) {
       addToast({
         color: "danger",
@@ -410,7 +410,7 @@ const APIIntegration = () => {
   }
 
   useEffect(() => {
-    let timeoutId;
+    let timeoutId: NodeJS.Timeout;
 
     if (unmaskAPIKey) {
       timeoutId = setTimeout(() => {
@@ -426,7 +426,7 @@ const APIIntegration = () => {
   useEffect(() => {
     // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
     if (!mutation.data) {
-      mutation.mutateAsync({ start_date, end_date });
+      mutation.mutateAsync();
     }
   }, []);
 
@@ -519,7 +519,11 @@ const APIIntegration = () => {
             </Button>
           </div>
 
-          <Table removeWrapper aria-label="API KEY TABLE" items={API_KEYS}>
+          <Table
+            removeWrapper
+            aria-label="API KEY TABLE"
+            // items={API_KEYS as any}
+          >
             <TableHeader>
               <TableColumn width={"30%"}>NAME</TableColumn>
               <TableColumn width={"60%"}>API KEY</TableColumn>
@@ -536,7 +540,7 @@ const APIIntegration = () => {
               }
             >
               {API_KEYS?.length > 0 ? (
-                API_KEYS?.map((item) => (
+                API_KEYS?.map((item: any) => (
                   <TableRow key={`${item?.state}-key`}>
                     <TableCell>{item?.username}</TableCell>
                     <TableCell className="flex gap-1">
@@ -653,9 +657,9 @@ const APIIntegration = () => {
                   </DropdownTrigger>
                   <DropdownMenu
                     aria-label="Action event example"
-                    onAction={(key) => handleManageTerminals(key)}
+                    onAction={(key) => handleManageTerminals(String(key))}
                   >
-                    {hasTerminals && (
+                    {hasTerminals ? (
                       <DropdownItem
                         key="add-terminal"
                         description="Add new terminals to workspace"
@@ -663,7 +667,7 @@ const APIIntegration = () => {
                       >
                         Add New Terminal
                       </DropdownItem>
-                    )}
+                    ) : null}
 
                     {/* <DropdownItem
                     key="workspace-settings"
@@ -687,7 +691,7 @@ const APIIntegration = () => {
                             <ComputerDesktopIcon
                               className={cn(
                                 iconClasses,
-                                "group-hover:text-white font-bold group-hover:border-white"
+                                "group-hover:text-white font-bold group-hover:border-white",
                               )}
                             />
                           }
@@ -711,7 +715,7 @@ const APIIntegration = () => {
                             <TrashIcon
                               className={cn(
                                 iconClasses,
-                                "text-danger group-hover:text-white"
+                                "text-danger group-hover:text-white",
                               )}
                             />
                           }
@@ -792,11 +796,11 @@ const APIIntegration = () => {
                           )
                         }
                         variant="light"
-                        onClick={
-                          terminalsConfigured && hasTerminals
-                            ? onAddTerminal
-                            : handleTerminalStatus
-                        }
+                        onClick={() => {
+                          return terminalsConfigured && hasTerminals
+                            ? onAddTerminal()
+                            : handleTerminalStatus();
+                        }}
                       >
                         {terminalsConfigured && hasTerminals
                           ? "Add Terminals"
@@ -862,7 +866,7 @@ const APIIntegration = () => {
         title={USER_PROMPT_ACTIONS[currentActionIndex]?.title}
         onClose={handleClosePrompt}
         onConfirm={USER_PROMPT_ACTIONS[currentActionIndex]?.onConfirmAction}
-        onOpen={onOpen}
+        // onOpen={onOpen}
       >
         <p className="-mt-4 text-sm leading-6 text-foreground/70">
           <strong>{USER_PROMPT_ACTIONS[currentActionIndex]?.promptText}</strong>{" "}

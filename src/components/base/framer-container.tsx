@@ -4,7 +4,11 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 // import { Image } from '@heroui/react'
 
-export default function FrameContainer({ image, description, className }: {
+export default function FrameContainer({
+  image,
+  description,
+  className,
+}: {
   image: string;
   description: string;
   className?: string;
