@@ -5,13 +5,17 @@ const nextConfig = {
   // distDir: "build",
   assetPrefix:
     process.env.NODE_ENV === "production" ? process.env.SERVER_URL : "",
+  devIndicators: {
+    autoPrerender: false,
+  },
   images: {
     unoptimized: true,
+    // domains: [process.env.SERVER_URL],
 
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "payboss-uat-backend.bgsgroup.co.zm",
+        protocol: "http",
+        hostname: process.env.SERVER_URL,
         port: "",
         pathname: "/**",
       },
@@ -32,7 +36,9 @@ const nextConfig = {
     },
   },
 
-  experimental: {},
+  experimental: {
+    forceSwcTransforms: true,
+  },
 };
 
 export default withSentryConfig(nextConfig, {
@@ -41,10 +47,7 @@ export default withSentryConfig(nextConfig, {
 
   org: "sentry",
   project: "merchant-web-portal",
-  sentryUrl:
-    process.env.NODE_ENV == "production"
-      ? process.env.SENTRY_DEV_URL
-      : process.env.SENTRY_URL,
+  sentryUrl: process.env.SENTRY_URL,
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
