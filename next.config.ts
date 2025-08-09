@@ -33,6 +33,21 @@ const nextConfig = {
   },
 
   experimental: {},
+
+  async headers() {
+    return [
+      {
+        // Apply these headers to all routes of your application
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "upgrade-insecure-requests",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(nextConfig, {
