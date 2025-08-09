@@ -4,8 +4,7 @@ import { NextConfig } from "next";
 const nextConfig = {
   output: "standalone",
   // distDir: "build",
-  assetPrefix:
-    process.env.NODE_ENV === "production" ? process.env.SERVER_URL : "",
+  assetPrefix: process.env.SERVER_URL || process.env.NEXT_PUBLIC_SERVER_URL,
   devIndicators: {
     autoPrerender: false,
   },
@@ -16,7 +15,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: String(process.env.SERVER_URL || "http://localhost:3000"),
+        hostname: String(
+          process.env.SERVER_URL ||
+            process.env.NEXT_PUBLIC_SERVER_URL ||
+            "http://localhost:3000",
+        ),
         port: "",
         pathname: "/**",
       },
@@ -39,33 +42,21 @@ const nextConfig = {
 
   experimental: {
     // Disable SWC transforms that might force HTTPS
-    // forceSwcTransforms: false, //Disabled
-    forceSwcTransforms: true, // Enabled
-    // Enable manual chunk handling
-    // manualClientBasePath: true,
+    forceSwcTransforms: false, //Disabled
+    // forceSwcTransforms: true, // Enabled
   },
   // Ensure static files use HTTP
   async headers() {
     return [
       {
-        source: "/_next/static/(.*)",
+        source: "/:path*",
         headers: [
-          {
-            key: "Content-Security-Policy",
-            value: "upgrade-insecure-requests; block-all-mixed-content",
-          },
+          // {
+          //   key: "Content-Security-Policy",
+          //   value: "upgrade-insecure-requests; block-all-mixed-content",
+          // },
         ],
       },
-      // {
-      //   // Apply these headers to all routes of your application
-      //   source: "/:path*",
-      //   headers: [
-      //     {
-      //       key: "Content-Security-Policy",
-      //       value: "upgrade-insecure-requests",
-      //     },
-      //   ],
-      // },
     ];
   },
 } as NextConfig;
