@@ -27,15 +27,15 @@ import { APIResponse } from "@/types";
 
 // Add response interceptor for error handling
 apiClient.interceptors.response.use(
-  (response) => response,
-  async (error) => {
+  (response: any) => response,
+  async (error: Error | any) => {
     const originalRequest = error.config;
 
     // Network error (no response)
     if (!error.response) {
       return Promise.reject({
-        type: "Network Error",
-        message: "Please check your internet connection.",
+        type: "NoResponse Error",
+        message: "No response from server. Please try again.",
       });
     }
 
@@ -46,6 +46,19 @@ apiClient.interceptors.response.use(
         type: "Timeout Error",
         message: "Request timed out! Please try again.",
       };
+    }
+
+    //network error
+
+    if (
+      error.code == "ECONNREFUSED" ||
+      error.code == "ECONNRESET" ||
+      error.code == "ENOTFOUND"
+    ) {
+      return Promise.reject({
+        type: "Network Error",
+        message: "Please check your internet connection.",
+      });
     }
 
     const { status, data } = error.response;
