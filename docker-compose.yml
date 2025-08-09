@@ -1,0 +1,59 @@
+services:
+  merchant-app:
+    image: merchant-web-portal
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: merchant-web-portal
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      AUTH_SECRET: "NItwnouhgbqwerg136#%^Q*TRJHNE8vMTAyLjIzLjEyMS4xNTU6OTAwMCIsInJlZ2lvbl91cmwiOiJodHRwOi8vMTAyLjIzLjEyMS4xNTU6OTAwMCWN="
+      SERVER_URL: "http://10.51.74.27:3000"
+      BASE_URL: "http://10.51.74.29:8080/api/v1"
+      NEXT_PUBLIC_BASE_PATH: ""
+    networks:
+      - coolify
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.merchant-app.entrypoints=web"
+      - "traefik.http.routers.merchant-app.rule=Host(`10.51.74.27`)"
+      - "traefik.http.services.merchant-app.loadbalancer.server.port=3001"
+      - "traefik.http.routers.merchant-app.middlewares=merchant-headers"
+      - "traefik.http.middlewares.merchant-headers.headers.customrequestheaders.X-Forwarded-Proto=http"
+      - "traefik.http.middlewares.merchant-headers.headers.sslredirect=false"
+      - "traefik.http.middlewares.merchant-headers.headers.stsincludesubdomains=false"
+      - "traefik.http.middlewares.merchant-headers.headers.stspreload=false"
+      - "traefik.http.middlewares.merchant-headers.headers.stsseconds=0"
+
+  # Traefik proxy service
+  traefik:
+    image: traefik:v3.0
+    container_name: coolify-proxy
+    restart: unless-stopped
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=web"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=http"
+    ports:
+      - "80:80"
+      - "8080:8080" # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik:/etc/traefik
+    networks:
+      - coolify
+    labels:
+      - "coolify.managed=true"
+      - "coolify.proxy=true"
+
+networks:
+  coolify:
+    name: coolify
+    driver: bridge
