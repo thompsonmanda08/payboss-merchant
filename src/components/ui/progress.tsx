@@ -8,7 +8,7 @@ const Progress = forwardRef<HTMLDivElement, { value: number; color: string }>(
         style={{ width: value + "%" }}
       />
     </div>
-  )
+  ),
 );
 
 Progress.displayName = "Progress";

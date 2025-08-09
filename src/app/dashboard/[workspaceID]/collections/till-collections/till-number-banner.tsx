@@ -9,7 +9,7 @@ import Logo from "@/components/base/payboss-logo";
 import BackgroundSVG from "@/components/base/background-svg";
 
 // Create Document Component
-export const TillBanner = ({ till }) => (
+export const TillBanner = ({ till }: { till: string }) => (
   <div className="relative flex h-full min-h-[600px] flex-1">
     <BackgroundSVG />
     <div className="flex flex-1 flex-col justify-between gap-4 p-4">
@@ -52,9 +52,13 @@ export const TillBanner = ({ till }) => (
 export default function TillNumberBanner({
   isOpen,
   onClose,
-  configData,
   isLoading,
   tillNumber,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  isLoading: boolean;
+  tillNumber: string;
 }) {
   return (
     <>

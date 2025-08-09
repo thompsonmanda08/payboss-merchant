@@ -38,6 +38,11 @@ export default function APIConfigViewModal({
   onClose,
   isLoading,
   API_CONFIG,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  isLoading: boolean;
+  API_CONFIG: any;
 }) {
   const [currentStep, setCurrentStep] = useState(API_CONFIG_VIEWS[0]);
 
@@ -145,7 +150,13 @@ export default function APIConfigViewModal({
   );
 }
 
-export function API_Authentication({ config, titles }) {
+export function API_Authentication({
+  config,
+  titles,
+}: {
+  config: any;
+  titles?: any;
+}) {
   const { payload, authentication, response, url } = config;
 
   return (
@@ -189,7 +200,15 @@ export function API_Authentication({ config, titles }) {
   );
 }
 
-export function ActionResponses({ config, titles, method }) {
+export function ActionResponses({
+  config,
+  titles,
+  method,
+}: {
+  config: any;
+  titles?: any;
+  method?: string;
+}) {
   const { collection, response, url, payload } = config;
 
   return (
@@ -237,7 +256,13 @@ export function ActionResponses({ config, titles, method }) {
   );
 }
 
-export function StatusResponses({ config, titles }) {
+export function StatusResponses({
+  config,
+  titles,
+}: {
+  config: any;
+  titles?: any;
+}) {
   const { response, url } = config;
 
   return (

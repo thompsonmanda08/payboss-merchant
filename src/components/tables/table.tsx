@@ -66,13 +66,13 @@ type CustomTableProps = {
   useRowDataAsKey?: any;
   rowKey?: any;
   filters?: {
-    status: {
+    status?: {
       enabled: boolean;
-      options: any;
+      options?: any;
     };
-    columns: {
+    columns?: {
       enabled: boolean;
-      options: any;
+      options?: any;
     };
   };
 };
@@ -154,8 +154,8 @@ export default function CustomTable({
     let filteredRows = [...rows];
 
     const STATUS_FILTERS =
-      filters.status.enabled && filters.status.options
-        ? filters.status.options
+      filters?.status?.enabled && filters.status.options
+        ? filters?.status.options
         : STATUSES;
 
     if (hasSearchFilter) {

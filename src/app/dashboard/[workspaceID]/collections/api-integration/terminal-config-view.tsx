@@ -42,6 +42,11 @@ export default function TerminalConfigViewModal({
   onClose,
   onOpenChange,
   workspaceID,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onOpenChange?: (open: boolean) => void;
+  workspaceID: string;
 }) {
   const queryClient = useQueryClient();
   const [terminalUrl, setTerminalUrl] = useState("");
@@ -66,8 +71,8 @@ export default function TerminalConfigViewModal({
     <CompleteConfig
       key={"complete"}
       handleClose={handleClose}
-      navigateBackwards={goBack}
-      navigateForward={goForward}
+      // navigateBackwards={goBack}
+      // navigateForward={goForward}
     />,
   ]);
 
@@ -163,10 +168,17 @@ const UploadTerminalConfigs = ({
   navigateBackwards,
   workspaceID,
   handleProceed,
+}: {
+  terminalUrl: string;
+  setTerminalUrl: (url: string) => void;
+  navigateForward: () => void;
+  navigateBackwards: () => void;
+  workspaceID: string;
+  handleProceed: () => void;
 }) => {
   const [isLoading, setIsLoading] = React.useState(false);
 
-  async function handleFileUpload(file) {
+  async function handleFileUpload(file: File) {
     setIsLoading(true);
 
     let response = await uploadTerminalConfigFile(file);
@@ -204,7 +216,7 @@ const UploadTerminalConfigs = ({
               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
                 [],
             }}
-            onChange={async (file) => await handleFileUpload(file)}
+            onChange={async (file) => await handleFileUpload(file as File)}
           />
 
           <p className="mt-2 text-sm font-medium text-gray-500">
@@ -261,7 +273,7 @@ const UploadTerminalConfigs = ({
   );
 };
 
-export function CompleteConfig({ handleClose }) {
+export function CompleteConfig({ handleClose }: { handleClose: () => void }) {
   return (
     <>
       <motion.div
@@ -286,7 +298,7 @@ export function CompleteConfig({ handleClose }) {
         </span>
         <div className="relative mx-auto flex max-w-sm object-contain">
           <Image
-            unoptimized
+            // unoptimized
             alt="Complete Application Illustration"
             className="mx-auto"
             height={200}

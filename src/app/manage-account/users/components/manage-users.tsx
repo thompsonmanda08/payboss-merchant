@@ -2,7 +2,11 @@
 import { cn } from "@/lib/utils";
 import UsersTable from "@/components/tables/users-table";
 
-function ManagePeople({ users, roles, permissions }:{
+function ManagePeople({
+  users,
+  roles,
+  permissions,
+}: {
   users: any;
   roles: any;
   permissions: any;
