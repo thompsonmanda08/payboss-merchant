@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Table,
   TableBody,
@@ -6,16 +6,16 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@heroui/react";
+} from '@heroui/react';
 
 export default function StatusCodesTable({}) {
   return (
     <>
-      <Table removeWrapper isStriped aria-label="API STATUS CODES TABLE">
+      <Table isStriped removeWrapper aria-label="API STATUS CODES TABLE">
         <TableHeader>
-          <TableColumn width={"10%"}>CODE</TableColumn>
-          <TableColumn width={"30%"}>TEXT</TableColumn>
-          <TableColumn width={"60%"}>DESCRIPTION</TableColumn>
+          <TableColumn width={'10%'}>CODE</TableColumn>
+          <TableColumn width={'30%'}>TEXT</TableColumn>
+          <TableColumn width={'60%'}>DESCRIPTION</TableColumn>
         </TableHeader>
         <TableBody>
           <TableRow>

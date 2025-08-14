@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-import DisbursementReports from "./disbursements-report";
+import DisbursementReports from './disbursements-report';
 
 export default function DisbursementReportsPage({}) {
   return (

@@ -1,8 +1,8 @@
-import Card from "@/components/base/custom-card";
-import CardHeader from "@/components/base/card-header";
-import Tooltip from "@/components/base/custom-tooltip";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import Tooltip from '@/components/base/custom-tooltip';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 function PendingApprovals({
   data,
@@ -14,14 +14,14 @@ function PendingApprovals({
   workspaceType: string;
 }) {
   return (
-    <Card className={"flex-1 self-start"}>
+    <Card className={'flex-1 self-start'}>
       <CardHeader
         infoText={
           canApprove
-            ? "Transactions that require you attention are displayed below"
-            : "Transactions that require approval"
+            ? 'Transactions that require you attention are displayed below'
+            : 'Transactions that require approval'
         }
-        title={canApprove ? "Pending Approvals" : "Initiated Transactions"}
+        title={canApprove ? 'Pending Approvals' : 'Initiated Transactions'}
       />
       <div className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] place-items-center gap-8">
         {data &&

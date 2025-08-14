@@ -1,6 +1,11 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
+import {
+  DocumentTextIcon,
+  ListBulletIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import {
   Card,
   CardBody,
@@ -9,23 +14,16 @@ import {
   Tabs,
   NumberInput,
   addToast,
-} from "@heroui/react";
+} from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
 
-import {
-  DocumentTextIcon,
-  ListBulletIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
-import { PlusIcon } from "@heroicons/react/24/outline";
-
-import { formatCurrency, formatDate } from "@/lib/utils";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input-field";
-import { createInvoice } from "@/app/_actions/vas-actions";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constants";
-import { useWorkspaceInit } from "@/hooks/use-query-data";
+import { createInvoice } from '@/app/_actions/vas-actions';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import { useWorkspaceInit } from '@/hooks/use-query-data';
+import { QUERY_KEYS } from '@/lib/constants';
+import { formatCurrency, formatDate } from '@/lib/utils';
 
 const INIT_INVOICE: {
   customerName: string;
@@ -44,18 +42,18 @@ const INIT_INVOICE: {
     unitPrice: number;
   }[];
 } = {
-  customerName: "",
-  customerEmail: "",
-  customerPhone: "",
-  customerAddress: "",
+  customerName: '',
+  customerEmail: '',
+  customerPhone: '',
+  customerAddress: '',
   // invoiceNumber: `INV-${Date.now().toString().slice(-6)}`,
   // invoiceDate: "",
   // dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-  dueDate: "", // 30 days from now
-  notes: "",
+  dueDate: '', // 30 days from now
+  notes: '',
   taxRate: 0,
   tax: 0,
-  lineItems: [{ description: "", quantity: 1, unitPrice: 0 }],
+  lineItems: [{ description: '', quantity: 1, unitPrice: 0 }],
 };
 
 export default function InvoiceForm({
@@ -71,17 +69,18 @@ export default function InvoiceForm({
   const permissions = workspaceInit?.data?.workspacePermissions;
 
   const [formData, setFormData] = useState(INIT_INVOICE);
-  const [selectedTab, setSelectedTab] = useState("invoice-details");
+  const [selectedTab, setSelectedTab] = useState('invoice-details');
   const [isLoading, setIsLoading] = useState(false);
 
   const thirtyDaysAgoDate = new Date();
 
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
-  const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
-  const end_date = formatDate(new Date(), "YYYY-MM-DD");
+  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
+  const end_date = formatDate(new Date(), 'YYYY-MM-DD');
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
@@ -123,9 +122,10 @@ export default function InvoiceForm({
 
     setIsLoading(true);
 
-    if (selectedTab == "invoice-details" && isValidDetails()) {
-      setSelectedTab("invoice-items");
+    if (selectedTab == 'invoice-details' && isValidDetails()) {
+      setSelectedTab('invoice-items');
       setIsLoading(false);
+
       return;
     }
 
@@ -154,9 +154,9 @@ export default function InvoiceForm({
 
     if (response?.success) {
       addToast({
-        title: "Invoice created",
-        description: "Invoice created successfully.",
-        color: "success",
+        title: 'Invoice created',
+        description: 'Invoice created successfully.',
+        color: 'success',
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.INVOICES, workspaceID],
@@ -164,9 +164,9 @@ export default function InvoiceForm({
       handleClosePrompts();
     } else {
       addToast({
-        title: "Error",
+        title: 'Error',
         description: response.message,
-        color: "danger",
+        color: 'danger',
       });
       setIsLoading(false);
     }
@@ -181,8 +181,8 @@ export default function InvoiceForm({
 
   return (
     <form
-      onSubmit={onSubmit}
       className="h-screen max-h-[calc(100svh-80px)] flex flex-col"
+      onSubmit={onSubmit}
     >
       <div className="flex-col items-start pb-4 pt-2">
         <h4 className="text-large font-bold">Client & Invoice Information</h4>
@@ -192,7 +192,7 @@ export default function InvoiceForm({
         aria-label="payment-methods"
         className="w-full"
         classNames={{
-          tabList: "w-full p-1",
+          tabList: 'w-full p-1',
         }}
         color="primary"
         radius="sm"
@@ -200,19 +200,20 @@ export default function InvoiceForm({
         size="lg"
         variant="bordered"
         onSelectionChange={(key) => {
-          if (!isValidDetails() && key == "invoice-items") {
+          if (!isValidDetails() && key == 'invoice-items') {
             addToast({
-              color: "warning",
-              title: "Missing Fields",
-              description: "Required fields are missing!",
+              color: 'warning',
+              title: 'Missing Fields',
+              description: 'Required fields are missing!',
             });
+
             return;
           }
           setSelectedTab(key as string);
         }}
       >
         <Tab
-          key={"invoice-details"}
+          key={'invoice-details'}
           className="gap-2 flex flex-col"
           title={
             <div className="flex items-center space-x-2">
@@ -222,10 +223,10 @@ export default function InvoiceForm({
           }
         >
           <InvoiceDetails
-            key={"details"}
+            key={'details'}
             formData={formData}
-            updateFormData={updateFormData}
             handleChange={handleChange}
+            updateFormData={updateFormData}
           />
         </Tab>
 
@@ -263,31 +264,32 @@ export default function InvoiceForm({
                 <div className="text-muted-foreground flex gap-2 items-center">
                   <NumberInput
                     required
-                    radius="sm"
-                    minValue={0}
-                    maxValue={100}
-                    startContent="Tax: "
-                    labelPlacement="outside"
-                    formatOptions={{
-                      style: "percent",
-                    }}
                     className="w-28 -ml-2"
                     classNames={{
-                      input: "shadow-none outline-transparent",
-                      errorMessage: "text-nowrap",
+                      input: 'shadow-none outline-transparent',
+                      errorMessage: 'text-nowrap',
                     }}
+                    formatOptions={{
+                      style: 'percent',
+                    }}
+                    labelPlacement="outside"
+                    maxValue={100}
+                    minValue={0}
+                    name={'taxRate'}
+                    radius="sm"
+                    startContent="Tax: "
                     validate={(value) => {
                       if (value < 0) {
                         return "Tax percentage can't be less than 0";
                       }
 
                       if (value > 100) {
-                        return "Tax percentage must be less than 100";
+                        return 'Tax percentage must be less than 100';
                       }
 
                       return null;
                     }}
-                    name={"taxRate"}
+                    value={formData?.taxRate}
                     onValueChange={(value) => {
                       setFormData((prev) => ({
                         ...prev,
@@ -295,7 +297,6 @@ export default function InvoiceForm({
                         tax,
                       }));
                     }}
-                    value={formData?.taxRate}
                   />
                 </div>
                 <span>{formatCurrency(tax)}</span>
@@ -310,12 +311,12 @@ export default function InvoiceForm({
       </div>
       <Button
         className="w-full my-4 min-h-9"
-        isLoading={isLoading}
         isDisabled={isLoading}
-        loadingText={"Processing..."}
+        isLoading={isLoading}
+        loadingText={'Processing...'}
         type="submit"
       >
-        {selectedTab == "invoice-details" ? "Next" : "Create Invoice"}
+        {selectedTab == 'invoice-details' ? 'Next' : 'Create Invoice'}
       </Button>
     </form>
   );
@@ -336,18 +337,18 @@ function InvoiceDetails({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
             required
-            label={"Customer Name"}
-            name={"customerName"}
-            placeholder={"Brick Enterprise"}
+            label={'Customer Name'}
+            name={'customerName'}
+            placeholder={'Brick Enterprise'}
             value={formData?.customerName}
             onChange={handleChange}
           />
           <Input
             required
-            label={"Customer Email"}
-            name={"customerEmail"}
-            type={"email"}
-            placeholder={"brick@enterprise.com"}
+            label={'Customer Email'}
+            name={'customerEmail'}
+            placeholder={'brick@enterprise.com'}
+            type={'email'}
             value={formData?.customerEmail}
             onChange={handleChange}
           />
@@ -355,17 +356,17 @@ function InvoiceDetails({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
             required
-            label={"Phone Number"}
-            name={"customerPhone"}
-            placeholder={"0977 XXX XXX"}
+            label={'Phone Number'}
+            name={'customerPhone'}
+            placeholder={'0977 XXX XXX'}
             value={formData?.customerPhone}
             onChange={handleChange}
           />
           <Input
             required
-            label={"Address"}
-            name={"customerAddress"}
-            placeholder={"87A Main Street, Ibex hill"}
+            label={'Address'}
+            name={'customerAddress'}
+            placeholder={'87A Main Street, Ibex hill'}
             value={formData?.customerAddress}
             onChange={handleChange}
           />
@@ -383,18 +384,18 @@ function InvoiceItems({
   updateFormData: (fields: Partial<typeof formData>) => void;
 }) {
   const [lineItems, setLineItems] = useState([
-    { description: "", quantity: 1, unitPrice: 0 },
+    { description: '', quantity: 1, unitPrice: 0 },
   ]);
 
   const addLineItem = () => {
     setLineItems((prev) => [
       ...prev,
-      { description: "", quantity: 1, unitPrice: 0 },
+      { description: '', quantity: 1, unitPrice: 0 },
     ]);
     updateFormData({
       lineItems: [
         ...(formData?.lineItems ?? []),
-        { description: "", quantity: 1, unitPrice: 0 },
+        { description: '', quantity: 1, unitPrice: 0 },
       ],
     });
   };
@@ -404,6 +405,7 @@ function InvoiceItems({
       // const updatedLineItems = formData.lineItems.filter((_, i) => i !== index);
       // Create a copy of the array first
       const lineItemsCopy = [...lineItems];
+
       lineItemsCopy.splice(index, 1);
 
       setLineItems(lineItemsCopy);
@@ -417,7 +419,7 @@ function InvoiceItems({
         <h4 className="text-large font-bold">Line Items</h4>
 
         <Button
-          className={"bg-primary/10"}
+          className={'bg-primary/10'}
           size="sm"
           startContent={<PlusIcon className="h-4 w-4" />}
           type="button"
@@ -436,7 +438,7 @@ function InvoiceItems({
             <Input
               required
               classNames={{
-                wrapper: "col-span-5",
+                wrapper: 'col-span-5',
               }}
               label="Description"
               name={`lineItems.${index}.description`}
@@ -459,7 +461,7 @@ function InvoiceItems({
             <Input
               required
               classNames={{
-                wrapper: "col-span-1",
+                wrapper: 'col-span-1',
               }}
               label="Qty"
               min={1}
@@ -475,7 +477,7 @@ function InvoiceItems({
                       quantity: Number(e.target.value) ?? 1,
                       unitPrice: formData?.lineItems?.[index]?.unitPrice ?? 0,
                       description:
-                        formData?.lineItems?.[index]?.description ?? "",
+                        formData?.lineItems?.[index]?.description ?? '',
                     },
                     ...(formData?.lineItems ?? [])?.slice(index + 1),
                   ],
@@ -485,7 +487,7 @@ function InvoiceItems({
             <Input
               required
               classNames={{
-                wrapper: "col-span-2",
+                wrapper: 'col-span-2',
               }}
               label="Unit Price"
               name={`lineItems.${index}.unitPrice`}
@@ -500,7 +502,7 @@ function InvoiceItems({
                       quantity: formData?.lineItems?.[index]?.quantity ?? 1,
                       unitPrice: Number(e.target.value) ?? 1,
                       description:
-                        formData?.lineItems?.[index]?.description ?? "",
+                        formData?.lineItems?.[index]?.description ?? '',
                     },
                     ...(formData?.lineItems ?? [])?.slice(index + 1),
                   ],
@@ -509,7 +511,7 @@ function InvoiceItems({
             />
             <Button
               isIconOnly
-              className={"col-span-1"}
+              className={'col-span-1'}
               color="danger"
               disabled={formData?.lineItems && formData?.lineItems.length === 1}
               type="button"

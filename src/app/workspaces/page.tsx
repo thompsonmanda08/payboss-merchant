@@ -1,21 +1,21 @@
-import Image from "next/image";
-import { redirect } from "next/navigation";
+import Image from 'next/image';
+import { redirect } from 'next/navigation';
 
-import { DefaultCover } from "@/lib/constants";
-import WorkspaceHeader from "@/components/elements/welcome-header";
-import WorkspacesList from "@/components/elements/workspaces-list";
-import { cn } from "@/lib/utils";
+import WorkspaceHeader from '@/components/elements/welcome-header';
+import WorkspacesList from '@/components/elements/workspaces-list';
+import { DefaultCover } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 
-import { getAuthSession, getUserDetails } from "../_actions/config-actions";
+import { getAuthSession, getUserDetails } from '../_actions/config-actions';
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 
 async function WorkSpacesPage() {
   // Check auth first before making other requests
   const auth = await getAuthSession();
 
-  if (!auth?.accessToken) redirect("/login");
+  if (!auth?.accessToken) redirect('/login');
 
   // Parallelize data fetching
   const [session] = await Promise.all([getUserDetails()]);
@@ -43,7 +43,7 @@ async function WorkSpacesPage() {
 
         <section
           className={cn(
-            "z-20 mx-auto mb-20 mt-[-160px] w-full max-w-[1540px] px-4 md:px-6",
+            'z-20 mx-auto mb-20 mt-[-160px] w-full max-w-[1540px] px-4 md:px-6',
           )}
           role="workspaces-list"
         >

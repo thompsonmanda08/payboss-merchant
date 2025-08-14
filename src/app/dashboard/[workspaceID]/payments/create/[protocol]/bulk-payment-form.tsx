@@ -1,46 +1,46 @@
-"use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Skeleton } from "@heroui/react";
+'use client';
+import { Skeleton } from '@heroui/react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
-import useCustomTabsHook from "@/hooks/use-custom-tabs";
-import usePaymentsStore from "@/context/payment-store";
-import UploadCSVFile from "@/app/dashboard/[workspaceID]/payments/components/upload-batch-file-step";
-import PaymentDetails from "@/app/dashboard/[workspaceID]/payments/components/bulk-payment-batch-details";
-import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/validation-details-step";
-import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer";
-import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/approver-action";
-import Card from "@/components/base/custom-card";
-import CardHeader from "@/components/base/card-header";
-import ProgressStep from "@/components/elements/progress-step";
-import SelectPrefund from "@/app/dashboard/[workspaceID]/payments/components/select-prefund-step";
+import ApproverAction from '@/app/dashboard/[workspaceID]/payments/components/approver-action';
+import RecordDetailsViewer from '@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer';
+import PaymentDetails from '@/app/dashboard/[workspaceID]/payments/components/bulk-payment-batch-details';
+import SelectPrefund from '@/app/dashboard/[workspaceID]/payments/components/select-prefund-step';
+import UploadCSVFile from '@/app/dashboard/[workspaceID]/payments/components/upload-batch-file-step';
+import ValidationDetails from '@/app/dashboard/[workspaceID]/payments/components/validation-details-step';
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import ProgressStep from '@/components/elements/progress-step';
+import usePaymentsStore from '@/context/payment-store';
+import useCustomTabsHook from '@/hooks/use-custom-tabs';
 
 export const STEPS = [
   {
-    title: "Create a Bulk payment - Select Prefund",
-    infoText: "Choose a prefund balance to use for the disbursement action",
-    step: "Wallet",
+    title: 'Create a Bulk payment - Select Prefund',
+    infoText: 'Choose a prefund balance to use for the disbursement action',
+    step: 'Wallet',
   },
   {
-    title: "Create a Bulk payment - Upload Batch File",
-    infoText: "Upload a file with records of the recipient in `.csv` format",
-    step: "Batch",
+    title: 'Create a Bulk payment - Upload Batch File',
+    infoText: 'Upload a file with records of the recipient in `.csv` format',
+    step: 'Batch',
   },
   {
-    title: "Create a Bulk payment - Batch Details",
-    infoText: "Provide details for the payment action batch files",
-    step: "Details",
+    title: 'Create a Bulk payment - Batch Details',
+    infoText: 'Provide details for the payment action batch files',
+    step: 'Details',
   },
   {
-    title: "Create a payment - File Record Validation",
+    title: 'Create a payment - File Record Validation',
     infoText:
-      "The validation will make sure all record entries do not cause internal errors",
-    step: "Validation",
+      'The validation will make sure all record entries do not cause internal errors',
+    step: 'Validation',
   },
   {
-    title: "Create a payment - Approval Status",
-    infoText: "Approvals can only be done by account admins",
-    step: "Approval",
+    title: 'Create a payment - Approval Status',
+    infoText: 'Approvals can only be done by account admins',
+    step: 'Approval',
   },
 ];
 
@@ -74,34 +74,34 @@ export default function BulkPaymentForm({
     navigateTo,
   } = useCustomTabsHook([
     <SelectPrefund
-      key={"step-1"}
+      key={'step-1'}
       // navigateBackwards={goBack}
       navigateForward={goForward}
       protocol={protocol}
       workspaceID={workspaceID}
     />,
     <UploadCSVFile
-      key={"step-2"}
+      key={'step-2'}
       handleCancel={handleCancel}
       // navigateBackwards={goBack}
       navigateForward={goForward}
       protocol={protocol}
     />,
     <PaymentDetails
-      key={"step-3"}
+      key={'step-3'}
       navigateBackwards={goBack}
       navigateForward={goForward}
       protocol={protocol}
       workspaceID={workspaceID}
     />,
     <ValidationDetails
-      key={"step-4"}
+      key={'step-4'}
       batch={selectedBatch}
       navigateForward={goForward}
       workspaceID={workspaceID}
     />,
     <ApproverAction
-      key={"step-5"}
+      key={'step-5'}
       batch={selectedBatch}
       workspaceID={workspaceID}
     />,
@@ -122,13 +122,13 @@ export default function BulkPaymentForm({
 
     setPaymentAction({
       type: protocol,
-      url: "",
+      url: '',
     });
     navigateTo(0);
   }
 
   useEffect(() => {
-    setError({ status: false, message: "" });
+    setError({ status: false, message: '' });
     setLoading(false);
   }, [paymentAction, currentTabIndex]);
 
@@ -154,7 +154,7 @@ export default function BulkPaymentForm({
     </div>
   ) : (
     <>
-      <Card className={""}>
+      <Card className={''}>
         <CardHeader
           handleClose={handleCancel}
           infoText={STEPS[currentTabIndex].infoText}

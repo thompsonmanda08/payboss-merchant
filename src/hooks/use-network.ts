@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export const useNetwork = () => {
   const [online, setOnline] = useState(true);
@@ -15,12 +15,12 @@ export const useNetwork = () => {
       }
     };
 
-    window.addEventListener("online", handleStatusChange);
-    window.addEventListener("offline", handleStatusChange);
+    window.addEventListener('online', handleStatusChange);
+    window.addEventListener('offline', handleStatusChange);
 
     return () => {
-      window.removeEventListener("online", handleStatusChange);
-      window.removeEventListener("offline", handleStatusChange);
+      window.removeEventListener('online', handleStatusChange);
+      window.removeEventListener('offline', handleStatusChange);
     };
   }, [online]);
 

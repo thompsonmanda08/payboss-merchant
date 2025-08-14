@@ -1,8 +1,9 @@
-"use server";
+'use server';
 
-import { cache } from "react";
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from 'next/cache';
+import { cache } from 'react';
 
+import { handleError, successResponse } from '@/lib/api-config';
 import {
   createUserSession,
   createWorkspaceSession,
@@ -10,10 +11,9 @@ import {
   getServerSession,
   getUserSession,
   getWorkspaceSessionData,
-} from "@/lib/session";
-import { apiClient } from "@/lib/utils";
-import { handleError, successResponse } from "@/lib/api-config";
-import { APIResponse, Workspace } from "@/types";
+} from '@/lib/session';
+import { apiClient } from '@/lib/utils';
+import { APIResponse, Workspace } from '@/types';
 
 /**
  * Retrieves the general configurations from the configuration service.
@@ -31,7 +31,7 @@ export const getGeneralConfigs = cache(async (): Promise<APIResponse> => {
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | GENERAL CONFIGS", url);
+    return handleError(error, 'GET | GENERAL CONFIGS', url);
   }
 });
 
@@ -90,7 +90,7 @@ export const getWorkspaceSession = cache(async (): Promise<any> => {
 export const revokeAccessToken = async (): Promise<any> => {
   const response = await deleteSession();
 
-  revalidatePath("/", "layout");
+  revalidatePath('/', 'layout');
 
   return response;
 };
@@ -112,13 +112,13 @@ export async function setupUserSessions(sessionData: any) {
           workspaceIDs: sessionData?.workspaces.map(
             (item: Workspace) => item?.ID,
           ),
-          workspaceType: sessionData?.workspaceType ?? "", // Provide a default or actual value
+          workspaceType: sessionData?.workspaceType ?? '', // Provide a default or actual value
         }),
     ]);
 
     return true;
   } catch (error) {
-    console.error("Error setting up user sessions:", error);
+    console.error('Error setting up user sessions:', error);
     if (error) throw error;
 
     return false;

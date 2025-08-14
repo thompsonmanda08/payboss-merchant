@@ -1,5 +1,4 @@
-"use client";
-import React, { useState } from "react";
+'use client';
 import {
   Modal,
   ModalContent,
@@ -7,32 +6,33 @@ import {
   ModalHeader,
   Link,
   Image,
-} from "@heroui/react";
-import { motion } from "framer-motion";
-import { useQueryClient } from "@tanstack/react-query";
+} from '@heroui/react';
+import { addToast } from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
+import React, { useState } from 'react';
 
-import useCustomTabsHook from "@/hooks/use-custom-tabs";
-import { addToast } from "@heroui/react";
-import Loader from "@/components/ui/loader";
-import CardHeader from "@/components/base/card-header";
-import { SingleFileDropzone } from "@/components/base/file-dropzone";
-import { Button } from "@/components/ui/button";
-import { registerTerminals } from "@/app/_actions/workspace-actions";
-import { uploadTerminalConfigFile } from "@/app/_actions/pocketbase-actions";
-import ProgressStep from "@/components/elements/progress-step";
+import { uploadTerminalConfigFile } from '@/app/_actions/pocketbase-actions';
+import { registerTerminals } from '@/app/_actions/workspace-actions';
+import CardHeader from '@/components/base/card-header';
+import { SingleFileDropzone } from '@/components/base/file-dropzone';
+import ProgressStep from '@/components/elements/progress-step';
+import { Button } from '@/components/ui/button';
+import Loader from '@/components/ui/loader';
+import useCustomTabsHook from '@/hooks/use-custom-tabs';
 
 export const CONFIG_VIEWS = [
   {
-    title: "Terminal Configuration",
-    name: "Upload",
-    infoText: "Upload a file with your terminal configurations",
-    step: "Upload Config File",
+    title: 'Terminal Configuration',
+    name: 'Upload',
+    infoText: 'Upload a file with your terminal configurations',
+    step: 'Upload Config File',
     index: 0,
   },
   {
-    title: "Complete Config",
-    infoText: "Upload a file with your terminal configurations",
-    step: "Complete",
+    title: 'Complete Config',
+    infoText: 'Upload a file with your terminal configurations',
+    step: 'Complete',
     index: 1,
   },
 ];
@@ -49,7 +49,7 @@ export default function TerminalConfigViewModal({
   workspaceID: string;
 }) {
   const queryClient = useQueryClient();
-  const [terminalUrl, setTerminalUrl] = useState("");
+  const [terminalUrl, setTerminalUrl] = useState('');
   const [isLoading, setIsLoading] = React.useState(false);
 
   const {
@@ -60,7 +60,7 @@ export default function TerminalConfigViewModal({
     navigateBackwards,
   } = useCustomTabsHook([
     <UploadTerminalConfigs
-      key={"upload"}
+      key={'upload'}
       handleProceed={handleTerminalRegistration}
       navigateBackwards={goBack}
       navigateForward={goForward}
@@ -69,7 +69,7 @@ export default function TerminalConfigViewModal({
       workspaceID={workspaceID}
     />,
     <CompleteConfig
-      key={"complete"}
+      key={'complete'}
       handleClose={handleClose}
       // navigateBackwards={goBack}
       // navigateForward={goForward}
@@ -90,12 +90,12 @@ export default function TerminalConfigViewModal({
   async function handleTerminalRegistration() {
     setIsLoading(true);
 
-    let response = await registerTerminals(workspaceID, terminalUrl);
+    const response = await registerTerminals(workspaceID, terminalUrl);
 
     if (!response?.success) {
       addToast({
-        title: "Error",
-        color: "danger",
+        title: 'Error',
+        color: 'danger',
         description: response?.message,
       });
       setIsLoading(false);
@@ -105,9 +105,9 @@ export default function TerminalConfigViewModal({
 
     queryClient.invalidateQueries();
     addToast({
-      color: "success",
-      title: "Success",
-      description: "Config file uploaded!",
+      color: 'success',
+      title: 'Success',
+      description: 'Config file uploaded!',
     });
     navigateForward();
     setIsLoading(false);
@@ -118,7 +118,7 @@ export default function TerminalConfigViewModal({
       <Modal
         isDismissable={false}
         isOpen={isOpen}
-        size={"2xl"}
+        size={'2xl'}
         onClose={handleClose}
         onOpenChange={onOpenChange}
       >
@@ -145,9 +145,9 @@ export default function TerminalConfigViewModal({
               <div className="flex flex-1 items-center rounded-lg">
                 <Loader
                   classNames={{
-                    wrapper: "bg-primary-100/20 rounded-xl h-full",
+                    wrapper: 'bg-primary-100/20 rounded-xl h-full',
                   }}
-                  loadingText={"Running Configurations..."}
+                  loadingText={'Running Configurations...'}
                   size={100}
                 />
               </div>
@@ -181,12 +181,12 @@ const UploadTerminalConfigs = ({
   async function handleFileUpload(file: File) {
     setIsLoading(true);
 
-    let response = await uploadTerminalConfigFile(file);
+    const response = await uploadTerminalConfigFile(file);
 
     if (!response?.success) {
       addToast({
-        title: "Error",
-        color: "danger",
+        title: 'Error',
+        color: 'danger',
         description: response?.message,
       });
       setIsLoading(false);
@@ -195,9 +195,9 @@ const UploadTerminalConfigs = ({
     }
 
     addToast({
-      color: "success",
-      title: "Success",
-      description: "Config file uploaded!",
+      color: 'success',
+      title: 'Success',
+      description: 'Config file uploaded!',
     });
     setTerminalUrl(response?.data?.file_url);
     setIsLoading(false);
@@ -212,8 +212,8 @@ const UploadTerminalConfigs = ({
           <SingleFileDropzone
             isLoading={isLoading}
             otherAcceptedFiles={{
-              "application/vnd.ms-excel": [],
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+              'application/vnd.ms-excel': [],
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
                 [],
             }}
             onChange={async (file) => await handleFileUpload(file as File)}
@@ -223,8 +223,8 @@ const UploadTerminalConfigs = ({
             Having trouble with the file upload? Download
             <Link
               className="mx-1 text-sm font-semibold text-primary hover:underline hover:underline-offset-2"
-              download={"terminal_config_template.xlsx"}
-              href={"/terminal_config_template.xlsx"}
+              download={'terminal_config_template.xlsx'}
+              href={'/terminal_config_template.xlsx'}
             >
               Terminal Configuration
             </Link>
@@ -259,7 +259,7 @@ const UploadTerminalConfigs = ({
             Cancel
           </Button> */}
           <Button
-            className={"w-full"}
+            className={'w-full'}
             isDisabled={isLoading}
             isLoading={isLoading}
             size="lg"
@@ -282,9 +282,9 @@ export function CompleteConfig({ handleClose }: { handleClose: () => void }) {
           opacity: [0, 1],
           scaleX: [0.8, 1],
           transition: {
-            type: "spring",
+            type: 'spring',
             stiffness: 300,
-            ease: "easeInOut",
+            ease: 'easeInOut',
             duration: 0.25,
           },
         }}
@@ -306,7 +306,7 @@ export function CompleteConfig({ handleClose }: { handleClose: () => void }) {
             width={300}
           />
         </div>
-        <Button className={"mb-5 w-full"} onClick={handleClose}>
+        <Button className={'mb-5 w-full'} onClick={handleClose}>
           Done
         </Button>
       </motion.div>

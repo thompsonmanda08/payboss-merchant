@@ -1,9 +1,9 @@
-"use client";
-import Link from "next/link";
-import { motion } from "framer-motion";
+'use client';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { PropsWithChildren } from 'react';
 
-import { cn } from "@/lib/utils";
-import { PropsWithChildren } from "react";
+import { cn } from '@/lib/utils';
 
 function Card({
   className,
@@ -16,7 +16,7 @@ function Card({
   href?: string;
 }) {
   const cardClasses = cn(
-    "flex w-full flex-col rounded-2xl bg-card p-5 shadow-lg dark:shadow-background shadow-neutral-400/10 border border-border transition-all duration-300 overflow-clip",
+    'flex w-full flex-col rounded-2xl bg-card p-5 shadow-lg dark:shadow-background shadow-neutral-400/10 border border-border transition-all duration-300 overflow-clip',
     className,
     classObject,
   );
@@ -28,7 +28,7 @@ function Card({
         whileInView={{
           opacity: [0, 1],
           transition: {
-            type: "spring",
+            type: 'spring',
             stiffness: 200,
             damping: 20,
             duration: 0.4,
@@ -43,7 +43,7 @@ function Card({
       animate={{
         opacity: [0, 1],
         transition: {
-          type: "spring",
+          type: 'spring',
           stiffness: 300,
           damping: 20,
           duration: 0.4,

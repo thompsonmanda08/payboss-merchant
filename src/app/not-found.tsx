@@ -1,50 +1,51 @@
-"use client";
+'use client';
 
-import type React from "react";
+import { Card, CardBody, Link } from '@heroui/react';
+import { ArrowLeft, Home, RefreshCw, MessageCircle, Zap } from 'lucide-react';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-import { useState, useEffect } from "react";
-import { ArrowLeft, Home, RefreshCw, MessageCircle, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
-import { Card, CardBody, Link } from "@heroui/react";
-import Image from "next/image";
-import { DefaultCover } from "@/lib/constants";
-import { Footer } from "@/components/landing-sections/footer";
+import { Footer } from '@/components/landing-sections/footer';
+import { Button } from '@/components/ui/button';
+import { DefaultCover } from '@/lib/constants';
+
+import type React from 'react';
 
 const errorMessages = {
   404: {
-    title: "Page Not Found",
+    title: 'Page Not Found',
     subtitle:
       "The page you're looking for seems to have wandered off into the digital wilderness.",
-    emoji: "🔍",
+    emoji: '🔍',
   },
   500: {
-    title: "Server Error",
+    title: 'Server Error',
     subtitle: "Our servers are having a moment. We're on it!",
-    emoji: "⚡",
+    emoji: '⚡',
   },
   403: {
-    title: "Access Denied",
+    title: 'Access Denied',
     subtitle: "You don't have permission to access this resource.",
-    emoji: "🔒",
+    emoji: '🔒',
   },
   default: {
-    title: "Something Went Wrong",
+    title: 'Something Went Wrong',
     subtitle:
       "Don't worry, even the best explorers sometimes take a wrong turn.",
-    emoji: "🚀",
+    emoji: '🚀',
   },
 };
 
 const quickLinks = [
-  { name: "Home", href: "/", icon: Home },
-  { name: "Dashboard", href: "/dashboard", icon: Zap },
-  { name: "Support", href: "/support", icon: MessageCircle },
+  { name: 'Home', href: '/', icon: Home },
+  { name: 'Dashboard', href: '/dashboard', icon: Zap },
+  { name: 'Support', href: '/support', icon: MessageCircle },
 ];
 
 export default function ErrorPage() {
   const params = useParams();
-  const code = params.code || "404";
+  const code = params.code || '404';
   const [errorCode, setErrorCode] = useState<keyof typeof errorMessages>(
     code as keyof typeof errorMessages,
   );
@@ -58,8 +59,10 @@ export default function ErrorPage() {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const handleRefresh = () => {
@@ -79,7 +82,7 @@ export default function ErrorPage() {
           style={{
             left: mousePosition.x / 10,
             top: mousePosition.y / 10,
-            transform: "translate(-50%, -50%)",
+            transform: 'translate(-50%, -50%)',
           }}
         />
         <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-200/30 dark:bg-blue-500/20 rounded-full blur-2xl animate-bounce" />
@@ -121,35 +124,35 @@ export default function ErrorPage() {
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-4 justify-center mb-12">
                 <Button
-                  onClick={() => window.history.back()}
-                  variant="bordered"
-                  size="lg"
                   className="h-12 px-6 md:border-white md:text-white"
+                  size="lg"
                   startContent={<ArrowLeft className="w-4 h-4 mr-2" />}
+                  variant="bordered"
+                  onClick={() => window.history.back()}
                 >
                   Go Back
                 </Button>
 
                 <Button
-                  onClick={handleRefresh}
-                  variant="bordered"
-                  size="lg"
-                  disabled={isRefreshing}
                   className="h-12 px-6 bg-transparent md:border-white md:text-white"
+                  disabled={isRefreshing}
+                  size="lg"
                   startContent={
                     <RefreshCw
-                      className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+                      className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`}
                     />
                   }
+                  variant="bordered"
+                  onClick={handleRefresh}
                 >
                   Refresh
                 </Button>
 
                 <Button
                   as={Link}
-                  href={"/"}
-                  size="lg"
                   className="h-12 px-6 bg-gradient-to-tr from-secondary to-primary-500 hover:from-purple-700 hover:to-blue-700"
+                  href={'/'}
+                  size="lg"
                 >
                   <Home className="w-4 h-4 mr-2" />
                   Go Home
@@ -166,11 +169,11 @@ export default function ErrorPage() {
                 <div className="flex flex-col sm:flex-wrap sm:flex-row md:flex-nowrap gap-4">
                   {quickLinks.map((link) => (
                     <Button
-                      as={Link}
-                      href={link.href}
                       key={link.name}
-                      variant="faded"
+                      as={Link}
                       className="h-20 flex-1 flex-col gap-2 bg-transparent hover:bg-primary/5 dark:hover:bg-secondary/10 transition-all duration-300 hover:scale-105"
+                      href={link.href}
+                      variant="faded"
                     >
                       <link.icon className="w-6 h-6" />
                       <span className="text-sm font-medium">{link.name}</span>
@@ -183,11 +186,11 @@ export default function ErrorPage() {
             {/* Help Text */}
             <div className="mt-8 text-center">
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Still need help?{" "}
+                Still need help?{' '}
                 <Link
-                  href="mailto:fintech@bgsgroup.co.zm"
-                  onClick={() => (window.location.href = "/support")}
                   className="text-secondary dark:text-secondary hover:underline text-sm font-medium"
+                  href="mailto:fintech@bgsgroup.co.zm"
+                  onClick={() => (window.location.href = '/support')}
                 >
                   Contact our support team
                 </Link>
@@ -195,7 +198,7 @@ export default function ErrorPage() {
             </div>
 
             <Footer
-              classNames={{ wrapper: "w-full" }}
+              classNames={{ wrapper: 'w-full' }}
               showLinks={false}
               showLogo={false}
             />

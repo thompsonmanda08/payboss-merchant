@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Bars3BottomLeftIcon,
   BriefcaseIcon,
@@ -7,42 +7,41 @@ import {
   UserCircleIcon,
   UserGroupIcon,
   XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { ArrowLeftIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { motion } from "framer-motion";
+} from '@heroicons/react/24/outline';
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
-import useAuthStore from "@/context/auth-store";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-
-import NavIconButton from "@/components/ui/nav-icon-button";
-import Logo from "@/components/base/payboss-logo";
+import Logo from '@/components/base/payboss-logo';
+import { Button } from '@/components/ui/button';
+import NavIconButton from '@/components/ui/nav-icon-button';
+import useAuthStore from '@/context/auth-store';
+import { cn } from '@/lib/utils';
 
 // SETTINGS OPTIONS
 const SETTINGS_LINKS = [
   {
-    name: "Workspaces",
+    name: 'Workspaces',
     Icon: BriefcaseIcon,
-    href: "/manage-account",
+    href: '/manage-account',
   },
   {
-    name: "Users",
+    name: 'Users',
     Icon: UserGroupIcon,
-    href: "/manage-account/users",
+    href: '/manage-account/users',
   },
   {
-    name: "Profile Settings",
+    name: 'Profile Settings',
     Icon: UserCircleIcon,
-    href: "/manage-account/profile",
+    href: '/manage-account/profile',
   },
 
   {
-    name: "Account Verification",
+    name: 'Account Verification',
     Icon: CheckBadgeIcon,
-    href: "/manage-account/account-verification",
+    href: '/manage-account/account-verification',
   },
 ];
 
@@ -59,24 +58,24 @@ function SettingsSideBar() {
     <>
       <div
         className={cn(
-          "fixed z-[77] flex h-16 w-screen bg-card/60 dark:shadow-black/10 dark:shadow-xl backdrop-blur-md shadow-sm lg:hidden",
+          'fixed z-[77] flex h-16 w-screen bg-card/60 dark:shadow-black/10 dark:shadow-xl backdrop-blur-md shadow-sm lg:hidden',
         )}
       >
         <Button
           className={cn(
-            "absolute left-6 top-3 z-50 h-8 min-w-5 items-center bg-transparent p-2 py-3 text-foreground/70 hover:bg-transparent lg:hidden",
+            'absolute left-6 top-3 z-50 h-8 min-w-5 items-center bg-transparent p-2 py-3 text-foreground/70 hover:bg-transparent lg:hidden',
           )}
           startContent={<Bars3BottomLeftIcon className="h-7 w-7" />}
           onClick={toggleSideBar}
         >
-          <Logo href={"#"} />
+          <Logo href={'#'} />
         </Button>
       </div>
 
       {openSettingsSideBar && (
         <motion.div
           className={cn(`absolute left-[-100%] z-[99] hidden bg-black/60`, {
-            "inset-0 block": openSettingsSideBar,
+            'inset-0 block': openSettingsSideBar,
           })}
           whileInView={{ opacity: [0, 1], transition: { duration: 0.3 } }}
           onClick={toggleSideBar}
@@ -85,7 +84,7 @@ function SettingsSideBar() {
       <motion.nav
         className={cn(
           `sticky -left-[110%] z-50 hidden h-full min-h-screen w-[380px] rounded-r-3xl bg-card py-5 transition-all duration-500 ease-in-out lg:left-0 lg:block`,
-          { "absolute left-0 z-[100] block": openSettingsSideBar },
+          { 'absolute left-0 z-[100] block': openSettingsSideBar },
         )}
       >
         <div className="relative flex h-full w-full flex-col px-5">
@@ -100,7 +99,7 @@ function SettingsSideBar() {
           <Button
             as={Link}
             className="h-12 w-full justify-start p-2 text-foreground-500 hover:text-primary data-[hover=true]:bg-primary/10 dark:data-[hover=true]:text-primary-50"
-            href={"/workspaces"}
+            href={'/workspaces'}
             startContent={<ArrowLeftIcon className="h-5 w-5" />}
             variant="light"
           >
@@ -122,9 +121,9 @@ function SettingsSideBar() {
                   key={href + index}
                   as={Link}
                   className={cn(
-                    "my-1 h-12 w-full justify-start p-2 text-foreground-500 hover:text-primary dark:data-[hover=true]:text-primary-50 data-[hover=true]:bg-primary/10",
+                    'my-1 h-12 w-full justify-start p-2 text-foreground-500 hover:text-primary dark:data-[hover=true]:text-primary-50 data-[hover=true]:bg-primary/10',
                     {
-                      "dark:bg-primary/50 bg-primary/10 dark:text-foreground text-primary-600":
+                      'dark:bg-primary/50 bg-primary/10 dark:text-foreground text-primary-600':
                         pathname == href,
                     },
                   )}
@@ -142,13 +141,13 @@ function SettingsSideBar() {
           {/* ************************************************************* */}
 
           <div className="flex items-center gap-2 px-5 pt-2">
-            <NavIconButton className={"bg-primary"} onClick={handleUserLogOut}>
+            <NavIconButton className={'bg-primary'} onClick={handleUserLogOut}>
               <PowerIcon className="h-5 w-5 text-white" />
             </NavIconButton>
             <Button
-              onClick={handleUserLogOut}
-              variant="light"
               className="my-2 h-auto w-full justify-start p-2 text-slate-600 hover:text-primary-600 data-[hover=true]:bg-primary-50"
+              variant="light"
+              onClick={handleUserLogOut}
             >
               Log out
             </Button>

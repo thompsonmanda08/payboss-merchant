@@ -1,6 +1,6 @@
-import { Select, SelectItem, SelectProps } from "@heroui/react";
+import { Select, SelectItem, SelectProps } from '@heroui/react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 type SelectComProps = Partial<SelectProps> & {
   value?: any;
@@ -45,7 +45,7 @@ function SelectField({
   return (
     <div
       className={cn(
-        "flex w-full max-w-md flex-col items-start",
+        'flex w-full max-w-md flex-col items-start',
         wrapperClassName,
         classNames?.wrapper,
       )}
@@ -53,15 +53,15 @@ function SelectField({
       {label && (
         <label
           className={cn(
-            "ml-1 text-sm font-medium text-foreground/70",
+            'ml-1 text-sm font-medium text-foreground/70',
             {
-              "opacity-50": props?.isDisabled || props?.disabled,
+              'opacity-50': props?.isDisabled || props?.disabled,
             },
             classNames?.label,
           )}
           htmlFor={name}
         >
-          {label}{" "}
+          {label}{' '}
           {props?.required && <span className="font-bold text-red-500">*</span>}
         </label>
       )}
@@ -69,19 +69,19 @@ function SelectField({
         className={`group relative flex w-full flex-col items-start justify-start gap-1`}
       >
         <Select
-          className={cn("font-medium", className)}
+          className={cn('font-medium', className)}
           classNames={{
             base: cn(
-              "text-lg shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium text-foreground placeholder:text-muted-foreground",
+              'text-lg shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium text-foreground placeholder:text-muted-foreground',
               classNames?.base,
             ),
             value: cn(
-              "text-foreground group-data-[has-value=true]:text-foreground font-inter tracking-tight capitalize",
+              'text-foreground group-data-[has-value=true]:text-foreground font-inter tracking-tight capitalize',
               classNames?.value,
             ),
             trigger: cn(
               cn(
-                "focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary capitalize data-[hover=true]:border-primary/70",
+                'focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary capitalize data-[hover=true]:border-primary/70',
                 classNames?.trigger,
               ),
               // {
@@ -90,14 +90,14 @@ function SelectField({
               // },
             ),
 
-            listbox: "font-medium",
-            popoverContent: "rounded-md text-foreground-700 font-medium",
-            selectorIcon: "w-4 h-4",
+            listbox: 'font-medium',
+            popoverContent: 'rounded-md text-foreground-700 font-medium',
+            selectorIcon: 'w-4 h-4',
           }}
           isInvalid={isInvalid}
           isRequired={props?.required}
           name={name}
-          placeholder={placeholder || "Choose an option"}
+          placeholder={placeholder || 'Choose an option'}
           selectedKeys={Boolean(prefilled) ? [value] : undefined}
           value={value}
           variant="bordered"
@@ -107,7 +107,7 @@ function SelectField({
           {/* OPTIONS ARRAY MUST BE AN ARRAY OF OBJECTS WITH ID, NAME AND VALUE PROPERTIES. */}
           {options &&
             options.map((item: any) => {
-              let ItemValue =
+              const ItemValue =
                 item?.[String(selector)] ||
                 item?.key ||
                 item?.id ||
@@ -115,7 +115,7 @@ function SelectField({
                 item?.index?.toString() ||
                 item;
 
-              let ItemLabel =
+              const ItemLabel =
                 item?.[String(listItemName)] ||
                 item?.name ||
                 item?.label ||
@@ -126,7 +126,7 @@ function SelectField({
                   key={ItemValue}
                   className="font-medium"
                   classNames={{
-                    base: "data-[hover=true]:bg-primary/10 data-[selected=true]:text-white data-[selected=true]:bg-primary data-[selected=true]:font-semibold data-[selectable=true]:focus:text-primary data-[selectable=true]:focus:bg-primary/20 data-[selectable=true]:hover:text-primary data-[selected=true]:focus:text-white data-[selectable=true]:hover:bg-primary/20 data-[selectable=true]:font-[600] data-[selected=true]:focus:bg-primary data-[hover=true]:hover:text-white capitalize",
+                    base: 'data-[hover=true]:bg-primary/10 data-[selected=true]:text-white data-[selected=true]:bg-primary data-[selected=true]:font-semibold data-[selectable=true]:focus:text-primary data-[selectable=true]:focus:bg-primary/20 data-[selectable=true]:hover:text-primary data-[selected=true]:focus:text-white data-[selectable=true]:hover:bg-primary/20 data-[selectable=true]:font-[600] data-[selected=true]:focus:bg-primary data-[hover=true]:hover:text-white capitalize',
                   }}
                 >
                   {ItemLabel}

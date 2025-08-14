@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useDisclosure } from "@heroui/react";
+import { useDisclosure } from '@heroui/react';
+import { useState } from 'react';
 
-import usePaymentsStore from "@/context/payment-store";
-import OverlayLoader from "@/components/ui/overlay-loader";
+import OverlayLoader from '@/components/ui/overlay-loader';
+import usePaymentsStore from '@/context/payment-store';
 
-import BatchDetailsPage from "./components/batch-details-view";
-import SelectPaymentType from "./components/payment-protocol-selection";
+import BatchDetailsPage from './components/batch-details-view';
+import SelectPaymentType from './components/payment-protocol-selection';
 
 export default function PaymentWidgets({
   workspaceID,
@@ -32,7 +32,7 @@ export default function PaymentWidgets({
       {openBatchDetailsModal && (
         <BatchDetailsPage
           isOpen={openBatchDetailsModal}
-          protocol={"direct"}
+          protocol={'direct'}
           onClose={onClose}
         />
       )}

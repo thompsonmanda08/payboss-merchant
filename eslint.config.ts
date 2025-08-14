@@ -1,106 +1,95 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-import { FlatCompat } from "@eslint/eslintrc";
-import unusedImports from "eslint-plugin-unused-imports";
-import react from "eslint-plugin-react";
+import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
+import unusedImports from 'eslint-plugin-unused-imports';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  // Extend Next.js configs only
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
 
   {
-    settings: {
-      "import/resolver": {
-        alias: {
-          map: [["@", "./src"]],
-          extensions: [".js", ".jsx", ".mjs"],
+    files: ['**/*.{js,jsx,ts,tsx,mjs}'],
+
+    languageOptions: {
+      ecmaVersion: 2024,
+      sourceType: 'module',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
         },
+      },
+    },
+
+    settings: {
+      react: {
+        version: 'detect',
       },
     },
 
     plugins: {
       react,
-      "unused-imports": unusedImports,
+      'react-hooks': reactHooks,
+      'unused-imports': unusedImports,
     },
 
     rules: {
-      "no-undef": "error", // Errors on undefined variables
-      "import/no-unresolved": "warn", // Errors on unresolved imports
-      // "no-console": "warn", // No Console logs in code base
-      "react/prop-types": "off",
-      "react/jsx-uses-react": "off",
-      "react/react-in-jsx-scope": "off",
-      "react-hooks/exhaustive-deps": "off",
-      "jsx-a11y/click-events-have-key-events": "warn",
-      "jsx-a11y/interactive-supports-focus": "warn",
-      "trailing-comma": "on",
-      "prettier/prettier": [
-        "warn",
-        {
-          endOfLine: "auto", // This will maintain existing line endings
-          trailingComma: "off", // Add this line to allow trailing commas
-        },
-      ],
-      "no-unused-vars": [
-        "warn",
-        { args: "after-used", ignoreRestSiblings: true },
-      ],
-      "unused-imports/no-unused-vars": "warn",
-      "unused-imports/no-unused-imports": "warn",
+      // Core rules (non-conflicting)
+      'no-unused-vars': 'off',
+      'prefer-const': 'warn',
 
-      "import/order": [
-        "warn",
+      // React rules (safe)
+      'react/prop-types': 'off',
+      'react/jsx-uses-react': 'off',
+      'react/react-in-jsx-scope': 'off',
+
+      // React Hooks rules
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+
+      // Unused imports (safe)
+      'unused-imports/no-unused-imports': 'warn',
+      'unused-imports/no-unused-vars': [
+        'warn',
         {
-          groups: [
-            "type",
-            "builtin",
-            "object",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-          ],
-          pathGroups: [
-            {
-              pattern: "~/**",
-              group: "external",
-              position: "after",
-            },
-          ],
-          "newlines-between": "always",
-          distinctGroup: true,
-          named: false,
-          warnOnUnassignedImports: false,
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
         },
       ],
-      "react/self-closing-comp": "warn",
-      "react/jsx-sort-props": [
-        "warn",
-        {
-          callbacksLast: true,
-          shorthandFirst: true,
-          noSortAlphabetically: false,
-          reservedFirst: true,
-        },
-      ],
-      "padding-line-between-statements": [
-        "warn",
-        { blankLine: "always", prev: "*", next: "return" },
-        { blankLine: "always", prev: ["const", "let", "var"], next: "*" },
-        {
-          blankLine: "any",
-          prev: ["const", "let", "var"],
-          next: ["const", "let", "var"],
-        },
-      ],
+
+      // TypeScript rules
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off', // Let unused-imports handle this
+    },
+  },
+
+  // TypeScript file specific rules
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'no-undef': 'off', // TypeScript handles this
+    },
+  },
+
+  // Config file rules
+  {
+    files: ['*.config.{js,ts,mjs}', '*.setup.{js,ts}'],
+    rules: {
+      'import/no-anonymous-default-export': 'off',
     },
   },
 ];

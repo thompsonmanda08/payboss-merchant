@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Skeleton } from "@heroui/react";
+import { Skeleton } from '@heroui/react';
 
-import { WalletLHistoryLoader } from "./workspace-settings/components/wallet";
+import { WalletLHistoryLoader } from './workspace-settings/components/wallet';
 
 export default function DashboardLoading() {
   return (

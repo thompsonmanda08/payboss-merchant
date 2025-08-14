@@ -1,8 +1,8 @@
-"use client";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+'use client';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import React from 'react';
 
-import { cn } from "@/lib/utils";
-import React from "react";
+import { cn } from '@/lib/utils';
 
 function CardHeader({
   title,
@@ -24,15 +24,15 @@ function CardHeader({
   return (
     <div
       className={cn(
-        "relative flex w-full items-center justify-between ",
+        'relative flex w-full items-center justify-between ',
         className,
       )}
     >
       {title && (
-        <div className={cn("flex flex-col", classNames?.innerWrapper)}>
+        <div className={cn('flex flex-col', classNames?.innerWrapper)}>
           <h3
             className={cn(
-              "font-semibold leading-8 tracking-tight text-foreground/80",
+              'font-semibold leading-8 tracking-tight text-foreground/80',
               classNames?.titleClasses,
             )}
           >
@@ -41,7 +41,7 @@ function CardHeader({
           {infoText && (
             <p
               className={cn(
-                "text-sm text-foreground-500",
+                'text-sm text-foreground-500',
                 classNames?.infoClasses,
               )}
             >

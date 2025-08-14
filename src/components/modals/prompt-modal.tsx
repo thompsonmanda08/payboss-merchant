@@ -5,11 +5,12 @@ import {
   ModalBody,
   ModalFooter,
   ModalProps,
-} from "@heroui/modal";
+} from '@heroui/modal';
+import { PropsWithChildren } from 'react';
 
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { PropsWithChildren } from "react";
+import { cn } from '@/lib/utils';
+
+import { Button } from '../ui/button';
 
 type PromptModalProps = ModalProps &
   PropsWithChildren & {
@@ -28,31 +29,31 @@ type PromptModalProps = ModalProps &
   };
 
 function PromptModal({
-  size = "lg",
+  size = 'lg',
   isOpen,
   onClose,
   onConfirm,
-  title = "",
-  cancelText = "Cancel",
-  confirmText = "Confirm",
+  title = '',
+  cancelText = 'Cancel',
+  confirmText = 'Confirm',
   isDisabled,
   isLoading,
   isDismissable = true,
   isKeyboardDismissDisabled = true,
   className,
   backdrop,
-  placement = "bottom-center",
+  placement = 'bottom-center',
   removeActionButtons = false,
   children,
 }: PromptModalProps) {
   return (
     <Modal
       backdrop={backdrop}
-      className={cn("z-[99999999] max-w-[600px]", className)}
+      className={cn('z-[99999999] max-w-[600px]', className)}
       isDismissable={isDismissable}
       isKeyboardDismissDisabled={isKeyboardDismissDisabled}
-      placement={placement}
       isOpen={isOpen}
+      placement={placement}
       size={size}
       onClose={onClose}
     >

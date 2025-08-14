@@ -1,27 +1,27 @@
-import "./globals.css";
-import localFont from "next/font/local";
+import './globals.css';
+import localFont from 'next/font/local';
+import { PropsWithChildren } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-import Providers from "./providers";
-import { getAuthSession, getUserDetails } from "./_actions/config-actions";
-import { PropsWithChildren } from "react";
+import { getAuthSession, getUserDetails } from './_actions/config-actions';
+import Providers from './providers';
 
 const inter = localFont({
-  src: "font/Inter-VariableFont_slnt,wght.ttf",
-  variable: "--font-inter",
+  src: 'font/Inter-VariableFont_slnt,wght.ttf',
+  variable: '--font-inter',
 });
 
 const description =
-  "PayBoss offers cutting-edge digital tools designed to help businesses of all sizes efficiently manage their financial inflows and outflows";
+  'PayBoss offers cutting-edge digital tools designed to help businesses of all sizes efficiently manage their financial inflows and outflows';
 
 export const metadata = {
   title: {
-    template: "%s - PayBoss",
-    default: "PayBoss - Gateway to simplified payments",
+    template: '%s - PayBoss',
+    default: 'PayBoss - Gateway to simplified payments',
   },
   description,
-  manifest: "/manifest.json",
+  manifest: '/manifest.json',
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
@@ -30,7 +30,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 
   return (
     <html
-      className={cn("h-screen scroll-smooth bg-background antialiased light")}
+      className={cn('h-screen scroll-smooth bg-background antialiased light')}
       lang="en"
     >
       <head>
@@ -56,19 +56,19 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         {/* Structured data */}
         <script type="application/ld+json">
           {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebApplication",
-            name: "BGS PayBoss",
+            '@context': 'https://schema.org',
+            '@type': 'WebApplication',
+            name: 'BGS PayBoss',
             description,
-            url: "https://bgspayboss.com",
-            applicationCategory: "Marketplace",
-            operatingSystem: "Web",
+            url: 'https://bgspayboss.com',
+            applicationCategory: 'Marketplace',
+            operatingSystem: 'Web',
           })}
         </script>
       </head>
       <body
         className={cn(
-          "flex min-h-screen flex-col bg-background font-inter overflow-x-hidden",
+          'flex min-h-screen flex-col bg-background font-inter overflow-x-hidden',
           inter.variable,
         )}
       >

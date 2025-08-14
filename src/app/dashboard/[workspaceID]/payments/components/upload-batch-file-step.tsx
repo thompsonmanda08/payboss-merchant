@@ -1,14 +1,13 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import React from "react";
+import { addToast } from '@heroui/react';
+import Link from 'next/link';
+import React from 'react';
 
-import { Button } from "@/components/ui/button";
-import usePaymentsStore from "@/context/payment-store";
-import { uploadPaymentBatchFile } from "@/app/_actions/pocketbase-actions";
-import useAccountProfile from "@/hooks/use-profile-info";
-import { SingleFileDropzone } from "@/components/base/file-dropzone";
-import { addToast } from "@heroui/react";
+import { uploadPaymentBatchFile } from '@/app/_actions/pocketbase-actions';
+import { SingleFileDropzone } from '@/components/base/file-dropzone';
+import { Button } from '@/components/ui/button';
+import usePaymentsStore from '@/context/payment-store';
 
 const UploadCSVFile = ({
   navigateForward,
@@ -23,29 +22,29 @@ const UploadCSVFile = ({
   const [isLoading, setIsLoading] = React.useState(false);
 
   function handleProceed() {
-    if (paymentAction?.url !== "") {
+    if (paymentAction?.url !== '') {
       navigateForward();
 
       return;
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "A valid file is required!",
+      title: 'Error',
+      color: 'danger',
+      description: 'A valid file is required!',
     });
   }
 
   async function handleFileUpload(file: File, recordID?: string) {
     setIsLoading(true);
 
-    let response = await uploadPaymentBatchFile(file);
+    const response = await uploadPaymentBatchFile(file);
 
     if (response?.success) {
       addToast({
-        color: "success",
-        title: "File Added!",
-        description: "File uploaded successfully!",
+        color: 'success',
+        title: 'File Added!',
+        description: 'File uploaded successfully!',
       });
       updatePaymentFields({
         file,
@@ -58,9 +57,9 @@ const UploadCSVFile = ({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "Failed to upload file.",
+      title: 'Error',
+      color: 'danger',
+      description: 'Failed to upload file.',
     });
     setIsLoading(false);
 
@@ -72,12 +71,12 @@ const UploadCSVFile = ({
       <div className="flex h-full w-full flex-col gap-5">
         <div className="flex flex-col">
           <SingleFileDropzone
+            file={paymentAction?.file}
             isLoading={isLoading}
             isUploaded={paymentAction?.file != undefined}
-            file={paymentAction?.file}
             otherAcceptedFiles={{
-              "application/vnd.ms-excel": [],
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+              'application/vnd.ms-excel': [],
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
                 [],
             }}
             onChange={async (file) =>
@@ -87,21 +86,21 @@ const UploadCSVFile = ({
 
           <p className="mt-2 text-xs font-medium text-gray-500 lg:text-[13px]">
             Having trouble with the validation and file uploads? Download
-            {protocol == "direct" ? (
+            {protocol == 'direct' ? (
               <Link
                 className="ml-1 font-bold text-primary hover:underline hover:underline-offset-2"
-                download={"batch_record_template.xlsx"}
-                href={"/batch_record_template.xlsx"}
+                download={'batch_record_template.xlsx'}
+                href={'/batch_record_template.xlsx'}
               >
-                Direct Transfer{" "}
+                Direct Transfer{' '}
               </Link>
             ) : (
               <Link
                 className="ml-1 font-bold text-primary"
-                download={"batch_record_template_voucher.xlsx"}
-                href={"/batch_record_template_voucher.xlsx"}
+                download={'batch_record_template_voucher.xlsx'}
+                href={'/batch_record_template_voucher.xlsx'}
               >
-                Voucher Transfer{" "}
+                Voucher Transfer{' '}
               </Link>
             )}
             template here
@@ -130,7 +129,7 @@ const UploadCSVFile = ({
 
         <div className="mt-auto flex w-full items-end justify-end gap-4">
           <Button
-            color={"danger"}
+            color={'danger'}
             isDisabled={isLoading}
             onClick={handleCancel}
           >

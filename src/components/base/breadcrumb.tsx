@@ -1,23 +1,23 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
+'use client';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-import { cn } from "@/lib/utils";
-import useWorkspaces from "@/hooks/use-workspaces";
-import useNavigation from "@/hooks/use-navigation";
+import useNavigation from '@/hooks/use-navigation';
+import useWorkspaces from '@/hooks/use-workspaces';
+import { cn } from '@/lib/utils';
 
 export default function BreadCrumbLinks() {
   const router = useRouter();
   const { pathname, pathArr } = useNavigation();
   const { workspaces, workspaceID } = useWorkspaces();
 
-  const [path, setPath] = useState([""]);
+  const [path, setPath] = useState(['']);
 
   useEffect(() => {
     /********************* WORKSPACE NAME ********************** */
-    if (pathArr.length > 2 && pathname?.startsWith("/dashboard")) {
-      let workspace = workspaces?.find(
+    if (pathArr.length > 2 && pathname?.startsWith('/dashboard')) {
+      const workspace = workspaces?.find(
         (item) => item?.ID == workspaceID,
       )?.workspace;
 
@@ -25,7 +25,7 @@ export default function BreadCrumbLinks() {
     }
     /***************************************************************** */
 
-    setPath([...pathArr.filter((path) => path !== "")]);
+    setPath([...pathArr.filter((path) => path !== '')]);
   }, [pathname, workspaceID]);
 
   return (
@@ -38,16 +38,16 @@ export default function BreadCrumbLinks() {
                 className={cn(
                   ` cursor-pointer px-2 font-medium capitalize text-slate-400`,
                   {
-                    "text-foreground/70": idx === path.length - 1,
+                    'text-foreground/70': idx === path.length - 1,
                   },
                 )}
               >
-                {segment?.replace(/-|%20/g, " ")}
+                {segment?.replace(/-|%20/g, ' ')}
               </div>
               {idx < path.length - 1 && (
                 <ChevronRightIcon
                   className={cn(
-                    "h-3 w-3 text-foreground/50 hover:text-primary",
+                    'h-3 w-3 text-foreground/50 hover:text-primary',
                   )}
                 />
               )}

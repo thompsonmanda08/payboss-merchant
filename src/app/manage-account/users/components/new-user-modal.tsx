@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Modal,
   ModalContent,
@@ -6,35 +6,34 @@ import {
   ModalBody,
   ModalFooter,
   addToast,
-} from "@heroui/react";
-import { useEffect, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { usePathname } from "next/navigation";
+} from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
-import { Input } from "@/components/ui/input-field";
-import SelectField from "@/components/ui/select-field";
-import { generateRandomString, isValidZambianMobileNumber } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import StatusMessage from "@/components/base/status-message";
 import {
   createNewUser,
   updateSystemUserData,
-} from "@/app/_actions/user-actions";
-import useWorkspaceStore from "@/context/workspaces-store";
-import { changeUserRoleInWorkspace } from "@/app/_actions/workspace-actions";
-import { ErrorState } from "@/types";
+} from '@/app/_actions/user-actions';
+import { changeUserRoleInWorkspace } from '@/app/_actions/workspace-actions';
+import StatusMessage from '@/components/base/status-message';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import SelectField from '@/components/ui/select-field';
+import useWorkspaceStore from '@/context/workspaces-store';
+import { generateRandomString, isValidZambianMobileNumber } from '@/lib/utils';
+import { ErrorState } from '@/types';
 
 const USER_INIT = {
-  userID: "",
-  first_name: "",
-  last_name: "",
-  username: "",
-  email: "",
-  phone_number: "",
-  roleID: "",
-  role: "",
+  userID: '',
+  first_name: '',
+  last_name: '',
+  username: '',
+  email: '',
+  phone_number: '',
+  roleID: '',
+  role: '',
   changePassword: true,
-  password: "P4y-B055_*848#=@B/G/S&zm",
+  password: 'P4y-B055_*848#=@B/G/S&zm',
 };
 
 // CREATE NEW USER
@@ -73,7 +72,7 @@ function CreateOrUpdateUser({
   const [newUser, setNewUser] = useState(USER_INIT);
   const [error, setError] = useState<ErrorState>({
     status: false,
-    message: "",
+    message: '',
   });
 
   const phoneNoError =
@@ -96,9 +95,9 @@ function CreateOrUpdateUser({
     setLoading(true);
     if (!isValidData()) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Invalid user details.",
+        title: 'Error',
+        color: 'danger',
+        description: 'Invalid user details.',
       });
       setLoading(false);
 
@@ -111,15 +110,15 @@ function CreateOrUpdateUser({
       password: generateRandomString(16), // Generates unique user password
     };
 
-    let response = await createNewUser(userData as any);
+    const response = await createNewUser(userData as any);
 
     if (response?.success) {
       addToast({
-        title: "Success",
-        color: "success",
-        description: "User created successfully!",
+        title: 'Success',
+        color: 'success',
+        description: 'User created successfully!',
       });
-      setError({ status: false, message: "" });
+      setError({ status: false, message: '' });
       onClose();
       queryClient.invalidateQueries();
       setNewUser(USER_INIT);
@@ -129,9 +128,9 @@ function CreateOrUpdateUser({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "Problem occurred while creating user.",
+      title: 'Error',
+      color: 'danger',
+      description: 'Problem occurred while creating user.',
     });
     setError({ status: true, message: response?.message });
     setLoading(false);
@@ -149,16 +148,16 @@ function CreateOrUpdateUser({
       recordID,
     };
 
-    let response = await updateSystemUserData(recordID, userMapping);
+    const response = await updateSystemUserData(recordID, userMapping);
 
     if (response?.success) {
       queryClient.invalidateQueries();
       addToast({
-        title: "Success",
-        color: "success",
-        description: "User updated successfully!",
+        title: 'Success',
+        color: 'success',
+        description: 'User updated successfully!',
       });
-      setError({ status: false, message: "" });
+      setError({ status: false, message: '' });
       setLoading(false);
       handleClose();
 
@@ -166,9 +165,9 @@ function CreateOrUpdateUser({
     }
 
     addToast({
-      title: "Error updating user",
-      color: "danger",
-      description: response?.message || "Invalid user details.",
+      title: 'Error updating user',
+      color: 'danger',
+      description: response?.message || 'Invalid user details.',
     });
     setError({ status: true, message: response?.message });
     setLoading(false);
@@ -185,7 +184,7 @@ function CreateOrUpdateUser({
       recordID,
     };
 
-    let response = await changeUserRoleInWorkspace(
+    const response = await changeUserRoleInWorkspace(
       userMapping,
       recordID,
       workspaceID,
@@ -194,11 +193,11 @@ function CreateOrUpdateUser({
     if (response?.success) {
       queryClient.invalidateQueries();
       addToast({
-        title: "Success",
-        color: "success",
-        description: "User updated successfully!",
+        title: 'Success',
+        color: 'success',
+        description: 'User updated successfully!',
       });
-      setError({ status: false, message: "" });
+      setError({ status: false, message: '' });
       setLoading(false);
       handleClose();
 
@@ -206,9 +205,9 @@ function CreateOrUpdateUser({
     }
 
     addToast({
-      title: "Error updating user",
-      color: "danger",
-      description: response?.message || "Failed to update user details.",
+      title: 'Error updating user',
+      color: 'danger',
+      description: response?.message || 'Failed to update user details.',
     });
     setError({ status: true, message: response?.message });
     setLoading(false);
@@ -222,7 +221,7 @@ function CreateOrUpdateUser({
       setError((prev) => ({
         ...prev,
         onMobileNo: true,
-        message: "Invalid Mobile Number",
+        message: 'Invalid Mobile Number',
       }));
     }
 
@@ -231,7 +230,7 @@ function CreateOrUpdateUser({
       setError((prev) => ({
         ...prev,
         onFName: true,
-        message: "Invalid First Name",
+        message: 'Invalid First Name',
       }));
     }
 
@@ -240,7 +239,7 @@ function CreateOrUpdateUser({
       setError((prev) => ({
         ...prev,
         onLName: true,
-        message: "Invalid Last Name",
+        message: 'Invalid Last Name',
       }));
     }
 
@@ -249,7 +248,7 @@ function CreateOrUpdateUser({
       setError((prev) => ({
         ...prev,
         onRole: true,
-        message: "User must have a system a role",
+        message: 'User must have a system a role',
       }));
     }
 
@@ -258,20 +257,20 @@ function CreateOrUpdateUser({
       setError((prev) => ({
         ...prev,
         onUsername: true,
-        message: "User must have a username",
+        message: 'User must have a username',
       }));
     }
 
     if (
       !newUser?.email ||
-      !newUser?.email?.includes("@") ||
-      !newUser?.email?.includes(".")
+      !newUser?.email?.includes('@') ||
+      !newUser?.email?.includes('.')
     ) {
       valid = false;
       setError((prev) => ({
         ...prev,
         onEmail: true,
-        message: "Invalid Email",
+        message: 'Invalid Email',
       }));
     }
 
@@ -318,31 +317,31 @@ function CreateOrUpdateUser({
           <>
             <ModalHeader className="flex flex-col gap-1">
               {isEditingUser && !isUsersRoute
-                ? "Update Workspace User"
+                ? 'Update Workspace User'
                 : isEditingUser && isUsersRoute
-                  ? "Update System User"
-                  : "Create New User"}
+                  ? 'Update System User'
+                  : 'Create New User'}
             </ModalHeader>
             <ModalBody>
               <SelectField
                 required
                 className="mt-px"
+                isInvalid={error?.onRole}
                 label={
                   isEditingUser && !isUsersRoute
-                    ? "Workspace Role"
-                    : "System Role"
+                    ? 'Workspace Role'
+                    : 'System Role'
                 }
-                listItemName={"role"}
-                options={roles?.filter((role) => role?.role !== "owner")}
-                placeholder={isEditingUser ? newUser?.role : "Choose a role"}
-                value={newUser?.role || "Choose a role"}
+                listItemName={'role'}
+                options={roles?.filter((role) => role?.role !== 'owner')}
+                placeholder={isEditingUser ? newUser?.role : 'Choose a role'}
+                value={newUser?.role || 'Choose a role'}
                 onChange={(e) => {
                   updateDetails({
                     role: e.target.value,
                     roleID: e.target.value,
                   });
                 }}
-                isInvalid={error?.onRole}
               />
 
               <div className="flex flex-col gap-3 sm:flex-row">
@@ -350,40 +349,41 @@ function CreateOrUpdateUser({
                   autoFocus
                   errorText="Invalid First Name"
                   isDisabled={isEditingUser}
+                  isInvalid={error?.onFName}
                   label="First Name"
                   required={!isEditingUser}
                   value={newUser?.first_name}
                   onChange={(e) => {
                     updateDetails({ first_name: e.target.value });
                   }}
-                  isInvalid={error?.onFName}
                 />
                 <Input
                   errorText="Invalid Last Name"
                   isDisabled={isEditingUser}
+                  isInvalid={error?.onLName}
                   label="Last Name"
                   required={!isEditingUser}
                   value={newUser?.last_name}
                   onChange={(e) => {
                     updateDetails({ last_name: e.target.value });
                   }}
-                  isInvalid={error?.onLName}
                 />
               </div>
               <Input
                 errorText="Username is required"
                 isDisabled={isEditingUser}
+                isInvalid={error?.onUsername}
                 label="Username"
                 required={!isEditingUser}
                 value={newUser?.username}
                 onChange={(e) => {
                   updateDetails({ username: e.target.value });
                 }}
-                isInvalid={error?.onUsername}
               />
               <Input
                 errorText="Invalid Mobile Number"
                 isDisabled={isEditingUser}
+                isInvalid={phoneNoError || error?.onMobileNo}
                 label="Mobile Number"
                 maxLength={12}
                 pattern="[0-9]{12}"
@@ -393,11 +393,11 @@ function CreateOrUpdateUser({
                 onChange={(e) => {
                   updateDetails({ phone_number: e.target.value });
                 }}
-                isInvalid={phoneNoError || error?.onMobileNo}
               />
               <Input
                 errorText="Invalid Email Address"
                 isDisabled={isEditingUser}
+                isInvalid={error?.onEmail}
                 label="Email Address"
                 required={!isEditingUser}
                 type="email"
@@ -405,7 +405,6 @@ function CreateOrUpdateUser({
                 onChange={(e) => {
                   updateDetails({ email: e.target.value });
                 }}
-                isInvalid={error?.onEmail}
               />
 
               {isEditingUser ? (
@@ -438,7 +437,7 @@ function CreateOrUpdateUser({
                   isLoading={loading}
                   onPress={onConfirmAction}
                 >
-                  {isEditingUser ? "Save" : "Create User"}
+                  {isEditingUser ? 'Save' : 'Create User'}
                 </Button>
               }
             </ModalFooter>

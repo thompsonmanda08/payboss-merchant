@@ -1,22 +1,22 @@
-import { create } from "zustand";
-import { addToast } from "@heroui/react";
+import { addToast } from '@heroui/react';
+import { create } from 'zustand';
 
 import {
   adminResetUserPassword,
   assignUsersToWorkspace,
   deleteSystemUserData,
   unlockSystemUser,
-} from "@/app/_actions/user-actions";
-import { deleteUserFromWorkspace } from "@/app/_actions/workspace-actions";
-import { generateRandomString } from "@/lib/utils";
-import { WorkspaceStore } from "@/types/stores";
+} from '@/app/_actions/user-actions';
+import { deleteUserFromWorkspace } from '@/app/_actions/workspace-actions';
+import { generateRandomString } from '@/lib/utils';
+import { WorkspaceStore } from '@/types/stores';
 
 const INITIAL_STATE = {
   addedUsers: [],
   existingUsers: [],
   error: {
     status: false,
-    message: "",
+    message: '',
   },
   isLoading: false,
   isEditingUser: false,
@@ -37,7 +37,7 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
   // METHODS AND ACTIONS
 
   handleAddToWorkspace: (user) => {
-    set({ error: { status: false, message: "" } });
+    set({ error: { status: false, message: '' } });
 
     // Filter out the user with the matching email, if exists then don't add
     const { addedUsers, existingUsers } = get();
@@ -45,20 +45,21 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
     const userExists = existingUsers.find((u) => u.userID === user.ID);
 
     // Check if the user is owner
-    if (user?.role?.toLowerCase() == "owner") {
+    if (user?.role?.toLowerCase() == 'owner') {
       addToast({
-        title: "Warning",
-        color: "warning",
-        description: "Owner is already part of the workspace!",
+        title: 'Warning',
+        color: 'warning',
+        description: 'Owner is already part of the workspace!',
       });
+
       return;
     }
 
     // Check if the user is already added
     if (exitingUser) {
       addToast({
-        title: "Warning",
-        color: "warning",
+        title: 'Warning',
+        color: 'warning',
         description: `${exitingUser?.first_name} is already added!`,
       });
 
@@ -68,8 +69,8 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
     // Check if the user already exists
     if (userExists) {
       addToast({
-        title: "Warning",
-        color: "warning",
+        title: 'Warning',
+        color: 'warning',
         description: `${userExists?.first_name} already exists in workspace!`,
       });
 
@@ -83,17 +84,17 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
     });
 
     addToast({
-      color: "success",
-      title: "Success",
+      color: 'success',
+      title: 'Success',
       description: `You added ${user?.first_name}!`,
     });
   },
 
   handleRemoveFromWorkspace: (user) => {
-    set({ error: { status: false, message: "" } });
+    set({ error: { status: false, message: '' } });
 
     if (!user || !user.ID) {
-      console.error("Invalid user or user ID");
+      console.error('Invalid user or user ID');
 
       return;
     }
@@ -107,14 +108,14 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
     });
 
     addToast({
-      color: "success",
-      title: "Success",
+      color: 'success',
+      title: 'Success',
       description: `You removed ${user?.first_name}!`,
     });
   },
 
   handleUserRoleChange: (user, roleID) => {
-    set({ error: { status: false, message: "" } });
+    set({ error: { status: false, message: '' } });
     // Map through the users and add the property workspaceRole = roleID to the user with the matching ID and return the other as they are
     set((state) => {
       return {
@@ -134,7 +135,7 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
 
     set({
       isLoading: true,
-      error: { status: false, message: "" },
+      error: { status: false, message: '' },
     });
 
     // check if the addedUsers list is empty
@@ -143,7 +144,7 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
         isLoading: false,
       });
 
-      return { status: true, message: "Please select at least one user" };
+      return { status: true, message: 'Please select at least one user' };
     }
 
     // Check is all users in the addedUSers list have a role assigned
@@ -154,7 +155,7 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
         isLoading: false,
       });
 
-      return { status: true, message: "Please assign a role to all users" };
+      return { status: true, message: 'Please assign a role to all users' };
     }
 
     const users = addedUsers.map((user) => ({
@@ -166,7 +167,7 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
   },
 
   handleResetUserPassword: async () => {
-    set({ isLoading: true, error: { status: false, message: "" } });
+    set({ isLoading: true, error: { status: false, message: '' } });
 
     const { selectedUser } = get();
 
@@ -182,8 +183,8 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
 
     if (response?.success) {
       addToast({
-        color: "success",
-        title: "Success",
+        color: 'success',
+        title: 'Success',
         description: `You Reset ${selectedUser?.first_name}'s Password!`,
       });
 
@@ -191,8 +192,8 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
+      title: 'Error',
+      color: 'danger',
       description: response?.message,
     });
 
@@ -210,8 +211,8 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
 
     if (response?.success) {
       addToast({
-        color: "success",
-        title: "Success",
+        color: 'success',
+        title: 'Success',
         description: `You Removed ${selectedUser?.first_name}!`,
       });
 
@@ -219,8 +220,8 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
+      title: 'Error',
+      color: 'danger',
       description: response?.message,
     });
 
@@ -235,8 +236,8 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
 
     if (response?.success) {
       addToast({
-        color: "success",
-        title: "Success",
+        color: 'success',
+        title: 'Success',
         description: `You unlocked ${selectedUser?.first_name}!`,
       });
 
@@ -244,8 +245,8 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
+      title: 'Error',
+      color: 'danger',
       description: response?.message,
     });
     set({ isLoading: false });
@@ -261,8 +262,8 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
 
     if (response?.success) {
       addToast({
-        color: "success",
-        title: "Success",
+        color: 'success',
+        title: 'Success',
         description: `You Removed ${selectedUser?.first_name}!`,
       });
 
@@ -270,8 +271,8 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
+      title: 'Error',
+      color: 'danger',
       description: response?.message,
     });
 
@@ -286,7 +287,7 @@ const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
 
     set({
       addedUsers: [],
-      error: { status: false, message: "" },
+      error: { status: false, message: '' },
       isLoading: false,
     });
   },

@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import type { Key } from "@react-types/shared";
+import {
+  ArrowPathIcon,
+  LockClosedIcon,
+  LockOpenIcon,
+  PencilSquareIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
 import {
   Table,
   TableHeader,
@@ -14,78 +20,73 @@ import {
   Pagination,
   addToast,
   AvatarProps,
-} from "@heroui/react";
-import {
-  ArrowPathIcon,
-  LockClosedIcon,
-  LockOpenIcon,
-  PencilSquareIcon,
-  PlusIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
-import { useQueryClient } from "@tanstack/react-query";
-import { usePathname } from "next/navigation";
+} from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { usePathname } from 'next/navigation';
+import React, { useState } from 'react';
 
-import { cn, getUserInitials } from "@/lib/utils";
-import useWorkspaceStore from "@/context/workspaces-store";
-import PromptModal from "@/components/modals/prompt-modal";
-import { QUERY_KEYS, rowsPerPageOptions } from "@/lib/constants";
+import CreateOrUpdateUser from '@/app/manage-account/users/components/new-user-modal';
+import EmptyLogs from '@/components/base/empty-logs';
+import PromptModal from '@/components/modals/prompt-modal';
+import { Button } from '@/components/ui/button';
+import { SingleSelectionDropdown } from '@/components/ui/dropdown-button';
 import Loader from "@/components/ui/loader";
-import EmptyLogs from "@/components/base/empty-logs";
-import SelectField from "@/components/ui/select-field";
-import { Button } from "@/components/ui/button";
-import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
-import Search from "@/components/ui/search";
-import CreateOrUpdateUser from "@/app/manage-account/users/components/new-user-modal";
-import useKYCInfo from "@/hooks/use-kyc-info";
+import Search from '@/components/ui/search';
+import SelectField from '@/components/ui/select-field';
+import useWorkspaceStore from '@/context/workspaces-store';
+import useKYCInfo from '@/hooks/use-kyc-info';
+import { QUERY_KEYS, rowsPerPageOptions } from '@/lib/constants';
+import { cn, getUserInitials } from '@/lib/utils';
+
+import type { Key } from '@react-types/shared';
 
 const ACCOUNT_ROLES = [
   {
-    name: "Owner",
-    uid: "owner",
+    name: 'Owner',
+    uid: 'owner',
   },
   {
-    name: "Admin",
-    uid: "admin",
+    name: 'Admin',
+    uid: 'admin',
   },
   {
-    name: "Viewer",
-    uid: "viewer",
+    name: 'Viewer',
+    uid: 'viewer',
   },
 ];
 
 const WORKSPACE_ROLES = [
   {
-    name: "Admin",
-    uid: "admin",
+    name: 'Admin',
+    uid: 'admin',
   },
   {
-    name: "Approver",
-    uid: "approver",
+    name: 'Approver',
+    uid: 'approver',
   },
   {
-    name: "Initiator",
-    uid: "initiator",
+    name: 'Initiator',
+    uid: 'initiator',
   },
   {
-    name: "Viewer",
-    uid: "viewer",
+    name: 'Viewer',
+    uid: 'viewer',
   },
 ];
 
 export const roleColorMap = {
-  owner: "success",
-  admin: "primary",
-  approver: "secondary",
-  initiator: "warning",
-  viewer: "default",
+  owner: 'success',
+  admin: 'primary',
+  approver: 'secondary',
+  initiator: 'warning',
+  viewer: 'default',
 };
 
 const columns = [
-  { name: "NAME", uid: "first_name", sortable: true },
-  { name: "USERNAME/MOBILE NO.", uid: "username", sortable: true },
-  { name: "ROLE", uid: "role", sortable: true },
-  { name: "ACTIONS", uid: "actions" },
+  { name: 'NAME', uid: 'first_name', sortable: true },
+  { name: 'USERNAME/MOBILE NO.', uid: 'username', sortable: true },
+  { name: 'ROLE', uid: 'role', sortable: true },
+  { name: 'ACTIONS', uid: 'actions' },
 ];
 
 export default function UsersTable({
@@ -122,7 +123,7 @@ export default function UsersTable({
   const [openUnlockUserPrompt, setOpenUnlockUserPrompt] = useState(false);
   const [openResetPasswordPrompt, setOpenResetPasswordPrompt] = useState(false);
 
-  const isUsersRoute = pathname == "/manage-account/users";
+  const isUsersRoute = pathname == '/manage-account/users';
 
   const ROLE_FILTERS = isUsersRoute ? ACCOUNT_ROLES : WORKSPACE_ROLES;
 
@@ -138,22 +139,22 @@ export default function UsersTable({
   // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
 
-  const [filterValue, setFilterValue] = React.useState("");
+  const [filterValue, setFilterValue] = React.useState('');
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS),
   );
 
-  const [roleFilter, setRoleFilter] = React.useState("all");
+  const [roleFilter, setRoleFilter] = React.useState('all');
 
   const [rowsPerPage, setRowsPerPage] = React.useState(rowLimit);
 
   const [sortDescriptor, setSortDescriptor] = React.useState<{
     column: Key;
-    direction: "ascending" | "descending";
+    direction: 'ascending' | 'descending';
   }>({
-    column: "amount",
-    direction: "ascending",
+    column: 'amount',
+    direction: 'ascending',
   });
 
   const hasSearchFilter = Boolean(filterValue);
@@ -183,10 +184,10 @@ export default function UsersTable({
     }
 
     if (
-      roleFilter !== "all" &&
+      roleFilter !== 'all' &&
       Array.from(roleFilter).length !== ROLE_FILTERS.length
     ) {
-      let filters = Array.from(roleFilter);
+      const filters = Array.from(roleFilter);
 
       filteredRows = filteredRows.filter((row) => filters.includes(row?.role));
     }
@@ -212,7 +213,7 @@ export default function UsersTable({
       const second = b[columnKey];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      return sortDescriptor.direction === 'descending' ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
@@ -242,7 +243,7 @@ export default function UsersTable({
       setFilterValue(value);
       setPage(1);
     } else {
-      setFilterValue("");
+      setFilterValue('');
     }
   }, []);
 
@@ -283,8 +284,8 @@ export default function UsersTable({
                 )}
                 <Tooltip
                   classNames={{
-                    base: "text-white",
-                    content: "bg-secondary text-white",
+                    base: 'text-white',
+                    content: 'bg-secondary text-white',
                   }}
                   color="secondary"
                   content="Reset User Password"
@@ -333,7 +334,7 @@ export default function UsersTable({
       const cellValue = user[String(columnKey)];
 
       switch (columnKey) {
-        case "first_name":
+        case 'first_name':
           return (
             <UserAvatarComponent
               key={cellValue}
@@ -341,7 +342,7 @@ export default function UsersTable({
               className="rounded-md"
               email={
                 <span className="flex items-center gap-1">
-                  {user?.email}{" "}
+                  {user?.email}{' '}
                   {user?.isLockedOut && (
                     <LockClosedIcon className="h-3 w-3 text-primary" />
                   )}
@@ -354,7 +355,8 @@ export default function UsersTable({
               src={user?.image}
             />
           );
-        case "username":
+
+        case 'username':
           return (
             <div className="flex flex-col">
               <p className="text-bold text-sm !lowercase">{cellValue}</p>
@@ -363,13 +365,15 @@ export default function UsersTable({
               </code>
             </div>
           );
-        case "workspace":
+
+        case 'workspace':
           return (
             <div className="flex flex-col">
               <p className="text-bold text-sm capitalize">{cellValue}</p>
             </div>
           );
-        case "role":
+
+        case 'role':
           return (
             <Chip
               className="capitalize"
@@ -384,7 +388,8 @@ export default function UsersTable({
               {cellValue}
             </Chip>
           );
-        case "actions":
+
+        case 'actions':
           return renderActionButtons(user);
 
         default:
@@ -410,11 +415,11 @@ export default function UsersTable({
     // TO REMOVE A USER FROM THE MERCHANT ACCOUNT AND ALL WORKSPACES
     if (isUsersRoute) {
       // ONLY OWNER CAN NOT BE REMOVED FROM ACCOUNT
-      if (selectedUser?.role == "owner") {
+      if (selectedUser?.role == 'owner') {
         addToast({
-          title: "Error",
-          color: "danger",
-          description: "Owner cannot be removed!",
+          title: 'Error',
+          color: 'danger',
+          description: 'Owner cannot be removed!',
         });
         setIsLoading(false);
 
@@ -437,9 +442,9 @@ export default function UsersTable({
     // The last person cannot be removed from the workspace
     if (users.length == 1) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Workspace cannot be empty!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Workspace cannot be empty!',
       });
       setIsLoading(false);
 
@@ -469,22 +474,22 @@ export default function UsersTable({
           <div className="relative flex gap-3">
             <SingleSelectionDropdown
               buttonVariant="flat"
-              className={"min-w-[160px]"}
+              className={'min-w-[160px]'}
               closeOnSelect={false}
               disallowEmptySelection={true}
               dropdownItems={ROLE_FILTERS}
-              name={"Role"}
+              name={'Role'}
               selectedKeys={roleFilter}
               selectionMode="multiple"
               onSelectionChange={setRoleFilter}
             />
             <SingleSelectionDropdown
               buttonVariant="flat"
-              className={"min-w-[160px]"}
+              className={'min-w-[160px]'}
               closeOnSelect={false}
               disallowEmptySelection={true}
               dropdownItems={columns}
-              name={"Columns"}
+              name={'Columns'}
               selectedKeys={visibleColumns}
               selectionMode="multiple"
               setSelectedKeys={setSelectedKeys}
@@ -519,7 +524,7 @@ export default function UsersTable({
             Total: {users.length} Users
           </span>
           <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-slate-400">
-            Rows per page:{" "}
+            Rows per page:{' '}
             <SelectField
               className="-mb-1 h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
               defaultValue={8}
@@ -586,10 +591,10 @@ export default function UsersTable({
     return (
       <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
         <EmptyLogs
-          className={"my-auto mt-16"}
-          classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
-          subTitle={"you have no users to be displayed here."}
-          title={"No users to display."}
+          className={'my-auto mt-16'}
+          classNames={{ heading: 'text-sm text-foreground/50 font-medium' }}
+          subTitle={'you have no users to be displayed here.'}
+          title={'No users to display.'}
         />
       </div>
     );
@@ -599,7 +604,7 @@ export default function UsersTable({
     return (
       <div className="mt-32 flex flex-1 items-center rounded-lg">
         <Loader
-          classNames={{ wrapper: "bg-foreground-200/50 rounded-xl h-full" }}
+          classNames={{ wrapper: 'bg-foreground-200/50 rounded-xl h-full' }}
           size={100}
         />
       </div>
@@ -627,7 +632,7 @@ export default function UsersTable({
         bottomContentPlacement="outside"
         className="max-h-[980px]"
         classNames={{
-          table: cn("align-top items-center justify-center", {}),
+          table: cn('align-top items-center justify-center', {}),
         }}
         removeWrapper={removeWrapper}
         selectedKeys={selectedKeys}
@@ -641,9 +646,9 @@ export default function UsersTable({
             <TableColumn
               key={column.uid}
               align={
-                column.uid === "actions" || column.uid === "status"
-                  ? "center"
-                  : "start"
+                column.uid === 'actions' || column.uid === 'status'
+                  ? 'center'
+                  : 'start'
               }
               allowsSorting={column.sortable}
             >
@@ -680,10 +685,10 @@ export default function UsersTable({
         // onOpen={setOpenUnlockUserPrompt}
       >
         <p className="-mt-4 text-sm leading-5 text-foreground/70">
-          By unlocking{" "}
+          By unlocking{' '}
           <code className="rounded-md bg-primary/10 p-0.5 px-2 font-medium text-primary-700">
             {`${selectedUser?.first_name} ${selectedUser?.last_name}`}&apos;s
-          </code>{" "}
+          </code>{' '}
           account, an email will be sent to {selectedUser?.email} with a new
           password. Are you sure you want to proceed?
         </p>
@@ -702,10 +707,10 @@ export default function UsersTable({
         // onOpen={onOpen}
       >
         <p className="-mt-4 text-sm leading-5 text-foreground/70">
-          Are you sure you want to reset{" "}
+          Are you sure you want to reset{' '}
           <code className="rounded-md bg-primary/10 p-0.5 px-2 font-medium text-primary-700">
             {`${selectedUser?.first_name} ${selectedUser?.last_name}`}&apos;s
-          </code>{" "}
+          </code>{' '}
           password? <br /> An email will be sent with the new default password.
         </p>
       </PromptModal>
@@ -724,21 +729,21 @@ export default function UsersTable({
         className={"max-w-lg"}
       >
         <p className="-mt-4 text-sm leading-6 text-foreground/70">
-          You are about to remove{" "}
+          You are about to remove{' '}
           <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
             {`${selectedUser?.first_name} ${selectedUser?.last_name}`}
-          </code>{" "}
-          from this {isUsersRoute ? "account" : "workspace"}.?
+          </code>{' '}
+          from this {isUsersRoute ? 'account' : 'workspace'}.?
         </p>
       </PromptModal>
 
       {/* CREATE  A NEW USER  */}
       <CreateOrUpdateUser
-        isUsersRoute={isUsersRoute}
         isOpen={(isEditingUser || isCreateUser) && isOpen}
+        isUsersRoute={isUsersRoute}
+        roles={USER_ROLES}
         workspaceID={workspaceID}
         onClose={handleClosePrompts}
-        roles={USER_ROLES}
       />
     </>
   );
@@ -769,7 +774,7 @@ export function UserAvatarComponent({
   return (
     <div
       className={cn(
-        "flex max-w-max cursor-pointer items-center justify-start gap-4 transition-all duration-200 ease-in-out",
+        'flex max-w-max cursor-pointer items-center justify-start gap-4 transition-all duration-200 ease-in-out',
         wrapper,
       )}
       onClick={(e) => {
@@ -780,7 +785,7 @@ export function UserAvatarComponent({
       {src ? (
         <Avatar
           alt={`Image - ${firstName} ${lastName}`}
-          className={cn("h-9 w-9 flex-none rounded-xl bg-gray-50", avatar)}
+          className={cn('h-9 w-9 flex-none rounded-xl bg-gray-50', avatar)}
           height={200}
           src={src}
           width={200}
@@ -794,11 +799,11 @@ export function UserAvatarComponent({
       <div className="flex min-w-[120px] flex-col items-start">
         <p
           className={cn(
-            "text-base font-semibold leading-6 text-foreground/80",
+            'text-base font-semibold leading-6 text-foreground/80',
             {},
           )}
         >{`${firstName} ${lastName}`}</p>
-        <p className={cn("text-[11px] font-medium text-foreground/50", {})}>
+        <p className={cn('text-[11px] font-medium text-foreground/50', {})}>
           {email}
         </p>
       </div>

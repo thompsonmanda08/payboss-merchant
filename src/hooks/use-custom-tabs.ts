@@ -1,5 +1,5 @@
-"use client";
-import { useState } from "react";
+'use client';
+import { useState } from 'react';
 
 export default function useCustomTabsHook(tabs: React.ReactNode[]) {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);

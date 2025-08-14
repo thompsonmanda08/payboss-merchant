@@ -1,6 +1,6 @@
-"use client";
-import { useEffect, useMemo, useState } from "react";
-import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+'use client';
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { Cog6ToothIcon } from '@heroicons/react/24/solid';
 import {
   Spinner,
   useDisclosure,
@@ -18,47 +18,44 @@ import {
   DropdownItem,
   DropdownSection,
   Link,
-  Code,
   Chip,
-} from "@heroui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+} from '@heroui/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  CreditCard,
-  DollarSign,
   Edit2Icon,
   Settings,
   SquarePenIcon,
   TicketPercentIcon,
   UserCog,
   Users2,
-} from "lucide-react";
-import { Cog6ToothIcon } from "@heroicons/react/24/solid";
+} from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { cn, formatCurrency, formatDate } from "@/lib/utils";
-import CustomTable from "@/components/tables/table";
-import {
-  useWorkspaceInit,
-  useWorkspaceSubscriptions,
-} from "@/hooks/use-query-data";
-import { QUERY_KEYS } from "@/lib/constants";
-import { getCollectionLatestTransactions } from "@/app/_actions/transaction-actions";
-import Card from "@/components/base/custom-card";
-import CardHeader from "@/components/base/card-header";
-import { SUBSCRIPTION_PAYMENT_COLUMNS } from "@/lib/table-columns";
-import { Input } from "@/components/ui/input-field";
+import { uploadCheckoutLogoFile as uploadMembersListFile } from '@/app/_actions/pocketbase-actions';
 import {
   createSubscriptionPack,
   updateSubscriptionPack,
   uploadSubscriptionMembers,
-} from "@/app/_actions/subscription-actions";
-import { SingleFileDropzone } from "@/components/base/file-dropzone";
-import { uploadCheckoutLogoFile as uploadMembersListFile } from "@/app/_actions/pocketbase-actions";
-import SoftBoxIcon from "@/components/base/soft-box-icon";
-import PromptModal from "@/components/modals/prompt-modal";
+} from '@/app/_actions/subscription-actions';
+import { getCollectionLatestTransactions } from '@/app/_actions/transaction-actions';
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import { SingleFileDropzone } from '@/components/base/file-dropzone';
+import SoftBoxIcon from '@/components/base/soft-box-icon';
+import PromptModal from '@/components/modals/prompt-modal';
+import CustomTable from "@/components/tables/table";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import {
+  useWorkspaceInit,
+  useWorkspaceSubscriptions,
+} from '@/hooks/use-query-data';
+import { QUERY_KEYS } from '@/lib/constants';
+import { SUBSCRIPTION_PAYMENT_COLUMNS } from '@/lib/table-columns';
+import { cn, formatCurrency, formatDate } from '@/lib/utils';
 
-type ActionKey = "create-new-sub" | "update-sub" | "delete-sub" | "add-members";
+type ActionKey = 'create-new-sub' | 'update-sub' | 'delete-sub' | 'add-members';
 
 const Subscriptions = () => {
   const params = useParams();
@@ -74,22 +71,22 @@ const Subscriptions = () => {
     isLoading: false,
     isUpdating: false,
     members_file: null as File | null,
-    members_file_name: "",
-    members_url: "",
-    services: [{ name: "", price: 0, key: "" }],
+    members_file_name: '',
+    members_url: '',
+    services: [{ name: '', price: 0, key: '' }],
   });
 
   const [selectedServicePack, setSelectedServicePack] = useState({
-    name: "",
+    name: '',
     price: 0,
-    key: "",
+    key: '',
     isUpdating: false,
     isDeleting: false,
     isLoading: false,
   });
 
   const [selectedActionKey, setSelectedActionKey] =
-    useState<ActionKey>("create-new-sub");
+    useState<ActionKey>('create-new-sub');
 
   function updateServiceData(fields: Partial<typeof selectedServicePack>) {
     setSelectedServicePack((prev) => {
@@ -122,29 +119,29 @@ const Subscriptions = () => {
     setFormData({
       isLoading: false,
       isUpdating: false,
-      services: [{ name: "", price: 0, key: "" }],
+      services: [{ name: '', price: 0, key: '' }],
     } as typeof formData);
 
     setSelectedServicePack({
-      name: "",
+      name: '',
       isLoading: false,
       isUpdating: false,
     } as typeof selectedServicePack);
 
-    setSelectedActionKey("" as ActionKey);
+    setSelectedActionKey('' as ActionKey);
   }
 
   const thirtyDaysAgoDate = new Date();
 
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
-  const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
-  const end_date = formatDate(new Date(), "YYYY-MM-DD");
+  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
+  const end_date = formatDate(new Date(), 'YYYY-MM-DD');
 
   // HANDLE FETCH SUBS COLLECTION LATEST TRANSACTION DATA
   const mutation = useMutation({
     mutationKey: [QUERY_KEYS.API_COLLECTIONS, workspaceID],
     mutationFn: (dateRange) =>
-      getCollectionLatestTransactions(workspaceID, "subscription", dateRange),
+      getCollectionLatestTransactions(workspaceID, 'subscription', dateRange),
   });
 
   const LATEST_TRANSACTIONS = useMemo(() => {
@@ -159,7 +156,8 @@ const Subscriptions = () => {
     return servicePacks
       ?.map((service: any) => {
         if (service.key !== selectedPack?.key) return service;
-        return action === "delete-sub" ? null : { ...service, ...selectedPack };
+
+        return action === 'delete-sub' ? null : { ...service, ...selectedPack };
       })
       ?.filter(Boolean);
   }
@@ -170,7 +168,7 @@ const Subscriptions = () => {
     );
 
     const isValidNames = payload?.services?.every(
-      (service: any) => service.name !== "",
+      (service: any) => service.name !== '',
     );
 
     const isUniqueValidKeys = (() => {
@@ -184,9 +182,9 @@ const Subscriptions = () => {
 
     if (payload == null || payload.services == null) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "There are no subscriptions being edited",
+        title: 'Error',
+        color: 'danger',
+        description: 'There are no subscriptions being edited',
       });
 
       return false;
@@ -194,28 +192,31 @@ const Subscriptions = () => {
 
     if (!isValidPrices) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "All prices must be greater than 0",
+        title: 'Error',
+        color: 'danger',
+        description: 'All prices must be greater than 0',
       });
+
       return false;
     }
 
     if (!isValidNames) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "All names must be provided",
+        title: 'Error',
+        color: 'danger',
+        description: 'All names must be provided',
       });
+
       return false;
     }
 
     if (!isUniqueValidKeys) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "All keys must be unique and valid!",
+        title: 'Error',
+        color: 'danger',
+        description: 'All keys must be unique and valid!',
       });
+
       return false;
     }
 
@@ -225,9 +226,9 @@ const Subscriptions = () => {
   async function handleCreateSubscription() {
     if (!permissions?.update || !permissions?.delete) {
       addToast({
-        color: "danger",
-        title: "NOT ALLOWED",
-        description: "Only admins are allowed to create subscriptions.",
+        color: 'danger',
+        title: 'NOT ALLOWED',
+        description: 'Only admins are allowed to create subscriptions.',
       });
       handleClose();
 
@@ -244,8 +245,8 @@ const Subscriptions = () => {
 
     if (!response?.success) {
       addToast({
-        title: "Error",
-        color: "danger",
+        title: 'Error',
+        color: 'danger',
         description: response?.message,
       });
       updateFormData({ isLoading: false });
@@ -258,7 +259,7 @@ const Subscriptions = () => {
     });
 
     addToast({
-      color: "success",
+      color: 'success',
       title: ACTION?.[selectedActionKey]?.success.title,
       description: ACTION?.[selectedActionKey]?.success.description,
     });
@@ -271,9 +272,9 @@ const Subscriptions = () => {
   async function handleUpdateOrAddMembers() {
     if (!permissions?.update || !permissions?.delete) {
       addToast({
-        color: "danger",
-        title: "NOT ALLOWED",
-        description: "Only admins are allowed to add members.",
+        color: 'danger',
+        title: 'NOT ALLOWED',
+        description: 'Only admins are allowed to add members.',
       });
       handleClose();
 
@@ -282,10 +283,11 @@ const Subscriptions = () => {
 
     if (!formData?.members_url) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Please upload a list of members!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Please upload a list of members!',
       });
+
       return;
     }
 
@@ -298,8 +300,8 @@ const Subscriptions = () => {
 
     if (!response?.success) {
       addToast({
-        title: "Error",
-        color: "danger",
+        title: 'Error',
+        color: 'danger',
         description: response?.message,
       });
       updateFormData({ isLoading: false });
@@ -308,11 +310,11 @@ const Subscriptions = () => {
     }
 
     queryClient.invalidateQueries({
-      queryKey: ["MEMBERS", workspaceID],
+      queryKey: ['MEMBERS', workspaceID],
     });
 
     addToast({
-      color: "success",
+      color: 'success',
       title: ACTION?.[selectedActionKey]?.success.title,
       description: ACTION?.[selectedActionKey]?.success.description,
     });
@@ -325,9 +327,9 @@ const Subscriptions = () => {
   async function handleUpdateSubscription() {
     if (!permissions?.update || !permissions?.delete) {
       addToast({
-        color: "danger",
-        title: "NOT ALLOWED",
-        description: "Only admins are allowed to update subscriptions.",
+        color: 'danger',
+        title: 'NOT ALLOWED',
+        description: 'Only admins are allowed to update subscriptions.',
       });
       handleClose();
 
@@ -354,8 +356,8 @@ const Subscriptions = () => {
 
     if (!response?.success) {
       addToast({
-        title: "Error",
-        color: "danger",
+        title: 'Error',
+        color: 'danger',
         description: response?.message,
       });
       updateFormData({ isLoading: false });
@@ -369,7 +371,7 @@ const Subscriptions = () => {
     });
 
     addToast({
-      color: "success",
+      color: 'success',
       title: ACTION?.[selectedActionKey]?.success.title,
       description: ACTION?.[selectedActionKey]?.success.description,
     });
@@ -383,12 +385,12 @@ const Subscriptions = () => {
   function handleSelectedAction(key: ActionKey) {
     setSelectedActionKey(key);
 
-    if (key == "create-new-sub") {
+    if (key == 'create-new-sub') {
       updateServiceData({ isUpdating: false });
       onOpen();
     }
 
-    if (key == "update-sub") {
+    if (key == 'update-sub') {
       setFormData((prev) => ({
         ...prev,
         isUpdating: true,
@@ -397,7 +399,7 @@ const Subscriptions = () => {
       onOpen();
     }
 
-    if (key == "add-members") {
+    if (key == 'add-members') {
       onOpen();
     }
 
@@ -407,13 +409,13 @@ const Subscriptions = () => {
   async function handleFileUpload(file: File, recordID: string) {
     updateFormData({ isLoading: true });
 
-    let response = await uploadMembersListFile(file, recordID);
+    const response = await uploadMembersListFile(file, recordID);
 
     if (response?.success) {
       addToast({
-        color: "success",
-        title: "Completed!",
-        description: "Members list uploaded successfully!",
+        color: 'success',
+        title: 'Completed!',
+        description: 'Members list uploaded successfully!',
       });
       updateFormData({
         members_file: file,
@@ -427,9 +429,9 @@ const Subscriptions = () => {
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "Failed to upload file.",
+      title: 'Error',
+      color: 'danger',
+      description: 'Failed to upload file.',
     });
     updateFormData({ isLoading: false });
 
@@ -444,56 +446,56 @@ const Subscriptions = () => {
   }, []);
 
   const ACTION: Record<ActionKey, any> = {
-    "create-new-sub": {
+    'create-new-sub': {
       prompt: {
-        title: "Create New Subscription",
-        description: "Subscription packs that your members can pay for",
+        title: 'Create New Subscription',
+        description: 'Subscription packs that your members can pay for',
       },
       success: {
-        title: "Success",
-        description: "Subscription created successfully!",
+        title: 'Success',
+        description: 'Subscription created successfully!',
       },
       onConfirm: handleCreateSubscription,
-      buttonText: "Create",
+      buttonText: 'Create',
     },
 
-    "update-sub": {
+    'update-sub': {
       prompt: {
-        title: "Update Subscriptions",
-        description: "Modify subscriptions that your members pay for",
+        title: 'Update Subscriptions',
+        description: 'Modify subscriptions that your members pay for',
       },
       success: {
-        title: "Success",
-        description: `Subscription${selectedServicePack?.isUpdating ? "" : "s"} updated successfully!`,
+        title: 'Success',
+        description: `Subscription${selectedServicePack?.isUpdating ? '' : 's'} updated successfully!`,
       },
       onConfirm: handleUpdateSubscription,
-      buttonText: "Save",
+      buttonText: 'Save',
     },
 
-    "delete-sub": {
+    'delete-sub': {
       prompt: {
-        title: "Delete Subscription",
-        description: "Are you sure you want to delete this subscription?",
+        title: 'Delete Subscription',
+        description: 'Are you sure you want to delete this subscription?',
       },
       success: {
-        title: "Success",
-        description: "Subscription deleted successfully!",
+        title: 'Success',
+        description: 'Subscription deleted successfully!',
       },
       onConfirm: handleUpdateSubscription,
-      buttonText: "Delete",
+      buttonText: 'Delete',
     },
 
-    "add-members": {
+    'add-members': {
       prompt: {
-        title: "Add Members",
-        description: "Are you sure you want to add members?",
+        title: 'Add Members',
+        description: 'Are you sure you want to add members?',
       },
       success: {
-        title: "Success",
-        description: "Members added successfully!",
+        title: 'Success',
+        description: 'Members added successfully!',
       },
       onConfirm: handleUpdateOrAddMembers,
-      buttonText: "Save",
+      buttonText: 'Save',
     },
   };
 
@@ -504,20 +506,20 @@ const Subscriptions = () => {
           <div className="mb-8 flex flex-col sm:flex-row justify-between">
             <CardHeader
               classNames={{
-                titleClasses: "xl:text-2xl lg:text-xl font-bold",
-                infoClasses: "!text-sm xl:text-base",
+                titleClasses: 'xl:text-2xl lg:text-xl font-bold',
+                infoClasses: '!text-sm xl:text-base',
               }}
               infoText={
-                "Members will make payments to you by subscribing to the packages you create"
+                'Members will make payments to you by subscribing to the packages you create'
               }
-              title={"Subscriptions"}
+              title={'Subscriptions'}
             />
             <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
               {SERVICE_PACKS?.length == 0 && (
                 <Button
                   endContent={<PlusIcon className="h-5 w-5" />}
                   isDisabled={isLoading}
-                  onPress={() => handleSelectedAction("create-new-sub")}
+                  onPress={() => handleSelectedAction('create-new-sub')}
                 >
                   Create New
                 </Button>
@@ -548,7 +550,7 @@ const Subscriptions = () => {
                         startContent={
                           <SquarePenIcon
                             className={cn(
-                              "w-5 h-5 pointer-events-none flex-shrink-0",
+                              'w-5 h-5 pointer-events-none flex-shrink-0',
                             )}
                           />
                         }
@@ -561,7 +563,7 @@ const Subscriptions = () => {
                         startContent={
                           <PlusIcon
                             className={cn(
-                              "w-5 h-5 pointer-events-none flex-shrink-0",
+                              'w-5 h-5 pointer-events-none flex-shrink-0',
                             )}
                           />
                         }
@@ -574,7 +576,7 @@ const Subscriptions = () => {
                         startContent={
                           <Users2
                             className={cn(
-                              "w-5 h-5 pointer-events-none flex-shrink-0",
+                              'w-5 h-5 pointer-events-none flex-shrink-0',
                             )}
                           />
                         }
@@ -582,14 +584,14 @@ const Subscriptions = () => {
                         View Members
                       </DropdownItem>
 
-                      <DropdownSection title={"Danger zone"}>
+                      <DropdownSection title={'Danger zone'}>
                         <DropdownItem
                           key="delete-users"
                           isReadOnly
                           className="text-danger"
                           classNames={{
                             shortcut:
-                              "group-hover:text-white font-bold group-hover:border-white",
+                              'group-hover:text-white font-bold group-hover:border-white',
                           }}
                           color="danger"
                           description="Remove all members"
@@ -598,7 +600,7 @@ const Subscriptions = () => {
                           startContent={
                             <TrashIcon
                               className={
-                                "w-5 h-5 pointer-events-none flex-shrink-0 text-danger group-hover:text-white"
+                                'w-5 h-5 pointer-events-none flex-shrink-0 text-danger group-hover:text-white'
                               }
                             />
                           }
@@ -630,7 +632,7 @@ const Subscriptions = () => {
                     <div className="space-y-4">
                       <div className="flex items-center gap-2 justify-between">
                         <div className="flex gap-2">
-                          <SoftBoxIcon className={"w-10 h-10 p-1"}>
+                          <SoftBoxIcon className={'w-10 h-10 p-1'}>
                             <TicketPercentIcon className="text-white" />
                           </SoftBoxIcon>
                           <h3 className="text-[clamp(14px,2.5vw,14px)] font-semibold text-primary-900 line-clamp-2 group-hover:text-blue-900 transition-colors duration-300">
@@ -641,7 +643,7 @@ const Subscriptions = () => {
                           <button
                             className="p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors duration-200 hover:scale-105"
                             onClick={() => {
-                              setSelectedActionKey("update-sub");
+                              setSelectedActionKey('update-sub');
                               updateServiceData({
                                 isUpdating: true,
                                 ...subscription,
@@ -652,15 +654,15 @@ const Subscriptions = () => {
                             <Edit2Icon className="w-4 h-4" />
                           </button>
                           <button
+                            className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors duration-200 hover:scale-105"
                             onClick={() => {
-                              setSelectedActionKey("delete-sub");
+                              setSelectedActionKey('delete-sub');
                               updateServiceData({
                                 isUpdating: true,
                                 ...subscription,
                               });
                               onOpen();
                             }}
-                            className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors duration-200 hover:scale-105"
                           >
                             <TrashIcon className="w-4 h-4" />
                           </button>
@@ -700,16 +702,16 @@ const Subscriptions = () => {
         <Card>
           <div className="flex w-full items-center justify-between gap-4">
             <CardHeader
-              className={"mb-4"}
+              className={'mb-4'}
               infoText={
-                "Subscription payment transactions made to your workspace wallet in the last 30days."
+                'Subscription payment transactions made to your workspace wallet in the last 30days.'
               }
-              title={"Recent Transactions"}
+              title={'Recent Transactions'}
             />
           </div>
           <CustomTable
             // removeWrapper
-            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
+            classNames={{ wrapper: 'shadow-none px-0 mx-0' }}
             columns={SUBSCRIPTION_PAYMENT_COLUMNS}
             isLoading={mutation.isPending}
             rows={LATEST_TRANSACTIONS}
@@ -719,14 +721,14 @@ const Subscriptions = () => {
 
       <Modal
         backdrop="blur"
-        className={"z-[999]"}
+        className={'z-[999]'}
         isDismissable={false}
         isOpen={
           (isOpen || selectedServicePack?.isUpdating) &&
-          selectedActionKey !== "delete-sub"
+          selectedActionKey !== 'delete-sub'
         }
         placement="bottom-center"
-        size={!selectedServicePack?.isUpdating ? "3xl" : undefined}
+        size={!selectedServicePack?.isUpdating ? '3xl' : undefined}
         onClose={handleClose}
       >
         <ModalContent>
@@ -740,18 +742,18 @@ const Subscriptions = () => {
           </ModalHeader>
           <ModalBody>
             {selectedServicePack?.isUpdating &&
-            selectedActionKey == "update-sub" ? (
+            selectedActionKey == 'update-sub' ? (
               <EditSubscriptionFields
                 formData={selectedServicePack}
                 updateFormData={updateServiceData}
               />
-            ) : selectedActionKey == "create-new-sub" ||
-              selectedActionKey == "update-sub" ? (
+            ) : selectedActionKey == 'create-new-sub' ||
+              selectedActionKey == 'update-sub' ? (
               <SubscriptionPacks
                 formData={formData}
                 updateFormData={updateFormData}
               />
-            ) : selectedActionKey == "add-members" ? (
+            ) : selectedActionKey == 'add-members' ? (
               <UploadMembersCSV
                 formData={formData}
                 handleFileUpload={handleFileUpload}
@@ -790,20 +792,20 @@ const Subscriptions = () => {
         title={"Delete Subscription?"}
         onClose={handleClose}
         onConfirm={handleUpdateSubscription}
-        className={"max-w-md"}
+        className={'max-w-md'}
         // onOpen={onOpen}
       >
         <div className="-mt-3 text-sm leading-6 text-foreground/70">
           <Chip className="rounded-md w-full my-1">
             <strong>
-              {selectedServicePack?.name} -{" "}
+              {selectedServicePack?.name} -{' '}
               {formatCurrency(selectedServicePack?.price)}
             </strong>
-          </Chip>{" "}
+          </Chip>{' '}
           <br />
           <p>
             The selected subscription pack will be deleted from your
-            subscriptions.{" "}
+            subscriptions.{' '}
             <span className="text-red-500">
               This action cannot be reversed!
             </span>
@@ -826,7 +828,7 @@ function EditSubscriptionFields({
       <Input
         required
         classNames={{
-          wrapper: "col-span-5",
+          wrapper: 'col-span-5',
         }}
         label="Name"
         name={`service-pack-name`}
@@ -836,10 +838,10 @@ function EditSubscriptionFields({
       />
       <Input
         required
+        isDisabled={true}
         label="Key (Identifier)"
         name={`service-pack-key`}
         value={formData?.key}
-        isDisabled={true}
         onChange={(e) => updateFormData({ key: e.target.value })}
       />
       <Input
@@ -866,18 +868,18 @@ function UploadMembersCSV({
     <div className="-mt-4">
       <label
         className={cn(
-          "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70",
+          'pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70',
         )}
       >
         Members List File
       </label>
       <SingleFileDropzone
+        file={formData?.members_file}
         isLoading={formData?.isLoading}
         isUploaded={formData?.recordID != undefined}
-        file={formData?.members_file}
         otherAcceptedFiles={{
-          "application/vnd.ms-excel": [],
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+          'application/vnd.ms-excel': [],
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
             [],
         }}
         onChange={async (file) =>
@@ -885,14 +887,14 @@ function UploadMembersCSV({
         }
       />
       <p className="mt-2 text-xs font-medium text-gray-500 lg:text-[13px]">
-        Click here to{" "}
+        Click here to{' '}
         <Link
           className="font-bold text-sm text-primary hover:underline hover:underline-offset-2"
-          download={"members_list_template.xlsx"}
-          href={"/members_list_template.xlsx"}
+          download={'members_list_template.xlsx'}
+          href={'/members_list_template.xlsx'}
         >
           download
-        </Link>{" "}
+        </Link>{' '}
         template file for a members list
       </p>
     </div>
@@ -907,20 +909,20 @@ function SubscriptionPacks({
   updateFormData: any;
 }) {
   const [lineItems, setLineItems] = useState(
-    formData?.services || [{ name: "", price: 0, key: "" }],
+    formData?.services || [{ name: '', price: 0, key: '' }],
   );
 
   const addLineItem = () => {
     if (
-      formData?.services[formData.services.length - 1]?.name === "" ||
-      formData?.services[formData.services.length - 1]?.key === "" ||
+      formData?.services[formData.services.length - 1]?.name === '' ||
+      formData?.services[formData.services.length - 1]?.key === '' ||
       formData?.services[formData.services.length - 1]?.price === 0
     ) {
       return;
     }
 
     // Both updates are good, but they need to happen after the check based on formData.services
-    const newLineItem = { name: "", price: 0, key: "" };
+    const newLineItem = { name: '', price: 0, key: '' };
 
     setLineItems((prev: any) => [...prev, newLineItem]); // Update local state for rendering
     updateFormData({
@@ -964,13 +966,13 @@ function SubscriptionPacks({
       <CardBody className="max-h-[600px] px-0 mx-0 overflow-y-auto gap-4">
         {lineItems?.map((_: any, index: number) => (
           <div
-            key={"pack" + index}
+            key={'pack' + index}
             className="grid grid-cols-1 md:grid-cols-9 gap-2 items-end border-b pb-4 pt-2 -mt-4 last:border-0"
           >
             <Input
               required
               classNames={{
-                wrapper: "col-span-3",
+                wrapper: 'col-span-3',
               }}
               label="Name"
               name={`services.${index}.name`}
@@ -992,13 +994,13 @@ function SubscriptionPacks({
             <Input
               required
               classNames={{
-                wrapper: "col-span-3",
+                wrapper: 'col-span-3',
               }}
+              errorText="Key must be unique"
+              isInvalid={!isUniqueKey(formData?.services[index]?.key, index)}
               label="Key"
               name={`services.${index}.key`}
               placeholder="Identifier Key"
-              isInvalid={!isUniqueKey(formData?.services[index]?.key, index)}
-              errorText="Key must be unique"
               value={formData?.services[index]?.key}
               onChange={(e) => {
                 updateFormData({
@@ -1016,7 +1018,7 @@ function SubscriptionPacks({
             <Input
               required
               classNames={{
-                wrapper: "col-span-2",
+                wrapper: 'col-span-2',
               }}
               label="Price"
               min={1}
@@ -1037,7 +1039,7 @@ function SubscriptionPacks({
               }}
             />
 
-            <div className={"flex gap-2 col-span-1"}>
+            <div className={'flex gap-2 col-span-1'}>
               <Button
                 isIconOnly
                 color="danger"

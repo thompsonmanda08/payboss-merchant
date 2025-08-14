@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Skeleton } from "@heroui/react";
+import { Skeleton } from '@heroui/react';
 
 export default function AccountVerificationLoading({}) {
   return (

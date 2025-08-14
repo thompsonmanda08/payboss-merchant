@@ -49,63 +49,63 @@
 //   );
 // }
 
-"use client";
+'use client';
 
-import type React from "react";
-
-import { useState, useEffect } from "react";
+import { Card, CardBody } from '@heroui/react';
 import {
   ArrowLeft,
   Home,
-  Search,
   RefreshCw,
   Mail,
   MessageCircle,
   Zap,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
-import { Card, CardBody } from "@heroui/react";
+} from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
+import { Button } from '@/components/ui/button';
+
+import type React from 'react';
 
 const errorMessages = {
   404: {
-    title: "Page Not Found",
+    title: 'Page Not Found',
     subtitle:
       "The page you're looking for seems to have wandered off into the digital wilderness.",
-    emoji: "🔍",
+    emoji: '🔍',
   },
   500: {
-    title: "Server Error",
+    title: 'Server Error',
     subtitle: "Our servers are having a moment. We're on it!",
-    emoji: "⚡",
+    emoji: '⚡',
   },
   403: {
-    title: "Access Denied",
+    title: 'Access Denied',
     subtitle: "You don't have permission to access this resource.",
-    emoji: "🔒",
+    emoji: '🔒',
   },
   default: {
-    title: "Something Went Wrong",
+    title: 'Something Went Wrong',
     subtitle:
       "Don't worry, even the best explorers sometimes take a wrong turn.",
-    emoji: "🚀",
+    emoji: '🚀',
   },
 };
 
 const quickLinks = [
-  { name: "Home", href: "/", icon: Home },
-  { name: "Dashboard", href: "/dashboard", icon: Zap },
-  { name: "Support", href: "/support", icon: MessageCircle },
-  { name: "Contact", href: "/contact", icon: Mail },
+  { name: 'Home', href: '/', icon: Home },
+  { name: 'Dashboard', href: '/dashboard', icon: Zap },
+  { name: 'Support', href: '/support', icon: MessageCircle },
+  { name: 'Contact', href: '/contact', icon: Mail },
 ];
 
 export default function ErrorPage() {
   const params = useParams();
-  const code = params.code || "404";
+  const code = params.code || '404';
   const [errorCode, setErrorCode] = useState<keyof typeof errorMessages>(
     code as keyof typeof errorMessages,
   );
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -115,8 +115,10 @@ export default function ErrorPage() {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const handleRefresh = () => {
@@ -143,7 +145,7 @@ export default function ErrorPage() {
           style={{
             left: mousePosition.x / 10,
             top: mousePosition.y / 10,
-            transform: "translate(-50%, -50%)",
+            transform: 'translate(-50%, -50%)',
           }}
         />
         <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-200/30 dark:bg-blue-500/20 rounded-full blur-2xl animate-bounce" />
@@ -154,14 +156,14 @@ export default function ErrorPage() {
         {/* Error Code Selector */}
         <div className="mb-8 flex gap-2 flex-wrap justify-center">
           {Object.keys(errorMessages)
-            .filter((key) => key !== "default")
+            .filter((key) => key !== 'default')
             .map((code) => (
               <Button
                 key={code}
-                variant={errorCode === code ? "solid" : "bordered"}
-                size="sm"
-                onClick={() => setErrorCode(code as keyof typeof errorMessages)}
                 className="text-xs"
+                size="sm"
+                variant={errorCode === code ? 'solid' : 'bordered'}
+                onClick={() => setErrorCode(code as keyof typeof errorMessages)}
               >
                 {code}
               </Button>
@@ -187,7 +189,7 @@ export default function ErrorPage() {
           </p>
 
           {/* Search Bar */}
-          <form onSubmit={handleSearch} className="mb-8">
+          <form className="mb-8" onSubmit={handleSearch}>
             <div className="flex max-w-md mx-auto gap-2">
               {/* <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -199,7 +201,7 @@ export default function ErrorPage() {
                   className="pl-10 h-12 text-base"
                 />
               </div> */}
-              <Button type="submit" size="lg" className="h-12 px-6">
+              <Button className="h-12 px-6" size="lg" type="submit">
                 Go
               </Button>
             </div>
@@ -208,36 +210,36 @@ export default function ErrorPage() {
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-4 justify-center mb-12">
             <Button
-              onClick={() => window.history.back()}
-              variant="bordered"
-              size="lg"
               className="h-12 px-6"
+              size="lg"
               startContent={<ArrowLeft className="w-4 h-4 mr-2" />}
+              variant="bordered"
+              onClick={() => window.history.back()}
             >
               Go Back
             </Button>
 
             <Button
-              onClick={handleRefresh}
-              variant="bordered"
-              size="lg"
+              className="h-12 px-6 bg-transparent"
               disabled={isRefreshing}
               isLoading={isRefreshing}
               loadingText="Refreshing..."
-              className="h-12 px-6 bg-transparent"
+              size="lg"
               startContent={
                 <RefreshCw
-                  className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+                  className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`}
                 />
               }
+              variant="bordered"
+              onClick={handleRefresh}
             >
               Refresh
             </Button>
 
             <Button
-              onClick={() => (window.location.href = "/")}
-              size="lg"
               className="h-12 px-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+              size="lg"
+              onClick={() => (window.location.href = '/')}
             >
               <Home className="w-4 h-4 mr-2" />
               Go Home
@@ -255,8 +257,8 @@ export default function ErrorPage() {
               {quickLinks.map((link) => (
                 <Button
                   key={link.name}
-                  variant="ghost"
                   className="h-20 flex-col gap-2 hover:bg-purple-100 dark:hover:bg-purple-900/50 transition-all duration-300 hover:scale-105"
+                  variant="ghost"
                   onClick={() => (window.location.href = link.href)}
                 >
                   <link.icon className="w-6 h-6" />
@@ -270,10 +272,10 @@ export default function ErrorPage() {
         {/* Help Text */}
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Still need help?{" "}
+            Still need help?{' '}
             <button
-              onClick={() => (window.location.href = "/support")}
               className="text-purple-600 dark:text-purple-400 hover:underline font-medium"
+              onClick={() => (window.location.href = '/support')}
             >
               Contact our support team
             </button>

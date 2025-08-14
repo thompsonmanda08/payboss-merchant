@@ -1,10 +1,10 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from 'next/cache';
 
-import authenticatedApiClient from "@/lib/api-config";
-import { apiClient } from "@/lib/utils";
-import { APIResponse } from "@/types";
+import authenticatedApiClient from '@/lib/api-config';
+import { apiClient } from '@/lib/utils';
+import { APIResponse } from '@/types';
 
 export async function generateCheckoutURL(
   workspaceID: string,
@@ -13,10 +13,10 @@ export async function generateCheckoutURL(
   if (!workspaceID) {
     return {
       success: false,
-      message: "Workspace ID is required",
+      message: 'Workspace ID is required',
       data: null,
       status: 400,
-      statusText: "BAD REQUEST",
+      statusText: 'BAD REQUEST',
     };
   }
 
@@ -24,7 +24,7 @@ export async function generateCheckoutURL(
 
   try {
     const res = await authenticatedApiClient({
-      method: "POST",
+      method: 'POST',
       url,
       data: checkoutData,
     });
@@ -41,7 +41,7 @@ export async function generateCheckoutURL(
     };
   } catch (error: Error | any) {
     console.error({
-      endpoint: "POST | CHECKOUT URL GEN ~ " + url,
+      endpoint: 'POST | CHECKOUT URL GEN ~ ' + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -54,7 +54,7 @@ export async function generateCheckoutURL(
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "No Server Response",
+        'No Server Response',
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -69,10 +69,10 @@ export async function updateCheckoutURL(
   if (!checkoutID || !workspaceID) {
     return {
       success: false,
-      message: "Checkout/Workspace ID is missing",
+      message: 'Checkout/Workspace ID is missing',
       data: null,
       status: 400,
-      statusText: "BAD REQUEST",
+      statusText: 'BAD REQUEST',
     };
   }
 
@@ -80,7 +80,7 @@ export async function updateCheckoutURL(
 
   try {
     const res = await authenticatedApiClient({
-      method: "PATCH",
+      method: 'PATCH',
       url,
       data: checkoutData,
     });
@@ -94,7 +94,7 @@ export async function updateCheckoutURL(
     };
   } catch (error: Error | any) {
     console.error({
-      endpoint: "PATCH | CHECKOUT URL DATA ~ " + url,
+      endpoint: 'PATCH | CHECKOUT URL DATA ~ ' + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -107,7 +107,7 @@ export async function updateCheckoutURL(
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "No Server Response",
+        'No Server Response',
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -121,10 +121,10 @@ export async function getCheckoutURL(
   if (!workspaceID) {
     return {
       success: false,
-      message: "Workspace ID is required",
+      message: 'Workspace ID is required',
       data: null,
       status: 400,
-      statusText: "BAD REQUEST",
+      statusText: 'BAD REQUEST',
     };
   }
 
@@ -142,7 +142,7 @@ export async function getCheckoutURL(
     };
   } catch (error: Error | any) {
     console.error({
-      endpoint: "GET | CHECKOUT URL ~ " + url,
+      endpoint: 'GET | CHECKOUT URL ~ ' + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -155,7 +155,7 @@ export async function getCheckoutURL(
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "No Server Response",
+        'No Server Response',
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -170,10 +170,10 @@ export async function createInvoice(
   if (!workspaceID) {
     return {
       success: false,
-      message: "Workspace ID is required",
+      message: 'Workspace ID is required',
       data: null,
       status: 400,
-      statusText: "BAD REQUEST",
+      statusText: 'BAD REQUEST',
     };
   }
 
@@ -183,11 +183,11 @@ export async function createInvoice(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: formData,
     });
 
-    revalidatePath("/dashboard/[workspaceID]/collections/invoicing", "page");
+    revalidatePath('/dashboard/[workspaceID]/collections/invoicing', 'page');
 
     return {
       success: true,
@@ -198,7 +198,7 @@ export async function createInvoice(
     };
   } catch (error: Error | any) {
     console.error({
-      endpoint: "POST | CREATE INVOICE ~ " + url,
+      endpoint: 'POST | CREATE INVOICE ~ ' + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -211,7 +211,7 @@ export async function createInvoice(
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "No Server Response",
+        'No Server Response',
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
@@ -223,10 +223,10 @@ export async function getInvoiceDetails(ID: string): Promise<APIResponse> {
   if (!ID) {
     return {
       success: false,
-      message: "INvoice ID is required",
+      message: 'INvoice ID is required',
       data: {},
       status: 400,
-      statusText: "BAD REQUEST",
+      statusText: 'BAD REQUEST',
     };
   }
 
@@ -244,7 +244,7 @@ export async function getInvoiceDetails(ID: string): Promise<APIResponse> {
     };
   } catch (error: Error | any) {
     console.error({
-      endpoint: "GET | INVOICE DETAILS ~ " + url,
+      endpoint: 'GET | INVOICE DETAILS ~ ' + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -257,7 +257,7 @@ export async function getInvoiceDetails(ID: string): Promise<APIResponse> {
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "No Server Response",
+        'No Server Response',
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

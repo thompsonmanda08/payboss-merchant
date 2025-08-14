@@ -39,7 +39,7 @@ export type User = {
 };
 
 export type AccountOwner = User & {
-  role: "owner";
+  role: 'owner';
   password: string;
   changePassword: string;
 };

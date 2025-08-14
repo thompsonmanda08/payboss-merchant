@@ -1,4 +1,4 @@
-import React, { Key } from "react";
+import { EyeIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import {
   Table,
   TableHeader,
@@ -9,41 +9,42 @@ import {
   Pagination,
   Tooltip,
   Chip,
-} from "@heroui/react";
-import { EyeIcon, FunnelIcon } from "@heroicons/react/24/outline";
-import { format } from "date-fns";
+} from '@heroui/react';
+import { format } from 'date-fns';
+import React, { Key } from 'react';
 
+import EmptyLogs from '@/components/base/empty-logs';
+import { Button } from '@/components/ui/button';
+import Loader from '@/components/ui/loader';
+import SelectField from '@/components/ui/select-field';
+import usePaymentsStore from '@/context/payment-store';
+import { useDebounce } from '@/hooks/use-debounce';
 import {
   SERVICE_PROVIDER_COLOR_MAP,
   TRANSACTION_STATUS_COLOR_MAP,
-} from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import usePaymentsStore from "@/context/payment-store";
-import Loader from "@/components/ui/loader";
-import SelectField from "@/components/ui/select-field";
-import EmptyLogs from "@/components/base/empty-logs";
-import Search from "../ui/search";
-import { SingleSelectionDropdown } from "../ui/dropdown-button";
-import { useDebounce } from "@/hooks/use-debounce";
-import { Columns, ColumnType } from "@/lib/table-columns";
+} from '@/lib/constants';
+import { Columns, ColumnType } from '@/lib/table-columns';
+import { cn } from '@/lib/utils';
+
+import { SingleSelectionDropdown } from '../ui/dropdown-button';
+import Search from '../ui/search';
 
 const STATUSES = [
   {
-    name: "Successful",
-    uid: "successful",
+    name: 'Successful',
+    uid: 'successful',
   },
   {
-    name: "Failed",
-    uid: "failed",
+    name: 'Failed',
+    uid: 'failed',
   },
   {
-    name: "Pending",
-    uid: "pending",
+    name: 'Pending',
+    uid: 'pending',
   },
   {
-    name: "Submitted",
-    uid: "submitted",
+    name: 'Submitted',
+    uid: 'submitted',
   },
 ];
 
@@ -87,7 +88,7 @@ export default function CustomTable({
   isLoading,
   removeWrapper,
   onRowAction = () => {},
-  emptyCellValue = "N/A",
+  emptyCellValue = 'N/A',
   emptyDescriptionText,
   emptyTitleText,
   classNames,
@@ -115,11 +116,11 @@ export default function CustomTable({
     (column: ColumnType) => column?.uid,
   );
   const [visibleColumns, setVisibleColumns] = React.useState<
-    Set<string> | "all"
+    Set<string> | 'all'
   >(new Set(INITIAL_VISIBLE_COLUMNS));
 
-  const [filterValue, setFilterValue] = React.useState("");
-  const [statusFilter, setStatusFilter] = React.useState("all");
+  const [filterValue, setFilterValue] = React.useState('');
+  const [statusFilter, setStatusFilter] = React.useState('all');
   const debouncedSearchQuery = useDebounce(filterValue, 500);
 
   // HANDLE EXPLICIT SEARCH
@@ -128,13 +129,13 @@ export default function CustomTable({
       setFilterValue(value);
       setPage(1);
     } else {
-      setFilterValue("");
+      setFilterValue('');
     }
   }, []);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "amount",
-    direction: "ascending",
+    column: 'amount',
+    direction: 'ascending',
   });
 
   const pages = Math.ceil(rows?.length / rowsPerPage);
@@ -142,7 +143,7 @@ export default function CustomTable({
   const hasSearchFilter = Boolean(debouncedSearchQuery);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columns;
+    if (visibleColumns === 'all') return columns;
 
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid),
@@ -170,10 +171,10 @@ export default function CustomTable({
     }
 
     if (
-      statusFilter !== "all" &&
+      statusFilter !== 'all' &&
       Array.from(statusFilter).length !== STATUS_FILTERS.length
     ) {
-      let selectedFilters = Array.from(statusFilter);
+      const selectedFilters = Array.from(statusFilter);
 
       filteredRows = filteredRows.filter((row) =>
         selectedFilters.includes(row?.status),
@@ -196,7 +197,7 @@ export default function CustomTable({
       const second = b[sortDescriptor.column];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      return sortDescriptor.direction === 'descending' ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
@@ -204,34 +205,37 @@ export default function CustomTable({
     const cellValue = row[String(columnKey)];
 
     switch (columnKey) {
-      case "name":
+      case 'name':
         return (
-          <span className={cn("text-nowrap font-medium capitalize")}>
+          <span className={cn('text-nowrap font-medium capitalize')}>
             {cellValue}
           </span>
         );
-      case "created_at":
+
+      case 'created_at':
         return (
-          <span className={cn("text-nowrap capitalize")}>
-            {format(cellValue, "dd-MMM-yyyy hh:mm:ss a")}
+          <span className={cn('text-nowrap capitalize')}>
+            {format(cellValue, 'dd-MMM-yyyy hh:mm:ss a')}
           </span>
         );
-      case "status":
+
+      case 'status':
         return (
           <Chip
             className={cn(
-              "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
+              'h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white',
               TRANSACTION_STATUS_COLOR_MAP[
                 row.status as keyof typeof TRANSACTION_STATUS_COLOR_MAP
               ],
             )}
-            variant="light"
             size="sm"
+            variant="light"
           >
-            {cellValue.replace("_", " ")}
+            {cellValue.replace('_', ' ')}
           </Chip>
         );
-      case "service_provider":
+
+      case 'service_provider':
         return (
           <Tooltip
             closeDelay={500}
@@ -239,7 +243,7 @@ export default function CustomTable({
             content={
               row?.mno_status_description ||
               row?.status_description ||
-              "No description"
+              'No description'
             }
             delay={500}
             placement="right"
@@ -247,13 +251,13 @@ export default function CustomTable({
           >
             <Chip
               className={cn(
-                "mx-auto self-center capitalize",
+                'mx-auto self-center capitalize',
                 SERVICE_PROVIDER_COLOR_MAP[
                   row?.service_provider?.toLowerCase() as keyof typeof SERVICE_PROVIDER_COLOR_MAP
                 ],
               )}
               classNames={{
-                content: "font-semibold",
+                content: 'font-semibold',
               }}
               color="primary"
               variant="flat"
@@ -262,11 +266,12 @@ export default function CustomTable({
             </Chip>
           </Tooltip>
         );
-      case "link":
+
+      case 'link':
         return (
           <Button
             isIconOnly
-            className={"max-w-fit p-2"}
+            className={'max-w-fit p-2'}
             variant="light"
             onPress={() => {
               setSelectedBatch(row);
@@ -278,7 +283,7 @@ export default function CustomTable({
         );
 
       default:
-        return cellValue || emptyCellValue || "N/A";
+        return cellValue || emptyCellValue || 'N/A';
     }
   }, []);
 
@@ -291,7 +296,7 @@ export default function CustomTable({
     return (
       <div className="-mt-8 flex flex-1 items-center rounded-lg">
         <Loader
-          classNames={{ wrapper: "bg-foreground-200/50 rounded-xl h-full" }}
+          classNames={{ wrapper: 'bg-foreground-200/50 rounded-xl h-full' }}
           size={100}
         />
       </div>
@@ -310,26 +315,26 @@ export default function CustomTable({
           <div className="relative flex gap-3">
             {filters?.status?.enabled && (
               <SingleSelectionDropdown
-                startContent={<FunnelIcon className="h-5 w-5" />}
                 buttonVariant="flat"
-                className={"min-w-[160px]"}
+                className={'min-w-[160px]'}
                 closeOnSelect={false}
                 disallowEmptySelection={true}
                 dropdownItems={STATUSES}
-                name={"Status"}
+                name={'Status'}
                 selectedKeys={statusFilter}
                 selectionMode="multiple"
+                startContent={<FunnelIcon className="h-5 w-5" />}
                 onSelectionChange={setStatusFilter}
               />
             )}
             {filters?.columns && (
               <SingleSelectionDropdown
                 buttonVariant="flat"
-                className={"min-w-[160px]"}
+                className={'min-w-[160px]'}
                 closeOnSelect={false}
                 disallowEmptySelection={true}
                 dropdownItems={columns}
-                name={"Columns"}
+                name={'Columns'}
                 selectedKeys={visibleColumns}
                 selectionMode="multiple"
                 setSelectedKeys={setSelectedKeys}
@@ -368,11 +373,11 @@ export default function CustomTable({
           onChange={(page) => setPage(page)}
         />
         <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-foreground-400">
-          Rows per page:{" "}
+          Rows per page:{' '}
           <SelectField
             className="h-8 min-w-max bg-transparent text-sm text-foreground-400 outline-none"
             defaultValue={8}
-            options={["5", "8", "10", "16", "20"]}
+            options={['5', '8', '10', '16', '20']}
             placeholder={rowsPerPage.toString()}
             onChange={onRowsPerPageChange}
           />
@@ -385,12 +390,12 @@ export default function CustomTable({
     return (
       <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
         <EmptyLogs
-          className={"my-auto mt-16"}
-          classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
+          className={'my-auto mt-16'}
+          classNames={{ heading: 'text-sm text-foreground/50 font-medium' }}
           subTitle={
-            emptyDescriptionText || "you have no data to be displayed here."
+            emptyDescriptionText || 'you have no data to be displayed here.'
           }
-          title={emptyTitleText || "No data to display."}
+          title={emptyTitleText || 'No data to display.'}
         />
       </div>
     );
@@ -419,7 +424,6 @@ export default function CustomTable({
       // classNames={}
       // showSelectionCheckboxes
       // selectionMode="multiple"
-      topContent={topContent}
       bottomContent={bottomContent}
       className="max-h-[1080px]"
       removeWrapper={removeWrapper}
@@ -427,6 +431,7 @@ export default function CustomTable({
       selectionBehavior={selectionBehavior}
       selectionMode="single"
       sortDescriptor={sortDescriptor as any}
+      topContent={topContent}
       onRowAction={(key) => onRowAction(key)}
       onSelectionChange={setSelectedKeys}
       onSortChange={setSortDescriptor as any}
@@ -435,7 +440,7 @@ export default function CustomTable({
         {(column) => (
           <TableColumn
             key={column.uid}
-            align={column.uid === "status" ? "center" : "start"}
+            align={column.uid === 'status' ? 'center' : 'start'}
             allowsSorting={column.sortable}
           >
             {column.name}

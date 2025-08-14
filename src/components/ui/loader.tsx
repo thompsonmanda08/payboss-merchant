@@ -1,7 +1,7 @@
-"use client";
-import { cn } from "@/lib/utils";
+'use client';
+import { cn } from '@/lib/utils';
 
-import Spinner from "./custom-spinner";
+import Spinner from './custom-spinner';
 
 function Loader({
   size = 50,
@@ -28,23 +28,23 @@ function Loader({
   return (
     <div
       className={cn(
-        "grid min-h-80 min-w-80 flex-1 flex-grow place-items-center rounded-xl bg-card/10 py-8",
+        'grid min-h-80 min-w-80 flex-1 flex-grow place-items-center rounded-xl bg-card/10 py-8',
         wrapper,
       )}
     >
       <div
         className={cn(
-          "flex w-max flex-col items-center justify-start gap-4",
+          'flex w-max flex-col items-center justify-start gap-4',
           container,
           className,
-          { "flex-row": isLandscape },
+          { 'flex-row': isLandscape },
         )}
       >
         <Spinner className={spinner} color={color} size={size} />
         {loadingText && (
           <p
             className={cn(
-              "mt-4 max-w-sm break-words font-bold text-foreground/80",
+              'mt-4 max-w-sm break-words font-bold text-foreground/80',
               text,
             )}
           >

@@ -1,10 +1,10 @@
-"use server";
+'use server';
 
 import authenticatedApiClient, {
   handleError,
   successResponse,
-} from "@/lib/api-config";
-import { APIResponse } from "@/types";
+} from '@/lib/api-config';
+import { APIResponse } from '@/types';
 
 /**
  * Creates subscription packs for a given workspace.
@@ -25,14 +25,14 @@ export async function createSubscriptionPack(
 
   try {
     const res = await authenticatedApiClient({
-      method: "POST",
+      method: 'POST',
       url,
       data: formData,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | CREATE SUBSCRIPTION DATA", url);
+    return handleError(error, 'POST | CREATE SUBSCRIPTION DATA', url);
   }
 }
 
@@ -55,14 +55,14 @@ export async function updateSubscriptionPack(
 
   try {
     const res = await authenticatedApiClient({
-      method: "PATCH",
+      method: 'PATCH',
       url,
       data: formData,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "PATCH | UPDATE SUBSCRIPTION DATA", url);
+    return handleError(error, 'PATCH | UPDATE SUBSCRIPTION DATA', url);
   }
 }
 
@@ -83,7 +83,7 @@ export async function getSubscriptionPacks(
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | SUBSCRIPTION PACKS", url);
+    return handleError(error, 'GET | SUBSCRIPTION PACKS', url);
   }
 }
 
@@ -103,14 +103,14 @@ export async function uploadSubscriptionMembers(
 
   try {
     const res = await authenticatedApiClient({
-      method: "PATCH",
+      method: 'PATCH',
       url,
       data: formData,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    handleError(error, "PATCH | UPLOAD SUBSCRIPTION MEMBERS", url);
+    handleError(error, 'PATCH | UPLOAD SUBSCRIPTION MEMBERS', url);
   }
 }
 
@@ -133,14 +133,14 @@ export async function getSubscriptionMembers(
 
   try {
     const res = await authenticatedApiClient({
-      method: "PATCH",
+      method: 'PATCH',
       url,
       data: formData,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "PATCH | GET SUBSCRIPTION MEMBERS", url);
+    return handleError(error, 'PATCH | GET SUBSCRIPTION MEMBERS', url);
   }
 }
 
@@ -186,7 +186,7 @@ export async function validateSubscriptionMember(
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | VALIDATE SUBSCRIPTION MEMBER", url);
+    return handleError(error, 'GET | VALIDATE SUBSCRIPTION MEMBER', url);
   }
 }
 
@@ -204,7 +204,7 @@ export async function getSubscriptionInstitutions(): Promise<APIResponse> {
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | GET SUBSCRIPTION INSTITUTIONS", url);
+    return handleError(error, 'GET | GET SUBSCRIPTION INSTITUTIONS', url);
   }
 }
 
@@ -231,14 +231,14 @@ export async function startSubscriptionPayment(
 
   try {
     const res = await authenticatedApiClient({
-      method: "POST",
+      method: 'POST',
       url,
       data: formData,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | START SUBSCRIPTION PAYMENT", url);
+    return handleError(error, 'POST | START SUBSCRIPTION PAYMENT', url);
   }
 }
 
@@ -263,13 +263,13 @@ export async function continueSubscriptionPayment(
 
   try {
     const res = await authenticatedApiClient({
-      method: "PATCH",
+      method: 'PATCH',
       url,
       data: formData,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "PATCH | CONTINUE SUBSCRIPTION PAYMENT", url);
+    return handleError(error, 'PATCH | CONTINUE SUBSCRIPTION PAYMENT', url);
   }
 }

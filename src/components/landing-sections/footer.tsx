@@ -1,9 +1,9 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import { NavLink } from "@/components/base/nav-link";
-import Logo from "@/components/base/payboss-logo";
-import ThemeSwitcher from "@/components/base/theme-switcher";
-import { cn } from "@/lib/utils";
+import { NavLink } from '@/components/base/nav-link';
+import Logo from '@/components/base/payboss-logo';
+import ThemeSwitcher from '@/components/base/theme-switcher';
+import { cn } from '@/lib/utils';
 
 export function Footer({
   showLogo = true,
@@ -18,10 +18,10 @@ export function Footer({
   };
 }) {
   return (
-    <footer className={cn("", classNames?.wrapper)}>
+    <footer className={cn('', classNames?.wrapper)}>
       <div
         className={cn(
-          "mx-auto container px-4 sm:px-6 lg:px-8",
+          'mx-auto container px-4 sm:px-6 lg:px-8',
           classNames?.container,
         )}
       >

@@ -1,23 +1,23 @@
-import { Snippet, Switch, useDisclosure, addToast } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Snippet, Switch, useDisclosure, addToast } from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-import PromptModal from "@/components/modals/prompt-modal";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input-field";
-import AddUserToWorkspace from "@/components/modals/add-users-workspace-modal";
-import useWorkspaces from "@/hooks/use-workspaces";
-import { QUERY_KEYS, WORKSPACE_TYPES } from "@/lib/constants";
-import { cn, syntaxHighlight } from "@/lib/utils";
-import SelectField from "@/components/ui/select-field";
-import { useWorkspaceCallbackURL } from "@/hooks/use-query-data";
-import { updateWorkspaceCallback } from "@/app/_actions/workspace-actions";
 import {
   deleteWorkspace,
   updateWorkspace,
-} from "@/app/_actions/merchant-actions";
-import { ErrorState } from "@/types";
+} from '@/app/_actions/merchant-actions';
+import { updateWorkspaceCallback } from '@/app/_actions/workspace-actions';
+import AddUserToWorkspace from '@/components/modals/add-users-workspace-modal';
+import PromptModal from '@/components/modals/prompt-modal';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import SelectField from '@/components/ui/select-field';
+import { useWorkspaceCallbackURL } from '@/hooks/use-query-data';
+import useWorkspaces from '@/hooks/use-workspaces';
+import { QUERY_KEYS, WORKSPACE_TYPES } from '@/lib/constants';
+import { cn, syntaxHighlight } from '@/lib/utils';
+import { ErrorState } from '@/types';
 
 function WorkspaceDetails({
   workspaceID,
@@ -46,19 +46,19 @@ function WorkspaceDetails({
   } = useDisclosure();
   const [error, setError] = useState<ErrorState>({
     status: false,
-    message: "",
+    message: '',
   });
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [isLoadingCallback, setIsLoadingCallback] = useState(false);
-  const [deleteWorkspaceName, setDeleteWorkspaceName] = useState("");
-  const [callbackURL, setCallbackURL] = useState({ method: "GET", url: "" });
+  const [deleteWorkspaceName, setDeleteWorkspaceName] = useState('');
+  const [callbackURL, setCallbackURL] = useState({ method: 'GET', url: '' });
   const { activeWorkspace } = useWorkspaces();
   const [isVisible, setIsVisible] = useState(activeWorkspace?.isVisible);
 
   const { data: callbackResponse } = useWorkspaceCallbackURL(workspaceID);
 
   const [isSandbox, setIsSandbox] = useState(
-    activeWorkspace?.workspace?.toLowerCase() == "sandbox",
+    activeWorkspace?.workspace?.toLowerCase() == 'sandbox',
   );
 
   const [newWorkspace, setNewWorkspace] = useState({
@@ -88,9 +88,9 @@ function WorkspaceDetails({
         newWorkspace?.description?.length < 3)
     ) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Provide valid name and description!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Provide valid name and description!',
       });
       setLoading(false);
 
@@ -108,15 +108,15 @@ function WorkspaceDetails({
       });
 
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Workspace updated successfully!",
+        color: 'success',
+        title: 'Success',
+        description: 'Workspace updated successfully!',
       });
     } else {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Failed to Update Workspace!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Failed to Update Workspace!',
       });
     }
     setLoading(false);
@@ -134,11 +134,11 @@ function WorkspaceDetails({
     // VALIDATE INPUTS
     if (!callbackURL?.url || !isValidURL) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Provide valid url!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Provide valid url!',
       });
-      setError({ onCallbackURL: true, message: "Provide a valid url!" });
+      setError({ onCallbackURL: true, message: 'Provide a valid url!' });
       setIsLoadingCallback(false);
 
       return;
@@ -150,18 +150,18 @@ function WorkspaceDetails({
       queryClient.invalidateQueries();
       setIsLoadingCallback(false);
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Callback URL updated!",
+        color: 'success',
+        title: 'Success',
+        description: 'Callback URL updated!',
       });
 
       return;
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "Failed to Update callback URL!",
+      title: 'Error',
+      color: 'danger',
+      description: 'Failed to Update callback URL!',
     });
     setIsLoadingCallback(false);
   }
@@ -174,7 +174,7 @@ function WorkspaceDetails({
       setDeleteLoading(false);
       setError({
         status: true,
-        message: "Type the workspace name to confirm delete",
+        message: 'Type the workspace name to confirm delete',
       });
 
       return;
@@ -192,9 +192,9 @@ function WorkspaceDetails({
       setDeleteLoading(false);
 
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Workspaces Deactivated successfully!",
+        color: 'success',
+        title: 'Success',
+        description: 'Workspaces Deactivated successfully!',
       });
       back();
 
@@ -202,9 +202,9 @@ function WorkspaceDetails({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "Failed to Deactivate Workspace!",
+      title: 'Error',
+      color: 'danger',
+      description: 'Failed to Deactivate Workspace!',
     });
     setDeleteLoading(false);
   }
@@ -227,20 +227,20 @@ function WorkspaceDetails({
 
   // CLEAR ERROR STATE
   useEffect(() => {
-    setError({ status: false, message: "" });
+    setError({ status: false, message: '' });
 
     return () => {
-      setError({ status: false, message: "" });
+      setError({ status: false, message: '' });
     };
   }, [deleteWorkspaceName]);
 
   useEffect(() => {
-    setError({ status: false, message: "" });
+    setError({ status: false, message: '' });
 
     // SET CALLBACK URL DATA
     if (
-      callbackResponse?.data?.method !== "n/a" &&
-      callbackResponse?.data?.url !== "n/a"
+      callbackResponse?.data?.method !== 'n/a' &&
+      callbackResponse?.data?.url !== 'n/a'
     ) {
       setCallbackURL((prev) => ({ ...prev, ...callbackResponse?.data }));
     }
@@ -266,7 +266,7 @@ function WorkspaceDetails({
         <div className="flex flex-col gap-6">
           <form
             className="flex w-full flex-col gap-4 sm:items-start md:flex-row md:items-end"
-            role={"edit-workspace-details"}
+            role={'edit-workspace-details'}
             onSubmit={handleUpdateWorkspace}
           >
             <Input
@@ -280,7 +280,7 @@ function WorkspaceDetails({
 
             <Input
               classNames={{
-                wrapper: cn("", { "w-full max-w-[700px]": isSandbox }),
+                wrapper: cn('', { 'w-full max-w-[700px]': isSandbox }),
               }}
               defaultValue={activeWorkspace?.description}
               isDisabled={loading || isSandbox}
@@ -293,7 +293,7 @@ function WorkspaceDetails({
               <Button
                 isDisabled={loading || noChangesToSave}
                 isLoading={loading}
-                loadingText={"Saving..."}
+                loadingText={'Saving...'}
                 type="submit"
               >
                 Save Changes
@@ -346,34 +346,34 @@ function WorkspaceDetails({
 
               <form
                 className="flex w-full flex-col gap-1 sm:items-start md:flex-row md:items-end"
-                role={"edit-workspace-details"}
+                role={'edit-workspace-details'}
                 onSubmit={handleUpdateWorkspaceCallback}
               >
                 <SelectField
                   className={cn(
-                    "max-w-[100px] bg-orange-300 bg-opacity-50 rounded-md",
+                    'max-w-[100px] bg-orange-300 bg-opacity-50 rounded-md',
                     {
-                      "bg-primary-300 bg-opacity-50 rounded-md ":
-                        callbackURL.method == "POST",
+                      'bg-primary-300 bg-opacity-50 rounded-md ':
+                        callbackURL.method == 'POST',
                     },
                   )}
                   classNames={{
                     value: cn(
-                      "font-bold text-orange-600 group-data-[has-value=true]:text-orange-600",
+                      'font-bold text-orange-600 group-data-[has-value=true]:text-orange-600',
                       {
-                        "text-primary-600 group-data-[has-value=true]:text-primary-600":
-                          callbackURL.method == "POST",
+                        'text-primary-600 group-data-[has-value=true]:text-primary-600':
+                          callbackURL.method == 'POST',
                       },
                     ),
                   }}
-                  defaultValue={"GET"}
+                  defaultValue={'GET'}
                   isDisabled={isLoadingCallback}
                   label="Method"
-                  options={["GET", "POST"]}
-                  placeholder={"GET"}
+                  options={['GET', 'POST']}
+                  placeholder={'GET'}
                   prefilled={true}
                   value={callbackURL?.method}
-                  wrapperClassName={cn("max-w-24")}
+                  wrapperClassName={cn('max-w-24')}
                   onChange={(e) =>
                     updateCallbackURL({ method: e.target.value })
                   }
@@ -381,25 +381,25 @@ function WorkspaceDetails({
                 />
 
                 <Input
+                  className="w-full"
+                  classNames={{
+                    wrapper: 'max-w-full',
+                  }}
                   defaultValue={activeWorkspace?.callBackURL}
                   isDisabled={loading}
+                  isInvalid={error?.onCallbackURL}
                   label="URL"
                   pattern="https?://.+"
                   required={true}
                   title="https://www.domain-name.com"
                   value={callbackURL?.url}
                   onChange={(e) => updateCallbackURL({ url: e.target.value })}
-                  isInvalid={error?.onCallbackURL}
-                  className="w-full"
-                  classNames={{
-                    wrapper: "max-w-full",
-                  }}
                 />
 
                 <Button
                   isDisabled={isLoadingCallback || noCallbackChanges}
                   isLoading={isLoadingCallback}
-                  loadingText={"Saving..."}
+                  loadingText={'Saving...'}
                   type="submit"
                 >
                   Save
@@ -416,19 +416,19 @@ function WorkspaceDetails({
               </p>
 
               <div>
-                {callbackURL?.method == "GET" ? (
+                {callbackURL?.method == 'GET' ? (
                   <Snippet hideSymbol className="w-full flex-1">
                     <span className="text-wrap">
-                      {"GET"} ~{" "}
+                      {'GET'} ~{' '}
                       {callbackURL?.url +
-                        "?status=&message=&transactionID=&mno_ref=&mno_status_description="}
+                        '?status=&message=&transactionID=&mno_ref=&mno_status_description='}
                     </span>
                   </Snippet>
                 ) : (
                   <Snippet
                     hideSymbol
                     classNames={{
-                      base: "max-w- w-full flex text-wrap",
+                      base: 'max-w- w-full flex text-wrap',
                     }}
                   >
                     <pre
@@ -436,11 +436,11 @@ function WorkspaceDetails({
                         __html: syntaxHighlight(
                           JSON.stringify(
                             {
-                              status: "string",
-                              message: "string",
-                              transactionID: "string",
-                              mno_ref: "string | null",
-                              mno_status_description: "string",
+                              status: 'string',
+                              message: 'string',
+                              transactionID: 'string',
+                              mno_ref: 'string | null',
+                              mno_status_description: 'string',
                             },
                             undefined,
                             2,
@@ -513,19 +513,19 @@ function WorkspaceDetails({
           <strong>Are you sure you want to perform this action?</strong>
         </p>
         <p className="text-sm text-foreground/70">
-          This action cannot be undone. Please type{" "}
+          This action cannot be undone. Please type{' '}
           <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
             {activeWorkspace?.workspace}
-          </code>{" "}
+          </code>{' '}
           to confirm your choice to proceed.
         </p>
 
         <Input
           errorText={error.message}
           isDisabled={deleteLoading}
+          isInvalid={error.status}
           label="Confirm Delete"
           onChange={(e) => setDeleteWorkspaceName(e.target.value)}
-          isInvalid={error.status}
         />
       </PromptModal>
 

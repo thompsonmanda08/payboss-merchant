@@ -1,26 +1,26 @@
-"use client";
-import { Switch } from "@heroui/switch";
+'use client';
+import { Switch } from '@heroui/switch';
 
-import Card from "@/components/base/custom-card";
+import Card from '@/components/base/custom-card';
 
 function AccountPreferences() {
   const APPLICATION_CONFIG = [
     {
-      title: "Receive Email Notifications",
+      title: 'Receive Email Notifications',
       active: true,
     },
     {
-      title: "Receive SMS Notifications",
+      title: 'Receive SMS Notifications',
       active: false,
     },
     {
-      title: "Subscribe to newsletters",
+      title: 'Subscribe to newsletters',
       active: false,
     },
   ];
 
   return (
-    <Card className={"rounded-2xl bg-background/70 backdrop-blur-md"}>
+    <Card className={'rounded-2xl bg-background/70 backdrop-blur-md'}>
       <div className="flex w-full flex-col rounded-md p-4">
         <div>
           <div className="flex w-full items-end justify-between">

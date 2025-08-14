@@ -1,21 +1,20 @@
 //BUSINESS REGISTRATION STATUS
-"use client";
-import { useMemo } from "react";
-import { motion } from "framer-motion";
-import { getLocalTimeZone, today } from "@internationalized/date";
-import { Switch, Tooltip } from "@heroui/react";
+'use client';
+import { getLocalTimeZone, today } from '@internationalized/date';
+import { motion } from 'framer-motion';
+import { useMemo } from 'react';
 
-import { Input } from "@/components/ui/input-field";
-import { staggerContainerItemVariants } from "@/lib/constants";
-import { cn, formatDate, isValidZambianMobileNumber } from "@/lib/utils";
-import DateSelectField from "@/components/ui/date-select-field";
-import useAuthStore from "@/context/auth-store";
-import SelectField from "@/components/ui/select-field";
-import useConfigOptions from "@/hooks/use-config-options";
-import CardHeader from "@/components/base/card-header";
-import AutoCompleteField from "@/components/base/auto-complete";
+import AutoCompleteField from '@/components/base/auto-complete';
+import CardHeader from '@/components/base/card-header';
+import DateSelectField from '@/components/ui/date-select-field';
+import { Input } from '@/components/ui/input-field';
+import SelectField from '@/components/ui/select-field';
+import useAuthStore from '@/context/auth-store';
+import useConfigOptions from '@/hooks/use-config-options';
+import { staggerContainerItemVariants } from '@/lib/constants';
+import { formatDate, isValidZambianMobileNumber } from '@/lib/utils';
 
-import { STEPS } from "../signup-form";
+import { STEPS } from '../signup-form';
 
 export default function Step1({
   updateDetails,
@@ -45,7 +44,7 @@ export default function Step1({
       <CardHeader
         handleClose={() => backToStart()}
         infoText={
-          "Information about your business to help us verify your identity."
+          'Information about your business to help us verify your identity.'
         }
         title="Business Details"
       />
@@ -75,7 +74,7 @@ export default function Step1({
           >
             <SelectField
               label="Company Type"
-              listItemName={"type"}
+              listItemName={'type'}
               name="companyTypeID"
               options={companyTypes}
               prefilled={true}
@@ -92,6 +91,7 @@ export default function Step1({
           >
             <Input
               errorText="Invalid TPIN"
+              isInvalid={TPINError}
               label="TPIN"
               maxLength={10}
               name="tpin"
@@ -102,7 +102,6 @@ export default function Step1({
               onChange={(e) => {
                 updateDetails(STEPS[1], { tpin: e.target.value });
               }}
-              isInvalid={TPINError}
             />
           </motion.div>
 
@@ -129,19 +128,19 @@ export default function Step1({
             <DateSelectField
               className="max-w-sm"
               defaultValue={formData?.date_of_incorporation as any}
-              description={"Date the company was registered"}
-              label={"Date of Incorporation"}
-              labelPlacement={"outside"}
+              description={'Date the company was registered'}
+              label={'Date of Incorporation'}
+              labelPlacement={'outside'}
               maxValue={today(getLocalTimeZone())}
               required={true}
               value={
-                (formData?.date_of_incorporation?.split("").length > 9
+                (formData?.date_of_incorporation?.split('').length > 9
                   ? formData?.date_of_incorporation
-                  : "") as any
+                  : '') as any
               }
               onChange={(date) => {
                 updateDetails(STEPS[1], {
-                  date_of_incorporation: formatDate(String(date), "YYYY-MM-DD"),
+                  date_of_incorporation: formatDate(String(date), 'YYYY-MM-DD'),
                 });
               }}
             />
@@ -155,7 +154,7 @@ export default function Step1({
           >
             <AutoCompleteField
               label="Province"
-              listItemName={"province"}
+              listItemName={'province'}
               name="provinceID"
               options={provinces}
               required={true}
@@ -171,11 +170,11 @@ export default function Step1({
           >
             <AutoCompleteField
               label="City/Town"
-              listItemName={"city"}
+              listItemName={'city'}
               name="cityID"
               options={cities}
               placeholder={
-                formData?.provinceID ? "Select city" : "Select a province first"
+                formData?.provinceID ? 'Select city' : 'Select a province first'
               }
               required={true}
               value={formData?.cityID}
@@ -206,6 +205,7 @@ export default function Step1({
           >
             <Input
               errorText="Invalid Mobile Number"
+              isInvalid={phoneNoError}
               label="Mobile Number"
               maxLength={12}
               name="contact"
@@ -217,7 +217,6 @@ export default function Step1({
               onChange={(e) => {
                 updateDetails(STEPS[1], { contact: e.target.value });
               }}
-              isInvalid={phoneNoError}
             />
           </motion.div>
           <motion.div

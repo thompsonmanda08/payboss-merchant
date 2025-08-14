@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { Mail, Send } from "lucide-react";
+import { Mail, Send } from 'lucide-react';
+import React, { useState } from 'react';
 
 export default function Newsletter() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email) {
       setIsSubmitted(true);
-      setEmail("");
+      setEmail('');
       setTimeout(() => setIsSubmitted(false), 3000);
     }
   };
@@ -31,20 +31,20 @@ export default function Newsletter() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+          <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
             <div className="flex gap-3">
               <input
+                required
+                className="flex-1 px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+                placeholder="Enter your email address"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email address"
-                className="flex-1 px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
-                required
               />
               <button
-                type="submit"
                 className="bg-blue-600 text-white px-6 py-4 rounded-xl hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center"
                 disabled={isSubmitted}
+                type="submit"
               >
                 {isSubmitted ? (
                   <span className="text-sm">✓ Subscribed!</span>
@@ -57,15 +57,15 @@ export default function Newsletter() {
 
           <div className="flex items-center justify-center space-x-6 text-sm text-gray-500">
             <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-emerald-500 rounded-full" />
               <span>No spam, ever</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-emerald-500 rounded-full" />
               <span>Unsubscribe anytime</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-emerald-500 rounded-full" />
               <span>1M+ subscribers</span>
             </div>
           </div>

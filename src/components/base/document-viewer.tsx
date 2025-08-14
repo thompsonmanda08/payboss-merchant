@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import CardHeader from "@/components/base/card-header";
-import Modal from "@/components/modals/custom-modal";
+import CardHeader from '@/components/base/card-header';
+import { Button } from '@/components/ui/button';
 
 const DocumentsViewer = ({
   documents,
@@ -26,13 +25,13 @@ const DocumentsViewer = ({
   return (
     <>
       <CardHeader
-        className={"py-0"}
+        className={'py-0'}
         classNames={{
-          infoClasses: "mb-0",
-          innerWrapper: "gap-0",
+          infoClasses: 'mb-0',
+          innerWrapper: 'gap-0',
         }}
         infoText={
-          "Documents that prove your company registrations and compliance with regulatory bodies."
+          'Documents that prove your company registrations and compliance with regulatory bodies.'
         }
         title="Business Documentation"
       />
@@ -58,7 +57,7 @@ const DocumentsViewer = ({
                   alt="file"
                   className="h-full w-full object-cover"
                   height={100}
-                  src={"/images/attachment.png"}
+                  src={'/images/attachment.png'}
                   width={80}
                 />
               </div>
@@ -86,7 +85,7 @@ const DocumentsViewer = ({
                   alt="file"
                   className="h-full w-full object-cover"
                   height={100}
-                  src={"/images/attachment.png"}
+                  src={'/images/attachment.png'}
                   width={80}
                 />
               </div>

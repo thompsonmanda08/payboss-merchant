@@ -1,11 +1,10 @@
-"use client";
-import { useState } from "react";
+'use client';
+import { addToast } from '@heroui/react';
+import { useState } from 'react';
 
-import { addToast } from "@heroui/react";
-
-import { Button } from "../ui/button";
-import Card from "../base/custom-card";
-import { Input } from "../ui/input-field";
+import Card from '../base/custom-card';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input-field';
 
 function SupportForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,10 +15,10 @@ function SupportForm() {
 
     const formData = new FormData(e.currentTarget);
 
-    const mobileNumber = formData.get("MobileNumber")?.toString().trim();
-    const fullName = formData.get("FullName")?.toString().trim();
-    const email = formData.get("Email")?.toString().trim();
-    const message = formData.get("Message")?.toString().trim();
+    const mobileNumber = formData.get('MobileNumber')?.toString().trim();
+    const fullName = formData.get('FullName')?.toString().trim();
+    const email = formData.get('Email')?.toString().trim();
+    const message = formData.get('Message')?.toString().trim();
 
     try {
       // const response = { ok: false };
@@ -33,9 +32,9 @@ function SupportForm() {
         e.currentTarget?.reset();
 
         addToast({
-          color: "success",
-          title: "Success",
-          description: "Message was sent Successfully!",
+          color: 'success',
+          title: 'Success',
+          description: 'Message was sent Successfully!',
         });
       }
     } catch (error) {
@@ -46,7 +45,7 @@ function SupportForm() {
 
   return (
     <>
-      {" "}
+      {' '}
       <Card className=" mx-auto max-w-lg">
         {/* <div className="mb-4 flex w-full flex-col justify-between md:flex-row md:items-center">
           <CardHeader
@@ -102,7 +101,7 @@ function SupportForm() {
               <textarea
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary/80 sm:text-sm sm:leading-6"
-                defaultValue={""}
+                defaultValue={''}
                 id="message"
                 name="Message"
                 rows={4}
@@ -112,7 +111,7 @@ function SupportForm() {
           <Button
             isDisabled={isLoading}
             isLoading={isLoading}
-            loadingText={"Sending..."}
+            loadingText={'Sending...'}
             type="submit"
           >
             Send

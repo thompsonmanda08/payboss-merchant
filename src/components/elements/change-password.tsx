@@ -1,13 +1,12 @@
-"use client";
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+'use client';
+import { addToast } from '@heroui/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
-import { addToast } from "@heroui/react";
-import { PASSWORD_PATTERN, slideDownInView } from "@/lib/constants";
-
-import { Input } from "@/components/ui/input-field";
-import { Button } from "@/components/ui/button";
-import { ErrorState } from "@/types";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import { PASSWORD_PATTERN, slideDownInView } from '@/lib/constants';
+import { ErrorState } from '@/types';
 
 type ChangePasswordProps = {
   updatePassword: boolean;
@@ -28,12 +27,12 @@ function ChangePasswordField({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorState>({
     status: false,
-    message: "",
+    message: '',
   });
   const [passwordFields, setPasswordField] = useState<PasswordFields>({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   });
 
   function updatePasswordField(fields: Partial<PasswordFields>) {
@@ -42,9 +41,9 @@ function ChangePasswordField({
 
   function resetPasswordFields() {
     setPasswordField({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
     });
   }
 
@@ -54,7 +53,7 @@ function ChangePasswordField({
     if (!passwordFields.currentPassword) {
       setError({
         noPassword: true,
-        message: "Provide your current password!",
+        message: 'Provide your current password!',
       });
       setLoading(false);
 
@@ -64,7 +63,7 @@ function ChangePasswordField({
     if (PASSWORD_PATTERN.test(passwordFields.newPassword)) {
       setError({
         status: true,
-        message: "Passwords should match the policy on the left",
+        message: 'Passwords should match the policy on the left',
       });
       setLoading(false);
 
@@ -75,7 +74,7 @@ function ChangePasswordField({
       setError({
         status: true,
         noMatch: true,
-        message: "Passwords do not match",
+        message: 'Passwords do not match',
       });
       setLoading(false);
 
@@ -84,9 +83,9 @@ function ChangePasswordField({
 
     setTimeout(() => {
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Password Changed Successfully!",
+        color: 'success',
+        title: 'Success',
+        description: 'Password Changed Successfully!',
       });
       setLoading(false);
       setUpdatePassword(false);
@@ -102,16 +101,17 @@ function ChangePasswordField({
     updatePassword && (
       <AnimatePresence mode="wait">
         <motion.div
-          animate={"visible"}
+          animate={'visible'}
           className="flex w-full gap-4 py-4"
-          exit={"hidden"}
-          initial={"hidden"}
+          exit={'hidden'}
+          initial={'hidden'}
           variants={slideDownInView as any}
         >
           <div className="flex w-full flex-col gap-3">
             <Input
               errorText={error.message}
               id="old_password"
+              is={error?.noPassword}
               label="Current Password"
               placeholder="Enter current password"
               type="password"
@@ -119,7 +119,6 @@ function ChangePasswordField({
               onChange={(e) =>
                 updatePasswordField({ currentPassword: e.target.value })
               }
-              is={error?.noPassword}
             />
             {/* ERROR MESSAGE */}
             {passwordFields.currentPassword && passwordFields.newPassword && (
@@ -149,6 +148,7 @@ function ChangePasswordField({
           <div className="flex w-full flex-col gap-2">
             <Input
               id="new_password"
+              isInvalid={error.status}
               label="New Password"
               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               placeholder="Enter new password"
@@ -158,22 +158,21 @@ function ChangePasswordField({
               onChange={(e) =>
                 updatePasswordField({ newPassword: e.target.value })
               }
-              isInvalid={error.status}
             />
             <Input
               errorText={error.message}
               id="confirm_password"
+              isInvalid={
+                passwordFields.confirmPassword.length > 6 &&
+                error.status &&
+                error?.noMatch
+              }
               label="Confirm Password"
               placeholder="Confirm new password"
               type="password"
               value={passwordFields.confirmPassword}
               onChange={(e) =>
                 updatePasswordField({ confirmPassword: e.target.value })
-              }
-              isInvalid={
-                passwordFields.confirmPassword.length > 6 &&
-                error.status &&
-                error?.noMatch
               }
             />
 

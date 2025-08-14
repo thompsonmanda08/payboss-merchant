@@ -1,20 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { getGeneralConfigs } from "@/app/_actions/config-actions";
+import { getRefreshToken } from '@/app/_actions/auth-actions';
+import { getGeneralConfigs } from '@/app/_actions/config-actions';
+import { getDashboardAnalytics } from '@/app/_actions/dashboard-actions';
 import {
   getAllKYCData,
   getAllWorkspaces,
   getUserAccountRoles,
   setupAccountConfig,
   getWorkspaceRoles,
-} from "@/app/_actions/merchant-actions";
-import { getDashboardAnalytics } from "@/app/_actions/dashboard-actions";
+} from '@/app/_actions/merchant-actions';
+import { getSubscriptionPacks } from '@/app/_actions/subscription-actions';
 import {
   getAllBulkTransactions,
   getBatchDetails,
   getWalletPrefundHistory,
-} from "@/app/_actions/transaction-actions";
-import { getAllUsers, getUser } from "@/app/_actions/user-actions";
+} from '@/app/_actions/transaction-actions';
+import { getAllUsers, getUser } from '@/app/_actions/user-actions';
+import { getCheckoutURL } from '@/app/_actions/vas-actions';
 import {
   getAllWorkspaceTerminals,
   getAssignedWorkspaces,
@@ -24,11 +27,8 @@ import {
   getWorkspaceMembers,
   getWorkspaceTillNumber,
   initializeWorkspace,
-} from "@/app/_actions/workspace-actions";
-import { AUTH_SESSION, QUERY_KEYS } from "@/lib/constants";
-import { getCheckoutURL } from "@/app/_actions/vas-actions";
-import { getRefreshToken } from "@/app/_actions/auth-actions";
-import { getSubscriptionPacks } from "@/app/_actions/subscription-actions";
+} from '@/app/_actions/workspace-actions';
+import { AUTH_SESSION, QUERY_KEYS } from '@/lib/constants';
 
 export const useGeneralConfigOptions = () =>
   useQuery({
@@ -60,7 +60,7 @@ export const useAssignedWorkspaces = () =>
 
 export const useKYCData = () =>
   useQuery({
-    queryKey: ["KYC"],
+    queryKey: ['KYC'],
     queryFn: async () => await getAllKYCData(),
     staleTime: Infinity,
   });
@@ -109,16 +109,16 @@ export const useWorkspaceInit = (workspaceID: string) =>
 
 export const useRefreshToken = (enable: boolean) =>
   useQuery({
-    queryKey: ["refresh-token"],
+    queryKey: ['refresh-token'],
     queryFn: async () => {
       if (!enable) {
         return {
           success: false,
           error: null,
-          message: "Refresh token is disabled",
+          message: 'Refresh token is disabled',
           data: null,
           status: 200,
-          statusText: "REFRESH_TOKEN_DISABLED",
+          statusText: 'REFRESH_TOKEN_DISABLED',
         };
       }
 

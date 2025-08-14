@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useEffect } from "react";
+import { Alert, addToast } from '@heroui/react';
+import React from 'react';
+import { useEffect } from 'react';
 
-import { Button } from "@/components/ui/button";
-import usePaymentsStore from "@/context/payment-store";
-import PrefundsTable from "@/components/tables/prefunds-table";
-import { Alert, addToast } from "@heroui/react";
-import { useActivePrefunds } from "@/hooks/use-query-data";
+import PrefundsTable from '@/components/tables/prefunds-table';
+import { Button } from '@/components/ui/button';
+import usePaymentsStore from '@/context/payment-store';
+import { useActivePrefunds } from '@/hooks/use-query-data';
 
 const SelectPrefund = ({
   navigateForward,
@@ -27,8 +27,8 @@ const SelectPrefund = ({
     usePaymentsStore();
 
   function handleProceed() {
-    if (paymentAction?.prefund_id !== "" || selectedKeys.size !== 0) {
-      let prefund = walletActivePrefunds.find(
+    if (paymentAction?.prefund_id !== '' || selectedKeys.size !== 0) {
+      const prefund = walletActivePrefunds.find(
         (prefund: any) => prefund.ID === paymentAction?.prefund_id,
       );
 
@@ -36,14 +36,15 @@ const SelectPrefund = ({
         updatePaymentFields({ prefund, protocol });
         navigateForward();
       }
+
       return;
     }
 
-    setError({ status: true, message: "You need to select a prefund!" });
+    setError({ status: true, message: 'You need to select a prefund!' });
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "You need to select a prefund!",
+      title: 'Error',
+      color: 'danger',
+      description: 'You need to select a prefund!',
     });
   }
 
@@ -55,11 +56,11 @@ const SelectPrefund = ({
     <>
       <div className="mt-4 flex h-full w-full flex-col gap-5">
         <PrefundsTable
-          emptyDescriptionText={
-            "You have no active prefunds available at this moment"
-          }
-          emptyTitleText={"Unavailable Prefunds"}
           removeWrapper
+          emptyDescriptionText={
+            'You have no active prefunds available at this moment'
+          }
+          emptyTitleText={'Unavailable Prefunds'}
           isLoading={isLoading}
           rows={walletActivePrefunds}
           selectedKeys={selectedKeys}
@@ -67,10 +68,10 @@ const SelectPrefund = ({
         />
         {error?.status && (
           <Alert
-            color="danger"
             classNames={{
-              base: "items-center",
+              base: 'items-center',
             }}
+            color="danger"
           >
             {error.message}
           </Alert>

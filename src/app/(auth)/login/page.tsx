@@ -1,17 +1,17 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import Logo from "@/components/base/payboss-logo";
-import LoginForm from "@/components/forms/login-form";
-import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
+import Logo from '@/components/base/payboss-logo';
+import LoginForm from '@/components/forms/login-form';
+import { BGS_SUPER_MERCHANT_ID } from '@/lib/constants';
 
 function LoginPage() {
   return (
     <div className="relative -mt-[320px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none">
       <div className="mb-10 flex flex-col items-center rounded-t-2xl border-b-0 p-6 pb-0 ">
-        <Logo isWhite classNames={{ wrapper: "scale-[1.5] mb-4" }} />
+        <Logo isWhite classNames={{ wrapper: 'scale-[1.5] mb-4' }} />
         <h2
           className={
-            "w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-transparent text-white"
+            'w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-transparent text-white'
           }
         >
           Welcome Back!

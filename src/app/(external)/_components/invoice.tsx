@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import React, { useRef, useState } from "react";
+import { CloudArrowDownIcon, PrinterIcon } from '@heroicons/react/24/outline';
+import { Link, RadioGroup, useDisclosure } from '@heroui/react';
+import { parseDate, getLocalTimeZone } from '@internationalized/date';
+import { useDateFormatter } from '@react-aria/i18n';
+import { motion } from 'framer-motion';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import Image from 'next/image';
+import React, { useRef, useState } from 'react';
 
-import { CloudArrowDownIcon, PrinterIcon } from "@heroicons/react/24/outline";
-import { cn, formatCurrency } from "@/lib/utils";
-import Logo from "@/components/base/payboss-logo";
-import { Button } from "@/components/ui/button";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { Link, RadioGroup, useDisclosure } from "@heroui/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { useDateFormatter } from "@react-aria/i18n";
-import Image from "next/image";
-import { slideDownInView } from "@/lib/constants";
-import { motion } from "framer-motion";
-import { Input } from "@/components/ui/input-field";
-import CustomRadioButton from "@/components/ui/radio-button";
-import PromptModal from "@/components/modals/prompt-modal";
+import Logo from '@/components/base/payboss-logo';
+import PromptModal from '@/components/modals/prompt-modal';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import CustomRadioButton from '@/components/ui/radio-button';
+import { slideDownInView } from '@/lib/constants';
+import { cn, formatCurrency } from '@/lib/utils';
 
 export default function Invoice({
   invoice,
@@ -32,8 +32,8 @@ export default function Invoice({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const formatter = useDateFormatter({ dateStyle: "long" });
-  const [paymentType, setPaymentType] = useState("FULL_PAYMENT");
+  const formatter = useDateFormatter({ dateStyle: 'long' });
+  const [paymentType, setPaymentType] = useState('FULL_PAYMENT');
   const [amount, setAmount] = useState(
     invoice?.dueAmount || invoice?.totalAmount || 0,
   );
@@ -42,29 +42,31 @@ export default function Invoice({
     setIsProcessing(true);
     try {
       const element = captureRef.current as any;
+
       if (!element) return;
 
       // Temporarily hide elements with class 'no-print'
-      const noPrintEls = element.querySelectorAll(".no-print");
-      noPrintEls.forEach((el: any) => (el.style.display = "none"));
+      const noPrintEls = element.querySelectorAll('.no-print');
+
+      noPrintEls.forEach((el: any) => (el.style.display = 'none'));
 
       const canvas = await html2canvas(element, { scale: 2, useCORS: true }); // higher scale for better quality
-      const imgData = canvas.toDataURL("image/png");
+      const imgData = canvas.toDataURL('image/png');
 
       const pdf = new jsPDF({
-        pageSize: "a4",
-        orientation: "portrait",
-        unit: "mm",
+        pageSize: 'a4',
+        orientation: 'portrait',
+        unit: 'mm',
         format: [canvas.width, canvas.height],
       } as any);
 
-      pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
       pdf.save(`${invoice?.invoiceID}.pdf`);
 
-      noPrintEls.forEach((el: any) => (el.style.display = "flex"));
+      noPrintEls.forEach((el: any) => (el.style.display = 'flex'));
       setIsProcessing(false);
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   };
 
@@ -79,12 +81,12 @@ export default function Invoice({
       <div
         ref={captureRef}
         className={cn(
-          "max-w-[800px] relative mx-auto p-8 bg-white min-h-screen rounded-lg shadow-xl shadow-primary/5 w-full",
+          'max-w-[800px] relative mx-auto p-8 bg-white min-h-screen rounded-lg shadow-xl shadow-primary/5 w-full',
           className,
           classNames?.wrapper,
         )}
       >
-        {invoice?.status?.toUpperCase() === "PAID" && (
+        {invoice?.status?.toUpperCase() === 'PAID' && (
           <div className="absolute left-24 bottom-0 opacity-10 max-w-sm aspect-square m-auto z-30">
             <Image
               unoptimized
@@ -92,7 +94,7 @@ export default function Invoice({
               className="z-0 h-full w-full object-contain "
               height={200}
               loading="lazy"
-              src={"/images/paid.png"}
+              src={'/images/paid.png'}
               width={480}
             />
           </div>
@@ -103,8 +105,8 @@ export default function Invoice({
             <div className="text-gray-700">
               <div className="uppercase text-sm max-w-[100px] font-bold h-16 ">
                 <Logo
-                  className={"object-contain w-full h-full"}
-                  src={invoice?.from?.logo || "/images/payboss-logo-light.png"}
+                  className={'object-contain w-full h-full'}
+                  src={invoice?.from?.logo || '/images/payboss-logo-light.png'}
                 />
               </div>
             </div>
@@ -117,18 +119,18 @@ export default function Invoice({
           <h1 className="text-5xl font-bold uppercase mb-8">INVOICE</h1>
           <div className="flex gap-2 no-print">
             <Button
-              variant="faded"
               size="sm"
-              onPress={handlePrint}
               startContent={<PrinterIcon className="h-5 w-5" />}
+              variant="faded"
+              onPress={handlePrint}
             >
               Print
             </Button>
             <Button
+              isLoading={isProcessing}
+              loadingText={'Processing...'}
               size="sm"
               onPress={generatePDF}
-              isLoading={isProcessing}
-              loadingText={"Processing..."}
             >
               <CloudArrowDownIcon className="mr-2 h-4 w-4" />
               Download
@@ -141,11 +143,11 @@ export default function Invoice({
           <div className="font-medium">
             {invoice?.date
               ? formatter.format(
-                  parseDate(invoice?.date.split("T")[0]).toDate(
+                  parseDate(invoice?.date.split('T')[0]).toDate(
                     getLocalTimeZone(),
                   ),
                 )
-              : "---"}
+              : '---'}
           </div>
         </div>
 
@@ -197,7 +199,7 @@ export default function Invoice({
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan={3} className="pt-2 px-4 text-right font-medium">
+                <td className="pt-2 px-4 text-right font-medium" colSpan={3}>
                   Tax: ({invoice?.taxRate}%)
                 </td>
                 <td className=" px-4 text-right font-semibold">
@@ -205,7 +207,7 @@ export default function Invoice({
                 </td>
               </tr>
               <tr>
-                <td colSpan={3} className="pt-2 px-4 text-right font-medium">
+                <td className="pt-2 px-4 text-right font-medium" colSpan={3}>
                   Total
                 </td>
                 <td className=" px-4 text-right font-semibold">
@@ -214,8 +216,8 @@ export default function Invoice({
               </tr>
               <tr className="no-print">
                 <td
-                  colSpan={3}
                   className="pb-4 pt-2 px-4 text-right font-medium"
+                  colSpan={3}
                 >
                   Balance
                 </td>
@@ -231,18 +233,18 @@ export default function Invoice({
           <p className="font-medium max-w-lg">
             Note:
             <span className="text-sm text-muted-foreground mx-1 font-normal">
-              {invoice?.note || "Thank you for doing business with us!"}
+              {invoice?.note || 'Thank you for doing business with us!'}
             </span>
           </p>
 
-          {(invoice?.status?.toUpperCase() == "PENDING" ||
-            invoice?.status?.toUpperCase() == "PARTIAL_PAYMENT") &&
+          {(invoice?.status?.toUpperCase() == 'PENDING' ||
+            invoice?.status?.toUpperCase() == 'PARTIAL_PAYMENT') &&
             invoice?.checkoutUrl && (
               <Button
-                onPress={onOpen}
-                target="_blank"
-                size="lg"
                 className="w-full no-print sm:w-auto"
+                size="lg"
+                target="_blank"
+                onPress={onOpen}
               >
                 Proceed to Pay
               </Button>
@@ -251,24 +253,24 @@ export default function Invoice({
       </div>
 
       <PromptModal
+        removeActionButtons
         backdrop="blur"
-        isOpen={isOpen}
         onClose={() => {
           onClose();
         }}
         // onOpen={onOpen}
         className={"max-w-md "}
+        isOpen={isOpen}
         size="sm"
-        removeActionButtons
       >
         <div className="flex flex-col gap-4 flex-1 justify-center items-center p-4 pb-6">
           <RadioGroup
             className="flex w-full"
-            defaultValue={"FULL_PAYMENT"}
+            defaultValue={'FULL_PAYMENT'}
             description="PayBoss invoices can be paid in full or in partial payments."
             label="How would you like to proceed?"
             onChange={(e) => {
-              if (e.target.value == "FULL_PAYMENT") {
+              if (e.target.value == 'FULL_PAYMENT') {
                 setAmount(invoice?.dueAmount);
               }
 
@@ -292,37 +294,37 @@ export default function Invoice({
               </CustomRadioButton>
             </div>
           </RadioGroup>
-          {paymentType == "PARTIAL_PAYMENT" && (
+          {paymentType == 'PARTIAL_PAYMENT' && (
             <motion.div className="my-2 w-full" whileInView={slideDownInView}>
               <Input
                 // isDisabled={isLoading}
-                min={0}
-                value={amount}
-                max={invoice?.dueAmount}
-                isInvalid={isInvalidAmount}
-                errorText={`Amount should be between ${formatCurrency(1)} and ${formatCurrency(invoice?.dueAmount)}`}
                 className="no-print h-12"
-                type="number"
+                errorText={`Amount should be between ${formatCurrency(1)} and ${formatCurrency(invoice?.dueAmount)}`}
+                isInvalid={isInvalidAmount}
+                max={invoice?.dueAmount}
+                min={0}
                 placeholder="Enter an amount"
+                type="number"
+                value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
             </motion.div>
           )}
           <div className="flex items-end w-full gap-2 justify-end">
-            {(invoice?.status?.toUpperCase() == "PENDING" ||
-              invoice?.status?.toUpperCase() == "PARTIAL_PAYMENT") &&
+            {(invoice?.status?.toUpperCase() == 'PENDING' ||
+              invoice?.status?.toUpperCase() == 'PARTIAL_PAYMENT') &&
               invoice?.checkoutUrl && (
                 <Button
                   as={Link}
+                  className="flex-1"
                   href={
                     !isInvalidAmount
                       ? `${invoice?.checkoutUrl}&amount=${amount}`
-                      : "#"
+                      : '#'
                   }
                   isDisabled={isInvalidAmount}
-                  target="_blank"
                   size="lg"
-                  className="flex-1"
+                  target="_blank"
                 >
                   Pay ({formatCurrency(amount)})
                 </Button>

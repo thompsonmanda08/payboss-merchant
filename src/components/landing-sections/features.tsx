@@ -1,5 +1,8 @@
-"use client";
-import { motion, AnimatePresence } from "framer-motion";
+'use client';
+import {
+  ArrowLeftEndOnRectangleIcon,
+  ArrowLeftStartOnRectangleIcon,
+} from '@heroicons/react/24/outline';
 import {
   BanknotesIcon,
   NewspaperIcon,
@@ -12,36 +15,33 @@ import {
   ReceiptPercentIcon,
   CalculatorIcon,
   TicketIcon,
-} from "@heroicons/react/24/solid";
-import { Tab, Tabs } from "@heroui/react";
-import {
-  ArrowLeftEndOnRectangleIcon,
-  ArrowLeftStartOnRectangleIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/solid';
+import { Tab, Tabs } from '@heroui/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
+import useCustomTabsHook from '@/hooks/use-custom-tabs';
 import {
   staggerContainerItemVariants,
   containerVariants,
-} from "@/lib/constants";
-import useCustomTabsHook from "@/hooks/use-custom-tabs";
+} from '@/lib/constants';
 
 const collections = [
   [
     {
       content:
-        "Seamlessly connect with your existing systems and automate your financial workflows with our robust API.",
+        'Seamlessly connect with your existing systems and automate your financial workflows with our robust API.',
       Icon: {
-        name: "API Integration",
-        role: "Connect Seamlessly",
+        name: 'API Integration',
+        role: 'Connect Seamlessly',
         element: AdjustmentsVerticalIcon,
       },
     },
     {
       content:
-        "Create, send, and manage professional invoices with ease. Stay on top of your income and ensure timely payments.",
+        'Create, send, and manage professional invoices with ease. Stay on top of your income and ensure timely payments.',
       Icon: {
-        name: "Invoicing",
-        role: "Effortless Billing",
+        name: 'Invoicing',
+        role: 'Effortless Billing',
         element: NewspaperIcon,
       },
     },
@@ -49,19 +49,19 @@ const collections = [
   [
     {
       content:
-        "Customize and deploy payment forms that cater to your business needs. Easy payments process for your customers.",
+        'Customize and deploy payment forms that cater to your business needs. Easy payments process for your customers.',
       Icon: {
-        name: "Payment Forms",
-        role: "Simplify Transactions",
+        name: 'Payment Forms',
+        role: 'Simplify Transactions',
         element: ClipboardDocumentIcon,
       },
     },
     {
       content:
-        "Sell your products and services online or via WhatsApp. Increase your sales with flexible store options.",
+        'Sell your products and services online or via WhatsApp. Increase your sales with flexible store options.',
       Icon: {
-        name: "Store",
-        role: "Expand Sales Channels",
+        name: 'Store',
+        role: 'Expand Sales Channels',
         element: BuildingStorefrontIcon,
       },
     },
@@ -69,19 +69,19 @@ const collections = [
   [
     {
       content:
-        "Manage recurring payments and subscriptions effortlessly. Keep track of your subscribers and their payments.",
+        'Manage recurring payments and subscriptions effortlessly. Keep track of your subscribers and their payments.',
       Icon: {
-        name: "Subscriptions",
-        role: "Automate Recurring Payments",
+        name: 'Subscriptions',
+        role: 'Automate Recurring Payments',
         element: CreditCardIcon,
       },
     },
     {
       content:
-        "Enable quick and secure in-store payments with our USSD feature. A convenient and cashless payment option.",
+        'Enable quick and secure in-store payments with our USSD feature. A convenient and cashless payment option.',
       Icon: {
-        name: "USSD",
-        role: "Quick Cashless Payments",
+        name: 'USSD',
+        role: 'Quick Cashless Payments',
         element: CalculatorIcon,
       },
     },
@@ -92,19 +92,19 @@ const spending = [
   [
     {
       content:
-        "Pay your bills on time and avoid late fees. Manage all your bill payments from a single dashboard.",
+        'Pay your bills on time and avoid late fees. Manage all your bill payments from a single dashboard.',
       Icon: {
-        name: "Bill Payment",
-        role: "Pay Bills Easily",
+        name: 'Bill Payment',
+        role: 'Pay Bills Easily',
         element: BanknotesIcon,
       },
     },
     {
       content:
-        "Purchase bulk data for your business needs at competitive rates. Ensure your team stays connected and productive.",
+        'Purchase bulk data for your business needs at competitive rates. Ensure your team stays connected and productive.',
       Icon: {
-        name: "Bulk Data",
-        role: "Connect Your Team",
+        name: 'Bulk Data',
+        role: 'Connect Your Team',
         element: ReceiptPercentIcon,
       },
     },
@@ -112,19 +112,19 @@ const spending = [
   [
     {
       content:
-        "Top up airtime for multiple employees in one go. Save time and reduce the hassle of individual top-ups.",
+        'Top up airtime for multiple employees in one go. Save time and reduce the hassle of individual top-ups.',
       Icon: {
-        name: "Bulk Airtime",
-        role: "Top Up Effortlessly",
+        name: 'Bulk Airtime',
+        role: 'Top Up Effortlessly',
         element: PhoneArrowDownLeftIcon,
       },
     },
     {
       content:
-        "Make bulk payments to vendors, suppliers, or employees and enjoy streamlined payments automation.",
+        'Make bulk payments to vendors, suppliers, or employees and enjoy streamlined payments automation.',
       Icon: {
-        name: "Bulk Direct Payment",
-        role: "Pay Multiple Vendors",
+        name: 'Bulk Direct Payment',
+        role: 'Pay Multiple Vendors',
         element: ArrowsRightLeftIcon,
       },
     },
@@ -132,19 +132,19 @@ const spending = [
   [
     {
       content:
-        "Distribute bulk vouchers to your customers or employees efficiently. Enhanced reward programs.",
+        'Distribute bulk vouchers to your customers or employees efficiently. Enhanced reward programs.',
       Icon: {
-        name: "Bulk Vouchers Payment",
-        role: "Distribute Rewards Efficiently",
+        name: 'Bulk Vouchers Payment',
+        role: 'Distribute Rewards Efficiently',
         element: TicketIcon,
       },
     },
     {
       content:
-        "Issue virtual or physical expense cards for your team. Control and track business spending with ease.",
+        'Issue virtual or physical expense cards for your team. Control and track business spending with ease.',
       Icon: {
-        name: "Expense Cards",
-        role: "Control Business PayoutFeatures",
+        name: 'Expense Cards',
+        role: 'Control Business PayoutFeatures',
         element: CreditCardIcon,
       },
     },
@@ -153,17 +153,17 @@ const spending = [
 
 const TABS = [
   {
-    name: "COLLECTIONS",
-    title: "Boost Your Collection Features",
+    name: 'COLLECTIONS',
+    title: 'Boost Your Collection Features',
     description:
-      "Streamline your collections, save time, and grow your business with confidence.",
+      'Streamline your collections, save time, and grow your business with confidence.',
     index: 0,
     Icon: ArrowLeftEndOnRectangleIcon,
   },
   {
-    name: "DISBURSEMENTS",
-    title: "Streamline Your Payout Features",
-    description: "Easily make bulk disbursements to your customers.",
+    name: 'DISBURSEMENTS',
+    title: 'Streamline Your Payout Features',
+    description: 'Easily make bulk disbursements to your customers.',
     index: 1,
     Icon: ArrowLeftStartOnRectangleIcon,
   },

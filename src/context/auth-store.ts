@@ -1,64 +1,65 @@
-import { ErrorState } from "@/types";
+import { create } from 'zustand';
+
+import { ErrorState } from '@/types';
 import {
   AccountOwner,
   BankAccountDetails,
   BusinessDetails,
   LoginPayload,
-} from "@/types/account";
-import { AuthStoreType, ChangePassword } from "@/types/stores";
-import { create } from "zustand";
+} from '@/types/account';
+import { AuthStoreType, ChangePassword } from '@/types/stores';
 
 const INITIAL_STATE = {
   isLoading: false,
-  merchantID: "",
+  merchantID: '',
   isValidTPIN: false,
   isKYCSent: false,
   isAccountCreated: false,
 
   password: {
-    newPassword: "",
-    confirmPassword: "",
+    newPassword: '',
+    confirmPassword: '',
   } as ChangePassword,
 
-  error: { status: false, message: "" } as ErrorState,
+  error: { status: false, message: '' } as ErrorState,
 
   businessInfo: {
-    name: "",
-    tpin: "",
-    date_of_incorporation: "",
-    companyTypeID: "",
-    physical_address: "",
-    contact: "",
-    company_email: "",
-    website: "",
-    provinceID: "",
-    cityID: "",
+    name: '',
+    tpin: '',
+    date_of_incorporation: '',
+    companyTypeID: '',
+    physical_address: '',
+    contact: '',
+    company_email: '',
+    website: '',
+    provinceID: '',
+    cityID: '',
   } as BusinessDetails,
 
   bankDetails: {
-    bankID: "",
-    branch_name: "",
-    branch_code: "",
-    account_name: "",
-    account_number: "",
-    currencyID: "",
+    bankID: '',
+    branch_name: '',
+    branch_code: '',
+    account_name: '',
+    account_number: '',
+    currencyID: '',
   } as BankAccountDetails,
 
   newAdminUser: {
-    first_name: "",
-    last_name: "",
-    email: "",
-    username: "",
-    phone_number: "",
-    password: "",
-    confirmPassword: "",
-    role: "owner",
+    first_name: '',
+    last_name: '',
+    email: '',
+    username: '',
+    phone_number: '',
+    password: '',
+    confirmPassword: '',
+    role: 'owner',
     changePassword: false,
   } as unknown as AccountOwner,
 
   loginDetails: {
-    emailusername: "",
-    password: "",
+    emailusername: '',
+    password: '',
   } as LoginPayload,
 };
 
@@ -96,12 +97,12 @@ const useAuthStore = create<AuthStoreType>((set, get) => ({
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
     try {
-      const res = await fetch("/api/logout", {
+      const res = await fetch('/api/logout', {
         signal: controller.signal,
       });
 
       if (!res.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error('Network response was not ok');
       }
 
       const data = await res.json();
@@ -112,7 +113,7 @@ const useAuthStore = create<AuthStoreType>((set, get) => ({
         window.location.href = data.redirect;
       }
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
     } finally {
       clearTimeout(timeoutId);
     }

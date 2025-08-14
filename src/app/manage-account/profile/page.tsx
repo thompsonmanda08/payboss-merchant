@@ -1,7 +1,7 @@
-import ProfileSecuritySettings from "@/app/manage-account/profile/components/security-settings";
-import { getUserSession } from "@/lib/session";
-import UserProfile from "@/components/elements/user-profile-card";
-import { User } from "@/types/account";
+import ProfileSecuritySettings from '@/app/manage-account/profile/components/security-settings';
+import UserProfile from '@/components/elements/user-profile-card';
+import { getUserSession } from '@/lib/session';
+import { User } from '@/types/account';
 
 async function AccountSettings() {
   const session = await getUserSession();

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { AvatarProps, Avatar as NextAvatar } from "@heroui/react";
+import { AvatarProps, Avatar as NextAvatar } from '@heroui/react';
 
-import { cn, getUserInitials } from "@/lib/utils";
+import { cn, getUserInitials } from '@/lib/utils';
 
 function Avatar({
   firstName,
@@ -41,15 +41,15 @@ function Avatar({
         <span className="items-center flex">
           <div className="flex min-w-[120px] flex-col items-start">
             <p
-              className={cn("text-sm font-semibold text-foreground-600", {
-                "text-white": isProfile,
+              className={cn('text-sm font-semibold text-foreground-600', {
+                'text-white': isProfile,
               })}
             >{`${firstName} ${lastName}`}</p>
             <p
               className={cn(
-                "-mt-1 ml-0.5 text-sm font-medium text-foreground-400",
+                '-mt-1 ml-0.5 text-sm font-medium text-foreground-400',
                 {
-                  "text-white": isProfile,
+                  'text-white': isProfile,
                 },
               )}
             >

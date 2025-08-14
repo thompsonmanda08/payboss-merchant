@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import React, { useEffect, useRef, useState } from "react";
-import CardHeader from "@/components/base/card-header";
-import useKYCInfo from "@/hooks/use-kyc-info";
-import Link from "next/link";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
-import EmptyLogs from "@/components/base/empty-logs";
-import Modal from "@/components/modals/custom-modal";
-import IframeWithFallback from "@/components/base/IframeWithFallback";
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useState } from 'react';
+
+import CardHeader from '@/components/base/card-header';
+import EmptyLogs from '@/components/base/empty-logs';
+import IframeWithFallback from '@/components/base/IframeWithFallback';
+import Modal from '@/components/modals/custom-modal';
+import { Button } from '@/components/ui/button';
+import useKYCInfo from '@/hooks/use-kyc-info';
 
 function TermsAndAgreement({
   isAdminOrOwner,
@@ -20,8 +21,8 @@ function TermsAndAgreement({
   const { signedContractDoc } = useKYCInfo();
 
   const contractDocument = {
-    name: "Signed Contract Document",
-    type: "SIGNED_CONTRACT",
+    name: 'Signed Contract Document',
+    type: 'SIGNED_CONTRACT',
     url: signedContractDoc || null,
   };
 
@@ -31,13 +32,13 @@ function TermsAndAgreement({
     <>
       <div className="w-full lg:px-8 mx-auto p-2">
         <CardHeader
-          title="Contract & Agreement"
-          infoText="Please read and agree to the terms and conditions."
-          className={"py-0 mb-6"}
+          className={'py-0 mb-6'}
           classNames={{
-            infoClasses: "mb-0",
-            innerWrapper: "gap-0",
+            infoClasses: 'mb-0',
+            innerWrapper: 'gap-0',
           }}
+          infoText="Please read and agree to the terms and conditions."
+          title="Contract & Agreement"
         />
 
         <p className="mt-2 mb-4 text-sm text-gray-500">
@@ -50,7 +51,7 @@ function TermsAndAgreement({
           variant="light"
           onClick={() => setIsOpenModal(true)}
         >
-          <Link href={contractDocument?.url || "#"} target="_blank">
+          <Link href={contractDocument?.url || '#'} target="_blank">
             <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 z-50 h-5 w-5 text-foreground/20 hover:text-primary" />
           </Link>
           <div className="h-[65%]">
@@ -59,7 +60,7 @@ function TermsAndAgreement({
               alt="file"
               className="h-full w-full object-cover"
               height={100}
-              src={"/images/attachment.png"}
+              src={'/images/attachment.png'}
               width={80}
             />
           </div>
@@ -90,11 +91,11 @@ function TermsAndAgreement({
   ) : (
     <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
       <EmptyLogs
-        className={"my-auto"}
+        className={'my-auto'}
         subTitle={
-          "Only the admin or account owner can access/submit company documentation."
+          'Only the admin or account owner can access/submit company documentation.'
         }
-        title={"Oops! Looks like your are not an Admin"}
+        title={'Oops! Looks like your are not an Admin'}
       />
     </div>
   );

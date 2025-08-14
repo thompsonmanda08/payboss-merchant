@@ -1,11 +1,11 @@
-"use client";
-import { XMarkIcon } from "@heroicons/react/24/outline";
-import { motion } from "framer-motion";
+'use client';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { motion } from 'framer-motion';
 
-import { cn } from "@/lib/utils";
+import Logo from '@/components/base/payboss-logo';
+import { cn } from '@/lib/utils';
 
-import Logo from "@/components/base/payboss-logo";
-import SideNavItems from "./side-nav-items";
+import SideNavItems from './side-nav-items';
 
 function MobileNavBar({
   isMobileMenuOpen,
@@ -37,7 +37,7 @@ function MobileNavBar({
           className={cn(
             `absolute left-[-100%] z-[99] hidden bg-black/80 backdrop-blur-sm`,
             {
-              "inset-0 block lg:hidden": isMobileMenuOpen,
+              'inset-0 block lg:hidden': isMobileMenuOpen,
             },
           )}
           whileInView={{ opacity: [0, 1], transition: { duration: 0.3 } }}
@@ -47,7 +47,7 @@ function MobileNavBar({
       <nav
         className={cn(
           `fixed left-[-100%] top-0 z-[999] h-full w-[70%] min-w-[300px] max-w-[412px] flex-col bg-background p-5 transition-all duration-300 ease-in-out`,
-          { "left-0 flex lg:-left-[100%]": isMobileMenuOpen },
+          { 'left-0 flex lg:-left-[100%]': isMobileMenuOpen },
         )}
       >
         <button

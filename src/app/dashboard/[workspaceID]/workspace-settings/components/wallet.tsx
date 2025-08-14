@@ -1,40 +1,35 @@
-import {
-  Chip,
-  Tooltip,
-  useDisclosure,
-  addToast,
-  ModalProps,
-} from "@heroui/react";
-import { getLocalTimeZone, today } from "@internationalized/date";
-import { useQueryClient } from "@tanstack/react-query";
-import { formatDistance } from "date-fns";
-import { useState } from "react";
-import { PaperClipIcon } from "@heroicons/react/24/outline";
+import { PaperClipIcon } from '@heroicons/react/24/outline';
+import { Chip, Tooltip, useDisclosure, addToast } from '@heroui/react';
+import { getLocalTimeZone, today } from '@internationalized/date';
+import { useQueryClient } from '@tanstack/react-query';
+import { formatDistance } from 'date-fns';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input-field";
-import { capitalize, cn, formatCurrency, formatDate } from "@/lib/utils";
-import { QUERY_KEYS, TASK_TYPE, WORKSPACE_TYPES } from "@/lib/constants";
-import PromptModal from "@/components/modals/prompt-modal";
-import { uploadPOPDocument } from "@/app/_actions/pocketbase-actions";
+import { uploadPOPDocument } from '@/app/_actions/pocketbase-actions';
 import {
   approveWalletPrefund,
   submitPOP,
-} from "@/app/_actions/workspace-actions";
-import DateSelectField from "@/components/ui/date-select-field";
-import { Skeleton } from "@/components/ui/skeleton";
-import Card from "@/components/base/custom-card";
-import Balance from "@/components/base/wallet-balance";
-import StatusMessage from "@/components/base/status-message";
-import CardHeader from "@/components/base/card-header";
-import EmptyLogs from "@/components/base/empty-logs";
-import UploadField from "@/components/base/file-dropzone";
-import Modal from "@/components/modals/custom-modal";
-import useWalletStore from "@/context/wallet-store";
-import { useWorkspaceInit } from "@/hooks/use-query-data";
-import { WorkspaceSession } from "@/types";
-import { formatActivityData } from "./wallet-transaction-log";
-import IframeWithFallback from "@/components/base/IframeWithFallback";
+} from '@/app/_actions/workspace-actions';
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import EmptyLogs from '@/components/base/empty-logs';
+import UploadField from '@/components/base/file-dropzone';
+import IframeWithFallback from '@/components/base/IframeWithFallback';
+import StatusMessage from '@/components/base/status-message';
+import Balance from '@/components/base/wallet-balance';
+import Modal from '@/components/modals/custom-modal';
+import PromptModal from '@/components/modals/prompt-modal';
+import { Button } from '@/components/ui/button';
+import DateSelectField from '@/components/ui/date-select-field';
+import { Input } from '@/components/ui/input-field';
+import { Skeleton } from '@/components/ui/skeleton';
+import useWalletStore from '@/context/wallet-store';
+import { useWorkspaceInit } from '@/hooks/use-query-data';
+import { QUERY_KEYS, TASK_TYPE, WORKSPACE_TYPES } from '@/lib/constants';
+import { capitalize, cn, formatCurrency, formatDate } from '@/lib/utils';
+import { WorkspaceSession } from '@/types';
+
+import { formatActivityData } from './wallet-transaction-log';
 
 function Wallet({
   workspaceID,
@@ -77,7 +72,7 @@ function Wallet({
 
   const [error, setError] = useState({
     status: false,
-    message: "",
+    message: '',
   });
 
   const isDisabled =
@@ -91,15 +86,15 @@ function Wallet({
 
   async function handleFileUpload(file: File, recordID: string) {
     setWalletLoading(true);
-    setError({ message: "", status: false });
+    setError({ message: '', status: false });
 
-    let response = await uploadPOPDocument(file, recordID);
+    const response = await uploadPOPDocument(file, recordID);
 
     if (response?.success) {
       setWalletLoading(false);
       addToast({
-        title: "Success",
-        color: "success",
+        title: 'Success',
+        color: 'success',
         description: response?.message,
       });
 
@@ -108,8 +103,8 @@ function Wallet({
 
     setWalletLoading(false);
     addToast({
-      title: "Error",
-      color: "danger",
+      title: 'Error',
+      color: 'danger',
       description: response?.message,
     });
 
@@ -121,12 +116,12 @@ function Wallet({
 
     if (!formData.url) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Attach proof of payment!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Attach proof of payment!',
       });
       setError({
-        message: "Verify that you have attached a proof of payment!",
+        message: 'Verify that you have attached a proof of payment!',
         status: true,
       });
       setIsLoading(false);
@@ -137,12 +132,12 @@ function Wallet({
 
     if (!formData.bank_rrn) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Enter a valid bank reference number!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Enter a valid bank reference number!',
       });
       setError({
-        message: "Verify that you have entered a valid bank reference number!",
+        message: 'Verify that you have entered a valid bank reference number!',
         status: true,
       });
       setIsLoading(false);
@@ -153,12 +148,12 @@ function Wallet({
 
     if (!formData.date_of_deposit) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Enter a valid date of deposit!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Enter a valid date of deposit!',
       });
       setError({
-        message: "Verify that you have entered a valid date of deposit!",
+        message: 'Verify that you have entered a valid date of deposit!',
         status: true,
       });
       setIsLoading(false);
@@ -169,12 +164,12 @@ function Wallet({
 
     if (!formData.name) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Enter a valid prefund name!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Enter a valid prefund name!',
       });
       setError({
-        message: "Verify that you have entered a valid prefund name!",
+        message: 'Verify that you have entered a valid prefund name!',
         status: true,
       });
       setIsLoading(false);
@@ -189,12 +184,12 @@ function Wallet({
       formData.amount.toString().length > 0
     ) {
       addToast({
-        title: "Invalid Amount",
-        color: "danger",
-        description: "Verify that you have entered a valid amount!",
+        title: 'Invalid Amount',
+        color: 'danger',
+        description: 'Verify that you have entered a valid amount!',
       });
       setError({
-        message: "Verify that you have entered a valid amount!",
+        message: 'Verify that you have entered a valid amount!',
         status: true,
       });
       setIsLoading(false);
@@ -205,12 +200,12 @@ function Wallet({
 
     if (workspaceType == WORKSPACE_TYPES[0]?.ID) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "You are not allowed to prefund your collections wallet!",
+        title: 'Error',
+        color: 'danger',
+        description: 'You are not allowed to prefund your collections wallet!',
       });
       setError({
-        message: "You are not allowed to prefund your collections wallet!",
+        message: 'You are not allowed to prefund your collections wallet!',
         status: true,
       });
       setIsLoading(false);
@@ -225,17 +220,17 @@ function Wallet({
         queryKey: [QUERY_KEYS.WALLET_HISTORY, workspaceID],
       });
       addToast({
-        title: "Success",
-        color: "success",
-        description: "Proof of payment submitted successfully.",
+        title: 'Success',
+        color: 'success',
+        description: 'Proof of payment submitted successfully.',
       });
       setIsLoading(false);
       setFormData({
-        amount: "",
-        bank_rrn: "",
-        date_of_deposit: "",
-        url: "",
-        name: "",
+        amount: '',
+        bank_rrn: '',
+        date_of_deposit: '',
+        url: '',
+        name: '',
       });
       onClose();
       setIsLoading(false);
@@ -248,8 +243,8 @@ function Wallet({
       message: response?.message,
     });
     addToast({
-      title: "Error",
-      color: "danger",
+      title: 'Error',
+      color: 'danger',
       description: response?.message,
     });
     setIsLoading(false);
@@ -262,10 +257,10 @@ function Wallet({
       <section className="flex w-full items-center" role="wallet-section">
         <Card
           className={cn(
-            "flex w-full flex-col items-start justify-center gap-8 md:flex-row",
+            'flex w-full flex-col items-start justify-center gap-8 md:flex-row',
             {
-              "items-center justify-center gap-x-0": hideHistory,
-              "rounded-none border-none p-0 shadow-none": removeWrapper,
+              'items-center justify-center gap-x-0': hideHistory,
+              'rounded-none border-none p-0 shadow-none': removeWrapper,
             },
           )}
         >
@@ -273,8 +268,8 @@ function Wallet({
           {permissions?.can_initiate &&
             workspaceType !== WORKSPACE_TYPES[0]?.ID && (
               <div
-                className={cn("flex w-full max-w-md flex-1 flex-col gap-4", {
-                  "mx-auto": hideHistory,
+                className={cn('flex w-full max-w-md flex-1 flex-col gap-4', {
+                  'mx-auto': hideHistory,
                 })}
               >
                 <Balance
@@ -284,9 +279,9 @@ function Wallet({
                 />
                 <div
                   className={cn(
-                    "flex w-full flex-col gap-y-4 p-[25px] lg:border lg:border-y-0 lg:border-l-0 lg:border-border",
+                    'flex w-full flex-col gap-y-4 p-[25px] lg:border lg:border-y-0 lg:border-l-0 lg:border-border',
                     {
-                      "lg:border-r-0": hideHistory,
+                      'lg:border-r-0': hideHistory,
                     },
                   )}
                 >
@@ -321,18 +316,18 @@ function Wallet({
                       isRequired
                       className="max-w-md"
                       defaultValue={formData?.date_of_deposit}
-                      description={"Date the funds were deposited"}
-                      label={"Date of Deposit"}
-                      labelPlacement={"outside"}
+                      description={'Date the funds were deposited'}
+                      label={'Date of Deposit'}
+                      labelPlacement={'outside'}
                       maxValue={today(getLocalTimeZone())}
                       value={
-                        formData?.date_of_deposit?.split("").length > 9
+                        formData?.date_of_deposit?.split('').length > 9
                           ? formData?.date_of_deposit
                           : undefined
                       }
                       onChange={(date: any) => {
                         updateFormData({
-                          date_of_deposit: formatDate(date, "YYYY-MM-DD"),
+                          date_of_deposit: formatDate(date, 'YYYY-MM-DD'),
                         });
                       }}
                     />
@@ -340,10 +335,10 @@ function Wallet({
                     <UploadField
                       required
                       acceptedFiles={{
-                        "application/pdf": [],
-                        "image/png": [],
-                        "image/jpeg": [],
-                        "image/jpg": [],
+                        'application/pdf': [],
+                        'image/png': [],
+                        'image/jpeg': [],
+                        'image/jpg': [],
                       }}
                       handleFile={async (file) => {
                         const file_record = await handleFileUpload(
@@ -381,14 +376,14 @@ function Wallet({
             <div className="flex h-full max-h-[600px] overflow-y-auto no-scrollbar flex-[2] flex-grow flex-col items-start gap-8">
               <CardHeader
                 infoText={
-                  "Transaction history logs for every activity on the wallet"
+                  'Transaction history logs for every activity on the wallet'
                 }
                 title="Wallet Transaction History"
               />
               <WalletTransactionHistory
-                workspaceID={workspaceID}
                 permissions={permissions}
                 transactionData={transactionData}
+                workspaceID={workspaceID}
               />
             </div>
           )}
@@ -405,7 +400,7 @@ function Wallet({
           onOpenChange={onOpenChange}
         >
           <p className="-mt-4 mb-4 text-[15px] leading-7 text-foreground/80">
-            Your wallet will be credited with the amount{" "}
+            Your wallet will be credited with the amount{' '}
             <strong>{formatCurrency(formData?.amount)}</strong> of bank
             reference number
             <code className="mx-1 mb-2 rounded-md bg-primary/10 p-1 px-2 font-bold text-primary-700">
@@ -471,7 +466,7 @@ export function WalletTransactionHistory({
 
   const data = [
     {
-      title: "Wallet Transactions",
+      title: 'Wallet Transactions',
       data: limit ? walletHistory.slice(0, limit) : walletHistory,
     },
   ];
@@ -483,13 +478,13 @@ export function WalletTransactionHistory({
     setOpenAttachmentModal(false);
     setSelectedPrefund(null);
     updatePrefundApproval({
-      action: "",
-      remarks: "",
+      action: '',
+      remarks: '',
     });
     onClose();
   }
 
-  function handleApproveOrReject(item: any, action: "approved" | "rejected") {
+  function handleApproveOrReject(item: any, action: 'approved' | 'rejected') {
     setSelectedPrefund(item);
     updatePrefundApproval({
       action: action,
@@ -506,9 +501,9 @@ export function WalletTransactionHistory({
     if (!prefundApproval.remarks) {
       setIsLoading(false);
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Review reason is required.",
+        title: 'Error',
+        color: 'danger',
+        description: 'Review reason is required.',
       });
 
       return;
@@ -517,9 +512,9 @@ export function WalletTransactionHistory({
     if (!prefundApproval?.action) {
       setIsLoading(false);
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Action is required!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Action is required!',
       });
 
       return;
@@ -534,9 +529,9 @@ export function WalletTransactionHistory({
     if (!response?.success) {
       setIsLoading(false);
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Failed to submit approval action!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Failed to submit approval action!',
       });
 
       return;
@@ -552,9 +547,9 @@ export function WalletTransactionHistory({
     });
     setIsLoading(false);
     addToast({
-      title: "Success",
-      color: "success",
-      description: "Submitted successfully!",
+      title: 'Success',
+      color: 'success',
+      description: 'Submitted successfully!',
     });
     handleClosePrompt();
   }
@@ -567,9 +562,9 @@ export function WalletTransactionHistory({
     <>
       <div
         className={cn(
-          "my-auto flex min-h-96 flex-col py-4 w-full",
+          'my-auto flex min-h-96 flex-col py-4 w-full',
           {
-            "my-0": formattedActivityData?.length > 0,
+            'my-0': formattedActivityData?.length > 0,
           },
           className,
           classNames?.wrapper,
@@ -587,14 +582,14 @@ export function WalletTransactionHistory({
                 {items?.data?.map((item, itemIndex) => {
                   // EACH TRANSACTION ITEM
                   const isGreen =
-                    (item?.status == "success" || item?.status == "approved") &&
-                    item?.type == "credit" &&
+                    (item?.status == 'success' || item?.status == 'approved') &&
+                    item?.type == 'credit' &&
                     item?.isPrefunded;
 
-                  const isYellow = item?.status == "pending";
+                  const isYellow = item?.status == 'pending';
 
                   const isRed =
-                    item?.status == "rejected" || item?.type == "debit";
+                    item?.status == 'rejected' || item?.type == 'debit';
 
                   const isGray = item?.isExpired;
 
@@ -605,7 +600,7 @@ export function WalletTransactionHistory({
                     >
                       <div className="flex items-start space-x-4">
                         <LogTaskType
-                          classNames={{ wrapper: "" }}
+                          classNames={{ wrapper: '' }}
                           type={item?.type}
                         />
 
@@ -614,7 +609,7 @@ export function WalletTransactionHistory({
                             <p className="text-xs text-foreground/70 -mt-1">
                               <span className="text-base font-semibold text-foreground/80 capitalize leading-6">
                                 {item?.name || (item?.created_by as string)}
-                              </span>{" "}
+                              </span>{' '}
                               <br />
                               {item?.content}
                               <span className="ml-2 font-normal leading-4 text-foreground/40">
@@ -622,7 +617,7 @@ export function WalletTransactionHistory({
                                 {formatDistance(
                                   new Date(item?.created_at),
                                   new Date(),
-                                )}{" "}
+                                )}{' '}
                                 ago
                               </span>
                             </p>
@@ -632,12 +627,12 @@ export function WalletTransactionHistory({
                                 <Tooltip
                                   classNames={{
                                     content: cn(
-                                      "text-nowrap bg-primary text-white",
+                                      'text-nowrap bg-primary text-white',
                                       {
-                                        "bg-success/10 text-green-600": isGreen,
-                                        "bg-secondary/10 text-secondary":
+                                        'bg-success/10 text-green-600': isGreen,
+                                        'bg-secondary/10 text-secondary':
                                           isYellow,
-                                        "bg-danger/10 text-danger": isRed,
+                                        'bg-danger/10 text-danger': isRed,
                                       },
                                     ),
                                   }}
@@ -649,26 +644,26 @@ export function WalletTransactionHistory({
                                   <Chip
                                     classNames={{
                                       base: cn(
-                                        "p-2 py-4 cursor-pointer rounded-md bg-primary/10 text-primary-700",
+                                        'p-2 py-4 cursor-pointer rounded-md bg-primary/10 text-primary-700',
 
                                         {
-                                          "bg-success/10 text-green-500":
+                                          'bg-success/10 text-green-500':
                                             isGreen,
-                                          "bg-secondary/10 text-secondary":
+                                          'bg-secondary/10 text-secondary':
                                             isYellow,
-                                          "bg-danger/10 text-danger": isRed,
+                                          'bg-danger/10 text-danger': isRed,
                                         },
                                       ),
-                                      content: cn("text-base font-bold", {}),
+                                      content: cn('text-base font-bold', {}),
                                     }}
                                     variant="flat"
                                   >
                                     {formatCurrency(item?.amount)}
                                   </Chip>
                                 </Tooltip>
-                                {item?.type?.toLowerCase() == "deposit" && (
+                                {item?.type?.toLowerCase() == 'deposit' && (
                                   <Tooltip
-                                    content={"View Proof of payment"}
+                                    content={'View Proof of payment'}
                                     placement="top"
                                   >
                                     <span
@@ -685,24 +680,24 @@ export function WalletTransactionHistory({
                               </div>
 
                               {/* TRANSACTION APPROVAL BUTTON COMPONENTS} */}
-                              {item?.status == "pending" &&
+                              {item?.status == 'pending' &&
                                 permissions?.can_approve && (
                                   <div className="mb-4 ml-auto mt-2 flex max-w-max gap-2">
                                     <Button
-                                      className={"h-8"}
-                                      color={"danger"}
+                                      className={'h-8'}
+                                      color={'danger'}
                                       size="sm"
                                       onClick={() =>
-                                        handleApproveOrReject(item, "rejected")
+                                        handleApproveOrReject(item, 'rejected')
                                       }
                                     >
                                       Reject
                                     </Button>
                                     <Button
-                                      className={"h-8"}
+                                      className={'h-8'}
                                       size="sm"
                                       onClick={() =>
-                                        handleApproveOrReject(item, "approved")
+                                        handleApproveOrReject(item, 'approved')
                                       }
                                     >
                                       Approve
@@ -726,9 +721,9 @@ export function WalletTransactionHistory({
         ) : (
           <div className="flex flex-1 items-center rounded-lg bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
             <EmptyLogs
-              className={"my-auto"}
-              subTitle={"You have not made any wallet transactions yet."}
-              title={"No Wallet Transactions"}
+              className={'my-auto'}
+              subTitle={'You have not made any wallet transactions yet.'}
+              title={'No Wallet Transactions'}
             />
           </div>
         )}
@@ -883,10 +878,10 @@ function ApprovalStatusPrompt({
     >
       <p className="-mt-4 mb-2 text-sm leading-6 text-foreground/70">
         Are you sure you want to <strong>{prefundApproval?.action}</strong> the
-        wallet transaction of{" "}
+        wallet transaction of{' '}
         <code className="rounded-md bg-primary/10 p-1 px-2 font-semibold text-primary-700">
-          {`(${formatCurrency(selectedPrefund?.amount || "00")})`}
-        </code>{" "}
+          {`(${formatCurrency(selectedPrefund?.amount || '00')})`}
+        </code>{' '}
       </p>
       <Input
         isDisabled={isLoading}

@@ -1,29 +1,9 @@
-import { getAuthSession } from "@/app/_actions/config-actions";
+import { AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
 
-import { apiClient } from "./utils";
-import { AxiosHeaders, AxiosRequestConfig, AxiosRequestHeaders } from "axios";
-import { APIResponse } from "@/types";
+import { getAuthSession } from '@/app/_actions/config-actions';
+import { APIResponse } from '@/types';
 
-// Add request interceptor for authenticated requests
-// apiClient.interceptors.request.use(
-//   async (config) => {
-//     // Skip adding auth header for specific endpoints
-//     if (config.publicEndpoint) {
-//       return config;
-//     }
-
-//     const session = await getAuthSession();
-
-//     if (session?.accessToken) {
-//       config.headers.Authorization = `Bearer ${session.accessToken}`;
-//     }
-
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   },
-// );
+import { apiClient } from './utils';
 
 // Add response interceptor for error handling
 apiClient.interceptors.response.use(
@@ -34,30 +14,32 @@ apiClient.interceptors.response.use(
     // Network error (no response)
     if (!error.response) {
       return Promise.reject({
-        type: "NoResponse Error",
-        message: "No response from server. Please try again.",
+        type: 'NoResponse Error',
+        message: 'No response from server. Please try again.',
+        request: originalRequest,
+        details: error,
       });
     }
 
     // Timeout error
-    if (error.code === "ECONNABORTED") {
+    if (error.code === 'ECONNABORTED') {
       throw {
         ...error,
-        type: "Timeout Error",
-        message: "Request timed out! Please try again.",
+        type: 'Timeout Error',
+        message: 'Request timed out! Please try again.',
       };
     }
 
     //network error
 
     if (
-      error.code == "ECONNREFUSED" ||
-      error.code == "ECONNRESET" ||
-      error.code == "ENOTFOUND"
+      error.code == 'ECONNREFUSED' ||
+      error.code == 'ECONNRESET' ||
+      error.code == 'ENOTFOUND'
     ) {
       return Promise.reject({
-        type: "Network Error",
-        message: "Please check your internet connection.",
+        type: 'Network Error',
+        message: 'Please check your internet connection.',
       });
     }
 
@@ -65,37 +47,37 @@ apiClient.interceptors.response.use(
 
     // Handle specific error codes
     const errorMap: { [x: string]: string } = {
-      400: "Bad request",
-      403: "Forbidden",
-      404: "Resource not found",
-      500: "Internal server error",
-      502: "Bad gateway",
-      503: "Service unavailable",
+      400: 'Bad request',
+      403: 'Forbidden',
+      404: 'Resource not found',
+      500: 'Internal server error',
+      502: 'Bad gateway',
+      503: 'Service unavailable',
     };
 
     throw {
       ...error,
-      type: "api",
+      type: 'api',
       status,
-      message: data?.message || errorMap[status] || "Request failed",
+      message: data?.message || errorMap[status] || 'Request failed',
       details: data?.errors || {},
     };
   },
 );
 
 export type RequestType = AxiosRequestConfig & {
-  contentType?: AxiosRequestHeaders["Content-Type"];
+  contentType?: AxiosRequestHeaders['Content-Type'];
 };
 
 const authenticatedApiClient = async (request: RequestType) => {
   const session = await getAuthSession();
 
   const config = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-type": request.contentType
+      'Content-type': request.contentType
         ? request.contentType
-        : "application/json",
+        : 'application/json',
       Authorization: `Bearer ${session?.accessToken}`,
     },
     withCredentials: true,
@@ -117,14 +99,14 @@ export default authenticatedApiClient;
 
 export function successResponse(
   data: any | null,
-  message: string = "Action completed successfully",
+  message: string = 'Action completed successfully',
 ): APIResponse {
   return {
     success: true,
     message,
     data,
     status: 200,
-    statusText: "OK",
+    statusText: 'OK',
   };
 }
 
@@ -134,14 +116,14 @@ export function successResponse(
  * @returns {APIResponse} The API response
  */
 export function handleBadRequest(
-  message: string = "Missing required parameters",
+  message: string = 'Missing required parameters',
 ): APIResponse {
   return {
     success: false,
     message,
     data: null,
     status: 400,
-    statusText: "BAD_REQUEST",
+    statusText: 'BAD_REQUEST',
   };
 }
 
@@ -153,14 +135,14 @@ export function handleBadRequest(
  * @returns {APIResponse} - The standardized API response object.
  */
 export function unauthorizedResponse(
-  message: string = "Unauthorized",
+  message: string = 'Unauthorized',
 ): APIResponse {
   return {
     success: false,
     message,
     data: null,
     status: 401,
-    statusText: "UNAUTHORIZED",
+    statusText: 'UNAUTHORIZED',
   };
 }
 
@@ -177,7 +159,7 @@ export function notFoundResponse(message: string): APIResponse {
     message,
     data: null,
     status: 404,
-    statusText: "NOT FOUND",
+    statusText: 'NOT FOUND',
   };
 }
 
@@ -193,7 +175,7 @@ export function notFoundResponse(message: string): APIResponse {
 
 export function handleError(
   error: any,
-  method: string = "GET",
+  method: string = 'GET',
   url: string,
 ): APIResponse {
   console.error({
@@ -213,9 +195,9 @@ export function handleError(
       error?.response?.data?.message ||
       error?.response?.config?.data?.error ||
       error?.message ||
-      "No Server Response",
+      'No Server Response',
     data: null,
     status: error?.response?.status || 500,
-    statusText: error?.response?.statusText || "INTERNAL SERVER ERROR",
+    statusText: error?.response?.statusText || 'INTERNAL SERVER ERROR',
   };
 }

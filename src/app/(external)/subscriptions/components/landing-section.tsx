@@ -1,5 +1,7 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+
+import { Button } from '@/components/ui/button';
+
 import {
   FloatingCircle,
   FloatingRectangle,
@@ -8,14 +10,12 @@ import {
   DecorativeStar,
   FloatingBook,
   FloatingUniversity,
-  FloatingOffice,
   FloatingCorporate,
   FloatingBusiness,
   FloatingFinance,
-  FloatingDocuments,
   FloatingSecurity,
   SubscriptionBackgroundSVG,
-} from "./floating-shapes";
+} from './floating-shapes';
 
 export default function SubScriptionLandingSection({
   startPayment,
@@ -100,20 +100,20 @@ export default function SubScriptionLandingSection({
 
               {/* Gradient capsules */}
               <div className="hidden lg:flex gap-2">
-                <div className="w-24 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 animate-float"></div>
+                <div className="w-24 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 animate-float" />
                 <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center animate-float-delayed">
-                  <div className="w-8 h-8 rounded-full bg-blue-200"></div>
+                  <div className="w-8 h-8 rounded-full bg-blue-200" />
                 </div>
                 <div className="w-20 h-16 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 animate-float flex items-center justify-center">
                   <svg
-                    width="24"
+                    className="text-white"
                     height="24"
                     viewBox="0 0 24 24"
-                    className="text-white"
+                    width="24"
                   >
-                    <circle cx="12" cy="12" r="3" fill="currentColor" />
-                    <circle cx="18" cy="8" r="2" fill="currentColor" />
-                    <circle cx="6" cy="16" r="2" fill="currentColor" />
+                    <circle cx="12" cy="12" fill="currentColor" r="3" />
+                    <circle cx="18" cy="8" fill="currentColor" r="2" />
+                    <circle cx="6" cy="16" fill="currentColor" r="2" />
                   </svg>
                 </div>
               </div>
@@ -122,15 +122,15 @@ export default function SubScriptionLandingSection({
             <div className="flex items-center justify-center mb-4 flex-wrap gap-4">
               <div className="relative hidden lg:block">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 animate-float-delayed flex items-center justify-center">
-                  <div className="w-3 h-8 bg-gray-900 rounded-full"></div>
+                  <div className="w-3 h-8 bg-gray-900 rounded-full" />
                 </div>
 
-                <svg className="absolute -right-8 top-8" width="60" height="20">
+                <svg className="absolute -right-8 top-8" height="20" width="60">
                   <path
                     d="M0 10 L60 10"
                     stroke="#6B7280"
-                    strokeWidth="2"
                     strokeDasharray="4,4"
+                    strokeWidth="2"
                   />
                 </svg>
               </div>
@@ -142,9 +142,9 @@ export default function SubScriptionLandingSection({
               {/* Toggle switch design */}
               <div className="ml-6 absolute left-1/2 -top-16 hidden lg:flex">
                 <div className="w-24 h-12 bg-gray-900 rounded-full flex items-center px-2">
-                  <div className="w-8 h-8 bg-green-400 rounded-full animate-pulse"></div>
-                  <div className="flex-1 h-1 bg-gray-600 mx-2 rounded"></div>
-                  <div className="w-6 h-6 bg-blue-400 rounded-full"></div>
+                  <div className="w-8 h-8 bg-green-400 rounded-full animate-pulse" />
+                  <div className="flex-1 h-1 bg-gray-600 mx-2 rounded" />
+                  <div className="w-6 h-6 bg-blue-400 rounded-full" />
                 </div>
                 {/* Dashed line extending */}
                 {/* <svg
@@ -166,30 +166,30 @@ export default function SubScriptionLandingSection({
             <div className="flex items-center justify-center flex-wrap gap-4">
               <div className="relative hidden lg:flex">
                 {/* Dashed connecting line from above */}
-                <svg className="absolute -top-8 left-8" width="40" height="40">
+                <svg className="absolute -top-8 left-8" height="40" width="40">
                   <path
                     d="M20 0 Q10 20 20 40"
-                    stroke="#6B7280"
-                    strokeWidth="2"
-                    strokeDasharray="4,4"
                     fill="none"
+                    stroke="#6B7280"
+                    strokeDasharray="4,4"
+                    strokeWidth="2"
                   />
                 </svg>
 
                 {/* Overlapping gradient circles */}
                 <div className="relative">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 animate-float"></div>
-                  <div className="absolute top-4 left-8 w-16 h-16 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 animate-float-delayed opacity-90"></div>
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 animate-float" />
+                  <div className="absolute top-4 left-8 w-16 h-16 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 animate-float-delayed opacity-90" />
                   <div className="absolute top-8 left-4 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center">
                     <svg
-                      width="16"
+                      className="text-gray-700"
                       height="16"
                       viewBox="0 0 16 16"
-                      className="text-gray-700"
+                      width="16"
                     >
-                      <circle cx="4" cy="4" r="1.5" fill="currentColor" />
-                      <circle cx="12" cy="4" r="1.5" fill="currentColor" />
-                      <circle cx="8" cy="12" r="1.5" fill="currentColor" />
+                      <circle cx="4" cy="4" fill="currentColor" r="1.5" />
+                      <circle cx="12" cy="4" fill="currentColor" r="1.5" />
+                      <circle cx="8" cy="12" fill="currentColor" r="1.5" />
                       <path
                         d="M4 4 L12 4 M8 4 L8 12"
                         stroke="currentColor"
@@ -216,16 +216,16 @@ export default function SubScriptionLandingSection({
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-8">
             <Button
-              size="lg"
               className="bg-primary-900 hover:bg-gray-800 text-white px-8 py-6 text-lg  shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              size="lg"
               onPress={() => navigateTo(1)}
             >
               Make a Payment
             </Button>
             <Button
-              variant="light"
-              size="lg"
               className="text-gray-600 hover:text-gray-900 px-8 py-6 text-lg"
+              size="lg"
+              variant="light"
               onPress={() => navigateTo(2)}
             >
               See how it work →
@@ -234,10 +234,10 @@ export default function SubScriptionLandingSection({
 
           {/* Additional floating elements for visual interest */}
           <div className="absolute top-1/2 left-8 transform -translate-y-1/2">
-            <div className="w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
+            <div className="w-4 h-4 bg-green-400 rounded-full animate-pulse" />
           </div>
           <div className="absolute top-1/3 right-12 transform -translate-y-1/2">
-            <div className="w-6 h-6 bg-yellow-400 rotate-45 animate-float"></div>
+            <div className="w-6 h-6 bg-yellow-400 rotate-45 animate-float" />
           </div>
         </div>
       </div>

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Input } from "@/components/ui/input-field";
-import useAccountProfile from "@/hooks/use-profile-info";
-import Card from "@/components/base/custom-card";
-import { User } from "@/types/account";
+import Card from '@/components/base/custom-card';
+import { Input } from '@/components/ui/input-field';
+import useAccountProfile from '@/hooks/use-profile-info';
+import { User } from '@/types/account';
 
 function ProfileDetails() {
   const { user, isLoading, isFetching } = useAccountProfile();
@@ -34,7 +34,7 @@ function ProfileDetails() {
   }
 
   return isFetching || isLoading ? (
-    <Card className={"rounded-2xl backdrop-blur-md"}>
+    <Card className={'rounded-2xl backdrop-blur-md'}>
       <div className="flex w-full animate-pulse flex-col rounded-md p-5">
         <div>
           <div className="flex w-full items-end justify-between gap-2">
@@ -67,7 +67,7 @@ function ProfileDetails() {
       </div>
     </Card>
   ) : (
-    <Card className={"rounded-2xl bg-background/70 backdrop-blur-md"}>
+    <Card className={'rounded-2xl bg-background/70 backdrop-blur-md'}>
       <div className="flex w-full flex-col rounded-md p-5">
         <div>
           <div className="flex w-full items-end justify-between">

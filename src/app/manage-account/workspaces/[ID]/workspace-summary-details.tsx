@@ -1,28 +1,28 @@
-"use client";
-import { useEffect, useMemo, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { Switch, useDisclosure, addToast } from "@heroui/react";
+'use client';
 import {
   ArrowRightStartOnRectangleIcon,
   PencilIcon,
   PlusIcon,
   WalletIcon,
-} from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { useQueryClient } from "@tanstack/react-query";
+} from '@heroicons/react/24/outline';
+import { Switch, useDisclosure, addToast } from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
-import useWorkspaceStore from "@/context/workspaces-store";
-import { cn, formatCurrency } from "@/lib/utils";
-import { Input } from "@/components/ui/input-field";
-import { Button } from "@/components/ui/button";
-import AddUserToWorkspace from "@/components/modals/add-users-workspace-modal";
-import PromptModal from "@/components/modals/prompt-modal";
-import NavIconButton from "@/components/ui/nav-icon-button";
 import {
   changeWorkspaceVisibility,
   deleteWorkspace,
   updateWorkspace,
-} from "@/app/_actions/merchant-actions";
+} from '@/app/_actions/merchant-actions';
+import AddUserToWorkspace from '@/components/modals/add-users-workspace-modal';
+import PromptModal from '@/components/modals/prompt-modal';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import NavIconButton from '@/components/ui/nav-icon-button';
+import useWorkspaceStore from '@/context/workspaces-store';
+import { cn, formatCurrency } from '@/lib/utils';
 
 function WorkspaceSummary({
   workspaceID,
@@ -42,14 +42,14 @@ function WorkspaceSummary({
   const router = useRouter();
 
   const isUserInWorkspace =
-    pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
+    pathname.split('/')[1] == 'dashboard' && pathname.split('/').length >= 3;
 
-  const isSandbox = selectedWorkspace?.workspace?.toLowerCase() == "sandbox";
+  const isSandbox = selectedWorkspace?.workspace?.toLowerCase() == 'sandbox';
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { setExistingUsers, existingUsers } = useWorkspaceStore();
 
-  const [deleteWorkspaceName, setDeleteWorkspaceName] = useState("");
+  const [deleteWorkspaceName, setDeleteWorkspaceName] = useState('');
   const [isVisible, setIsVisible] = useState(selectedWorkspace?.isVisible);
   const [changeWorkspaceDetails, setChangeWorkspaceDetails] = useState(false);
 
@@ -66,7 +66,7 @@ function WorkspaceSummary({
 
   const [deleteError, setDeleteError] = useState({
     status: false,
-    message: "",
+    message: '',
   });
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -107,9 +107,9 @@ function WorkspaceSummary({
       setLoading(false);
       setChangeWorkspaceDetails(false);
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Changes Saved!",
+        color: 'success',
+        title: 'Success',
+        description: 'Changes Saved!',
       });
 
       return;
@@ -121,9 +121,9 @@ function WorkspaceSummary({
       newWorkspace.description.length <= 3
     ) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Provide valid name and description!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Provide valid name and description!',
       });
       setLoading(false);
 
@@ -139,18 +139,18 @@ function WorkspaceSummary({
       queryClient.invalidateQueries();
       setLoading(false);
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Changes Saved!",
+        color: 'success',
+        title: 'Success',
+        description: 'Changes Saved!',
       });
 
       return;
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "Failed to Update Workspace!",
+      title: 'Error',
+      color: 'danger',
+      description: 'Failed to Update Workspace!',
     });
     setLoading(false);
   }
@@ -163,7 +163,7 @@ function WorkspaceSummary({
       setDeleteLoading(false);
       setDeleteError({
         status: true,
-        message: "Type the workspace name to confirm delete",
+        message: 'Type the workspace name to confirm delete',
       });
 
       return;
@@ -176,9 +176,9 @@ function WorkspaceSummary({
       setDeleteLoading(false);
 
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Workspaces Deactivated successfully!",
+        color: 'success',
+        title: 'Success',
+        description: 'Workspaces Deactivated successfully!',
       });
       router.back();
 
@@ -186,9 +186,9 @@ function WorkspaceSummary({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "Failed to Deactivate Workspace!",
+      title: 'Error',
+      color: 'danger',
+      description: 'Failed to Deactivate Workspace!',
     });
     setDeleteLoading(false);
   }
@@ -202,9 +202,9 @@ function WorkspaceSummary({
       setIsVisible(!isVisible);
 
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Failed to update visibility",
+        title: 'Error',
+        color: 'danger',
+        description: 'Failed to update visibility',
       });
 
       return;
@@ -213,15 +213,15 @@ function WorkspaceSummary({
     queryClient.invalidateQueries();
 
     addToast({
-      color: "success",
-      title: "Success",
-      description: "Visibility updated successfully",
+      color: 'success',
+      title: 'Success',
+      description: 'Visibility updated successfully',
     });
   }
 
   return (
-    <div className={cn("px-2", { "px-3": isUserInWorkspace })}>
-      <div className={cn("mb-8")}>
+    <div className={cn('px-2', { 'px-3': isUserInWorkspace })}>
+      <div className={cn('mb-8')}>
         <h2 className="heading-3 !font-bold uppercase tracking-tight text-foreground">
           Workspace ({selectedWorkspace?.workspace})
         </h2>
@@ -237,7 +237,7 @@ function WorkspaceSummary({
           <div className="flex flex-col gap-6 ">
             <form
               className="flex w-full flex-col gap-4 sm:items-start md:flex-row md:items-end"
-              role={"edit-workspace-details"}
+              role={'edit-workspace-details'}
               onSubmit={handleUpdateWorkspace}
             >
               <Input
@@ -251,7 +251,7 @@ function WorkspaceSummary({
 
               <Input
                 classNames={{
-                  wrapper: cn("", { "w-full max-w-[700px]": isSandbox }),
+                  wrapper: cn('', { 'w-full max-w-[700px]': isSandbox }),
                 }}
                 defaultValue={selectedWorkspace?.description}
                 isDisabled={loading || isSandbox}
@@ -280,7 +280,7 @@ function WorkspaceSummary({
                   <Button
                     isDisabled={loading}
                     isLoading={loading}
-                    loadingText={"Saving..."}
+                    loadingText={'Saving...'}
                     type="submit"
                   >
                     Save
@@ -290,7 +290,7 @@ function WorkspaceSummary({
             </form>
           </div>
         ) : (
-          <div className={cn("my-")}>
+          <div className={cn('my-')}>
             <div className="flex items-center ">
               <h2 className="heading-5 !font-bold uppercase tracking-tight text-foreground">
                 {selectedWorkspace?.workspace}
@@ -312,22 +312,22 @@ function WorkspaceSummary({
         <div className="flex w-full justify-between gap-4">
           <div
             className={cn(
-              "flex group select-none items-start gap-2 text-slate-600",
+              'flex group select-none items-start gap-2 text-slate-600',
             )}
           >
-            <WalletIcon className="h-12 w-12 dark:text-foreground text-primary" />{" "}
+            <WalletIcon className="h-12 w-12 dark:text-foreground text-primary" />{' '}
             <div className=" flex flex-col items-start">
-              <span className={cn("font-medium text-foreground")}>
+              <span className={cn('font-medium text-foreground')}>
                 Wallet Balance
               </span>
               <span className="-mt-1 text-base lg:text-lg font-bold text-primary dark:text-primary-500">
-                {formatCurrency(selectedWorkspace?.balance || "0.00")}
+                {formatCurrency(selectedWorkspace?.balance || '0.00')}
               </span>
             </div>
           </div>
           <Button
             as={Link}
-            className={"sm:w-auto sm:max-w-fit"}
+            className={'sm:w-auto sm:max-w-fit'}
             endContent={<ArrowRightStartOnRectangleIcon className="h-5 w-5" />}
             href={`/dashboard/${workspaceID}`}
           >
@@ -420,19 +420,19 @@ function WorkspaceSummary({
           <strong>Are you sure you want to perform this action?</strong>
         </p>
         <p className="text-sm text-foreground/70">
-          This action cannot be undone. Please type{" "}
+          This action cannot be undone. Please type{' '}
           <code className="rounded-md bg-primary/10 p-1 px-2 font-medium text-primary-700">
             {selectedWorkspace?.workspace}
-          </code>{" "}
+          </code>{' '}
           to confirm your choice to proceed.
         </p>
 
         <Input
           errorText={deleteError.message}
           isDisabled={deleteLoading}
+          isInvalid={deleteError.status}
           label="Confirm Delete"
           onChange={(e) => setDeleteWorkspaceName(e.target.value)}
-          isInvalid={deleteError.status}
         />
       </PromptModal>
 

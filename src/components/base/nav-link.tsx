@@ -1,7 +1,7 @@
-import Link from "next/link";
+import Link from 'next/link';
+import { PropsWithChildren } from 'react';
 
-import { cn } from "@/lib/utils";
-import { PropsWithChildren } from "react";
+import { cn } from '@/lib/utils';
 
 export function NavLink({
   href,
@@ -18,9 +18,9 @@ export function NavLink({
   return (
     <Link
       className={cn(
-        "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium tracking-tight text-foreground/70 transition-all duration-300 ease-in-out hover:text-primary sm:text-base",
+        'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium tracking-tight text-foreground/70 transition-all duration-300 ease-in-out hover:text-primary sm:text-base',
         {
-          "font-bold text-primary": active,
+          'font-bold text-primary': active,
         },
         className,
       )}

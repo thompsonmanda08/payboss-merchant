@@ -1,124 +1,124 @@
-"use client";
-import { useEffect, useState } from "react";
+'use client';
 import {
   Modal,
   ModalContent,
   ModalBody,
   ModalHeader,
   ModalFooter,
-} from "@heroui/react";
+} from '@heroui/react';
+import { useEffect, useState } from 'react';
 
-import useCustomTabsHook from "@/hooks/use-custom-tabs";
-import Loader from "@/components/ui/loader";
-import Tabs from "@/components/elements/tabs";
-import CardHeader from "@/components/base/card-header";
+import CardHeader from '@/components/base/card-header';
+import Tabs from '@/components/elements/tabs';
+import Loader from '@/components/ui/loader';
+import useCustomTabsHook from '@/hooks/use-custom-tabs';
 
 import {
   ActionResponses,
   API_Authentication,
   StatusResponses,
-} from "../collections/api-integration/api-config-view";
+} from '../collections/api-integration/api-config-view';
 
 export const API_CONFIG_VIEWS = [
   {
-    name: "Authentication",
-    infoText: "Credentials for applications to access the API",
-    step: "authentication",
+    name: 'Authentication',
+    infoText: 'Credentials for applications to access the API',
+    step: 'authentication',
     index: 0,
   },
   {
-    name: "Bill Payment",
-    infoText: "Payment Collection JSON request and response payloads",
-    step: "bill-payment",
+    name: 'Bill Payment',
+    infoText: 'Payment Collection JSON request and response payloads',
+    step: 'bill-payment',
     index: 1,
   },
   {
-    name: "Status Callback",
-    infoText: "Payment Collection JSON response for a status callback",
-    step: "status-callback",
+    name: 'Status Callback',
+    infoText: 'Payment Collection JSON response for a status callback',
+    step: 'status-callback',
     index: 2,
   },
   {
-    name: "Service Providers",
-    infoText: "A list a of service providers integrated on PayBoss",
-    step: "service-provider",
+    name: 'Service Providers',
+    infoText: 'A list a of service providers integrated on PayBoss',
+    step: 'service-provider',
     index: 3,
   },
   {
-    name: "Service Provider Details",
-    infoText: "Details of service providers integrated on PayBoss",
-    step: "service-provider-details",
+    name: 'Service Provider Details',
+    infoText: 'Details of service providers integrated on PayBoss',
+    step: 'service-provider-details',
     index: 4,
   },
 ];
 
 const BILLS_API_KEY_DATA = {
   authURL:
-    "https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/auth",
+    'https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/auth',
 
   authPayload: {
-    username: "your username",
-    apikey: "your api key",
+    username: 'your username',
+    apikey: 'your api key',
   },
 
   authResponse: {
-    tokenType: "Bearer",
-    token: "your token",
+    tokenType: 'Bearer',
+    token: 'your token',
     expiresIn: 180,
   },
 
   paymentURL:
-    "https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills",
+    'https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills',
   paymentPayLoad: {
-    contact_number: "required string",
-    amount: "required string",
-    narration: "required string",
-    transactionID: "required string",
-    service_provider: "required string",
-    voucher_type: "required string",
-    destination: "required string",
+    contact_number: 'required string',
+    amount: 'required string',
+    narration: 'required string',
+    transactionID: 'required string',
+    service_provider: 'required string',
+    voucher_type: 'required string',
+    destination: 'required string',
   },
   paymentResponse: {
-    status: "success | failed | pending",
-    message: "status description",
-    transactionID: "your transaction ID",
+    status: 'success | failed | pending',
+    message: 'status description',
+    transactionID: 'your transaction ID',
   },
 
   paymentStatusURL:
-    "https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/status/{transactionId}",
+    'https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/status/{transactionId}',
   paymentStatusResponse: {
-    status: "successful | failed | pending",
-    message: "status description",
-    transactionID: "your transaction ID",
-    bill_ref: "bill ref | null",
-    bill_status_description: "bill transaction status description",
+    status: 'successful | failed | pending',
+    message: 'status description',
+    transactionID: 'your transaction ID',
+    bill_ref: 'bill ref | null',
+    bill_status_description: 'bill transaction status description',
   },
 
   serviceProviderURL:
-    "https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/serviceproviders",
+    'https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/serviceproviders',
 
   serviceProviderResponse: {
     serviceproviders: [
       {
-        ID: "string",
-        service_provider: "string",
-        key: "string",
+        ID: 'string',
+        service_provider: 'string',
+        key: 'string',
       },
     ],
   },
 
   providerDetailsURL:
-    "https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/serviceprovider/{key || ID}",
+    'https://payboss-uat-backend.bgsgroup.co.zm/api/v2/transaction/bills/serviceprovider/{key || ID}',
 
   providerDetailsResponse: {
-    ID: "string",
-    service_provider: "string",
-    key: "string",
+    ID: 'string',
+    service_provider: 'string',
+    key: 'string',
     vouchertype: [
       {
-        ID: "string",
-        type: "string",
-        key: "string",
+        ID: 'string',
+        type: 'string',
+        key: 'string',
       },
     ],
   },
@@ -151,9 +151,9 @@ export default function BillPaymentAPIConfigModal({
           response: configData?.paymentResponse,
         }}
         titles={{
-          url: "Payment URL",
-          payload: "Payment Payload Body",
-          response: "Payment Response Body",
+          url: 'Payment URL',
+          payload: 'Payment Payload Body',
+          response: 'Payment Response Body',
         }}
       />,
       <StatusResponses
@@ -170,11 +170,11 @@ export default function BillPaymentAPIConfigModal({
           url: configData?.serviceProviderURL,
           response: configData?.serviceProviderResponse,
         }}
-        method={"GET"}
+        method={'GET'}
         titles={{
-          url: "Service Providers URL",
-          payload: "Service Providers Payload Body",
-          response: "Service Providers Response Body",
+          url: 'Service Providers URL',
+          payload: 'Service Providers Payload Body',
+          response: 'Service Providers Response Body',
         }}
       />,
 
@@ -184,11 +184,11 @@ export default function BillPaymentAPIConfigModal({
           url: configData?.providerDetailsURL,
           response: configData?.providerDetailsResponse,
         }}
-        method={"GET"}
+        method={'GET'}
         titles={{
-          url: "Provider Details URL",
-          payload: "Providers Details Payload Body",
-          response: "Providers Details Response Body",
+          url: 'Provider Details URL',
+          payload: 'Providers Details Payload Body',
+          response: 'Providers Details Response Body',
         }}
       />,
     ]);

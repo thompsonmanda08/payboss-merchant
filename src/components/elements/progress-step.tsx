@@ -1,6 +1,6 @@
-import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 function ProgressStep({
   STEPS,
@@ -26,7 +26,7 @@ function ProgressStep({
           <div
             key={index}
             className={cn(
-              "z-10 flex cursor-pointer flex-row items-center justify-center gap-4 bg-card px-6 text-sm font-medium",
+              'z-10 flex cursor-pointer flex-row items-center justify-center gap-4 bg-card px-6 text-sm font-medium',
               classNames?.content,
             )}
             onClick={(e) => {
@@ -40,7 +40,7 @@ function ProgressStep({
               className={cn(
                 `bg-foreground/20 before:bg-foreground/10 before:content[''] relative grid aspect-square h-6 w-6 place-items-center rounded-full text-xs text-slate-50 before:absolute before:-inset-1.5 before:rounded-full`,
                 {
-                  "bg-primary before:bg-primary/20": currentTabIndex >= index,
+                  'bg-primary before:bg-primary/20': currentTabIndex >= index,
                 },
                 classNames?.contentItem,
               )}

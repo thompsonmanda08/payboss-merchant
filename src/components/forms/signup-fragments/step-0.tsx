@@ -1,13 +1,13 @@
 //BUSINESS REGISTRATION STATUS
-"use client";
-import { useEffect } from "react";
-import { RadioGroup } from "@heroui/react";
-import { motion } from "framer-motion";
+'use client';
+import { RadioGroup } from '@heroui/react';
+import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 
-import { staggerContainerItemVariants } from "@/lib/constants";
-import CustomRadioButton from "@/components/ui/radio-button";
+import CustomRadioButton from '@/components/ui/radio-button';
+import { staggerContainerItemVariants } from '@/lib/constants';
 
-import { STEPS } from "../signup-form";
+import { STEPS } from '../signup-form';
 export default function Step0({
   updateDetails,
 }: {
@@ -16,7 +16,7 @@ export default function Step0({
   useEffect(() => {
     // Set Default  Registration STAGE
     updateDetails(STEPS[0], {
-      registration: "NEW",
+      registration: 'NEW',
     });
   }, []);
 
@@ -24,10 +24,10 @@ export default function Step0({
     <div className="">
       <RadioGroup
         className="flex w-full"
-        defaultValue={"NEW"}
+        defaultValue={'NEW'}
         description={
           <p className="text-sm">
-            <span className="font-bold text-primary">Important Notice:</span>{" "}
+            <span className="font-bold text-primary">Important Notice:</span>{' '}
             Registration information will not be editable after registration and
             KYC is completed. Ensure to double-check all entries for accuracy
             before proceeding.
@@ -42,7 +42,7 @@ export default function Step0({
       >
         <div className="mt-2 flex flex-col items-center gap-2 sm:flex-row md:gap-5">
           <motion.div
-            key={"step-0-1"}
+            key={'step-0-1'}
             className="my-2 w-full"
             variants={staggerContainerItemVariants}
           >
@@ -55,7 +55,7 @@ export default function Step0({
           </motion.div>
 
           <motion.div
-            key={"step-0-2"}
+            key={'step-0-2'}
             className="w-full"
             variants={staggerContainerItemVariants}
           >

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   ArrowLeftEndOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
@@ -7,45 +7,45 @@ import {
   ListBulletIcon,
   ReceiptPercentIcon,
   WalletIcon,
-} from "@heroicons/react/24/outline";
-import { Chip } from "@heroui/react";
+} from '@heroicons/react/24/outline';
+import { Chip } from '@heroui/react';
 
-import { cn, formatCurrency } from "@/lib/utils";
-import Card from "@/components/base/custom-card";
-import SimpleStats from "@/app/dashboard/components/simple-stats";
-import CardHeader from "@/components/base/card-header";
-import OverlayLoader from "@/components/ui/overlay-loader";
-import { MONTHS, WORKSPACE_TYPES } from "@/lib/constants";
-import ReportsBarChart from "@/components/charts/ReportsBarChart/ReportsBarChart";
+import SimpleStats from '@/app/dashboard/components/simple-stats';
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import ReportsBarChart from '@/components/charts/ReportsBarChart/ReportsBarChart';
+import OverlayLoader from '@/components/ui/overlay-loader';
+import { useWorkspaceInit } from '@/hooks/use-query-data';
+import { MONTHS, WORKSPACE_TYPES } from '@/lib/constants';
+import { cn, formatCurrency } from '@/lib/utils';
 
-import { WalletTransactionHistory } from "../[workspaceID]/workspace-settings/components/wallet";
-import { useWorkspaceInit } from "@/hooks/use-query-data";
+import { WalletTransactionHistory } from '../[workspaceID]/workspace-settings/components/wallet';
 
 const pendingApprovals = [
   {
-    label: "Bulk Direct Transfers",
+    label: 'Bulk Direct Transfers',
     workspaceType: WORKSPACE_TYPES[1].ID,
     total: 0,
     icon: {
-      color: "primary",
+      color: 'primary',
       component: <ArrowUpOnSquareStackIcon className="h-6 w-6 rotate-90" />,
     },
   },
   {
-    label: "Wallet Settlements",
+    label: 'Wallet Settlements',
     workspaceType: WORKSPACE_TYPES[0].ID,
     total: 0,
     icon: {
-      color: "success",
+      color: 'success',
       component: <BanknotesIcon className="h-6 w-6" />,
     },
   },
   {
-    label: "Wallet Prefund Requests",
+    label: 'Wallet Prefund Requests',
     workspaceType: WORKSPACE_TYPES[1].ID,
     total: 0,
     icon: {
-      color: "secondary",
+      color: 'secondary',
       component: <WalletIcon className="h-6 w-6" />,
     },
   },
@@ -109,7 +109,7 @@ function DashboardAnalytics({
       labels: MONTHS,
       datasets: [
         {
-          label: "Transactions",
+          label: 'Transactions',
           data: MONTHS.map((month) => {
             const transaction = monthlyTransactionRecords?.find((item: any) =>
               String(item.month)
@@ -136,9 +136,9 @@ function DashboardAnalytics({
   return (
     <>
       <OverlayLoader
+        description="Your dashboard is being populated with recent data."
         show={isLoading}
         title="Please wait"
-        description="Your dashboard is being populated with recent data."
       />
 
       <div className="flex w-full flex-col gap-4 md:gap-4">
@@ -147,8 +147,8 @@ function DashboardAnalytics({
           <Card className="flex-1 gap-2 border-none bg-gradient-to-br from-primary to-primary-400 shadow-lg shadow-primary-300/50">
             <Chip
               classNames={{
-                base: "border-1 border-white/30",
-                content: "text-white/90 text-small font-semibold",
+                base: 'border-1 border-white/30',
+                content: 'text-white/90 text-small font-semibold',
               }}
               variant="bordered"
             >
@@ -161,7 +161,7 @@ function DashboardAnalytics({
           <SimpleStats
             Icon={CardIcon}
             classNames={{
-              smallFigureClasses: "md:text-base font-semibold",
+              smallFigureClasses: 'md:text-base font-semibold',
             }}
             figure={today?.count || 0}
             smallFigure={formatCurrency(today?.value || 0)}
@@ -171,7 +171,7 @@ function DashboardAnalytics({
           <SimpleStats
             Icon={CardIcon}
             classNames={{
-              smallFigureClasses: "md:text-base font-semibold",
+              smallFigureClasses: 'md:text-base font-semibold',
             }}
             figure={yesterday?.count || 0}
             smallFigure={formatCurrency(yesterday?.value || 0)}
@@ -181,11 +181,11 @@ function DashboardAnalytics({
         {/*  2ND ROW - MONTHLY FIGURES AND VALUES */}
         <Card className="flex-col flex w-full flex-wrap items-start">
           <CardHeader
-            infoText={"Monthly transactions by count and value"}
-            title={"Transactions Summary"}
             classNames={{
-              infoClasses: "text-sm -mt-1 mb-4",
+              infoClasses: 'text-sm -mt-1 mb-4',
             }}
+            infoText={'Monthly transactions by count and value'}
+            title={'Transactions Summary'}
           />
           <ReportsBarChart
             chart={monthlyTransactions.chart}
@@ -201,8 +201,8 @@ function DashboardAnalytics({
                 <p className="text-lg font-bold">
                   {allTransactions?.count || 0}
                 </p>
-                <span className={cn("text-sm text-gray-500")}>
-                  ({formatCurrency(allTransactions?.value || "0")})
+                <span className={cn('text-sm text-gray-500')}>
+                  ({formatCurrency(allTransactions?.value || '0')})
                 </span>
               </div>
               <p className="text-sm text-gray-500">All Transactions</p>
@@ -212,19 +212,19 @@ function DashboardAnalytics({
 
         {/*  3RD ROW - LATEST WALLET STATEMENT TRANSACTIONS */}
         <div className="grid w-full grid-cols-1 gap-4">
-          <Card className={""}>
+          <Card className={''}>
             <CardHeader
-              infoText={"Brief overview of your latest statement transactions"}
               classNames={{
-                infoClasses: "text-sm -mt-1",
+                infoClasses: 'text-sm -mt-1',
               }}
-              title={"Wallet Statement Summary"}
+              infoText={'Brief overview of your latest statement transactions'}
+              title={'Wallet Statement Summary'}
             />
             <WalletTransactionHistory
               limit={5}
+              permissions={permissions}
               transactionData={walletSummary}
               workspaceID={workspaceID}
-              permissions={permissions}
             />
           </Card>
         </div>

@@ -1,21 +1,21 @@
 //BUSINESS REGISTRATION STATUS
-"use client";
-import React, { useEffect } from "react";
-import { motion } from "framer-motion";
-import { Checkbox } from "@heroui/react";
-import { BriefcaseIcon } from "@heroicons/react/24/outline";
+'use client';
+import { BriefcaseIcon } from '@heroicons/react/24/outline';
+import { Checkbox } from '@heroui/react';
+import { motion } from 'framer-motion';
+import React, { useEffect } from 'react';
 
-import useAuthStore from "@/context/auth-store";
-import { Button } from "@/components/ui/button";
-import { validateTPIN } from "@/app/_actions/auth-actions";
-import { cn } from "@/lib/utils";
-import { staggerContainerItemVariants } from "@/lib/constants";
-import { Input } from "@/components/ui/input-field";
-import CardHeader from "@/components/base/card-header";
-import SoftBoxIcon from "@/components/base/soft-box-icon";
+import { validateTPIN } from '@/app/_actions/auth-actions';
+import CardHeader from '@/components/base/card-header';
+import SoftBoxIcon from '@/components/base/soft-box-icon';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import useAuthStore from '@/context/auth-store';
+import { staggerContainerItemVariants } from '@/lib/constants';
+import { cn } from '@/lib/utils';
+import { BusinessDetails } from '@/types/account';
 
-import { STEPS } from "../signup-form";
-import { BusinessDetails } from "@/types/account";
+import { STEPS } from '../signup-form';
 
 export default function Step1_TPIN({
   updateDetails,
@@ -41,12 +41,12 @@ export default function Step1_TPIN({
   async function handleTPINValidation() {
     setLoading(true);
     setMerchant(null);
-    setMerchantID("");
+    setMerchantID('');
     setIsValidTPIN(false);
     const tpin = step?.tpin;
 
     if (!tpin || tpin?.length > 10) {
-      updateErrorStatus({ onTPIN: true, message: "Invalid TPIN" });
+      updateErrorStatus({ onTPIN: true, message: 'Invalid TPIN' });
       setLoading(false);
 
       return;
@@ -78,14 +78,14 @@ export default function Step1_TPIN({
 
   // Clean out TPIN from state at first rendering
   useEffect(() => {
-    updateDetails(STEPS[0], { tpin: "" });
+    updateDetails(STEPS[0], { tpin: '' });
   }, []);
 
   return (
     <>
       <CardHeader
         handleClose={() => backToStart()}
-        infoText={"Enter your TPIN to retrieve your business information."}
+        infoText={'Enter your TPIN to retrieve your business information.'}
         title="Verify your identity"
       />
       <div className="flex w-full flex-col items-center justify-center gap-6">
@@ -97,6 +97,7 @@ export default function Step1_TPIN({
             <Input
               errorText="Invalid TPIN"
               isDisabled={loading}
+              isInvalid={TPINError || error?.onTPIN}
               label="TPIN"
               maxLength={10}
               name="tpin"
@@ -105,13 +106,12 @@ export default function Step1_TPIN({
               onChange={(e) => {
                 updateDetails(STEPS[0], { tpin: e.target.value });
               }}
-              isInvalid={TPINError || error?.onTPIN}
             />
             <Button
-              className={cn("flex-[1]", { "mb-4": TPINError || error?.status })}
+              className={cn('flex-[1]', { 'mb-4': TPINError || error?.status })}
               isDisabled={TPINError || loading || step?.tpin?.length < 10}
               isLoading={loading}
-              loadingText={"Validating..."}
+              loadingText={'Validating...'}
               onPress={handleTPINValidation}
             >
               Validate TPIN
@@ -127,7 +127,7 @@ export default function Step1_TPIN({
               opacity: [0, 1],
               transition: {
                 duration: 0.3,
-                ease: "easeInOut",
+                ease: 'easeInOut',
               },
             }}
           >
@@ -155,7 +155,7 @@ export default function Step1_TPIN({
             <Checkbox
               className="mx-auto mt-2 items-start text-xs sm:text-sm"
               classNames={{
-                label: "flex flex-col items-start -mt-1",
+                label: 'flex flex-col items-start -mt-1',
               }}
               isSelected={isValidTPIN}
               onValueChange={setIsValidTPIN}

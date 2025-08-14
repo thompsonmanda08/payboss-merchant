@@ -1,13 +1,13 @@
-"use client";
-import { BanknotesIcon, WalletIcon } from "@heroicons/react/24/outline";
+'use client';
+import { BanknotesIcon, WalletIcon } from '@heroicons/react/24/outline';
+import { Alert, addToast } from '@heroui/react';
 
-import usePaymentsStore from "@/context/payment-store";
-import { Input } from "@/components/ui/input-field";
-import { Button } from "@/components/ui/button";
-import { formatCurrency } from "@/lib/utils";
-import { initializeBulkTransaction } from "@/app/_actions/transaction-actions";
-import { Alert, addToast } from "@heroui/react";
-import { useWorkspaceInit } from "@/hooks/use-query-data";
+import { initializeBulkTransaction } from '@/app/_actions/transaction-actions';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import usePaymentsStore from '@/context/payment-store';
+import { useWorkspaceInit } from '@/hooks/use-query-data';
+import { formatCurrency } from '@/lib/utils';
 
 const PaymentDetails = ({
   navigateForward,
@@ -37,17 +37,17 @@ const PaymentDetails = ({
 
   async function handleProceed() {
     setLoading(true);
-    setError({ status: false, message: "" });
+    setError({ status: false, message: '' });
 
     if (
-      paymentAction?.batch_name == "" &&
+      paymentAction?.batch_name == '' &&
       paymentAction?.batch_name?.length < 3
     ) {
       setLoading(false);
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "A valid filename is required!",
+        title: 'Error',
+        color: 'danger',
+        description: 'A valid filename is required!',
       });
 
       return;
@@ -55,14 +55,14 @@ const PaymentDetails = ({
 
     if (!role?.can_initiate) {
       addToast({
-        title: "NOT ALLOWED",
-        color: "danger",
-        description: "You do not have permissions to perform this action",
+        title: 'NOT ALLOWED',
+        color: 'danger',
+        description: 'You do not have permissions to perform this action',
       });
 
       setError({
         status: true,
-        message: "You do not have permissions to perform this action",
+        message: 'You do not have permissions to perform this action',
       });
       setLoading(false);
 
@@ -77,9 +77,9 @@ const PaymentDetails = ({
 
     if (response?.success) {
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Payment Batch Created!",
+        color: 'success',
+        title: 'Success',
+        description: 'Payment Batch Created!',
       });
 
       resetPaymentData();
@@ -91,9 +91,9 @@ const PaymentDetails = ({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "Failed to create payment batch!",
+      title: 'Error',
+      color: 'danger',
+      description: 'Failed to create payment batch!',
     });
     setError({ status: true, message: response?.message });
     setLoading(false);
@@ -102,7 +102,7 @@ const PaymentDetails = ({
   }
 
   function handleBackwardsNavigation() {
-    setError({ status: false, message: "" });
+    setError({ status: false, message: '' });
     navigateBackwards();
   }
 
@@ -165,22 +165,22 @@ const PaymentDetails = ({
         <div className="flex flex-1 flex-col gap-4">
           <Input
             className="mb-auto"
-            classNames={{ wrapper: "w-full col-span-1 max-w-lg" }}
-            label={"Batch Name"}
-            placeholder={"Enter a batch name"}
+            classNames={{ wrapper: 'w-full col-span-1 max-w-lg' }}
+            isInvalid={error?.status}
+            label={'Batch Name'}
+            placeholder={'Enter a batch name'}
             required={true}
             value={paymentAction?.batch_name}
             onChange={(e) => {
               updatePaymentFields({ batch_name: e.target.value, protocol });
             }}
-            isInvalid={error?.status}
           />
           {error?.status && (
             <Alert
-              color="danger"
               classNames={{
-                base: "items-center",
+                base: 'items-center',
               }}
+              color="danger"
             >
               {error.message}
             </Alert>
@@ -190,8 +190,8 @@ const PaymentDetails = ({
 
       <div className="flex flex-1 items-end justify-end gap-4">
         <Button
-          className={"bg-primary/10 font-medium text-primary"}
-          color={"primary"}
+          className={'bg-primary/10 font-medium text-primary'}
+          color={'primary'}
           isDisabled={loading}
           variant="light"
           onClick={handleBackwardsNavigation}
@@ -199,7 +199,7 @@ const PaymentDetails = ({
           Back
         </Button>
         <Button
-          className={""}
+          className={''}
           isDisabled={loading}
           isLoading={loading}
           onClick={handleProceed}

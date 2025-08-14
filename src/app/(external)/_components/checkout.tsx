@@ -1,9 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
-
-import MobileMoneyForm from "./mobile-money-form";
-import CardPaymentForm from "./card-payment-form";
+import {
+  CheckBadgeIcon,
+  CreditCardIcon,
+  DevicePhoneMobileIcon,
+  ShieldCheckIcon,
+} from '@heroicons/react/24/outline';
 import {
   Card,
   CardBody,
@@ -17,19 +19,17 @@ import {
   TableCell,
   TableBody,
   TableRow,
-} from "@heroui/react";
+} from '@heroui/react';
+import React from 'react';
 
-import {
-  CheckBadgeIcon,
-  CreditCardIcon,
-  DevicePhoneMobileIcon,
-  ShieldCheckIcon,
-} from "@heroicons/react/24/outline";
-import { formatCurrency } from "@/lib/utils";
-import Logo from "@/components/base/payboss-logo";
+import Logo from '@/components/base/payboss-logo';
+import { formatCurrency } from '@/lib/utils';
+
+import CardPaymentForm from './card-payment-form';
+import MobileMoneyForm from './mobile-money-form';
 
 export default function Checkout({ checkoutData }: { checkoutData: any }) {
-  const [selectedMethod, setSelectedMethod] = React.useState("mobile");
+  const [selectedMethod, setSelectedMethod] = React.useState('mobile');
 
   return (
     <div className="container px-0 sm:px-4 md:px-8 lg:px-12 max-w-5xl">
@@ -46,7 +46,7 @@ export default function Checkout({ checkoutData }: { checkoutData: any }) {
               aria-label="payment-methods"
               className="lg:max-w-lg w-full"
               classNames={{
-                tabList: "w-full p-0.5 ",
+                tabList: 'w-full p-0.5 ',
               }}
               color="primary"
               radius="sm"
@@ -99,11 +99,11 @@ export default function Checkout({ checkoutData }: { checkoutData: any }) {
               isStriped
               removeWrapper
               aria-label="checkout-summary"
-              radius="sm"
               className=" -mt-4 overflow-visible"
               classNames={{
-                wrapper: "overflow-visible",
+                wrapper: 'overflow-visible',
               }}
+              radius="sm"
             >
               <TableHeader>
                 <TableColumn>KEY</TableColumn>
@@ -114,7 +114,7 @@ export default function Checkout({ checkoutData }: { checkoutData: any }) {
                   <TableRow key="merchant-logo">
                     <TableCell className="text-right font-bold" colSpan={2}>
                       <Logo
-                        className={"ml-auto -mr-3"}
+                        className={'ml-auto -mr-3'}
                         src={checkoutData?.logo}
                       />
                     </TableCell>
@@ -123,14 +123,14 @@ export default function Checkout({ checkoutData }: { checkoutData: any }) {
                 <TableRow key="merchant-display-name">
                   <TableCell className="">Payment To:</TableCell>
                   <TableCell className="text-right font-bold">
-                    {checkoutData?.display_name || "BGS PayBoss"}
+                    {checkoutData?.display_name || 'BGS PayBoss'}
                   </TableCell>
                 </TableRow>
                 {checkoutData?.physical_address && (
                   <TableRow key="physical-address">
                     <TableCell className="">Physical Address:</TableCell>
                     <TableCell className="text-right font-bold">
-                      {checkoutData?.physical_address || "87A Kabulonga Rd."}
+                      {checkoutData?.physical_address || '87A Kabulonga Rd.'}
                     </TableCell>
                   </TableRow>
                 )}
@@ -138,7 +138,7 @@ export default function Checkout({ checkoutData }: { checkoutData: any }) {
                   <TableRow key="city-country">
                     <TableCell>City,Country</TableCell>
                     <TableCell className="text-right font-bold">
-                      {checkoutData?.city || "Lusaka, ZM"}
+                      {checkoutData?.city || 'Lusaka, ZM'}
                     </TableCell>
                   </TableRow>
                 )}
@@ -151,7 +151,7 @@ export default function Checkout({ checkoutData }: { checkoutData: any }) {
                     Total Amount
                   </TableCell>
                   <TableCell className="text-right text-primary rounded-r-md bg-primary/10 font-bold">
-                    {formatCurrency(checkoutData?.amount || "00")}
+                    {formatCurrency(checkoutData?.amount || '00')}
                   </TableCell>
                 </TableRow>
               </TableBody>

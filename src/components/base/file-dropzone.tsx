@@ -1,34 +1,33 @@
-"use client";
+'use client';
 
-import * as React from "react";
 import {
   CheckCircleIcon,
   CloudArrowUpIcon,
   DocumentArrowUpIcon,
   XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { useDropzone } from "react-dropzone";
-import { twMerge } from "tailwind-merge";
-import { Progress } from "@heroui/react";
-import { motion } from "framer-motion";
+} from '@heroicons/react/24/outline';
+import { motion } from 'framer-motion';
+import * as React from 'react';
+import { useDropzone } from 'react-dropzone';
+import { twMerge } from 'tailwind-merge';
 
-import { cn } from "@/lib/utils";
-import { staggerContainerItemVariants } from "@/lib/constants";
+import { staggerContainerItemVariants } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 
-import { Button } from "../ui/button";
-import Loader from "../ui/loader";
+import { Button } from '../ui/button';
+import Loader from '../ui/loader';
 
 const variants = {
   base: cn(
-    "relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out",
+    'relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out',
   ),
   image:
-    "border-0 p-0 min-h-0 min-w-0 relative shadow-md bg-foreground-200 dark:bg-foreground-900 rounded-md",
-  active: "border-2",
+    'border-0 p-0 min-h-0 min-w-0 relative shadow-md bg-foreground-200 dark:bg-foreground-900 rounded-md',
+  active: 'border-2',
   disabled:
-    "bg-gray-200 border-gray-300 cursor-default pointer-events-none bg-opacity-30 dark:bg-gray-700",
-  accept: "border border-blue-500 bg-blue-500 bg-opacity-10",
-  reject: "border border-red-700 bg-red-700 bg-opacity-10",
+    'bg-gray-200 border-gray-300 cursor-default pointer-events-none bg-opacity-30 dark:bg-gray-700',
+  accept: 'border border-blue-500 bg-blue-500 bg-opacity-10',
+  reject: 'border border-red-700 bg-red-700 bg-opacity-10',
 };
 
 const ERROR_MESSAGES = {
@@ -36,13 +35,13 @@ const ERROR_MESSAGES = {
     return `The file is too large. Max size is ${formatFileSize(maxSize)}.`;
   },
   fileInvalidType() {
-    return "Invalid file type.";
+    return 'Invalid file type.';
   },
   tooManyFiles(maxFiles: any) {
     return `You can only add ${maxFiles} file(s).`;
   },
   fileNotSupported() {
-    return "The file is not supported.";
+    return 'The file is not supported.';
   },
 };
 
@@ -81,14 +80,14 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
       isLoading = false,
       showPreview = false,
       isUploaded = false,
-      preview = "",
+      preview = '',
     },
     ref,
   ) => {
     const [imagePreview, setImagePreview] = React.useState(preview);
 
     const imageUrl = React.useMemo(() => {
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         // in case a url is passed in, use it to display the image
         return value;
       } else if (value) {
@@ -122,12 +121,14 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
       onDrop: (acceptedFiles) => {
         // OF THE MULTIPLE FILE ADD GET ONLY ONE
         const file = acceptedFiles[0] as File;
+
         if (file) {
           const fileObject = Object.assign(file, {
             preview: URL.createObjectURL(file),
           });
 
           const imagePreview = fileObject?.preview;
+
           void onChange?.(file, imagePreview);
         }
       },
@@ -137,7 +138,7 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
 
     React.useImperativeHandle(ref, () => ({
       clear() {
-        setImagePreview("");
+        setImagePreview('');
         onChange?.(undefined, undefined);
       },
     }));
@@ -170,11 +171,11 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
       if (fileRejections[0]) {
         const { errors } = fileRejections[0];
 
-        if (errors[0]?.code === "file-too-large") {
+        if (errors[0]?.code === 'file-too-large') {
           return ERROR_MESSAGES.fileTooLarge(dropzoneOptions?.maxSize ?? 0);
-        } else if (errors[0]?.code === "file-invalid-type") {
+        } else if (errors[0]?.code === 'file-invalid-type') {
           return ERROR_MESSAGES.fileInvalidType();
-        } else if (errors[0]?.code === "too-many-files") {
+        } else if (errors[0]?.code === 'too-many-files') {
           return ERROR_MESSAGES.tooManyFiles(dropzoneOptions?.maxFiles ?? 0);
         } else {
           return ERROR_MESSAGES.fileNotSupported();
@@ -207,41 +208,41 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
           {isLoading ? (
             // Image Preview
             <Loader
-              className={"items-center"}
-              classNames={{
-                wrapper: "min-w-full min-h-full p-2.5 items-center",
-                text: "mt-0 font-medium text-sm",
-              }}
-              size={28}
-              loadingText="Uploading..."
-              aria-label="Loading..."
               isLandscape
+              aria-label="Loading..."
+              className={'items-center'}
+              classNames={{
+                wrapper: 'min-w-full min-h-full p-2.5 items-center',
+                text: 'mt-0 font-medium text-sm',
+              }}
+              loadingText="Uploading..."
+              size={28}
             />
           ) : showPreview && imagePreview && (acceptedFiles[0] || file) ? (
             <div className="w-80 h-[120px] rounded-md">
               <img
-                className="h-full w-full rounded-md object-contain"
-                src={imagePreview || imageUrl || ""}
                 alt={acceptedFiles[0]?.name || file?.name}
+                className="h-full w-full rounded-md object-contain"
+                src={imagePreview || imageUrl || ''}
               />
             </div>
           ) : (isUploaded && file) || acceptedFiles[0] ? (
             // ********************* FILE UPLOAD PREVIEW ******************* //
             <div
-              className={cn("relative flex flex-col items-center gap-4 py-2", {
-                "w-full flex-row items-center justify-between ": isLandscape,
+              className={cn('relative flex flex-col items-center gap-4 py-2', {
+                'w-full flex-row items-center justify-between ': isLandscape,
               })}
             >
               <DocumentArrowUpIcon
-                className={cn("absolute -z-0 h-24 w-24  text-gray-200", {
-                  "m-0 h-8 w-8": isLandscape,
+                className={cn('absolute -z-0 h-24 w-24  text-gray-200', {
+                  'm-0 h-8 w-8': isLandscape,
                 })}
               />
               <div
                 className={cn(
-                  "relative z-10 flex flex-col items-center gap-4",
+                  'relative z-10 flex flex-col items-center gap-4',
                   {
-                    "bg-red-10 w-full gap-0": isLandscape,
+                    'bg-red-10 w-full gap-0': isLandscape,
                   },
                 )}
               >
@@ -255,12 +256,12 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
                 <span className="flex items-center w-full gap-2 font-semibold text-xs lg:text-sm max-w-sm text-primary">
                   {isLandscape && (
                     <CheckCircleIcon className="h-6 w-6 text-green-500" />
-                  )}{" "}
+                  )}{' '}
                   {acceptedFiles[0]?.name || file?.name}
                 </span>
                 {/* // ONLY SHOWS ON THE UPRIGHT COMPONENT */}
                 {!isLandscape && (
-                  <Button isDisabled className={"opacity-100"}>
+                  <Button isDisabled className={'opacity-100'}>
                     Change
                   </Button>
                 )}
@@ -273,26 +274,26 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
             // ********************* FILE UPLOAD ICON ******************* //
             <div
               className={cn(
-                "flex flex-col items-center justify-center text-xs text-gray-400",
+                'flex flex-col items-center justify-center text-xs text-gray-400',
                 {
-                  "w-full flex-row items-center justify-between ": isLandscape,
+                  'w-full flex-row items-center justify-between ': isLandscape,
                 },
               )}
             >
               <div
-                className={cn("flex flex-col items-center", {
-                  "flex-row gap-2 font-medium": isLandscape,
+                className={cn('flex flex-col items-center', {
+                  'flex-row gap-2 font-medium': isLandscape,
                 })}
               >
                 <CloudArrowUpIcon
-                  className={cn("mb-2 h-12 w-12", { "m-0 w-8": isLandscape })}
+                  className={cn('mb-2 h-12 w-12', { 'm-0 w-8': isLandscape })}
                 />
                 <div className="text-gray-400">Drag & Drop to Upload</div>
               </div>
               {!isLandscape && (
                 // ONLY SHOWS ON THE UPRIGHT COMPONENT
-                <div className={cn("mt-3", { "m-0": isLandscape })}>
-                  <Button isDisabled className={"opacity-100"}>
+                <div className={cn('mt-3', { 'm-0': isLandscape })}>
+                  <Button isDisabled className={'opacity-100'}>
                     Upload
                   </Button>
                 </div>
@@ -325,19 +326,19 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
     );
   },
 );
-SingleFileDropzone.displayName = "SingleFileDropzone";
+SingleFileDropzone.displayName = 'SingleFileDropzone';
 
 function formatFileSize(bytes: any) {
   if (!bytes) {
-    return "0 Bytes";
+    return '0 Bytes';
   }
   bytes = Number(bytes);
   if (bytes === 0) {
-    return "0 Bytes";
+    return '0 Bytes';
   }
   const k = 1024;
   const dm = 2;
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
@@ -363,7 +364,7 @@ export default function UploadField(
 ) {
   return (
     <motion.div
-      key={"step-2-1"}
+      key={'step-2-1'}
       className="w-full"
       variants={staggerContainerItemVariants}
     >
@@ -373,11 +374,11 @@ export default function UploadField(
       <SingleFileDropzone
         ref={ref}
         isLandscape
-        className={" min-h-8 px-2"}
+        className={' min-h-8 px-2'}
         disabled={isLoading}
         isLoading={isLoading}
         otherAcceptedFiles={{
-          "application/pdf": [],
+          'application/pdf': [],
           ...acceptedFiles,
         }}
         onChange={(file) => handleFile(file as File)}

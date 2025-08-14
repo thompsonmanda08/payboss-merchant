@@ -1,6 +1,6 @@
-"use client";
-import { cn } from "@/lib/utils";
-import UsersTable from "@/components/tables/users-table";
+'use client';
+import UsersTable from '@/components/tables/users-table';
+import { cn } from '@/lib/utils';
 
 function ManagePeople({
   users,
@@ -12,7 +12,7 @@ function ManagePeople({
   permissions: any;
 }) {
   return (
-    <div className={cn("flex w-full flex-col gap-8")}>
+    <div className={cn('flex w-full flex-col gap-8')}>
       <div className="flex w-full flex-col">
         <h2 className="heading-3 !font-bold tracking-tight text-foreground">
           Manage People
@@ -23,9 +23,9 @@ function ManagePeople({
       </div>
 
       <UsersTable
-        key={"all-users"}
-        roles={roles}
+        key={'all-users'}
         permissions={permissions}
+        roles={roles}
         users={users}
       />
     </div>

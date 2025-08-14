@@ -1,5 +1,4 @@
-"use client";
-import { useEffect } from "react";
+'use client';
 import {
   Modal,
   ModalContent,
@@ -8,16 +7,16 @@ import {
   ModalFooter,
   useDisclosure,
   addToast,
-} from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
+} from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
-import { PASSWORD_PATTERN } from "@/lib/constants";
-import useAuthStore from "@/context/auth-store";
-import { changeUserPassword } from "@/app/_actions/user-actions";
-
-import { Input } from "@/components/ui/input-field";
-import { Button } from "@/components/ui/button";
-import StatusMessage from "@/components/base/status-message";
+import { changeUserPassword } from '@/app/_actions/user-actions';
+import StatusMessage from '@/components/base/status-message';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import useAuthStore from '@/context/auth-store';
+import { PASSWORD_PATTERN } from '@/lib/constants';
 
 export default function FirstLogin({ open }: { open?: boolean }) {
   const queryClient = useQueryClient();
@@ -39,16 +38,16 @@ export default function FirstLogin({ open }: { open?: boolean }) {
       !PASSWORD_PATTERN.test(password.newPassword)
     ) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Operation Failed! Try again",
+        title: 'Error',
+        color: 'danger',
+        description: 'Operation Failed! Try again',
       });
       setIsLoading(false);
       setError({
         status: true,
         onConfirmPassword: true,
         message:
-          "Passwords needs to contain at least 8 characters (consisting of lowercase, uppercase, symbols) and have no spaces",
+          'Passwords needs to contain at least 8 characters (consisting of lowercase, uppercase, symbols) and have no spaces',
       });
 
       return;
@@ -62,9 +61,9 @@ export default function FirstLogin({ open }: { open?: boolean }) {
       onClose();
 
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Password Changed Successfully",
+        color: 'success',
+        title: 'Success',
+        description: 'Password Changed Successfully',
       });
       queryClient.invalidateQueries();
       setIsLoading(false);
@@ -74,8 +73,8 @@ export default function FirstLogin({ open }: { open?: boolean }) {
 
     setIsLoading(false);
     addToast({
-      title: "Error",
-      color: "danger",
+      title: 'Error',
+      color: 'danger',
       description: res.message,
     });
   }
@@ -85,7 +84,7 @@ export default function FirstLogin({ open }: { open?: boolean }) {
   }, [onOpen]);
 
   useEffect(() => {
-    setError({ message: "", status: false });
+    setError({ message: '', status: false });
   }, [password, setError]);
 
   return (
@@ -120,17 +119,17 @@ export default function FirstLogin({ open }: { open?: boolean }) {
                 }
               />
               <Input
-                errorText={"Passwords do not match"}
+                errorText={'Passwords do not match'}
+                isInvalid={
+                  (password.confirmPassword !== password.newPassword &&
+                    password?.confirmPassword.length > 6) ||
+                  error?.onConfirmPassword
+                }
                 label="Confirm Password"
                 type="password"
                 value={password.confirmPassword}
                 onChange={(e) =>
                   updatePasswordField({ confirmPassword: e.target.value })
-                }
-                isInvalid={
-                  (password.confirmPassword !== password.newPassword &&
-                    password?.confirmPassword.length > 6) ||
-                  error?.onConfirmPassword
                 }
               />
               {error?.status && (

@@ -1,4 +1,4 @@
-import React, { Key } from "react";
+import { WalletIcon } from '@heroicons/react/24/outline';
 import {
   Table,
   TableHeader,
@@ -9,23 +9,23 @@ import {
   Button,
   Chip,
   Pagination,
-} from "@heroui/react";
-import { WalletIcon } from "@heroicons/react/24/outline";
-import { format } from "date-fns";
+} from '@heroui/react';
+import { format } from 'date-fns';
+import React, { Key } from 'react';
 
-import { cn, formatCurrency } from "@/lib/utils";
-import SoftBoxIcon from "@/components/base/soft-box-icon";
-import EmptyLogs from "@/components/base/empty-logs";
-import Loader from "@/components/ui/loader";
-import { Columns } from "@/lib/table-columns";
+import EmptyLogs from '@/components/base/empty-logs';
+import SoftBoxIcon from '@/components/base/soft-box-icon';
+import Loader from '@/components/ui/loader';
+import { Columns } from '@/lib/table-columns';
+import { cn, formatCurrency } from '@/lib/utils';
 
 const columns: Columns = [
-  { name: "NAME", uid: "name" },
-  { name: "PREFUND AMOUNT", uid: "amount" },
-  { name: "DISBURSED AMOUNT", uid: "disbursed_amount" },
-  { name: "STATUS", uid: "status" },
-  { name: "DATE CREATED", uid: "created_at" },
-  { name: "VALID TIL", uid: "expires_on" },
+  { name: 'NAME', uid: 'name' },
+  { name: 'PREFUND AMOUNT', uid: 'amount' },
+  { name: 'DISBURSED AMOUNT', uid: 'disbursed_amount' },
+  { name: 'STATUS', uid: 'status' },
+  { name: 'DATE CREATED', uid: 'created_at' },
+  { name: 'VALID TIL', uid: 'expires_on' },
 ];
 
 type PrefundTableProps = {
@@ -44,8 +44,8 @@ export default function PrefundsTable({
   rows,
   isLoading,
   removeWrapper,
-  onRowAction = () => {},
-  emptyCellValue,
+  // onRowAction = () => {},
+  // emptyCellValue,
   emptyDescriptionText,
   emptyTitleText,
   selectedKeys,
@@ -53,8 +53,8 @@ export default function PrefundsTable({
 }: PrefundTableProps) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
-    direction: "ascending",
+    column: 'age',
+    direction: 'ascending',
   });
   const [page, setPage] = React.useState(1);
 
@@ -71,15 +71,15 @@ export default function PrefundsTable({
     const cellValue = item[String(columnKey)];
 
     switch (columnKey) {
-      case "name":
+      case 'name':
         return (
           <Button
             isDisabled
             className={cn(
-              "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100",
+              'flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100',
             )}
             startContent={
-              <SoftBoxIcon className={"h-12 w-12"}>
+              <SoftBoxIcon className={'h-12 w-12'}>
                 <WalletIcon />
               </SoftBoxIcon>
             }
@@ -99,19 +99,20 @@ export default function PrefundsTable({
           </Button>
         );
 
-      case "status":
+      case 'status':
         return (
           <Chip
             className="capitalize"
-            color={item?.isLocked ? "default" : "success"}
+            color={item?.isLocked ? 'default' : 'success'}
             size="sm"
             variant="flat"
           >
-            {item?.isLocked ? "Locked" : "Active"}
+            {item?.isLocked ? 'Locked' : 'Active'}
           </Chip>
         );
-      case "created_at":
-        return format(cellValue, "dd-MMM-yyyy hh:mm:ss a");
+
+      case 'created_at':
+        return format(cellValue, 'dd-MMM-yyyy hh:mm:ss a');
 
       default:
         return cellValue;
@@ -161,12 +162,12 @@ export default function PrefundsTable({
     return (
       <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
         <EmptyLogs
-          className={"my-auto mt-16"}
-          classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
+          className={'my-auto mt-16'}
+          classNames={{ heading: 'text-sm text-foreground/50 font-medium' }}
           subTitle={
-            emptyDescriptionText || "you have no data to be displayed here."
+            emptyDescriptionText || 'you have no data to be displayed here.'
           }
-          title={emptyTitleText || "No data to display."}
+          title={emptyTitleText || 'No data to display.'}
         />
       </div>
     );
@@ -176,7 +177,7 @@ export default function PrefundsTable({
     return (
       <div className="-mt-8 flex flex-1 items-center rounded-lg">
         <Loader
-          classNames={{ wrapper: "bg-foreground-200/50 rounded-xl h-full" }}
+          classNames={{ wrapper: 'bg-foreground-200/50 rounded-xl h-full' }}
           size={100}
         />
       </div>
@@ -190,7 +191,7 @@ export default function PrefundsTable({
     const keys = Array.from(key);
 
     // if the length of the array is 3 or the keys are all, then clear the selected keys
-    if (keys.length === 3 || keys.join() == "all") {
+    if (keys.length === 3 || keys.join() == 'all') {
       setSelectedKeys(new Set([]));
 
       return;
@@ -215,10 +216,10 @@ export default function PrefundsTable({
       bottomContentPlacement="outside"
       className="max-h-[480px]"
       classNames={{
-        table: cn("align-top items-start justify-start", {
-          "min-h-[400px]": isLoading || !rows,
+        table: cn('align-top items-start justify-start', {
+          'min-h-[400px]': isLoading || !rows,
         }),
-        base: cn("overflow-x-auto", { "": pages <= 1 }),
+        base: cn('overflow-x-auto', { '': pages <= 1 }),
       }}
       color="primary"
       removeWrapper={removeWrapper}
@@ -232,7 +233,7 @@ export default function PrefundsTable({
         {(column) => (
           <TableColumn
             key={column.uid}
-            align={column.uid === "status" ? "center" : "start"}
+            align={column.uid === 'status' ? 'center' : 'start'}
             allowsSorting={Boolean(column?.sortable)}
           >
             {column.name}

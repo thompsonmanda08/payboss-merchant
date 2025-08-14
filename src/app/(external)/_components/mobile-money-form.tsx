@@ -1,27 +1,26 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
+import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { Image, useDisclosure, addToast } from '@heroui/react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
-import { Input } from "@/components/ui/input-field";
-import { Button } from "@/components/ui/button";
-import { AIRTEL_NO, MTN_NO } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { Image, useDisclosure, addToast } from "@heroui/react";
-import { useCheckoutTransactionStatus } from "@/hooks/use-checkout-transaction-status";
-import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { payWithMobileMoney } from "@/app/_actions/checkout-actions";
-
-import Spinner from "@/components/ui/custom-spinner";
-import PromptModal from "@/components/modals/prompt-modal";
-import { useRouter } from "next/navigation";
+import { payWithMobileMoney } from '@/app/_actions/checkout-actions';
+import PromptModal from '@/components/modals/prompt-modal';
+import { Button } from '@/components/ui/button';
+import Spinner from '@/components/ui/custom-spinner';
+import { Input } from '@/components/ui/input-field';
+import { useCheckoutTransactionStatus } from '@/hooks/use-checkout-transaction-status';
+import { AIRTEL_NO, MTN_NO } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 
 export default function MobileMoneyForm({ checkoutData }: any) {
-  const { amount, transactionID, serviceID, workspaceID } = checkoutData || "";
+  const { amount, transactionID, serviceID, workspaceID } = checkoutData || '';
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
-  const [operatorLogo, setOperatorLogo] = React.useState("");
+  const [operatorLogo, setOperatorLogo] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [pinPromptSent, setPinPromptSent] = React.useState(false);
   const [transaction, setTransaction] = React.useState<{
@@ -29,12 +28,12 @@ export default function MobileMoneyForm({ checkoutData }: any) {
     message: string;
     serviceProviderDescription?: string;
   }>({
-    status: "PENDING",
-    message: "Please wait while we process your payment request",
-    serviceProviderDescription: "",
+    status: 'PENDING',
+    message: 'Please wait while we process your payment request',
+    serviceProviderDescription: '',
   });
 
-  const [paymentRefID, setPaymentRefID] = React.useState("");
+  const [paymentRefID, setPaymentRefID] = React.useState('');
   //!! GET TRANSACTION STATUS HOOK
   const { transactionResponse, isSuccess, isFailed, isProcessing } =
     useCheckoutTransactionStatus(paymentRefID, pinPromptSent);
@@ -43,29 +42,29 @@ export default function MobileMoneyForm({ checkoutData }: any) {
     phoneNumber: string;
     amount: string;
   }>({
-    phoneNumber: "",
+    phoneNumber: '',
     amount: amount,
   });
   const [errors, setErrors] = useState({
-    phoneNumber: "",
+    phoneNumber: '',
   });
 
   function checkOperator(phone: string) {
     if (AIRTEL_NO.test(phone)) {
-      setFormData((prev) => ({ ...prev, operator: "airtel" }));
-      setOperatorLogo("/images/airtel-logo.png");
+      setFormData((prev) => ({ ...prev, operator: 'airtel' }));
+      setOperatorLogo('/images/airtel-logo.png');
 
       return;
     }
 
     if (MTN_NO.test(phone)) {
-      setFormData((prev) => ({ ...prev, operator: "mtn" }));
-      setOperatorLogo("/images/mtn-logo.png");
+      setFormData((prev) => ({ ...prev, operator: 'mtn' }));
+      setOperatorLogo('/images/mtn-logo.png');
 
       return;
     }
 
-    setOperatorLogo("");
+    setOperatorLogo('');
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,15 +78,15 @@ export default function MobileMoneyForm({ checkoutData }: any) {
       }));
 
       // Simple validation
-      if (name === "phoneNumber" && value.length < 10) {
+      if (name === 'phoneNumber' && value.length < 10) {
         setErrors((prev) => ({
           ...prev,
-          phoneNumber: "Phone number must be at least 10 digits.",
+          phoneNumber: 'Phone number must be at least 10 digits.',
         }));
-      } else if (name === "phoneNumber") {
+      } else if (name === 'phoneNumber') {
         setErrors((prev) => ({
           ...prev,
-          phoneNumber: "",
+          phoneNumber: '',
         }));
       }
     }
@@ -101,8 +100,9 @@ export default function MobileMoneyForm({ checkoutData }: any) {
     // Validate before submission
     if (formData.phoneNumber.length < 10) {
       setErrors({
-        phoneNumber: "Phone number must be at least 10 digits.",
+        phoneNumber: 'Phone number must be at least 10 digits.',
       });
+
       return;
     }
 
@@ -116,9 +116,9 @@ export default function MobileMoneyForm({ checkoutData }: any) {
 
     if (response?.success) {
       addToast({
-        title: "Mobile Payment",
+        title: 'Mobile Payment',
         description: `Pin prompt sent to${formData?.phoneNumber}`,
-        color: "success",
+        color: 'success',
       });
       setPaymentRefID(response?.data?.transactionID);
       onOpen();
@@ -126,9 +126,9 @@ export default function MobileMoneyForm({ checkoutData }: any) {
       setPinPromptSent(true); // THIS WILL ENABLE THE TRANSACTION STATUS HOOK - FIRES IN INTERVALS
     } else {
       addToast({
-        title: "Error",
+        title: 'Error',
         description: response.message,
-        color: "danger",
+        color: 'danger',
       });
       setIsSubmitting(false);
       setPinPromptSent(false); // THIS WILL DISABLE THE TRANSACTION STATUS HOOK - FIRES IN INTERVALS
@@ -140,8 +140,8 @@ export default function MobileMoneyForm({ checkoutData }: any) {
     setIsSubmitting(false);
     setPinPromptSent(false);
     setTransaction({
-      status: "PENDING",
-      message: "Please wait while we process your payment request",
+      status: 'PENDING',
+      message: 'Please wait while we process your payment request',
     });
   }
 
@@ -160,18 +160,18 @@ export default function MobileMoneyForm({ checkoutData }: any) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form className="space-y-6" onSubmit={handleSubmit}>
         <div className="relative">
           <div className="relative flex flex-col">
             <Input
               required
-              id="phoneNumber"
-              name="phoneNumber"
-              label="Phone Number"
-              isInvalid={Boolean(errors.phoneNumber)}
-              value={formData.phoneNumber}
               errorText={errors.phoneNumber}
-              placeholder={"Mobile Number"}
+              id="phoneNumber"
+              isInvalid={Boolean(errors.phoneNumber)}
+              label="Phone Number"
+              name="phoneNumber"
+              placeholder={'Mobile Number'}
+              value={formData.phoneNumber}
               onChange={(e) => {
                 handleChange(e);
                 checkOperator(e.target.value);
@@ -215,21 +215,21 @@ export default function MobileMoneyForm({ checkoutData }: any) {
         </div> */}
 
         <Button
-          type="submit"
-          isLoading={isSubmitting}
+          className={'w-full'}
           disabled={isSubmitting}
-          loadingText={"Processing..."}
-          className={"w-full"}
-          size={"lg"}
+          isLoading={isSubmitting}
+          loadingText={'Processing...'}
+          size={'lg'}
+          type="submit"
         >
           Pay with Mobile Money
         </Button>
       </form>
 
       <PromptModal
+        removeActionButtons
         backdrop="blur"
-        isDismissable={false}
-        isOpen={isOpen}
+        className={"max-w-max"}
         onClose={
           transaction?.status == "PENDING"
             ? () => {
@@ -242,15 +242,15 @@ export default function MobileMoneyForm({ checkoutData }: any) {
             : handleClosePrompt
         }
         // onOpen={onOpen}
-        className={"max-w-max"}
+        isDismissable={false}
+        isOpen={isOpen}
         size="sm"
-        removeActionButtons
       >
         <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max m-auto p-4 pb-6">
           <div className="aspect-square flex justify-center items-center mx-auto mb-4 max-w-xs">
-            {transaction?.status == "SUCCESSFUL" ? (
+            {transaction?.status == 'SUCCESSFUL' ? (
               <CheckBadgeIcon className="w-32 text-success" />
-            ) : transaction?.status == "FAILED" ? (
+            ) : transaction?.status == 'FAILED' ? (
               <XCircleIcon className="w-32 text-danger" />
             ) : (
               <Spinner size={100} />
@@ -259,16 +259,16 @@ export default function MobileMoneyForm({ checkoutData }: any) {
           <div className="grid place-items-center w-full mx-auto">
             <p
               className={cn(
-                " max-w-sm break-words text-center uppercase font-bold text-foreground/80",
+                ' max-w-sm break-words text-center uppercase font-bold text-foreground/80',
               )}
             >
               {transaction?.status}
             </p>
             <small className="text-muted-foreground text-center min-w-60 mx-auto">
-              {transaction?.status == "SUCCESSFUL"
-                ? "Payment completed successfully!"
-                : transaction?.status == "FAILED"
-                  ? "Payment failed. Try again later!"
+              {transaction?.status == 'SUCCESSFUL'
+                ? 'Payment completed successfully!'
+                : transaction?.status == 'FAILED'
+                  ? 'Payment failed. Try again later!'
                   : transaction?.message}
               {transaction?.serviceProviderDescription && (
                 <>
@@ -279,22 +279,23 @@ export default function MobileMoneyForm({ checkoutData }: any) {
             </small>
           </div>
 
-          {!isProcessing && transaction?.status != "PENDING" && (
+          {!isProcessing && transaction?.status != 'PENDING' && (
             <>
               <Button
+                className={'w-full '}
                 color="danger"
                 isDisabled={isProcessing}
                 onPress={() => {
                   const redirect =
                     checkoutData?.redirect_url ||
                     checkoutData?.redirectUrl ||
-                    "#";
+                    '#';
+
                   if (isSuccess && redirect) {
                     router.push(`${redirect}?success=true`);
                   }
                   handleClosePrompt();
                 }}
-                className={"w-full "}
               >
                 Close
               </Button>

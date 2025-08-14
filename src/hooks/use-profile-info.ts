@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useSetupConfig } from "./use-query-data";
+import { useSetupConfig } from './use-query-data';
 
 const useAccountProfile = () => {
   const { data: setup, isFetching, isLoading } = useSetupConfig();
@@ -13,8 +13,8 @@ const useAccountProfile = () => {
 
   const merchantID = setup?.data?.merchantID;
 
-  const isOwner = permissions?.role?.toLowerCase() == "owner";
-  const isAccountAdmin = permissions?.role?.toLowerCase() == "admin";
+  const isOwner = permissions?.role?.toLowerCase() == 'owner';
+  const isAccountAdmin = permissions?.role?.toLowerCase() == 'admin';
 
   return {
     user,

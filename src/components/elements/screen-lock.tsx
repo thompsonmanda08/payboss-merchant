@@ -1,5 +1,4 @@
-"use client";
-import { useEffect, useState } from "react";
+'use client';
 import {
   Modal,
   ModalContent,
@@ -11,15 +10,15 @@ import {
   CardBody,
   CardFooter,
   Chip,
-} from "@heroui/react";
+} from '@heroui/react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 // import { useIdleTimer } from "react-idle-timer/legacy";
-import { useIdleTimer } from "react-idle-timer";
-import { usePathname } from "next/navigation";
+import { useIdleTimer } from 'react-idle-timer';
 
-import { lockScreenOnUserIdle } from "@/app/_actions/auth-actions";
-
-import { Button } from "@/components/ui/button";
-import { useRefreshToken } from "@/hooks/use-query-data";
+import { lockScreenOnUserIdle } from '@/app/_actions/auth-actions';
+import { Button } from '@/components/ui/button';
+import { useRefreshToken } from '@/hooks/use-query-data';
 
 function ScreenLock({ open }: { open: boolean }) {
   const { isOpen, onClose } = useDisclosure();
@@ -39,12 +38,12 @@ function ScreenLock({ open }: { open: boolean }) {
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
     try {
-      const res = await fetch("/api/logout", {
+      const res = await fetch('/api/logout', {
         signal: controller.signal,
       });
 
       if (!res.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error('Network response was not ok');
       }
 
       const response = await res.json();
@@ -54,7 +53,7 @@ function ScreenLock({ open }: { open: boolean }) {
         onClose();
       }
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
     } finally {
       clearTimeout(timeoutId);
       setIsLoading(false);
@@ -93,10 +92,10 @@ function ScreenLock({ open }: { open: boolean }) {
               </p>
               <CircularProgress
                 classNames={{
-                  svg: "w-36 h-36 drop-shadow-md",
-                  indicator: "stroke-white",
-                  track: "stroke-white/10",
-                  value: "text-3xl font-semibold text-white",
+                  svg: 'w-36 h-36 drop-shadow-md',
+                  indicator: 'stroke-white',
+                  track: 'stroke-white/10',
+                  value: 'text-3xl font-semibold text-white',
                 }}
                 formatOptions={
                   {
@@ -113,8 +112,8 @@ function ScreenLock({ open }: { open: boolean }) {
             <CardFooter className="flex-col items-center justify-center gap-4 pt-0">
               <Chip
                 classNames={{
-                  base: "border-1 border-white/30",
-                  content: "text-white/90 text-small font-semibold",
+                  base: 'border-1 border-white/30',
+                  content: 'text-white/90 text-small font-semibold',
                 }}
                 variant="bordered"
               >
@@ -154,21 +153,21 @@ function ScreenLock({ open }: { open: boolean }) {
 export function IdleTimerContainer({ authSession }: { authSession: any }) {
   const pathname = usePathname();
 
-  const [state, setState] = useState("Active");
+  const [state, setState] = useState('Active');
   const [count, setCount] = useState(0);
   const [remaining, setRemaining] = useState(0);
 
   const loggedIn = authSession?.accessToken;
 
-  useRefreshToken(loggedIn && state !== "Idle");
+  useRefreshToken(loggedIn && state !== 'Idle');
 
   const onIdle = async () => {
-    setState("Idle");
+    setState('Idle');
     await lockScreenOnUserIdle(true);
   };
 
   const onActive = () => {
-    setState("Active");
+    setState('Active');
   };
 
   const onAction = async () => setCount(count + 1);
@@ -193,8 +192,8 @@ export function IdleTimerContainer({ authSession }: { authSession: any }) {
   });
 
   /* NO TIMER ON EXTERNAL ROUTES */
-  if (pathname.startsWith("/checkout")) return null;
-  if (pathname.startsWith("/invoice")) return null;
+  if (pathname.startsWith('/checkout')) return null;
+  if (pathname.startsWith('/invoice')) return null;
 
   return <></>;
 }

@@ -1,5 +1,5 @@
-"use client";
-import { useGeneralConfigOptions } from "./use-query-data";
+'use client';
+import { useGeneralConfigOptions } from './use-query-data';
 
 const useConfigOptions = () => {
   const {
@@ -17,8 +17,8 @@ const useConfigOptions = () => {
 
   const zambia = response?.data?.countries.find(
     (country: any) =>
-      country.country_code === "ZM" ||
-      country?.country.toLowerCase() === "zambia",
+      country.country_code === 'ZM' ||
+      country?.country.toLowerCase() === 'zambia',
   );
 
   const countries = [zambia, ...otherCountries];

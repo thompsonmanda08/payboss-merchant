@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import OverlayLoader from "@/components/ui/overlay-loader";
+import OverlayLoader from '@/components/ui/overlay-loader';
 
 export default function PaymentsLoading({}) {
   return (

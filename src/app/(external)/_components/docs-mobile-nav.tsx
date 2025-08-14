@@ -1,17 +1,16 @@
-"use client";
-import React from "react";
+'use client';
+import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import React from 'react';
 
-import Link from "next/link";
-import { Bars3BottomRightIcon } from "@heroicons/react/24/outline";
-
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet';
 
 function DocsMobileNav() {
   return (
@@ -23,7 +22,7 @@ function DocsMobileNav() {
         </Button>
       </SheetTrigger>
       <SheetContent className="w-72" side="left">
-        <SheetHeader className={"flex flex-col items-start"}>
+        <SheetHeader className={'flex flex-col items-start'}>
           <SheetTitle>API Documentation</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col items-start gap-2 text-sm mt-4">

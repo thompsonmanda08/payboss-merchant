@@ -1,27 +1,26 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
-import { getServerSession, getWorkspaceSessionData } from "./lib/session";
-import { NextApiRequest } from "next";
-import { WorkspaceSession } from "./types";
+import { getServerSession, getWorkspaceSessionData } from './lib/session';
+import { WorkspaceSession } from './types';
 
 const PUBLIC_ROUTES = [
-  "/",
-  "/login",
-  "/register",
-  "/support",
-  "/sentry-example-page",
-  "/checkout",
-  "/invoice",
-  "/docs",
-  "/subscriptions",
+  '/',
+  '/login',
+  '/register',
+  '/support',
+  '/sentry-example-page',
+  '/checkout',
+  '/invoice',
+  '/docs',
+  '/subscriptions',
 ];
 
 const PUBLIC_PREFIXES = [
-  "/invoice/", // This will catch all /invoice/[id] routes
-  "/checkout/",
-  "/docs/",
-  "/subscriptions/",
-  "/register/",
+  '/invoice/', // This will catch all /invoice/[id] routes
+  '/checkout/',
+  '/docs/',
+  '/subscriptions/',
+  '/register/',
 ];
 
 export async function middleware(request: NextRequest) {
@@ -35,31 +34,31 @@ export async function middleware(request: NextRequest) {
   const workspaceIDs = workspaceSession?.workspaceIDs || {};
 
   const urlRouteParams = pathname.match(/^\/dashboard\/([^\/]+)\/?$/);
-  const accessToken = session?.accessToken || "";
+  const accessToken = session?.accessToken || '';
 
   // Exclude public assets like icons, manifest, and images
   if (
-    pathname.startsWith("/web-app-manifest") ||
-    pathname.startsWith("/favicon") ||
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/static") ||
-    pathname.startsWith("/public") ||
-    pathname.startsWith("/manifest.json")
+    pathname.startsWith('/web-app-manifest') ||
+    pathname.startsWith('/favicon') ||
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/static') ||
+    pathname.startsWith('/public') ||
+    pathname.startsWith('/manifest.json')
   ) {
     return NextResponse.next();
   }
 
   // CHECK FOR  ROUTES
   const isAuthPage =
-    pathname.startsWith("/login") || pathname.startsWith("/register");
+    pathname.startsWith('/login') || pathname.startsWith('/register');
   const isUserInWorkspace =
-    pathname.startsWith("/dashboard") && pathname.split("/").length >= 3;
-  const isDashboardRoute = pathname == "/dashboard";
+    pathname.startsWith('/dashboard') && pathname.split('/').length >= 3;
+  const isDashboardRoute = pathname == '/dashboard';
   const isPublicRoute =
     PUBLIC_ROUTES.includes(pathname) ||
     PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 
-  if (pathname == "/") return response;
+  if (pathname == '/') return response;
   if (isPublicRoute && !accessToken) return response;
 
   /**********USER MUST CHOOSE A WORKSPACE TO SEE DASHBOARDS *********/
@@ -73,7 +72,7 @@ export async function middleware(request: NextRequest) {
     }
 
     if (!workspaceIDs.includes(workspaceID)) {
-      url.pathname = "/workspaces";
+      url.pathname = '/workspaces';
 
       return NextResponse.redirect(url);
     }
@@ -81,7 +80,7 @@ export async function middleware(request: NextRequest) {
 
   // IF NO ACCESS TOKEN AT ALL>>> REDIRECT BACK TO AUTH PAGE
   if (!accessToken && !isPublicRoute) {
-    url.pathname = "/login";
+    url.pathname = '/login';
 
     // url.searchParams.set("callbackUrl", pathname);
 
@@ -100,6 +99,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|images|favicon.ico|web-app-manifest-192x192.png|web-app-manifest-512x512.png|manifest.json).*)",
+    '/((?!api|_next/static|_next/image|images|favicon.ico|web-app-manifest-192x192.png|web-app-manifest-512x512.png|manifest.json).*)',
   ],
 };

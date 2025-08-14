@@ -1,17 +1,17 @@
-import Link from "next/link";
+import Link from 'next/link';
+import { PropsWithChildren } from 'react';
 
-import Search from "@/components/ui/search";
-import Logo from "@/components/base/payboss-logo";
+import Logo from '@/components/base/payboss-logo';
+import Search from '@/components/ui/search';
 
-import DocsMobileNav from "../_components/docs-mobile-nav";
-import { PropsWithChildren } from "react";
+import DocsMobileNav from '../_components/docs-mobile-nav';
 
 export default function DocsLayout({ children }: PropsWithChildren) {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b border-foreground/10 bg-background shadow-sm shadow-black/5 px-4 md:px-6">
         <DocsMobileNav />
-        <Logo aria-label="Home" className="" href={"/"} />
+        <Logo aria-label="Home" className="" href={'/'} />
         <Link className="flex items-center gap-2 font-semibold" href="#">
           <span className="text-xl">Documentation</span>
         </Link>

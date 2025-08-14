@@ -1,7 +1,7 @@
-import Workspaces from "@/components/elements/workspaces-list";
+import Workspaces from '@/components/elements/workspaces-list';
 
-import { getUserDetails } from "../_actions/config-actions";
-import { getAllWorkspaces } from "../_actions/merchant-actions";
+import { getUserDetails } from '../_actions/config-actions';
+import { getAllWorkspaces } from '../_actions/merchant-actions';
 
 async function AllWorkspacesPage() {
   // Parallelize data fetching
@@ -25,7 +25,7 @@ async function AllWorkspacesPage() {
       </div>
 
       <Workspaces
-        className={"m-0 border-none bg-transparent p-0 shadow-none"}
+        className={'m-0 border-none bg-transparent p-0 shadow-none'}
         // user={session?.user}
         workspaces={workspaces}
       />

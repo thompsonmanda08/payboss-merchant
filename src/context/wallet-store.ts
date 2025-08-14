@@ -1,19 +1,20 @@
-import { WalletStore } from "@/types/stores";
-import { create } from "zustand";
+import { create } from 'zustand';
+
+import { WalletStore } from '@/types/stores';
 
 export const POP_INIT = {
-  amount: "",
-  bank_rrn: "",
-  date_of_deposit: "",
-  url: "",
-  name: "",
+  amount: '',
+  bank_rrn: '',
+  date_of_deposit: '',
+  url: '',
+  name: '',
 };
 
 const INITIAL_STATE = {
   selectedPrefund: null,
   prefundApproval: {
-    action: "",
-    remarks: "",
+    action: '',
+    remarks: '',
   },
   openAttachmentModal: false,
   walletLoading: false,

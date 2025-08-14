@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-function Spinner({ size = 18, color = "#1B64CE", className = "" }) {
+function Spinner({ size = 18, color = '#1B64CE', className = '' }) {
   return (
     <div className="flex flex-1 items-center justify-center">
       <svg
-        className={cn("animate-spin text-current", className)}
+        className={cn('animate-spin text-current', className)}
         fill="none"
         hanging={size}
         viewBox="0 0 24 24"

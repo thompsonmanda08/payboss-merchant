@@ -1,38 +1,38 @@
-"use client";
-import { useEffect, useState } from "react";
-import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
+'use client';
+import { Modal, ModalContent, ModalBody, ModalHeader } from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-import useCustomTabsHook from "@/hooks/use-custom-tabs";
-import ValidationDetails from "@/app/dashboard/[workspaceID]/payments/components/validation-details-step";
-import ApproverAction from "@/app/dashboard/[workspaceID]/payments/components/approver-action";
-import RecordDetailsViewer from "@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer";
-import usePaymentsStore from "@/context/payment-store";
-import CardHeader from "@/components/base/card-header";
-import Tabs from "@/components/elements/tabs";
-import { useBatchDetails, useWorkspaceInit } from "@/hooks/use-query-data";
-import { useParams } from "next/navigation";
+import ApproverAction from '@/app/dashboard/[workspaceID]/payments/components/approver-action';
+import RecordDetailsViewer from '@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer';
+import ValidationDetails from '@/app/dashboard/[workspaceID]/payments/components/validation-details-step';
+import CardHeader from '@/components/base/card-header';
+import Tabs from '@/components/elements/tabs';
+import usePaymentsStore from '@/context/payment-store';
+import useCustomTabsHook from '@/hooks/use-custom-tabs';
+import { useBatchDetails } from '@/hooks/use-query-data';
 
 export const BATCH_DETAILS_STEPS = [
   {
-    title: "Bulk payment - File Record Validation",
-    infoText: "Provide details for the payment action batch files",
-    step: "Validation",
+    title: 'Bulk payment - File Record Validation',
+    infoText: 'Provide details for the payment action batch files',
+    step: 'Validation',
   },
   {
-    title: "Bulk payment - Approval Status",
-    infoText: "You need to be an administrator to approve bulk payments",
-    step: "Approval",
+    title: 'Bulk payment - Approval Status',
+    infoText: 'You need to be an administrator to approve bulk payments',
+    step: 'Approval',
   },
 ];
 
 const TABS = [
   {
-    name: "Batch Details",
+    name: 'Batch Details',
     index: 0,
   },
   {
-    name: "Approval Status",
+    name: 'Approval Status',
     index: 1,
   },
 ];
@@ -83,15 +83,15 @@ export default function BatchDetailsPage({
 
   const COMPONENT_LIST_RENDERER = [
     <ValidationDetails
-      key={"batch-details"}
-      workspaceID={workspaceID}
+      key={'batch-details'}
       batch={batch}
       navigateForward={goForward}
+      workspaceID={workspaceID}
     />,
     <ApproverAction
-      key={"approval-status"}
-      workspaceID={workspaceID}
+      key={'approval-status'}
       batch={batch}
+      workspaceID={workspaceID}
     />,
   ];
 
@@ -110,7 +110,7 @@ export default function BatchDetailsPage({
   useEffect(() => {
     setCurrentStep(
       BATCH_DETAILS_STEPS[
-        batch?.status?.toLowerCase() != "submitted"
+        batch?.status?.toLowerCase() != 'submitted'
           ? COMPONENT_LIST_RENDERER.length - 1
           : currentTabIndex
       ],
@@ -118,7 +118,7 @@ export default function BatchDetailsPage({
   }, [currentTabIndex]);
 
   useEffect(() => {
-    if (batch?.status?.toLowerCase() != "submitted") {
+    if (batch?.status?.toLowerCase() != 'submitted') {
       navigateTo(COMPONENT_LIST_RENDERER.length - 1);
     }
   }, []);
@@ -144,7 +144,7 @@ export default function BatchDetailsPage({
       <Modal
         isDismissable={false}
         isOpen={isOpen}
-        size={"5xl"}
+        size={'5xl'}
         onClose={handleClose}
       >
         <ModalContent>
@@ -158,8 +158,8 @@ export default function BatchDetailsPage({
                     {
                       selectedProtocol && batch && (
                         <span className="capitalize">
-                          {" "}
-                          ({selectedProtocol} - {batch?.batch_name}){" "}
+                          {' '}
+                          ({selectedProtocol} - {batch?.batch_name}){' '}
                         </span>
                       ) //ONLY FOR THE CREATE PAYMENTS PAGE
                     }
@@ -167,7 +167,7 @@ export default function BatchDetailsPage({
                 }
               />
               <Tabs
-                className={"mr-8 w-fit"}
+                className={'mr-8 w-fit'}
                 currentTab={currentTabIndex}
                 navigateTo={navigateTo}
                 tabs={TABS}

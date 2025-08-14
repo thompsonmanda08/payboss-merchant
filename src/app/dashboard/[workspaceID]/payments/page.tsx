@@ -1,26 +1,27 @@
-import CardHeader from "@/components/base/card-header";
-import { PageProps } from "@/types";
-import Card from "@/components/base/custom-card";
-import { PAYMENT_SERVICE_TYPES } from "@/lib/constants";
-import BulkTransactionsTable from "./components/bulk-transactions-table";
-import PaymentWidgets from "./payment-widgets";
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import { PAYMENT_SERVICE_TYPES } from '@/lib/constants';
+import { PageProps } from '@/types';
+
+import BulkTransactionsTable from './components/bulk-transactions-table';
+import PaymentWidgets from './payment-widgets';
 
 export default async function DisbursementsPage({ params }: PageProps) {
   const workspaceID = (await params)?.workspaceID as string;
 
   return (
     <>
-      <Card className={"mb-8 w-full gap-4"}>
+      <Card className={'mb-8 w-full gap-4'}>
         <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
           <CardHeader
             classNames={{
-              titleClasses: "xl:text-2xl lg:text-xl font-bold",
-              infoClasses: "text-[15px] xl:text-base",
+              titleClasses: 'xl:text-2xl lg:text-xl font-bold',
+              infoClasses: 'text-[15px] xl:text-base',
             }}
             infoText={
-              "Make payments to your clients or multiple recipients simultaneously with direct/voucher transfers"
+              'Make payments to your clients or multiple recipients simultaneously with direct/voucher transfers'
             }
-            title={"Disbursement Transfers"}
+            title={'Disbursement Transfers'}
           />
         </div>
 

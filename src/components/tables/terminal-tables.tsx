@@ -1,4 +1,9 @@
-import React from "react";
+import {
+  Cog6ToothIcon,
+  ComputerDesktopIcon,
+  ListBulletIcon,
+  PlusIcon,
+} from '@heroicons/react/24/outline';
 import {
   Table,
   TableHeader,
@@ -10,24 +15,19 @@ import {
   Chip,
   Pagination,
   Tooltip,
-} from "@heroui/react";
-import {
-  Cog6ToothIcon,
-  ComputerDesktopIcon,
-  ListBulletIcon,
-  PlusIcon,
-} from "@heroicons/react/24/outline";
-import { format } from "date-fns";
+} from '@heroui/react';
+import { format } from 'date-fns';
+import React from 'react';
 
-import { cn, formatCurrency } from "@/lib/utils";
-import SoftBoxIcon from "@/components/base/soft-box-icon";
-import Loader from "@/components/ui/loader";
-import { Columns } from "@/lib/table-columns";
+import SoftBoxIcon from '@/components/base/soft-box-icon';
+import Loader from '@/components/ui/loader';
+import { Columns } from '@/lib/table-columns';
+import { cn, formatCurrency } from '@/lib/utils';
 
 const columns: Columns = [
-  { name: "TERMINAL", uid: "terminal_name" },
-  { name: "CREATED BY", uid: "created_by" },
-  { name: "DATE CREATED", uid: "created_at" },
+  { name: 'TERMINAL', uid: 'terminal_name' },
+  { name: 'CREATED BY', uid: 'created_by' },
+  { name: 'DATE CREATED', uid: 'created_at' },
   // { name: "ACTION", uid: "action" },
 ];
 
@@ -37,10 +37,7 @@ export default function TerminalsTable({
   removeWrapper,
   onRowAction = () => {},
   handleAddTerminal,
-  emptyDescriptionText,
-  emptyTitleText,
   selectedKeys,
-  setSelectedKeys,
 }: {
   rows: any[];
   isLoading: boolean;
@@ -54,8 +51,8 @@ export default function TerminalsTable({
 }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(3);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
-    direction: "ascending",
+    column: 'age',
+    direction: 'ascending',
   });
   const [page, setPage] = React.useState(1);
 
@@ -72,7 +69,7 @@ export default function TerminalsTable({
     const cellValue = item[columnKey];
 
     switch (columnKey) {
-      case "terminal_name":
+      case 'terminal_name':
         return (
           <TerminalInfo
             terminalID={item?.terminalID}
@@ -80,21 +77,22 @@ export default function TerminalsTable({
           />
         );
 
-      case "created_by":
+      case 'created_by':
         return (
           <Chip
             className="capitalize"
-            color={"default"}
+            color={'default'}
             size="sm"
             variant="flat"
           >
-            {cellValue || "N/A"}
+            {cellValue || 'N/A'}
           </Chip>
         );
-      case "created_at":
-        return format(cellValue || new Date(), "dd-MMM-yyyy hh:mm:ss a");
 
-      case "action":
+      case 'created_at':
+        return format(cellValue || new Date(), 'dd-MMM-yyyy hh:mm:ss a');
+
+      case 'action':
         return (
           <div className="flex items-center justify-end gap-4">
             <Tooltip color="primary" content="Manage Terminal">
@@ -113,7 +111,7 @@ export default function TerminalsTable({
         );
 
       default:
-        return cellValue || "N/A";
+        return cellValue || 'N/A';
     }
   }, []);
 
@@ -159,7 +157,7 @@ export default function TerminalsTable({
       <div className="mb-2 mt-4 flex h-full flex-1 items-center justify-center rounded-2xl bg-slate-50 text-sm font-medium dark:bg-foreground/5">
         <Button
           className={
-            "max-h-auto h-full w-full flex-1 font-medium text-primary-600"
+            'max-h-auto h-full w-full flex-1 font-medium text-primary-600'
           }
           startContent={<PlusIcon className="h-5 w-5 cursor-pointer" />}
           variant="light"
@@ -175,7 +173,7 @@ export default function TerminalsTable({
     return (
       <div className="-mt-8 flex flex-1 items-center rounded-lg">
         <Loader
-          classNames={{ wrapper: "bg-foreground-200/50 rounded-xl h-full" }}
+          classNames={{ wrapper: 'bg-foreground-200/50 rounded-xl h-full' }}
           size={100}
         />
       </div>
@@ -189,8 +187,8 @@ export default function TerminalsTable({
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        table: cn("align-top items-start justify-start", {
-          "min-h-[400px]": isLoading || !rows,
+        table: cn('align-top items-start justify-start', {
+          'min-h-[400px]': isLoading || !rows,
         }),
       }}
       color="primary"
@@ -202,9 +200,9 @@ export default function TerminalsTable({
         {(column) => (
           <TableColumn
             key={column.uid}
-            align={column.uid === "action" ? "center" : "start"}
+            align={column.uid === 'action' ? 'center' : 'start'}
             allowsSorting={column?.sortable}
-            width={(column.uid === "name" ? "60%" : "auto") as any}
+            width={(column.uid === 'name' ? '60%' : 'auto') as any}
           >
             {column.name}
           </TableColumn>
@@ -251,11 +249,11 @@ export function TerminalInfo({
   return (
     <Button
       className={cn(
-        "flex h-auto w-full justify-start gap-2  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100 max-w-xs",
+        'flex h-auto w-full justify-start gap-2  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100 max-w-xs',
         className,
       )}
       startContent={
-        <SoftBoxIcon className={"h-12 w-12"}>
+        <SoftBoxIcon className={'h-12 w-12'}>
           <ComputerDesktopIcon />
         </SoftBoxIcon>
       }
@@ -265,7 +263,7 @@ export function TerminalInfo({
       <div className="flex w-full justify-between">
         <div className="flex flex-col items-start gap-1">
           <h3 className="ml-1 font-bold uppercase text-primary-600">
-            {terminalName || "Terminal #"}
+            {terminalName || 'Terminal #'}
           </h3>
           <Chip
             className="truncate text-xs font-medium text-orange-600"
@@ -273,13 +271,13 @@ export function TerminalInfo({
             size="sm"
             variant="flat"
           >
-            ID: {terminalID || "******"}
+            ID: {terminalID || '******'}
           </Chip>
         </div>
         {count && value && (
           <Tooltip
             classNames={{
-              content: "text-white",
+              content: 'text-white',
             }}
             color="success"
             content="Successful Transactions"
@@ -298,7 +296,7 @@ export function TerminalInfo({
                 size="sm"
                 variant="flat"
               >
-                {value ? formatCurrency(value) : "ZMW 0.00"}
+                {value ? formatCurrency(value) : 'ZMW 0.00'}
               </Chip>
             </div>
           </Tooltip>

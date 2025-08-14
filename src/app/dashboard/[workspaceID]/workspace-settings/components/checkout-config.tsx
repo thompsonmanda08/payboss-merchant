@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Cog6ToothIcon,
   LinkIcon,
@@ -6,7 +6,7 @@ import {
   EyeSlashIcon,
   Square2StackIcon,
   ClipboardDocumentCheckIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
 import {
   Modal,
   ModalContent,
@@ -29,32 +29,32 @@ import {
   ModalHeader,
   ModalFooter,
   addToast,
-} from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { Key, useEffect, useState } from "react";
+} from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Key, useEffect, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import Card from "@/components/base/custom-card";
-import CardHeader from "@/components/base/card-header";
-import { cn, maskString } from "@/lib/utils";
-import { uploadCheckoutLogoFile } from "@/app/_actions/pocketbase-actions";
-import PromptModal from "@/components/modals/prompt-modal";
+import { uploadCheckoutLogoFile } from '@/app/_actions/pocketbase-actions';
 import {
   generateCheckoutURL,
   updateCheckoutURL,
-} from "@/app/_actions/vas-actions";
-import { useWorkspaceCheckout, useWorkspaceInit } from "@/hooks/use-query-data";
-import { Input } from "@/components/ui/input-field";
-import { SingleFileDropzone } from "@/components/base/file-dropzone";
+} from '@/app/_actions/vas-actions';
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import { SingleFileDropzone } from '@/components/base/file-dropzone';
+import PromptModal from '@/components/modals/prompt-modal';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import { useWorkspaceCheckout, useWorkspaceInit } from '@/hooks/use-query-data';
+import { cn, maskString } from '@/lib/utils';
 
 const INIT_FORM = {
-  display_name: "",
-  logo: "",
-  logo_url: "",
-  physical_address: "",
-  city_country: "",
-  redirect_url: "",
-  recordID: "",
+  display_name: '',
+  logo: '',
+  logo_url: '',
+  physical_address: '',
+  city_country: '',
+  redirect_url: '',
+  recordID: '',
 };
 
 export default function CheckoutConfig({
@@ -75,7 +75,7 @@ export default function CheckoutConfig({
   const configData = checkoutResponse?.data || {};
 
   const [selectedKey, setSelectedKey] = useState<Key | null>(null);
-  const [copiedKey, setCopiedKey] = useState("");
+  const [copiedKey, setCopiedKey] = useState('');
   const [newCheckoutFormData, setNewCheckoutFormData] = useState(INIT_FORM);
 
   const [openViewConfig, setOpenViewConfig] = useState(false);
@@ -83,18 +83,18 @@ export default function CheckoutConfig({
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
+  const iconClasses = 'w-5 h-5 pointer-events-none flex-shrink-0';
 
   async function handleFileUpload(file: File, recordID?: string) {
     setIsUploading(true);
 
-    let response = await uploadCheckoutLogoFile(file, recordID);
+    const response = await uploadCheckoutLogoFile(file, recordID);
 
     if (response?.success) {
       addToast({
-        color: "success",
-        title: "Logo Uploaded!",
-        description: "Logo File uploaded successfully!",
+        color: 'success',
+        title: 'Logo Uploaded!',
+        description: 'Logo File uploaded successfully!',
       });
       setNewCheckoutFormData((prev) => ({
         ...prev,
@@ -108,9 +108,9 @@ export default function CheckoutConfig({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "Failed to upload file.",
+      title: 'Error',
+      color: 'danger',
+      description: 'Failed to upload file.',
     });
     setIsUploading(false);
 
@@ -118,7 +118,7 @@ export default function CheckoutConfig({
   }
 
   function handleManageDropdown(key: Key) {
-    if (configData?.url && key == "update-checkout-url") {
+    if (configData?.url && key == 'update-checkout-url') {
       setNewCheckoutFormData({
         ...configData,
         city_country: configData?.city,
@@ -126,25 +126,28 @@ export default function CheckoutConfig({
       });
       setSelectedKey(key);
       onOpen();
+
       return;
     }
 
     /* OPEN MODAL */
-    if (key == "generate-checkout-url") {
+    if (key == 'generate-checkout-url') {
       // CHECK IF URL ALREADY EXISTS
-      if (configData?.url && key == "generate-checkout-url") {
+      if (configData?.url && key == 'generate-checkout-url') {
         addToast({
-          color: "danger",
-          title: "Error",
-          description: "URL already exists for this workspace.",
+          color: 'danger',
+          title: 'Error',
+          description: 'URL already exists for this workspace.',
         });
         setIsLoading(false);
         handleClosePrompts();
+
         return;
       }
 
       setSelectedKey(key);
       onOpen();
+
       return;
     }
   }
@@ -154,8 +157,8 @@ export default function CheckoutConfig({
     setIsLoading(false);
     setIsUploading(false);
     setUnmaskURL(false);
-    setCopiedKey("");
-    setSelectedKey("");
+    setCopiedKey('');
+    setSelectedKey('');
     setNewCheckoutFormData(INIT_FORM);
     // setCurrentActionIndex(null);
     setOpenViewConfig(false);
@@ -166,17 +169,17 @@ export default function CheckoutConfig({
       navigator?.clipboard?.writeText(key);
       setCopiedKey(key);
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Checkout URL copied to clipboard!",
+        color: 'success',
+        title: 'Success',
+        description: 'Checkout URL copied to clipboard!',
       });
     } catch (error) {
       addToast({
-        color: "danger",
-        title: "Error",
-        description: "Failed to copy Checkout URL to clipboard!",
+        color: 'danger',
+        title: 'Error',
+        description: 'Failed to copy Checkout URL to clipboard!',
       });
-      console.error("FAILED", error);
+      console.error('FAILED', error);
     }
   }
 
@@ -185,11 +188,12 @@ export default function CheckoutConfig({
 
     if (!permissions?.create || !permissions?.update) {
       addToast({
-        color: "danger",
-        title: "NOT ALLOWED",
-        description: "Only admins are allowed to generate URLs.",
+        color: 'danger',
+        title: 'NOT ALLOWED',
+        description: 'Only admins are allowed to generate URLs.',
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -203,8 +207,9 @@ export default function CheckoutConfig({
 
     let response;
 
-    if (configData?.url && selectedKey == "update-checkout-url") {
+    if (configData?.url && selectedKey == 'update-checkout-url') {
       const checkoutID = configData?.ID;
+
       response = await updateCheckoutURL(workspaceID, checkoutID, checkoutData);
     } else {
       response = await generateCheckoutURL(workspaceID, checkoutData);
@@ -212,15 +217,15 @@ export default function CheckoutConfig({
 
     if (!response?.success) {
       addToast({
-        title: "Error",
-        color: "danger",
+        title: 'Error',
+        color: 'danger',
         description: response?.message,
       });
     } else {
       addToast({
-        title: "Success",
-        color: "success",
-        description: "Checkout URL Configured Successfully!",
+        title: 'Success',
+        color: 'success',
+        description: 'Checkout URL Configured Successfully!',
       });
       queryClient.invalidateQueries();
     }
@@ -251,7 +256,7 @@ export default function CheckoutConfig({
 
     if (copiedKey) {
       timeoutId = setTimeout(() => {
-        setCopiedKey("");
+        setCopiedKey('');
       }, 3000);
     }
 
@@ -267,13 +272,13 @@ export default function CheckoutConfig({
           <div className="mb-4 flex justify-between">
             <CardHeader
               classNames={{
-                titleClasses: "xl:text-2xl lg:text-xl font-bold",
-                infoClasses: "!text-sm xl:text-base",
+                titleClasses: 'xl:text-2xl lg:text-xl font-bold',
+                infoClasses: '!text-sm xl:text-base',
               }}
               infoText={
-                "Generate checkout URLs for your clients to make payments for their invoices."
+                'Generate checkout URLs for your clients to make payments for their invoices.'
               }
-              title={"Checkout Config"}
+              title={'Checkout Config'}
             />
             <Dropdown>
               <DropdownTrigger>
@@ -328,8 +333,8 @@ export default function CheckoutConfig({
           <Alert hideIcon className="bg-stone-50" color="default">
             <Table removeWrapper aria-label="Checkout URL TABLE">
               <TableHeader>
-                <TableColumn width={"40%"}>CHECKOUT DISPLAY NAME</TableColumn>
-                <TableColumn width={"55%"}>URL</TableColumn>
+                <TableColumn width={'40%'}>CHECKOUT DISPLAY NAME</TableColumn>
+                <TableColumn width={'55%'}>URL</TableColumn>
                 <TableColumn align="center">ACTIONS</TableColumn>
               </TableHeader>
               <TableBody
@@ -356,7 +361,7 @@ export default function CheckoutConfig({
                               : maskString(configData?.url, 0, 60)}
                           </span>
                           <Button
-                            className={"h-max max-h-max max-w-max p-1"}
+                            className={'h-max max-h-max max-w-max p-1'}
                             color="default"
                             size="sm"
                             variant="light"
@@ -442,13 +447,13 @@ export default function CheckoutConfig({
 
       {/* GENERATE URL PROMPT MODAL */}
       <PromptModal
-        confirmText={"Confirm"}
+        confirmText={'Confirm'}
         isDisabled={isLoading}
         isDismissable={false}
         isLoading={isLoading}
         isOpen={isOpen}
         size="sm"
-        title={"Checkout URL Information"}
+        title={'Checkout URL Information'}
         onClose={handleClosePrompts}
         onConfirm={handleCheckoutURLGenerate}
         // onOpen={onOpen}
@@ -456,9 +461,9 @@ export default function CheckoutConfig({
         <div className="flex flex-col gap-4 w-full mb-4">
           <Input
             required
-            label={"Display Name"}
-            name={"displayName"}
-            placeholder={"Brick Enterprise"}
+            label={'Display Name'}
+            name={'displayName'}
+            placeholder={'Brick Enterprise'}
             value={newCheckoutFormData?.display_name}
             onChange={(e) =>
               setNewCheckoutFormData({
@@ -469,9 +474,9 @@ export default function CheckoutConfig({
           />
           <Input
             required
-            label={"Physical Address"}
-            name={"customerName"}
-            placeholder={"87A Kabulonga Road"}
+            label={'Physical Address'}
+            name={'customerName'}
+            placeholder={'87A Kabulonga Road'}
             value={newCheckoutFormData?.physical_address}
             onChange={(e) =>
               setNewCheckoutFormData({
@@ -482,9 +487,9 @@ export default function CheckoutConfig({
           />
           <Input
             required
-            label={"City & Country"}
-            name={"city_country"}
-            placeholder={"Lusaka, Zambia"}
+            label={'City & Country'}
+            name={'city_country'}
+            placeholder={'Lusaka, Zambia'}
             value={newCheckoutFormData?.city_country}
             onChange={(e) =>
               setNewCheckoutFormData({
@@ -495,9 +500,9 @@ export default function CheckoutConfig({
           />
           <Input
             required
-            label={"Redirect URL"}
-            name={"redirect_url"}
-            placeholder={"https://"}
+            label={'Redirect URL'}
+            name={'redirect_url'}
+            placeholder={'https://'}
             value={newCheckoutFormData?.redirect_url}
             onChange={(e) =>
               setNewCheckoutFormData({
@@ -509,7 +514,7 @@ export default function CheckoutConfig({
         </div>
         <label
           className={cn(
-            "pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70",
+            'pl-1 text-sm font-medium text-nowrap mb-1 text-foreground/70',
           )}
         >
           Logo (Optional)
@@ -519,11 +524,11 @@ export default function CheckoutConfig({
           isLoading={isUploading}
           otherAcceptedFiles={{
             // images
-            "image/png": [],
-            "image/jpeg": [],
-            "image/jpg": [],
-            "image/svg+xml": [],
-            "image/webp": [],
+            'image/png': [],
+            'image/jpeg': [],
+            'image/jpg': [],
+            'image/svg+xml': [],
+            'image/webp': [],
           }}
           onChange={async (file) =>
             await handleFileUpload(file as File, newCheckoutFormData?.recordID)
@@ -535,13 +540,13 @@ export default function CheckoutConfig({
       <Modal
         isDismissable
         isKeyboardDismissDisabled
-        placement="center"
-        className={"z-[99999999] max-w-full 2xl:max-w-[calc(100svw-200px)]"}
+        className={'z-[99999999] max-w-full 2xl:max-w-[calc(100svw-200px)]'}
         isOpen={isOpen && openViewConfig}
+        placement="center"
         onClose={onClose}
       >
         <ModalContent>
-          <ModalHeader className="tracking-tight">{"Checkout URL"}</ModalHeader>
+          <ModalHeader className="tracking-tight">{'Checkout URL'}</ModalHeader>
           <ModalBody className="gap-0">
             <div className="flex w-full flex-col gap-8">
               <Snippet hideSymbol className="w-full flex-1">
@@ -563,7 +568,7 @@ export default function CheckoutConfig({
                 </Snippet>
                 <div className="w-full flex items-center my-3">
                   <Alert
-                    color={"warning"}
+                    color={'warning'}
                     title={
                       <span>
                         Please replace the 'XXXXXX' placeholder ONLY on the

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   BookOpen,
   GraduationCap,
@@ -9,32 +8,30 @@ import {
   Building2,
   Briefcase,
   CircleDollarSign,
-  DollarSign,
   FileText,
-  Shield,
   ShieldCheck,
-  ShieldX,
-} from "lucide-react";
+} from 'lucide-react';
+import React from 'react';
 
-export const FloatingCircle = ({ className = "", delay = 0 }) => (
+export const FloatingCircle = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float ${className}`}
     style={{ animationDelay: `${delay}s` }}
   >
-    <svg width="80" height="80" viewBox="0 0 80 80" className="drop-shadow-lg">
+    <svg className="drop-shadow-lg" height="80" viewBox="0 0 80 80" width="80">
       <defs>
         <linearGradient
           id="circleGradient1"
           x1="0%"
-          y1="0%"
           x2="100%"
+          y1="0%"
           y2="100%"
         >
           <stop offset="0%" stopColor="#4F46E5" />
           <stop offset="100%" stopColor="#7C3AED" />
         </linearGradient>
       </defs>
-      <circle cx="40" cy="40" r="35" fill="url(#circleGradient1)" />
+      <circle cx="40" cy="40" fill="url(#circleGradient1)" r="35" />
     </svg>
     <div className="absolute inset-0 flex items-center justify-center">
       <BookOpen className="w-8 h-8 text-white animate-pulse" />
@@ -42,30 +39,30 @@ export const FloatingCircle = ({ className = "", delay = 0 }) => (
   </div>
 );
 
-export const FloatingRectangle = ({ className = "", delay = 0 }) => (
+export const FloatingRectangle = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float-delayed ${className}`}
     style={{ animationDelay: `${delay}s` }}
   >
     <svg
-      width="120"
+      className="drop-shadow-lg"
       height="60"
       viewBox="0 0 120 60"
-      className="drop-shadow-lg"
+      width="120"
     >
       <defs>
-        <linearGradient id="rectGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="rectGradient1" x1="0%" x2="100%" y1="0%" y2="100%">
           <stop offset="0%" stopColor="#10B981" />
           <stop offset="100%" stopColor="#3B82F6" />
         </linearGradient>
       </defs>
       <rect
-        x="5"
-        y="5"
-        width="110"
+        fill="url(#rectGradient1)"
         height="50"
         rx="25"
-        fill="url(#rectGradient1)"
+        width="110"
+        x="5"
+        y="5"
       />
     </svg>
     <div className="absolute inset-0 flex items-center justify-center">
@@ -74,50 +71,50 @@ export const FloatingRectangle = ({ className = "", delay = 0 }) => (
   </div>
 );
 
-export const ConnectingLine = ({ className = "" }) => (
+export const ConnectingLine = ({ className = '' }) => (
   <div className={`absolute ${className}`}>
-    <svg width="200" height="100" viewBox="0 0 200 100" className="opacity-60">
+    <svg className="opacity-60" height="100" viewBox="0 0 200 100" width="200">
       <defs>
-        <linearGradient id="lineGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+        <linearGradient id="lineGradient1" x1="0%" x2="100%" y1="0%" y2="0%">
           <stop offset="0%" stopColor="#8B5CF6" />
           <stop offset="50%" stopColor="#06B6D4" />
           <stop offset="100%" stopColor="#10B981" />
         </linearGradient>
       </defs>
       <path
-        d="M 10 50 Q 100 10 190 50"
-        stroke="url(#lineGradient1)"
-        strokeWidth="3"
-        fill="none"
-        strokeDasharray="10,5"
         className="animate-pulse"
+        d="M 10 50 Q 100 10 190 50"
+        fill="none"
+        stroke="url(#lineGradient1)"
+        strokeDasharray="10,5"
+        strokeWidth="3"
       />
-      <circle cx="10" cy="50" r="4" fill="#8B5CF6" />
-      <circle cx="190" cy="50" r="4" fill="#10B981" />
+      <circle cx="10" cy="50" fill="#8B5CF6" r="4" />
+      <circle cx="190" cy="50" fill="#10B981" r="4" />
     </svg>
   </div>
 );
 
-export const GradientOrb = ({ className = "", delay = 0 }) => (
+export const GradientOrb = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float ${className}`}
     style={{ animationDelay: `${delay}s` }}
   >
     <svg
-      width="100"
+      className="drop-shadow-xl"
       height="100"
       viewBox="0 0 100 100"
-      className="drop-shadow-xl"
+      width="100"
     >
       <defs>
-        <radialGradient id="orbGradient1" cx="30%" cy="30%">
+        <radialGradient cx="30%" cy="30%" id="orbGradient1">
           <stop offset="0%" stopColor="#F59E0B" />
           <stop offset="50%" stopColor="#EF4444" />
           <stop offset="100%" stopColor="#EC4899" />
         </radialGradient>
       </defs>
-      <circle cx="50" cy="50" r="45" fill="url(#orbGradient1)" opacity="0.9" />
-      <circle cx="35" cy="35" r="8" fill="white" opacity="0.6" />
+      <circle cx="50" cy="50" fill="url(#orbGradient1)" opacity="0.9" r="45" />
+      <circle cx="35" cy="35" fill="white" opacity="0.6" r="8" />
     </svg>
     <div className="absolute inset-0 flex items-center justify-center">
       <School className="w-10 h-10 text-white" />
@@ -125,13 +122,13 @@ export const GradientOrb = ({ className = "", delay = 0 }) => (
   </div>
 );
 
-export const DecorativeStar = ({ className = "", size = 20 }) => (
+export const DecorativeStar = ({ className = '', size = 20 }) => (
   <div className={`absolute animate-pulse ${className}`}>
     <svg
-      width={size}
+      className="text-yellow-400"
       height={size}
       viewBox="0 0 24 24"
-      className="text-yellow-400"
+      width={size}
     >
       <path
         d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
@@ -142,7 +139,7 @@ export const DecorativeStar = ({ className = "", size = 20 }) => (
 );
 
 // Educational floating elements
-export const FloatingBook = ({ className = "", delay = 0 }) => (
+export const FloatingBook = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float ${className}`}
     style={{ animationDelay: `${delay}s` }}
@@ -153,7 +150,7 @@ export const FloatingBook = ({ className = "", delay = 0 }) => (
   </div>
 );
 
-export const FloatingUniversity = ({ className = "", delay = 0 }) => (
+export const FloatingUniversity = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float-delayed ${className}`}
     style={{ animationDelay: `${delay}s` }}
@@ -165,7 +162,7 @@ export const FloatingUniversity = ({ className = "", delay = 0 }) => (
 );
 
 // Corporate floating elements
-export const FloatingOffice = ({ className = "", delay = 0 }) => (
+export const FloatingOffice = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float ${className}`}
     style={{ animationDelay: `${delay}s` }}
@@ -176,7 +173,7 @@ export const FloatingOffice = ({ className = "", delay = 0 }) => (
   </div>
 );
 
-export const FloatingCorporate = ({ className = "", delay = 0 }) => (
+export const FloatingCorporate = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float-delayed ${className}`}
     style={{ animationDelay: `${delay}s` }}
@@ -187,7 +184,7 @@ export const FloatingCorporate = ({ className = "", delay = 0 }) => (
   </div>
 );
 
-export const FloatingBusiness = ({ className = "", delay = 0 }) => (
+export const FloatingBusiness = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float ${className}`}
     style={{ animationDelay: `${delay}s` }}
@@ -198,7 +195,7 @@ export const FloatingBusiness = ({ className = "", delay = 0 }) => (
   </div>
 );
 
-export const FloatingFinance = ({ className = "", delay = 0 }) => (
+export const FloatingFinance = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float-delayed ${className}`}
     style={{ animationDelay: `${delay}s` }}
@@ -209,7 +206,7 @@ export const FloatingFinance = ({ className = "", delay = 0 }) => (
   </div>
 );
 
-export const FloatingDocuments = ({ className = "", delay = 0 }) => (
+export const FloatingDocuments = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float ${className}`}
     style={{ animationDelay: `${delay}s` }}
@@ -220,7 +217,7 @@ export const FloatingDocuments = ({ className = "", delay = 0 }) => (
   </div>
 );
 
-export const FloatingSecurity = ({ className = "", delay = 0 }) => (
+export const FloatingSecurity = ({ className = '', delay = 0 }) => (
   <div
     className={`absolute animate-float-delayed ${className}`}
     style={{ animationDelay: `${delay}s` }}
@@ -232,17 +229,17 @@ export const FloatingSecurity = ({ className = "", delay = 0 }) => (
 );
 
 // Large static subscription illustration background
-export const SubscriptionBackgroundSVG = ({ className = "" }) => (
+export const SubscriptionBackgroundSVG = ({ className = '' }) => (
   <div
     className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}
   >
-    <svg width="800" height="600" viewBox="0 0 800 600" className="opacity-5">
+    <svg className="opacity-5" height="600" viewBox="0 0 800 600" width="800">
       <defs>
         <linearGradient
           id="subscriptionGradient"
           x1="0%"
-          y1="0%"
           x2="100%"
+          y1="0%"
           y2="100%"
         >
           <stop offset="0%" stopColor="#6366F1" />
@@ -253,68 +250,68 @@ export const SubscriptionBackgroundSVG = ({ className = "" }) => (
 
       {/* Main subscription card outline */}
       <rect
-        x="200"
-        y="150"
-        width="400"
+        fill="none"
         height="300"
         rx="20"
-        fill="none"
         stroke="url(#subscriptionGradient)"
-        strokeWidth="3"
         strokeDasharray="15,10"
+        strokeWidth="3"
+        width="400"
+        x="200"
+        y="150"
       />
 
       {/* Header section */}
       <rect
-        x="220"
-        y="170"
-        width="360"
+        fill="none"
         height="60"
         rx="10"
-        fill="none"
         stroke="url(#subscriptionGradient)"
-        strokeWidth="2"
         strokeDasharray="8,5"
+        strokeWidth="2"
+        width="360"
+        x="220"
+        y="170"
       />
 
       {/* Title placeholder */}
       <rect
-        x="240"
-        y="185"
-        width="120"
+        fill="none"
         height="12"
         rx="6"
-        fill="none"
         stroke="url(#subscriptionGradient)"
         strokeWidth="1.5"
+        width="120"
+        x="240"
+        y="185"
       />
       <rect
-        x="240"
-        y="205"
-        width="80"
+        fill="none"
         height="8"
         rx="4"
-        fill="none"
         stroke="url(#subscriptionGradient)"
         strokeWidth="1"
+        width="80"
+        x="240"
+        y="205"
       />
 
       {/* Price circle */}
       <circle
         cx="520"
         cy="200"
-        r="25"
         fill="none"
+        r="25"
         stroke="url(#subscriptionGradient)"
-        strokeWidth="2"
         strokeDasharray="5,3"
+        strokeWidth="2"
       />
       <text
-        x="520"
-        y="205"
-        textAnchor="middle"
         className="text-xs"
         fill="url(#subscriptionGradient)"
+        textAnchor="middle"
+        x="520"
+        y="205"
       >
         $
       </text>
@@ -324,152 +321,152 @@ export const SubscriptionBackgroundSVG = ({ className = "" }) => (
         <circle
           cx="250"
           cy="270"
-          r="4"
           fill="none"
+          r="4"
           stroke="url(#subscriptionGradient)"
           strokeWidth="1.5"
         />
         <rect
-          x="265"
-          y="265"
-          width="200"
+          fill="none"
           height="8"
           rx="4"
-          fill="none"
           stroke="url(#subscriptionGradient)"
           strokeWidth="1"
+          width="200"
+          x="265"
+          y="265"
         />
 
         <circle
           cx="250"
           cy="295"
-          r="4"
           fill="none"
+          r="4"
           stroke="url(#subscriptionGradient)"
           strokeWidth="1.5"
         />
         <rect
-          x="265"
-          y="290"
-          width="150"
+          fill="none"
           height="8"
           rx="4"
-          fill="none"
           stroke="url(#subscriptionGradient)"
           strokeWidth="1"
+          width="150"
+          x="265"
+          y="290"
         />
 
         <circle
           cx="250"
           cy="320"
-          r="4"
           fill="none"
+          r="4"
           stroke="url(#subscriptionGradient)"
           strokeWidth="1.5"
         />
         <rect
-          x="265"
-          y="315"
-          width="180"
+          fill="none"
           height="8"
           rx="4"
-          fill="none"
           stroke="url(#subscriptionGradient)"
           strokeWidth="1"
+          width="180"
+          x="265"
+          y="315"
         />
 
         <circle
           cx="250"
           cy="345"
-          r="4"
           fill="none"
+          r="4"
           stroke="url(#subscriptionGradient)"
           strokeWidth="1.5"
         />
         <rect
-          x="265"
-          y="340"
-          width="120"
+          fill="none"
           height="8"
           rx="4"
-          fill="none"
           stroke="url(#subscriptionGradient)"
           strokeWidth="1"
+          width="120"
+          x="265"
+          y="340"
         />
       </g>
 
       {/* Action button */}
       <rect
-        x="250"
-        y="380"
-        width="300"
+        fill="none"
         height="40"
         rx="20"
-        fill="none"
         stroke="url(#subscriptionGradient)"
-        strokeWidth="2"
         strokeDasharray="10,5"
+        strokeWidth="2"
+        width="300"
+        x="250"
+        y="380"
       />
 
       {/* Decorative elements around the card */}
       <circle
         cx="150"
         cy="120"
-        r="15"
         fill="none"
+        r="15"
         stroke="url(#subscriptionGradient)"
-        strokeWidth="2"
         strokeDasharray="3,2"
+        strokeWidth="2"
       />
       <circle
         cx="680"
         cy="180"
-        r="20"
         fill="none"
+        r="20"
         stroke="url(#subscriptionGradient)"
-        strokeWidth="2"
         strokeDasharray="4,3"
+        strokeWidth="2"
       />
       <circle
         cx="120"
         cy="400"
-        r="12"
         fill="none"
+        r="12"
         stroke="url(#subscriptionGradient)"
-        strokeWidth="1.5"
         strokeDasharray="2,1"
+        strokeWidth="1.5"
       />
       <circle
         cx="720"
         cy="450"
-        r="18"
         fill="none"
+        r="18"
         stroke="url(#subscriptionGradient)"
-        strokeWidth="2"
         strokeDasharray="5,3"
+        strokeWidth="2"
       />
 
       {/* Connecting lines */}
       <path
         d="M 100 300 Q 150 250 200 280"
-        stroke="url(#subscriptionGradient)"
-        strokeWidth="1.5"
         fill="none"
+        stroke="url(#subscriptionGradient)"
         strokeDasharray="6,4"
+        strokeWidth="1.5"
       />
       <path
         d="M 600 150 Q 650 100 700 130"
-        stroke="url(#subscriptionGradient)"
-        strokeWidth="1.5"
         fill="none"
+        stroke="url(#subscriptionGradient)"
         strokeDasharray="6,4"
+        strokeWidth="1.5"
       />
       <path
         d="M 150 500 Q 200 480 250 500"
-        stroke="url(#subscriptionGradient)"
-        strokeWidth="1.5"
         fill="none"
+        stroke="url(#subscriptionGradient)"
         strokeDasharray="6,4"
+        strokeWidth="1.5"
       />
     </svg>
   </div>

@@ -1,21 +1,22 @@
-import { PaymentStore } from "@/types/stores";
-import { create } from "zustand";
+import { create } from 'zustand';
+
+import { PaymentStore } from '@/types/stores';
 
 const INITIAL_STATE = {
-  selectedProtocol: "", // DIRECT OR VOUCHER
+  selectedProtocol: '', // DIRECT OR VOUCHER
   selectedActionType: {},
   selectedBatch: null,
   selectedRecord: null,
   paymentAction: {
-    type: "",
-    url: "",
-    batch_name: "",
+    type: '',
+    url: '',
+    batch_name: '',
     file: null,
   },
 
   error: {
     status: false,
-    message: "",
+    message: '',
   },
 
   transactionDetails: {},
@@ -28,7 +29,7 @@ const INITIAL_STATE = {
   openBatchDetailsModal: false,
   openTransactionDetailsModal: false,
   loading: false,
-  dateFilter: "",
+  dateFilter: '',
 };
 
 const usePaymentsStore = create<PaymentStore>((set) => ({
@@ -58,21 +59,21 @@ const usePaymentsStore = create<PaymentStore>((set) => ({
 
   // OPEN VALIDATION AND RECORD MODALS
   openRecordsModal: (type) => {
-    if (type === "all")
+    if (type === 'all')
       set({
         openAllRecordsModal: true,
         openValidRecordsModal: false,
         openInvalidRecordsModal: false,
       });
 
-    if (type === "valid")
+    if (type === 'valid')
       set({
         openValidRecordsModal: true,
         openAllRecordsModal: false,
         openInvalidRecordsModal: false,
       });
 
-    if (type === "invalid")
+    if (type === 'invalid')
       set({
         openInvalidRecordsModal: true,
         openAllRecordsModal: false,

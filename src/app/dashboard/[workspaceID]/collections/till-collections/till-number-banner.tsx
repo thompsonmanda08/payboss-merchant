@@ -1,12 +1,12 @@
-"use client";
-import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
-import Image from "next/image";
+'use client';
+import { Modal, ModalContent, ModalBody, ModalHeader } from '@heroui/react';
+import Image from 'next/image';
 
-import Loader from "@/components/ui/loader";
-import CardHeader from "@/components/base/card-header";
-import { DefaultCover } from "@/lib/constants";
-import Logo from "@/components/base/payboss-logo";
-import BackgroundSVG from "@/components/base/background-svg";
+import BackgroundSVG from '@/components/base/background-svg';
+import CardHeader from '@/components/base/card-header';
+import Logo from '@/components/base/payboss-logo';
+import Loader from '@/components/ui/loader';
+import { DefaultCover } from '@/lib/constants';
 
 // Create Document Component
 export const TillBanner = ({ till }: { till: string }) => (
@@ -23,7 +23,7 @@ export const TillBanner = ({ till }: { till: string }) => (
           {till}
         </span>
         <span className="text-[clamp(2rem,2vw,4rem)] font-bold">
-          {" *AMOUNT# "}
+          {' *AMOUNT# '}
         </span>
       </div>
       <div className="font-semi-bold font-display flex items-center justify-center italic">
@@ -42,7 +42,7 @@ export const TillBanner = ({ till }: { till: string }) => (
         alt="lady-boss"
         className="absolute -bottom-6 right-12 z-20 h-full w-full flex-1 object-contain object-right"
         height={300}
-        src={"/images/like-a-boss.png"}
+        src={'/images/like-a-boss.png'}
         width={1024}
       />
     </div>
@@ -74,9 +74,9 @@ export default function TillNumberBanner({
             <ModalHeader className="flex flex-col gap-4">
               <CardHeader
                 infoText={
-                  "Print this till number banner to display at the till"
+                  'Print this till number banner to display at the till'
                 }
-                title={"Till Number"}
+                title={'Till Number'}
               />
             </ModalHeader>
 

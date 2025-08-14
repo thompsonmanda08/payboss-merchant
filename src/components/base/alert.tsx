@@ -1,19 +1,19 @@
-import { Alert, cn, AlertProps } from "@heroui/react";
-import React from "react";
+import { Alert, cn, AlertProps } from '@heroui/react';
+import React from 'react';
 
 const CustomAlert = React.forwardRef<
   AlertProps,
   {
     title: string;
     children: React.ReactNode;
-    variant?: "faded" | "solid";
+    variant?: 'faded' | 'solid';
     color?:
-      | "default"
-      | "primary"
-      | "secondary"
-      | "success"
-      | "warning"
-      | "danger";
+      | 'default'
+      | 'primary'
+      | 'secondary'
+      | 'success'
+      | 'warning'
+      | 'danger';
     className?: string;
     classNames?: {
       base?: string;
@@ -26,8 +26,8 @@ const CustomAlert = React.forwardRef<
     {
       title,
       children,
-      variant = "faded",
-      color = "secondary",
+      variant = 'faded',
+      color = 'secondary',
       className,
       classNames = {},
       ...props
@@ -36,20 +36,26 @@ const CustomAlert = React.forwardRef<
   ) => {
     const colorClass = React.useMemo(() => {
       switch (color) {
-        case "default":
-          return "before:bg-default-300";
-        case "primary":
-          return "before:bg-primary";
-        case "secondary":
-          return "before:bg-secondary";
-        case "success":
-          return "before:bg-success";
-        case "warning":
-          return "before:bg-warning";
-        case "danger":
-          return "before:bg-danger";
+        case 'default':
+          return 'before:bg-default-300';
+
+        case 'primary':
+          return 'before:bg-primary';
+
+        case 'secondary':
+          return 'before:bg-secondary';
+
+        case 'success':
+          return 'before:bg-success';
+
+        case 'warning':
+          return 'before:bg-warning';
+
+        case 'danger':
+          return 'before:bg-danger';
+
         default:
-          return "before:bg-default-200";
+          return 'before:bg-default-200';
       }
     }, []);
 
@@ -60,18 +66,18 @@ const CustomAlert = React.forwardRef<
           ...classNames,
           base: cn(
             [
-              "bg-default-50 dark:bg-background shadow-sm",
-              "border-1 border-default-200 dark:border-default-100",
+              'bg-default-50 dark:bg-background shadow-sm',
+              'border-1 border-default-200 dark:border-default-100',
               "relative before:content-[''] before:absolute before:z-10",
-              "before:left-0 before:top-[-1px] before:bottom-[-1px] before:w-1",
-              "rounded-l-none border-l-0",
+              'before:left-0 before:top-[-1px] before:bottom-[-1px] before:w-1',
+              'rounded-l-none border-l-0',
               colorClass,
             ],
             classNames.base,
             className,
           ),
-          mainWrapper: cn("pt-1", classNames.mainWrapper),
-          iconWrapper: cn("dark:bg-transparent", classNames.iconWrapper),
+          mainWrapper: cn('pt-1', classNames.mainWrapper),
+          iconWrapper: cn('dark:bg-transparent', classNames.iconWrapper),
         }}
         color={color}
         title={title}
@@ -84,6 +90,6 @@ const CustomAlert = React.forwardRef<
   },
 );
 
-CustomAlert.displayName = "CustomAlert";
+CustomAlert.displayName = 'CustomAlert';
 
 export default CustomAlert;

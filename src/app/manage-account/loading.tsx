@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 export default function WorkspacesLoading({ showHeader = true, length = 6 }) {
   return (

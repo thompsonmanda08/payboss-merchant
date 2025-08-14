@@ -1,6 +1,5 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
 import {
   HomeIcon,
   BanknotesIcon,
@@ -18,22 +17,23 @@ import {
   BriefcaseIcon,
   ChevronRightIcon,
   DocumentTextIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
+import { TicketPercentIcon } from 'lucide-react';
+import { useParams, usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-import DropdownButton from "@/components/ui/dropdown-button";
-import Spinner from "@/components/ui/custom-spinner";
-import SoftBoxIcon from "@/components/base/soft-box-icon";
-import { cn } from "@/lib/utils";
-import { WORKSPACE_TYPES } from "@/lib/constants";
+import Logo from '@/components/base/payboss-logo';
+import SoftBoxIcon from '@/components/base/soft-box-icon';
+import { Button } from '@/components/ui/button';
+import Spinner from '@/components/ui/custom-spinner';
+import DropdownButton from '@/components/ui/dropdown-button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useWorkspaceInit } from '@/hooks/use-query-data';
+import { WORKSPACE_TYPES } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 
-import SideNavItems from "./side-nav-items";
-import { Skeleton } from "@/components/ui/skeleton";
-import Logo from "@/components/base/payboss-logo";
-import MobileNavBar from "./mobile-menu";
-import { Button } from "@/components/ui/button";
-import { useWorkspaceInit } from "@/hooks/use-query-data";
-import { useParams, usePathname } from "next/navigation";
-import { TicketPercentIcon } from "lucide-react";
+import MobileNavBar from './mobile-menu';
+import SideNavItems from './side-nav-items';
 
 type SideNavBarProps = {};
 
@@ -69,32 +69,32 @@ function SideNavBar({}: SideNavBarProps) {
   const workspaceSession = workspaceInit?.data || {};
   const workspaces = workspaceSession.workspaces || [];
   const activeWorkspace = workspaceSession?.activeWorkspace || {};
-  const workspaceType = workspaceSession?.workspaceType || "";
+  const workspaceType = workspaceSession?.workspaceType || '';
 
   // *************** COLLECTIONS AND INCOME *************** //
   const COLLECTION_SERVICES: SideNavItem[] = [
     {
-      ID: "collections",
-      name: "Manage Income",
+      ID: 'collections',
+      name: 'Manage Income',
       Icon: InboxArrowDownIcon,
       subMenuItems: [
         {
-          name: "Till Payments",
+          name: 'Till Payments',
           href: `${dashboardRoute}/collections/till-collections`,
           Icon: CalculatorIcon,
         },
         {
-          name: "API Integration",
+          name: 'API Integration',
           href: `${dashboardRoute}/collections/api-integration`,
           Icon: AdjustmentsVerticalIcon,
         },
         {
-          name: "Subscriptions",
+          name: 'Subscriptions',
           href: `${dashboardRoute}/collections/subscriptions`,
           Icon: TicketPercentIcon,
         },
         {
-          name: "Invoicing",
+          name: 'Invoicing',
           href: `${dashboardRoute}/collections/invoicing`,
           Icon: DocumentTextIcon,
         },
@@ -117,13 +117,13 @@ function SideNavBar({}: SideNavBarProps) {
   // *************** DISBURSEMENTS AND PAYOUTS ************ //
   const DISBURSEMENT_SERVICES = [
     {
-      ID: "payments",
-      name: "Manage Payments",
+      ID: 'payments',
+      name: 'Manage Payments',
       Icon: BanknotesIcon,
       // href: `${dashboardRoute}/payments`,
       subMenuItems: [
         {
-          name: "Disbursements",
+          name: 'Disbursements',
           href: `${dashboardRoute}/payments`,
           Icon: ArrowsRightLeftIcon,
         },
@@ -144,7 +144,7 @@ function SideNavBar({}: SideNavBarProps) {
   // *************** BILL PAYMENTS ******************** //
   const BILL_PAYMENT_SERVICES: SideNavItem[] = [
     {
-      name: "Bill Payments",
+      name: 'Bill Payments',
       href: `${dashboardRoute}/bills`,
       Icon: ReceiptPercentIcon,
     },
@@ -153,7 +153,7 @@ function SideNavBar({}: SideNavBarProps) {
   // *************** DISBURSEMENTS REPORTS ************ //
   const DISBURSEMENT_REPORTS: SideNavItem[] = [
     {
-      name: "Disbursements",
+      name: 'Disbursements',
       href: `${dashboardRoute}/reports/disbursements`,
       Icon: ArrowRightStartOnRectangleIcon,
     },
@@ -162,7 +162,7 @@ function SideNavBar({}: SideNavBarProps) {
   // *************** COLLECTION REPORTS **************** //
   const COLLECTION_REPORTS: SideNavItem[] = [
     {
-      name: "Collections",
+      name: 'Collections',
       href: `${dashboardRoute}/reports/collection`,
       Icon: ArrowLeftEndOnRectangleIcon,
     },
@@ -170,7 +170,7 @@ function SideNavBar({}: SideNavBarProps) {
 
   const BILL_PAYMENTS_REPORTS: SideNavItem[] = [
     {
-      name: "Bill Payment Reports",
+      name: 'Bill Payment Reports',
       href: `${dashboardRoute}/reports/bills`,
       Icon: ReceiptPercentIcon,
     },
@@ -227,8 +227,8 @@ function SideNavBar({}: SideNavBarProps) {
 
   const SIDE_BAR_OPTIONS: SideNavItem[] = [
     {
-      name: "Dashboard",
-      ID: "dashboard",
+      name: 'Dashboard',
+      ID: 'dashboard',
       href: dashboardRoute,
       Icon: HomeIcon,
     },
@@ -238,13 +238,13 @@ function SideNavBar({}: SideNavBarProps) {
 
     // *************** REPORTS AND ANALYSIS ***************** //
     {
-      ID: "reports",
-      name: "Reports & Analytics",
+      ID: 'reports',
+      name: 'Reports & Analytics',
       href: `${dashboardRoute}/reports`,
       Icon: DocumentChartBarIcon,
       subMenuItems: [
         {
-          name: "Wallet Statement",
+          name: 'Wallet Statement',
           href: `${dashboardRoute}/reports/statement`,
           Icon: WalletIcon,
         },
@@ -255,8 +255,8 @@ function SideNavBar({}: SideNavBarProps) {
     ...MISC_SERVICES,
     // ****************************************************** //
     {
-      ID: "workspace",
-      name: "Manage Workspace",
+      ID: 'workspace',
+      name: 'Manage Workspace',
       Icon: WrenchScrewdriverIcon,
       href: `${dashboardRoute}/workspace-settings`,
     },
@@ -265,19 +265,19 @@ function SideNavBar({}: SideNavBarProps) {
   // *************** WORKSPACES DROPDOWN ***************** //
   const WORKSPACES_OPTIONS = [
     {
-      key: "home",
-      name: "Home",
-      href: "/workspaces",
-      shortcut: "⌘H",
-      description: "Go back Home",
+      key: 'home',
+      name: 'Home',
+      href: '/workspaces',
+      shortcut: '⌘H',
+      description: 'Go back Home',
       Icon: HomeIcon,
     },
 
     {
-      key: "workspaces",
-      name: "Workspaces",
+      key: 'workspaces',
+      name: 'Workspaces',
       // shortcut: '>',
-      description: "Change your workspace",
+      description: 'Change your workspace',
       Icon: BriefcaseIcon,
       subMenuItems: workspaces.map((item: any) => {
         return {
@@ -296,11 +296,11 @@ function SideNavBar({}: SideNavBarProps) {
       }),
     },
     {
-      key: "settings",
-      name: "Workspace Settings",
-      href: dashboardRoute + "/workspace-settings",
-      shortcut: "⌘S",
-      description: "Workspace preferences",
+      key: 'settings',
+      name: 'Workspace Settings',
+      href: dashboardRoute + '/workspace-settings',
+      shortcut: '⌘S',
+      description: 'Workspace preferences',
       Icon: WrenchScrewdriverIcon,
     },
     // {
@@ -359,11 +359,11 @@ function SideNavBar({}: SideNavBarProps) {
         className="absolute left-6 top-3 z-[99] h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
       >
         <Bars3BottomLeftIcon className="h-7 w-7 text-foreground/70" />
-        <Logo href={"#"} />
+        <Logo href={'#'} />
       </Button>
       <div
-        className={cn("h-full hidden w-[380px] lg:flex", {
-          "flex ": openMobileMenu,
+        className={cn('h-full hidden w-[380px] lg:flex', {
+          'flex ': openMobileMenu,
         })}
       >
         <nav
@@ -375,16 +375,17 @@ function SideNavBar({}: SideNavBarProps) {
           <div className="relative py-2">
             <DropdownButton
               backdropBlur={true}
-              isDisabled={!workspaceID || isLoading || isPending}
               dropDownItems={WORKSPACES_OPTIONS}
+              isDisabled={!workspaceID || isLoading || isPending}
             >
-              <SoftBoxIcon className={"aspect-square h-9 w-10 p-2"}>
+              <SoftBoxIcon className={'aspect-square h-9 w-10 p-2'}>
                 <BriefcaseIcon />
               </SoftBoxIcon>
               <div className="flex w-full items-center justify-between text-primary">
                 {(() => {
                   const isFetching =
                     !activeWorkspace || !activeWorkspace?.workspace;
+
                   return (
                     <div className="flex flex-col items-start justify-start gap-0">
                       <div className="text-base font-semibold uppercase">
@@ -404,7 +405,7 @@ function SideNavBar({}: SideNavBarProps) {
                     </div>
                   );
                 })()}
-                <ChevronRightIcon className={cn("h-4 w-4 ease-in-out")} />
+                <ChevronRightIcon className={cn('h-4 w-4 ease-in-out')} />
               </div>
             </DropdownButton>
           </div>
@@ -422,9 +423,9 @@ function SideNavBar({}: SideNavBarProps) {
             <SideNavItems
               expandedSection={expandedSection as number}
               handleExpand={handleExpand}
+              handleLinkClick={handleLinkClick}
               handleMainLinkClick={handleMainLinkClick}
               navBarItems={SIDE_BAR_OPTIONS}
-              handleLinkClick={handleLinkClick}
             />
           )}
         </nav>

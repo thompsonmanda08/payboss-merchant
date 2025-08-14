@@ -1,10 +1,9 @@
-import Link from "next/link";
+import { ClassValue } from 'clsx';
+import Link from 'next/link';
+import { PropsWithChildren } from 'react';
 
-import { cn } from "@/lib/utils";
-
-import { Button } from "@/components/ui/button";
-import { PropsWithChildren } from "react";
-import { ClassValue } from "clsx";
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 function EmptyState({
   title,
@@ -34,7 +33,7 @@ function EmptyState({
           classNames?.heading,
         )}
       >
-        {title || "Whoops-a-daisy!"}
+        {title || 'Whoops-a-daisy!'}
       </h3>
       <p
         className={cn(
@@ -42,16 +41,16 @@ function EmptyState({
           classNames?.paragraph,
         )}
       >
-        {message || "There is nothing here yet. Please try again later."}
+        {message || 'There is nothing here yet. Please try again later.'}
       </p>
       {children ||
         (!onButtonClick ? (
-          <Button as={Link} className={"h-12 px-8"} href={href || "/"}>
-            {buttonText || "Go Home"}
+          <Button as={Link} className={'h-12 px-8'} href={href || '/'}>
+            {buttonText || 'Go Home'}
           </Button>
         ) : (
-          <Button className={"px-8 py-3"} onClick={onButtonClick}>
-            {buttonText || "Done"}
+          <Button className={'px-8 py-3'} onClick={onButtonClick}>
+            {buttonText || 'Done'}
           </Button>
         ))}
     </div>

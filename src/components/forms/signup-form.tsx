@@ -1,31 +1,31 @@
-"use client";
-import { useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Card, addToast } from "@heroui/react";
+'use client';
+import { Card, addToast } from '@heroui/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect } from 'react';
 
-import useCustomTabsHook from "@/hooks/use-custom-tabs";
-import { containerVariants } from "@/lib/constants";
-import useAuthStore from "@/context/auth-store";
 import {
   createMerchantAdminUser,
   createNewMerchant,
   submitMerchantBankDetails,
-} from "@/app/_actions/auth-actions";
+} from '@/app/_actions/auth-actions';
+import useAuthStore from '@/context/auth-store';
+import useCustomTabsHook from '@/hooks/use-custom-tabs';
+import { containerVariants } from '@/lib/constants';
 
-import { Button } from "../ui/button";
-import StatusMessage from "../base/status-message";
+import StatusMessage from '../base/status-message';
+import { Button } from '../ui/button';
 
-import Step0 from "./signup-fragments/step-0";
-import Step1 from "./signup-fragments/step-1";
-import Step2 from "./signup-fragments/step-2";
-import Step3 from "./signup-fragments/step-3";
-import Step1_TPIN from "./signup-fragments/step-1-1";
+import Step0 from './signup-fragments/step-0';
+import Step1 from './signup-fragments/step-1';
+import Step1_TPIN from './signup-fragments/step-1-1';
+import Step2 from './signup-fragments/step-2';
+import Step3 from './signup-fragments/step-3';
 
 export const STEPS = [
-  "business-registration",
-  "business-information",
-  "business-bank-details",
-  "user-information",
+  'business-registration',
+  'business-information',
+  'business-bank-details',
+  'user-information',
 ];
 
 export default function SignUpForm({
@@ -55,7 +55,7 @@ export default function SignUpForm({
   const NEW_REGISTRATION = [
     // BUSINESS INFO
     <Step1
-      key={STEPS[1] + "_NEW"}
+      key={STEPS[1] + '_NEW'}
       backToStart={handleGotoStart}
       updateDetails={updateAccountDetails}
     />,
@@ -75,7 +75,7 @@ export default function SignUpForm({
 
   const CONTINUE_REGISTRATION = [
     <Step1_TPIN
-      key={STEPS[1] + "_CONTINUE"} // GET ACCOUNT DETAILS BY TPIN
+      key={STEPS[1] + '_CONTINUE'} // GET ACCOUNT DETAILS BY TPIN
       backToStart={handleGotoStart}
       updateDetails={updateAccountDetails}
     />,
@@ -92,7 +92,7 @@ export default function SignUpForm({
   ];
 
   const RENDERED_COMPONENTS =
-    businessInfo?.registration != "NEW"
+    businessInfo?.registration != 'NEW'
       ? CONTINUE_REGISTRATION
       : NEW_REGISTRATION;
 
@@ -146,10 +146,10 @@ export default function SignUpForm({
   async function handleCreateAccount(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
-    updateErrorStatus({ status: false, message: "" });
+    updateErrorStatus({ status: false, message: '' });
 
     // ******** STEP: 0 ==>  USER CHOOSES TO EITHER CONTINUE OR START A NEW REGISTRATION ********** //
-    if (businessInfo.registration == "CONTINUE" && !isValidTPIN) {
+    if (businessInfo.registration == 'CONTINUE' && !isValidTPIN) {
       navigateForward();
       setIsLoading(false);
 
@@ -161,7 +161,7 @@ export default function SignUpForm({
     // IF USER IS CONTINUING REGISTRATION AND HAS PROVIDED A VALID TPIN
     // THEN NAVIGATE THEM TO CORRECT STAGE
     if (
-      businessInfo.registration == "CONTINUE" &&
+      businessInfo.registration == 'CONTINUE' &&
       currentTabIndex === 1 &&
       isValidTPIN &&
       businessInfo?.stage // EXPECTED TO BE EITHER 2 OR 3
@@ -181,7 +181,7 @@ export default function SignUpForm({
         super_merchant_id: superMerchantID,
       });
 
-      let merchantID = response?.data?.merchantID;
+      const merchantID = response?.data?.merchantID;
 
       if (merchantID) {
         setMerchantID(merchantID);
@@ -189,9 +189,9 @@ export default function SignUpForm({
 
       if (response?.success && (response?.data?.merchantID || merchantID)) {
         addToast({
-          color: "success",
-          title: "Success",
-          description: "Business Details Submitted!",
+          color: 'success',
+          title: 'Success',
+          description: 'Business Details Submitted!',
         });
         navigateForward();
         setIsLoading(false);
@@ -199,9 +199,9 @@ export default function SignUpForm({
         return;
       } else {
         addToast({
-          color: "danger",
-          title: "Failed",
-          description: "Error Submitting Business Details",
+          color: 'danger',
+          title: 'Failed',
+          description: 'Error Submitting Business Details',
         });
         updateErrorStatus({ status: true, message: response?.message });
         setIsLoading(false);
@@ -217,9 +217,9 @@ export default function SignUpForm({
 
       if (response?.success) {
         addToast({
-          color: "success",
-          title: "Success",
-          description: "Bank information Submitted!",
+          color: 'success',
+          title: 'Success',
+          description: 'Bank information Submitted!',
         });
         navigateForward();
         setIsLoading(false);
@@ -227,9 +227,9 @@ export default function SignUpForm({
         return;
       } else {
         addToast({
-          color: "danger",
-          title: "Failed",
-          description: "Error Submitting Bank information!",
+          color: 'danger',
+          title: 'Failed',
+          description: 'Error Submitting Bank information!',
         });
         updateErrorStatus({ status: true, message: response?.message });
         setIsLoading(false);
@@ -245,20 +245,20 @@ export default function SignUpForm({
       if (newAdminUser?.password !== newAdminUser?.confirmPassword) {
         updateErrorStatus({
           onPassword: true,
-          message: "Passwords do not match",
+          message: 'Passwords do not match',
         });
         setIsLoading(false);
 
         return;
       }
 
-      let response = await createMerchantAdminUser(newAdminUser, merchantID);
+      const response = await createMerchantAdminUser(newAdminUser, merchantID);
 
       if (response?.success) {
         addToast({
-          color: "success",
-          title: "Success",
-          description: "Account Created Successfully",
+          color: 'success',
+          title: 'Success',
+          description: 'Account Created Successfully',
         });
         setAccountCreated(true);
         setIsLoading(false);
@@ -266,9 +266,9 @@ export default function SignUpForm({
         return;
       } else {
         addToast({
-          color: "danger",
-          title: "Failed",
-          description: "Error Creating Account!",
+          color: 'danger',
+          title: 'Failed',
+          description: 'Error Creating Account!',
         });
         updateErrorStatus({ status: true, message: response?.message });
         setIsLoading(false);
@@ -303,10 +303,10 @@ export default function SignUpForm({
           <AnimatePresence mode="wait">
             <motion.div
               key={currentTabIndex}
+              animate={'show'}
               className="flex w-full flex-col items-center justify-center gap-y-4"
-              animate={"show"}
-              exit={"exit"}
-              initial={"hidden"}
+              exit={'exit'}
+              initial={'hidden'}
               transition={{ duration: 0.5 }}
               variants={containerVariants}
             >
@@ -326,19 +326,19 @@ export default function SignUpForm({
               color="primary"
               disabled={
                 isLoading ||
-                (businessInfo.registration == "CONTINUE" &&
+                (businessInfo.registration == 'CONTINUE' &&
                   !isValidTPIN &&
                   currentTabIndex === 1)
               }
               isLoading={isLoading}
               size="lg"
-              type={"submit"}
+              type={'submit'}
             >
               {isFirstStep
-                ? "Get Started"
+                ? 'Get Started'
                 : !isLastStep
-                  ? "Next"
-                  : "Create Account"}
+                  ? 'Next'
+                  : 'Create Account'}
             </Button>
           </div>
         </form>

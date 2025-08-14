@@ -1,18 +1,17 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-import useCustomTabsHook from "@/hooks/use-custom-tabs";
+import useCustomTabsHook from '@/hooks/use-custom-tabs';
 
-import SubScriptionLandingSection from "./components/landing-section";
-import SubscriptionPaymentForm from "./components/subscription-payment-form";
-import HowItWorksSection from "./components/how-it-works";
+import HowItWorksSection from './components/how-it-works';
+import SubscriptionPaymentForm from './components/subscription-payment-form';
 
 export default function SubscriptionsMiniApp() {
   const { activeTab, navigateTo } = useCustomTabsHook([
-    <HowItWorksSection key={"how-it-works"} navigateTo={goTo} />,
+    <HowItWorksSection key={'how-it-works'} navigateTo={goTo} />,
     // <SubScriptionLandingSection key={"landing"} navigateTo={goTo} />,
-    <SubscriptionPaymentForm key={"payment"} navigateTo={goTo} />,
+    <SubscriptionPaymentForm key={'payment'} navigateTo={goTo} />,
   ]);
 
   function goTo(index: number) {

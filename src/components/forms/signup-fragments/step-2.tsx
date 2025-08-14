@@ -1,15 +1,15 @@
 //BUSINESS REGISTRATION STATUS
-"use client";
-import { motion } from "framer-motion";
+'use client';
+import { motion } from 'framer-motion';
 
-import { Input } from "@/components/ui/input-field";
-import { staggerContainerItemVariants } from "@/lib/constants";
-import useAuthStore from "@/context/auth-store";
-import SelectField from "@/components/ui/select-field";
-import useConfigOptions from "@/hooks/use-config-options";
-import CardHeader from "@/components/base/card-header";
+import CardHeader from '@/components/base/card-header';
+import { Input } from '@/components/ui/input-field';
+import SelectField from '@/components/ui/select-field';
+import useAuthStore from '@/context/auth-store';
+import useConfigOptions from '@/hooks/use-config-options';
+import { staggerContainerItemVariants } from '@/lib/constants';
 
-import { STEPS } from "../signup-form";
+import { STEPS } from '../signup-form';
 
 // BUSINESS BANKING DETAILS
 export default function Step2({ updateDetails, backToStart }: any) {
@@ -25,7 +25,7 @@ export default function Step2({ updateDetails, backToStart }: any) {
       <CardHeader
         handleClose={() => backToStart()}
         infoText={
-          "Please provide your banking details to receive your payments."
+          'Please provide your banking details to receive your payments.'
         }
         title="Banking Details"
       />
@@ -67,7 +67,7 @@ export default function Step2({ updateDetails, backToStart }: any) {
           >
             <SelectField
               label="Bank"
-              listItemName={"bank_name"}
+              listItemName={'bank_name'}
               name="bankID"
               options={banks}
               prefilled={true}
@@ -122,7 +122,7 @@ export default function Step2({ updateDetails, backToStart }: any) {
           >
             <SelectField
               label="Currency"
-              listItemName={"currency"}
+              listItemName={'currency'}
               name="currencyID"
               options={currencies}
               prefilled={true}

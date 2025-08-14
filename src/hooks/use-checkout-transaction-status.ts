@@ -1,33 +1,33 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { getTransactionStatus } from "@/app/_actions/checkout-actions";
+import { getTransactionStatus } from '@/app/_actions/checkout-actions';
 
 export const useCheckoutTransactionStatus = (
   transactionID: string,
   enable: boolean,
 ) => {
   const { data, isError } = useQuery({
-    queryKey: ["transaction-status", transactionID],
+    queryKey: ['transaction-status', transactionID],
     queryFn: async () => {
       if (!enable) {
         return {
           success: false,
-          message: "Transaction has not been initiated",
+          message: 'Transaction has not been initiated',
           data: {
-            status: "NOT STARTED",
+            status: 'NOT STARTED',
           },
           status: 400,
-          statusText: "BAD_REQUEST",
+          statusText: 'BAD_REQUEST',
         };
       }
 
       if (!transactionID) {
         return {
           success: false,
-          message: "Transaction REF ID is required",
+          message: 'Transaction REF ID is required',
           data: [],
           status: 400,
-          statusText: "BAD_REQUEST",
+          statusText: 'BAD_REQUEST',
         };
       }
 
@@ -41,9 +41,9 @@ export const useCheckoutTransactionStatus = (
 
   const status = String(data?.status)?.toUpperCase();
 
-  const isSuccess = status == "SUCCESSFUL";
-  const isFailed = status == "FAILED";
-  const isProcessing = status == "PENDING";
+  const isSuccess = status == 'SUCCESSFUL';
+  const isFailed = status == 'FAILED';
+  const isProcessing = status == 'PENDING';
 
   const transactionResponse = {
     ...data,

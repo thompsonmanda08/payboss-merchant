@@ -1,26 +1,26 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { ArrowDownTrayIcon, FunnelIcon } from "@heroicons/react/24/outline";
-import { useMutation } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+'use client';
+import { ArrowDownTrayIcon, FunnelIcon } from '@heroicons/react/24/outline';
+import { useMutation } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { DateRangePickerField } from "@/components/ui/date-select-field";
-import { QUERY_KEYS } from "@/lib/constants";
-import { getWalletStatementReport } from "@/app/_actions/transaction-actions";
-import { WalletTransactionHistory } from "@/app/dashboard/[workspaceID]/workspace-settings/components/wallet";
-import { walletStatementReportToCSV } from "@/app/_actions/file-conversion-actions";
-import Card from "@/components/base/custom-card";
-import CardHeader from "@/components/base/card-header";
-import Search from "@/components/ui/search";
-import { useDebounce } from "@/hooks/use-debounce";
+import { walletStatementReportToCSV } from '@/app/_actions/file-conversion-actions';
+import { getWalletStatementReport } from '@/app/_actions/transaction-actions';
+import { WalletTransactionHistory } from '@/app/dashboard/[workspaceID]/workspace-settings/components/wallet';
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import { Button } from '@/components/ui/button';
+import { DateRangePickerField } from '@/components/ui/date-select-field';
+import Search from '@/components/ui/search';
+import { useDebounce } from '@/hooks/use-debounce';
+import { QUERY_KEYS } from '@/lib/constants';
 
 export default function StatementReport({}) {
   const params = useParams();
   const workspaceID = String(params.workspaceID);
 
   const [dateRange, setDateRange] = useState<any>();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const mutation = useMutation({
@@ -87,11 +87,11 @@ export default function StatementReport({}) {
           <DateRangePickerField
             autoFocus
             dateRange={dateRange}
-            description={"Dates to generate reports"}
-            label={"Reports Date Range"}
+            description={'Dates to generate reports'}
+            label={'Reports Date Range'}
             setDateRange={setDateRange}
             visibleMonths={2}
-          />{" "}
+          />{' '}
           <Button
             endContent={<FunnelIcon className="h-5 w-5" />}
             onPress={() => runAsyncMutation(dateRange)}
@@ -102,23 +102,23 @@ export default function StatementReport({}) {
       </div>
       {/************************************************************************/}
 
-      <Card className={"mb-8 w-full"}>
+      <Card className={'mb-8 w-full'}>
         <div className="flex items-center gap-2">
           <CardHeader
             classNames={{
-              titleClasses: "xl:text-[clamp(1.125rem,1vw,1.75rem)] font-bold",
-              infoClasses: "text-[clamp(0.8rem,0.8vw,1rem)]",
+              titleClasses: 'xl:text-[clamp(1.125rem,1vw,1.75rem)] font-bold',
+              infoClasses: 'text-[clamp(0.8rem,0.8vw,1rem)]',
             }}
             infoText={
-              "Statement transactions:" +
-              ` (${dateRange ? dateRange.range : "--"})`
+              'Statement transactions:' +
+              ` (${dateRange ? dateRange.range : '--'})`
             }
-            title={"Wallet Statement Report"}
+            title={'Wallet Statement Report'}
           />
 
           <div className="flex w-full max-w-sm gap-4">
             <Search
-              placeholder={"Search for transaction..."}
+              placeholder={'Search for transaction...'}
               onChange={(v) => setSearchQuery(v)}
             />
             <Button

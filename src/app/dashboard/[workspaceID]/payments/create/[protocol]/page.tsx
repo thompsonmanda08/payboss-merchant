@@ -1,5 +1,6 @@
-import BulkPaymentForm from "./bulk-payment-form";
-import { PageProps } from "@/types";
+import { PageProps } from '@/types';
+
+import BulkPaymentForm from './bulk-payment-form';
 
 export default async function CreateBatchPayment({ params }: PageProps) {
   const workspaceID = (await params)?.workspaceID as string;
@@ -7,7 +8,7 @@ export default async function CreateBatchPayment({ params }: PageProps) {
 
   return (
     <>
-      <BulkPaymentForm workspaceID={workspaceID} protocol={protocol} />
+      <BulkPaymentForm protocol={protocol} workspaceID={workspaceID} />
     </>
   );
 }

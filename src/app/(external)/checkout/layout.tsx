@@ -1,6 +1,7 @@
-import Logo from "@/components/base/payboss-logo";
-import { Footer } from "@/components/landing-sections/footer";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren } from 'react';
+
+import Logo from '@/components/base/payboss-logo';
+import { Footer } from '@/components/landing-sections/footer';
 
 async function CheckoutLayout({ children }: PropsWithChildren) {
   return (
@@ -9,7 +10,7 @@ async function CheckoutLayout({ children }: PropsWithChildren) {
         <div>
           <h2
             className={
-              "w-full text-[clamp(18px,18px+1vw,1.25rem)] text-foreground font-bold"
+              'w-full text-[clamp(18px,18px+1vw,1.25rem)] text-foreground font-bold'
             }
           >
             Checkout
@@ -19,7 +20,7 @@ async function CheckoutLayout({ children }: PropsWithChildren) {
           </p>
         </div>
         <span className="font-medium italic text-xs sm:text-sm  text-nowrap flex gap-2 items-center scale-80 sm:scale-100">
-          Powered by <Logo href={"#"} />
+          Powered by <Logo href={'#'} />
         </span>
       </div>
       <hr className="mb-4 bg-transparent border-slate-200" />

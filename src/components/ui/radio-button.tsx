@@ -1,4 +1,4 @@
-import { Radio, cn, RadioProps } from "@heroui/react";
+import { Radio, cn, RadioProps } from '@heroui/react';
 
 const CustomRadioButton = (props: RadioProps) => {
   const { children, ...otherProps } = props;
@@ -8,9 +8,9 @@ const CustomRadioButton = (props: RadioProps) => {
       {...otherProps}
       classNames={{
         base: cn(
-          "inline-flex m-0 bg-transparent hover:bg-primary/5 hover:border-primary/80 items-center justify-between",
-          "flex-row-reverse w-full max-w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-neutral-150",
-          "data-[selected=true]:border-primary",
+          'inline-flex m-0 bg-transparent hover:bg-primary/5 hover:border-primary/80 items-center justify-between',
+          'flex-row-reverse w-full max-w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-neutral-150',
+          'data-[selected=true]:border-primary',
         ),
       }}
     >

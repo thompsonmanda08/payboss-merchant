@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { getAllKYCData } from "@/app/_actions/merchant-actions";
-import { getBusinessDocumentRefs } from "@/app/_actions/auth-actions";
+import { getBusinessDocumentRefs } from '@/app/_actions/auth-actions';
+import { getAllKYCData } from '@/app/_actions/merchant-actions';
 
 const useKYCInfo = () => {
   const {
@@ -12,13 +12,13 @@ const useKYCInfo = () => {
     isError,
     isSuccess,
   } = useQuery({
-    queryKey: ["KYC"],
+    queryKey: ['KYC'],
     queryFn: async () => await getAllKYCData(),
     staleTime: Infinity,
   });
 
   const { data: docsResponse } = useQuery({
-    queryKey: ["uploaded-docs"],
+    queryKey: ['uploaded-docs'],
     queryFn: () => getBusinessDocumentRefs(),
     staleTime: Infinity,
   });
@@ -28,16 +28,16 @@ const useKYCInfo = () => {
   const documents = docsResponse?.data || response?.data?.documents || {};
   const refDocsExist = Object.keys(documents).length > 0;
 
-  let merchantKYC = response?.data?.merchant_kyc || {
+  const merchantKYC = response?.data?.merchant_kyc || {
     is_complete_kyc: false,
-    stage: "",
+    stage: '',
     stage_id: 1,
-    kyc_approval_status: "pending",
+    kyc_approval_status: 'pending',
     can_edit: false,
   };
 
-  const merchantID = businessDetails?.ID || "";
-  const merchant = businessDetails?.name || "";
+  const merchantID = businessDetails?.ID || '';
+  const merchant = businessDetails?.name || '';
 
   const isCompleteKYC = merchantKYC?.is_complete_kyc;
   const KYCStage = merchantKYC?.stage?.toLowerCase();
@@ -45,15 +45,15 @@ const useKYCInfo = () => {
   const KYCApprovalStatus = merchantKYC?.kyc_approval_status?.toLowerCase();
 
   const isApprovedUser =
-    KYCStageID == 3 && isCompleteKYC && KYCApprovalStatus == "approved";
+    KYCStageID == 3 && isCompleteKYC && KYCApprovalStatus == 'approved';
 
   const contactPerson =
-    users?.find((user: any) => user?.role?.toLowerCase() == "owner") || {};
+    users?.find((user: any) => user?.role?.toLowerCase() == 'owner') || {};
 
-  const signedContractDoc = documents?.signed_contract || "";
+  const signedContractDoc = documents?.signed_contract || '';
 
   const allowUserToSubmitKYC =
-    merchantKYC?.can_edit && contactPerson?.role?.toLowerCase() == "owner";
+    merchantKYC?.can_edit && contactPerson?.role?.toLowerCase() == 'owner';
 
   return {
     businessDetails,

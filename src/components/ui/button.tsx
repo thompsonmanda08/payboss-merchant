@@ -1,6 +1,6 @@
-import { ButtonProps, Button as NextUIButton } from "@heroui/react";
+import { ButtonProps, Button as NextUIButton } from '@heroui/react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 export function Button({
   children,
@@ -12,13 +12,12 @@ export function Button({
   loadingText?: string;
   onClick?: (e?: any) => void;
 }) {
-  props.variant ??= "solid";
-  props.color ??= "primary";
+  props.variant ??= 'solid';
+  props.color ??= 'primary';
 
   return (
     <NextUIButton
-      type={props.type || "button"}
-      className={cn("min-w-max font-semibold", className)}
+      className={cn('min-w-max font-semibold', className)}
       radius="sm"
       size={size}
       spinner={
@@ -43,9 +42,10 @@ export function Button({
           />
         </svg>
       }
+      type={props.type || 'button'}
       {...props}
     >
-      {props.isLoading ? loadingText || "" : children}
+      {props.isLoading ? loadingText || '' : children}
     </NextUIButton>
   );
 }

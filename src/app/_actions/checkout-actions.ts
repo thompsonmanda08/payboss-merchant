@@ -1,12 +1,12 @@
-"use server";
+'use server';
 
 import {
   handleBadRequest,
   handleError,
   successResponse,
-} from "@/lib/api-config";
-import { apiClient } from "@/lib/utils";
-import { APIResponse } from "@/types";
+} from '@/lib/api-config';
+import { apiClient } from '@/lib/utils';
+import { APIResponse } from '@/types';
 
 /**
  * Validates the provided checkout data by ensuring required parameters are present
@@ -38,7 +38,7 @@ export async function validateCheckoutData(
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | CHECKOUT VALIDATION", url);
+    return handleError(error, 'POST | CHECKOUT VALIDATION', url);
   }
 }
 
@@ -59,7 +59,7 @@ export async function getCheckoutInfo(
   serviceID: string,
 ): Promise<APIResponse> {
   if (!checkoutID) {
-    return handleBadRequest("checkout ID is required");
+    return handleBadRequest('checkout ID is required');
   }
 
   const url = `merchant/transaction/collection/checkout/${checkoutID}/details/${serviceID}`;
@@ -69,7 +69,7 @@ export async function getCheckoutInfo(
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | CHECKOUT INFO", url);
+    return handleError(error, 'GET | CHECKOUT INFO', url);
   }
 }
 
@@ -110,7 +110,7 @@ export async function payWithMobileMoney(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | PAY WITH MOBILE", url);
+    return handleError(error, 'GET | PAY WITH MOBILE', url);
   }
 }
 
@@ -134,7 +134,7 @@ export async function payWithBankCard(checkoutData: any): Promise<APIResponse> {
     !checkoutData?.serviceID
   ) {
     return handleBadRequest(
-      "Missing Required Params: Transaction/Service/Workspace ID",
+      'Missing Required Params: Transaction/Service/Workspace ID',
     );
   }
 
@@ -167,10 +167,10 @@ export async function getTransactionStatus(
   if (!transactionID) {
     return {
       success: false,
-      message: "Missing Required Params: Transaction ID",
+      message: 'Missing Required Params: Transaction ID',
       data: null,
       status: 400,
-      statusText: "BAD REQUEST",
+      statusText: 'BAD REQUEST',
     };
   }
 
@@ -181,14 +181,14 @@ export async function getTransactionStatus(
 
     return {
       success: true,
-      message: "Transaction status fetched",
+      message: 'Transaction status fetched',
       data: res.data,
       status: res.status,
       statusText: res.statusText,
     };
   } catch (error: Error | any) {
     console.error({
-      endpoint: "GET | TRANSACTION STATUS ~ " + url,
+      endpoint: 'GET | TRANSACTION STATUS ~ ' + url,
       status: error?.response?.status,
       statusText: error?.response?.statusText,
       headers: error?.response?.headers,
@@ -201,7 +201,7 @@ export async function getTransactionStatus(
       message:
         error?.response?.data?.error ||
         error?.response?.config?.data?.error ||
-        "No Server Response",
+        'No Server Response',
       data: error?.response?.data,
       status: error?.response?.status,
       statusText: error?.response?.statusText,

@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-import Card from "../../../components/base/custom-card";
+import Card from '../../../components/base/custom-card';
 
 function SimpleStats({
   title,
@@ -28,13 +28,13 @@ function SimpleStats({
   return (
     <Card
       className={
-        "min-w-[300px] flex-1 flex-row items-center justify-between rounded-2xl"
+        'min-w-[300px] flex-1 flex-row items-center justify-between rounded-2xl'
       }
     >
       <div className="flex flex-col gap-3">
         <h2
           className={cn(
-            "text-nowrap text-xs font-semibold text-foreground/50 md:text-sm capitalize",
+            'text-nowrap text-xs font-semibold text-foreground/50 md:text-sm capitalize',
             heading,
           )}
         >
@@ -42,7 +42,7 @@ function SimpleStats({
         </h2>
         <div
           className={cn(
-            "text-nowrap text-lg font-bold text-foreground/80 md:text-xl lg:text-2xl",
+            'text-nowrap text-lg font-bold text-foreground/80 md:text-xl lg:text-2xl',
             figureClasses,
           )}
         >
@@ -50,11 +50,11 @@ function SimpleStats({
           {smallFigure && (
             <span
               className={cn(
-                "ml-2 text-xs font-semibold text-foreground/50 sm:text-sm",
+                'ml-2 text-xs font-semibold text-foreground/50 sm:text-sm',
                 smallFigureClasses,
                 {
-                  "text-green-500": isGood,
-                  "text-rose-600": isBad,
+                  'text-green-500': isGood,
+                  'text-rose-600': isBad,
                 },
               )}
             >

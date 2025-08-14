@@ -1,15 +1,15 @@
-"use client";
-import { Switch } from "@heroui/switch";
-import { useState } from "react";
+'use client';
+import { Card } from '@heroui/react';
+import { Switch } from '@heroui/switch';
+import { useState } from 'react';
 
-import ChangePasswordField from "@/components/elements/change-password";
-import { Card } from "@heroui/react";
+import ChangePasswordField from '@/components/elements/change-password';
 
 function ProfileSecuritySettings() {
   const [changePassword, setChangePassword] = useState(false);
 
   return (
-    <Card className={"flex-1 shadow"}>
+    <Card className={'flex-1 shadow'}>
       <div className="flex w-full flex-col rounded-md p-5">
         <div>
           <div className="flex w-full items-end justify-between">

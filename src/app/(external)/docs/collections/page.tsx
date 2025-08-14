@@ -1,16 +1,16 @@
-"use client";
-import Link from "next/link";
-import { Snippet } from "@heroui/react";
+'use client';
+import { Snippet } from '@heroui/react';
+import Link from 'next/link';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { syntaxHighlight } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { syntaxHighlight } from '@/lib/utils';
 
-import StatusCodesTable from "../../_components/status-codes";
+import StatusCodesTable from '../../_components/status-codes';
 
 export default function CollectionsDocs({}) {
   return (
     <>
-      {" "}
+      {' '}
       {/* Main Content */}
       <main className="flex-1 p-4 md:p-6 w-full">
         <div className="mx-auto max-w-3xl space-y-8">
@@ -49,8 +49,8 @@ Content-Type: application/json`}
                             __html: syntaxHighlight(
                               JSON.stringify(
                                 {
-                                  username: "YOUR_USERNAME",
-                                  apikey: "YOUR_API_KEY",
+                                  username: 'YOUR_USERNAME',
+                                  apikey: 'YOUR_API_KEY',
                                 },
                                 undefined,
                                 4,
@@ -73,8 +73,8 @@ Content-Type: application/json`}
                             __html: syntaxHighlight(
                               JSON.stringify(
                                 {
-                                  tokenType: "Bearer",
-                                  token: "YOUR_ACCESS_TOKEN",
+                                  tokenType: 'Bearer',
+                                  token: 'YOUR_ACCESS_TOKEN',
                                   expiresIn: 180,
                                 },
                                 undefined,
@@ -116,10 +116,10 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                             __html: syntaxHighlight(
                               JSON.stringify(
                                 {
-                                  phoneNumber: "0971234567",
-                                  amount: "1.00",
-                                  narration: "your narration",
-                                  transactionID: "your transaction ID",
+                                  phoneNumber: '0971234567',
+                                  amount: '1.00',
+                                  narration: 'your narration',
+                                  transactionID: 'your transaction ID',
                                 },
                                 undefined,
                                 4,
@@ -142,9 +142,9 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                             __html: syntaxHighlight(
                               JSON.stringify(
                                 {
-                                  status: "success | failed | pending",
-                                  message: "status description",
-                                  transactionID: "your transaction ID",
+                                  status: 'success | failed | pending',
+                                  message: 'status description',
+                                  transactionID: 'your transaction ID',
                                 },
                                 undefined,
                                 4,
@@ -192,14 +192,14 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                             __html: syntaxHighlight(
                               JSON.stringify(
                                 {
-                                  status: "success | failed | pending",
+                                  status: 'success | failed | pending',
                                   statusCode: 200 | 401 | 404 | 500,
-                                  message: "status description",
-                                  transactionID: "your transaction ID",
+                                  message: 'status description',
+                                  transactionID: 'your transaction ID',
                                   serviceProviderRef:
-                                    "serviceProvider reference | null",
+                                    'serviceProvider reference | null',
                                   serviceProviderStatusDescription:
-                                    "serviceProvider transaction status description",
+                                    'serviceProvider transaction status description',
                                 },
                                 undefined,
                                 4,
@@ -221,8 +221,8 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
               </CardHeader>
               <CardContent className="space-y-4">
                 <p>
-                  Be sure that the variables denoted with{" "}
-                  <code>{"{%variable name%}"}</code> are provided when required
+                  Be sure that the variables denoted with{' '}
+                  <code>{'{%variable name%}'}</code> are provided when required
                 </p>
 
                 <div className="space-y-2">
@@ -243,7 +243,7 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                     To perform a collection, you need to initiate a transaction
                     on your system and as reference PayBoss will need the ID of
                     that transaction. You are required to pass the ID of that
-                    transaction in the collection payload as a property{" "}
+                    transaction in the collection payload as a property{' '}
                     <code>transactionID</code> and also in the URL when you need
                     to get a status query of the transaction.
                   </p>

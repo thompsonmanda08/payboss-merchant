@@ -1,8 +1,9 @@
-"use client";
-import Modal from "@/components/modals/custom-modal";
-import SingleTransactionsTable from "@/components/tables/single-transaction-table";
-import { Columns } from "@/lib/table-columns";
-import { Dispatch, SetStateAction } from "react";
+'use client';
+import { Dispatch, SetStateAction } from 'react';
+
+import Modal from '@/components/modals/custom-modal';
+import SingleTransactionsTable from '@/components/tables/single-transaction-table';
+import { Columns } from '@/lib/table-columns';
 
 function ReportDetailsViewer({
   columns,

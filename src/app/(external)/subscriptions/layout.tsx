@@ -1,9 +1,7 @@
-import { CreditCard } from "lucide-react";
+import { PropsWithChildren } from 'react';
 
-import Logo from "@/components/base/payboss-logo";
-import { Footer } from "@/components/landing-sections/footer";
-import { Props } from "next/script";
-import { PropsWithChildren } from "react";
+import Logo from '@/components/base/payboss-logo';
+import { Footer } from '@/components/landing-sections/footer';
 
 async function SubscriptionsAppLayout({ children }: PropsWithChildren) {
   return (
@@ -11,7 +9,7 @@ async function SubscriptionsAppLayout({ children }: PropsWithChildren) {
       <nav className="bg-red-500 mb-4 fixed inset-x-0 bg-white/40 backdrop-blur-md z-50">
         <div className="flex w-full py-2 pt-3 container items-center justify-between">
           <div className="flex items-center justify-center w-max space-x-2">
-            <Logo href={"/"} />
+            <Logo href={'/'} />
             <span className="text-xl mb-1 font-bold text-gray-900">
               Subscriptions
             </span>
@@ -26,7 +24,7 @@ async function SubscriptionsAppLayout({ children }: PropsWithChildren) {
         {children}
       </section>
       <Footer
-        classNames={{ wrapper: "bg-white  dark:bg-background" }}
+        classNames={{ wrapper: 'bg-white  dark:bg-background' }}
         showLinks={false}
         showLogo={false}
       />

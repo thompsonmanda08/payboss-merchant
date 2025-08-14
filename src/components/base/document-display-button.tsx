@@ -1,11 +1,9 @@
-import Image from "next/image";
-import Link from "next/link";
-import {
-  ArrowTopRightOnSquareIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
-import { Button } from "@/components/ui/button";
-import { Link2Icon } from "lucide-react";
+import { TrashIcon } from '@heroicons/react/24/outline';
+import { Link2Icon } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { Button } from '@/components/ui/button';
 
 const DocumentDisplayButton = ({
   documentName,
@@ -13,7 +11,7 @@ const DocumentDisplayButton = ({
   onOpenModal,
   onDelete,
   allowDelete = false,
-  imageUrl = "/images/attachment.png",
+  imageUrl = '/images/attachment.png',
   buttonKey,
 }: {
   documentName: string;
@@ -34,23 +32,23 @@ const DocumentDisplayButton = ({
       {documentUrl && (
         <div className="absolute right-2 top-2 z-50 flex flex-col gap-y-1 items-center">
           <Link
-            href={documentUrl || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
             aria-label={`Open ${documentName} in a new tab`}
+            href={documentUrl || '#'}
+            rel="noopener noreferrer"
+            target="_blank"
+            onClick={(e) => e.stopPropagation()}
           >
             <Link2Icon className="h-5 w-5 text-foreground/20 hover:text-primary" />
           </Link>
 
           {onDelete && allowDelete && (
             <span
+              aria-label={`Delete ${documentName}`}
+              className="rounded-full p-1 text-danger transition-colors hover:bg-danger/20"
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete();
               }}
-              className="rounded-full p-1 text-danger transition-colors hover:bg-danger/20"
-              aria-label={`Delete ${documentName}`}
             >
               <TrashIcon className="h-4 w-4" />
             </span>
@@ -69,7 +67,7 @@ const DocumentDisplayButton = ({
       </div>
       <div className="flex flex-col gap-y-1 justify-start items-start w-max">
         <span className="text-xs sm:text-[13px] text-foreground/90 truncate">
-          {" "}
+          {' '}
           {/* Added truncate for long names */}
           {documentName}
         </span>

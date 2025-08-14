@@ -1,5 +1,4 @@
-"use client";
-import { useEffect, useState } from "react";
+'use client';
 import {
   PlusIcon,
   Square2StackIcon,
@@ -10,7 +9,7 @@ import {
   WrenchScrewdriverIcon,
   ComputerDesktopIcon,
   TrashIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
 import {
   Dropdown,
   DropdownItem,
@@ -27,40 +26,41 @@ import {
   TableRow,
   TableCell,
   addToast,
-} from "@heroui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AnimatePresence, motion } from "framer-motion";
-import { useParams } from "next/navigation";
-import Link from "next/link";
+} from '@heroui/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { cn, formatDate, maskString } from "@/lib/utils";
-import CustomTable from "@/components/tables/table";
-import {
-  useWorkspaceAPIKey,
-  useWorkspaceInit,
-  useWorkspaceTerminals,
-} from "@/hooks/use-query-data";
+import { getCollectionLatestTransactions } from '@/app/_actions/transaction-actions';
 import {
   activateWorkspaceTerminals,
   deactivateWorkspaceTerminals,
   refreshWorkspaceAPIKey,
   setupWorkspaceAPIKey,
-} from "@/app/_actions/workspace-actions";
-import { QUERY_KEYS } from "@/lib/constants";
-import { getCollectionLatestTransactions } from "@/app/_actions/transaction-actions";
-import Card from "@/components/base/custom-card";
-import CardHeader from "@/components/base/card-header";
+} from '@/app/_actions/workspace-actions';
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import PromptModal from '@/components/modals/prompt-modal';
+import CustomTable from '@/components/tables/table';
+import TerminalsTable from '@/components/tables/terminal-tables';
+import { Button } from '@/components/ui/button';
+import Loader from '@/components/ui/loader';
+import {
+  useWorkspaceAPIKey,
+  useWorkspaceInit,
+  useWorkspaceTerminals,
+} from "@/hooks/use-query-data";
+import { QUERY_KEYS } from '@/lib/constants';
 import {
   API_KEY_TERMINAL_TRANSACTION_COLUMNS,
   API_KEY_TRANSACTION_COLUMNS,
-} from "@/lib/table-columns";
-import TerminalsTable from "@/components/tables/terminal-tables";
-import Loader from "@/components/ui/loader";
-import PromptModal from "@/components/modals/prompt-modal";
+} from '@/lib/table-columns';
+import { cn, formatDate, maskString } from '@/lib/utils';
 
-import TerminalConfigViewModal from "./terminal-config-view";
-import APIConfigViewModal from "./api-config-view";
+import APIConfigViewModal from './api-config-view';
+import TerminalConfigViewModal from './terminal-config-view';
 
 const APIIntegration = () => {
   const queryClient = useQueryClient();
@@ -83,8 +83,8 @@ const APIIntegration = () => {
   const { data: terminalData, isLoading: isLoadingTerminals } =
     useWorkspaceTerminals(workspaceID);
 
-  const [copiedKey, setCopiedKey] = useState("");
-  const [refreshKeyID, setRefreshKeyID] = useState("");
+  const [copiedKey, setCopiedKey] = useState('');
+  const [refreshKeyID, setRefreshKeyID] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
   const [openViewConfig, setOpenViewConfig] = useState(false);
@@ -96,14 +96,14 @@ const APIIntegration = () => {
     setIsLoading(false);
     setCurrentActionIndex(0);
     setUnmaskAPIKey(false);
-    setRefreshKeyID("");
+    setRefreshKeyID('');
   };
 
   const thirtyDaysAgoDate = new Date();
 
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
-  const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
-  const end_date = formatDate(new Date(), "YYYY-MM-DD");
+  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
+  const end_date = formatDate(new Date(), 'YYYY-MM-DD');
 
   const API_KEYS_DATA = apiKeyResponse?.data || [];
   const API_CONFIG = API_KEYS_DATA?.config || [];
@@ -118,7 +118,7 @@ const APIIntegration = () => {
     mutationFn: (dateRange) =>
       getCollectionLatestTransactions(
         workspaceID,
-        "api-integration",
+        'api-integration',
         dateRange,
       ),
   });
@@ -128,17 +128,17 @@ const APIIntegration = () => {
       navigator?.clipboard?.writeText(key);
       setCopiedKey(key);
       addToast({
-        color: "success",
-        title: "Success",
-        description: "API key copied to clipboard!",
+        color: 'success',
+        title: 'Success',
+        description: 'API key copied to clipboard!',
       });
     } catch (error) {
       addToast({
-        color: "danger",
-        title: "Error",
-        description: "Failed to copy API key!",
+        color: 'danger',
+        title: 'Error',
+        description: 'Failed to copy API key!',
       });
-      console.error("FAILED", error);
+      console.error('FAILED', error);
     }
   }
 
@@ -147,9 +147,9 @@ const APIIntegration = () => {
 
     if (!permissions?.update || !permissions?.delete) {
       addToast({
-        color: "danger",
-        title: "Error",
-        description: "Only admins are allowed to generate API keys!",
+        color: 'danger',
+        title: 'Error',
+        description: 'Only admins are allowed to generate API keys!',
       });
 
       setIsLoading(false);
@@ -161,9 +161,9 @@ const APIIntegration = () => {
     // THERE CAN ONLY BE 2 API KEYS ==> UAT AND PRODUCTION
     if (API_KEYS?.length == 2) {
       addToast({
-        color: "danger",
-        title: "Error",
-        description: "You already have an API key for this workspace!",
+        color: 'danger',
+        title: 'Error',
+        description: 'You already have an API key for this workspace!',
       });
 
       return;
@@ -173,8 +173,8 @@ const APIIntegration = () => {
 
     if (!response?.success) {
       addToast({
-        color: "danger",
-        title: "Failed to generate API key",
+        color: 'danger',
+        title: 'Failed to generate API key',
         description: response?.message,
       });
       setIsLoading(false);
@@ -186,9 +186,9 @@ const APIIntegration = () => {
       queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
     });
     addToast({
-      color: "success",
-      title: "Success",
-      description: "API key has been generated",
+      color: 'success',
+      title: 'Success',
+      description: 'API key has been generated',
     });
     setIsLoading(false);
     handleClosePrompt();
@@ -201,9 +201,9 @@ const APIIntegration = () => {
 
     if (!permissions?.update || !permissions?.delete) {
       addToast({
-        color: "danger",
-        title: "Error",
-        description: "Only admins are allowed to refresh API keys.",
+        color: 'danger',
+        title: 'Error',
+        description: 'Only admins are allowed to refresh API keys.',
       });
       setIsLoading(false);
       handleClosePrompt();
@@ -213,9 +213,9 @@ const APIIntegration = () => {
 
     if (API_KEYS?.length == 0) {
       addToast({
-        color: "danger",
-        title: "Error",
-        description: "You have no API key.",
+        color: 'danger',
+        title: 'Error',
+        description: 'You have no API key.',
       });
       setIsLoading(false);
 
@@ -226,18 +226,18 @@ const APIIntegration = () => {
 
     if (response?.success) {
       addToast({
-        color: "success",
-        title: "Success",
-        description: "API key has been updated",
+        color: 'success',
+        title: 'Success',
+        description: 'API key has been updated',
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.WORKSPACE_API_KEY, workspaceID],
       });
     } else {
       addToast({
-        color: "danger",
-        title: "Error",
-        description: response?.message || "Failed to refresh API key.",
+        color: 'danger',
+        title: 'Error',
+        description: response?.message || 'Failed to refresh API key.',
       });
     }
 
@@ -252,9 +252,9 @@ const APIIntegration = () => {
 
     if (!permissions?.update || !permissions?.delete) {
       addToast({
-        color: "danger",
-        title: "Error",
-        description: "Only admins are allowed to activate terminals.",
+        color: 'danger',
+        title: 'Error',
+        description: 'Only admins are allowed to activate terminals.',
       });
       setIsLoading(false);
       handleClosePrompt();
@@ -264,9 +264,9 @@ const APIIntegration = () => {
 
     if (API_KEYS_DATA?.terminals || hasTerminals) {
       addToast({
-        color: "danger",
-        title: "Error",
-        description: "Terminals already activated for this workspace.",
+        color: 'danger',
+        title: 'Error',
+        description: 'Terminals already activated for this workspace.',
       });
       setIsLoading(false);
       handleClosePrompt();
@@ -278,8 +278,8 @@ const APIIntegration = () => {
 
     if (!response?.success) {
       addToast({
-        color: "danger",
-        title: "Error",
+        color: 'danger',
+        title: 'Error',
         description: response?.message,
       });
       setIsLoading(false);
@@ -290,9 +290,9 @@ const APIIntegration = () => {
     queryClient.invalidateQueries();
 
     addToast({
-      color: "success",
-      title: "Success",
-      description: "Collection Terminals activated.",
+      color: 'success',
+      title: 'Success',
+      description: 'Collection Terminals activated.',
     });
     setIsLoading(false);
     handleClosePrompt();
@@ -305,9 +305,9 @@ const APIIntegration = () => {
 
     if (!permissions?.update || !permissions?.delete) {
       addToast({
-        color: "danger",
-        title: "NOT ALLOWED",
-        description: "Only admins are allowed to deactivate terminals.",
+        color: 'danger',
+        title: 'NOT ALLOWED',
+        description: 'Only admins are allowed to deactivate terminals.',
       });
       setIsLoading(false);
       handleClosePrompt();
@@ -319,8 +319,8 @@ const APIIntegration = () => {
 
     if (!response?.success) {
       addToast({
-        title: "Error",
-        color: "danger",
+        title: 'Error',
+        color: 'danger',
         description: response?.message,
       });
       setIsLoading(false);
@@ -333,9 +333,9 @@ const APIIntegration = () => {
     });
 
     addToast({
-      title: "Success",
-      color: "success",
-      description: "Collection Terminals activated!",
+      title: 'Success',
+      color: 'success',
+      description: 'Collection Terminals activated!',
     });
     setIsLoading(false);
     handleClosePrompt();
@@ -344,11 +344,11 @@ const APIIntegration = () => {
   }
 
   function handleTerminalStatus(actionKey?: string) {
-    if (hasTerminals && actionKey == "activate-terminals") {
+    if (hasTerminals && actionKey == 'activate-terminals') {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Terminals already activated for this workspace!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Terminals already activated for this workspace!',
       });
       handleClosePrompt();
 
@@ -359,12 +359,12 @@ const APIIntegration = () => {
     if (
       hasTerminals &&
       terminalsConfigured &&
-      actionKey == "deactivate-terminals"
+      actionKey == 'deactivate-terminals'
     ) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Contact support to deactivate terminals!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Contact support to deactivate terminals!',
       });
       handleClosePrompt();
 
@@ -372,7 +372,7 @@ const APIIntegration = () => {
     }
 
     // ALLOW DEACTIVATION IF TERMINALS ARE NOT UPLOADED
-    if (actionKey == "deactivate-terminals") {
+    if (actionKey == 'deactivate-terminals') {
       setCurrentActionIndex(3);
 
       return;
@@ -384,24 +384,24 @@ const APIIntegration = () => {
   function handleManageTerminals(selectedKey: string) {
     if (!permissions?.update || !permissions?.delete) {
       addToast({
-        color: "danger",
-        title: "NOT ALLOWED!",
-        description: "You cannot perform this action",
+        color: 'danger',
+        title: 'NOT ALLOWED!',
+        description: 'You cannot perform this action',
       });
       handleClosePrompt();
 
       return;
     }
 
-    if (selectedKey == "add-terminal") {
+    if (selectedKey == 'add-terminal') {
       onAddTerminal();
 
       return;
     }
 
     if (
-      selectedKey == "activate-terminals" ||
-      selectedKey == "deactivate-terminals"
+      selectedKey == 'activate-terminals' ||
+      selectedKey == 'deactivate-terminals'
     ) {
       handleTerminalStatus(selectedKey);
 
@@ -435,63 +435,63 @@ const APIIntegration = () => {
   // ACTIONS FOR API COLLECTIONS
   const USER_PROMPT_ACTIONS = [
     {
-      title: "Generate API Key",
+      title: 'Generate API Key',
       icon: PlusIcon,
-      color: "primary",
-      confirmText: "Generate",
+      color: 'primary',
+      confirmText: 'Generate',
       onConfirmAction: handleGenerateAPIKey,
-      description: "Generate a new API key for this workspace",
-      promptText: "Are you sure you want to generate a new API key?",
+      description: 'Generate a new API key for this workspace',
+      promptText: 'Are you sure you want to generate a new API key?',
       promptDescription:
-        "This API key will allow you channel funds to your workspace wallet from 3rd party applications and interfaces.",
+        'This API key will allow you channel funds to your workspace wallet from 3rd party applications and interfaces.',
     },
     {
-      title: "Refresh API Key",
+      title: 'Refresh API Key',
       icon: ArrowPathIcon,
-      color: "warning",
-      confirmText: "Refresh",
+      color: 'warning',
+      confirmText: 'Refresh',
       onConfirmAction: handleRefreshAPIKey,
-      description: "Refresh the API key for this workspace",
-      promptText: "Are you sure you want to refresh this API key?",
+      description: 'Refresh the API key for this workspace',
+      promptText: 'Are you sure you want to refresh this API key?',
       promptDescription:
-        "By confirming this, your API key will be changed to a new one and you will not be able to use the old API anymore.",
+        'By confirming this, your API key will be changed to a new one and you will not be able to use the old API anymore.',
     },
     {
-      title: "Activate Terminals",
+      title: 'Activate Terminals',
       icon: ComputerDesktopIcon,
-      color: "primary",
-      confirmText: "Activate",
+      color: 'primary',
+      confirmText: 'Activate',
       onConfirmAction: handleTerminalActivation,
-      description: "Activate Terminals for this workspace",
-      promptText: "Are you sure you want to activate Terminals?",
+      description: 'Activate Terminals for this workspace',
+      promptText: 'Are you sure you want to activate Terminals?',
       promptDescription:
-        "By confirming this, Terminals will be activated and you will be able to create and manage terminal transactions.",
+        'By confirming this, Terminals will be activated and you will be able to create and manage terminal transactions.',
     },
     {
-      title: "Deactivate Terminals",
+      title: 'Deactivate Terminals',
       icon: ComputerDesktopIcon,
-      color: "primary",
-      confirmText: "Deactivate",
+      color: 'primary',
+      confirmText: 'Deactivate',
       onConfirmAction: handleTerminalDeactivation,
-      description: "Deactivate Terminals for this workspace",
-      promptText: "Are you sure you want to deactivate Terminals?",
+      description: 'Deactivate Terminals for this workspace',
+      promptText: 'Are you sure you want to deactivate Terminals?',
       promptDescription:
-        "By confirming this, Terminals will be deactivated and you will NOT be able to create and manage terminal transactions.",
+        'By confirming this, Terminals will be deactivated and you will NOT be able to create and manage terminal transactions.',
     },
     {
-      title: "Delete API Key",
+      title: 'Delete API Key',
       icon: TrashIcon,
-      color: "danger",
-      confirmText: "Delete",
+      color: 'danger',
+      confirmText: 'Delete',
       onConfirmAction: () => {},
-      description: "Delete the API key for this workspace",
-      promptText: "Are you sure you want to delete this API key?",
+      description: 'Delete the API key for this workspace',
+      promptText: 'Are you sure you want to delete this API key?',
       promptDescription:
-        "This action is not reversible and will result in the non-operation of this key. Make sure you update any application making use of this Key.",
+        'This action is not reversible and will result in the non-operation of this key. Make sure you update any application making use of this Key.',
     },
   ];
 
-  const iconClasses = "w-5 h-5 pointer-events-none flex-shrink-0";
+  const iconClasses = 'w-5 h-5 pointer-events-none flex-shrink-0';
 
   return (
     <>
@@ -500,13 +500,13 @@ const APIIntegration = () => {
           <div className="mb-8 flex justify-between">
             <CardHeader
               classNames={{
-                titleClasses: "xl:text-2xl lg:text-xl font-bold",
-                infoClasses: "!text-sm xl:text-base",
+                titleClasses: 'xl:text-2xl lg:text-xl font-bold',
+                infoClasses: '!text-sm xl:text-base',
               }}
               infoText={
-                "Use the API keys to collect payments to your workspace wallet."
+                'Use the API keys to collect payments to your workspace wallet.'
               }
-              title={"API Key"}
+              title={'API Key'}
             />
             <Button
               endContent={<PlusIcon className="h-5 w-5" />}
@@ -525,8 +525,8 @@ const APIIntegration = () => {
             // items={API_KEYS as any}
           >
             <TableHeader>
-              <TableColumn width={"30%"}>NAME</TableColumn>
-              <TableColumn width={"60%"}>API KEY</TableColumn>
+              <TableColumn width={'30%'}>NAME</TableColumn>
+              <TableColumn width={'60%'}>API KEY</TableColumn>
               <TableColumn align="center">ACTIONS</TableColumn>
             </TableHeader>
             <TableBody
@@ -552,7 +552,7 @@ const APIIntegration = () => {
                               : maskString(item?.apikey, 0, 50)}
                           </span>
                           <Button
-                            className={"h-max max-h-max max-w-max p-1"}
+                            className={'h-max max-h-max max-w-max p-1'}
                             color="default"
                             size="sm"
                             variant="light"
@@ -589,8 +589,8 @@ const APIIntegration = () => {
                             <Square2StackIcon
                               className={`h-6 w-6 cursor-pointer ${
                                 copiedKey === item?.apikey
-                                  ? "text-primary"
-                                  : "text-gray-500"
+                                  ? 'text-primary'
+                                  : 'text-gray-500'
                               } hover:text-primary`}
                               onClick={() => copyToClipboard(item?.apikey)}
                             />
@@ -630,13 +630,13 @@ const APIIntegration = () => {
           <div className="mb-8 flex justify-between">
             <CardHeader
               classNames={{
-                titleClasses: "xl:text-2xl lg:text-xl font-bold",
-                infoClasses: "!text-sm xl:text-base",
+                titleClasses: 'xl:text-2xl lg:text-xl font-bold',
+                infoClasses: '!text-sm xl:text-base',
               }}
               infoText={
-                "Activate terminals to manage  multiple collection points like POS machines, tills, etc."
+                'Activate terminals to manage  multiple collection points like POS machines, tills, etc.'
               }
-              title={"Terminals"}
+              title={'Terminals'}
             />
 
             <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
@@ -650,7 +650,7 @@ const APIIntegration = () => {
                       color="primary"
                       endContent={<WrenchScrewdriverIcon className="h-5 w-5" />}
                       isDisabled={isLoadingTerminals || isLoadingConfig}
-                      loadingText={"Please wait..."}
+                      loadingText={'Please wait...'}
                     >
                       Manage
                     </Button>
@@ -677,12 +677,12 @@ const APIIntegration = () => {
                   >
                     Workspace Settings
                   </DropdownItem> */}
-                    <DropdownSection title={hasTerminals ? "" : "Danger zone"}>
+                    <DropdownSection title={hasTerminals ? '' : 'Danger zone'}>
                       {!hasTerminals ? (
                         <DropdownItem
                           key="activate-terminals"
                           classNames={{
-                            shortcut: "group-hover:text-white",
+                            shortcut: 'group-hover:text-white',
                           }}
                           color="primary"
                           description="Activate collection terminals"
@@ -691,7 +691,7 @@ const APIIntegration = () => {
                             <ComputerDesktopIcon
                               className={cn(
                                 iconClasses,
-                                "group-hover:text-white font-bold group-hover:border-white",
+                                'group-hover:text-white font-bold group-hover:border-white',
                               )}
                             />
                           }
@@ -705,7 +705,7 @@ const APIIntegration = () => {
                           className="text-danger"
                           classNames={{
                             shortcut:
-                              "group-hover:text-white font-bold group-hover:border-white",
+                              'group-hover:text-white font-bold group-hover:border-white',
                           }}
                           color="danger"
                           description="Deactivate collection terminals"
@@ -715,7 +715,7 @@ const APIIntegration = () => {
                             <TrashIcon
                               className={cn(
                                 iconClasses,
-                                "text-danger group-hover:text-white",
+                                'text-danger group-hover:text-white',
                               )}
                             />
                           }
@@ -729,13 +729,13 @@ const APIIntegration = () => {
               )}
               <Tooltip
                 classNames={{
-                  content: "max-w-96 text-sm leading-6 p-3",
+                  content: 'max-w-96 text-sm leading-6 p-3',
                 }}
                 color="secondary"
                 content="Show configured terminals"
               >
                 <Button
-                  color={"secondary"}
+                  color={'secondary'}
                   isDisabled={isLoadingTerminals || isLoadingConfig}
                   variant="flat"
                   onPress={() => setIsExpanded(!isExpanded)}
@@ -753,7 +753,7 @@ const APIIntegration = () => {
           <AnimatePresence>
             <motion.div
               animate={{
-                height: isExpanded ? "auto" : 0,
+                height: isExpanded ? 'auto' : 0,
                 opacity: isExpanded ? 1 : 0,
               }}
               initial={{ height: 0, opacity: 0 }}
@@ -769,25 +769,25 @@ const APIIntegration = () => {
                   {isLoadingTerminals || isLoadingConfig ? (
                     <Loader
                       classNames={{
-                        wrapper: "bg-foreground-200/50 rounded-xl h-full",
+                        wrapper: 'bg-foreground-200/50 rounded-xl h-full',
                       }}
-                      loadingText={"Getting configuration..."}
+                      loadingText={'Getting configuration...'}
                       size={60}
                     />
                   ) : (
                     <Tooltip
                       classNames={{
-                        content: "max-w-96 text-sm leading-6 p-3",
+                        content: 'max-w-96 text-sm leading-6 p-3',
                       }}
                       content="Terminals are like a POS/Till machines that can be used to collect payments from your customers."
                     >
                       <Button
                         className={
-                          "flex-grow min-h-auto max-h-auto min-h-32 w-full flex-1 font-medium text-primary-600"
+                          'flex-grow min-h-auto max-h-auto min-h-32 w-full flex-1 font-medium text-primary-600'
                         }
                         isDisabled={isLoadingConfig || mutation?.isPending}
                         isLoading={isLoadingConfig || mutation?.isPending}
-                        loadingText={"Getting Configuration..."}
+                        loadingText={'Getting Configuration...'}
                         startContent={
                           terminalsConfigured && hasTerminals ? (
                             <PlusIcon className={cn(iconClasses)} />
@@ -803,8 +803,8 @@ const APIIntegration = () => {
                         }}
                       >
                         {terminalsConfigured && hasTerminals
-                          ? "Add Terminals"
-                          : "Activate Terminals"}
+                          ? 'Add Terminals'
+                          : 'Activate Terminals'}
                       </Button>
                     </Tooltip>
                   )}
@@ -817,16 +817,16 @@ const APIIntegration = () => {
         <Card>
           <div className="flex w-full items-center justify-between gap-4">
             <CardHeader
-              className={"mb-4"}
+              className={'mb-4'}
               infoText={
-                "Transactions made to your workspace wallet in the last 30days."
+                'Transactions made to your workspace wallet in the last 30days.'
               }
-              title={"Recent Transactions"}
+              title={'Recent Transactions'}
             />
           </div>
           <CustomTable
             // removeWrapper
-            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
+            classNames={{ wrapper: 'shadow-none px-0 mx-0' }}
             columns={
               hasTerminals && terminalsConfigured
                 ? API_KEY_TERMINAL_TRANSACTION_COLUMNS
@@ -857,7 +857,7 @@ const APIIntegration = () => {
       {/* DELETE PROMPT MODAL */}
       <PromptModal
         confirmText={
-          USER_PROMPT_ACTIONS[currentActionIndex]?.confirmText || "Confirm"
+          USER_PROMPT_ACTIONS[currentActionIndex]?.confirmText || 'Confirm'
         }
         isDisabled={isLoading}
         isDismissable={false}
@@ -869,7 +869,7 @@ const APIIntegration = () => {
         // onOpen={onOpen}
       >
         <p className="-mt-4 text-sm leading-6 text-foreground/70">
-          <strong>{USER_PROMPT_ACTIONS[currentActionIndex]?.promptText}</strong>{" "}
+          <strong>{USER_PROMPT_ACTIONS[currentActionIndex]?.promptText}</strong>{' '}
           <br />
           {USER_PROMPT_ACTIONS[currentActionIndex]?.promptDescription}
         </p>

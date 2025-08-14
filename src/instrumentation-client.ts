@@ -1,8 +1,8 @@
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
   dsn:
-    process.env.NODE_ENV == "production"
+    process.env.NODE_ENV == 'production'
       ? process.env.SENTRY_DNS || process.env.NEXT_PUBLIC_SENTRY_DNS
       : process.env.SENTRY_DEV_DNS || process.env.NEXT_PUBLIC_SENTRY_DEV_DNS,
 

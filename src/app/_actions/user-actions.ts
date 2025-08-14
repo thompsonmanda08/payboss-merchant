@@ -1,17 +1,18 @@
-"use server";
-import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
-import { cache } from "react";
+'use server';
+import { AnyARecord } from 'dns';
+
+import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
+import { cache } from 'react';
 
 import authenticatedApiClient, {
   handleBadRequest,
   handleError,
   successResponse,
-} from "@/lib/api-config";
-import { USER_SESSION } from "@/lib/constants";
-import { getUserSession } from "@/lib/session";
-import { APIResponse } from "@/types";
-import { AnyARecord } from "dns";
+} from '@/lib/api-config';
+import { USER_SESSION } from '@/lib/constants';
+import { getUserSession } from '@/lib/session';
+import { APIResponse } from '@/types';
 
 /**
  * Creates a new user for a merchant by calling the API endpoint.
@@ -29,16 +30,16 @@ export async function createNewUser(newUser: AnyARecord): Promise<APIResponse> {
 
   try {
     const res = await authenticatedApiClient({
-      method: "POST",
+      method: 'POST',
       url,
       data: newUser,
     });
 
-    revalidatePath("/manage-account/users", "page");
+    revalidatePath('/manage-account/users', 'page');
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | CREATE NEW USER", url);
+    return handleError(error, 'POST | CREATE NEW USER', url);
   }
 }
 
@@ -55,7 +56,7 @@ export const getAllUsers = cache(async (): Promise<APIResponse> => {
   const merchantID = session?.user?.merchantID;
 
   if (!merchantID) {
-    return handleBadRequest("Merchant ID is required");
+    return handleBadRequest('Merchant ID is required');
   }
 
   const url = `merchant/${merchantID}/users`;
@@ -65,7 +66,7 @@ export const getAllUsers = cache(async (): Promise<APIResponse> => {
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | ALL USERS", url);
+    return handleError(error, 'GET | ALL USERS', url);
   }
 });
 
@@ -85,7 +86,7 @@ export async function assignUsersToWorkspace(
   try {
     const res = await authenticatedApiClient({
       url: `merchant/workspace/${workspaceID}/user/mapping`,
-      method: "POST",
+      method: 'POST',
       data: {
         users,
       },
@@ -93,7 +94,7 @@ export async function assignUsersToWorkspace(
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | ASSIGN USERS TO WORKSPACE", "");
+    return handleError(error, 'POST | ASSIGN USERS TO WORKSPACE', '');
   }
 }
 
@@ -113,7 +114,7 @@ export async function getUser(userID: string): Promise<APIResponse> {
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | USER DETAILS", "");
+    return handleError(error, 'GET | USER DETAILS', '');
   }
 }
 
@@ -138,15 +139,15 @@ export async function updateProfileData(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "PATCH",
+      method: 'PATCH',
       data: userData,
     });
 
-    revalidatePath("/manage-account/profile", "page");
+    revalidatePath('/manage-account/profile', 'page');
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "PATCH | UPDATE PROFILE", url);
+    return handleError(error, 'PATCH | UPDATE PROFILE', url);
   }
 }
 
@@ -168,22 +169,22 @@ export async function updateSystemUserData(
   const merchantID = session?.user?.merchantID;
 
   if (!merchantID || !userID) {
-    return handleBadRequest("Merchant ID and User ID are required");
+    return handleBadRequest('Merchant ID and User ID are required');
   }
   const url = `merchant/${merchantID}/user/${userID}`;
 
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "PATCH",
+      method: 'PATCH',
       data: userData,
     });
 
-    revalidatePath("/manage-account/users", "page");
+    revalidatePath('/manage-account/users', 'page');
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "PATCH | UPDATE SYSTEM USER", url);
+    return handleError(error, 'PATCH | UPDATE SYSTEM USER', url);
   }
 }
 
@@ -201,15 +202,15 @@ export async function deleteSystemUserData(userID: string) {
 
   try {
     const res = await authenticatedApiClient({
-      method: "DELETE",
+      method: 'DELETE',
       url: `merchant/user/${userID}`,
     });
 
-    revalidatePath("/manage-account/users", "page");
+    revalidatePath('/manage-account/users', 'page');
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "DELETE | DELETE SYSTEM USER", "");
+    return handleError(error, 'DELETE | DELETE SYSTEM USER', '');
   }
 }
 
@@ -226,7 +227,7 @@ export async function unlockSystemUser(userID: string): Promise<APIResponse> {
   const merchantID = session?.user?.merchantID;
 
   if (!merchantID || !userID) {
-    return handleBadRequest("Merchant ID and User ID are required");
+    return handleBadRequest('Merchant ID and User ID are required');
   }
 
   const url = `merchant/${merchantID}/user/${userID}/unlock`;
@@ -236,11 +237,11 @@ export async function unlockSystemUser(userID: string): Promise<APIResponse> {
       url,
     });
 
-    revalidatePath("/manage-account/users", "page");
+    revalidatePath('/manage-account/users', 'page');
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "PATCH | UNLOCK SYSTEM USER", url);
+    return handleError(error, 'PATCH | UNLOCK SYSTEM USER', url);
   }
 }
 
@@ -260,15 +261,15 @@ export async function changeUserPassword(
   try {
     const res = await authenticatedApiClient({
       url: `merchant/user/change/password `,
-      method: "PATCH",
+      method: 'PATCH',
       data: { password },
     });
 
-    revalidatePath("/manage-account/profile", "page");
+    revalidatePath('/manage-account/profile', 'page');
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "PATCH | CHANGE PASSWORD", "");
+    return handleError(error, 'PATCH | CHANGE PASSWORD', '');
   }
 }
 
@@ -288,14 +289,14 @@ export async function adminResetUserPassword(
   try {
     const res = await authenticatedApiClient({
       url: `merchant/user/${userID}/reset/password`,
-      method: "PATCH",
+      method: 'PATCH',
       data: newPasswordData,
     });
 
-    revalidatePath("/manage-account/users", "page");
+    revalidatePath('/manage-account/users', 'page');
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "PATCH | RESET PASSWORD", "");
+    return handleError(error, 'PATCH | RESET PASSWORD', '');
   }
 }

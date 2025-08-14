@@ -1,4 +1,4 @@
-import BillPaymentReports from "./bill-payments-report";
+import BillPaymentReports from './bill-payments-report';
 
 export default async function BillPaymentReportsPage(props) {
   const params = await props.params;

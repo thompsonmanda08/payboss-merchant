@@ -1,10 +1,11 @@
-import { ErrorState } from ".";
 import {
   AccountOwner,
   BankAccountDetails,
   BusinessDetails,
   LoginPayload,
-} from "./account";
+} from './account';
+
+import { ErrorState } from '.';
 
 export type ChangePassword = {
   newPassword: string;

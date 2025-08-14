@@ -1,8 +1,8 @@
-import Image from "next/image";
+import Image from 'next/image';
+import { PropsWithChildren } from 'react';
 
-import { Footer } from "@/components/landing-sections/footer";
-import { DefaultCover } from "@/lib/constants";
-import { PropsWithChildren } from "react";
+import { Footer } from '@/components/landing-sections/footer';
+import { DefaultCover } from '@/lib/constants';
 
 async function AuthLayout({ children }: PropsWithChildren) {
   return (

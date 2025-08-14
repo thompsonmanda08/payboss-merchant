@@ -1,17 +1,17 @@
-"use client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { HeroUIProvider, ToastProvider } from "@heroui/react";
-import { motion } from "framer-motion";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { PropsWithChildren, useEffect, useState } from "react";
+'use client';
+import { HeroUIProvider, ToastProvider } from '@heroui/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { motion } from 'framer-motion';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { PropsWithChildren, useEffect, useState } from 'react';
 
-import { useNetwork } from "@/hooks/use-network";
+import FirstLogin from '@/components/elements/first-login';
 import ScreenLock, {
   IdleTimerContainer,
-} from "@/components/elements/screen-lock";
-import FirstLogin from "@/components/elements/first-login";
-import { AuthSession, UserSession } from "@/types";
+} from '@/components/elements/screen-lock';
+import { useNetwork } from '@/hooks/use-network';
+import { AuthSession, UserSession } from '@/types';
 
 const queryClient = new QueryClient();
 
@@ -45,9 +45,9 @@ function Providers({
             <motion.div
               className="relative -top-1 left-0 right-0 z-[999] mb-4 bg-red-500 p-2 py-2 text-xs font-bold capitalize text-white"
               transition={{
-                type: "spring",
+                type: 'spring',
                 stiffness: 100,
-                ease: "easeInOut",
+                ease: 'easeInOut',
                 duration: 0.3,
               }}
               whileInView={{
@@ -65,7 +65,7 @@ function Providers({
             <ScreenLock open={authSession?.screenLocked} />
           )}
 
-          <ToastProvider placement={"top-right"} toastOffset={8} />
+          <ToastProvider placement={'top-right'} toastOffset={8} />
         </HeroUIProvider>
       </NextThemesProvider>
 

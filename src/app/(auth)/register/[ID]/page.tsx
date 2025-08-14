@@ -1,5 +1,6 @@
-import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
-import Register from "./register";
+import { BGS_SUPER_MERCHANT_ID } from '@/lib/constants';
+
+import Register from './register';
 
 export default async function RegisterPage({
   params,

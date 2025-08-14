@@ -1,5 +1,6 @@
-import Logo from "@/components/base/payboss-logo";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren } from 'react';
+
+import Logo from '@/components/base/payboss-logo';
 
 async function InvoiceLayout({ children }: PropsWithChildren) {
   return (

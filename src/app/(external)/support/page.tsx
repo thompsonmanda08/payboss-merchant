@@ -1,9 +1,9 @@
-import SupportForm from "@/components/forms/support-form";
-import Logo from "@/components/base/payboss-logo";
-import WorkspaceHeader from "@/components/elements/welcome-header";
+import Logo from '@/components/base/payboss-logo';
+import WorkspaceHeader from '@/components/elements/welcome-header';
+import SupportForm from '@/components/forms/support-form';
 
-import AuthLayout from "../../(auth)/layout";
-import { getUserDetails } from "../../_actions/config-actions";
+import AuthLayout from '../../(auth)/layout';
+import { getUserDetails } from '../../_actions/config-actions';
 
 async function Support() {
   const [session] = await Promise.all([getUserDetails()]);
@@ -20,12 +20,12 @@ async function Support() {
         <Logo
           isWhite
           classNames={{
-            wrapper: "scale-[1.5] mb-4",
+            wrapper: 'scale-[1.5] mb-4',
           }}
         />
         <h2
           className={
-            "w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-transparent text-white"
+            'w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-transparent text-white'
           }
         >
           Contact Support

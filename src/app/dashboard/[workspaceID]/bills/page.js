@@ -1,5 +1,4 @@
-"use client";
-import { useEffect, useMemo, useState } from "react";
+'use client';
 import {
   PlusIcon,
   Square2StackIcon,
@@ -7,7 +6,7 @@ import {
   EyeIcon,
   EyeSlashIcon,
   Cog6ToothIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
 import {
   Table,
   TableHeader,
@@ -19,26 +18,27 @@ import {
   Tooltip,
   useDisclosure,
   addToast,
-} from "@heroui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+} from '@heroui/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { formatDate, maskString } from "@/lib/utils";
-import CustomTable from "@/components/tables/table";
-import { useWorkspaceAPIKey } from "@/hooks/use-query-data";
+import { getBillsLatestTransactions } from '@/app/_actions/transaction-actions';
 import {
   refreshWorkspaceAPIKey,
   setupWorkspaceAPIKey,
-} from "@/app/_actions/workspace-actions";
-import { QUERY_KEYS } from "@/lib/constants";
-import { getBillsLatestTransactions } from "@/app/_actions/transaction-actions";
-import CardHeader from "@/components/base/card-header";
-import { BILLS_TRANSACTION_COLUMNS } from "@/lib/table-columns";
-import PromptModal from "@/components/modals/prompt-modal";
-import Card from "@/components/base/custom-card";
+} from '@/app/_actions/workspace-actions';
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import PromptModal from '@/components/modals/prompt-modal';
+import CustomTable from '@/components/tables/table';
+import { Button } from '@/components/ui/button';
+import { useWorkspaceAPIKey } from '@/hooks/use-query-data';
+import { QUERY_KEYS } from '@/lib/constants';
+import { BILLS_TRANSACTION_COLUMNS } from '@/lib/table-columns';
+import { formatDate, maskString } from '@/lib/utils';
 
-import BillPaymentAPIConfigModal from "./bill-api-config-modal";
+import BillPaymentAPIConfigModal from './bill-api-config-modal';
 
 const BillPayments = ({}) => {
   const params = useParams();
@@ -61,8 +61,8 @@ const BillPayments = ({}) => {
   const thirtyDaysAgoDate = new Date();
 
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
-  const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
-  const end_date = formatDate(new Date(), "YYYY-MM-DD");
+  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
+  const end_date = formatDate(new Date(), 'YYYY-MM-DD');
 
   // HANDLE FETCH API COLLECTION LATEST TRANSACTION DATA
   const mutation = useMutation({
@@ -84,9 +84,9 @@ const BillPayments = ({}) => {
     navigator.clipboard.writeText(key);
     setCopiedKey(key);
     addToast({
-      color: "success",
-      title: "Success",
-      description: "Copied to clipboard",
+      color: 'success',
+      title: 'Success',
+      description: 'Copied to clipboard',
     });
   };
 
@@ -95,9 +95,9 @@ const BillPayments = ({}) => {
     // THERE CAN ONLY BE ONE API KEY
     if (apiKey?.key && isNew) {
       addToast({
-        color: "danger",
-        title: "Failed to generate API key!",
-        description: "You already have an API key for this workspace.",
+        color: 'danger',
+        title: 'Failed to generate API key!',
+        description: 'You already have an API key for this workspace.',
       });
 
       return;
@@ -109,8 +109,8 @@ const BillPayments = ({}) => {
 
       if (!response?.success) {
         addToast({
-          color: "danger",
-          title: "Failed to refresh API key!",
+          color: 'danger',
+          title: 'Failed to refresh API key!',
           description: response?.message,
         });
         setIsLoading(false);
@@ -123,9 +123,9 @@ const BillPayments = ({}) => {
       });
 
       addToast({
-        color: "success",
-        title: "Success",
-        description: "API key has been updated!",
+        color: 'success',
+        title: 'Success',
+        description: 'API key has been updated!',
       });
       setIsRefresh(false);
       setIsLoading(false);
@@ -138,8 +138,8 @@ const BillPayments = ({}) => {
 
     if (!response?.success) {
       addToast({
-        color: "danger",
-        title: "Failed to generate API key!",
+        color: 'danger',
+        title: 'Failed to generate API key!',
         description: response?.message,
       });
       setIsLoading(false);
@@ -155,9 +155,9 @@ const BillPayments = ({}) => {
     setApiKey(response?.data?.API);
 
     addToast({
-      color: "success",
-      title: "Success",
-      description: "API key has been generated!",
+      color: 'success',
+      title: 'Success',
+      description: 'API key has been generated!',
     });
     setIsLoading(false);
     setIsNew(false);
@@ -202,13 +202,13 @@ const BillPayments = ({}) => {
           <div className="mb-8 flex justify-between">
             <CardHeader
               classNames={{
-                titleClasses: "xl:text-2xl lg:text-xl font-bold",
-                infoClasses: "!text-sm xl:text-base",
+                titleClasses: 'xl:text-2xl lg:text-xl font-bold',
+                infoClasses: '!text-sm xl:text-base',
               }}
               infoText={
-                "Use the API keys to collect payments to your workspace wallet."
+                'Use the API keys to collect payments to your workspace wallet.'
               }
-              title={"Bills API Key"}
+              title={'Bills API Key'}
             />
             <Button
               endContent={<PlusIcon className="h-5 w-5" />}
@@ -221,8 +221,8 @@ const BillPayments = ({}) => {
 
           <Table removeWrapper aria-label="API KEY TABLE">
             <TableHeader>
-              <TableColumn width={"30%"}>NAME</TableColumn>
-              <TableColumn width={"65%"}>KEY</TableColumn>
+              <TableColumn width={'30%'}>NAME</TableColumn>
+              <TableColumn width={'65%'}>KEY</TableColumn>
               {/* <TableColumn>ENABLE</TableColumn> */}
               <TableColumn align="center">ACTIONS</TableColumn>
             </TableHeader>
@@ -255,7 +255,7 @@ const BillPayments = ({}) => {
                             : maskString(apiKey.key, 0, 20)}
                         </span>
                         <Button
-                          className={"h-max max-h-max max-w-max p-1"}
+                          className={'h-max max-h-max max-w-max p-1'}
                           color="default"
                           size="sm"
                           variant="light"
@@ -307,8 +307,8 @@ const BillPayments = ({}) => {
                             <Square2StackIcon
                               className={`h-6 w-6 cursor-pointer ${
                                 copiedKey === apiKey?.key
-                                  ? "text-primary"
-                                  : "text-gray-500"
+                                  ? 'text-primary'
+                                  : 'text-gray-500'
                               } hover:text-primary`}
                               onClick={() => copyToClipboard(apiKey?.key)}
                             />
@@ -339,16 +339,16 @@ const BillPayments = ({}) => {
         <Card>
           <div className="flex w-full items-center justify-between gap-4">
             <CardHeader
-              className={"mb-4"}
+              className={'mb-4'}
               infoText={
-                "Transactions made to your workspace wallet in the last 30days."
+                'Transactions made to your workspace wallet in the last 30days.'
               }
-              title={"Recent Bill Transactions"}
+              title={'Recent Bill Transactions'}
             />
           </div>
           <CustomTable
             // removeWrapper
-            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
+            classNames={{ wrapper: 'shadow-none px-0 mx-0' }}
             columns={BILLS_TRANSACTION_COLUMNS}
             isLoading={mutation.isPending}
             rows={LATEST_TRANSACTIONS}
@@ -370,12 +370,12 @@ const BillPayments = ({}) => {
       <PromptModal
         confirmText={
           isNew
-            ? "Generate"
+            ? 'Generate'
             : isDelete
-              ? "Delete"
+              ? 'Delete'
               : isRefresh
-                ? "Refresh"
-                : "Confirm"
+                ? 'Refresh'
+                : 'Confirm'
         }
         isDisabled={isLoading}
         isDismissable={false}
@@ -383,12 +383,12 @@ const BillPayments = ({}) => {
         isOpen={isNew || isDelete || isRefresh}
         title={
           isNew
-            ? "Generate New API Key"
+            ? 'Generate New API Key'
             : isDelete
-              ? "Delete API Key"
+              ? 'Delete API Key'
               : isRefresh
-                ? "Refresh API Key"
-                : "API Keys"
+                ? 'Refresh API Key'
+                : 'API Keys'
         }
         onClose={() => {
           onClose();
@@ -402,7 +402,7 @@ const BillPayments = ({}) => {
         {isDelete ? (
           <>
             <p className="-mt-4 text-sm leading-6 text-foreground/70">
-              <strong>Are you sure you want to delete this API Key?</strong>{" "}
+              <strong>Are you sure you want to delete this API Key?</strong>{' '}
               <br />
               This action is not reversible and will result in the non-operation
               of this key. Make sure you update any application making use of

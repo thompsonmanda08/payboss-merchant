@@ -1,24 +1,26 @@
-import { Button } from "@/components/ui/button";
-import ProgressStep from "@/components/elements/progress-step";
-import { Card, CardBody } from "@heroui/react";
-import { Check, ArrowLeft } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
-import useCustomTabsHook from "@/hooks/use-custom-tabs";
-import EntityUserDetails from "./entity-user-details";
-import SelectPaymentPackage from "./select-package";
-import { getSubscriptionInstitutions } from "@/app/_actions/subscription-actions";
-import { useQuery } from "@tanstack/react-query";
+import { Card, CardBody } from '@heroui/react';
+import { useQuery } from '@tanstack/react-query';
+import { Check } from 'lucide-react';
+import { useMemo, useState } from 'react';
+
+import { getSubscriptionInstitutions } from '@/app/_actions/subscription-actions';
+import ProgressStep from '@/components/elements/progress-step';
+import { Button } from '@/components/ui/button';
+import useCustomTabsHook from '@/hooks/use-custom-tabs';
+
+import EntityUserDetails from './entity-user-details';
+import SelectPaymentPackage from './select-package';
 
 export const SCHOOLS = [
-  { id: "harmony-high", name: "Harmony High School", type: "Secondary" },
+  { id: 'harmony-high', name: 'Harmony High School', type: 'Secondary' },
   {
-    id: "discovery-primary",
-    name: "Discovery Primary School",
-    type: "Primary",
+    id: 'discovery-primary',
+    name: 'Discovery Primary School',
+    type: 'Primary',
   },
-  { id: "tech-university", name: "Tech University", type: "University" },
-  { id: "creative-college", name: "Creative Arts College", type: "College" },
-  { id: "science-academy", name: "Science Academy", type: "Academy" },
+  { id: 'tech-university', name: 'Tech University', type: 'University' },
+  { id: 'creative-college', name: 'Creative Arts College', type: 'College' },
+  { id: 'science-academy', name: 'Science Academy', type: 'Academy' },
 ];
 
 type PaymentPackage = {
@@ -31,68 +33,68 @@ type PaymentPackage = {
 
 export const PAYMENT_PACKAGES: PaymentPackage[] = [
   {
-    id: "tuition-annual",
-    name: "Annual Tuition Fee",
+    id: 'tuition-annual',
+    name: 'Annual Tuition Fee',
     amount: 2500,
-    category: "Tuition",
-    key: "tuition-annual",
+    category: 'Tuition',
+    key: 'tuition-annual',
   },
   {
-    id: "tuition-semester",
-    name: "Semester Tuition Fee",
+    id: 'tuition-semester',
+    name: 'Semester Tuition Fee',
     amount: 1250,
-    category: "Tuition",
-    key: "tuition-semester",
+    category: 'Tuition',
+    key: 'tuition-semester',
   },
   {
-    id: "enrollment-fee",
-    name: "Enrollment Fee",
+    id: 'enrollment-fee',
+    name: 'Enrollment Fee',
     amount: 150,
-    category: "Registration",
-    key: "enrollment-fee",
+    category: 'Registration',
+    key: 'enrollment-fee',
   },
   {
-    id: "sports-membership",
-    name: "Sports Club Membership",
+    id: 'sports-membership',
+    name: 'Sports Club Membership',
     amount: 75,
-    category: "Activities",
-    key: "sports-membership",
+    category: 'Activities',
+    key: 'sports-membership',
   },
   {
-    id: "course-materials",
-    name: "Course Materials",
+    id: 'course-materials',
+    name: 'Course Materials',
     amount: 200,
-    category: "Materials",
-    key: "course-materials",
+    category: 'Materials',
+    key: 'course-materials',
   },
   {
-    id: "library-fee",
-    name: "Library Access Fee",
+    id: 'library-fee',
+    name: 'Library Access Fee',
     amount: 50,
-    category: "Services",
-    key: "library-fee",
+    category: 'Services',
+    key: 'library-fee',
   },
   {
-    id: "custom",
-    name: "Other (Custom Amount)",
+    id: 'custom',
+    name: 'Other (Custom Amount)',
     amount: 0,
-    category: "Custom",
-    key: "custom",
+    category: 'Custom',
+    key: 'custom',
   },
 ];
 
 const STEPS = [
   {
-    title: "Institution Selection & User Details",
+    title: 'Institution Selection & User Details',
     infoText:
-      "Choose an institution/organization and enter your user details to make a payment",
-    step: "Choose Institution",
+      'Choose an institution/organization and enter your user details to make a payment',
+    step: 'Choose Institution',
   },
   {
-    title: "Payment Selection",
+    title: 'Payment Selection',
     infoText:
-      "Select a payment option and enter payment details of what you want to pay for.",
-    step: "Make Payment",
+      'Select a payment option and enter payment details of what you want to pay for.',
+    step: 'Make Payment',
   },
 ];
 
@@ -106,7 +108,7 @@ export default function SubscriptionPaymentForm({
   const [showRedirectMessage, setShowRedirectMessage] = useState(false);
 
   const { data: institutionsResponse } = useQuery({
-    queryKey: ["subscription-entities"],
+    queryKey: ['subscription-entities'],
     queryFn: async () => await getSubscriptionInstitutions(),
     refetchOnMount: true,
     refetchIntervalInBackground: true,
@@ -123,11 +125,11 @@ export default function SubscriptionPaymentForm({
       return {
         id: item.ID || item.id,
         name: item.display_name || item.name,
-        type: item.type || "",
-        address: item.physical_address || "",
-        city: item.city || "",
-        redirect_url: item.redirect_url || "",
-        logo: item.logo || "",
+        type: item.type || '',
+        address: item.physical_address || '',
+        city: item.city || '',
+        redirect_url: item.redirect_url || '',
+        logo: item.logo || '',
       };
     });
   }, [institutionsResponse?.data?.institutions]);
@@ -135,17 +137,17 @@ export default function SubscriptionPaymentForm({
   // Form data state
   const [formData, setFormData] = useState({
     institution: {
-      id: "",
-      name: "",
-      type: "",
-      address: "",
-      city: "",
-      redirect_url: "",
-      logo: "",
+      id: '',
+      name: '',
+      type: '',
+      address: '',
+      city: '',
+      redirect_url: '',
+      logo: '',
     },
-    user_id: "",
-    fullName: "",
-    amount: "",
+    user_id: '',
+    fullName: '',
+    amount: '',
     selectedPackages: [],
   });
 
@@ -156,22 +158,22 @@ export default function SubscriptionPaymentForm({
   const { activeTab, currentTabIndex, navigateForward, navigateBackwards } =
     useCustomTabsHook([
       <EntityUserDetails
-        key={"entity-user-details"}
-        formData={formData}
-        updateFormData={updateFormData}
-        setErrors={setErrors}
+        key={'entity-user-details'}
         errors={errors}
+        formData={formData}
         handleNextStep={handleNextStep}
         institutions={INSTITUTIONS}
+        setErrors={setErrors}
+        updateFormData={updateFormData}
       />,
       <SelectPaymentPackage
-        key={"payment"}
+        key={'payment'}
+        errors={errors}
         formData={formData}
+        handlePreviousStep={handlePreviousStep}
+        setErrors={setErrors}
         setFormData={setFormData}
         updateFormData={updateFormData}
-        setErrors={setErrors}
-        errors={errors}
-        handlePreviousStep={handlePreviousStep}
       />,
     ]);
 
@@ -185,7 +187,6 @@ export default function SubscriptionPaymentForm({
     setErrors({});
   }
 
-
   //************ STEPS TO CREATE A PAYMENT ACTION *****************/
   return (
     <div className="flex flex-col w-full container mx-auto">
@@ -193,9 +194,9 @@ export default function SubscriptionPaymentForm({
         <>
           <div className="flex justify-between w-full lg:container mb-8 lg:mb-1">
             <Button
+              className="text-gray-600  hover:text-gray-900"
               variant="light"
               onPress={() => navigateTo(0)}
-              className="text-gray-600  hover:text-gray-900"
             >
               ← Back to Home
             </Button>
@@ -246,7 +247,7 @@ export default function SubscriptionPaymentForm({
                 {formData.institution?.id}&school_name=
                 {encodeURIComponent(
                   [...INSTITUTIONS].find((s) => s.id === formData.institution)
-                    ?.name || "",
+                    ?.name || '',
                 )}
                 &payer_name=
                 {encodeURIComponent(formData.fullName)}
@@ -256,15 +257,15 @@ export default function SubscriptionPaymentForm({
 
             <div className="space-y-3">
               <Button
-                onClick={() => navigateTo(0)}
                 className="bg-primary-600 hover:bg-primary-700 text-white w-full"
+                onClick={() => navigateTo(0)}
               >
                 Return to Home
               </Button>
               <Button
+                className="w-full"
                 variant="bordered"
                 onClick={() => setShowRedirectMessage(false)}
-                className="w-full"
               >
                 Back to Payment Form
               </Button>

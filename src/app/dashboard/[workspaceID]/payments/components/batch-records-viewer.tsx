@@ -1,11 +1,11 @@
-"use client";
-import { Modal, ModalContent, ModalHeader, ModalBody } from "@heroui/modal";
+'use client';
+import { Modal, ModalContent, ModalHeader, ModalBody } from '@heroui/modal';
 
-import usePaymentsStore from "@/context/payment-store";
-import CardHeader from "@/components/base/card-header";
-import { SINGLE_TRANSACTIONS_VALIDATION_COLUMNS } from "@/lib/table-columns";
-import SingleTransactionsTable from "@/components/tables/single-transaction-table";
-import Loader from "@/components/ui/loader";
+import CardHeader from '@/components/base/card-header';
+import SingleTransactionsTable from '@/components/tables/single-transaction-table';
+import Loader from '@/components/ui/loader';
+import usePaymentsStore from '@/context/payment-store';
+import { SINGLE_TRANSACTIONS_VALIDATION_COLUMNS } from '@/lib/table-columns';
 
 function RecordDetailsViewer({ batch }: { batch: any }) {
   const {
@@ -22,16 +22,16 @@ function RecordDetailsViewer({ batch }: { batch: any }) {
     openAllRecordsModal;
 
   const title = openInvalidRecordsModal
-    ? "Invalid Records"
+    ? 'Invalid Records'
     : openValidRecordsModal
-      ? "Valid Records"
-      : "All Records";
+      ? 'Valid Records'
+      : 'All Records';
 
   const infoText = openAllRecordsModal
-    ? "This list includes all the records that have been processed. Review them carefully."
+    ? 'This list includes all the records that have been processed. Review them carefully.'
     : openValidRecordsModal
-      ? "All records in this list are valid and ready for the next step."
-      : "The records listed here contain errors or missing information. Please update them to proceed with the transaction.";
+      ? 'All records in this list are valid and ready for the next step.'
+      : 'The records listed here contain errors or missing information. Please update them to proceed with the transaction.';
 
   return (
     <Modal
@@ -52,7 +52,7 @@ function RecordDetailsViewer({ batch }: { batch: any }) {
             </ModalHeader>
             <ModalBody className="gap-0">
               {!batch?.total ? (
-                <Loader size={80} loadingText={"Processing batch..."} />
+                <Loader loadingText={'Processing batch...'} size={80} />
               ) : (
                 <>
                   {/* IF MODAL OPENED AND TOTAL RECORDS ARRAY IS NOT EMPTY */}

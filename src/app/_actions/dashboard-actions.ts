@@ -1,13 +1,13 @@
-"use server";
+'use server';
 
-import { cache } from "react";
+import { cache } from 'react';
 
 import authenticatedApiClient, {
   handleBadRequest,
   handleError,
   successResponse,
-} from "@/lib/api-config";
-import { APIResponse } from "@/types";
+} from '@/lib/api-config';
+import { APIResponse } from '@/types';
 
 /**
  * Retrieves the analytics data for a given workspace ID.
@@ -26,7 +26,7 @@ export async function fetchDashboardAnalytics(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   try {
@@ -36,7 +36,7 @@ export async function fetchDashboardAnalytics(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | DASHBOARD ANALYTICS", "");
+    return handleError(error, 'GET | DASHBOARD ANALYTICS', '');
   }
 }
 

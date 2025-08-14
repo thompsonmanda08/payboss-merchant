@@ -1,6 +1,6 @@
-import Image from "next/image";
+import Image from 'next/image';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 const EmptyLogs = ({
   listName,
@@ -34,7 +34,7 @@ const EmptyLogs = ({
     >
       <p
         className={cn(
-          "text-center text-base  leading-6 dark:text-foreground-700 text-primary-900",
+          'text-center text-base  leading-6 dark:text-foreground-700 text-primary-900',
           classNames?.heading,
         )}
       >
@@ -42,7 +42,7 @@ const EmptyLogs = ({
       </p>
       <p
         className={cn(
-          "mb-2  text-center text-sm leading-6 text-foreground/50",
+          'mb-2  text-center text-sm leading-6 text-foreground/50',
           classNames?.paragraph,
         )}
       >
@@ -52,7 +52,7 @@ const EmptyLogs = ({
         alt="empty list"
         className="w-[450px] aspect-video"
         height={450}
-        src={image || "/images/emptyLogs.svg"}
+        src={image || '/images/emptyLogs.svg'}
         width={450}
       />
     </div>

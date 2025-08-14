@@ -1,29 +1,29 @@
 //BUSINESS REGISTRATION STATUS
-"use client";
-import { useEffect } from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
+'use client';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { useEffect } from 'react';
 
-import { Input } from "@/components/ui/input-field";
-import { staggerContainerItemVariants } from "@/lib/constants";
-import useAuthStore from "@/context/auth-store";
-import CardHeader from "@/components/base/card-header";
+import CardHeader from '@/components/base/card-header';
+import { Input } from '@/components/ui/input-field';
+import useAuthStore from '@/context/auth-store';
+import { staggerContainerItemVariants } from '@/lib/constants';
 
-import { STEPS } from "../signup-form";
+import { STEPS } from '../signup-form';
 
 // CREATE NEW ADMIN USER
 export default function Step4({ updateDetails, backToStart }: any) {
   const { newAdminUser, error, setError } = useAuthStore();
 
   useEffect(() => {
-    updateDetails(STEPS[3], { role: "owner", changePassword: false });
+    updateDetails(STEPS[3], { role: 'owner', changePassword: false });
   }, []);
 
   return (
     <>
       <CardHeader
         handleClose={() => backToStart()}
-        infoText={"Create a new admin user to manage your business on PayBoss."}
+        infoText={'Create a new admin user to manage your business on PayBoss.'}
         title="Create New Admin User"
       />
 
@@ -35,10 +35,10 @@ export default function Step4({ updateDetails, backToStart }: any) {
           >
             <div className="mx-auto aspect-square w-60 ">
               <Image
-                alt={"image"}
+                alt={'image'}
                 className="w-fit object-contain"
                 height={320}
-                src={"/images/auth-img.png"}
+                src={'/images/auth-img.png'}
                 width={440}
               />
             </div>
@@ -148,6 +148,7 @@ export default function Step4({ updateDetails, backToStart }: any) {
             variants={staggerContainerItemVariants}
           >
             <Input
+              isInvalid={error?.onPassword}
               label="Confirm Password"
               name="password2"
               placeholder="Confirm New password"
@@ -157,7 +158,6 @@ export default function Step4({ updateDetails, backToStart }: any) {
               onChange={(e) => {
                 updateDetails(STEPS[3], { confirmPassword: e.target.value });
               }}
-              isInvalid={error?.onPassword}
             />
           </motion.div>
         </div>

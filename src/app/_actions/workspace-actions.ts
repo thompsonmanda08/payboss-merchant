@@ -1,19 +1,19 @@
-"use server";
-import { revalidatePath } from "next/cache";
-import { cache } from "react";
+'use server';
+import { revalidatePath } from 'next/cache';
+import { cache } from 'react';
 
 import authenticatedApiClient, {
   handleBadRequest,
   handleError,
   successResponse,
-} from "@/lib/api-config";
-import { updateWorkspaceSession } from "@/lib/session";
-import { APIResponse } from "@/types";
+} from '@/lib/api-config';
+import { updateWorkspaceSession } from '@/lib/session';
+import { APIResponse } from '@/types';
 
 export const initializeWorkspace = cache(
   async (workspaceID: string): Promise<APIResponse> => {
     if (!workspaceID) {
-      return handleBadRequest("Workspace ID is required");
+      return handleBadRequest('Workspace ID is required');
     }
 
     const url = `merchant/workspace/${workspaceID}/init`;
@@ -31,7 +31,7 @@ export const initializeWorkspace = cache(
 
       return successResponse(updatedSession);
     } catch (error: Error | any) {
-      return handleError(error, "POST | INIT WORKSPACE", url);
+      return handleError(error, 'POST | INIT WORKSPACE', url);
     }
   },
 );
@@ -48,7 +48,7 @@ export const getAssignedWorkspaces = cache(async (): Promise<APIResponse> => {
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | WORKSPACES", url);
+    return handleError(error, 'GET | WORKSPACES', url);
   }
 });
 
@@ -81,7 +81,7 @@ export async function submitPOP(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${workspaceID}/wallet/prefund`;
@@ -89,18 +89,18 @@ export async function submitPOP(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: popDetails,
     });
 
     revalidatePath(
-      "/manage-account/workspaces/[ID]/workspace-settings",
-      "page",
+      '/manage-account/workspaces/[ID]/workspace-settings',
+      'page',
     );
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "POST | PREFUND POP", url);
+    return handleError(error, 'POST | PREFUND POP', url);
   }
 }
 
@@ -124,7 +124,7 @@ export async function getWalletPrefunds(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${workspaceID}/wallet/prefund/list`;
@@ -134,7 +134,7 @@ export async function getWalletPrefunds(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | WALLET PREFUND LIST", url);
+    return handleError(error, 'GET | WALLET PREFUND LIST', url);
   }
 }
 
@@ -162,7 +162,7 @@ export async function approveWalletPrefund(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!prefundID || !workspaceID) {
-    return handleBadRequest("Prefund/workspaceID ID is required!");
+    return handleBadRequest('Prefund/workspaceID ID is required!');
   }
 
   const url = `merchant/workspace/${workspaceID}/wallet/prefund/${prefundID}/review`;
@@ -170,13 +170,13 @@ export async function approveWalletPrefund(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "PATCH",
+      method: 'PATCH',
       data: prefundData,
     });
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "PATCH | APPROVE WALLET PREFUND", url);
+    return handleError(error, 'PATCH | APPROVE WALLET PREFUND', url);
   }
 }
 
@@ -199,7 +199,7 @@ export async function getWorkspaceMembers(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${workspaceID}/users`;
@@ -209,7 +209,7 @@ export async function getWorkspaceMembers(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | WORKSPACE MEMBERS", url);
+    return handleError(error, 'GET | WORKSPACE MEMBERS', url);
   }
 }
 
@@ -228,7 +228,7 @@ export async function deleteUserFromWorkspace(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `/merchant/workspace/${workspaceID}/user/${recordID}`;
@@ -236,15 +236,15 @@ export async function deleteUserFromWorkspace(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "DELETE",
+      method: 'DELETE',
     });
 
-    revalidatePath("/manage-account/workspaces/[ID]", "page");
-    revalidatePath("/dashboard/[workspaceID]/workspace-settings", "page");
+    revalidatePath('/manage-account/workspaces/[ID]', 'page');
+    revalidatePath('/dashboard/[workspaceID]/workspace-settings', 'page');
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "DELETE | USER", url);
+    return handleError(error, 'DELETE | USER', url);
   }
 }
 
@@ -266,7 +266,7 @@ export async function changeUserRoleInWorkspace(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${workspaceID}/user/role/${recordID}`;
@@ -274,13 +274,13 @@ export async function changeUserRoleInWorkspace(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "PATCH",
+      method: 'PATCH',
       data: mapping,
     });
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "PATCH | USER ROLE", url);
+    return handleError(error, 'PATCH | USER ROLE', url);
   }
 }
 
@@ -295,7 +295,7 @@ export async function setupWorkspaceAPIKey(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/transaction/collection/create/api-key/${workspaceID}`;
@@ -305,7 +305,7 @@ export async function setupWorkspaceAPIKey(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | SETUP API KEY", url);
+    return handleError(error, 'GET | SETUP API KEY', url);
   }
 }
 
@@ -329,7 +329,7 @@ export async function refreshWorkspaceAPIKey(
   keyID: string,
 ): Promise<APIResponse> {
   if (!workspaceID || !keyID) {
-    return handleBadRequest("Workspace/Refresh Key ID is required!");
+    return handleBadRequest('Workspace/Refresh Key ID is required!');
   }
 
   const url = `/merchant/transaction/collection/generate/${workspaceID}/api-key/${keyID}`;
@@ -339,7 +339,7 @@ export async function refreshWorkspaceAPIKey(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | FRESH API KEY", url);
+    return handleError(error, 'GET | FRESH API KEY', url);
   }
 }
 
@@ -360,7 +360,7 @@ export async function getWorkspaceAPIKey(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/transaction/collection/api-key/${workspaceID}`;
@@ -370,7 +370,7 @@ export async function getWorkspaceAPIKey(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | API KEY", url);
+    return handleError(error, 'GET | API KEY', url);
   }
 }
 
@@ -391,7 +391,7 @@ export async function generateWorkspaceTillNumber(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/transaction/collection/create/till-number/${workspaceID}`;
@@ -401,7 +401,7 @@ export async function generateWorkspaceTillNumber(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | GENERATE TILL NUMBER", url);
+    return handleError(error, 'GET | GENERATE TILL NUMBER', url);
   }
 }
 
@@ -423,7 +423,7 @@ export async function getWorkspaceTillNumber(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/transaction/collection/till-number/${workspaceID}`;
@@ -433,7 +433,7 @@ export async function getWorkspaceTillNumber(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | TILL NUMBER", url);
+    return handleError(error, 'GET | TILL NUMBER', url);
   }
 }
 
@@ -454,7 +454,7 @@ export async function activateWorkspaceTerminals(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${workspaceID}/terminal/activation`;
@@ -464,7 +464,7 @@ export async function activateWorkspaceTerminals(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "POST | TERMINAL ACTIVATION", url);
+    return handleError(error, 'POST | TERMINAL ACTIVATION', url);
   }
 }
 
@@ -485,7 +485,7 @@ export async function deactivateWorkspaceTerminals(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   try {
@@ -495,7 +495,7 @@ export async function deactivateWorkspaceTerminals(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "POST | TERMINAL DEACTIVATION", "");
+    return handleError(error, 'POST | TERMINAL DEACTIVATION', '');
   }
 }
 
@@ -516,7 +516,7 @@ export async function getAllWorkspaceTerminals(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${workspaceID}/terminals`;
@@ -526,7 +526,7 @@ export async function getAllWorkspaceTerminals(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | WORKSPACE TERMINALS", url);
+    return handleError(error, 'GET | WORKSPACE TERMINALS', url);
   }
 }
 
@@ -549,21 +549,21 @@ export async function registerTerminals(
   terminalUrl: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${workspaceID}/terminal`;
 
   try {
     const res = await authenticatedApiClient({
-      method: "POST",
+      method: 'POST',
       url,
       data: { terminalUrl },
     });
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "POST | REGISTER TERMINALS", url);
+    return handleError(error, 'POST | REGISTER TERMINALS', url);
   }
 }
 
@@ -586,21 +586,21 @@ export async function updateWorkspaceCallback(
   callbackData: any,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/callback/${workspaceID}`;
 
   try {
     const res = await authenticatedApiClient({
-      method: "PATCH",
+      method: 'PATCH',
       url,
       data: callbackData,
     });
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "PATCH | CALLBACK URL", url);
+    return handleError(error, 'PATCH | CALLBACK URL', url);
   }
 }
 
@@ -622,7 +622,7 @@ export async function getWorkspaceCallback(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${workspaceID}/callback`;
@@ -632,6 +632,6 @@ export async function getWorkspaceCallback(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | CALLBACK URL", url);
+    return handleError(error, 'GET | CALLBACK URL', url);
   }
 }

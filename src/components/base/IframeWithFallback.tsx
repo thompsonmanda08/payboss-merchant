@@ -1,7 +1,10 @@
-import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
-import Spinner from "../ui/custom-spinner";
-import EmptyLogs from "./empty-logs";
+import { useEffect, useRef, useState } from 'react';
+
+import { cn } from '@/lib/utils';
+
+import Spinner from '../ui/custom-spinner';
+
+import EmptyLogs from './empty-logs';
 
 const IframeWithFallback = ({
   title,
@@ -53,11 +56,11 @@ const IframeWithFallback = ({
     return (
       <div className="flex min-h-[80vh] w-full items-center justify-center pt-2">
         <EmptyLogs
-          className={"my-auto"}
+          className={'my-auto'}
           subTitle={
-            "The requested content could not be loaded. Please try again later."
+            'The requested content could not be loaded. Please try again later.'
           }
-          title={"Oops! No content available"}
+          title={'Oops! No content available'}
         />
       </div>
     );
@@ -65,17 +68,17 @@ const IframeWithFallback = ({
 
   return (
     <iframe
-      title={title || "Iframe"}
+      ref={iframeRef}
       className={cn(
-        "min-h-[80vh] w-full h-full flex flex-1",
+        'min-h-[80vh] w-full h-full flex flex-1',
         className,
         classNames?.iframe,
       )}
       src={src}
+      style={{ border: 'none', width: '100%' }}
+      title={title || 'Iframe'}
       onError={handleIframeError}
       onLoad={handleIframeLoad}
-      ref={iframeRef}
-      style={{ border: "none", width: "100%" }}
       {...props}
     />
   );

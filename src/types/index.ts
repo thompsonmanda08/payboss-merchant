@@ -1,5 +1,6 @@
-import { JWTPayload } from "jose";
-import { User } from "./account";
+import { JWTPayload } from 'jose';
+
+import { User } from './account';
 
 export type PageProps = {
   params?: Promise<{ [key: string]: string }>;

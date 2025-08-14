@@ -1,17 +1,17 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import { cache } from "react";
+import { revalidatePath } from 'next/cache';
+import { cache } from 'react';
 
 import authenticatedApiClient, {
   handleBadRequest,
   handleError,
   successResponse,
-} from "@/lib/api-config";
-import { getUserSession } from "@/lib/session";
+} from '@/lib/api-config';
+import { getUserSession } from '@/lib/session';
+import { APIResponse } from '@/types';
 
-import { setupUserSessions } from "./config-actions";
-import { APIResponse } from "@/types";
+import { setupUserSessions } from './config-actions';
 
 /**
  * Retrieves the user setup configurations including the logged in user details, permissions, KYC and workspaces.
@@ -32,7 +32,7 @@ export const setupAccountConfig = cache(async (): Promise<APIResponse> => {
     if (!configured) {
       return {
         success: false,
-        message: "Error setting up user sessions",
+        message: 'Error setting up user sessions',
         data: null,
         status: 500,
       };
@@ -40,7 +40,7 @@ export const setupAccountConfig = cache(async (): Promise<APIResponse> => {
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | SETUP CONFIG", url);
+    return handleError(error, 'GET | SETUP CONFIG', url);
   }
 });
 
@@ -53,14 +53,14 @@ export const setupAccountConfig = cache(async (): Promise<APIResponse> => {
  */
 
 export async function getUserAccountRoles(): Promise<APIResponse> {
-  const url = `configuration/all/system/role/${"payboss"}`;
+  const url = `configuration/all/system/role/${'payboss'}`;
 
   try {
     const res = await authenticatedApiClient({ url });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | SYSTEM ROLES", url);
+    return handleError(error, 'GET | SYSTEM ROLES', url);
   }
 }
 
@@ -79,7 +79,7 @@ export async function getWorkspaceRoles(): Promise<APIResponse> {
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | WORKSPACE ROLES", url);
+    return handleError(error, 'GET | WORKSPACE ROLES', url);
   }
 }
 
@@ -98,7 +98,7 @@ export async function changeWorkspaceVisibility(
   isVisible: boolean,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/visibility/${workspaceID}`;
@@ -106,7 +106,7 @@ export async function changeWorkspaceVisibility(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "PATCH",
+      method: 'PATCH',
       data: {
         isVisible,
       },
@@ -114,7 +114,7 @@ export async function changeWorkspaceVisibility(
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "PATCH | WORKSPACE VISIBILITY", url);
+    return handleError(error, 'PATCH | WORKSPACE VISIBILITY', url);
   }
 }
 
@@ -133,21 +133,21 @@ export async function createNewWorkspace(
   const merchantID = session?.user?.merchantID;
 
   if (!merchantID) {
-    return handleBadRequest("MerchantID ID is required");
+    return handleBadRequest('MerchantID ID is required');
   }
 
   const url = `merchant/workspace/new`;
 
   try {
     const res = await authenticatedApiClient({
-      method: "POST",
+      method: 'POST',
       url,
       data: { ...newWorkspace, merchantID },
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | NEW WORKSPACE", url);
+    return handleError(error, 'POST | NEW WORKSPACE', url);
   }
 }
 
@@ -169,14 +169,14 @@ export async function updateWorkspace({
   ID,
 }: any): Promise<APIResponse> {
   if (!ID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${ID}`;
 
   try {
     const res = await authenticatedApiClient({
-      method: "PATCH",
+      method: 'PATCH',
       url,
       data: {
         workspace,
@@ -184,12 +184,12 @@ export async function updateWorkspace({
       },
     });
 
-    revalidatePath("/manage-account/workspaces/[ID]", "page");
-    revalidatePath("/dashboard/[workspaceID]/workspace-settings", "page");
+    revalidatePath('/manage-account/workspaces/[ID]', 'page');
+    revalidatePath('/dashboard/[workspaceID]/workspace-settings', 'page');
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "PATCH | WORKSPACE", url);
+    return handleError(error, 'PATCH | WORKSPACE', url);
   }
 }
 
@@ -209,7 +209,7 @@ export async function deleteWorkspace(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${workspaceID}`;
@@ -217,14 +217,14 @@ export async function deleteWorkspace(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "DELETE",
+      method: 'DELETE',
     });
 
-    revalidatePath("/manage-account/workspaces/[ID]", "page");
+    revalidatePath('/manage-account/workspaces/[ID]', 'page');
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "DELETE | WORKSPACE", url);
+    return handleError(error, 'DELETE | WORKSPACE', url);
   }
 }
 
@@ -240,7 +240,7 @@ export const getAllWorkspaces = cache(async (): Promise<APIResponse> => {
   const merchantID = session?.user?.merchantID;
 
   if (!merchantID) {
-    return handleBadRequest("MerchantID ID is required");
+    return handleBadRequest('MerchantID ID is required');
   }
 
   const url = `merchant/${merchantID}/workspaces`;
@@ -250,7 +250,7 @@ export const getAllWorkspaces = cache(async (): Promise<APIResponse> => {
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | ALL WORKSPACES", url);
+    return handleError(error, 'GET | ALL WORKSPACES', url);
   }
 });
 
@@ -263,7 +263,7 @@ export const getAllKYCData = cache(async (): Promise<APIResponse> => {
   const merchantID = session?.user?.merchantID;
 
   if (!merchantID) {
-    return handleBadRequest("MerchantID ID is required");
+    return handleBadRequest('MerchantID ID is required');
   }
 
   const url = `merchant/${merchantID}/details`;
@@ -273,14 +273,14 @@ export const getAllKYCData = cache(async (): Promise<APIResponse> => {
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | KYC DATA", url);
+    return handleError(error, 'GET | KYC DATA', url);
   }
 });
 
 export const getWorkspaceDetails = cache(
   async (workspaceID: string): Promise<APIResponse> => {
     if (!workspaceID) {
-      return handleBadRequest("Workspace ID is required");
+      return handleBadRequest('Workspace ID is required');
     }
 
     const url = `merchant/workspace/${workspaceID}/details`;
@@ -290,7 +290,7 @@ export const getWorkspaceDetails = cache(
 
       return successResponse(res.data);
     } catch (error) {
-      return handleError(error, "GET | WORKSPACE DETAILS", url);
+      return handleError(error, 'GET | WORKSPACE DETAILS', url);
     }
   },
 );

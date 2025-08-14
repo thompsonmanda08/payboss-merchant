@@ -1,31 +1,21 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import ProgressStep from "@/components/elements/progress-step";
-import AutoCompleteField from "@/components/base/auto-complete";
-import CustomCardHeader from "@/components/base/card-header";
 import {
   Card as HerouiCard,
   CardBody,
   CardFooter,
   Checkbox,
-  Chip,
   Divider,
   Image,
-  Input,
   Link,
-  Textarea,
-} from "@heroui/react";
-import {
-  CreditCard,
-  School,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  DollarSign,
-} from "lucide-react";
-import { cn, formatCurrency } from "@/lib/utils";
-import { PAYMENT_PACKAGES, SCHOOLS } from "./subscription-payment-form";
-import { Dispatch, SetStateAction, useCallback } from "react";
+} from '@heroui/react';
+import { CreditCard, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Dispatch, SetStateAction, useCallback } from 'react';
+
+import CustomCardHeader from '@/components/base/card-header';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn, formatCurrency } from '@/lib/utils';
+
+import { PAYMENT_PACKAGES, SCHOOLS } from './subscription-payment-form';
 
 export default function SelectPaymentPackage({
   formData,
@@ -48,16 +38,16 @@ export default function SelectPaymentPackage({
     const newErrors = {} as any;
 
     if (formData.selectedPackages.length === 0) {
-      newErrors.paymentPackage = "Please select at least one payment option";
+      newErrors.paymentPackage = 'Please select at least one payment option';
     } else if (
-      formData.selectedPackages.includes("custom") &&
+      formData.selectedPackages.includes('custom') &&
       (formData.customAmount <= 0 || !formData.customReference.trim())
     ) {
       if (formData.customAmount <= 0) {
-        newErrors.customAmount = "Please enter a valid amount";
+        newErrors.customAmount = 'Please enter a valid amount';
       }
       if (!formData.customReference.trim()) {
-        newErrors.customReference = "Please enter a payment reference";
+        newErrors.customReference = 'Please enter a payment reference';
       }
     }
 
@@ -73,9 +63,9 @@ export default function SelectPaymentPackage({
   const getSelectedPackageDetails = useCallback(() => {
     return formData.selectedPackages
       .map((packageId: string) => {
-        if (packageId === "custom") {
+        if (packageId === 'custom') {
           return {
-            id: "custom",
+            id: 'custom',
             name: `Custom Payment - ${formData.customReference}`,
             amount: formData.customAmount,
           };
@@ -156,14 +146,16 @@ export default function SelectPaymentPackage({
   const getTotalAmount = () => {
     return formData?.selectedPackages?.reduce(
       (total: number, packageId: string) => {
-        if (packageId === "custom") {
+        if (packageId === 'custom') {
           total += formData?.customAmount;
         } else {
           const pkg = PAYMENT_PACKAGES.find((p) => p.id === packageId);
+
           if (pkg) {
             total += pkg.amount;
           }
         }
+
         return total;
       },
       0,
@@ -179,7 +171,7 @@ export default function SelectPaymentPackage({
 
       const queryParams = new URLSearchParams({
         school_id: formData.institution,
-        school_name: selectedSchool?.name || "",
+        school_name: selectedSchool?.name || '',
         payer_name: formData.payerDetails.fullName,
         payer_nrc: formData.payerDetails.nrc,
         payer_address: formData.payerDetails.address,
@@ -211,12 +203,12 @@ export default function SelectPaymentPackage({
           <CardBody className="flex flex-row items-center gap-2">
             <Image
               alt="Logo"
+              className="aspect-square w-20 object-cover bg-primary-50"
               height={60}
               radius="sm"
               src={
-                formData?.institution?.logo || "/images/logos/payboss-icon.svg"
+                formData?.institution?.logo || '/images/logos/payboss-icon.svg'
               }
-              className="aspect-square w-20 object-cover bg-primary-50"
               width={60}
             />
             <div className="flex flex-col">
@@ -232,15 +224,15 @@ export default function SelectPaymentPackage({
           <Divider />
           <CardFooter>
             <p className="text-sm font-bold flex items-center gap-2 w-full justify-between">
-              Institution: {formData?.institution?.name}{" "}
+              Institution: {formData?.institution?.name}{' '}
               <Link
-                className="text-md"
                 isExternal
                 showAnchorIcon
+                className="text-md"
                 href={
                   formData?.institution?.website ||
                   formData?.institution?.redirect_url ||
-                  "#"
+                  '#'
                 }
                 target="_blank"
               >
@@ -254,19 +246,19 @@ export default function SelectPaymentPackage({
         <div className="space-y-3">
           <CustomCardHeader
             infoText={
-              "Select one or more payment packages and/or add a custom payment"
+              'Select one or more payment packages and/or add a custom payment'
             }
-            title={"Payment Packages"}
+            title={'Payment Packages'}
           />
           <div className="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-3">
-            {PAYMENT_PACKAGES.filter((pkg) => pkg.id !== "custom").map(
+            {PAYMENT_PACKAGES.filter((pkg) => pkg.id !== 'custom').map(
               (pkg) => (
                 <button
                   key={pkg.id}
                   className={cn(
                     `border rounded-lg p-4 cursor-pointer transition-all duration-200 border-gray-200 hover:border-gray-300 `,
                     {
-                      "border-primary-300 bg-primary-50/50":
+                      'border-primary-300 bg-primary-50/50':
                         formData.selectedPackages.includes(pkg.id),
                     },
                   )}
@@ -275,10 +267,10 @@ export default function SelectPaymentPackage({
                 >
                   <div className="flex items-start space-x-1 ">
                     <Checkbox
-                      size="lg"
-                      isSelected={formData.selectedPackages.includes(pkg.id)}
-                      onValueChange={(v) => handlePackageToggle(pkg.id)}
                       className="mt-0.25"
+                      isSelected={formData.selectedPackages.includes(pkg.id)}
+                      size="lg"
+                      onValueChange={(v) => handlePackageToggle(pkg.id)}
                     />
                     <div className="flex-1 justify-start items-start">
                       <div className="flex items-center justify-between">
@@ -403,7 +395,7 @@ export default function SelectPaymentPackage({
             className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2"
             disabled={
               formData.selectedPackages.length === 0 ||
-              (formData.selectedPackages.includes("custom") &&
+              (formData.selectedPackages.includes('custom') &&
                 (formData.customAmount <= 0 ||
                   !formData.customReference.trim()))
             }

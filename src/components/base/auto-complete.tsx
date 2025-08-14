@@ -1,16 +1,16 @@
-"use client";
+'use client';
 import {
   Autocomplete,
   AutocompleteItem,
   AutocompleteProps,
-} from "@heroui/react";
-import { motion } from "framer-motion";
+} from '@heroui/react';
+import { motion } from 'framer-motion';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 type AutoCompleteFieldProps = Omit<
   AutocompleteProps,
-  "children" | "onChange"
+  'children' | 'onChange'
 > & {
   options: {
     ID?: string;
@@ -40,7 +40,7 @@ function AutoCompleteField({
   className,
   classNames,
   onErrorMessage,
-  placeholder = "Search...",
+  placeholder = 'Search...',
 
   errorText,
   ...props
@@ -48,22 +48,22 @@ function AutoCompleteField({
   return (
     <div
       className={cn(
-        "flex w-full max-w-md flex-col items-start",
+        'flex w-full max-w-md flex-col items-start',
         classNames?.wrapper,
       )}
     >
       {label && (
         <label
           className={cn(
-            "ml-1 text-sm font-medium text-foreground/70",
+            'ml-1 text-sm font-medium text-foreground/70',
             {
-              "opacity-50": props?.isDisabled,
+              'opacity-50': props?.isDisabled,
             },
             classNames?.label,
           )}
           htmlFor={label}
         >
-          {label}{" "}
+          {label}{' '}
           {props?.required && <span className="font-bold text-red-500">*</span>}
         </label>
       )}
@@ -71,26 +71,26 @@ function AutoCompleteField({
         // label={label}
         // labelPlacement="outside"
         classNames={{
-          base: cn("outline-none border-none", classNames?.base),
-          listbox: "",
-          popoverContent: "rounded-md text-foreground-700 font-medium",
+          base: cn('outline-none border-none', classNames?.base),
+          listbox: '',
+          popoverContent: 'rounded-md text-foreground-700 font-medium',
           // selectorIcon: "w-4 h-4",
         }}
         defaultItems={options}
         inputProps={{
           classNames: {
             input: cn(
-              "-ml-2 focus:ring-none border-none outline-none focus:border-none focus:outline-none focus-visible:ring-none px-2 data-[focus=true]:border-none focus:ring-transparent",
+              '-ml-2 focus:ring-none border-none outline-none focus:border-none focus:outline-none focus-visible:ring-none px-2 data-[focus=true]:border-none focus:ring-transparent',
               {
-                "cursor-not-allowed": props?.isDisabled,
+                'cursor-not-allowed': props?.isDisabled,
               },
             ),
 
             inputWrapper: cn(
-              "focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70",
+              'focus:border-1 focus:border-primary/70 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 flex h-10 w-full rounded-md border border-input focus-active:border-primary bg-transparent data-[focus=true]:border-primary data-[open=true]:border-primary data-[hover=true]:border-primary/70',
               {
-                "cursor-not-allowed": props?.isDisabled,
-                "border-red-500": onErrorMessage && props?.isInvalid,
+                'cursor-not-allowed': props?.isDisabled,
+                'border-red-500': onErrorMessage && props?.isInvalid,
               },
               classNames?.trigger,
             ),
@@ -120,7 +120,7 @@ function AutoCompleteField({
 
       {errorText && props.isInvalid && (
         <motion.span
-          className={cn("ml-1 text-xs text-red-500", classNames?.errorText)}
+          className={cn('ml-1 text-xs text-red-500', classNames?.errorText)}
           whileInView={{
             scale: [0, 1],
             opacity: [0, 1],

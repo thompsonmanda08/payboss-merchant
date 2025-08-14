@@ -1,5 +1,4 @@
-"use client";
-import { useEffect, useState } from "react";
+'use client';
 import {
   Modal,
   ModalContent,
@@ -7,29 +6,30 @@ import {
   ModalHeader,
   Snippet,
   ModalFooter,
-} from "@heroui/react";
+} from '@heroui/react';
+import { useEffect, useState } from 'react';
 
-import useCustomTabsHook from "@/hooks/use-custom-tabs";
-import { syntaxHighlight } from "@/lib/utils";
-import Loader from "@/components/ui/loader";
-import Tabs from "@/components/elements/tabs";
-import CardHeader from "@/components/base/card-header";
+import CardHeader from '@/components/base/card-header';
+import Tabs from '@/components/elements/tabs';
+import Loader from '@/components/ui/loader';
+import useCustomTabsHook from '@/hooks/use-custom-tabs';
+import { syntaxHighlight } from '@/lib/utils';
 
 export const API_CONFIG_VIEWS = [
   {
-    title: "API Authentication",
-    infoText: "Credentials for applications to access the API",
-    step: "authentication",
+    title: 'API Authentication',
+    infoText: 'Credentials for applications to access the API',
+    step: 'authentication',
   },
   {
-    title: "Payment Collections",
-    infoText: "Payment Collection JSON request and response payloads",
-    step: "collections",
+    title: 'Payment Collections',
+    infoText: 'Payment Collection JSON request and response payloads',
+    step: 'collections',
   },
   {
-    title: "Transaction Status",
-    infoText: "Payment Collection JSON response for a status callback",
-    step: "status",
+    title: 'Transaction Status',
+    infoText: 'Payment Collection JSON response for a status callback',
+    step: 'status',
   },
 ];
 
@@ -48,15 +48,15 @@ export default function APIConfigViewModal({
 
   const TABS = [
     {
-      name: "Authentication",
+      name: 'Authentication',
       index: 0,
     },
     {
-      name: "Collections",
+      name: 'Collections',
       index: 1,
     },
     {
-      name: "Status Callback",
+      name: 'Status Callback',
       index: 2,
     },
   ];
@@ -163,7 +163,7 @@ export function API_Authentication({
     <div className="flex w-full flex-col gap-5">
       <div className="max-w-full">
         <h4 className="text-base font-bold text-slate-600">
-          {titles?.url || "Authentication URL"}
+          {titles?.url || 'Authentication URL'}
         </h4>
         <Snippet hideSymbol className="w-full flex-1">
           <p className="text-wrap">POST ~ {url}</p>
@@ -171,7 +171,7 @@ export function API_Authentication({
       </div>
       <div className="flex w-full flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
-          {titles?.payload || "Authentication Payload"}
+          {titles?.payload || 'Authentication Payload'}
         </h4>
         <Snippet hideSymbol>
           <pre
@@ -186,7 +186,7 @@ export function API_Authentication({
 
       <div className="flex flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
-          {titles?.response || "Authentication Response"}
+          {titles?.response || 'Authentication Response'}
         </h4>
         <Snippet hideSymbol>
           <pre
@@ -215,18 +215,18 @@ export function ActionResponses({
     <div className="flex w-full flex-col gap-8">
       <div className="max-w-full">
         <h4 className="text-base font-bold text-slate-600">
-          {titles?.url || "Collection URL"}
+          {titles?.url || 'Collection URL'}
         </h4>
         <Snippet hideSymbol className="w-full flex-1">
           <p className="text-wrap">
-            {method || "POST"} ~ {url}
+            {method || 'POST'} ~ {url}
           </p>
         </Snippet>
       </div>
-      {method !== "GET" && (
+      {method !== 'GET' && (
         <div className="flex flex-col gap-2">
           <h4 className="text-base font-bold text-slate-600">
-            {titles?.payload || "Collection Payload"}
+            {titles?.payload || 'Collection Payload'}
           </h4>
           <Snippet hideSymbol className="w-full">
             <pre
@@ -242,7 +242,7 @@ export function ActionResponses({
 
       <div className="flex flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
-          {titles?.response || "Collection Response"}
+          {titles?.response || 'Collection Response'}
         </h4>
         <Snippet hideSymbol className="w-full">
           <pre
@@ -269,7 +269,7 @@ export function StatusResponses({
     <div className="flex w-full flex-col gap-8">
       <div className="max-w-full">
         <h4 className="text-base font-bold text-slate-600">
-          {titles?.url || "Status Callback URL"}
+          {titles?.url || 'Status Callback URL'}
         </h4>
         <Snippet hideSymbol className="w-full flex-1">
           <p className="text-wrap">GET ~ {url}</p>
@@ -278,7 +278,7 @@ export function StatusResponses({
 
       <div className="flex flex-col gap-2">
         <h4 className="text-base font-bold text-slate-600">
-          {titles?.response || "Transaction Status Response"}
+          {titles?.response || 'Transaction Status Response'}
         </h4>
         <Snippet hideSymbol className="w-full">
           <pre

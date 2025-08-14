@@ -1,12 +1,12 @@
-import { getAllUsers } from "@/app/_actions/user-actions";
-import { getWorkspaceMembers } from "@/app/_actions/workspace-actions";
 import {
   getAllWorkspaces,
   getWorkspaceRoles,
-} from "@/app/_actions/merchant-actions";
+} from '@/app/_actions/merchant-actions';
+import { getAllUsers } from '@/app/_actions/user-actions';
+import { getWorkspaceMembers } from '@/app/_actions/workspace-actions';
+import { PageProps } from '@/types';
 
-import WorkspaceSummary from "./workspace-summary-details";
-import { PageProps } from "@/types";
+import WorkspaceSummary from './workspace-summary-details';
 
 async function WorkSpaceIDPage({ params }: PageProps) {
   const workspaceID = String((await params)?.ID);

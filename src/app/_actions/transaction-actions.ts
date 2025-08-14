@@ -1,11 +1,11 @@
-"use server";
+'use server';
 
 import authenticatedApiClient, {
   handleBadRequest,
   handleError,
   successResponse,
-} from "@/lib/api-config";
-import { APIResponse } from "@/types";
+} from '@/lib/api-config';
+import { APIResponse } from '@/types';
 
 // ****************** ******************************** ************************** //
 // ****************** BULK TRANSACTION API ENDPOINTS ************************** //
@@ -32,7 +32,7 @@ export async function getAllBulkTransactions(
   // const session = await getUserSession()
   // const merchantID = session?.user?.merchantID
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/transaction/payments/bulk/batches/${workspaceID}`;
@@ -42,7 +42,7 @@ export async function getAllBulkTransactions(
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | BULK TRANSACTIONS", url);
+    return handleError(error, 'GET | BULK TRANSACTIONS', url);
   }
 }
 
@@ -64,7 +64,7 @@ export async function getAllBulkTransactions(
  */
 export async function getBatchDetails(batchID: string): Promise<APIResponse> {
   if (!batchID) {
-    return handleBadRequest("Batch ID is required");
+    return handleBadRequest('Batch ID is required');
   }
 
   const url = `merchant/transaction/payments/bulk/batch/details/${batchID}`;
@@ -74,7 +74,7 @@ export async function getBatchDetails(batchID: string): Promise<APIResponse> {
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | BATCH DETAILS", url);
+    return handleError(error, 'GET | BATCH DETAILS', url);
   }
 }
 
@@ -101,7 +101,7 @@ export async function reviewBatch(
 ): Promise<APIResponse> {
   // const { action, review } = reviewDetails
   if (!batchID) {
-    return handleBadRequest("Batch ID is required");
+    return handleBadRequest('Batch ID is required');
   }
 
   const url = `transaction/payments/bulk/review-submission/${batchID}`;
@@ -109,13 +109,13 @@ export async function reviewBatch(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: reviewDetails,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | REVIEW BATCH", url);
+    return handleError(error, 'POST | REVIEW BATCH', url);
   }
 }
 
@@ -146,7 +146,7 @@ export async function initializeBulkTransaction(
   const { protocol } = transactionData;
 
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `transaction/${protocol}/payments/bulk/${workspaceID}`;
@@ -154,13 +154,13 @@ export async function initializeBulkTransaction(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: transactionData,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | INITIALIZE BATCH TRANSACTION", url);
+    return handleError(error, 'POST | INITIALIZE BATCH TRANSACTION', url);
   }
 }
 
@@ -186,7 +186,7 @@ export async function submitBatchForApproval(
 ): Promise<APIResponse> {
   // At this point mew records would have been sent to the BE server so we just need to fetch the updated batch
   if (!batchID) {
-    return handleBadRequest("Batch ID is required");
+    return handleBadRequest('Batch ID is required');
   }
 
   const url = `transaction/payments/bulk/review-submission/${batchID}`;
@@ -196,7 +196,7 @@ export async function submitBatchForApproval(
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | SUBMIT BATCH TRANSACTION", url);
+    return handleError(error, 'GET | SUBMIT BATCH TRANSACTION', url);
   }
 }
 
@@ -221,7 +221,7 @@ export async function getWalletPrefundHistory(
   workspaceID: string,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/workspace/${workspaceID}/wallet/prefund/history`;
@@ -231,7 +231,7 @@ export async function getWalletPrefundHistory(
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "GET | WALLET PREFUND HISTORY", url);
+    return handleError(error, 'GET | WALLET PREFUND HISTORY', url);
   }
 }
 
@@ -254,7 +254,7 @@ export async function getBulkAnalyticReports(
   dateFilter: any,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `analytics/merchant/workspace/${workspaceID}/bulk/payments`;
@@ -262,13 +262,13 @@ export async function getBulkAnalyticReports(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: dateFilter,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | BULK ANALYTIC REPORTS", url);
+    return handleError(error, 'POST | BULK ANALYTIC REPORTS', url);
   }
 }
 
@@ -295,7 +295,7 @@ export async function getCollectionsReport(
   dateFilter: any,
 ): Promise<APIResponse> {
   if (!workspaceID || !service) {
-    return handleBadRequest("Workspace ID and Service are required");
+    return handleBadRequest('Workspace ID and Service are required');
   }
 
   const url = `analytics/merchant/workspace/${workspaceID}/${service}/report`;
@@ -303,13 +303,13 @@ export async function getCollectionsReport(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: dateFilter,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | COLLECTIONS REPORT", url);
+    return handleError(error, 'POST | COLLECTIONS REPORT', url);
   }
 }
 
@@ -342,7 +342,7 @@ export async function getCollectionLatestTransactions(
   dateFilter: any,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/transaction/collections/${service}/${workspaceID}`;
@@ -350,13 +350,13 @@ export async function getCollectionLatestTransactions(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: dateFilter,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | API COLLECTION TRANSACTIONS", url);
+    return handleError(error, 'POST | API COLLECTION TRANSACTIONS', url);
   }
 }
 
@@ -381,20 +381,20 @@ export async function getWalletStatementReport(
   dateFilter: any,
 ) {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
   const url = `/analytics/merchant/workspace/${workspaceID}/wallet-report`;
 
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: dateFilter,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | WALLET STATEMENT REPORT", url);
+    return handleError(error, 'POST | WALLET STATEMENT REPORT', url);
   }
 }
 
@@ -423,7 +423,7 @@ export async function getBillsLatestTransactions(
   dateFilter: any,
 ): Promise<APIResponse> {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `transaction/merchant/bills/${workspaceID}`;
@@ -431,19 +431,19 @@ export async function getBillsLatestTransactions(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: dateFilter,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | BILL PAYMENTS", url);
+    return handleError(error, 'POST | BILL PAYMENTS', url);
   }
 }
 
 export async function getRecentInvoices(workspaceID: string, dateFilter: any) {
   if (!workspaceID) {
-    return handleBadRequest("Workspace ID is required");
+    return handleBadRequest('Workspace ID is required');
   }
 
   const url = `merchant/transaction/collection/invoices/${workspaceID}`;
@@ -451,12 +451,12 @@ export async function getRecentInvoices(workspaceID: string, dateFilter: any) {
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: dateFilter,
     });
 
     return successResponse(res.data);
   } catch (error) {
-    return handleError(error, "POST | INVOICES", url);
+    return handleError(error, 'POST | INVOICES', url);
   }
 }

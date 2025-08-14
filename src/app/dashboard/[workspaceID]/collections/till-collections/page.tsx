@@ -1,11 +1,10 @@
-"use client";
-import { useEffect, useMemo, useState } from "react";
+'use client';
 import {
   PlusIcon,
   QrCodeIcon,
   ArrowDownTrayIcon,
   ComputerDesktopIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
 import {
   Table,
   TableHeader,
@@ -18,25 +17,26 @@ import {
   Tooltip,
   useDisclosure,
   addToast,
-} from "@heroui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+} from '@heroui/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { cn, formatDate } from "@/lib/utils";
-import PromptModal from "@/components/modals/prompt-modal";
-import CustomTable from "@/components/tables/table";
-import { useTillNumber } from "@/hooks/use-query-data";
-import { generateWorkspaceTillNumber } from "@/app/_actions/workspace-actions";
-import { QUERY_KEYS } from "@/lib/constants";
-import { getCollectionLatestTransactions } from "@/app/_actions/transaction-actions";
-import Card from "@/components/base/custom-card";
-import CardHeader from "@/components/base/card-header";
-import SoftBoxIcon from "@/components/base/soft-box-icon";
-import { TILL_TRANSACTION_COLUMNS } from "@/lib/table-columns";
-import { Skeleton } from "@/components/ui/skeleton";
+import { getCollectionLatestTransactions } from '@/app/_actions/transaction-actions';
+import { generateWorkspaceTillNumber } from '@/app/_actions/workspace-actions';
+import CardHeader from '@/components/base/card-header';
+import Card from '@/components/base/custom-card';
+import SoftBoxIcon from '@/components/base/soft-box-icon';
+import PromptModal from '@/components/modals/prompt-modal';
+import CustomTable from '@/components/tables/table';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useTillNumber } from '@/hooks/use-query-data';
+import { QUERY_KEYS } from '@/lib/constants';
+import { TILL_TRANSACTION_COLUMNS } from '@/lib/table-columns';
+import { cn, formatDate } from '@/lib/utils';
 
-import TillNumberBanner from "./till-number-banner";
+import TillNumberBanner from './till-number-banner';
 
 export default function TillPaymentCollections({}) {
   const params = useParams();
@@ -53,14 +53,14 @@ export default function TillPaymentCollections({}) {
   const thirtyDaysAgoDate = new Date();
 
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
-  const start_date = formatDate(thirtyDaysAgoDate, "YYYY-MM-DD");
-  const end_date = formatDate(new Date(), "YYYY-MM-DD");
+  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
+  const end_date = formatDate(new Date(), 'YYYY-MM-DD');
 
   // HANDLE FETCH TILL_NUMBER COLLECTION LATEST TRANSACTION DATA
   const mutation = useMutation({
     mutationKey: [QUERY_KEYS.TILL_COLLECTIONS, workspaceID],
     mutationFn: (dateRange) =>
-      getCollectionLatestTransactions(workspaceID, "till", dateRange),
+      getCollectionLatestTransactions(workspaceID, 'till', dateRange),
   });
 
   const TILL_NUMBER = useMemo(() => {
@@ -76,8 +76,8 @@ export default function TillPaymentCollections({}) {
 
     if (!response?.success) {
       addToast({
-        color: "danger",
-        title: "Failed to generate Till Number!",
+        color: 'danger',
+        title: 'Failed to generate Till Number!',
         description: response?.message,
       });
       setIsLoading(false);
@@ -88,9 +88,9 @@ export default function TillPaymentCollections({}) {
     queryClient.invalidateQueries();
 
     addToast({
-      color: "success",
-      title: "Success",
-      description: "Till Number has been generated!",
+      color: 'success',
+      title: 'Success',
+      description: 'Till Number has been generated!',
     });
     setIsLoading(false);
     setIsNew(false);
@@ -143,13 +143,13 @@ export default function TillPaymentCollections({}) {
           <div className="mb-8 flex justify-between">
             <CardHeader
               classNames={{
-                titleClasses: "xl:text-2xl lg:text-xl font-bold",
-                infoClasses: "!text-sm xl:text-base",
+                titleClasses: 'xl:text-2xl lg:text-xl font-bold',
+                infoClasses: '!text-sm xl:text-base',
               }}
               infoText={
-                "Use the till number to collect payments to your workspace wallet."
+                'Use the till number to collect payments to your workspace wallet.'
               }
-              title={"Till Number Collections"}
+              title={'Till Number Collections'}
             />
             <Button
               endContent={<PlusIcon className="h-5 w-5" />}
@@ -162,8 +162,8 @@ export default function TillPaymentCollections({}) {
 
           <Table removeWrapper aria-label="TILL_NUMBER KEY TABLE">
             <TableHeader>
-              <TableColumn width={"70%"}>TILL NUMBER</TableColumn>
-              <TableColumn width={"30%"}>SHORT CODE</TableColumn>
+              <TableColumn width={'70%'}>TILL NUMBER</TableColumn>
+              <TableColumn width={'30%'}>SHORT CODE</TableColumn>
               <TableColumn align="center">ACTIONS</TableColumn>
             </TableHeader>
             <TableBody
@@ -189,16 +189,16 @@ export default function TillPaymentCollections({}) {
                     <Button
                       isDisabled
                       className={
-                        "flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100"
+                        'flex h-auto w-full justify-start gap-4  bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100'
                       }
                       startContent={
-                        <SoftBoxIcon className={"h-12 w-12"}>
+                        <SoftBoxIcon className={'h-12 w-12'}>
                           <QrCodeIcon />
                         </SoftBoxIcon>
                       }
                     >
                       <h3 className="mb-1 text-[clamp(2rem,1vw,2.5rem)] font-black uppercase text-primary-600">
-                        {TILL_NUMBER || "TILL NUMBER"}
+                        {TILL_NUMBER || 'TILL NUMBER'}
                       </h3>
                     </Button>
                   </TableCell>
@@ -206,22 +206,22 @@ export default function TillPaymentCollections({}) {
                   <TableCell align="center">
                     <Chip
                       className={cn(
-                        "m-0 flex flex-row items-center justify-center rounded-md text-[clamp(1.25rem,1vw,2rem)]",
-                        { "-mb-3 mt-1": !TILL_NUMBER },
+                        'm-0 flex flex-row items-center justify-center rounded-md text-[clamp(1.25rem,1vw,2rem)]',
+                        { '-mb-3 mt-1': !TILL_NUMBER },
                       )}
                       color="primary"
                     >
                       <span>*</span> 848 <span>*</span>
                       <span className="text-[clamp(1rem,1vw,1.5rem)] font-bold">{` ${
-                        TILL_NUMBER || "TILL NUMBER"
+                        TILL_NUMBER || 'TILL NUMBER'
                       } * `}</span>
                       [
                       <span className="text-[clamp(1rem,1vw,1.5rem)] font-bold">
-                        {" "}
-                        AMOUNT{" "}
+                        {' '}
+                        AMOUNT{' '}
                       </span>
                       ] #
-                    </Chip>{" "}
+                    </Chip>{' '}
                     {!TILL_NUMBER && (
                       <>
                         <br />
@@ -244,7 +244,7 @@ export default function TillPaymentCollections({}) {
                             tabIndex={0}
                             onClick={() => setOpenViewConfig(true)}
                             onKeyDown={(e) => {
-                              if (e.key === "Enter" || e.key === " ") {
+                              if (e.key === 'Enter' || e.key === ' ') {
                                 setOpenViewConfig(true);
                               }
                             }}
@@ -277,15 +277,15 @@ export default function TillPaymentCollections({}) {
         <Card>
           <div className="flex w-full items-center justify-between">
             <CardHeader
-              className={"mb-4"}
+              className={'mb-4'}
               infoText={
-                "Transactions made to your workspace wallet in the last 30days."
+                'Transactions made to your workspace wallet in the last 30days.'
               }
-              title={"Recent Transactions"}
+              title={'Recent Transactions'}
             />
           </div>
           <CustomTable
-            classNames={{ wrapper: "shadow-none px-0 mx-0" }}
+            classNames={{ wrapper: 'shadow-none px-0 mx-0' }}
             columns={TILL_TRANSACTION_COLUMNS}
             isLoading={mutation.isPending}
             rows={LATEST_TRANSACTIONS || []}
@@ -294,12 +294,12 @@ export default function TillPaymentCollections({}) {
       </div>
       {/* MODALS */}
       <PromptModal
-        confirmText={"Generate"}
+        confirmText={'Generate'}
         isDisabled={isLoading}
         isDismissable={false}
         isLoading={isLoading}
         isOpen={isNew}
-        title={"Generate New Till Number "}
+        title={'Generate New Till Number '}
         onClose={() => {
           onClose();
           setIsNew(false);

@@ -1,116 +1,116 @@
-"use client";
-import { useState } from "react";
-import { Checkbox, Tooltip, addToast } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
+'use client';
+import { Checkbox, Tooltip, addToast } from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { InfoIcon } from 'lucide-react';
+import { useState } from 'react';
 
-import { uploadBusinessFile } from "@/app/_actions/pocketbase-actions";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   deleteBusinessDocumentRefs,
   sendBusinessDocumentRefs,
   updateBusinessDocumentRefs,
-} from "@/app/_actions/auth-actions";
-import CardHeader from "@/components/base/card-header";
-import StatusMessage from "@/components/base/status-message";
-import EmptyLogs from "@/components/base/empty-logs";
-import UploadField from "@/components/base/file-dropzone";
-import Modal from "@/components/modals/custom-modal";
-import DocumentDisplayButton from "@/components/base/document-display-button";
-import PromptModal from "@/components/modals/prompt-modal";
-import { QUERY_KEYS } from "@/lib/constants";
-import { InfoIcon } from "lucide-react";
-import IframeWithFallback from "@/components/base/IframeWithFallback";
-import { ErrorState } from "@/types";
+} from '@/app/_actions/auth-actions';
+import { uploadBusinessFile } from '@/app/_actions/pocketbase-actions';
+import CardHeader from '@/components/base/card-header';
+import DocumentDisplayButton from '@/components/base/document-display-button';
+import EmptyLogs from '@/components/base/empty-logs';
+import UploadField from '@/components/base/file-dropzone';
+import IframeWithFallback from '@/components/base/IframeWithFallback';
+import StatusMessage from '@/components/base/status-message';
+import Modal from '@/components/modals/custom-modal';
+import PromptModal from '@/components/modals/prompt-modal';
+import { Button } from '@/components/ui/button';
+import { QUERY_KEYS } from '@/lib/constants';
+import { cn } from '@/lib/utils';
+import { ErrorState } from '@/types';
 
 const ALL_DOCUMENT_CONFIGS = [
   {
-    id: "CERTIFICATE_INC",
-    label: "Business Incorporation Certificate",
-    backendKey: "cert_of_incorporation_url",
+    id: 'CERTIFICATE_INC',
+    label: 'Business Incorporation Certificate',
+    backendKey: 'cert_of_incorporation_url',
     required: true,
     tooltip:
       "Upload a copy of the company's Business Incorporation Certificate.",
   },
   {
-    id: "ARTICLES_ASSOCIATION",
-    label: "Articles of Association (Stamped)",
-    backendKey: "articles_of_association_url",
+    id: 'ARTICLES_ASSOCIATION',
+    label: 'Articles of Association (Stamped)',
+    backendKey: 'articles_of_association_url',
     required: true,
     tooltip: "Upload a stamped copy of the company's Articles of Association.",
   },
   {
-    id: "SHAREHOLDER_AGREEMENT",
-    label: "Shareholders Agreement",
-    backendKey: "share_holder_url",
+    id: 'SHAREHOLDER_AGREEMENT',
+    label: 'Shareholders Agreement',
+    backendKey: 'share_holder_url',
     required: true,
     tooltip: "Upload a copy of the company's Shareholders Agreement.",
   },
 
   {
-    id: "DIRECTOR_NRC",
+    id: 'DIRECTOR_NRC',
     label: "Directors' National IDS (Certified)",
-    backendKey: "director_nrc_url",
+    backendKey: 'director_nrc_url',
     required: true,
     tooltip:
       "Upload a certified copies of all the company Directors' National IDs",
   },
   {
-    id: "PASSPORT_PHOTOS",
+    id: 'PASSPORT_PHOTOS',
     label: "Directors' Passport Size Photos",
-    backendKey: "passport_photos_url",
+    backendKey: 'passport_photos_url',
     required: true,
     tooltip:
       "Upload a copies of all the company Directors' passport size photos as one PDF file.",
   },
 
   {
-    id: "TAX_CLEARANCE",
-    label: "Tax Clearance Certificate",
-    backendKey: "tax_clearance_certificate_url",
+    id: 'TAX_CLEARANCE',
+    label: 'Tax Clearance Certificate',
+    backendKey: 'tax_clearance_certificate_url',
     required: true,
     tooltip:
       "Tax Clearance Certificate must be a ZRA issued document with the TPIN and the company's name.",
   },
   {
-    id: "COMPANY_PROFILE",
-    label: "Copy of Company Profile",
-    backendKey: "company_profile_url",
+    id: 'COMPANY_PROFILE',
+    label: 'Copy of Company Profile',
+    backendKey: 'company_profile_url',
     required: true,
     tooltip:
       "Company Profile could be a any document that shows the company's name, address, and contact information. It should also include the company's logo and other relevant information on the nature of business of the company.",
   },
   {
-    id: "COMPANY_STRUCTURE",
-    label: "Company Structure",
-    backendKey: "organisation_structure_url",
+    id: 'COMPANY_STRUCTURE',
+    label: 'Company Structure',
+    backendKey: 'organisation_structure_url',
     required: true,
     tooltip:
       "Company Structure could be a any document that shows the company's leadership structure and their responsibilities.",
   },
   {
-    id: "PROOF_OF_ADDRESS",
-    label: "Proof of Address",
-    backendKey: "proof_of_address_url",
+    id: 'PROOF_OF_ADDRESS',
+    label: 'Proof of Address',
+    backendKey: 'proof_of_address_url',
     required: true,
     tooltip:
       "Proof of Address must be a certified document, utility bill, lease agreement, or bank statement with the company's name and address. The document must be no more than 3 months old.",
   },
   {
-    id: "BANK_STATEMENT",
-    label: "Copy of Bank Statement",
-    backendKey: "bank_statement_url",
+    id: 'BANK_STATEMENT',
+    label: 'Copy of Bank Statement',
+    backendKey: 'bank_statement_url',
     required: true,
     tooltip:
-      "Bank Statement document must be no more than 3 months old with all bank details clearly visible.",
+      'Bank Statement document must be no more than 3 months old with all bank details clearly visible.',
   },
   {
-    id: "PROFESSIONAL_LICENSE",
-    label: "Professional License",
-    backendKey: "professional_license_url",
+    id: 'PROFESSIONAL_LICENSE',
+    label: 'Professional License',
+    backendKey: 'professional_license_url',
     required: false,
     tooltip:
-      "(Optional) A professional license is required for certain businesses. Please provide a copy of the professional license if applicable.",
+      '(Optional) A professional license is required for certain businesses. Please provide a copy of the professional license if applicable.',
   },
 ];
 
@@ -138,7 +138,7 @@ export default function DocumentAttachments({
   const [fieldLoadingStates, setFieldLoadingStates] = useState({});
   const [error, setError] = useState<ErrorState>({
     status: false,
-    message: "",
+    message: '',
   });
   const [isViewerModalOpen, setViewerModalOpen] = useState(false);
   const [currentDocInModal, setCurrentDocInModal] = useState<{
@@ -157,7 +157,7 @@ export default function DocumentAttachments({
 
   async function submitKYCDocuments() {
     setIsSubmitting(true);
-    setError({ message: "", status: false });
+    setError({ message: '', status: false });
 
     const documentUrls = {} as any;
 
@@ -168,12 +168,12 @@ export default function DocumentAttachments({
 
     if (!agreed) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Checkbox is unmarked",
+        title: 'Error',
+        color: 'danger',
+        description: 'Checkbox is unmarked',
       });
       setError({
-        message: "Checkbox is unmarked. Agree to the statement below.",
+        message: 'Checkbox is unmarked. Agree to the statement below.',
         status: true,
       });
       setIsSubmitting(false);
@@ -192,12 +192,12 @@ export default function DocumentAttachments({
 
     if (!requiredDocsProvided && agreed) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Provide all required files!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Provide all required files!',
       });
       setError({
-        message: "Provide all required files!",
+        message: 'Provide all required files!',
         status: true,
       });
       setIsSubmitting(false);
@@ -213,12 +213,12 @@ export default function DocumentAttachments({
 
       if (response?.success) {
         addToast({
-          title: "Success",
-          color: "success",
-          description: "Documents updated successfully!",
+          title: 'Success',
+          color: 'success',
+          description: 'Documents updated successfully!',
         });
-        queryClient.invalidateQueries({ queryKey: ["KYC"] });
-        queryClient.invalidateQueries({ queryKey: ["uploaded-docs"] });
+        queryClient.invalidateQueries({ queryKey: ['KYC'] });
+        queryClient.invalidateQueries({ queryKey: ['uploaded-docs'] });
         queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.SETUP] });
         setIsSubmitting(false);
 
@@ -233,12 +233,12 @@ export default function DocumentAttachments({
 
       if (response?.success) {
         addToast({
-          title: "Success",
-          color: "success",
-          description: "Documents submitted successfully!",
+          title: 'Success',
+          color: 'success',
+          description: 'Documents submitted successfully!',
         });
-        queryClient.invalidateQueries({ queryKey: ["KYC"] });
-        queryClient.invalidateQueries({ queryKey: ["uploaded-docs"] });
+        queryClient.invalidateQueries({ queryKey: ['KYC'] });
+        queryClient.invalidateQueries({ queryKey: ['uploaded-docs'] });
         queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.SETUP] });
         setIsSubmitting(false);
 
@@ -252,11 +252,11 @@ export default function DocumentAttachments({
 
     setError({ message: response?.message, status: true });
 
-    const action = refDocsExist ? "update" : "submit";
+    const action = refDocsExist ? 'update' : 'submit';
 
     addToast({
-      title: "Error",
-      color: "danger",
+      title: 'Error',
+      color: 'danger',
       description: `Failed to ${action} documents`,
     });
 
@@ -269,14 +269,14 @@ export default function DocumentAttachments({
     recordID?: string,
   ) {
     setFieldLoadingStates((prev) => ({ ...prev, [fieldId]: true }));
-    setError({ message: "", status: false });
+    setError({ message: '', status: false });
 
-    let response = await uploadBusinessFile(file, recordID);
+    const response = await uploadBusinessFile(file, recordID);
 
     if (response?.success) {
       addToast({
-        title: "Success",
-        color: "success",
+        title: 'Success',
+        color: 'success',
         description: response?.message,
       });
       setFieldLoadingStates((prev) => ({ ...prev, [fieldId]: false }));
@@ -285,8 +285,8 @@ export default function DocumentAttachments({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
+      title: 'Error',
+      color: 'danger',
       description: response?.message,
     });
     setFieldLoadingStates((prev) => ({ ...prev, [fieldId]: false }));
@@ -301,25 +301,25 @@ export default function DocumentAttachments({
     if (!docToDelete) return;
 
     setIsDeleting(true);
-    setError({ message: "", status: false });
+    setError({ message: '', status: false });
 
     // Send and array of keys to Backend to delete the file
     const response = await deleteBusinessDocumentRefs([docToDelete.backendKey]);
 
     if (response?.success) {
       addToast({
-        title: "Success",
-        color: "success",
-        description: "Document removed successfully.",
+        title: 'Success',
+        color: 'success',
+        description: 'Document removed successfully.',
       });
-      queryClient.invalidateQueries({ queryKey: ["KYC"] });
-      queryClient.invalidateQueries({ queryKey: ["uploaded-docs"] });
+      queryClient.invalidateQueries({ queryKey: ['KYC'] });
+      queryClient.invalidateQueries({ queryKey: ['uploaded-docs'] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.SETUP] });
     } else {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: response?.message || "Failed to remove document.",
+        title: 'Error',
+        color: 'danger',
+        description: response?.message || 'Failed to remove document.',
       });
       setError({ message: response?.message, status: true });
     }
@@ -344,13 +344,13 @@ export default function DocumentAttachments({
   return isAdminOrOwner ? (
     <div className="w-full flex flex-1 flex-col gap-4">
       <CardHeader
-        className={"py-0 mb-6"}
+        className={'py-0 mb-6'}
         classNames={{
-          infoClasses: "mb-0",
-          innerWrapper: "gap-0",
+          infoClasses: 'mb-0',
+          innerWrapper: 'gap-0',
         }}
         infoText={
-          "Documents that prove your company registrations and compliance with regulatory bodies."
+          'Documents that prove your company registrations and compliance with regulatory bodies.'
         }
         title="Business Documents and Attachments"
       />
@@ -364,10 +364,14 @@ export default function DocumentAttachments({
           if (displayUrl) {
             return (
               <DocumentDisplayButton
-                key={docConfig.id + "-display"}
-                buttonKey={docConfig.id + "-btn"}
+                key={docConfig.id + '-display'}
+                allowDelete={isAdminOrOwner && allowUserToSubmitKYC}
+                buttonKey={docConfig.id + '-btn'}
                 documentName={displayName}
                 documentUrl={displayUrl}
+                onDelete={() =>
+                  handleDeleteRequest(docConfig.backendKey, docConfig.label)
+                }
                 onOpenModal={() => {
                   setCurrentDocInModal({
                     name: displayName,
@@ -375,24 +379,20 @@ export default function DocumentAttachments({
                   });
                   setViewerModalOpen(true);
                 }}
-                allowDelete={isAdminOrOwner && allowUserToSubmitKYC}
-                onDelete={() =>
-                  handleDeleteRequest(docConfig.backendKey, docConfig.label)
-                }
               />
             );
           }
+
           return (
-            <div key={docConfig.id + "-upload-field"} className="relative">
+            <div key={docConfig.id + '-upload-field'} className="relative">
               <UploadField
-                key={docConfig.id + "-upload"}
-                required={docConfig.required}
+                key={docConfig.id + '-upload'}
                 handleFile={async (file) =>
                   updateDocs({
                     [docConfig.id]: await handleFileUpload(
                       file,
                       docConfig.id, //DOCUMENT FIELD ID
-                      docFiles[docConfig.id]?.file_record_id || "", // DOCUMENT RECORD ID (IF ANY)
+                      docFiles[docConfig.id]?.file_record_id || '', // DOCUMENT RECORD ID (IF ANY)
                     ),
                   })
                 }
@@ -402,13 +402,14 @@ export default function DocumentAttachments({
                   ] || false
                 }
                 label={docConfig.label}
+                required={docConfig.required}
               />
-              <Tooltip content={docConfig.tooltip} placement="top" className="">
+              <Tooltip className="" content={docConfig.tooltip} placement="top">
                 <InfoIcon
                   className={cn(
-                    "w-5 h-5 text-gray-300 dark:text-gray-600 hover:text-secondary absolute top-8 right-2 focus:outline-none transition-all duration-300 ease-in-out",
+                    'w-5 h-5 text-gray-300 dark:text-gray-600 hover:text-secondary absolute top-8 right-2 focus:outline-none transition-all duration-300 ease-in-out',
                     {
-                      "right-8": docFiles[docConfig.id]?.file_url,
+                      'right-8': docFiles[docConfig.id]?.file_url,
                     },
                   )}
                 />
@@ -427,13 +428,13 @@ export default function DocumentAttachments({
       {!isCompleteDocumentUploads(documents) && (
         <div className="mt-4 flex w-full flex-col  lg:flex-row justify-between items-start gap-4">
           <Checkbox
-            size="lg"
-            color="primary"
             className="flex items-start "
             classNames={{
-              label: "flex flex-col items-start -mt-1",
+              label: 'flex flex-col items-start -mt-1',
             }}
+            color="primary"
             isSelected={agreed}
+            size="lg"
             onValueChange={setAgreed}
           >
             <span className="max-w-xl lg:max-w-3xl text-xs font-medium text-slate-500 md:text-sm">
@@ -444,11 +445,11 @@ export default function DocumentAttachments({
           </Checkbox>
 
           <Button
+            className="w-full lg:w-auto"
             isDisabled={!agreed || isSubmitting}
             isLoading={isSubmitting}
-            loadingText={"Submitting..."}
+            loadingText={'Submitting...'}
             onPress={submitKYCDocuments}
-            className="w-full lg:w-auto"
           >
             Submit Documents
           </Button>
@@ -458,9 +459,9 @@ export default function DocumentAttachments({
       {isCompleteDocumentUploads(documents) && (
         <div className="mt-4 flex w-full justify-end items-start gap-4">
           <Button
-            className={"justify-end ml-auto"}
+            className={'justify-end ml-auto'}
             onPress={() =>
-              onCompletionNavigateTo?.(isAdminOrOwner ? "summary" : "contract")
+              onCompletionNavigateTo?.(isAdminOrOwner ? 'summary' : 'contract')
             }
           >
             Next Section
@@ -488,13 +489,13 @@ export default function DocumentAttachments({
       </Modal>
 
       <PromptModal
-        isOpen={isDeletePromptOpen}
-        onClose={() => setDeletePromptOpen(false)}
-        onConfirm={confirmDelete}
-        title={`Delete ${docToDelete?.name}?`}
+        className={'max-w-md'}
         confirmText="Delete"
         isLoading={isDeleting}
-        className={"max-w-md"}
+        isOpen={isDeletePromptOpen}
+        title={`Delete ${docToDelete?.name}?`}
+        onClose={() => setDeletePromptOpen(false)}
+        onConfirm={confirmDelete}
       >
         <p className="-mt-2 text-xs text-foreground/85 lg:text-sm">
           Are you sure you want to delete this document.
@@ -507,11 +508,11 @@ export default function DocumentAttachments({
   ) : (
     <div className="flex aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg  text-sm font-semibold text-slate-600">
       <EmptyLogs
-        className={"my-auto"}
+        className={'my-auto'}
         subTitle={
-          "Only the admin or account owner can submit company documentation."
+          'Only the admin or account owner can submit company documentation.'
         }
-        title={"Oops! Looks like your are not an Admin"}
+        title={'Oops! Looks like your are not an Admin'}
       />
     </div>
   );

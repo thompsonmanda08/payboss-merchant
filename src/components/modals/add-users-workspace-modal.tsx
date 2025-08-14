@@ -1,5 +1,5 @@
-"use client";
-import { Key, useCallback, useEffect } from "react";
+'use client';
+import { UserPlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import {
   Table,
   TableHeader,
@@ -15,32 +15,32 @@ import {
   Chip,
   Tooltip,
   addToast,
-} from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import StatusMessage from "@/components/base/status-message";
-import EmptyState from "@/components/elements/empty-state";
-import CardHeader from "@/components/base/card-header";
-import SelectField from "@/components/ui/select-field";
-import useWorkspaceStore from "@/context/workspaces-store";
+} from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { Key, useCallback, useEffect } from 'react';
 
-import Spinner from "@/components/ui/custom-spinner";
+import CardHeader from '@/components/base/card-header';
+import StatusMessage from '@/components/base/status-message';
+import EmptyState from '@/components/elements/empty-state';
 import {
   roleColorMap,
   UserAvatarComponent,
-} from "@/components/tables/users-table";
+} from '@/components/tables/users-table';
+import { Button } from '@/components/ui/button';
+import Spinner from '@/components/ui/custom-spinner';
+import SelectField from '@/components/ui/select-field';
+import useWorkspaceStore from '@/context/workspaces-store';
 
 const columns = [
-  { name: "NAME", uid: "name" },
-  { name: "SYSTEM ROLE", uid: "role" },
-  { name: "ACTION", uid: "action_add" },
+  { name: 'NAME', uid: 'name' },
+  { name: 'SYSTEM ROLE', uid: 'role' },
+  { name: 'ACTION', uid: 'action_add' },
 ];
 const columns_added = [
-  { name: "NAME", uid: "added_name" },
-  { name: "WORKSPACE ROLE", uid: "workspace_role" },
-  { name: "ACTION", uid: "action_remove" },
+  { name: 'NAME', uid: 'added_name' },
+  { name: 'WORKSPACE ROLE', uid: 'workspace_role' },
+  { name: 'ACTION', uid: 'action_remove' },
 ];
 
 function AddUserToWorkspace({
@@ -83,7 +83,7 @@ function AddUserToWorkspace({
     const cellValue = user[String(columnKey)];
 
     switch (columnKey) {
-      case "name": // FIRST_NAME IDENTIFIED THE ALL USERS TABLE AND LAST NAME IDENTIFIES THE ADDED_USERS TABLE
+      case 'name': // FIRST_NAME IDENTIFIED THE ALL USERS TABLE AND LAST NAME IDENTIFIES THE ADDED_USERS TABLE
         return (
           <UserAvatarComponent
             key={cellValue}
@@ -102,7 +102,8 @@ function AddUserToWorkspace({
             src={user?.image}
           />
         );
-      case "added_name": // LAST NAME IDENTIFIES THE ADDED_USERS TABLE
+
+      case 'added_name': // LAST NAME IDENTIFIES THE ADDED_USERS TABLE
         return (
           <UserAvatarComponent
             key={cellValue}
@@ -120,7 +121,7 @@ function AddUserToWorkspace({
           />
         );
 
-      case "role":
+      case 'role':
         return (
           <Chip
             key={cellValue}
@@ -137,27 +138,27 @@ function AddUserToWorkspace({
           </Chip>
         );
 
-      case "workspace_role":
+      case 'workspace_role':
         return (
           <SelectField
             key={user?.ID}
-            className={"max-w-[200px]"}
-            listItemName={"role"}
+            className={'max-w-[200px]'}
+            listItemName={'role'}
             name="role"
             options={workspaceRoles}
-            placeholder={"Select Role"}
+            placeholder={'Select Role'}
             value={user?.workspaceRole}
             onChange={(e) => handleUserRoleChange(user, e.target.value)}
           />
         );
 
-      case "action_add":
+      case 'action_add':
         return (
           <Button
             isIconOnly
             className="relative"
             color="primary"
-            isDisabled={user?.role == "owner"}
+            isDisabled={user?.role == 'owner'}
             size="sm"
             variant="light"
             onPress={() => handleAddToWorkspace(user)}
@@ -169,13 +170,14 @@ function AddUserToWorkspace({
             </Tooltip>
           </Button>
         );
-      case "action_remove":
+
+      case 'action_remove':
         return (
           <Button
             isIconOnly
             className="relative"
             color="danger"
-            isDisabled={user?.role == "owner"}
+            isDisabled={user?.role == 'owner'}
             size="sm"
             variant="light"
             onPress={() => handleRemoveFromWorkspace(user)}
@@ -187,6 +189,7 @@ function AddUserToWorkspace({
             </Tooltip>
           </Button>
         );
+
       default:
         return cellValue;
     }
@@ -202,8 +205,8 @@ function AddUserToWorkspace({
       });
 
       addToast({
-        title: "Error",
-        color: "danger",
+        title: 'Error',
+        color: 'danger',
         description: response?.message,
       });
       setIsLoading(false);
@@ -212,8 +215,8 @@ function AddUserToWorkspace({
     }
 
     addToast({
-      color: "success",
-      title: "Success",
+      color: 'success',
+      title: 'Success',
       description: `Users were added to ${workspaceName}!`,
     });
     navigateTo?.(1);
@@ -231,7 +234,7 @@ function AddUserToWorkspace({
   }, []);
 
   useEffect(() => {
-    setError({ status: false, message: "" });
+    setError({ status: false, message: '' });
   }, [addedUsers]);
 
   useEffect(() => {
@@ -275,7 +278,7 @@ function AddUserToWorkspace({
                             <TableColumn
                               key={column.uid}
                               align={
-                                column.uid === "action_add" ? "center" : "start"
+                                column.uid === 'action_add' ? 'center' : 'start'
                               }
                             >
                               {column.name}
@@ -283,7 +286,7 @@ function AddUserToWorkspace({
                           ))}
                         </TableHeader>
                         <TableBody
-                          emptyContent={"No Users to display."}
+                          emptyContent={'No Users to display.'}
                           items={allUsers}
                         >
                           {(user) => (
@@ -326,9 +329,9 @@ function AddUserToWorkspace({
                             <TableColumn
                               key={column.uid}
                               align={
-                                column.uid === "action_remove"
-                                  ? "center"
-                                  : "start"
+                                column.uid === 'action_remove'
+                                  ? 'center'
+                                  : 'start'
                               }
                             >
                               {column.name}
@@ -337,7 +340,7 @@ function AddUserToWorkspace({
                         </TableHeader>
                         <TableBody
                           emptyContent={
-                            "You have not selected any all Users to add to this workspace"
+                            'You have not selected any all Users to add to this workspace'
                           }
                           items={addedUsers || []}
                         >
@@ -354,7 +357,7 @@ function AddUserToWorkspace({
                       </Table>
 
                       <Button
-                        className={"ml-auto mt-5"}
+                        className={'ml-auto mt-5'}
                         color="primary"
                         variant="light"
                         onPress={handleClearAllSelected}
@@ -394,17 +397,17 @@ function AddUserToWorkspace({
                 ) : (
                   <section className="flex gap-8" role="user-section">
                     <EmptyState
-                      buttonText={"Add New Users"}
+                      buttonText={'Add New Users'}
                       classNames={{
-                        heading: "md:text-[40px] tracking-tight leading-3",
-                        paragraph: "text-[18px] text-slate-600",
+                        heading: 'md:text-[40px] tracking-tight leading-3',
+                        paragraph: 'text-[18px] text-slate-600',
                       }}
                       message={
-                        "Add allUsers to your workspace to start assigning them."
+                        'Add allUsers to your workspace to start assigning them.'
                       }
-                      title={"NO USERS ADDED"}
+                      title={'NO USERS ADDED'}
                       onButtonClick={() => {
-                        router.push("/manage-account/users");
+                        router.push('/manage-account/users');
                         onClose();
                       }}
                     />

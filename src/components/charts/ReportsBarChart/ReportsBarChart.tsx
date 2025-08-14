@@ -1,9 +1,9 @@
-"use client";
-import { useMemo } from "react";
-import { Bar } from "react-chartjs-2";
-import { Progress } from "@heroui/react";
+'use client';
+import { Progress } from '@heroui/react';
+import { useMemo } from 'react';
+import { Bar } from 'react-chartjs-2';
 
-import configs from "./configs";
+import configs from './configs';
 
 function ReportsBarChart({
   color,
@@ -98,10 +98,10 @@ function ReportsBarChartItem({
           <Progress
             className="w-full"
             classNames={{
-              base: "w-full",
-              track: "drop-shadow-sm border border-slate-300",
-              indicator: "bg-gradient-to-r !h-4 from-primary-300 to-primary",
-              label: "font-bold text-primary-900 text-nowrap",
+              base: 'w-full',
+              track: 'drop-shadow-sm border border-slate-300',
+              indicator: 'bg-gradient-to-r !h-4 from-primary-300 to-primary',
+              label: 'font-bold text-primary-900 text-nowrap',
             }}
             color="primary"
             label={progress.content}

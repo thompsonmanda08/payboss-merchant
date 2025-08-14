@@ -1,21 +1,21 @@
-"use client";
-import React, { useMemo } from "react";
-import Image from "next/image";
-import { useDisclosure, addToast } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
+'use client';
+import { useDisclosure, addToast } from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import Image from 'next/image';
+import React, { useMemo } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { formatCurrency } from "@/lib/utils";
 import {
   reviewBatch,
   submitBatchForApproval,
-} from "@/app/_actions/transaction-actions";
-import usePaymentsStore from "@/context/payment-store";
-import { Input } from "@/components/ui/input-field";
-import { QUERY_KEYS } from "@/lib/constants";
-import PromptModal from "@/components/modals/prompt-modal";
-import { useWorkspaceInit } from "@/hooks/use-query-data";
-import Loader from "@/components/ui/loader";
+} from '@/app/_actions/transaction-actions';
+import PromptModal from '@/components/modals/prompt-modal';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import Loader from '@/components/ui/loader';
+import usePaymentsStore from '@/context/payment-store';
+import { useWorkspaceInit } from '@/hooks/use-query-data';
+import { QUERY_KEYS } from '@/lib/constants';
+import { formatCurrency } from '@/lib/utils';
 
 const ApproverAction = ({
   workspaceID,
@@ -45,8 +45,8 @@ const ApproverAction = ({
   const [isLoading, setIsLoading] = React.useState(false);
   const [isApproval, setIsApproval] = React.useState(true);
   const [approve, setApprove] = React.useState({
-    action: "approve", //approve or reject
-    remarks: "",
+    action: 'approve', //approve or reject
+    remarks: '',
   });
 
   async function handleApproval() {
@@ -54,13 +54,13 @@ const ApproverAction = ({
 
     if (!permissions?.can_approve) {
       addToast({
-        color: "danger",
-        title: "Unauthorized!",
-        description: "You do not have permissions to perform this action",
+        color: 'danger',
+        title: 'Unauthorized!',
+        description: 'You do not have permissions to perform this action',
       });
       setError({
         status: true,
-        message: "You do not have permissions to perform this action",
+        message: 'You do not have permissions to perform this action',
       });
       setIsLoading(false);
 
@@ -73,9 +73,9 @@ const ApproverAction = ({
     ) {
       setIsLoading(false);
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Insufficient funds in workspace wallet",
+        title: 'Error',
+        color: 'danger',
+        description: 'Insufficient funds in workspace wallet',
       });
 
       return;
@@ -84,9 +84,9 @@ const ApproverAction = ({
     if (!approve.remarks) {
       setIsLoading(false);
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Review reason is required!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Review reason is required!',
       });
 
       return;
@@ -101,8 +101,8 @@ const ApproverAction = ({
     if (!response?.success) {
       setIsLoading(false);
       addToast({
-        title: "Error",
-        color: "danger",
+        title: 'Error',
+        color: 'danger',
         description: response?.message,
       });
 
@@ -112,9 +112,9 @@ const ApproverAction = ({
     setIsLoading(false);
 
     addToast({
-      title: "Success",
-      color: "success",
-      description: `Bulk transaction ${isApproval ? "approved" : "rejected"}!`,
+      title: 'Success',
+      color: 'success',
+      description: `Bulk transaction ${isApproval ? 'approved' : 'rejected'}!`,
     });
 
     // PERFORM QUERY INVALIDATION TO UPDATE THE STATE OF THE UI
@@ -130,15 +130,15 @@ const ApproverAction = ({
   }
 
   function handleReject() {
-    setApprove((prev) => ({ ...prev, action: "reject" }));
+    setApprove((prev) => ({ ...prev, action: 'reject' }));
     setIsApproval(false);
     onOpen();
   }
 
   function handleClosePrompt() {
     setApprove({
-      action: "approve", //approve or reject
-      remarks: "",
+      action: 'approve', //approve or reject
+      remarks: '',
     });
     setIsApproval(true);
     setIsLoading(false);
@@ -146,26 +146,26 @@ const ApproverAction = ({
   }
 
   const isApprovedOrRejected =
-    batch?.status?.toLowerCase() == "approved" ||
-    batch?.status?.toLowerCase() == "rejected" ||
-    transactionDetails?.status?.toLowerCase() == "approved" ||
-    transactionDetails?.status?.toLowerCase() == "rejected";
+    batch?.status?.toLowerCase() == 'approved' ||
+    batch?.status?.toLowerCase() == 'rejected' ||
+    transactionDetails?.status?.toLowerCase() == 'approved' ||
+    transactionDetails?.status?.toLowerCase() == 'rejected';
 
   const isInReview =
-    batch?.status == "review" || transactionDetails?.status == "review";
+    batch?.status == 'review' || transactionDetails?.status == 'review';
 
   const isProcessed =
-    batch?.status == "processed" ||
-    transactionDetails?.status == "processed" ||
-    transactionDetails?.status == "processed";
+    batch?.status == 'processed' ||
+    transactionDetails?.status == 'processed' ||
+    transactionDetails?.status == 'processed';
 
   async function handleSubmitForApproval() {
     setLoading(true);
     if (batch?.number_of_records != batch?.number_of_valid_records) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Some records are still invalid!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Some records are still invalid!',
       });
       setLoading(false);
 
@@ -174,9 +174,9 @@ const ApproverAction = ({
 
     if (parseFloat(batch?.valid_amount) > parseFloat(workspaceWalletBalance)) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Insufficient funds in the wallet!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Insufficient funds in the wallet!',
       });
       setLoading(false);
 
@@ -185,13 +185,13 @@ const ApproverAction = ({
 
     if (!permissions.can_initiate) {
       addToast({
-        title: "NOT ALLOWED",
-        color: "danger",
-        description: "You do not have permissions to perform this action",
+        title: 'NOT ALLOWED',
+        color: 'danger',
+        description: 'You do not have permissions to perform this action',
       });
       setError({
         status: true,
-        message: "You do not have permissions to perform this action",
+        message: 'You do not have permissions to perform this action',
       });
       setLoading(false);
 
@@ -202,8 +202,8 @@ const ApproverAction = ({
 
     if (!response?.success) {
       addToast({
-        title: "Error",
-        color: "danger",
+        title: 'Error',
+        color: 'danger',
         description: response?.message,
       });
       setLoading(false);
@@ -220,9 +220,9 @@ const ApproverAction = ({
     });
 
     addToast({
-      title: "Success",
-      color: "success",
-      description: "Records submitted successfully!",
+      title: 'Success',
+      color: 'success',
+      description: 'Records submitted successfully!',
     });
     onClose();
     setLoading(false);
@@ -238,7 +238,7 @@ const ApproverAction = ({
             ? `Batch ${batch?.status}`
             : isProcessed
               ? `Batch Processed`
-              : "Batch payout requires approval"}
+              : 'Batch payout requires approval'}
         </h3>
 
         {isApprovedOrRejected ? (
@@ -278,10 +278,10 @@ const ApproverAction = ({
   return !batch?.batch_name || loading ? (
     <Loader
       classNames={{
-        wrapper: "lg:min-h-96",
+        wrapper: 'lg:min-h-96',
       }}
+      loadingText={'Please wait...'}
       size={100}
-      loadingText={"Please wait..."}
     />
   ) : (
     <>
@@ -291,17 +291,17 @@ const ApproverAction = ({
             alt="Approval Illustration"
             className="aspect-square max-h-80 object-contain"
             height={200}
-            src={"/images/illustrations/approval.svg"}
+            src={'/images/illustrations/approval.svg'}
             width={200}
           />
 
           {renderBatchApproval}
-          {batch?.status?.toLowerCase() == "submitted" &&
+          {batch?.status?.toLowerCase() == 'submitted' &&
             permissions?.can_initiate && (
               <div className="mx-auto gap-4">
                 <Button
                   isLoading={loading}
-                  size={"lg"}
+                  size={'lg'}
                   onClick={handleSubmitForApproval}
                 >
                   Submit For Approval
@@ -313,7 +313,7 @@ const ApproverAction = ({
         {permissions?.can_approve && isInReview && (
           <div className="mb-4 ml-auto flex w-full max-w-xs items-end justify-end gap-4">
             <Button
-              className={"flex-1 bg-red-500/10"}
+              className={'flex-1 bg-red-500/10'}
               color="danger"
               variant="light"
               // isDisabled={isLoading}
@@ -322,7 +322,7 @@ const ApproverAction = ({
               Reject
             </Button>
             <Button
-              className={"flex-1"}
+              className={'flex-1'}
               isDisabled={isLoading}
               isLoading={isLoading}
               onClick={onOpen}
@@ -345,11 +345,11 @@ const ApproverAction = ({
         // onOpen={onOpen}
       >
         <p className="-mt-4 mb-2 text-sm leading-6 text-foreground/70">
-          Are you sure you want to {approve.action} the batch transaction{" "}
+          Are you sure you want to {approve.action} the batch transaction{' '}
           <code className="rounded-md bg-primary/10 p-1 px-2 font-semibold text-primary-700">
             {`${batch?.batch_name} - (${formatCurrency(batch?.total_amount)})`}
-          </code>{" "}
-          {isApproval ? "to run against your PayBoss Wallet balance." : ""}
+          </code>{' '}
+          {isApproval ? 'to run against your PayBoss Wallet balance.' : ''}
         </p>
         <Input
           isDisabled={isLoading}

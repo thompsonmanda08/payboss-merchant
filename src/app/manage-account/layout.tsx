@@ -1,5 +1,6 @@
-import SettingsSideBar from "@/components/elements/settings-sidebar";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren } from 'react';
+
+import SettingsSideBar from '@/components/elements/settings-sidebar';
 
 async function AccountSettingsLayout({ children }: PropsWithChildren) {
   return (

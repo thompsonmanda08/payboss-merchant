@@ -1,8 +1,9 @@
-"use client";
-import { usePathname } from "next/navigation";
+'use client';
+import { usePathname } from 'next/navigation';
 
-import { useSetupConfig } from "./use-query-data";
-import { Workspace } from "@/types";
+import { Workspace } from '@/types';
+
+import { useSetupConfig } from './use-query-data';
 
 const useWorkspaces = (query?: any) => {
   const pathname = usePathname();
@@ -13,11 +14,11 @@ const useWorkspaces = (query?: any) => {
   const workspaceTypes = setup?.data?.workspace_type || [];
 
   const isUserInWorkspace =
-    pathname.split("/")[1] == "dashboard" && pathname.split("/").length >= 3;
+    pathname.split('/')[1] == 'dashboard' && pathname.split('/').length >= 3;
 
   const workspaceID = isUserInWorkspace
-    ? query?.workspaceID || pathname.split("/")[2]
-    : query?.workspaceID || "";
+    ? query?.workspaceID || pathname.split('/')[2]
+    : query?.workspaceID || '';
 
   const activeWorkspace = workspaces?.find(
     (workspace) => workspace?.ID == workspaceID,

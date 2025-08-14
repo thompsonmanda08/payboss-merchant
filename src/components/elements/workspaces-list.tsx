@@ -1,36 +1,36 @@
-"use client";
-import { PlusIcon } from "@heroicons/react/24/outline";
-import { use, useMemo, useState } from "react";
-import { Alert, Link, useDisclosure } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { usePathname } from "next/navigation";
+'use client';
+import { PlusIcon } from '@heroicons/react/24/outline';
+import { Alert, Link, useDisclosure } from '@heroui/react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
   addToast,
-} from "@heroui/react";
+} from '@heroui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { usePathname } from 'next/navigation';
+import { useMemo, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { capitalize, cn } from "@/lib/utils";
-import { createNewWorkspace } from "@/app/_actions/merchant-actions";
-import { QUERY_KEYS } from "@/lib/constants";
-import useWorkspace from "@/hooks/use-workspaces";
-import OverlayLoader from "@/components/ui/overlay-loader";
-import useAccountProfile from "@/hooks/use-profile-info";
-import Card from "@/components/base/custom-card";
-import EmptyLogs from "@/components/base/empty-logs";
+import { createNewWorkspace } from '@/app/_actions/merchant-actions';
+import Card from '@/components/base/custom-card';
+import EmptyLogs from '@/components/base/empty-logs';
+import { Button } from '@/components/ui/button';
+import OverlayLoader from '@/components/ui/overlay-loader';
+import useKYCInfo from '@/hooks/use-kyc-info';
+import useAccountProfile from '@/hooks/use-profile-info';
+import useWorkspace from '@/hooks/use-workspaces';
+import { QUERY_KEYS } from '@/lib/constants';
+import { capitalize, cn } from '@/lib/utils';
+import { Workspace } from '@/types';
 
-import WorkspaceItem from "./workspace-card-item";
-import CreateNewWorkspaceModal from "../modals/create-new-workspace-modal";
-import useKYCInfo from "@/hooks/use-kyc-info";
-import WorkspacesLoading from "@/app/manage-account/loading";
-import { Workspace } from "@/types";
+import CreateNewWorkspaceModal from '../modals/create-new-workspace-modal';
+
+import WorkspaceItem from './workspace-card-item';
 
 const INIT_DATA = {
-  workspace: "",
-  description: "",
-  workspaceType: "",
+  workspace: '',
+  description: '',
+  workspaceType: '',
 };
 
 function WorkspacesList({
@@ -65,7 +65,7 @@ function WorkspacesList({
   const editWorkspaceField = (fields: Partial<typeof INIT_DATA>) =>
     setNewWorkspace((prev) => ({ ...prev, ...fields }));
 
-  const isManagePage = pathname.split("/").includes("manage-account");
+  const isManagePage = pathname.split('/').includes('manage-account');
 
   const canCreateWorkspace =
     (isAccountAdmin || isOwner) && merchantKYC?.stage_id == 3;
@@ -84,11 +84,12 @@ function WorkspacesList({
       newWorkspace.description.length < 3
     ) {
       addToast({
-        title: "Error",
-        color: "danger",
-        description: "Provide valid name and description!",
+        title: 'Error',
+        color: 'danger',
+        description: 'Provide valid name and description!',
       });
       setIsLoading(false);
+
       return;
     }
 
@@ -99,9 +100,9 @@ function WorkspacesList({
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.WORKSPACES] });
 
       addToast({
-        color: "success",
-        title: "Success",
-        description: "Workspaces created successfully!",
+        color: 'success',
+        title: 'Success',
+        description: 'Workspaces created successfully!',
       });
       handleClose();
       setIsLoading(false);
@@ -110,9 +111,9 @@ function WorkspacesList({
     }
 
     addToast({
-      title: "Error",
-      color: "danger",
-      description: "Failed to create Workspace!",
+      title: 'Error',
+      color: 'danger',
+      description: 'Failed to create Workspace!',
     });
 
     setIsLoading(false);
@@ -141,7 +142,7 @@ function WorkspacesList({
 
   return (
     <>
-      <Card className={cn("gap-6 min-h-[450px]", className)}>
+      <Card className={cn('gap-6 min-h-[450px]', className)}>
         {showHeader && (
           <div className="flex justify-between gap-8">
             <div>
@@ -157,7 +158,7 @@ function WorkspacesList({
             {canCreateWorkspace && !isLoadingData && (
               <Button
                 className={
-                  "mt-auto bg-primary-50 dark:bg-primary dark:text-primary-foreground px-4"
+                  'mt-auto bg-primary-50 dark:bg-primary dark:text-primary-foreground px-4'
                 }
                 color="primary"
                 endContent={<PlusIcon className="h-5 w-5" />}
@@ -176,8 +177,8 @@ function WorkspacesList({
         {merchantKYC?.can_edit ? (
           <Alert
             className="my-4"
+            classNames={{ mainWrapper: 'flex flex-row items-center max-h-16' }}
             color="warning"
-            classNames={{ mainWrapper: "flex flex-row items-center max-h-16" }}
           >
             <span>
               Just one more step, please submit your business documents to aid
@@ -185,9 +186,9 @@ function WorkspacesList({
             </span>
             <Button
               as={Link}
+              className={'text-white bg-warning m-0 ml-auto'}
               color="warning"
-              href={"/manage-account/account-verification"}
-              className={"text-white bg-warning m-0 ml-auto"}
+              href={'/manage-account/account-verification'}
             >
               Complete Verification
             </Button>
@@ -198,8 +199,8 @@ function WorkspacesList({
           {/* SCROLL-AREA */}
           <div
             className={cn(
-              "max-h-[600px] overflow-y-auto no-scrollbar flex w-full min-w-[400px]  flex-col lg:px-2",
-              { "max-h-auto lg:max-h-max ": isManagePage },
+              'max-h-[600px] overflow-y-auto no-scrollbar flex w-full min-w-[400px]  flex-col lg:px-2',
+              { 'max-h-auto lg:max-h-max ': isManagePage },
             )}
           >
             {loadingWorkspaces || loadingAccountProfile ? (
@@ -223,9 +224,9 @@ function WorkspacesList({
             ) : (
               <div
                 className={cn(
-                  "grid w-full place-items-center gap-4 rounded-lg",
+                  'grid w-full place-items-center gap-4 rounded-lg',
                   {
-                    "grid-cols-[repeat(auto-fill,minmax(400px,1fr))]":
+                    'grid-cols-[repeat(auto-fill,minmax(400px,1fr))]':
                       WORKSPACES?.length > 0,
                   },
                 )}
@@ -252,22 +253,22 @@ function WorkspacesList({
                 ) : (
                   <div className="flex flex-col aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg text-sm font-semibold text-slate-600">
                     <EmptyLogs
-                      className={"my-8"}
+                      className={'my-8'}
                       subTitle={
                         merchantKYC?.stageID < 2
-                          ? "Submit your KYC documents to start creating workspaces."
+                          ? 'Submit your KYC documents to start creating workspaces.'
                           : merchantKYC?.stageID >= 2 &&
-                              merchantKYC?.stage?.toLowerCase() == "review"
-                            ? "Your KYC application is under review. Once approved, you will be able to create a workspace."
-                            : "Only the admin or account owner can create a workspace."
+                              merchantKYC?.stage?.toLowerCase() == 'review'
+                            ? 'Your KYC application is under review. Once approved, you will be able to create a workspace.'
+                            : 'Only the admin or account owner can create a workspace.'
                       }
                       title={
                         merchantKYC?.stageID < 2
-                          ? "Start Account Verification"
+                          ? 'Start Account Verification'
                           : merchantKYC?.stageID >= 2 &&
-                              merchantKYC?.stage?.toLowerCase() == "review"
-                            ? "KYC Under Review"
-                            : "Oops! Looks like you have no workspaces yet!"
+                              merchantKYC?.stage?.toLowerCase() == 'review'
+                            ? 'KYC Under Review'
+                            : 'Oops! Looks like you have no workspaces yet!'
                       }
                     />
                     <>
@@ -276,7 +277,7 @@ function WorkspacesList({
                         <Popover placement="top">
                           <PopoverTrigger>
                             <Button
-                              className={"p-8 min-w-[300px] bg-primary-50"}
+                              className={'p-8 min-w-[300px] bg-primary-50'}
                               color="primary"
                               endContent={<PlusIcon className="h-5 w-5" />}
                               variant="flat"
@@ -302,7 +303,7 @@ function WorkspacesList({
                       {canCreateWorkspace && isCompleteKYC && !isManagePage && (
                         <Button
                           className={
-                            "bg-primary-50 p-8 min-w-[300px] dark:bg-primary dark:text-primary-foreground px-4"
+                            'bg-primary-50 p-8 min-w-[300px] dark:bg-primary dark:text-primary-foreground px-4'
                           }
                           color="primary"
                           endContent={<PlusIcon className="h-5 w-5" />}
@@ -322,9 +323,9 @@ function WorkspacesList({
                 {canCreateWorkspace && (
                   <Button
                     className={cn(
-                      "h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50",
+                      'h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50',
                       {
-                        "col-span-full": !workspaces || workspaces?.length < 0,
+                        'col-span-full': !workspaces || workspaces?.length < 0,
                       },
                     )}
                     onPress={onOpen}
@@ -342,9 +343,9 @@ function WorkspacesList({
       {/* OVERLAYS AND MODALS  */}
       {
         <OverlayLoader
+          description="Your workspace is being prepared. Please wait..."
           show={isLoading}
           title="Initializing Workspace"
-          description="Your workspace is being prepared. Please wait..."
         />
       }
 

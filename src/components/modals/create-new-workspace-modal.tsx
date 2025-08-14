@@ -1,15 +1,15 @@
-"use client";
+'use client';
 import {
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "@heroui/react";
+} from '@heroui/react';
 
-import { Input } from "@/components/ui/input-field";
-import { Button } from "@/components/ui/button";
-import SelectField from "@/components/ui/select-field";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
+import SelectField from '@/components/ui/select-field';
 
 export default function CreateNewWorkspaceModal({
   workspaceTypes,
@@ -48,7 +48,7 @@ export default function CreateNewWorkspaceModal({
           />
           <SelectField
             label="Workspace Type"
-            listItemName={"workspace_type"}
+            listItemName={'workspace_type'}
             name="workspaceType"
             options={workspaceTypes}
             required={true}

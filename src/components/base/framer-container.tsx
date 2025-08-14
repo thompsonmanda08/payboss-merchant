@@ -1,7 +1,7 @@
-"use client";
-import Image from "next/image";
+'use client';
+import Image from 'next/image';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 // import { Image } from '@heroui/react'
 
 export default function FrameContainer({
@@ -16,7 +16,7 @@ export default function FrameContainer({
   return (
     <div
       className={cn(
-        "relative flex aspect-[16/9] max-h-[620px] items-center justify-center overflow-clip rounded-[32px] border-[12px] border-[#1b1b1b] object-cover shadow-xl",
+        'relative flex aspect-[16/9] max-h-[620px] items-center justify-center overflow-clip rounded-[32px] border-[12px] border-[#1b1b1b] object-cover shadow-xl',
         className,
       )}
       id="showcase"

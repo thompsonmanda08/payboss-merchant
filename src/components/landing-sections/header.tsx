@@ -1,22 +1,22 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+'use client';
 import {
   ChatBubbleLeftRightIcon,
   Squares2X2Icon,
   UserCircleIcon,
   UserPlusIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { NavLink } from "@/components/base/nav-link";
-import { cn } from "@/lib/utils";
-import useFloatingHeader from "@/hooks/use-floating-header";
-import Logo from "@/components/base/payboss-logo";
-import ThemeSwitcher from "@/components/base/theme-switcher";
-import NavIconButton from "@/components/ui/nav-icon-button";
-import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
+import { NavLink } from '@/components/base/nav-link';
+import Logo from '@/components/base/payboss-logo';
+import ThemeSwitcher from '@/components/base/theme-switcher';
+import { Button } from '@/components/ui/button';
+import NavIconButton from '@/components/ui/nav-icon-button';
+import useFloatingHeader from '@/hooks/use-floating-header';
+import { BGS_SUPER_MERCHANT_ID } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 
 function MobileNavLink({
   href,
@@ -28,7 +28,7 @@ function MobileNavLink({
   children: React.ReactNode;
 }) {
   return (
-    <Button as={Link} className={cn("w-full p-2")} href={href} variant="light">
+    <Button as={Link} className={cn('w-full p-2')} href={href} variant="light">
       {children}
     </Button>
   );
@@ -44,13 +44,13 @@ function MobileNavIcon({ open }: { open: boolean }) {
       strokeWidth={2}
     >
       <path
-        className={cn("origin-center transition", open && "scale-90 opacity-0")}
+        className={cn('origin-center transition', open && 'scale-90 opacity-0')}
         d="M0 1H14M0 7H14M0 13H14"
       />
       <path
         className={cn(
-          "origin-center transition",
-          !open && "scale-90 opacity-0",
+          'origin-center transition',
+          !open && 'scale-90 opacity-0',
         )}
         d="M2 2L12 12M12 2L2 12"
       />
@@ -131,8 +131,8 @@ export function Header({ session }: { session: any }) {
       className={cn(
         `rounded-blur fixed left-0 right-0 top-0 z-30 flex flex-wrap items-center px-4 py-5 backdrop-blur-2xl backdrop-saturate-200 transition-all lg:flex-nowrap lg:justify-start`,
         {
-          "top-4 sm:top-2 sm:mx-10 rounded-xl bg-background/80": isFloating,
-          "z-50": pathname === "/" && !isFloating,
+          'top-4 sm:top-2 sm:mx-10 rounded-xl bg-background/80': isFloating,
+          'z-50': pathname === '/' && !isFloating,
         },
       )}
     >
@@ -149,7 +149,7 @@ export function Header({ session }: { session: any }) {
         <div className="flex items-center gap-1">
           <div className="flex lg:gap-2 items-center">
             {session ? (
-              <NavLink href="/dashboard" className={"p-1"}>
+              <NavLink className={'p-1'} href="/dashboard">
                 <NavIconButton>
                   <Squares2X2Icon className="h-5 w-5 " />
                 </NavIconButton>
@@ -157,7 +157,7 @@ export function Header({ session }: { session: any }) {
               </NavLink>
             ) : (
               <>
-                <NavLink href="/login" className={"p-1 "}>
+                <NavLink className={'p-1 '} href="/login">
                   <NavIconButton>
                     <UserCircleIcon className="h-5 w-5 " />
                   </NavIconButton>

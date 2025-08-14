@@ -1,7 +1,7 @@
 {
-  "endOfLine": "auto",
+  "endOfLine": "lf",
   "trailingComma": "all",
-  "singleQuote": false,
+  "singleQuote": true,
   "printWidth": 80,
   "tabWidth": 2,
   "useTabs": false,
@@ -10,5 +10,40 @@
   "jsxSingleQuote": false,
   "arrowParens": "always",
   "proseWrap": "preserve",
-  "htmlWhitespaceSensitivity": "css"
+  "htmlWhitespaceSensitivity": "css",
+  "quoteProps": "as-needed",
+  "bracketSameLine": false,
+  "embeddedLanguageFormatting": "auto",
+  "insertPragma": false,
+  "requirePragma": false,
+  "vueIndentScriptAndStyle": false,
+  "overrides": [
+    {
+      "files": ["*.json", "*.jsonc"],
+      "options": {
+        "singleQuote": false,
+        "trailingComma": "none"
+      }
+    },
+    {
+      "files": ["*.md", "*.mdx"],
+      "options": {
+        "proseWrap": "always",
+        "printWidth": 100
+      }
+    },
+    {
+      "files": ["*.yml", "*.yaml"],
+      "options": {
+        "singleQuote": false,
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": ["*.css", "*.scss", "*.less"],
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
 }

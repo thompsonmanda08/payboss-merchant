@@ -1,10 +1,10 @@
-"use client";
-import { Chip } from "@heroui/react";
-import Image from "next/image";
+'use client';
+import { Chip } from '@heroui/react';
+import Image from 'next/image';
 
-import useAccountProfile from "@/hooks/use-profile-info";
-import { DefaultCover } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import useAccountProfile from '@/hooks/use-profile-info';
+import { DefaultCover } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 
 export default function ProfileBanner({ className }: { className?: string }) {
   const { user } = useAccountProfile();
@@ -14,7 +14,7 @@ export default function ProfileBanner({ className }: { className?: string }) {
   ) : (
     <div
       className={cn(
-        "absolute left-0 right-0 top-[24%] z-20 m-7 rounded-2xl border border-input/40 bg-background/10 p-4 backdrop-blur-md",
+        'absolute left-0 right-0 top-[24%] z-20 m-7 rounded-2xl border border-input/40 bg-background/10 p-4 backdrop-blur-md',
         className,
       )}
     >
@@ -37,7 +37,7 @@ export default function ProfileBanner({ className }: { className?: string }) {
               {/* {merchant}{" "} */}
               <Chip
                 className="ml-2 text-sm text-green-500 font-bold"
-                color={"success"}
+                color={'success'}
                 variant="flat"
               >
                 <strong>{user?.role}</strong>
@@ -54,7 +54,7 @@ function ProfileBannerLoader({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "absolute left-0 right-0 top-[24%] z-20 m-7 rounded-2xl border border-input/40 bg-background/10 p-4 backdrop-blur-md",
+        'absolute left-0 right-0 top-[24%] z-20 m-7 rounded-2xl border border-input/40 bg-background/10 p-4 backdrop-blur-md',
         className,
       )}
     >

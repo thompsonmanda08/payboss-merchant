@@ -1,42 +1,42 @@
-import React from "react";
-import { UserPlus, CreditCard, TrendingUp, Shield } from "lucide-react";
+import { UserPlus, CreditCard, TrendingUp, Shield } from 'lucide-react';
+import React from 'react';
 
 const steps = [
   {
     icon: UserPlus,
-    title: "Sign Up in Minutes",
+    title: 'Sign Up in Minutes',
     description:
-      "Create your account with just your phone number. No paperwork, no waiting – get started immediately.",
-    step: "01",
+      'Create your account with just your phone number. No paperwork, no waiting – get started immediately.',
+    step: '01',
   },
   {
     icon: CreditCard,
-    title: "Get Your Card",
+    title: 'Get Your Card',
     description:
-      "Receive your virtual card instantly and physical card within 2 business days. Start spending right away.",
-    step: "02",
+      'Receive your virtual card instantly and physical card within 2 business days. Start spending right away.',
+    step: '02',
   },
   {
     icon: TrendingUp,
-    title: "Start Investing",
+    title: 'Start Investing',
     description:
-      "Set up automated investments with as little as $1. Our AI helps optimize your portfolio for maximum returns.",
-    step: "03",
+      'Set up automated investments with as little as $1. Our AI helps optimize your portfolio for maximum returns.',
+    step: '03',
   },
   {
     icon: Shield,
-    title: "Stay Protected",
+    title: 'Stay Protected',
     description:
-      "Enjoy peace of mind with real-time fraud monitoring, instant notifications, and comprehensive insurance.",
-    step: "04",
+      'Enjoy peace of mind with real-time fraud monitoring, instant notifications, and comprehensive insurance.',
+    step: '04',
   },
 ];
 
 export default function HowItWorks() {
   return (
     <section
-      id="how-it-works"
       className="py-20 bg-gradient-to-br from-gray-50 to-blue-50"
+      id="how-it-works"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-4 mb-16">
@@ -73,7 +73,7 @@ export default function HowItWorks() {
 
               {index < steps.length - 1 && (
                 <div className="hidden lg:block absolute top-1/2 -right-2 w-4 h-4 bg-blue-500 rounded-full transform -translate-y-1/2 z-10">
-                  <div className="absolute top-1/2 left-full w-8 h-0.5 bg-blue-500 transform -translate-y-1/2"></div>
+                  <div className="absolute top-1/2 left-full w-8 h-0.5 bg-blue-500 transform -translate-y-1/2" />
                 </div>
               )}
             </div>

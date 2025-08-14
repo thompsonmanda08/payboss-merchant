@@ -1,6 +1,7 @@
-import { Card, CardBody, CardHeader, Chip } from "@heroui/react";
-import React from "react";
-import Logo from "./payboss-logo";
+import { Card, CardBody, CardHeader, Chip } from '@heroui/react';
+import React from 'react';
+
+import Logo from './payboss-logo';
 
 function BankCard({ formData }: { formData: any }) {
   return (
@@ -14,7 +15,7 @@ function BankCard({ formData }: { formData: any }) {
         <Chip
           className="bg-gradient-to-r  from-orange-400 via-orange-300 to-orange-400 "
           classNames={{
-            content: "text-black font-bold",
+            content: 'text-black font-bold',
           }}
           color="warning"
           variant="solid"
@@ -35,7 +36,7 @@ function BankCard({ formData }: { formData: any }) {
             <p>
               {formData?.firstName || formData?.lastName
                 ? `${formData?.firstName} ${formData?.lastName}`
-                : "Full Name"}
+                : 'Full Name'}
             </p>
           </div>
           <div>

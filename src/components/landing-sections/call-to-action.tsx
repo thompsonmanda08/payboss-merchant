@@ -1,9 +1,9 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { Button } from "@/components/ui/button";
-import { BGS_SUPER_MERCHANT_ID } from "@/lib/constants";
+import { Button } from '@/components/ui/button';
+import { BGS_SUPER_MERCHANT_ID } from '@/lib/constants';
 
 export function CallToAction() {
   return (
@@ -16,7 +16,7 @@ export function CallToAction() {
         alt="background image"
         className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 opacity-50"
         height={1244}
-        src={"/images/background-call-to-action.jpg"}
+        src={'/images/background-call-to-action.jpg'}
         width={2347}
       />
       <div className="relative container">
@@ -32,7 +32,7 @@ export function CallToAction() {
             as={Link}
             className="mt-10 bg-white text-primary"
             href={`/register/${BGS_SUPER_MERCHANT_ID}`}
-            size={"lg"}
+            size={'lg'}
           >
             Get Started Now
           </Button>

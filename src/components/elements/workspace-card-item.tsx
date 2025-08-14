@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { ArrowRightIcon, BriefcaseIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
+import { ArrowRightIcon, BriefcaseIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
-import { cn } from "@/lib/utils";
-import SoftBoxIcon from "@/components/base/soft-box-icon";
-import { Button } from "@/components/ui/button";
+import SoftBoxIcon from '@/components/base/soft-box-icon';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 function WorkspaceItem({
   name,
@@ -24,9 +24,9 @@ function WorkspaceItem({
     <Button
       as={Link}
       className={cn(
-        "flex h-auto w-full justify-start gap-4 border-[1px] dark:border-primary/5 border-primary-100 bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100 dark:bg-primary-400/5 dark:hover:border-primary-300 dark:hover:bg-primary-300/5",
+        'flex h-auto w-full justify-start gap-4 border-[1px] dark:border-primary/5 border-primary-100 bg-transparent p-2 opacity-100 hover:border-primary-200 hover:bg-primary-100 dark:bg-primary-400/5 dark:hover:border-primary-300 dark:hover:bg-primary-300/5',
         {
-          "opacity-50 hover:opacity-90": !isVisible,
+          'opacity-50 hover:opacity-90': !isVisible,
         },
       )}
       endContent={
@@ -34,7 +34,7 @@ function WorkspaceItem({
       }
       href={href}
       startContent={
-        <SoftBoxIcon className={"w-18 h-20"}>
+        <SoftBoxIcon className={'w-18 h-20'}>
           <BriefcaseIcon />
         </SoftBoxIcon>
       }

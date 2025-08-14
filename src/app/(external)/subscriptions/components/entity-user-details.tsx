@@ -1,8 +1,3 @@
-import { Button } from "@/components/ui/button";
-import AutoCompleteField from "@/components/base/auto-complete";
-import { School, User } from "lucide-react";
-import { Input } from "@/components/ui/input-field";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   addToast,
   Alert,
@@ -15,14 +10,20 @@ import {
   Link,
   Radio,
   RadioGroup,
-} from "@heroui/react";
-import React, { Dispatch, SetStateAction, useCallback } from "react";
-import EmptyLogs from "@/components/base/empty-logs";
-import { validateSubscriptionMember } from "@/app/_actions/subscription-actions";
+} from '@heroui/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { School, User } from 'lucide-react';
+import React, { Dispatch, SetStateAction, useCallback } from 'react';
+
+import { validateSubscriptionMember } from '@/app/_actions/subscription-actions';
+import AutoCompleteField from '@/components/base/auto-complete';
+import EmptyLogs from '@/components/base/empty-logs';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input-field';
 import {
   containerVariants,
   staggerContainerItemVariants,
-} from "@/lib/constants";
+} from '@/lib/constants';
 export default function EntityUserDetails({
   formData,
   updateFormData,
@@ -38,8 +39,8 @@ export default function EntityUserDetails({
   handleNextStep: any;
   institutions: any;
 }) {
-  const [selected, setSelected] = React.useState("EXISTING");
-  const [responseError, setResponseError] = React.useState("");
+  const [selected, setSelected] = React.useState('EXISTING');
+  const [responseError, setResponseError] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
 
   const existingUserFound = formData?.member_details?.member_id;
@@ -55,9 +56,12 @@ export default function EntityUserDetails({
     setErrors((prev: any) => {
       if (prev.institution) {
         const newErrors = { ...prev };
+
         delete newErrors.institution;
+
         return newErrors;
       }
+
       return prev;
     });
   };
@@ -70,9 +74,9 @@ export default function EntityUserDetails({
   function createNewPayment() {
     const newErrors = {} as any;
 
-    if (!formData.institution) newErrors.institution = "Please select a school";
-    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
-    if (!formData.user_id.trim()) newErrors.user_id = "Valid ID is required";
+    if (!formData.institution) newErrors.institution = 'Please select a school';
+    if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
+    if (!formData.user_id.trim()) newErrors.user_id = 'Valid ID is required';
 
     setErrors(newErrors);
 
@@ -85,8 +89,8 @@ export default function EntityUserDetails({
   async function validateExistingUser() {
     const newErrors = {} as any;
 
-    if (!formData.institution) newErrors.institution = "Please select a school";
-    if (!formData.user_id.trim()) newErrors.user_id = "Valid ID is required";
+    if (!formData.institution) newErrors.institution = 'Please select a school';
+    if (!formData.user_id.trim()) newErrors.user_id = 'Valid ID is required';
     setErrors(newErrors);
 
     /* IF ERROR EXIST RETURN */
@@ -99,17 +103,17 @@ export default function EntityUserDetails({
 
     if (response?.success) {
       addToast({
-        title: "Success",
-        description: "Member validation completed",
-        color: "success",
+        title: 'Success',
+        description: 'Member validation completed',
+        color: 'success',
       });
 
       updateFormData({ ...response.data });
     } else {
       addToast({
-        title: "Error",
+        title: 'Error',
         description: response.message,
-        color: "danger",
+        color: 'danger',
       });
       setResponseError(response.message);
     }
@@ -129,13 +133,13 @@ export default function EntityUserDetails({
         {/* School Selection */}
         <div className="grid gap-6 mb-2">
           <AutoCompleteField
-            label={"Select an Institution/Organization"}
-            options={institutions}
-            listItemName={"name"}
-            value={formData.institution?.id || ""}
-            onChange={handleSelectInstitution}
-            isInvalid={errors.institution}
             errorText={errors.institution}
+            isInvalid={errors.institution}
+            label={'Select an Institution/Organization'}
+            listItemName={'name'}
+            options={institutions}
+            value={formData.institution?.id || ''}
+            onChange={handleSelectInstitution}
           />
 
           {formData.institution?.name && (
@@ -172,49 +176,49 @@ export default function EntityUserDetails({
             <AnimatePresence mode="wait">
               <motion.div
                 key={selected}
-                animate={"show"}
-                exit={"exit"}
-                initial={"hidden"}
+                animate={'show'}
+                className="grid gap-4"
+                exit={'exit'}
+                initial={'hidden'}
                 transition={{ duration: 0.3 }}
                 variants={containerVariants}
-                className="grid gap-4"
               >
-                {selected === "NEW" && formData.institution?.name ? (
+                {selected === 'NEW' && formData.institution?.name ? (
                   <motion.div
-                    variants={staggerContainerItemVariants}
                     className="space-y-2"
+                    variants={staggerContainerItemVariants}
                   >
                     <Input
+                      errorText={errors.fullName}
                       id="fullName"
+                      isInvalid={errors.fullName}
                       label="Full Names"
                       placeholder="Enter your full names"
                       type="text"
-                      isInvalid={errors.fullName}
-                      errorText={errors.fullName}
                       value={formData.fullName}
                       onChange={(e) =>
                         updateFormData({ fullName: e.target.value })
                       }
                     />
                     <Input
+                      errorText={errors.user_id}
                       id="user_id"
+                      isInvalid={errors.user_id}
                       label="Registration/ National ID"
                       placeholder="Enter your Registration/NRC/Passport number"
                       type="text"
-                      isInvalid={errors.user_id}
-                      errorText={errors.user_id}
                       value={formData.user_id}
                       onChange={(e) =>
                         updateFormData({ user_id: e.target.value })
                       }
                     />
                     <div className="flex justify-end pt-4">
-                      <Button className={"w-full"} onClick={createNewPayment}>
+                      <Button className={'w-full'} onClick={createNewPayment}>
                         Next
                       </Button>
                     </div>
                   </motion.div>
-                ) : selected === "EXISTING" && formData.institution?.name ? (
+                ) : selected === 'EXISTING' && formData.institution?.name ? (
                   <motion.div
                     className="flex flex-col gap-4"
                     variants={staggerContainerItemVariants}
@@ -225,13 +229,13 @@ export default function EntityUserDetails({
                           <CardHeader className="flex gap-2">
                             <Image
                               alt="Logo"
+                              className="aspect-square w-20 object-cover"
                               height={40}
                               radius="sm"
                               src={
                                 formData?.institution?.logo ||
-                                "/images/logos/logo-icon.svg"
+                                '/images/logos/logo-icon.svg'
                               }
-                              className="aspect-square w-20 object-cover"
                               width={40}
                             />
                             <div className="flex flex-col">
@@ -246,20 +250,20 @@ export default function EntityUserDetails({
                           <Divider />
                           <CardBody>
                             <p className="text-xs">
-                              You are a registered member at{" "}
+                              You are a registered member at{' '}
                               {formData?.institution?.name}
                             </p>
                           </CardBody>
                           <Divider />
                           <CardFooter>
                             <Link
-                              className="text-md"
                               isExternal
                               showAnchorIcon
+                              className="text-md"
                               href={
                                 formData?.institution?.website ||
                                 formData?.institution?.redirect_url ||
-                                "#"
+                                '#'
                               }
                               target="_blank"
                             >
@@ -268,7 +272,7 @@ export default function EntityUserDetails({
                           </CardFooter>
                         </Card>
                         <div className="flex justify-end">
-                          <Button className={"w-full"} onClick={handleNextStep}>
+                          <Button className={'w-full'} onClick={handleNextStep}>
                             Next
                           </Button>
                         </div>
@@ -277,12 +281,12 @@ export default function EntityUserDetails({
                       /* USER: ENTERS THEIR ID NUMBER ==> TO BE VALIDATED AND LOOKED UP */
                       <>
                         <Input
+                          errorText={errors.user_id}
                           id="user_id"
+                          isInvalid={errors.user_id}
                           label="Registration/ National ID"
                           placeholder="Enter your Registration/NRC/Passport number"
                           type="text"
-                          isInvalid={errors.user_id}
-                          errorText={errors.user_id}
                           value={formData.user_id}
                           onChange={(e) =>
                             updateFormData({ user_id: e.target.value })
@@ -293,9 +297,9 @@ export default function EntityUserDetails({
                         )}
                         <div className="flex justify-end">
                           <Button
-                            className={"w-full"}
-                            isLoading={isLoading}
+                            className={'w-full'}
                             isDisabled={!formData.user_id || isLoading}
+                            isLoading={isLoading}
                             onClick={validateExistingUser}
                           >
                             Validate
@@ -307,24 +311,24 @@ export default function EntityUserDetails({
                 ) : (
                   /* NO SCHOOL HAS BEEN SELECTED */
                   <motion.div
+                    className="flex flex-col gap-4"
                     whileInView={{
                       opacity: [0, 1],
                       y: [-20, 0],
                       transition: {
-                        type: "spring",
+                        type: 'spring',
                         stiffness: 200,
                         damping: 20,
                         duration: 0.3,
                       },
                     }}
-                    className="flex flex-col gap-4"
                   >
                     <EmptyLogs
-                      className={"my-auto"}
+                      className={'my-auto'}
                       subTitle={
-                        "You have not selected an entity/institution to make payments for."
+                        'You have not selected an entity/institution to make payments for.'
                       }
-                      title={"Choose an entity"}
+                      title={'Choose an entity'}
                     />
                   </motion.div>
                 )}

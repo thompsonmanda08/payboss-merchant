@@ -1,6 +1,6 @@
-import { formatDistance } from "date-fns";
+import { formatDistance } from 'date-fns';
 
-import { TASK_ICON_BG_COLOR_MAP, TASK_TYPE } from "@/lib/constants";
+import { TASK_ICON_BG_COLOR_MAP, TASK_TYPE } from '@/lib/constants';
 
 export type ActivityLogItem = {
   name: string;
@@ -25,7 +25,7 @@ const sampleActivityLogs: ActivityLogGroup[] = [];
 
 const activityLogStore: { activityLogs: ActivityLogGroup[] } = {
   activityLogs:
-    typeof (globalThis as any).sampleActivityLogs !== "undefined"
+    typeof (globalThis as any).sampleActivityLogs !== 'undefined'
       ? (globalThis as any).sampleActivityLogs
       : sampleActivityLogs,
 };
@@ -106,14 +106,14 @@ export function formatActivityData(
   activityLog: any,
   isNotReverse = true,
 ): ActivityLogGroup[] {
-  let groupedData: { [x: string]: any } = {};
+  const groupedData: { [x: string]: any } = {};
 
   activityLog?.forEach((activity: { title: string; data: any[] }) => {
     activity.data?.forEach((item: any) => {
-      const created_at = new Date(item.created_at).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+      const created_at = new Date(item.created_at).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       });
 
       if (!groupedData[created_at]) {

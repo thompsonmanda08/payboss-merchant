@@ -1,7 +1,7 @@
-"use client";
-import OverlayLoader from "@/components/ui/overlay-loader";
+'use client';
+import OverlayLoader from '@/components/ui/overlay-loader';
 
-export default function LoadingPage({ loadingText = "Please wait" }) {
+export default function LoadingPage({ loadingText = 'Please wait' }) {
   return (
     <OverlayLoader
       description="Please be patient while we prepare your session"

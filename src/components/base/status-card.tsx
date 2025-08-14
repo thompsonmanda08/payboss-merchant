@@ -1,8 +1,8 @@
-import { Chip, CircularProgress, Tooltip } from "@heroui/react";
+import { Chip, CircularProgress, Tooltip } from '@heroui/react';
 
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from '@/lib/utils';
 
-import Card from "./custom-card";
+import Card from './custom-card';
 
 type StatusCardProps = {
   totalTitle: string;
@@ -40,7 +40,7 @@ function StatusCard({
   viewInvalidRecords,
   tooltipText,
   Icon,
-  IconColor = "#4c5cf7",
+  IconColor = '#4c5cf7',
   totalAmount,
   validAmount,
   invalidAmount,
@@ -60,11 +60,11 @@ function StatusCard({
             </p>
             <CircularProgress
               classNames={{
-                base: "cursor-pointer",
-                svg: "w-36 h-36 drop-shadow-md ",
-                indicator: "stroke-primary",
-                track: "stroke-primary/10",
-                value: "text-2xl font-semibold text-primary",
+                base: 'cursor-pointer',
+                svg: 'w-36 h-36 drop-shadow-md ',
+                indicator: 'stroke-primary',
+                track: 'stroke-primary/10',
+                value: 'text-2xl font-semibold text-primary',
               }}
               showValueLabel={true}
               strokeWidth={4}
@@ -85,8 +85,8 @@ function StatusCard({
             >
               <Chip
                 classNames={{
-                  base: "border-1 border-primary/30 mt-4 cursor-pointer",
-                  content: "text-primary text-small font-semibold",
+                  base: 'border-1 border-primary/30 mt-4 cursor-pointer',
+                  content: 'text-primary text-small font-semibold',
                 }}
                 variant="bordered"
                 onClick={viewAllRecords}
@@ -104,11 +104,11 @@ function StatusCard({
 
             <CircularProgress
               classNames={{
-                base: "cursor-pointer",
-                svg: "w-36 h-36 drop-shadow-md ",
-                indicator: "stroke-green-500",
-                track: "stroke-green-500/10",
-                value: "text-2xl font-semibold text-green-500",
+                base: 'cursor-pointer',
+                svg: 'w-36 h-36 drop-shadow-md ',
+                indicator: 'stroke-green-500',
+                track: 'stroke-green-500/10',
+                value: 'text-2xl font-semibold text-green-500',
               }}
               showValueLabel={true}
               strokeWidth={4}
@@ -129,8 +129,8 @@ function StatusCard({
             >
               <Chip
                 classNames={{
-                  base: "border-1 border-green-500/30 mt-4 cursor-pointer",
-                  content: "text-green-500 text-small font-semibold",
+                  base: 'border-1 border-green-500/30 mt-4 cursor-pointer',
+                  content: 'text-green-500 text-small font-semibold',
                 }}
                 variant="bordered"
                 onClick={viewValidRecords}
@@ -148,11 +148,11 @@ function StatusCard({
 
             <CircularProgress
               classNames={{
-                base: "cursor-pointer",
-                svg: "w-36 h-36 drop-shadow-md ",
-                indicator: "stroke-red-500",
-                track: "stroke-red-500/10",
-                value: "text-2xl font-semibold text-red-500",
+                base: 'cursor-pointer',
+                svg: 'w-36 h-36 drop-shadow-md ',
+                indicator: 'stroke-red-500',
+                track: 'stroke-red-500/10',
+                value: 'text-2xl font-semibold text-red-500',
               }}
               showValueLabel={true}
               strokeWidth={4}
@@ -173,8 +173,8 @@ function StatusCard({
             >
               <Chip
                 classNames={{
-                  base: "border-1 border-red-500/30 mt-4 cursor-pointer",
-                  content: "text-red-500 text-small font-semibold",
+                  base: 'border-1 border-red-500/30 mt-4 cursor-pointer',
+                  content: 'text-red-500 text-small font-semibold',
                 }}
                 variant="bordered"
                 onClick={viewInvalidRecords}
@@ -188,8 +188,8 @@ function StatusCard({
         <div className="mt-2 flex w-full items-center justify-center">
           <Chip
             classNames={{
-              base: "p-2 py-4 cursor-pointer",
-              content: "text-green-500 text-base font-bold",
+              base: 'p-2 py-4 cursor-pointer',
+              content: 'text-green-500 text-base font-bold',
             }}
             color="success"
             variant="flat"
@@ -204,16 +204,16 @@ function StatusCard({
             <Tooltip
               classNames={{
                 content:
-                  "text-nowrap bg-primary/10 font-medium text-primary-600",
+                  'text-nowrap bg-primary/10 font-medium text-primary-600',
               }}
               color="primary"
-              content={tooltipText || ""}
+              content={tooltipText || ''}
               placement="left"
             >
               <Icon
                 // color={IconColor}
                 className={cn(
-                  "my-auto ml-4 aspect-square h-6 w-6",
+                  'my-auto ml-4 aspect-square h-6 w-6',
                   `text-${IconColor}`,
                 )}
               />

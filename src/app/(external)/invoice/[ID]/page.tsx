@@ -1,9 +1,9 @@
-import { ErrorCard } from "@/components/base/error-card";
-import { capitalize } from "@/lib/utils";
-import { getInvoiceDetails } from "@/app/_actions/vas-actions";
+import { getInvoiceDetails } from '@/app/_actions/vas-actions';
+import { ErrorCard } from '@/components/base/error-card';
+import { capitalize } from '@/lib/utils';
+import { PageProps } from '@/types';
 
-import Invoice from "../../_components/invoice";
-import { PageProps } from "@/types";
+import Invoice from '../../_components/invoice';
 
 async function InvoicePage(props: PageProps) {
   const params = await props.params;
@@ -15,15 +15,15 @@ async function InvoicePage(props: PageProps) {
     return (
       <>
         <ErrorCard
-          className={"max-h-fit m-auto"}
+          className={'max-h-fit m-auto'}
           goBack={true}
           message={
             !response?.data?.invoice_id
-              ? "Could not find invoice with the provided ID"
+              ? 'Could not find invoice with the provided ID'
               : capitalize(response?.message)
           }
           status={String(response?.status)}
-          title={!response?.data?.invoice_id ? "Invoice not found" : "Error"}
+          title={!response?.data?.invoice_id ? 'Invoice not found' : 'Error'}
         />
       </>
     );
@@ -39,7 +39,7 @@ async function InvoicePage(props: PageProps) {
       address: response?.data?.from?.physical_address,
       logo: response?.data?.from?.logo,
       city: response?.data?.from?.city,
-      email: "",
+      email: '',
     },
     billedTo: {
       name: response?.data?.customer_name,
@@ -50,8 +50,8 @@ async function InvoicePage(props: PageProps) {
     },
     items: response?.data?.items?.map((item: any) => ({
       description: item?.description,
-      quantity: parseInt(String(item?.quantity || "0")),
-      price: parseFloat(String(item?.unit_price || "0")),
+      quantity: parseInt(String(item?.quantity || '0')),
+      price: parseFloat(String(item?.unit_price || '0')),
       amount: parseFloat(
         String(
           parseInt(String(item?.quantity || 0)) *
@@ -59,17 +59,17 @@ async function InvoicePage(props: PageProps) {
         ),
       ),
     })),
-    taxRate: parseFloat(String(response?.data?.tax_rate || "0")),
-    tax: parseFloat(String(response?.data?.tax || "0")),
-    paidAmount: parseFloat(String(response?.data?.paid_amount || "0")),
-    dueAmount: parseFloat(String(response?.data?.balance || "0")),
-    total: parseFloat(String(response?.data?.total || "0")),
+    taxRate: parseFloat(String(response?.data?.tax_rate || '0')),
+    tax: parseFloat(String(response?.data?.tax || '0')),
+    paidAmount: parseFloat(String(response?.data?.paid_amount || '0')),
+    dueAmount: parseFloat(String(response?.data?.balance || '0')),
+    total: parseFloat(String(response?.data?.total || '0')),
     checkoutUrl: response?.data?.checkout_link,
     status: response?.data?.status,
     note:
       response?.data?.description ||
       response?.data?.notes ||
-      "Thank you for doing business with us!",
+      'Thank you for doing business with us!',
   };
 
   return (

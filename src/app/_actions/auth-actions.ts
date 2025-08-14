@@ -1,26 +1,24 @@
-"use server";
+'use server';
 import authenticatedApiClient, {
   handleBadRequest,
   handleError,
   successResponse,
-} from "@/lib/api-config";
+} from '@/lib/api-config';
 import {
   createAuthSession,
   getUserSession,
   updateAuthSession,
   verifySession,
-} from "@/lib/session";
-import { apiClient } from "@/lib/utils";
-
-import { revokeAccessToken } from "./config-actions";
+} from '@/lib/session';
+import { apiClient } from '@/lib/utils';
+import { APIResponse } from '@/types';
 import {
   AccountOwner,
   BankAccountDetails,
   BusinessDetails,
   DocumentUrls,
   LoginPayload,
-} from "@/types/account";
-import { APIResponse } from "@/types";
+} from '@/types/account';
 
 /**
  * Authenticates a user with their email and password by calling the API endpoint
@@ -48,7 +46,7 @@ export async function authenticateUser(
 
     return successResponse({ accessToken }, res.data?.message);
   } catch (error: Error | any) {
-    return handleError(error, "POST | LOGIN", url);
+    return handleError(error, 'POST | LOGIN', url);
   }
 }
 
@@ -67,7 +65,7 @@ export async function validateTPIN(tpin: string): Promise<APIResponse> {
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | VALIDATE TPIN", url);
+    return handleError(error, 'GET | VALIDATE TPIN', url);
   }
 }
 
@@ -89,7 +87,7 @@ export async function createNewMerchant(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "POST | CREATE MERCHANT", url);
+    return handleError(error, 'POST | CREATE MERCHANT', url);
   }
 }
 
@@ -107,7 +105,7 @@ export async function submitMerchantBankDetails(
   merchantID: string,
 ): Promise<APIResponse> {
   if (!merchantID) {
-    return handleBadRequest("Merchant ID is required");
+    return handleBadRequest('Merchant ID is required');
   }
 
   const url = `merchant/onboard/bank-details/${merchantID}`;
@@ -117,7 +115,7 @@ export async function submitMerchantBankDetails(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "POST | SUBMIT BANK DETAILS", url);
+    return handleError(error, 'POST | SUBMIT BANK DETAILS', url);
   }
 }
 
@@ -135,7 +133,7 @@ export async function updateMerchantDetails(
   merchantID: string,
 ): Promise<APIResponse> {
   if (!merchantID) {
-    return handleBadRequest("Merchant ID is required");
+    return handleBadRequest('Merchant ID is required');
   }
 
   const url = `kyc/merchant/${merchantID}`;
@@ -145,7 +143,7 @@ export async function updateMerchantDetails(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "PATCH | UPDATE MERCHANT DETAILS", url);
+    return handleError(error, 'PATCH | UPDATE MERCHANT DETAILS', url);
   }
 }
 
@@ -175,7 +173,7 @@ export async function createMerchantAdminUser(
   merchantID: string,
 ): Promise<APIResponse> {
   if (!merchantID) {
-    return handleBadRequest("Merchant ID is required");
+    return handleBadRequest('Merchant ID is required');
   }
 
   const url = `merchant/${merchantID}/user/owner`;
@@ -185,7 +183,7 @@ export async function createMerchantAdminUser(
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "POST | CREATE ADMIN USER", url);
+    return handleError(error, 'POST | CREATE ADMIN USER', url);
   }
 }
 
@@ -201,7 +199,7 @@ export async function getBusinessDocumentRefs(): Promise<APIResponse> {
   const merchantID = session?.user?.merchantID;
 
   if (!merchantID) {
-    return handleBadRequest("Merchant ID is required");
+    return handleBadRequest('Merchant ID is required');
   }
 
   const url = `merchant/${merchantID}/submitted/document/details`;
@@ -211,7 +209,7 @@ export async function getBusinessDocumentRefs(): Promise<APIResponse> {
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "GET | DOCUMENT REFERENCES", url);
+    return handleError(error, 'GET | DOCUMENT REFERENCES', url);
   }
 }
 
@@ -230,7 +228,7 @@ export async function sendBusinessDocumentRefs(
   const merchantID = session?.merchantID;
 
   if (!merchantID) {
-    return handleBadRequest("Merchant ID is required");
+    return handleBadRequest('Merchant ID is required');
   }
 
   const url = `merchant/${merchantID}/document/submission`;
@@ -238,13 +236,13 @@ export async function sendBusinessDocumentRefs(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "POST",
+      method: 'POST',
       data: payloadUrls,
     });
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "POST | DOCUMENT REFERENCES", url);
+    return handleError(error, 'POST | DOCUMENT REFERENCES', url);
   }
 }
 
@@ -263,7 +261,7 @@ export async function deleteBusinessDocumentRefs(
   const merchantID = session?.user?.merchantID;
 
   if (!merchantID) {
-    return handleBadRequest("Merchant ID is required");
+    return handleBadRequest('Merchant ID is required');
   }
 
   const url = `merchant/${merchantID}/documents/for/resubmission`;
@@ -271,13 +269,13 @@ export async function deleteBusinessDocumentRefs(
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "PATCH",
+      method: 'PATCH',
       data: { document_names: [...keys] },
     });
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "PATCH/DELETE | DOCUMENT REFERENCES", url);
+    return handleError(error, 'PATCH/DELETE | DOCUMENT REFERENCES', url);
   }
 }
 
@@ -296,20 +294,20 @@ export async function updateBusinessDocumentRefs(
   const merchantID = session?.user?.merchantID;
 
   if (!merchantID) {
-    return handleBadRequest("Merchant ID is required");
+    return handleBadRequest('Merchant ID is required');
   }
   const url = `merchant/${merchantID}/document/submission`;
 
   try {
     const res = await authenticatedApiClient({
       url,
-      method: "PATCH",
+      method: 'PATCH',
       data: payloadUrls,
     });
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "PATCH | DOCUMENT REFERENCES", url);
+    return handleError(error, 'PATCH | DOCUMENT REFERENCES', url);
   }
 }
 
@@ -340,7 +338,7 @@ export async function getRefreshToken(): Promise<APIResponse> {
 
     return successResponse({ accessToken }, res.data?.message);
   } catch (error: Error | any) {
-    return handleError(error, "POST | REFRESH TOKEN", url);
+    return handleError(error, 'POST | REFRESH TOKEN', url);
   }
 }
 
@@ -355,7 +353,7 @@ export async function submitKYCForReview() {
 
     return successResponse(res.data);
   } catch (error: Error | any) {
-    return handleError(error, "POST | SUBMIT FOR REVIEW", url);
+    return handleError(error, 'POST | SUBMIT FOR REVIEW', url);
   }
 }
 

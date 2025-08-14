@@ -1,27 +1,28 @@
-"use client";
-import React from "react";
-import { User, Mail, Phone, Edit, Briefcase } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
-import { capitalize, cn } from "@/lib/utils";
-import useKYCInfo from "@/hooks/use-kyc-info";
-import { useWorkspaceInit } from "@/hooks/use-query-data";
-import { useParams } from "next/navigation";
-import { User as UserType } from "@/types/account";
+'use client';
+import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
+import { User, Mail, Phone, Edit, Briefcase } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import React from 'react';
+
+import { Button } from '@/components/ui/button';
+import useKYCInfo from '@/hooks/use-kyc-info';
+import { useWorkspaceInit } from '@/hooks/use-query-data';
+import { capitalize, cn } from '@/lib/utils';
+import { User as UserType } from '@/types/account';
 
 export default function UserProfile({
   showBusinessDetails = false,
   onEditProfile,
   user = {
-    first_name: "Pay",
-    last_name: "Boss",
-    email: "info@bgspayboss.com",
-    phone: "+260 977 777 777",
+    first_name: 'Pay',
+    last_name: 'Boss',
+    email: 'info@bgspayboss.com',
+    phone: '+260 977 777 777',
     profile_image: undefined,
-    role: "Member",
+    role: 'Member',
   },
   classNames = {
-    card: "",
+    card: '',
   },
 }: {
   showBusinessDetails?: boolean;
@@ -44,7 +45,7 @@ export default function UserProfile({
   return (
     <Card
       className={cn(
-        "max-w-[360px] mx-auto flex-1 overflow-hidden border-none outline-none shadow",
+        'max-w-[360px] mx-auto flex-1 overflow-hidden border-none outline-none shadow',
         classNames?.card,
       )}
     >
@@ -53,10 +54,10 @@ export default function UserProfile({
         {/* Edit Profile Button */}
         {onEditProfile && (
           <Button
-            size={"lg"}
             isIconOnly
-            variant="faded"
             className="gap-2 absolute right-4 top-4 bg-white/10 backdrop-blur-sm border-none outline-none "
+            size={'lg'}
+            variant="faded"
             onClick={onEditProfile}
           >
             <Edit className="w-5 h-5 text-white" />
@@ -68,16 +69,16 @@ export default function UserProfile({
             <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border-4 border-white/30">
               {user.profile_image ? (
                 <img
-                  src={user.profile_image}
                   alt={`${user.first_name} ${user.last_name}`}
                   className="w-full h-full rounded-full object-cover"
+                  src={user.profile_image}
                 />
               ) : (
                 <User className="w-12 h-12 text-white" />
               )}
             </div>
             {/* Online status indicator */}
-            <div className="absolute bottom-1 right-1 w-6 h-6 bg-emerald-400 rounded-full border-3 border-white"></div>
+            <div className="absolute bottom-1 right-1 w-6 h-6 bg-emerald-400 rounded-full border-3 border-white" />
           </div>
 
           {/* User Name */}
@@ -127,7 +128,7 @@ export default function UserProfile({
       </CardBody>
       <CardFooter className="pt-0">
         {onEditProfile && (
-          <Button size={"lg"} className="w-full gap-2" onClick={onEditProfile}>
+          <Button className="w-full gap-2" size={'lg'} onClick={onEditProfile}>
             <Edit className="w-4 h-4" />
             <span>Edit Profile</span>
           </Button>

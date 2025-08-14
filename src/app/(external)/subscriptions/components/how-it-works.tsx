@@ -1,7 +1,8 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight } from 'lucide-react';
+import React from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 const HowItWorksSection = ({
   navigateTo,
@@ -17,7 +18,7 @@ const HowItWorksSection = ({
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900">
               Pay
             </h1>
-            <div className="w-6 h-6 bg-primary-400 rotate-45 rounded-sm"></div>
+            <div className="w-6 h-6 bg-primary-400 rotate-45 rounded-sm" />
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-2">
             smarter,
@@ -32,10 +33,10 @@ const HowItWorksSection = ({
           </p>
 
           <Button
-            size="lg"
-            onPress={() => navigateTo(1)}
             className="bg-primary-900 hover:bg-gray-800 text-white px-8 py-6 text-lg rounded-fll"
             endContent={<ArrowRight className="w-6 h-6" />}
+            size="lg"
+            onPress={() => navigateTo(1)}
           >
             Make Payment
           </Button>
@@ -45,7 +46,7 @@ const HowItWorksSection = ({
         <div className="relative flex-1 mx-auto">
           {/* Central gradient background */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-96 h-96 bg-gradient-to-br from-purple-400 via-blue-400 to-green-400 rounded-full opacity-80 blur-3xl"></div>
+            <div className="w-96 h-96 bg-gradient-to-br from-purple-400 via-blue-400 to-green-400 rounded-full opacity-80 blur-3xl" />
           </div>
 
           {/* Workflow cards */}
@@ -93,17 +94,17 @@ const HowItWorksSection = ({
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <div className="w-2 h-8 bg-green-400 rounded animate-pulse"></div>
-                  <div className="w-2 h-8 bg-green-400 rounded animate-pulse delay-150"></div>
-                  <div className="w-2 h-8 bg-blue-500 rounded animate-pulse delay-300"></div>
-                  <div className="w-2 h-8 bg-gray-300 rounded animate-pulse delay-450"></div>
+                  <div className="w-2 h-8 bg-green-400 rounded animate-pulse" />
+                  <div className="w-2 h-8 bg-green-400 rounded animate-pulse delay-150" />
+                  <div className="w-2 h-8 bg-blue-500 rounded animate-pulse delay-300" />
+                  <div className="w-2 h-8 bg-gray-300 rounded animate-pulse delay-450" />
                 </div>
               </div>
             </Card>
           </div>
 
           {/* Central circular flow */}
-          <div className="relative flex items-center justify-center mb-12"></div>
+          <div className="relative flex items-center justify-center mb-12" />
 
           {/* Bottom workflow cards */}
           {/* <div className="relative grid grid-cols-1 gap-8 max-w-2xl mx-auto">

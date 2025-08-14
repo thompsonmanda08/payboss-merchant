@@ -1,17 +1,15 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+'use client';
+import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 
-import { cn } from "@/lib/utils";
-
-import { Button } from "@/components/ui/button";
-
-import CardHeader from "@/components/base/card-header";
+import CardHeader from '@/components/base/card-header';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const modalVariants = {
-  hidden: { opacity: 0, y: "-50%", scale: 0.8 },
-  visible: { opacity: 1, y: "0%", scale: 1 },
-  exit: { opacity: 0, y: "-50%", scale: 0.8 },
+  hidden: { opacity: 0, y: '-50%', scale: 0.8 },
+  visible: { opacity: 1, y: '0%', scale: 1 },
+  exit: { opacity: 0, y: '-50%', scale: 0.8 },
 };
 
 const overlayVariants = {
@@ -58,7 +56,7 @@ function Modal({
     }
   }
 
-  const { overlay, base, card, container } = classNames || "";
+  const { overlay, base, card, container } = classNames || '';
 
   return (
     <AnimatePresence>
@@ -66,7 +64,7 @@ function Modal({
         <motion.div
           animate="visible"
           className={cn(
-            "absolute inset-0 z-50 flex h-screen w-full items-center justify-center backdrop-blur-sm bg-foreground-800/5",
+            'absolute inset-0 z-50 flex h-screen w-full items-center justify-center backdrop-blur-sm bg-foreground-800/5',
             overlay,
           )}
           exit="exit"
@@ -78,7 +76,7 @@ function Modal({
           <motion.div
             animate="visible"
             className={cn(
-              "z-50 flex w-full flex-col items-center justify-start gap-1 rounded-lg bg-[#ffffff] p-4",
+              'z-50 flex w-full flex-col items-center justify-start gap-1 rounded-lg bg-[#ffffff] p-4',
               className,
               base,
               card,
@@ -86,8 +84,8 @@ function Modal({
             exit="exit"
             initial="hidden"
             style={{
-              maxWidth: width ? `${width}px` : "380px",
-              minHeight: height ? `${height}px` : "180px",
+              maxWidth: width ? `${width}px` : '380px',
+              minHeight: height ? `${height}px` : '180px',
               // height: height ? `${height}px` : 'auto',
             }}
             transition={{ duration: 0.25 }}
@@ -102,7 +100,7 @@ function Modal({
             {/* MODAL CONTENT */}
             <div
               className={cn(
-                "mb-2 mt-5 flex h-full w-full flex-grow flex-col",
+                'mb-2 mt-5 flex h-full w-full flex-grow flex-col',
                 container,
               )}
               onClick={(e) => e.stopPropagation()}
@@ -112,7 +110,7 @@ function Modal({
             {!noCallToAction && (
               <div className="mt-auto flex w-full justify-end gap-3">
                 <Button className="" color="danger" onClick={handleClose}>
-                  {cancelText || "Cancel"}
+                  {cancelText || 'Cancel'}
                 </Button>
                 <Button
                   className=" px-6"
@@ -120,7 +118,7 @@ function Modal({
                   isLoading={loading}
                   onClick={onConfirm}
                 >
-                  {confirmText || "Done"}
+                  {confirmText || 'Done'}
                 </Button>
               </div>
             )}

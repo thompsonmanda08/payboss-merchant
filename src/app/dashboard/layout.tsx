@@ -1,15 +1,15 @@
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
+import { PropsWithChildren } from 'react';
 
-import SideNavBar from "@/components/elements/side-navbar";
-import TopNavBar from "@/components/elements/top-bar";
+import SideNavBar from '@/components/elements/side-navbar';
+import TopNavBar from '@/components/elements/top-bar';
 
-import { getAuthSession, getUserDetails } from "../_actions/config-actions";
-import { PropsWithChildren } from "react";
+import { getAuthSession, getUserDetails } from '../_actions/config-actions';
 
 export default async function DashboardLayout({ children }: PropsWithChildren) {
   const authSession = await getAuthSession();
 
-  if (!authSession?.accessToken) redirect("/login");
+  if (!authSession?.accessToken) redirect('/login');
 
   const [session] = await Promise.all([getUserDetails()]);
 

@@ -1,5 +1,5 @@
-"use client";
-import React, { Key } from "react";
+'use client';
+import { ComputerDesktopIcon, PlusIcon } from '@heroicons/react/24/outline';
 import {
   Table,
   TableHeader,
@@ -8,33 +8,33 @@ import {
   TableRow,
   TableCell,
   Pagination,
-} from "@heroui/react";
-import { ComputerDesktopIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { format } from "date-fns";
+} from '@heroui/react';
+import { format } from 'date-fns';
+import Link from 'next/link';
+import React, { Key } from 'react';
 
-import { TRANSACTION_STATUS_COLOR_MAP } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import usePaymentsStore from "@/context/payment-store";
-import Loader from "@/components/ui/loader";
-import Search from "@/components/ui/search";
-import { SingleSelectionDropdown } from "@/components/ui/dropdown-button";
-import SelectField from "@/components/ui/select-field";
-import { useBulkTransactions, useWorkspaceInit } from "@/hooks/use-query-data";
-import EmptyLogs from "@/components/base/empty-logs";
-import { BULK_TRANSACTIONS_COLUMN, ColumnType } from "@/lib/table-columns";
-import Link from "next/link";
+import EmptyLogs from '@/components/base/empty-logs';
+import { Button } from '@/components/ui/button';
+import { SingleSelectionDropdown } from '@/components/ui/dropdown-button';
+import Loader from '@/components/ui/loader';
+import Search from '@/components/ui/search';
+import SelectField from '@/components/ui/select-field';
+import usePaymentsStore from '@/context/payment-store';
+import { useBulkTransactions, useWorkspaceInit } from '@/hooks/use-query-data';
+import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants';
+import { BULK_TRANSACTIONS_COLUMN } from '@/lib/table-columns';
+import { cn } from '@/lib/utils';
 
 // DEFINE FILTERABLE SERVICES
 const SERVICE_FILTERS = [
   {
-    name: "direct bulk disbursement",
-    uid: "direct bulk disbursement",
+    name: 'direct bulk disbursement',
+    uid: 'direct bulk disbursement',
   },
 
   {
-    name: "voucher bulk disbursement",
-    uid: "voucher bulk disbursement",
+    name: 'voucher bulk disbursement',
+    uid: 'voucher bulk disbursement',
   },
 ];
 
@@ -59,20 +59,20 @@ export default function BulkTransactionsTable({
   // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
 
-  const [filterValue, setFilterValue] = React.useState("");
+  const [filterValue, setFilterValue] = React.useState('');
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<
-    Set<string> | "all"
+    Set<string> | 'all'
   >(new Set(INITIAL_VISIBLE_COLUMNS));
 
   const [serviceProtocolFilter, setServiceProtocolFilter] =
-    React.useState("all");
+    React.useState('all');
 
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "amount",
-    direction: "ascending",
+    column: 'amount',
+    direction: 'ascending',
   });
 
   const [page, setPage] = React.useState(1);
@@ -80,7 +80,7 @@ export default function BulkTransactionsTable({
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columns;
+    if (visibleColumns === 'all') return columns;
 
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid),
@@ -98,10 +98,10 @@ export default function BulkTransactionsTable({
       );
     }
     if (
-      serviceProtocolFilter !== "all" &&
+      serviceProtocolFilter !== 'all' &&
       Array.from(serviceProtocolFilter).length !== SERVICE_FILTERS.length
     ) {
-      let filters = Array.from(serviceProtocolFilter);
+      const filters = Array.from(serviceProtocolFilter);
 
       filteredRows = filteredRows.filter((row) =>
         filters.includes(row?.service),
@@ -126,7 +126,7 @@ export default function BulkTransactionsTable({
       const second = b[sortDescriptor.column];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      return sortDescriptor.direction === 'descending' ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
@@ -134,33 +134,37 @@ export default function BulkTransactionsTable({
     const cellValue = row[String(columnKey)];
 
     switch (columnKey) {
-      case "created_at":
+      case 'created_at':
         return (
-          <span className={cn("text-nowrap capitalize")}>
-            {format(cellValue, "dd-MMM-yyyy hh:mm:ss a")}
+          <span className={cn('text-nowrap capitalize')}>
+            {format(cellValue, 'dd-MMM-yyyy hh:mm:ss a')}
           </span>
         );
-      case "updated_at":
+
+      case 'updated_at':
         return (
-          <span className={cn("text-nowrap capitalize")}>
-            {format(cellValue, "dd-MMM-yyyy hh:mm:ss a")}
+          <span className={cn('text-nowrap capitalize')}>
+            {format(cellValue, 'dd-MMM-yyyy hh:mm:ss a')}
           </span>
         );
-      case "batch_name":
+
+      case 'batch_name':
         return (
-          <span className={cn("text-nowrap font-medium capitalize")}>
+          <span className={cn('text-nowrap font-medium capitalize')}>
             {cellValue}
           </span>
         );
-      case "service":
+
+      case 'service':
         return (
-          <span className={cn("text-nowrap capitalize")}>{cellValue}</span>
+          <span className={cn('text-nowrap capitalize')}>{cellValue}</span>
         );
-      case "status":
+
+      case 'status':
         return (
           <Button
             className={cn(
-              "h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white",
+              'h-max min-h-max cursor-pointer rounded-lg bg-gradient-to-tr px-4 py-1 font-medium capitalize text-white',
               TRANSACTION_STATUS_COLOR_MAP[
                 row.status as keyof typeof TRANSACTION_STATUS_COLOR_MAP
               ],
@@ -175,17 +179,18 @@ export default function BulkTransactionsTable({
             {cellValue}
           </Button>
         );
-      case "actions":
+
+      case 'actions':
         return (
           <Button
             isIconOnly
-            className={"max-w-fit p-2"}
+            className={'max-w-fit p-2'}
+            startContent={<ComputerDesktopIcon className="h-6 w-5 mr-2" />}
             variant="light"
             onPress={() => {
               setSelectedBatch(row);
               setOpenBatchDetailsModal(true);
             }}
-            startContent={<ComputerDesktopIcon className="h-6 w-5 mr-2" />}
           >
             View
           </Button>
@@ -209,7 +214,7 @@ export default function BulkTransactionsTable({
       setFilterValue(value);
       setPage(1);
     } else {
-      setFilterValue("");
+      setFilterValue('');
     }
   }, []);
 
@@ -218,7 +223,7 @@ export default function BulkTransactionsTable({
       <div className="mt-24 flex flex-1 items-center rounded-lg">
         <Loader
           classNames={{
-            wrapper: "bg-foreground-200/50 rounded-xl mt-8 h-full",
+            wrapper: 'bg-foreground-200/50 rounded-xl mt-8 h-full',
           }}
           size={100}
         />
@@ -230,10 +235,10 @@ export default function BulkTransactionsTable({
     return (
       <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
         <EmptyLogs
-          className={"my-auto mt-16"}
-          classNames={{ heading: "text-sm text-foreground/50 font-medium" }}
-          subTitle={""}
-          title={"No transaction data records!"}
+          className={'my-auto mt-16'}
+          classNames={{ heading: 'text-sm text-foreground/50 font-medium' }}
+          subTitle={''}
+          title={'No transaction data records!'}
         />
       </div>
     );
@@ -269,28 +274,28 @@ export default function BulkTransactionsTable({
           <div className="relative flex items-center gap-3">
             <SingleSelectionDropdown
               buttonVariant="flat"
-              className={"hidden min-w-[160px] md:flex"}
+              className={'hidden min-w-[160px] md:flex'}
               classNames={{
-                trigger: "hidden lg:flex",
+                trigger: 'hidden lg:flex',
               }}
               closeOnSelect={false}
               disallowEmptySelection={true}
               dropdownItems={SERVICE_FILTERS}
-              name={"Type"}
+              name={'Type'}
               selectedKeys={serviceProtocolFilter}
               selectionMode="multiple"
               onSelectionChange={setServiceProtocolFilter}
             />
             <SingleSelectionDropdown
               buttonVariant="flat"
-              className={"hidden min-w-[160px] lg:flex"}
+              className={'hidden min-w-[160px] lg:flex'}
               classNames={{
-                trigger: "hidden lg:flex",
+                trigger: 'hidden lg:flex',
               }}
               closeOnSelect={false}
               disallowEmptySelection={true}
               dropdownItems={columns}
-              name={"Columns"}
+              name={'Columns'}
               selectedKeys={visibleColumns}
               selectionMode="multiple"
               setSelectedKeys={setSelectedKeys}
@@ -300,8 +305,8 @@ export default function BulkTransactionsTable({
             {permissions?.can_initiate && (
               <Button
                 as={Link} // BY PASS VOUCHER
-                href={`/dashboard/${workspaceID}/payments/create/direct?protocol=direct`}
                 color="primary"
+                href={`/dashboard/${workspaceID}/payments/create/direct?protocol=direct`}
                 endContent={<PlusIcon className="h-5 w-5" />}
                 // onPress={() => setOpenPaymentsModal(true)}
               >
@@ -315,11 +320,11 @@ export default function BulkTransactionsTable({
             Total: {rows.length} transactions
           </span>
           <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-slate-400">
-            Rows per page:{" "}
+            Rows per page:{' '}
             <SelectField
               className="-mb-1 h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
               defaultValue={8}
-              options={["5", "8", "10", "20"]}
+              options={['5', '8', '10', '20']}
               placeholder={rowsPerPage.toString()}
               onChange={onRowsPerPageChange}
             />
@@ -341,16 +346,16 @@ export default function BulkTransactionsTable({
   return (
     <Table
       isHeaderSticky
-      classNames={{
-        table: cn(
-          "align-top min-h-[300px] w-full overflow-scroll items-center justify-center",
-        ),
-        base: cn("overflow-x-auto", { "": pages <= 1 }),
-      }}
       isStriped
       removeWrapper
       aria-label="Transactions table with custom cells"
       bottomContent={bottomContent}
+      classNames={{
+        table: cn(
+          'align-top min-h-[300px] w-full overflow-scroll items-center justify-center',
+        ),
+        base: cn('overflow-x-auto', { '': pages <= 1 }),
+      }}
       selectedKeys={selectedKeys}
       sortDescriptor={sortDescriptor as any}
       topContent={topContent}
@@ -362,9 +367,9 @@ export default function BulkTransactionsTable({
           <TableColumn
             key={column.uid}
             align={
-              column.uid === "actions" || column.uid === "status"
-                ? "center"
-                : "start"
+              column.uid === 'actions' || column.uid === 'status'
+                ? 'center'
+                : 'start'
             }
             allowsSorting={column.sortable}
           >
