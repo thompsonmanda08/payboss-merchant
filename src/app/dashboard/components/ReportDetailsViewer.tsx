@@ -22,7 +22,7 @@ function ReportDetailsViewer({
 }) {
   return (
     <Modal
-      classNames={{ overlay: "z-[55]", container: "px-2" }}
+      classNames={{ overlay: 'z-[55]', container: 'px-2' }}
       onClose={() => {
         setOpenReportsModal(false);
         setSelectedBatch(null);
@@ -30,12 +30,12 @@ function ReportDetailsViewer({
       // onConfirm={handleConfirmationClose}
       disableAction={true}
       height={400}
-      infoText={"Track each transactions status throughout the payment process"}
+      infoText={'Track each transactions status throughout the payment process'}
       isDismissible={false}
       loading={isLoading}
       removeCallToAction={true}
       show={openReportsModal}
-      title={"Transaction Report Details"}
+      title={'Transaction Report Details'}
       width={1440}
     >
       <SingleTransactionsTable

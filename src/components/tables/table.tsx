@@ -408,16 +408,16 @@ export default function CustomTable({
       aria-label="Example table with custom cells"
       classNames={{
         table: cn(
-          "align-top items-start justify-start",
+          'align-top items-start justify-start',
           {
-            "min-h-[400px]": isLoading || !rows,
+            'min-h-[400px]': isLoading || !rows,
           },
           classNames?.table,
         ),
 
         base: cn(
-          "min-h-[200px] overflow-x-auto",
-          { "min-h-max": pages <= 1 },
+          'min-h-[200px] overflow-x-auto',
+          { 'min-h-max': pages <= 1 },
           classNames?.wrapper,
         ),
       }}

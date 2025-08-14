@@ -40,8 +40,8 @@ function RecordDetailsViewer({ batch }: { batch: any }) {
       onClose={closeRecordsModal}
       // onConfirm={handleConfirmationClose}
       classNames={{
-        backdrop: "z-[55]",
-        base: "max-w-[calc(100vw-180px)] min-h-[calc(100vh-200px)]",
+        backdrop: 'z-[55]',
+        base: 'max-w-[calc(100vw-180px)] min-h-[calc(100vh-200px)]',
       }}
     >
       <ModalContent>

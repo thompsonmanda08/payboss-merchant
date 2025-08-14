@@ -6,7 +6,7 @@ const steps = [
     icon: UserPlus,
     title: 'Sign Up in Minutes',
     description:
-      'Create your account with just your phone number. No paperwork, no waiting – get started immediately.',
+      'Create your account with just your phone number. No paperwork, no waiting - get started immediately.',
     step: '01',
   },
   {

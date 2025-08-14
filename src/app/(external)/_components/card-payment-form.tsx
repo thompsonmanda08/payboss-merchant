@@ -338,12 +338,12 @@ export default function CardPaymentForm({
           <AutoCompleteField
             name="country"
             options={countries || []}
-            selector={"country_code"}
+            selector={'country_code'}
             value={formData?.country}
-            onChange={(value) => handleSelectChange("country", value)}
+            onChange={(value) => handleSelectChange('country', value)}
             label="Country"
             // required
-            listItemName={"country"}
+            listItemName={'country'}
           />
         </div>
 
@@ -362,14 +362,14 @@ export default function CardPaymentForm({
       <PromptModal
         removeActionButtons
         backdrop="blur"
-        className={"max-w-max"}
+        className={'max-w-max'}
         onClose={
-          transaction?.status == "PENDING"
+          transaction?.status == 'PENDING'
             ? () => {
                 addToast({
-                  color: "warning",
-                  title: "Pending Transaction",
-                  description: "Transaction is still pending, please wait.",
+                  color: 'warning',
+                  title: 'Pending Transaction',
+                  description: 'Transaction is still pending, please wait.',
                 });
               }
             : handleClosePrompt

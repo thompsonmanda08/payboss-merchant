@@ -74,18 +74,18 @@ function DateSelectField({
       <DatePicker
         // label={label}
         key={label}
-        className={cn("max-w-sm", className)}
+        className={cn('max-w-sm', className)}
         classNames={{
           label: cn(classNames?.label),
           inputWrapper: cn(
-            "focus:border-1 gap-0 bg-red-500 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary/70 focus:outline-none focus-visible:outline-primary/10 focus-visible:ring-1 focus:ring-primary/10 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[focus=true]:border-primary hover:border-primary/60 focus-within:hover:border-primary/60 focus-within:border-primary/60",
+            'focus:border-1 gap-0 bg-red-500 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary/70 focus:outline-none focus-visible:outline-primary/10 focus-visible:ring-1 focus:ring-primary/10 focus-visible:ring-primary/30 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[focus=true]:border-primary hover:border-primary/60 focus-within:hover:border-primary/60 focus-within:border-primary/60',
           ),
         }}
         defaultValue={defaultValue}
         description={description}
         inert={false}
         isRequired={props?.isRequired || required}
-        labelPlacement={labelPlacement || "outside"}
+        labelPlacement={labelPlacement || 'outside'}
         variant="bordered"
         onChange={onChange}
         value={value ? parseDate(value) : undefined}

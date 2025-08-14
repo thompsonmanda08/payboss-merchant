@@ -229,14 +229,14 @@ export default function MobileMoneyForm({ checkoutData }: any) {
       <PromptModal
         removeActionButtons
         backdrop="blur"
-        className={"max-w-max"}
+        className={'max-w-max'}
         onClose={
-          transaction?.status == "PENDING"
+          transaction?.status == 'PENDING'
             ? () => {
                 addToast({
-                  color: "warning",
-                  title: "Pending Transaction",
-                  description: "Transaction is still pending, please wait.",
+                  color: 'warning',
+                  title: 'Pending Transaction',
+                  description: 'Transaction is still pending, please wait.',
                 });
               }
             : handleClosePrompt

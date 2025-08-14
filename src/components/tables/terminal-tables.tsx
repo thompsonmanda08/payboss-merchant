@@ -49,11 +49,11 @@ export default function TerminalsTable({
   selectedKeys?: any;
   setSelectedKeys?: any;
 }) {
-  const [rowsPerPage, setRowsPerPage] = React.useState(3);
-  const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: 'age',
-    direction: 'ascending',
-  });
+  const rowsPerPage = 3;
+  // const [sortDescriptor, setSortDescriptor] = React.useState({
+  //   column: 'age',
+  //   direction: 'ascending',
+  // });
   const [page, setPage] = React.useState(1);
 
   const pages = Math.ceil(rows?.length / rowsPerPage);
@@ -194,7 +194,7 @@ export default function TerminalsTable({
       color="primary"
       removeWrapper={removeWrapper}
       onRowAction={(key) => onRowAction(key)}
-      onSortChange={setSortDescriptor as any}
+      // onSortChange={setSortDescriptor as any}
     >
       <TableHeader columns={columns}>
         {(column) => (

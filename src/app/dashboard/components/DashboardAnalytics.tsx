@@ -21,43 +21,43 @@ import { cn, formatCurrency } from '@/lib/utils';
 
 import { WalletTransactionHistory } from '../[workspaceID]/workspace-settings/components/wallet';
 
-const pendingApprovals = [
-  {
-    label: 'Bulk Direct Transfers',
-    workspaceType: WORKSPACE_TYPES[1].ID,
-    total: 0,
-    icon: {
-      color: 'primary',
-      component: <ArrowUpOnSquareStackIcon className="h-6 w-6 rotate-90" />,
-    },
-  },
-  {
-    label: 'Wallet Settlements',
-    workspaceType: WORKSPACE_TYPES[0].ID,
-    total: 0,
-    icon: {
-      color: 'success',
-      component: <BanknotesIcon className="h-6 w-6" />,
-    },
-  },
-  {
-    label: 'Wallet Prefund Requests',
-    workspaceType: WORKSPACE_TYPES[1].ID,
-    total: 0,
-    icon: {
-      color: 'secondary',
-      component: <WalletIcon className="h-6 w-6" />,
-    },
-  },
-  // {
-  //   label: "Single Voucher Transfers",
-  //   total: 0,
-  //   icon: {
-  //     color: "danger",
-  //     component: <QrCodeIcon className="h-6 w-6 rotate-90" />,
-  //   },
-  // },
-];
+// const pendingApprovals = [
+//   {
+//     label: 'Bulk Direct Transfers',
+//     workspaceType: WORKSPACE_TYPES[1].ID,
+//     total: 0,
+//     icon: {
+//       color: 'primary',
+//       component: <ArrowUpOnSquareStackIcon className="h-6 w-6 rotate-90" />,
+//     },
+//   },
+//   {
+//     label: 'Wallet Settlements',
+//     workspaceType: WORKSPACE_TYPES[0].ID,
+//     total: 0,
+//     icon: {
+//       color: 'success',
+//       component: <BanknotesIcon className="h-6 w-6" />,
+//     },
+//   },
+//   {
+//     label: 'Wallet Prefund Requests',
+//     workspaceType: WORKSPACE_TYPES[1].ID,
+//     total: 0,
+//     icon: {
+//       color: 'secondary',
+//       component: <WalletIcon className="h-6 w-6" />,
+//     },
+//   },
+//   // {
+//   //   label: "Single Voucher Transfers",
+//   //   total: 0,
+//   //   icon: {
+//   //     color: "danger",
+//   //     component: <QrCodeIcon className="h-6 w-6 rotate-90" />,
+//   //   },
+//   // },
+// ];
 
 function DashboardAnalytics({
   workspaceID,
@@ -83,18 +83,18 @@ function DashboardAnalytics({
   const {
     today,
     yesterday,
-    collectionsToday,
-    disbursementsToday,
-    billsToday,
-    allCollections,
-    allDisbursements,
+    // collectionsToday,
+    // disbursementsToday,
+    // billsToday,
+    // allCollections,
+    // allDisbursements,
     allTransactions,
-    allBills,
+    // allBills,
     walletSummary,
-    latestTransactions,
+    // latestTransactions,
     monthlyCollections,
     monthlyDisbursements,
-    monthlyBills,
+    // monthlyBills,
   } = dashboardAnalytics || {};
 
   const monthlyTransactionRecords =

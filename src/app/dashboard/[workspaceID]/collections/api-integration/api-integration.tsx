@@ -51,7 +51,7 @@ import {
   useWorkspaceAPIKey,
   useWorkspaceInit,
   useWorkspaceTerminals,
-} from "@/hooks/use-query-data";
+} from '@/hooks/use-query-data';
 import { QUERY_KEYS } from '@/lib/constants';
 import {
   API_KEY_TERMINAL_TRANSACTION_COLUMNS,

@@ -44,7 +44,7 @@ export default function EntityUserDetails({
   const [isLoading, setIsLoading] = React.useState(false);
 
   const existingUserFound = formData?.member_details?.member_id;
-  const pendingTransaction = formData?.transaction?.id;
+  // const pendingTransaction = formData?.transaction?.id;
 
   const handleSelectInstitution = (value: string) => {
     updateFormData({

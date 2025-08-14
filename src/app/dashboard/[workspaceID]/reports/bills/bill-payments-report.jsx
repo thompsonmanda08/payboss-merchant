@@ -17,11 +17,11 @@ import TotalStatsLoader from '@/app/dashboard/components/total-stats-loader';
 import CardHeader from '@/components/base/card-header';
 import Card from '@/components/base/custom-card';
 import Tabs from '@/components/elements/tabs';
-import CustomTable from "@/components/tables/table";
-import { Button } from "@/components/ui/button";
-import { DateRangePickerField } from "@/components/ui/date-select-field";
+import CustomTable from '@/components/tables/table';
+import { Button } from '@/components/ui/button';
+import { DateRangePickerField } from '@/components/ui/date-select-field';
 import Search from '@/components/ui/search';
-import { QUERY_KEYS } from "@/lib/constants";
+import { QUERY_KEYS } from '@/lib/constants';
 import { BILLS_TRANSACTION_COLUMNS } from '@/lib/table-columns';
 import { formatCurrency } from '@/lib/utils';
 

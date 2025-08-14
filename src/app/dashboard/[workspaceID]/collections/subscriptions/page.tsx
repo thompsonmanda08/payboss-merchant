@@ -44,7 +44,7 @@ import Card from '@/components/base/custom-card';
 import { SingleFileDropzone } from '@/components/base/file-dropzone';
 import SoftBoxIcon from '@/components/base/soft-box-icon';
 import PromptModal from '@/components/modals/prompt-modal';
-import CustomTable from "@/components/tables/table";
+import CustomTable from '@/components/tables/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input-field';
 import {
@@ -784,12 +784,12 @@ const Subscriptions = () => {
 
       {/* DELETE PROMPT MODAL */}
       <PromptModal
-        confirmText={"Confirm"}
+        confirmText={'Confirm'}
         isDisabled={selectedServicePack?.isLoading}
         isDismissable={false}
         isLoading={selectedServicePack?.isLoading}
-        isOpen={selectedActionKey == "delete-sub"}
-        title={"Delete Subscription?"}
+        isOpen={selectedActionKey == 'delete-sub'}
+        title={'Delete Subscription?'}
         onClose={handleClose}
         onConfirm={handleUpdateSubscription}
         className={'max-w-md'}

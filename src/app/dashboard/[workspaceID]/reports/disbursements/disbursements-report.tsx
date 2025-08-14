@@ -13,23 +13,23 @@ import React, { useEffect, useState } from 'react';
 
 import { bulkTransactionsReportToCSV } from '@/app/_actions/file-conversion-actions';
 import { getBulkAnalyticReports } from '@/app/_actions/transaction-actions';
-import ReportDetailsViewer from "@/app/dashboard/components/ReportDetailsViewer";
-import TotalValueStat from "@/app/dashboard/components/total-stats";
-import TotalStatsLoader from "@/app/dashboard/components/total-stats-loader";
-import CardHeader from "@/components/base/card-header";
+import ReportDetailsViewer from '@/app/dashboard/components/ReportDetailsViewer';
+import TotalValueStat from '@/app/dashboard/components/total-stats';
+import TotalStatsLoader from '@/app/dashboard/components/total-stats-loader';
+import CardHeader from '@/components/base/card-header';
 import Card from '@/components/base/custom-card';
-import Tabs from "@/components/elements/tabs";
+import Tabs from '@/components/elements/tabs';
 import CustomTable from '@/components/tables/table';
 import { Button } from '@/components/ui/button';
 import { DateRangePickerField } from '@/components/ui/date-select-field';
 import Search from '@/components/ui/search';
 import useCustomTabsHook from '@/hooks/use-custom-tabs';
-import { useDebounce } from "@/hooks/use-debounce";
+import { useDebounce } from '@/hooks/use-debounce';
 import { QUERY_KEYS } from '@/lib/constants';
 import {
   BULK_REPORTS_COLUMNS,
   SINGLE_TRANSACTION_REPORTS_COLUMNS,
-} from "@/lib/table-columns";
+} from '@/lib/table-columns';
 import { formatCurrency } from '@/lib/utils';
 import { DateRangeFilter } from '@/types';
 

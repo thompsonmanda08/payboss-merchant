@@ -55,7 +55,7 @@ export default function TerminalConfigViewModal({
   const {
     activeTab,
     currentTabIndex,
-    navigateTo,
+    // navigateTo,
     navigateForward,
     navigateBackwards,
   } = useCustomTabsHook([
@@ -162,11 +162,11 @@ export default function TerminalConfigViewModal({
 }
 
 const UploadTerminalConfigs = ({
-  terminalUrl,
+  // terminalUrl,
   setTerminalUrl,
-  navigateForward,
-  navigateBackwards,
-  workspaceID,
+  // navigateForward,
+  // navigateBackwards,
+  // workspaceID,
   handleProceed,
 }: {
   terminalUrl: string;

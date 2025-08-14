@@ -1,8 +1,8 @@
-import { withSentryConfig } from "@sentry/nextjs";
-import { NextConfig } from "next";
+import { withSentryConfig } from '@sentry/nextjs';
+import { NextConfig } from 'next';
 
 const nextConfig = {
-  output: "standalone",
+  output: 'standalone',
   // distDir: "build",
   assetPrefix: process.env.SERVER_URL || process.env.NEXT_PUBLIC_SERVER_URL,
   devIndicators: {
@@ -14,20 +14,20 @@ const nextConfig = {
 
     remotePatterns: [
       {
-        protocol: "http",
+        protocol: 'http',
         hostname: String(
           process.env.SERVER_URL ||
             process.env.NEXT_PUBLIC_SERVER_URL ||
-            "http://localhost:3000",
+            'http://localhost:3000',
         ),
-        port: "",
-        pathname: "/**",
+        port: '',
+        pathname: '/**',
       },
       {
-        protocol: "https",
-        hostname: "bgspayboss.com",
-        port: "",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: 'bgspayboss.com',
+        port: '',
+        pathname: '/**',
       },
     ],
   },
@@ -65,8 +65,8 @@ export default withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-  org: "sentry",
-  project: "merchant-web-portal",
+  org: 'sentry',
+  project: 'merchant-web-portal',
   sentryUrl: process.env.SENTRY_URL,
 
   // Only print logs for uploading source maps in CI
@@ -82,7 +82,7 @@ export default withSentryConfig(nextConfig, {
   // This can increase your server load as well as your hosting bill.
   // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
   // side errors will fail.
-  tunnelRoute: "/monitoring",
+  tunnelRoute: '/monitoring',
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,

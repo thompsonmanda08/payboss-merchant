@@ -99,7 +99,7 @@ export default function SignUpForm({
   const {
     activeTab,
     navigateForward,
-    navigateBackwards,
+    // navigateBackwards,
     navigateTo,
     currentTabIndex,
     firstTab,

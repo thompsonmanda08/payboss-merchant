@@ -30,7 +30,7 @@ import EmptyLogs from '@/components/base/empty-logs';
 import PromptModal from '@/components/modals/prompt-modal';
 import { Button } from '@/components/ui/button';
 import { SingleSelectionDropdown } from '@/components/ui/dropdown-button';
-import Loader from "@/components/ui/loader";
+import Loader from '@/components/ui/loader';
 import Search from '@/components/ui/search';
 import SelectField from '@/components/ui/select-field';
 import useWorkspaceStore from '@/context/workspaces-store';
@@ -722,11 +722,11 @@ export default function UsersTable({
         isDismissable={false}
         isLoading={isLoading}
         isOpen={isOpen && selectedUser !== null}
-        title={`Remove ${isUsersRoute ? "Account" : "Workspace"} User?`}
+        title={`Remove ${isUsersRoute ? 'Account' : 'Workspace'} User?`}
         onClose={handleClosePrompts}
         onConfirm={handleRemoveUser}
         // onOpen={onOpen}
-        className={"max-w-lg"}
+        className={'max-w-lg'}
       >
         <p className="-mt-4 text-sm leading-6 text-foreground/70">
           You are about to remove{' '}

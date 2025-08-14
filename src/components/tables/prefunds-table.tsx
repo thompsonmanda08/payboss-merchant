@@ -51,11 +51,12 @@ export default function PrefundsTable({
   selectedKeys,
   setSelectedKeys = (k: any) => {},
 }: PrefundTableProps) {
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: 'age',
-    direction: 'ascending',
-  });
+  // const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  // const [sortDescriptor, setSortDescriptor] = React.useState({
+  //   column: 'age',
+  //   direction: 'ascending',
+  // });
+  const rowsPerPage = 5;
   const [page, setPage] = React.useState(1);
 
   const pages = Math.ceil(rows?.length / rowsPerPage);
@@ -226,7 +227,7 @@ export default function PrefundsTable({
       selectedKeys={selectedKeys}
       selectionMode="multiple"
       onSelectionChange={handlePrefundSelection}
-      onSortChange={setSortDescriptor as any}
+      // onSortChange={setSortDescriptor as any}
       // onRowAction={(key) => onRowAction(key)}
     >
       <TableHeader columns={columns}>

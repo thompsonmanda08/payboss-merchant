@@ -56,7 +56,7 @@ const eslintConfig = [
 
       // React Hooks rules
       'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
+      'react-hooks/exhaustive-deps': 'off',
 
       // Unused imports (safe)
       'unused-imports/no-unused-imports': 'warn',

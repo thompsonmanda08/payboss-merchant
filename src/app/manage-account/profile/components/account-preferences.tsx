@@ -36,7 +36,7 @@ function AccountPreferences() {
 
           <div className="mt-4 space-y-4 divide-y divide-foreground-100 border-t border-foreground-200 text-sm leading-6">
             {/*  TODO: Add a switch for each of the application config */}
-            {APPLICATION_CONFIG.map((config, index) => (
+            {APPLICATION_CONFIG.map((config) => (
               <div key={config.title} className="mt-4 pt-4 sm:flex">
                 <div className="mt-1 flex items-center gap-x-4 sm:mt-0 sm:flex-auto">
                   <Switch />

@@ -35,8 +35,6 @@ import { cn } from '@/lib/utils';
 import MobileNavBar from './mobile-menu';
 import SideNavItems from './side-nav-items';
 
-type SideNavBarProps = {};
-
 type SideNavItem = {
   ID?: string;
   name: string;
@@ -45,7 +43,7 @@ type SideNavItem = {
   subMenuItems?: SideNavItem[];
 };
 
-function SideNavBar({}: SideNavBarProps) {
+function SideNavBar() {
   const pathname = usePathname();
 
   const [openMobileMenu, setOpenMobileMenu] = useState<boolean>(false);

@@ -88,7 +88,7 @@ function WorkspaceSettings({
             workspaceID={workspaceID}
           />,
           <Wallet
-            key={"wallet"}
+            key={'wallet'}
             removeWrapper
             balance={activeWorkspace?.balance}
             workspaceID={workspaceID}
@@ -103,7 +103,7 @@ function WorkspaceSettings({
         isBillPaymentWorkspace
         ? [
             <Wallet
-              key={"wallet"}
+              key={'wallet'}
               removeWrapper
               balance={activeWorkspace?.balance}
               workspaceID={workspaceID}
@@ -137,7 +137,7 @@ function WorkspaceSettings({
       // permissions={permissions}
     />,
     <WorkspaceMembers
-      key={"members"}
+      key={'members'}
       allUsers={allUsers || []}
       workspaceID={workspaceID}
       workspaceMembers={workspaceMembers || []}

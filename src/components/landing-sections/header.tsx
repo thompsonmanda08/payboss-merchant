@@ -28,7 +28,12 @@ function MobileNavLink({
   children: React.ReactNode;
 }) {
   return (
-    <Button as={Link} className={cn('w-full p-2')} href={href} variant="light">
+    <Button
+      as={Link}
+      className={cn('w-full p-2', className)}
+      href={href}
+      variant="light"
+    >
       {children}
     </Button>
   );

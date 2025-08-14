@@ -68,12 +68,12 @@ const PendingApprovalsItem = ({
           //   setOpenBatchDetailsModal(true)
           // }}
           className={cn(
-            "h-max min-h-max max-w-max cursor-pointer rounded-lg px-4 py-2 text-[13px] font-semibold capitalize text-white",
+            'h-max min-h-max max-w-max cursor-pointer rounded-lg px-4 py-2 text-[13px] font-semibold capitalize text-white',
             `bg-${icon?.color}/5 text-${icon?.color}`,
             {
-              "bg-red-50 text-red-500": icon?.color === "danger",
-              "bg-green-50 text-green-600": icon?.color === "success",
-              "bg-secondary/10 text-orange-600": icon?.color === "secondary",
+              'bg-red-50 text-red-500': icon?.color === 'danger',
+              'bg-green-50 text-green-600': icon?.color === 'success',
+              'bg-secondary/10 text-orange-600': icon?.color === 'secondary',
             },
           )}
         >

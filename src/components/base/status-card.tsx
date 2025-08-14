@@ -74,7 +74,7 @@ function StatusCard({
 
             <Tooltip
               classNames={{
-                content: "text-nowrap bg-primary/10 text-primary-600",
+                content: 'text-nowrap bg-primary/10 text-primary-600',
               }}
               color="primary"
               content={totalInfo}
@@ -118,7 +118,7 @@ function StatusCard({
 
             <Tooltip
               classNames={{
-                content: "text-nowrap bg-success/10 text-green-600",
+                content: 'text-nowrap bg-success/10 text-green-600',
               }}
               color="success"
               content={validInfo}
@@ -162,7 +162,7 @@ function StatusCard({
 
             <Tooltip
               classNames={{
-                content: "text-nowrap bg-red-500/10 text-red-600",
+                content: 'text-nowrap bg-red-500/10 text-red-600',
               }}
               color="danger"
               content={invalidInfo}

@@ -33,17 +33,17 @@ import Card from '@/components/base/custom-card';
 import SoftBoxIcon from '@/components/base/soft-box-icon';
 import CustomTable from '@/components/tables/table';
 import { TerminalInfo } from '@/components/tables/terminal-tables';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import Spinner from '@/components/ui/custom-spinner';
-import { DateRangePickerField } from "@/components/ui/date-select-field";
+import { DateRangePickerField } from '@/components/ui/date-select-field';
 import Search from '@/components/ui/search';
 import { useDebounce } from '@/hooks/use-debounce';
-import { QUERY_KEYS } from "@/lib/constants";
+import { QUERY_KEYS } from '@/lib/constants';
 import {
   API_KEY_TERMINAL_TRANSACTION_COLUMNS,
   API_KEY_TRANSACTION_COLUMNS,
 } from '@/lib/table-columns';
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from '@/lib/utils';
 import { DateRangeFilter } from '@/types';
 
 const SERVICE_TYPES = [

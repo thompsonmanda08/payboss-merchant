@@ -203,7 +203,7 @@ export default function BillPaymentAPIConfigModal({
     <>
       <Modal
         isOpen={isOpen}
-        size={"4xl"}
+        size={'4xl'}
         onClose={handleClose}
         isDismissable={false}
         // className="max-w-[768px]"

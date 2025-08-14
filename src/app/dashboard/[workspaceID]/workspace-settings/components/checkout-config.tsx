@@ -287,7 +287,7 @@ export default function CheckoutConfig({
                   startContent={<Cog6ToothIcon className="h-6 w-6" />}
                   variant="faded"
                   // isLoading={initLoading}
-                  loadingText={"Please wait..."}
+                  loadingText={'Please wait...'}
                 >
                   Menu
                 </Button>

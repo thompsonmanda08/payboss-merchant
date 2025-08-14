@@ -259,7 +259,7 @@ export default function Invoice({
           onClose();
         }}
         // onOpen={onOpen}
-        className={"max-w-md "}
+        className={'max-w-md '}
         isOpen={isOpen}
         size="sm"
       >

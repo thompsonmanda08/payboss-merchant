@@ -37,9 +37,9 @@ function Modal({
   classNames,
 }: any) {
   const [isOpen, setIsOpen] = useState(show || false);
-  const [noCallToAction, setNoCallToAction] = useState(
-    removeCallToAction || false,
-  );
+  // const [noCallToAction, setNoCallToAction] = useState(
+  //   removeCallToAction || false,
+  // );
 
   useEffect(() => {
     setIsOpen(show);
@@ -83,11 +83,11 @@ function Modal({
             )}
             exit="exit"
             initial="hidden"
-            style={{
-              maxWidth: width ? `${width}px` : '380px',
-              minHeight: height ? `${height}px` : '180px',
-              // height: height ? `${height}px` : 'auto',
-            }}
+            // style={{
+            //   maxWidth: width ? `${width}px` : '380px',
+            //   minHeight: height ? `${height}px` : '180px',
+            //   // height: height ? `${height}px` : 'auto',
+            // }}
             transition={{ duration: 0.25 }}
             variants={modalVariants}
             onClick={(e) => e.stopPropagation()}
@@ -107,7 +107,7 @@ function Modal({
             >
               {children}
             </div>
-            {!noCallToAction && (
+            {!removeCallToAction && (
               <div className="mt-auto flex w-full justify-end gap-3">
                 <Button className="" color="danger" onClick={handleClose}>
                   {cancelText || 'Cancel'}
