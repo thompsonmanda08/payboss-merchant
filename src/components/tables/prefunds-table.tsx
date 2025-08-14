@@ -37,7 +37,7 @@ type PrefundTableProps = {
   emptyDescriptionText?: string;
   emptyTitleText?: string;
   selectedKeys?: any;
-  setSelectedKeys?: any;
+  setSelectedKeys?: (k: any) => void;
 };
 
 export default function PrefundsTable({
@@ -49,7 +49,7 @@ export default function PrefundsTable({
   emptyDescriptionText,
   emptyTitleText,
   selectedKeys,
-  setSelectedKeys,
+  setSelectedKeys = (k: any) => {},
 }: PrefundTableProps) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({

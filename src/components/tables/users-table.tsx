@@ -616,8 +616,6 @@ export default function UsersTable({
   }
 
   const USER_ROLES = roles || getRoles();
-  console.log("USERS ROUTE==>", !isUsersRoute && isEditingUser);
-  console.log("ROLES TO USE==>", USER_ROLES);
 
   return (
     <>

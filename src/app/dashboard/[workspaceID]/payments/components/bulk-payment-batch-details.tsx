@@ -173,7 +173,7 @@ const PaymentDetails = ({
             onChange={(e) => {
               updatePaymentFields({ batch_name: e.target.value, protocol });
             }}
-            onError={error?.status}
+            isInvalid={error?.status}
           />
           {error?.status && (
             <Alert

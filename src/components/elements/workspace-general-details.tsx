@@ -377,7 +377,7 @@ function WorkspaceDetails({
                   onChange={(e) =>
                     updateCallbackURL({ method: e.target.value })
                   }
-                  isInvalid={error?.onCallbackURL}
+                  // isInvalid={error?.onCallbackURL}
                 />
 
                 <Input
@@ -389,7 +389,7 @@ function WorkspaceDetails({
                   title="https://www.domain-name.com"
                   value={callbackURL?.url}
                   onChange={(e) => updateCallbackURL({ url: e.target.value })}
-                  onError={error?.onCallbackURL}
+                  isInvalid={error?.onCallbackURL}
                   className="w-full"
                   classNames={{
                     wrapper: "max-w-full",

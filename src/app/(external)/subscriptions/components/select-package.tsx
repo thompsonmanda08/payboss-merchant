@@ -195,9 +195,6 @@ export default function SelectPaymentPackage({
 
       // Show redirect message instead of actual navigation
       // setShowRedirectMessage(true);
-
-      // Log the URL for demonstration
-      console.log("Constructed Payment URL:", dummyUrl);
     }
   }, [formData, validateStep2, getSelectedPackageDetails, getTotalAmount]);
 
@@ -340,7 +337,7 @@ export default function SelectPaymentPackage({
                 className={` `}
                 variant="underlined"
                 errorText={errors.customAmount}
-                onError={errors.customAmount}
+                isInvalid={errors.customAmount}
                 label="Custom Amount (ZMW)"
                 min="1"
                 placeholder="0.00"

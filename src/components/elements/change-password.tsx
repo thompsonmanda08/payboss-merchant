@@ -119,7 +119,7 @@ function ChangePasswordField({
               onChange={(e) =>
                 updatePasswordField({ currentPassword: e.target.value })
               }
-              onError={error?.noPassword}
+              is={error?.noPassword}
             />
             {/* ERROR MESSAGE */}
             {passwordFields.currentPassword && passwordFields.newPassword && (
@@ -170,7 +170,7 @@ function ChangePasswordField({
               onChange={(e) =>
                 updatePasswordField({ confirmPassword: e.target.value })
               }
-              onError={
+              isInvalid={
                 passwordFields.confirmPassword.length > 6 &&
                 error.status &&
                 error?.noMatch

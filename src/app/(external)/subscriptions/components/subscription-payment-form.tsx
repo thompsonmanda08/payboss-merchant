@@ -185,7 +185,6 @@ export default function SubscriptionPaymentForm({
     setErrors({});
   }
 
-  console.log("formData", formData);
 
   //************ STEPS TO CREATE A PAYMENT ACTION *****************/
   return (

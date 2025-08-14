@@ -83,7 +83,7 @@ function LoginForm() {
           onChange={(e) => {
             updateLoginDetails({ emailusername: e.target.value });
           }}
-          onError={error?.onFields}
+          isInvalid={error?.onFields}
         />
 
         <Input
@@ -96,7 +96,7 @@ function LoginForm() {
           onChange={(e) => {
             updateLoginDetails({ password: e.target.value });
           }}
-          onError={error?.onFields}
+          isInvalid={error?.onFields}
         />
         <p className="-mt-1 ml-1 text-xs font-medium text-foreground/60 xl:text-sm">
           Forgot password?{" "}

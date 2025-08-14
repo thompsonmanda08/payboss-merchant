@@ -270,6 +270,7 @@ export default function DocumentAttachments({
   ) {
     setFieldLoadingStates((prev) => ({ ...prev, [fieldId]: true }));
     setError({ message: "", status: false });
+
     let response = await uploadBusinessFile(file, recordID);
 
     if (response?.success) {
@@ -390,8 +391,8 @@ export default function DocumentAttachments({
                   updateDocs({
                     [docConfig.id]: await handleFileUpload(
                       file,
-                      docFiles[docConfig.id]?.file_record_id,
-                      docConfig.id,
+                      docConfig.id, //DOCUMENT FIELD ID
+                      docFiles[docConfig.id]?.file_record_id || "", // DOCUMENT RECORD ID (IF ANY)
                     ),
                   })
                 }

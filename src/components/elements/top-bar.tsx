@@ -80,9 +80,9 @@ export default function TopNavBar({ user }: any) {
             className={cn("flex items-center gap-4 text-foreground-400", {})}
           >
             <Button
-              variant="ghost"
+              variant="light"
               className={cn(
-                "flex group cursor-pointer items-start gap-2 text-foreground-600",
+                "flex group h-auto hover:bg-transparent cursor-pointer items-start gap-2 text-foreground-600",
               )}
               onPress={() => {
                 router.push(`${dashboardRoute}/workspace-settings?wallet=true`);

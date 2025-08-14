@@ -4,6 +4,7 @@ import { POCKET_BASE_URL } from "@/lib/constants";
 
 import { getUserDetails } from "./config-actions";
 import { APIResponse } from "@/types";
+import { handleError } from "@/lib/api-config";
 
 const pb = new PocketBase(POCKET_BASE_URL);
 
@@ -71,15 +72,7 @@ export async function uploadPaymentBatchFile(file: File): Promise<APIResponse> {
       },
     };
   } catch (error: Error | any) {
-    console.error(error);
-
-    return {
-      success: false,
-      status: error.status,
-      message:
-        error?.data?.message || error.response?.message || "Operation failed!",
-      data: null,
-    };
+    return handleError(error, "UPLOAD-POST", `POCKET URL: ${POCKET_BASE_URL}`);
   }
 }
 
@@ -145,15 +138,7 @@ export async function uploadPOPDocument(
       },
     };
   } catch (error: Error | any) {
-    console.error(error);
-
-    return {
-      success: false,
-      status: error.status,
-      message:
-        error?.data?.message || error.response?.message || "Operation failed!",
-      data: null,
-    };
+    return handleError(error, "UPLOAD-POST", `POCKET URL: ${POCKET_BASE_URL}`);
   }
 }
 
@@ -219,15 +204,11 @@ export async function uploadBusinessFile(
       },
     };
   } catch (error: Error | any) {
-    console.error(error);
-
-    return {
-      success: false,
-      status: error.status,
-      message:
-        error?.data?.message || error.response?.message || "Operation failed!",
-      data: null,
-    };
+    return handleError(
+      error,
+      "UPLOAD-POST",
+      `POCKET URL: ${POCKET_BASE_URL}/merchant_onboarding_documents`,
+    );
   }
 }
 
@@ -274,15 +255,7 @@ export async function uploadTerminalConfigFile(
       },
     };
   } catch (error: Error | any) {
-    console.error(error);
-
-    return {
-      success: false,
-      status: error.status,
-      message:
-        error?.data?.message || error.response?.message || "Operation failed!",
-      data: null,
-    };
+    return handleError(error, "UPLOAD-POST", `POCKET URL: ${POCKET_BASE_URL}`);
   }
 }
 
@@ -339,14 +312,6 @@ export async function uploadCheckoutLogoFile(
       },
     };
   } catch (error: Error | any) {
-    console.error(error);
-
-    return {
-      success: false,
-      status: error.status,
-      message:
-        error?.data?.message || error.response?.message || "Operation failed!",
-      data: null,
-    };
+    return handleError(error, "UPLOAD-POST", `POCKET URL: ${POCKET_BASE_URL}`);
   }
 }

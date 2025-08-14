@@ -141,7 +141,7 @@ export default function Step4({ updateDetails, backToStart }: any) {
               onChange={(e) => {
                 updateDetails(STEPS[3], { password: e.target.value });
               }}
-              onError={error?.onPassword}
+              isInvalid={error?.onPassword}
             />
           </motion.div>
           <motion.div
@@ -158,7 +158,7 @@ export default function Step4({ updateDetails, backToStart }: any) {
               onChange={(e) => {
                 updateDetails(STEPS[3], { confirmPassword: e.target.value });
               }}
-              onError={error?.onPassword}
+              isInvalid={error?.onPassword}
             />
           </motion.div>
         </div>

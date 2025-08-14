@@ -17,7 +17,7 @@ type SelectComProps = Partial<SelectProps> & {
   className?: string;
   classNames?: any;
   wrapperClassName?: string;
-  onError?: boolean;
+  isInvalid?: boolean;
   prefilled?: boolean;
   isDisabled?: boolean;
 };
@@ -38,7 +38,7 @@ function SelectField({
   classNames,
   wrapperClassName,
 
-  onError,
+  isInvalid,
   prefilled = false,
   ...props
 }: SelectComProps) {
@@ -86,7 +86,7 @@ function SelectField({
               ),
               // {
               //   'border-red-500 focus:border-red-500/70 focus-visible:ring-red-500/30':
-              //     onError,
+              //     isInvalid,
               // },
             ),
 
@@ -94,7 +94,7 @@ function SelectField({
             popoverContent: "rounded-md text-foreground-700 font-medium",
             selectorIcon: "w-4 h-4",
           }}
-          isInvalid={onError}
+          isInvalid={isInvalid}
           isRequired={props?.required}
           name={name}
           placeholder={placeholder || "Choose an option"}

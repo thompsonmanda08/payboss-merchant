@@ -127,7 +127,7 @@ export default function FirstLogin({ open }: { open?: boolean }) {
                 onChange={(e) =>
                   updatePasswordField({ confirmPassword: e.target.value })
                 }
-                onError={
+                isInvalid={
                   (password.confirmPassword !== password.newPassword &&
                     password?.confirmPassword.length > 6) ||
                   error?.onConfirmPassword

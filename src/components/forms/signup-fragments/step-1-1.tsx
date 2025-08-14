@@ -105,7 +105,7 @@ export default function Step1_TPIN({
               onChange={(e) => {
                 updateDetails(STEPS[0], { tpin: e.target.value });
               }}
-              onError={TPINError || error?.onTPIN}
+              isInvalid={TPINError || error?.onTPIN}
             />
             <Button
               className={cn("flex-[1]", { "mb-4": TPINError || error?.status })}
