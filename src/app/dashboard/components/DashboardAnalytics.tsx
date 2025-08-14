@@ -2,11 +2,8 @@
 import {
   ArrowLeftEndOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
-  ArrowUpOnSquareStackIcon,
-  BanknotesIcon,
   ListBulletIcon,
   ReceiptPercentIcon,
-  WalletIcon,
 } from '@heroicons/react/24/outline';
 import { Chip } from '@heroui/react';
 

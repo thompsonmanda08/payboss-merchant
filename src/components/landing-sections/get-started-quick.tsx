@@ -6,7 +6,7 @@ const steps = [
     icon: UserPlus,
     title: 'Sign Up in Minutes',
     description:
-      'Create your account with just your phone number. No paperwork, no waiting - get started immediately.',
+      'Create your account with just your phone number. No paperwork, no waiting, get started immediately.',
     step: '01',
   },
   {
@@ -27,7 +27,7 @@ const steps = [
     icon: Shield,
     title: 'Stay Protected',
     description:
-      'Enjoy peace of mind with real-time fraud monitoring, instant notifications, and comprehensive insurance.',
+      'Enjoy peace of mind with real time fraud monitoring, instant notifications, and comprehensive insurance.',
     step: '04',
   },
 ];
@@ -45,7 +45,7 @@ export default function HowItWorks() {
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Join millions of users who have transformed their financial lives
-            with PayFlow. It's easier than you think.
+            with PayFlow. It&apos;s easier than you think.
           </p>
         </div>
 

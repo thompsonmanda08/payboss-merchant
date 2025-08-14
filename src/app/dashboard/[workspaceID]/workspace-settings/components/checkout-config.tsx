@@ -68,8 +68,7 @@ export default function CheckoutConfig({
   const { data: checkoutResponse, isLoading: isLoadingConfig } =
     useWorkspaceCheckout(workspaceID);
 
-  const { data: workspaceInit, isLoading: loadingSession } =
-    useWorkspaceInit(workspaceID);
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const permissions = workspaceInit?.data?.workspacePermissions;
 
   const configData = checkoutResponse?.data || {};
@@ -571,7 +570,8 @@ export default function CheckoutConfig({
                     color={'warning'}
                     title={
                       <span>
-                        Please replace the 'XXXXXX' placeholder ONLY on the
+                        Please replace the &apos;XXXXXX&apos; placeholder ONLY
+                        on the
                         <span className="font-bold mx-1 uppercase">amount</span>
                         &amp;
                         <span className="font-bold mx-1 uppercase">
