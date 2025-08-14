@@ -86,11 +86,11 @@ function SideNavBar() {
           href: `${dashboardRoute}/collections/api-integration`,
           Icon: AdjustmentsVerticalIcon,
         },
-        {
-          name: 'Subscriptions',
-          href: `${dashboardRoute}/collections/subscriptions`,
-          Icon: TicketPercentIcon,
-        },
+        // {
+        //   name: 'Subscriptions',
+        //   href: `${dashboardRoute}/collections/subscriptions`,
+        //   Icon: TicketPercentIcon,
+        // },
         {
           name: 'Invoicing',
           href: `${dashboardRoute}/collections/invoicing`,

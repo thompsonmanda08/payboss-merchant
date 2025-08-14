@@ -57,9 +57,8 @@ import {
   API_KEY_TERMINAL_TRANSACTION_COLUMNS,
   API_KEY_TRANSACTION_COLUMNS,
 } from '@/lib/table-columns';
-import { cn, formatDate, maskString } from '@/lib/utils';
+import { cn, maskString } from '@/lib/utils';
 
-import APIConfigViewModal from './api-config-view';
 import TerminalConfigViewModal from './terminal-config-view';
 
 const APIIntegration = () => {
@@ -71,7 +70,7 @@ const APIIntegration = () => {
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const permissions = workspaceInit?.data?.workspacePermissions;
 
-  const { onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure(); // GENERATE API KEY PROMPT
   const {
     isOpen: isOpenAddTerminal,
     onOpen: onAddTerminal,
@@ -87,7 +86,6 @@ const APIIntegration = () => {
   const [refreshKeyID, setRefreshKeyID] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [unmaskAPIKey, setUnmaskAPIKey] = useState(false);
-  const [openViewConfig, setOpenViewConfig] = useState(false);
   const [currentActionIndex, setCurrentActionIndex] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -97,16 +95,17 @@ const APIIntegration = () => {
     setCurrentActionIndex(0);
     setUnmaskAPIKey(false);
     setRefreshKeyID('');
+    setCopiedKey('');
+    setIsExpanded(true);
   };
 
-  const thirtyDaysAgoDate = new Date();
+  // const thirtyDaysAgoDate = new Date();
 
-  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
-  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
-  const end_date = formatDate(new Date(), 'YYYY-MM-DD');
+  // thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
+  // const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
+  // const end_date = formatDate(new Date(), 'YYYY-MM-DD');
 
   const API_KEYS_DATA = apiKeyResponse?.data || [];
-  const API_CONFIG = API_KEYS_DATA?.config || [];
   const API_KEYS = API_KEYS_DATA?.data || [];
   const terminals = terminalData?.data?.terminals || []; //
   const hasTerminals = Boolean(API_KEYS_DATA?.hasTerminals);
@@ -478,17 +477,17 @@ const APIIntegration = () => {
       promptDescription:
         'By confirming this, Terminals will be deactivated and you will NOT be able to create and manage terminal transactions.',
     },
-    {
-      title: 'Delete API Key',
-      icon: TrashIcon,
-      color: 'danger',
-      confirmText: 'Delete',
-      onConfirmAction: () => {},
-      description: 'Delete the API key for this workspace',
-      promptText: 'Are you sure you want to delete this API key?',
-      promptDescription:
-        'This action is not reversible and will result in the non-operation of this key. Make sure you update any application making use of this Key.',
-    },
+    // {
+    //   title: 'Delete API Key',
+    //   icon: TrashIcon,
+    //   color: 'danger',
+    //   confirmText: 'Delete',
+    //   onConfirmAction: () => {},
+    //   description: 'Delete the API key for this workspace',
+    //   promptText: 'Are you sure you want to delete this API key?',
+    //   promptDescription:
+    //     'This action is not reversible and will result in the non-operation of this key. Make sure you update any application making use of this Key.',
+    // },
   ];
 
   const iconClasses = 'w-5 h-5 pointer-events-none flex-shrink-0';
@@ -511,11 +510,9 @@ const APIIntegration = () => {
             <Button
               endContent={<PlusIcon className="h-5 w-5" />}
               isDisabled={isLoadingConfig || Boolean(API_KEYS?.length > 0)}
-              onPress={() => {
-                setCurrentActionIndex(0);
-              }}
+              onPress={onOpen}
             >
-              Generate Key
+              Generate API Key
             </Button>
           </div>
 
@@ -838,23 +835,13 @@ const APIIntegration = () => {
         </Card>
       </div>
 
-      <APIConfigViewModal
-        API_CONFIG={API_CONFIG}
-        isLoading={isLoadingConfig}
-        isOpen={openViewConfig}
-        onClose={() => {
-          setOpenViewConfig(false);
-          onClose();
-        }}
-      />
-
       <TerminalConfigViewModal
         isOpen={isOpenAddTerminal}
         workspaceID={workspaceID}
         onClose={onCloseTerminal}
       />
 
-      {/* DELETE PROMPT MODAL */}
+      {/*PROMPT MODAL BY ACTION */}
       <PromptModal
         confirmText={
           USER_PROMPT_ACTIONS[currentActionIndex]?.confirmText || 'Confirm'
@@ -862,7 +849,7 @@ const APIIntegration = () => {
         isDisabled={isLoading}
         isDismissable={false}
         isLoading={isLoading}
-        isOpen={currentActionIndex !== null}
+        isOpen={isOpen}
         title={USER_PROMPT_ACTIONS[currentActionIndex]?.title}
         onClose={handleClosePrompt}
         onConfirm={USER_PROMPT_ACTIONS[currentActionIndex]?.onConfirmAction}

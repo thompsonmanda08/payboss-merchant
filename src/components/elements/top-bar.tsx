@@ -56,7 +56,7 @@ export default function TopNavBar({ user }: any) {
         {/* LEFT SIDE */}
         <div
           className={cn(
-            'relative left-16 hidden transition-all duration-300 ease-in-out lg:left-0 lg:block',
+            'relative left-16 hidden transition-all duration-300 ease-in-out lg:-left-3 lg:block',
           )}
         >
           <BreadCrumbLinks />

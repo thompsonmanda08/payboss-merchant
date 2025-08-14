@@ -37,7 +37,7 @@ export default function CollectionsDocs({}) {
                   <div>
                     <h3 className="text-lg font-semibold mb-2">Request</h3>
                     <div className="flex flex-col gap-4 w-full">
-                      <pre className="text-sm bg-primary-50 p-4 rounded-md">
+                      <pre className="text-sm bg-primary-50 dark:bg-gray-900 p-4 rounded-md">
                         <code>
                           {`POST ~ {%BASE_URL%}/api/v1/transaction/collection/auth
 Content-Type: application/json`}
@@ -102,7 +102,7 @@ Content-Type: application/json`}
                   <div>
                     <h3 className="text-lg font-semibold mb-2">Request</h3>
                     <div className="flex flex-col gap-4 w-full">
-                      <pre className="text-sm bg-primary-50 p-4 rounded-md">
+                      <pre className="text-sm bg-primary-50 dark:bg-gray-900 p-4 rounded-md">
                         <code>
                           {`POST ~ {%BASE_URL%}/api/v1/transaction/collection
 Content-Type: application/json
@@ -171,7 +171,7 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                   <div>
                     <h3 className="text-lg font-semibold mb-2">Request</h3>
                     <div className="flex flex-col gap-4 w-full">
-                      <pre className="text-sm bg-primary-50 p-4 rounded-md">
+                      <pre className="text-sm bg-primary-50 dark:bg-gray-900 p-4 rounded-md">
                         <code>
                           {`GET ~ {%BASE_URL%}/api/v1/transaction/collection/status/{%transactionID%}
 Content-Type: application/json
@@ -225,21 +225,32 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                   <code>{'{%variable name%}'}</code> are provided when required
                 </p>
 
+                {/* <div className="space-y-2">
+                  <h3 className="text-lg font-semibold">
+                    BASE_URL: (TESTING ENVIRONMENT)
+                  </h3>
+                  <Snippet hideSymbol className="w-full flex-1">
+                    <code className="text-wrap text-base tracking-tighter font-medium">
+                      https://services-uat.bgspayboss.com
+                    </code>
+                  </Snippet>
+                </div> */}
                 <div className="space-y-2">
-                  <h3 className="text-lg font-semibold">BASE_URL:</h3>
+                  <h3 className="text-lg font-semibold">
+                    BASE_URL: (PRODUCTION)
+                  </h3>
                   <Snippet hideSymbol className="w-full flex-1">
                     <code className="text-wrap text-base tracking-tighter font-medium">
                       https://services-prod.bgspayboss.com
                     </code>
                   </Snippet>
-                  {/* <div className="rounded-md bg-muted p-4">
-                    <code></code>
-                  </div> */}
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-semibold">TRANSACTION_ID:</h3>
-                  <p>
+                  <h3 className="text-base xl:text-lg font-semibold">
+                    TRANSACTION_ID:
+                  </h3>
+                  <p className="text-xs sm:text-sm xl:text-base text-foreground">
                     To perform a collection, you need to initiate a transaction
                     on your system and as reference PayBoss will need the ID of
                     that transaction. You are required to pass the ID of that
