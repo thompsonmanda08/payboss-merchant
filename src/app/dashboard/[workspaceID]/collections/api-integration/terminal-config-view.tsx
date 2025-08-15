@@ -15,7 +15,10 @@ import React, { useState } from 'react';
 import { uploadTerminalConfigFile } from '@/app/_actions/pocketbase-actions';
 import { registerTerminals } from '@/app/_actions/workspace-actions';
 import CardHeader from '@/components/base/card-header';
-import { SingleFileDropzone } from '@/components/base/file-dropzone';
+import {
+  ACCEPTABLE_FILE_TYPES,
+  SingleFileDropzone,
+} from '@/components/base/file-dropzone';
 import ProgressStep from '@/components/elements/progress-step';
 import { Button } from '@/components/ui/button';
 import Loader from '@/components/ui/loader';
@@ -211,10 +214,8 @@ const UploadTerminalConfigs = ({
         <div className="flex flex-col px-5">
           <SingleFileDropzone
             isLoading={isLoading}
-            otherAcceptedFiles={{
-              'application/vnd.ms-excel': [],
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                [],
+            dropzoneOptions={{
+              accept: ACCEPTABLE_FILE_TYPES.excel,
             }}
             onChange={async (file) => await handleFileUpload(file as File)}
           />

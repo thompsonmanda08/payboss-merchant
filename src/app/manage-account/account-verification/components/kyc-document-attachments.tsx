@@ -13,7 +13,9 @@ import { uploadBusinessFile } from '@/app/_actions/pocketbase-actions';
 import CardHeader from '@/components/base/card-header';
 import DocumentDisplayButton from '@/components/base/document-display-button';
 import EmptyLogs from '@/components/base/empty-logs';
-import UploadField from '@/components/base/file-dropzone';
+import UploadField, {
+  ACCEPTABLE_FILE_TYPES,
+} from '@/components/base/file-dropzone';
 import IframeWithFallback from '@/components/base/IframeWithFallback';
 import StatusMessage from '@/components/base/status-message';
 import Modal from '@/components/modals/custom-modal';
@@ -116,14 +118,12 @@ const ALL_DOCUMENT_CONFIGS = [
 
 // BUSINESS DOCUMENTS AND ATTACHMENTS
 export default function DocumentAttachments({
-  merchantID,
   documents,
   refDocsExist,
   onCompletionNavigateTo,
   isAdminOrOwner,
   allowUserToSubmitKYC,
 }: {
-  merchantID: string;
   documents: any;
   refDocsExist: boolean;
   onCompletionNavigateTo?: (targetSectionId?: string) => void;
@@ -350,7 +350,7 @@ export default function DocumentAttachments({
           innerWrapper: 'gap-0',
         }}
         infoText={
-          'Documents that prove your company registrations and compliance with regulatory bodies.'
+          'Upload documents that prove your company registrations and compliance with regulatory bodies. (Only scanned Images and PDFs are supported)'
         }
         title="Business Documents and Attachments"
       />
@@ -387,6 +387,10 @@ export default function DocumentAttachments({
             <div key={docConfig.id + '-upload-field'} className="relative">
               <UploadField
                 key={docConfig.id + '-upload'}
+                acceptedFiles={{
+                  ...ACCEPTABLE_FILE_TYPES.images,
+                  ...ACCEPTABLE_FILE_TYPES.pdf,
+                }}
                 handleFile={async (file) =>
                   updateDocs({
                     [docConfig.id]: await handleFileUpload(

@@ -105,7 +105,7 @@ export default function ErrorPage() {
   const [errorCode, setErrorCode] = useState<keyof typeof errorMessages>(
     code as keyof typeof errorMessages,
   );
-  const [searchQuery, setSearchQuery] = useState('');
+
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -127,13 +127,6 @@ export default function ErrorPage() {
       setIsRefreshing(false);
       window.location.reload();
     }, 1000);
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
-    }
   };
 
   return (
@@ -188,25 +181,6 @@ export default function ErrorPage() {
             {currentError.subtitle}
           </p>
 
-          {/* Search Bar */}
-          <form className="mb-8" onSubmit={handleSearch}>
-            <div className="flex max-w-md mx-auto gap-2">
-              {/* <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  type="text"
-                  placeholder="Search for what you need..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-12 text-base"
-                />
-              </div> */}
-              <Button className="h-12 px-6" size="lg" type="submit">
-                Go
-              </Button>
-            </div>
-          </form>
-
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-4 justify-center mb-12">
             <Button
@@ -225,11 +199,7 @@ export default function ErrorPage() {
               isLoading={isRefreshing}
               loadingText="Refreshing..."
               size="lg"
-              startContent={
-                <RefreshCw
-                  className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`}
-                />
-              }
+              startContent={<RefreshCw className={`w-4 h-4 mr-2`} />}
               variant="bordered"
               onClick={handleRefresh}
             >
@@ -292,7 +262,7 @@ export default function ErrorPage() {
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
+              animationDelay: `${Math.random() * 3}s`,
               animationDuration: `${2 + Math.random() * 2}s`,
             }}
           />

@@ -21,6 +21,8 @@ export const WORKSPACE_SESSION =
 export const placeHolderImage = '/images/placeholder-image.webp';
 export const DefaultCover = '/images/profile-cover.jpg';
 
+export const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
 export const MONTHS = [
   'January',
   'February',

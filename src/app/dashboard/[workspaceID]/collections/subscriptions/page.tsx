@@ -41,7 +41,10 @@ import {
 import { getCollectionLatestTransactions } from '@/app/_actions/transaction-actions';
 import CardHeader from '@/components/base/card-header';
 import Card from '@/components/base/custom-card';
-import { SingleFileDropzone } from '@/components/base/file-dropzone';
+import {
+  ACCEPTABLE_FILE_TYPES,
+  SingleFileDropzone,
+} from '@/components/base/file-dropzone';
 import SoftBoxIcon from '@/components/base/soft-box-icon';
 import PromptModal from '@/components/modals/prompt-modal';
 import CustomTable from '@/components/tables/table';
@@ -877,10 +880,8 @@ function UploadMembersCSV({
         file={formData?.members_file}
         isLoading={formData?.isLoading}
         isUploaded={formData?.recordID != undefined}
-        otherAcceptedFiles={{
-          'application/vnd.ms-excel': [],
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-            [],
+        dropzoneOptions={{
+          accept: ACCEPTABLE_FILE_TYPES.excel,
         }}
         onChange={async (file) =>
           await handleFileUpload(file, formData?.recordID)

@@ -13,7 +13,9 @@ import {
 import CardHeader from '@/components/base/card-header';
 import Card from '@/components/base/custom-card';
 import EmptyLogs from '@/components/base/empty-logs';
-import UploadField from '@/components/base/file-dropzone';
+import UploadField, {
+  ACCEPTABLE_FILE_TYPES,
+} from '@/components/base/file-dropzone';
 import IframeWithFallback from '@/components/base/IframeWithFallback';
 import StatusMessage from '@/components/base/status-message';
 import Balance from '@/components/base/wallet-balance';
@@ -48,15 +50,14 @@ function Wallet({
 }) {
   const queryClient = useQueryClient();
 
-  const { data: workspaceInit, isLoading: loadingSession } =
-    useWorkspaceInit(workspaceID);
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const session = workspaceInit?.data as WorkspaceSession;
   const permissions = session?.workspacePermissions;
 
   const {
-    setOpenAttachmentModal,
-    openAttachmentModal,
-    setSelectedPrefund,
+    // setOpenAttachmentModal,
+    // openAttachmentModal,
+    // setSelectedPrefund,
     isLoading,
     setIsLoading,
     walletLoading,
@@ -335,10 +336,8 @@ function Wallet({
                     <UploadField
                       required
                       acceptedFiles={{
-                        'application/pdf': [],
-                        'image/png': [],
-                        'image/jpeg': [],
-                        'image/jpg': [],
+                        ...ACCEPTABLE_FILE_TYPES.images,
+                        ...ACCEPTABLE_FILE_TYPES.pdf,
                       }}
                       handleFile={async (file) => {
                         const file_record = await handleFileUpload(
@@ -366,7 +365,7 @@ function Wallet({
                       type="button"
                       onClick={onOpen}
                     >
-                      Deposit
+                      Create Deposit
                     </Button>
                   </div>
                 </div>
@@ -591,7 +590,7 @@ export function WalletTransactionHistory({
                   const isRed =
                     item?.status == 'rejected' || item?.type == 'debit';
 
-                  const isGray = item?.isExpired;
+                  // const isGray = item?.isExpired;
 
                   return (
                     <div

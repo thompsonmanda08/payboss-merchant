@@ -5,7 +5,10 @@ import Link from 'next/link';
 import React from 'react';
 
 import { uploadPaymentBatchFile } from '@/app/_actions/pocketbase-actions';
-import { SingleFileDropzone } from '@/components/base/file-dropzone';
+import {
+  ACCEPTABLE_FILE_TYPES,
+  SingleFileDropzone,
+} from '@/components/base/file-dropzone';
 import { Button } from '@/components/ui/button';
 import usePaymentsStore from '@/context/payment-store';
 
@@ -74,10 +77,8 @@ const UploadCSVFile = ({
             file={paymentAction?.file}
             isLoading={isLoading}
             isUploaded={paymentAction?.file != undefined}
-            otherAcceptedFiles={{
-              'application/vnd.ms-excel': [],
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                [],
+            dropzoneOptions={{
+              accept: ACCEPTABLE_FILE_TYPES.excel,
             }}
             onChange={async (file) =>
               await handleFileUpload(file as File, paymentAction?.recordID)

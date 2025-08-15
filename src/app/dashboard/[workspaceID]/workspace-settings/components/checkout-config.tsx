@@ -40,7 +40,10 @@ import {
 } from '@/app/_actions/vas-actions';
 import CardHeader from '@/components/base/card-header';
 import Card from '@/components/base/custom-card';
-import { SingleFileDropzone } from '@/components/base/file-dropzone';
+import {
+  ACCEPTABLE_FILE_TYPES,
+  SingleFileDropzone,
+} from '@/components/base/file-dropzone';
 import PromptModal from '@/components/modals/prompt-modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input-field';
@@ -521,13 +524,8 @@ export default function CheckoutConfig({
         <SingleFileDropzone
           showPreview
           isLoading={isUploading}
-          otherAcceptedFiles={{
-            // images
-            'image/png': [],
-            'image/jpeg': [],
-            'image/jpg': [],
-            'image/svg+xml': [],
-            'image/webp': [],
+          dropzoneOptions={{
+            accept: ACCEPTABLE_FILE_TYPES.images,
           }}
           onChange={async (file) =>
             await handleFileUpload(file as File, newCheckoutFormData?.recordID)

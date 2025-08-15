@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import {
@@ -8,10 +9,10 @@ import {
 } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 import * as React from 'react';
-import { useDropzone } from 'react-dropzone';
+import { FileRejection, useDropzone } from 'react-dropzone';
 import { twMerge } from 'tailwind-merge';
 
-import { staggerContainerItemVariants } from '@/lib/constants';
+import { MAX_FILE_SIZE, staggerContainerItemVariants } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 import { Button } from '../ui/button';
@@ -45,28 +46,61 @@ const ERROR_MESSAGES = {
   },
 };
 
-type DropZoneProps = {
-  dropzoneOptions?: any;
-  width?: any;
-  height?: any;
-  value?: any;
-  className?: any;
-  disabled?: boolean;
-  onChange?: (file?: File, imagePreview?: string) => void;
-  file?: any;
-  otherAcceptedFiles?: object;
-  isMultipleFiles?: boolean;
-  isLandscape?: boolean;
-  isLoading?: boolean;
-  showPreview?: boolean;
-  isUploaded?: boolean;
-  preview?: string;
-};
+export default function UploadField(
+  {
+    label,
+    isLoading,
+    required,
+    handleFile,
+    acceptedFiles,
+    options,
+    ...props
+  }: {
+    label?: string;
+    isLoading?: boolean;
+    required?: boolean;
+    handleFile: (file: File) => void;
+    acceptedFiles?: Record<string, string[] | string>;
+    options?: any;
+    props?: any;
+  },
+  ref?: any,
+) {
+  return (
+    <motion.div
+      key={'step-2-1'}
+      className="w-full"
+      variants={staggerContainerItemVariants}
+    >
+      <label className="mb-2 text-xs font-medium capitalize text-gray-500 lg:text-[13px]">
+        {label} {required && <span className="font-bold text-red-500"> *</span>}
+      </label>
+      <SingleFileDropzone
+        ref={ref}
+        isLandscape
+        className={' min-h-8 px-2'}
+        disabled={isLoading}
+        isLoading={isLoading}
+        dropzoneOptions={{
+          maxSize: MAX_FILE_SIZE,
+          maxFiles: 1, // Only 1 file allowed
+          accept: acceptedFiles,
+          ...options,
+        }}
+        onChange={(file) => handleFile(file as File)}
+        {...props}
+      />
+    </motion.div>
+  );
+}
 
 export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
   (
     {
-      dropzoneOptions,
+      dropzoneOptions = {
+        maxSize: MAX_FILE_SIZE,
+        maxFiles: 1, // Only 1 file allowed
+      },
       width,
       height,
       value,
@@ -74,7 +108,6 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
       disabled,
       onChange,
       file,
-      otherAcceptedFiles,
       isMultipleFiles = false,
       isLandscape,
       isLoading = false,
@@ -108,16 +141,8 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
       isDragAccept,
       isDragReject,
     } = useDropzone({
-      accept: {
-        // 'image/png': [],
-        // 'text/csv': [],
-        // 'text/*': [],
-        // 'application/*': [],
-        ...otherAcceptedFiles,
-      },
       multiple: isMultipleFiles,
       disabled,
-
       onDrop: (acceptedFiles) => {
         // OF THE MULTIPLE FILE ADD GET ONLY ONE
         const file = acceptedFiles[0] as File;
@@ -132,8 +157,9 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
           void onChange?.(file, imagePreview);
         }
       },
-
       ...dropzoneOptions,
+      maxSize: MAX_FILE_SIZE, // 5MB - files larger than this will be rejected
+      accept: dropzoneOptions?.accept || { 'application/pdf': ['.pdf'] },
     });
 
     React.useImperativeHandle(ref, () => ({
@@ -253,7 +279,7 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
                     Your file is ready
                   </p>
                 )}
-                <span className="flex items-center w-full gap-2 font-semibold text-xs lg:text-sm max-w-sm text-primary">
+                <span className="flex items-center w-full gap-2 font-semibold text-xs lg:text-sm max-w-sm truncate text-primary">
                   {isLandscape && (
                     <CheckCircleIcon className="h-6 w-6 text-green-500" />
                   )}{' '}
@@ -288,7 +314,9 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
                 <CloudArrowUpIcon
                   className={cn('mb-2 h-12 w-12', { 'm-0 w-8': isLandscape })}
                 />
-                <div className="text-gray-400">Drag & Drop to Upload</div>
+                <div className="text-gray-400">
+                  Drag & Drop to Upload - ({formatFileSize(MAX_FILE_SIZE)}) Max.
+                </div>
               </div>
               {!isLandscape && (
                 // ONLY SHOWS ON THE UPRIGHT COMPONENT
@@ -306,8 +334,8 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
             <div
               className="group absolute right-0 top-0 -translate-y-1/4 translate-x-1/4 transform"
               onClick={(e) => {
-                e.stopPropagation();
                 void onChange?.(undefined);
+                e.stopPropagation();
               }}
             >
               <div className="flex h-5 w-5 items-center justify-center rounded-md border border-solid border-gray-500 bg-background transition-all duration-300 hover:h-6 hover:w-6 dark:border-gray-400 dark:bg-black">
@@ -321,11 +349,53 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
           )}
         </div>
         {/* Error Text */}
-        <div className="mt-1 text-sm text-red-500">{errorMessage}</div>
+        {errorMessage && (
+          <motion.span
+            className={cn('ml-1 mt-1 text-sm text-red-500')}
+            whileInView={{
+              scale: [0, 1],
+              opacity: [0, 1],
+              transition: { duration: 0.3 },
+            }}
+          >
+            {errorMessage}
+          </motion.span>
+        )}
       </div>
     );
   },
 );
+
+type DropZoneProps = {
+  dropzoneOptions?: {
+    maxSize?: number;
+    maxFiles?: number;
+    accept?: Record<string, string[]>;
+    onDrop?: (acceptedFiles: File[], fileRejections: FileRejection[]) => void;
+    onDragEnter?: () => void;
+    onDragLeave?: () => void;
+    onDragOver?: () => void;
+    onDragEnd?: () => void;
+    onDropAccepted?: () => void;
+    onDropRejected?: () => void;
+    [key: string]: any;
+  };
+  width?: any;
+  height?: any;
+  value?: any;
+  className?: any;
+  disabled?: boolean;
+  onChange?: (file?: File, imagePreview?: string) => void;
+  file?: any;
+  acceptableFileTypes?: Record<string, string[] | string>;
+  isMultipleFiles?: boolean;
+  isLandscape?: boolean;
+  isLoading?: boolean;
+  showPreview?: boolean;
+  isUploaded?: boolean;
+  preview?: string;
+};
+
 SingleFileDropzone.displayName = 'SingleFileDropzone';
 
 function formatFileSize(bytes: any) {
@@ -341,48 +411,37 @@ function formatFileSize(bytes: any) {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))}${sizes[i]}`;
 }
 
-export default function UploadField(
-  {
-    label,
-    isLoading,
-    required,
-    handleFile,
-    acceptedFiles,
-    ...props
-  }: {
-    label?: string;
-    isLoading?: boolean;
-    required?: boolean;
-    handleFile: (file: File) => void;
-    acceptedFiles?: Record<string, File[]>;
-    props?: any;
+export const ACCEPTABLE_FILE_TYPES = {
+  pdf: {
+    'application/pdf': ['.pdf'],
   },
-  ref?: any,
-) {
-  return (
-    <motion.div
-      key={'step-2-1'}
-      className="w-full"
-      variants={staggerContainerItemVariants}
-    >
-      <label className="mb-2 text-xs font-medium capitalize text-gray-500 lg:text-[13px]">
-        {label} {required && <span className="font-bold text-red-500"> *</span>}
-      </label>
-      <SingleFileDropzone
-        ref={ref}
-        isLandscape
-        className={' min-h-8 px-2'}
-        disabled={isLoading}
-        isLoading={isLoading}
-        otherAcceptedFiles={{
-          'application/pdf': [],
-          ...acceptedFiles,
-        }}
-        onChange={(file) => handleFile(file as File)}
-      />
-    </motion.div>
-  );
-}
+  images: {
+    'image/png': ['.png'],
+    'image/jpeg': ['.jpg', '.jpeg'],
+    'image/webp': ['.webp'],
+  },
+
+  word: {
+    'application/msword': ['.doc', '.docx'],
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [
+      '.docx',
+    ],
+  },
+
+  excel: {
+    'text/csv': ['.csv'],
+    'application/vnd.ms-excel': ['.xls', '.xlsx'],
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
+      '.xlsx',
+    ],
+  },
+
+  powerpoint: {
+    'application/vnd.ms-powerpoint': ['.ppt', '.pptx'],
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+      ['.pptx'],
+  },
+};
