@@ -1,6 +1,6 @@
 import PocketBase from 'pocketbase';
 
-import { handleError } from '@/lib/api-config';
+import { handleError, successResponse } from '@/lib/api-config';
 import { POCKET_BASE_URL } from '@/lib/constants';
 import { APIResponse } from '@/types';
 
@@ -21,7 +21,10 @@ const pb = new PocketBase(POCKET_BASE_URL);
  *                            or an error message and status upon failure.
  */
 
-export async function uploadPaymentBatchFile(file: File): Promise<APIResponse> {
+export async function uploadPaymentBatchFile(
+  file: File,
+  fileRecordId?: string,
+): Promise<APIResponse> {
   const session = await getUserDetails();
   const merchantID = session?.user?.merchantID as string;
 
@@ -34,24 +37,24 @@ export async function uploadPaymentBatchFile(file: File): Promise<APIResponse> {
     formData.append('merchantID', merchantID);
 
     // FILE ALREADY EXISTS AND ONLY NEEDS TO BE UPDATED
-    // if (fileRecordId) {
-    //   const fileRecord = await pb
-    //     .collection('bulk_direct_payments')
-    //     .update(fileRecordId, formData)
+    if (fileRecordId) {
+      const fileRecord = await pb
+        .collection('bulk_direct_payments')
+        .update(fileRecordId, formData);
 
-    //   const file_url = pb.files.getURL(fileRecord, fileRecord['file'])
-    //   const file_record_id = fileRecord['id']
+      const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
+      const file_record_id = fileRecord['id'];
 
-    //   return {
-    //     success: true,
-    //     message: 'File Updated Successfully!',
-    //     data: {
-    //       file_name,
-    //       file_url,
-    //       file_record_id,
-    //     },
-    //   }
-    // }
+      return {
+        success: true,
+        message: 'File Updated Successfully!',
+        data: {
+          file_name,
+          file_url,
+          file_record_id,
+        },
+      };
+    }
 
     // FILE UPLOAD
     const fileRecord = await pb
@@ -61,16 +64,14 @@ export async function uploadPaymentBatchFile(file: File): Promise<APIResponse> {
     const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
     const file_record_id = fileRecord['id'];
 
-    return {
-      status: 200,
-      success: true,
-      message: 'File Uploaded Successfully!',
-      data: {
+    return successResponse(
+      {
         file_name,
         file_url,
         file_record_id,
       },
-    };
+      'File Uploaded Successfully!',
+    );
   } catch (error: Error | any) {
     return handleError(error, 'UPLOAD-POST', `POCKET URL: ${POCKET_BASE_URL}`);
   }
@@ -109,15 +110,14 @@ export async function uploadPOPDocument(
       const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
       const file_record_id = fileRecord['id'];
 
-      return {
-        success: true,
-        message: 'POP File Updated Successfully!',
-        data: {
+      return successResponse(
+        {
           file_name,
           file_url,
           file_record_id,
         },
-      };
+        'POP File Updated Successfully!',
+      );
     }
 
     // FILE UPLOAD
@@ -128,15 +128,14 @@ export async function uploadPOPDocument(
     const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
     const file_record_id = fileRecord['id'];
 
-    return {
-      success: true,
-      message: 'File Uploaded Successfully!',
-      data: {
+    return successResponse(
+      {
         file_name,
         file_url,
         file_record_id,
       },
-    };
+      'POP File Uploaded Successfully!',
+    );
   } catch (error: Error | any) {
     return handleError(error, 'UPLOAD-POST', `POCKET URL: ${POCKET_BASE_URL}`);
   }
@@ -176,15 +175,14 @@ export async function uploadBusinessFile(
       const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
       const file_record_id = fileRecord['id'];
 
-      return {
-        success: true,
-        message: 'File Updated Successfully!',
-        data: {
+      return successResponse(
+        {
           file_name,
           file_url,
           file_record_id,
         },
-      };
+        'File Updated Successfully!',
+      );
     }
 
     // FILE UPLOAD
@@ -195,15 +193,14 @@ export async function uploadBusinessFile(
     const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
     const file_record_id = fileRecord['id'];
 
-    return {
-      success: true,
-      message: 'File Uploaded Successfully!',
-      data: {
+    return successResponse(
+      {
         file_name,
         file_url,
         file_record_id,
       },
-    };
+      'File Uploaded Successfully!',
+    );
   } catch (error: Error | any) {
     return handleError(
       error,
@@ -246,15 +243,14 @@ export async function uploadTerminalConfigFile(
     const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
     const file_record_id = fileRecord['id'];
 
-    return {
-      success: true,
-      message: 'File Uploaded Successfully!',
-      data: {
+    return successResponse(
+      {
         file_name,
         file_url,
         file_record_id,
       },
-    };
+      'File Uploaded Successfully!',
+    );
   } catch (error: Error | any) {
     return handleError(error, 'UPLOAD-POST', `POCKET URL: ${POCKET_BASE_URL}`);
   }
@@ -284,15 +280,14 @@ export async function uploadCheckoutLogoFile(
       const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
       const file_record_id = fileRecord['id'];
 
-      return {
-        success: true,
-        message: 'File Updated Successfully!',
-        data: {
+      return successResponse(
+        {
           file_name,
           file_url,
           file_record_id,
         },
-      };
+        'File Uploaded Successfully!',
+      );
     }
 
     // FILE UPLOAD
@@ -303,15 +298,14 @@ export async function uploadCheckoutLogoFile(
     const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
     const file_record_id = fileRecord['id'];
 
-    return {
-      success: true,
-      message: 'File Uploaded Successfully!',
-      data: {
+    return successResponse(
+      {
         file_name,
         file_url,
         file_record_id,
       },
-    };
+      'File Uploaded Successfully!',
+    );
   } catch (error: Error | any) {
     return handleError(error, 'UPLOAD-POST', `POCKET URL: ${POCKET_BASE_URL}`);
   }

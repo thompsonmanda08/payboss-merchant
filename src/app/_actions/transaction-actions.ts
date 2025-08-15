@@ -6,6 +6,7 @@ import authenticatedApiClient, {
   successResponse,
 } from '@/lib/api-config';
 import { APIResponse } from '@/types';
+import { revalidatePath } from 'next/cache';
 
 // ****************** ******************************** ************************** //
 // ****************** BULK TRANSACTION API ENDPOINTS ************************** //
@@ -112,6 +113,9 @@ export async function reviewBatch(
       method: 'POST',
       data: reviewDetails,
     });
+
+    revalidatePath('/dashboard/[workspaceID]/payments', 'page');
+    revalidatePath('/dashboard/[workspaceID]/payments/create/[protocol]', 'page');
 
     return successResponse(res.data);
   } catch (error) {

@@ -92,28 +92,28 @@ function Wallet({
     const response = await uploadPOPDocument(file, recordID);
 
     if (response?.success) {
-      setWalletLoading(false);
       addToast({
         title: 'Success',
         color: 'success',
         description: response?.message,
       });
-
-      return response?.data;
+    } else {
+      addToast({
+        title: 'Error',
+        color: 'danger',
+        description: response?.message,
+      });
     }
 
     setWalletLoading(false);
-    addToast({
-      title: 'Error',
-      color: 'danger',
-      description: response?.message,
-    });
-
-    return null;
+    return response?.data;
   }
 
   async function handleWalletPreFund() {
-    setIsLoading(true);
+    setError({
+      message: '',
+      status: false,
+    });
 
     if (!formData.url) {
       addToast({
@@ -125,7 +125,6 @@ function Wallet({
         message: 'Verify that you have attached a proof of payment!',
         status: true,
       });
-      setIsLoading(false);
       onClose();
 
       return;
@@ -141,7 +140,6 @@ function Wallet({
         message: 'Verify that you have entered a valid bank reference number!',
         status: true,
       });
-      setIsLoading(false);
       onClose();
 
       return;
@@ -157,7 +155,6 @@ function Wallet({
         message: 'Verify that you have entered a valid date of deposit!',
         status: true,
       });
-      setIsLoading(false);
       onClose();
 
       return;
@@ -173,7 +170,6 @@ function Wallet({
         message: 'Verify that you have entered a valid prefund name!',
         status: true,
       });
-      setIsLoading(false);
       onClose();
 
       return;
@@ -193,7 +189,6 @@ function Wallet({
         message: 'Verify that you have entered a valid amount!',
         status: true,
       });
-      setIsLoading(false);
       onClose();
 
       return;
@@ -209,23 +204,20 @@ function Wallet({
         message: 'You are not allowed to prefund your collections wallet!',
         status: true,
       });
-      setIsLoading(false);
 
       return;
     }
 
+    setIsLoading(true);
     const response = await submitPOP(formData, workspaceID);
 
     if (response?.success) {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.WALLET_HISTORY, workspaceID],
-      });
       addToast({
         title: 'Success',
         color: 'success',
         description: 'Proof of payment submitted successfully.',
       });
-      setIsLoading(false);
+
       setFormData({
         amount: '',
         bank_rrn: '',
@@ -234,23 +226,24 @@ function Wallet({
         name: '',
       });
       onClose();
-      setIsLoading(false);
+      setFormData({} as typeof formData);
 
-      return;
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.WALLET_HISTORY],
+      });
+    } else {
+      setError({
+        status: true,
+        message: response?.message,
+      });
+      addToast({
+        title: 'Error',
+        color: 'danger',
+        description: response?.message,
+      });
     }
 
-    setError({
-      status: true,
-      message: response?.message,
-    });
-    addToast({
-      title: 'Error',
-      color: 'danger',
-      description: response?.message,
-    });
     setIsLoading(false);
-
-    return;
   }
 
   return (
@@ -443,7 +436,6 @@ export function WalletTransactionHistory({
   };
   permissions?: any;
 }) {
-  const queryClient = useQueryClient();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const {
@@ -536,14 +528,6 @@ export function WalletTransactionHistory({
       return;
     }
 
-    // Invalidate all wallet prefund and transactions
-    queryClient.invalidateQueries({
-      queryKey: [QUERY_KEYS.WALLET_HISTORY, workspaceID],
-    });
-
-    queryClient.invalidateQueries({
-      queryKey: [QUERY_KEYS.ACTIVE_PREFUND, workspaceID],
-    });
     setIsLoading(false);
     addToast({
       title: 'Success',

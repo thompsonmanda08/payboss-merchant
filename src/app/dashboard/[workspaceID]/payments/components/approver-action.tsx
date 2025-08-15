@@ -119,6 +119,9 @@ const ApproverAction = ({
 
     // PERFORM QUERY INVALIDATION TO UPDATE THE STATE OF THE UI
     queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.BATCH_DETAILS],
+    });
+    queryClient.invalidateQueries({
       queryKey: [QUERY_KEYS.BATCH_DETAILS, batch?.id],
     });
     queryClient.invalidateQueries({

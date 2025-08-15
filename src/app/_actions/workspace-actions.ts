@@ -174,6 +174,11 @@ export async function approveWalletPrefund(
       data: prefundData,
     });
 
+    revalidatePath(
+      '/manage-account/workspaces/[ID]/workspace-settings',
+      'page',
+    );
+
     return successResponse(res.data);
   } catch (error: Error | any) {
     return handleError(error, 'PATCH | APPROVE WALLET PREFUND', url);
@@ -239,7 +244,7 @@ export async function deleteUserFromWorkspace(
       method: 'DELETE',
     });
 
-    revalidatePath('/manage-account/workspaces/[ID]', 'page');
+    revalidatePath('/manage-account/workspaces/[ID]', 'layout');
     revalidatePath('/dashboard/[workspaceID]/workspace-settings', 'page');
 
     return successResponse(res.data);
@@ -277,6 +282,11 @@ export async function changeUserRoleInWorkspace(
       method: 'PATCH',
       data: mapping,
     });
+
+    revalidatePath(
+      '/manage-account/workspaces/[ID]/workspace-settings',
+      'page',
+    );
 
     return successResponse(res.data);
   } catch (error: Error | any) {
@@ -399,6 +409,11 @@ export async function generateWorkspaceTillNumber(
   try {
     const res = await authenticatedApiClient({ url });
 
+    revalidatePath(
+      '/manage-account/workspaces/[ID]/collections/till-collections',
+      'page',
+    );
+
     return successResponse(res.data);
   } catch (error: Error | any) {
     return handleError(error, 'GET | GENERATE TILL NUMBER', url);
@@ -462,6 +477,11 @@ export async function activateWorkspaceTerminals(
   try {
     const res = await authenticatedApiClient({ url });
 
+    revalidatePath(
+      '/manage-account/workspaces/[ID]/collections/api-integration',
+      'page',
+    );
+
     return successResponse(res.data);
   } catch (error: Error | any) {
     return handleError(error, 'POST | TERMINAL ACTIVATION', url);
@@ -492,6 +512,11 @@ export async function deactivateWorkspaceTerminals(
     const res = await authenticatedApiClient({
       url: `merchant/workspace/${workspaceID}/terminal/deactivation`,
     });
+
+    revalidatePath(
+      '/manage-account/workspaces/[ID]/collections/api-integration',
+      'page',
+    );
 
     return successResponse(res.data);
   } catch (error: Error | any) {
@@ -560,6 +585,11 @@ export async function registerTerminals(
       url,
       data: { terminalUrl },
     });
+
+    revalidatePath(
+      '/manage-account/workspaces/[ID]/collections/api-integration',
+      'page',
+    );
 
     return successResponse(res.data);
   } catch (error: Error | any) {
