@@ -18,7 +18,7 @@ import {
 } from './floating-shapes';
 
 export default function SubScriptionLandingSection({
-  startPayment,
+  // startPayment,
   navigateTo,
 }: {
   startPayment: () => void;

@@ -40,14 +40,14 @@ const TABS = [
 export default function BatchDetailsPage({
   isOpen,
   onClose,
-  protocol,
+  // protocol,
 }: {
   isOpen: boolean;
   onClose: () => void;
   protocol: string;
 }) {
   const [currentStep, setCurrentStep] = useState(BATCH_DETAILS_STEPS[0]);
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const params = useParams();
   const workspaceID = String(params.workspaceID);
 
@@ -66,8 +66,8 @@ export default function BatchDetailsPage({
 
   const {
     data: batchResponse,
-    isSuccess,
-    isLoading,
+    // isSuccess,
+    // isLoading,
   } = useBatchDetails(batchID);
 
   const batch = batchResponse?.data;

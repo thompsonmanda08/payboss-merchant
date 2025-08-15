@@ -45,7 +45,7 @@ export default function TillPaymentCollections({}) {
   const queryClient = useQueryClient();
   const { data: tillNumberResponse, isFetching } = useTillNumber(workspaceID);
 
-  const { onOpen, onClose } = useDisclosure();
+  const { onClose } = useDisclosure();
   const [isNew, setIsNew] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [openViewConfig, setOpenViewConfig] = useState(false);

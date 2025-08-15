@@ -41,7 +41,7 @@ const UploadCSVFile = ({
   async function handleFileUpload(file: File, recordID?: string) {
     setIsLoading(true);
 
-    const response = await uploadPaymentBatchFile(file);
+    const response = await uploadPaymentBatchFile(file, recordID);
 
     if (response?.success) {
       addToast({

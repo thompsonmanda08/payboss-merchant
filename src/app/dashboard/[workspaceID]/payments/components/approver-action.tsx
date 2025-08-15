@@ -30,7 +30,7 @@ const ApproverAction = ({
   const {
     closeRecordsModal,
     setOpenBatchDetailsModal,
-    openBatchDetailsModal,
+
     setLoading,
     loading,
     transactionDetails,

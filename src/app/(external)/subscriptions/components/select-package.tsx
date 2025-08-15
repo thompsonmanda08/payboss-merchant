@@ -80,42 +80,43 @@ export default function SelectPaymentPackage({
     // formData.customReference,
   ]);
 
-  const handleCustomAmountChange = (value: string) => {
-    updateFormData({ customAmount: Number.parseFloat(value) || 0 });
-    setErrors((prev: any) => {
-      if (prev.customAmount) {
-        const newErrors = { ...prev };
+  // const handleCustomAmountChange = (value: string) => {
+  //   updateFormData({ customAmount: Number.parseFloat(value) || 0 });
+  //   setErrors((prev: any) => {
+  //     if (prev.customAmount) {
+  //       const newErrors = { ...prev };
 
-        delete newErrors.customAmount;
+  //       delete newErrors.customAmount;
 
-        return newErrors;
-      }
+  //       return newErrors;
+  //     }
 
-      return prev;
-    });
-  };
+  //     return prev;
+  //   });
+  // };
 
-  const handleCustomReferenceChange = (value: string) => {
-    updateFormData({ customReference: value });
-    setErrors((prev: any) => {
-      if (prev.customReference) {
-        const newErrors = { ...prev };
+  // const handleCustomReferenceChange = (value: string) => {
+  //   updateFormData({ customReference: value });
+  //   setErrors((prev: any) => {
+  //     if (prev.customReference) {
+  //       const newErrors = { ...prev };
 
-        delete newErrors.customReference;
+  //       delete newErrors.customReference;
 
-        return newErrors;
-      }
+  //       return newErrors;
+  //     }
 
-      return prev;
-    });
-  };
+  //     return prev;
+  //   });
+  // };
 
-  // Replace the getFinalAmount function with:
-  const getFinalAmount = () => {
-    return getTotalAmount();
-  };
+  // // Replace the getFinalAmount function with:
+  // const getFinalAmount = () => {
+  //   return getTotalAmount();
+  // };
 
   // Add these helper functions after the validation functions
+
   const handlePackageToggle = useCallback((packageId: string) => {
     setFormData((prev: any) => {
       const isSelected = prev.selectedPackages.includes(packageId);

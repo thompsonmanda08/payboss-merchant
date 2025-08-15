@@ -244,7 +244,6 @@ function AccountVerification({}) {
             allowUserToSubmitKYC={allowUserToSubmitKYC}
             documents={documents}
             isAdminOrOwner={isOwner || isAccountAdmin}
-            merchantID={merchantID}
             refDocsExist={refDocsExist}
             onCompletionNavigateTo={(targetSectionId?: string) =>
               navigateToSection(targetSectionId || 'contract')

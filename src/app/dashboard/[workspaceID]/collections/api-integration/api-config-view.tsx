@@ -7,7 +7,7 @@ import {
   Snippet,
   ModalFooter,
 } from '@heroui/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import CardHeader from '@/components/base/card-header';
 import Tabs from '@/components/elements/tabs';

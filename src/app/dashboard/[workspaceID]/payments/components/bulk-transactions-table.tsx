@@ -50,8 +50,7 @@ export default function BulkTransactionsTable({
   const rows = bulkTransactionsResponse?.data?.batches || [];
 
   const columns = BULK_TRANSACTIONS_COLUMN;
-  const { setSelectedBatch, setOpenBatchDetailsModal, setOpenPaymentsModal } =
-    usePaymentsStore();
+  const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
 
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const permissions = workspaceInit?.data?.workspacePermissions;

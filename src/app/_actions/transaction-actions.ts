@@ -115,7 +115,10 @@ export async function reviewBatch(
     });
 
     revalidatePath('/dashboard/[workspaceID]/payments', 'page');
-    revalidatePath('/dashboard/[workspaceID]/payments/create/[protocol]', 'page');
+    revalidatePath(
+      '/dashboard/[workspaceID]/payments/create/[protocol]',
+      'page',
+    );
 
     return successResponse(res.data);
   } catch (error) {

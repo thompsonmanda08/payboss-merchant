@@ -18,7 +18,6 @@ import {
   ChevronRightIcon,
   DocumentTextIcon,
 } from '@heroicons/react/24/outline';
-import { TicketPercentIcon } from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 

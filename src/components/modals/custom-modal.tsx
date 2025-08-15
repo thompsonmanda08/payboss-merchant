@@ -25,8 +25,8 @@ function Modal({
   confirmText,
   cancelText,
   children,
-  // width,
-  // height,
+  width,
+  height,
   title,
   infoText,
   loading,
@@ -83,11 +83,13 @@ function Modal({
             )}
             exit="exit"
             initial="hidden"
-            // style={{
-            //   maxWidth: width ? `${width}px` : '380px',
-            //   minHeight: height ? `${height}px` : '180px',
-            //   // height: height ? `${height}px` : 'auto',
-            // }}
+            style={
+              {
+                maxWidth: width ? `${width}px` : '380px',
+                minHeight: height ? `${height}px` : '180px',
+                // height: height ? `${height}px` : 'auto',
+              } as any
+            }
             transition={{ duration: 0.25 }}
             variants={modalVariants}
             onClick={(e) => e.stopPropagation()}
