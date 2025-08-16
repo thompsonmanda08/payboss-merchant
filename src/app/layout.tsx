@@ -1,5 +1,5 @@
 import './globals.css';
-import localFont from 'next/font/local';
+// import localFont from 'next/font/local';
 import { PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -7,13 +7,25 @@ import { cn } from '@/lib/utils';
 import { getAuthSession, getUserDetails } from './_actions/config-actions';
 import Providers from './providers';
 
-const inter = localFont({
-  src: 'font/Inter-VariableFont_slnt,wght.ttf',
-  variable: '--font-inter',
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
   display: 'swap',
+  // Preload critical fonts
   preload: true,
+  // Fallback fonts
   fallback: ['system-ui', 'arial'],
+  variable: '--font-inter',
 });
+
+// const inter = localFont({
+//   src: 'font/Inter-VariableFont_slnt,wght.ttf',
+//   variable: '--font-inter',
+//   display: 'swap',
+//   preload: true,
+//   fallback: ['system-ui', 'arial'],
+// });
 
 const description =
   'PayBoss offers cutting-edge digital tools designed to help businesses of all sizes efficiently manage their financial inflows and outflows';
@@ -73,6 +85,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         className={cn(
           'flex min-h-screen flex-col bg-background font-inter overflow-x-hidden',
           inter.variable,
+          inter.className,
         )}
       >
         <Providers authSession={authSession} session={session}>
