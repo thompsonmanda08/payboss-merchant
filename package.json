@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "rm -rf .next && next build",
+    "build": "next build",
+    "build:clean": "rm -rf .next && next build",
+    "build:production": "NODE_ENV=production npm run build:clean",
     "start": "next start",
     "type-check": "tsc",
     "type-check:watch": "tsc --watch",
