@@ -6,6 +6,7 @@ const nextConfig = {
   assetPrefix: process.env.SERVER_URL || process.env.NEXT_PUBLIC_SERVER_URL,
   compress: false, // Disable compression - let reverse proxy handle it
   outputFileTracingRoot: process.cwd(), // Container-specific settings
+
   devIndicators: {
     autoPrerender: false,
   },
@@ -42,6 +43,10 @@ const nextConfig = {
   experimental: {
     // Disable SWC transforms that might force HTTPS
     forceSwcTransforms: false, //Disabled
+    serverActions: {
+      bodySizeLimit: '50mb',
+      allowedOrigins: ['bgspayboss.com', '*.bgspayboss.com'],
+    },
 
     optimizePackageImports: ['lucide-react', '@heroicons/react'], // Optimize chunk splitting
   },
