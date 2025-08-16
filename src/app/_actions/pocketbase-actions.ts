@@ -104,7 +104,7 @@ export async function uploadPOPDocument(
     // FILE ALREADY EXISTS AND ONLY NEEDS TO BE UPDATED
     if (fileRecordId) {
       const fileRecord = await pb
-        .collection('merchant_pop_documents')
+        .collection('temp_files')
         .update(fileRecordId, formData);
 
       const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
@@ -121,9 +121,7 @@ export async function uploadPOPDocument(
     }
 
     // FILE UPLOAD
-    const fileRecord = await pb
-      .collection('merchant_pop_documents')
-      .create(formData);
+    const fileRecord = await pb.collection('temp_files').create(formData);
 
     const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
     const file_record_id = fileRecord['id'];
