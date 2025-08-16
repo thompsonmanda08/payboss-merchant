@@ -3,7 +3,6 @@ import { NextConfig } from 'next';
 
 const nextConfig = {
   output: 'standalone',
-  // distDir: "build",
   assetPrefix: process.env.SERVER_URL || process.env.NEXT_PUBLIC_SERVER_URL,
   compress: false, // Disable compression - let reverse proxy handle it
   outputFileTracingRoot: process.cwd(), // Container-specific settings
