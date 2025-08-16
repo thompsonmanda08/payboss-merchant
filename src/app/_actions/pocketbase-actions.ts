@@ -1,3 +1,4 @@
+'use server';
 import PocketBase from 'pocketbase';
 
 import { handleError, successResponse } from '@/lib/api-config';
@@ -6,8 +7,7 @@ import { APIResponse } from '@/types';
 
 import { getUserDetails } from './config-actions';
 
-// const pb = new PocketBase(POCKET_BASE_URL);
-const pb = new PocketBase('http://10.51.74.29:8090');
+const pb = new PocketBase(POCKET_BASE_URL);
 
 /**
  * Uploads or updates a payment batch file to the 'bulk_direct_payments' collection.

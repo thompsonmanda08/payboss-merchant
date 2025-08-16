@@ -1,5 +1,5 @@
 import './globals.css';
-// import localFont from 'next/font/local';
+import localFont from 'next/font/local';
 import { PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -7,25 +7,59 @@ import { cn } from '@/lib/utils';
 import { getAuthSession, getUserDetails } from './_actions/config-actions';
 import Providers from './providers';
 
-import { Inter } from 'next/font/google';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  // Preload critical fonts
-  preload: true,
-  // Fallback fonts
-  fallback: ['system-ui', 'arial'],
+const inter = localFont({
+  src: [
+    {
+      path: 'fonts/inter/100.ttf',
+      weight: '100',
+      style: 'normal',
+    },
+    {
+      path: 'fonts/inter/200.ttf',
+      weight: '200',
+      style: 'normal',
+    },
+    {
+      path: 'fonts/inter/300.ttf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: 'fonts/inter/400.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: 'fonts/inter/500.ttf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: 'fonts/inter/600.ttf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: 'fonts/inter/700.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: 'fonts/inter/800.ttf',
+      weight: '800',
+      style: 'normal',
+    },
+    {
+      path: 'fonts/inter/900.ttf',
+      weight: '900',
+      style: 'normal',
+    },
+  ],
   variable: '--font-inter',
+  display: 'swap',
+  preload: true,
+  fallback: ['inter', 'system-ui', 'arial'],
 });
-
-// const inter = localFont({
-//   src: 'font/Inter-VariableFont_slnt,wght.ttf',
-//   variable: '--font-inter',
-//   display: 'swap',
-//   preload: true,
-//   fallback: ['system-ui', 'arial'],
-// });
 
 const description =
   'PayBoss offers cutting-edge digital tools designed to help businesses of all sizes efficiently manage their financial inflows and outflows';
