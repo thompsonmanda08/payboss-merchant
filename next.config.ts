@@ -105,6 +105,24 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: '/_next/static/media/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Content-Type',
+            value: 'font/ttf',
+          },
+          // Force proper content encoding
+          {
+            key: 'Content-Encoding',
+            value: 'identity',
+          },
+        ],
+      },
     ];
   },
 } as NextConfig;

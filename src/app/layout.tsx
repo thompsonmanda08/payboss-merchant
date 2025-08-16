@@ -10,6 +10,9 @@ import Providers from './providers';
 const inter = localFont({
   src: 'font/Inter-VariableFont_slnt,wght.ttf',
   variable: '--font-inter',
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 });
 
 const description =
