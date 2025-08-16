@@ -44,7 +44,7 @@ const nextConfig = {
     // Disable SWC transforms that might force HTTPS
     forceSwcTransforms: false, //Disabled
     serverActions: {
-      bodySizeLimit: '50mb',
+      bodySizeLimit: process.env.MAX_FILE_SIZE_LIMIT || '60mb',
       allowedOrigins: ['bgspayboss.com', '*.bgspayboss.com'],
     },
 

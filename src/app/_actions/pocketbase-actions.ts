@@ -145,7 +145,6 @@ export async function uploadPOPDocument(
 /**
  * Uploads a business file to the corresponding merchant's collection in PocketBase.
  * @param {File} file The file to be uploaded
- * @param {string} merchantID The ID of the merchant
  * @param {string} fileRecordId The ID of the file to be updated. If not provided, a new file will be created.
  * @returns {Object} An object with the following properties:
  *  - success: A boolean indicating if the operation was successful
@@ -257,6 +256,15 @@ export async function uploadTerminalConfigFile(
   }
 }
 
+/**
+ * Uploads a checkout logo file to the corresponding merchant's collection in PocketBase.
+ * @param {File} file The file to be uploaded
+ * @param {string} [fileRecordId] The ID of the file to be updated. If not provided, a new file will be created.
+ * @returns {Object} An object with the following properties:
+ *  - success: A boolean indicating if the operation was successful
+ *  - message: A string describing the outcome of the operation
+ *  - data: An object containing the uploaded file's name, URL and ID
+ */
 export async function uploadCheckoutLogoFile(
   file: File,
   fileRecordId?: string,
