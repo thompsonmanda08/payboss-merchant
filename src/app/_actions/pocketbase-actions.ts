@@ -6,7 +6,8 @@ import { APIResponse } from '@/types';
 
 import { getUserDetails } from './config-actions';
 
-const pb = new PocketBase(POCKET_BASE_URL);
+// const pb = new PocketBase(POCKET_BASE_URL);
+const pb = new PocketBase('http://10.51.74.29:8090');
 
 /**
  * Uploads or updates a payment batch file to the 'bulk_direct_payments' collection.
@@ -39,7 +40,7 @@ export async function uploadPaymentBatchFile(
     // FILE ALREADY EXISTS AND ONLY NEEDS TO BE UPDATED
     if (fileRecordId) {
       const fileRecord = await pb
-        .collection('bulk_direct_payments')
+        .collection('temp_files')
         .update(fileRecordId, formData);
 
       const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
@@ -57,9 +58,7 @@ export async function uploadPaymentBatchFile(
     }
 
     // FILE UPLOAD
-    const fileRecord = await pb
-      .collection('bulk_direct_payments')
-      .create(formData);
+    const fileRecord = await pb.collection('temp_files').create(formData);
 
     const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
     const file_record_id = fileRecord['id'];
@@ -73,7 +72,7 @@ export async function uploadPaymentBatchFile(
       'File Uploaded Successfully!',
     );
   } catch (error: Error | any) {
-    return handleError(error, 'UPLOAD-POST', `POCKET URL: ${POCKET_BASE_URL}`);
+    return handleError(error, 'UPLOAD-FILE', `POCKET URL: ${POCKET_BASE_URL}`);
   }
 }
 
@@ -135,7 +134,11 @@ export async function uploadPOPDocument(
       'POP File Uploaded Successfully!',
     );
   } catch (error: Error | any) {
-    return handleError(error, 'UPLOAD-POST', `POCKET URL: ${POCKET_BASE_URL}`);
+    return handleError(
+      error,
+      'UPLOAD-FILE',
+      `POCKET URL: ${POCKET_BASE_URL}/uploadPOPDocument`,
+    );
   }
 }
 
@@ -167,7 +170,7 @@ export async function uploadBusinessFile(
     // FILE ALREADY EXISTS AND ONLY NEEDS TO BE UPDATED
     if (fileRecordId) {
       const fileRecord = await pb
-        .collection('merchant_onboarding_documents')
+        .collection('temp_files')
         .update(fileRecordId, formData);
 
       const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
@@ -184,9 +187,7 @@ export async function uploadBusinessFile(
     }
 
     // FILE UPLOAD
-    const fileRecord = await pb
-      .collection('merchant_onboarding_documents')
-      .create(formData);
+    const fileRecord = await pb.collection('temp_files').create(formData);
 
     const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
     const file_record_id = fileRecord['id'];
@@ -202,8 +203,8 @@ export async function uploadBusinessFile(
   } catch (error: Error | any) {
     return handleError(
       error,
-      'UPLOAD-POST',
-      `POCKET URL: ${POCKET_BASE_URL}/merchant_onboarding_documents`,
+      'UPLOAD-FILE',
+      `POCKET URL: ${POCKET_BASE_URL}/uploadBusinessFile`,
     );
   }
 }
@@ -234,9 +235,7 @@ export async function uploadTerminalConfigFile(
     formData.append('merchantID', merchantID);
 
     // FILE UPLOAD
-    const fileRecord = await pb
-      .collection('terminal_config_files')
-      .create(formData);
+    const fileRecord = await pb.collection('temp_files').create(formData);
 
     const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
     const file_record_id = fileRecord['id'];
@@ -250,7 +249,11 @@ export async function uploadTerminalConfigFile(
       'File Uploaded Successfully!',
     );
   } catch (error: Error | any) {
-    return handleError(error, 'UPLOAD-POST', `POCKET URL: ${POCKET_BASE_URL}`);
+    return handleError(
+      error,
+      'UPLOAD-FILE',
+      `POCKET URL: ${POCKET_BASE_URL}/uploadTerminalConfigFile`,
+    );
   }
 }
 
@@ -272,7 +275,7 @@ export async function uploadCheckoutLogoFile(
     // FILE ALREADY EXISTS AND ONLY NEEDS TO BE UPDATED
     if (fileRecordId) {
       const fileRecord = await pb
-        .collection('merchant_checkout_logo_files')
+        .collection('temp_files')
         .update(fileRecordId, formData);
 
       const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
@@ -289,9 +292,7 @@ export async function uploadCheckoutLogoFile(
     }
 
     // FILE UPLOAD
-    const fileRecord = await pb
-      .collection('merchant_checkout_logo_files')
-      .create(formData);
+    const fileRecord = await pb.collection('temp_files').create(formData);
 
     const file_url = pb.files.getURL(fileRecord, fileRecord['file']);
     const file_record_id = fileRecord['id'];
@@ -305,6 +306,10 @@ export async function uploadCheckoutLogoFile(
       'File Uploaded Successfully!',
     );
   } catch (error: Error | any) {
-    return handleError(error, 'UPLOAD-POST', `POCKET URL: ${POCKET_BASE_URL}`);
+    return handleError(
+      error,
+      'UPLOAD-FILE',
+      `POCKET URL: ${POCKET_BASE_URL}/uploadCheckoutLogoFile`,
+    );
   }
 }
