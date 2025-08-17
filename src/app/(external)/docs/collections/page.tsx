@@ -2,7 +2,13 @@
 import { Snippet } from '@heroui/react';
 import Link from 'next/link';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { syntaxHighlight } from '@/lib/utils';
 
 import StatusCodesTable from '../../_components/status-codes';
@@ -39,7 +45,7 @@ export default function CollectionsDocs({}) {
                     <div className="flex flex-col gap-4 w-full">
                       <pre className="text-sm bg-primary-50 dark:bg-gray-900 p-4 rounded-md">
                         <code>
-                          {`POST ~ {%BASE_URL%}/api/v1/transaction/collection/auth
+                          {`POST ~ {%BASE_URL%}/transaction/collection/auth
 Content-Type: application/json`}
                         </code>
                       </pre>
@@ -94,23 +100,32 @@ Content-Type: application/json`}
             <Card id="collection">
               <CardHeader>
                 <CardTitle>Step 2: Collection</CardTitle>
+                <CardDescription>
+                  To initiate a collection transaction:
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <p>To initiate a collection transaction:</p>
+                <h3 className="text-lg font-semibold mb-2">
+                  A. Mobile Money (Airtel, MTN & Zamtel)
+                </h3>
 
-                <div className="space-y-4">
+                <div id="mobile" className="space-y-4">
+                  {/* REQUEST */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">Request</h3>
+                    <h4 className="font-medium mb-2">Request</h4>
                     <div className="flex flex-col gap-4 w-full">
-                      <pre className="text-sm bg-primary-50 dark:bg-gray-900 p-4 rounded-md">
-                        <code>
-                          {`POST ~ {%BASE_URL%}/api/v1/transaction/collection
+                      <Snippet hideSymbol className="w-full">
+                        <pre className="text-sm p-4 rounded-md">
+                          <code>
+                            {`POST ~ {%BASE_URL%}/transaction/collection
 Content-Type: application/json
-Authorization: Bearer YOUR_ACCESS_TOKEN `}
-                        </code>
-                      </pre>
+Authorization: Bearer YOUR_ACCESS_TOKEN `}{' '}
+                            <br />
+                          </code>
+                        </pre>
+                      </Snippet>
 
-                      <Snippet hideSymbol>
+                      <Snippet hideSymbol className="w-full">
                         <pre
                           dangerouslySetInnerHTML={{
                             __html: syntaxHighlight(
@@ -130,11 +145,9 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                       </Snippet>
                     </div>
                   </div>
-
+                  {/* RESPONSE */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">
-                      Response Example
-                    </h3>
+                    <h3 className="font-medium mb-2">Response</h3>
                     <div className="flex flex-col gap-4 w-full">
                       <Snippet hideSymbol>
                         <pre
@@ -145,6 +158,84 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                                   status: 'success | failed | pending',
                                   message: 'status description',
                                   transactionID: 'your transaction ID',
+                                },
+                                undefined,
+                                4,
+                              ),
+                            ),
+                          }}
+                        />
+                      </Snippet>
+                    </div>
+                  </div>
+                </div>
+
+                <h3 className="text-lg font-semibold mb-2">
+                  B. Debit/Credit (VISA, Mastercard, AmericanExpress, etc)
+                </h3>
+                <div id="card" className="space-y-4">
+                  {/* REQUEST */}
+                  <div>
+                    <h4 className="font-medium mb-2">Request</h4>
+                    <div className="flex flex-col gap-4 w-full">
+                      <Snippet hideSymbol className="w-full">
+                        <pre className="text-sm p-4 rounded-md">
+                          <code>
+                            {`POST ~ {%BASE_URL%}/transaction/collection/card
+Content-Type: application/json
+Authorization: Bearer YOUR_ACCESS_TOKEN `}{' '}
+                            <br />
+                          </code>
+                        </pre>
+                      </Snippet>
+
+                      <Snippet hideSymbol className="w-full">
+                        <pre
+                          dangerouslySetInnerHTML={{
+                            __html: syntaxHighlight(
+                              JSON.stringify(
+                                {
+                                  phoneNumber: '0974XXXXXX',
+                                  amount: '1.00',
+                                  narration: 'Testing Narration',
+                                  transactionID: 'tnx-uat-test',
+                                  firstname: 'Bob',
+                                  lastname: 'Mwale',
+                                  email: 'bmwale@mail.com',
+                                  address: '87A Kabulonga',
+                                  city: 'Lusaka',
+                                  country: 'ZM',
+                                  postalCode: '10101',
+                                  province: 'Lusaka',
+                                  redirectUrl:
+                                    'https://back-to-my-site.bgspayboss.com',
+                                  currency: 'zmw',
+                                },
+                                undefined,
+                                4,
+                              ),
+                            ),
+                          }}
+                        />
+                      </Snippet>
+                    </div>
+                  </div>
+                  {/* RESPONSE */}
+                  <div>
+                    <h3 className="font-medium mb-2">Response</h3>
+                    <div className="flex flex-col gap-4 w-full">
+                      <Snippet hideSymbol>
+                        <pre
+                          dangerouslySetInnerHTML={{
+                            __html: syntaxHighlight(
+                              JSON.stringify(
+                                {
+                                  status: 'success',
+                                  message:
+                                    'transaction submitted for processing',
+                                  transactionID: 'tnx-uat-test',
+                                  redirectUrl:
+                                    '{%BASE_URL%}/transaction/collection/card/processing/{%TXN_ID%}',
                                 },
                                 undefined,
                                 4,
@@ -169,11 +260,11 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
 
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">Request</h3>
+                    <h3 className="font-medium mb-2">Request</h3>
                     <div className="flex flex-col gap-4 w-full">
                       <pre className="text-sm bg-primary-50 dark:bg-gray-900 p-4 rounded-md">
                         <code>
-                          {`GET ~ {%BASE_URL%}/api/v1/transaction/collection/status/{%transactionID%}
+                          {`GET ~ {%BASE_URL%}/transaction/collection/status/{%transactionID%}
 Content-Type: application/json
 Authorization: Bearer YOUR_ACCESS_TOKEN `}
                         </code>
@@ -182,9 +273,7 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">
-                      Response Example
-                    </h3>
+                    <h3 className="font-medium mb-2">Response Example</h3>
                     <div className="rounded-md flex flex-col w-full">
                       <Snippet hideSymbol>
                         <pre
@@ -192,14 +281,14 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                             __html: syntaxHighlight(
                               JSON.stringify(
                                 {
-                                  status: 'success | failed | pending',
-                                  statusCode: 200 | 401 | 404 | 500,
+                                  status: '"success" | "failed" | "pending"',
+                                  statusCode: '"200" | "401" | "404" | "500"',
                                   message: 'status description',
                                   transactionID: 'your transaction ID',
                                   serviceProviderRef:
                                     'serviceProvider reference | null',
                                   serviceProviderStatusDescription:
-                                    'serviceProvider transaction status description',
+                                    'Transaction status description',
                                 },
                                 undefined,
                                 4,
@@ -241,7 +330,7 @@ Authorization: Bearer YOUR_ACCESS_TOKEN `}
                   </h3>
                   <Snippet hideSymbol className="w-full flex-1">
                     <code className="text-wrap text-base tracking-tighter font-medium">
-                      https://services-prod.bgspayboss.com
+                      https://services-prod.bgspayboss.com/api/v1
                     </code>
                   </Snippet>
                 </div>
