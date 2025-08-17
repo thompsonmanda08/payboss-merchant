@@ -156,12 +156,18 @@ export const metadata: Metadata = {
   // Icons (Next.js 15+ format)
   icons: {
     icon: [
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      {
+        url: '/web-app-manifest-192x192.png',
+        sizes: '16x16',
+        type: 'image/png',
+      },
+      {
+        url: '/web-app-manifest-512x512.png',
+        sizes: '32x32',
+        type: 'image/png',
+      },
     ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
+    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
     shortcut: '/favicon.ico',
   },
 
@@ -176,7 +182,7 @@ export const metadata: Metadata = {
     title: appConfig.name,
     startupImage: [
       {
-        url: '/apple-startup-image.png',
+        url: '/apple-icon.png',
         media: '(max-width: 768px)',
       },
     ],
@@ -298,12 +304,12 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         />
 
         {/* Preconnect to external domains for performance */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
-        />
+        /> */}
 
         {/* DNS prefetch for better performance */}
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
