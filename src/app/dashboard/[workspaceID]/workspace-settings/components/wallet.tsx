@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { formatDistance } from 'date-fns';
 import { useState } from 'react';
 
-import { uploadPOPDocument } from '@/app/_actions/pocketbase-actions';
+import { uploadFile } from '@/app/_actions/pocketbase-actions';
 import {
   approveWalletPrefund,
   submitPOP,
@@ -89,7 +89,7 @@ function Wallet({
     setWalletLoading(true);
     setError({ message: '', status: false });
 
-    const response = await uploadPOPDocument(file, recordID);
+    const response = await uploadFile(file, recordID);
 
     if (response?.success) {
       addToast({

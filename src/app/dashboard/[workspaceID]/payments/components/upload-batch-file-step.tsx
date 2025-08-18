@@ -4,7 +4,7 @@ import { addToast } from '@heroui/react';
 import Link from 'next/link';
 import React from 'react';
 
-import { uploadPaymentBatchFile } from '@/app/_actions/pocketbase-actions';
+import { uploadFile } from '@/app/_actions/pocketbase-actions';
 import {
   ACCEPTABLE_FILE_TYPES,
   SingleFileDropzone,
@@ -41,7 +41,7 @@ const UploadCSVFile = ({
   async function handleFileUpload(file: File, recordID?: string) {
     setIsLoading(true);
 
-    const response = await uploadPaymentBatchFile(file, recordID);
+    const response = await uploadFile(file, recordID);
 
     if (response?.success) {
       addToast({

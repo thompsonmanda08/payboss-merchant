@@ -9,7 +9,7 @@ import {
   sendBusinessDocumentRefs,
   updateBusinessDocumentRefs,
 } from '@/app/_actions/auth-actions';
-import { uploadBusinessFile } from '@/app/_actions/pocketbase-actions';
+import { uploadFile } from '@/app/_actions/pocketbase-actions';
 import CardHeader from '@/components/base/card-header';
 import DocumentDisplayButton from '@/components/base/document-display-button';
 import EmptyLogs from '@/components/base/empty-logs';
@@ -271,7 +271,7 @@ export default function DocumentAttachments({
     setFieldLoadingStates((prev) => ({ ...prev, [fieldId]: true }));
     setError({ message: '', status: false });
 
-    const response = await uploadBusinessFile(file, recordID);
+    const response = await uploadFile(file, recordID);
 
     if (response?.success) {
       addToast({

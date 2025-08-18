@@ -33,7 +33,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { Key, useEffect, useState } from 'react';
 
-import { uploadCheckoutLogoFile } from '@/app/_actions/pocketbase-actions';
+import { uploadFile } from '@/app/_actions/pocketbase-actions';
 import {
   generateCheckoutURL,
   updateCheckoutURL,
@@ -90,7 +90,7 @@ export default function CheckoutConfig({
   async function handleFileUpload(file: File, recordID?: string) {
     setIsUploading(true);
 
-    const response = await uploadCheckoutLogoFile(file, recordID);
+    const response = await uploadFile(file, recordID);
 
     if (response?.success) {
       addToast({

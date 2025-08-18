@@ -32,7 +32,7 @@ import {
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
-import { uploadCheckoutLogoFile as uploadMembersListFile } from '@/app/_actions/pocketbase-actions';
+import { uploadFile as uploadMembersListFile } from '@/app/_actions/pocketbase-actions';
 import {
   createSubscriptionPack,
   updateSubscriptionPack,

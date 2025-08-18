@@ -12,7 +12,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
-import { uploadTerminalConfigFile } from '@/app/_actions/pocketbase-actions';
+import { uploadFile } from '@/app/_actions/pocketbase-actions';
 import { registerTerminals } from '@/app/_actions/workspace-actions';
 import CardHeader from '@/components/base/card-header';
 import {
@@ -184,7 +184,7 @@ const UploadTerminalConfigs = ({
   async function handleFileUpload(file: File) {
     setIsLoading(true);
 
-    const response = await uploadTerminalConfigFile(file);
+    const response = await uploadFile(file);
 
     if (!response?.success) {
       addToast({
