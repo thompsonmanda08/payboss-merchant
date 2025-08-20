@@ -12,7 +12,7 @@ import { APIResponse } from '@/types';
 
 export const initializeWorkspace = cache(
   async (workspaceID: string): Promise<APIResponse> => {
-    if (!workspaceID) {
+    if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
       return handleBadRequest('Workspace ID is required');
     }
 
@@ -80,7 +80,7 @@ export async function submitPOP(
   popDetails: any,
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -123,7 +123,7 @@ export async function submitPOP(
 export async function getWalletPrefunds(
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -203,7 +203,7 @@ export async function approveWalletPrefund(
 export async function getWorkspaceMembers(
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -232,7 +232,7 @@ export async function deleteUserFromWorkspace(
   recordID: string,
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -270,7 +270,7 @@ export async function changeUserRoleInWorkspace(
   recordID: string,
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -304,7 +304,7 @@ export async function changeUserRoleInWorkspace(
 export async function setupWorkspaceAPIKey(
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -369,7 +369,7 @@ export async function refreshWorkspaceAPIKey(
 export async function getWorkspaceAPIKey(
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -400,7 +400,7 @@ export async function getWorkspaceAPIKey(
 export async function generateWorkspaceTillNumber(
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -437,7 +437,7 @@ export async function generateWorkspaceTillNumber(
 export async function getWorkspaceTillNumber(
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -468,7 +468,7 @@ export async function getWorkspaceTillNumber(
 export async function activateWorkspaceTerminals(
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -504,7 +504,7 @@ export async function activateWorkspaceTerminals(
 export async function deactivateWorkspaceTerminals(
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -540,7 +540,7 @@ export async function deactivateWorkspaceTerminals(
 export async function getAllWorkspaceTerminals(
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -573,7 +573,7 @@ export async function registerTerminals(
   workspaceID: string,
   terminalUrl: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -615,7 +615,7 @@ export async function updateWorkspaceCallback(
   workspaceID: string,
   callbackData: any,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 
@@ -651,7 +651,7 @@ export async function updateWorkspaceCallback(
 export async function getWorkspaceCallback(
   workspaceID: string,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
+  if (!workspaceID || !Boolean(workspaceID) || workspaceID === 'undefined') {
     return handleBadRequest('Workspace ID is required');
   }
 

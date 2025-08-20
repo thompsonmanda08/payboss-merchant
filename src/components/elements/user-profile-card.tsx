@@ -122,7 +122,7 @@ export default function UserProfile({
           </div>
           <div className="flex-1">
             <p className="text-sm text-gray-500 font-medium">Phone Number</p>
-            <p className="text-gray-900 font-medium">{user?.phone}</p>
+            <p className="text-gray-900 font-medium">{user?.phone_number}</p>
           </div>
         </div>
       </CardBody>
