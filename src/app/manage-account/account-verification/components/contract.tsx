@@ -14,6 +14,7 @@ import useKYCInfo from '@/hooks/use-kyc-info';
 
 function TermsAndAgreement({
   isAdminOrOwner,
+  onCompletionNavigateTo,
 }: {
   isAdminOrOwner: boolean;
   onCompletionNavigateTo?: (targetSectionId?: string) => void;
@@ -69,6 +70,14 @@ function TermsAndAgreement({
           </span>
         </Button>
       </div>
+      {/* <div className="mt-4 flex w-full justify-end items-start gap-4">
+        <Button
+          className={'justify-end ml-auto'}
+          onPress={() => onCompletionNavigateTo?.('summary')}
+        >
+          Next Section
+        </Button>
+      </div> */}
 
       <Modal
         removeCallToAction

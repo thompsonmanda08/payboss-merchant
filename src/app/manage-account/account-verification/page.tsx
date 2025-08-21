@@ -110,13 +110,6 @@ function AccountVerification({}) {
       let hasChanged = false;
       let newSections = [...currentSections];
 
-      // FILTER OUT CONTRACTS IN KYC NOT COMPLETED
-      if (KYCStageID < 1) {
-        newSections = newSections.filter(
-          (section) => section.id !== 'contract',
-        );
-      }
-
       const updateStatus = (sectionId: string, status: string) => {
         const sectionIndex = newSections.findIndex((s) => s.id === sectionId);
 
@@ -192,6 +185,13 @@ function AccountVerification({}) {
 
       if (KYCStageID == 3 && isCompleteKYC && documents.signed_contract) {
         updateStatus('contract', 'completed');
+      }
+
+      // FILTER OUT CONTRACTS IN KYC NOT COMPLETED
+      if (KYCStageID <= 2) {
+        newSections = newSections.filter(
+          (section) => section.id !== 'contract',
+        );
       }
 
       return hasChanged ? newSections : currentSections;
