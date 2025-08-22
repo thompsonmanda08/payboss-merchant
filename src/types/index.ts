@@ -70,5 +70,17 @@ export type WorkspaceSession = {
 export type DateRangeFilter = {
   start_date?: string;
   end_date?: string;
+  page?: number;
+  limit?: number;
+  [x: string]: any;
+};
+
+export type Pagination = {
+  page: number;
+  limit: number;
+  total?: number; // TOTAL NUMBER OF RECORDS
+  total_pages?: number;
+  hasNext?: boolean;
+  hasPrev?: boolean;
   [x: string]: any;
 };

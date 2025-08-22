@@ -5,7 +5,7 @@ import authenticatedApiClient, {
   handleError,
   successResponse,
 } from '@/lib/api-config';
-import { APIResponse } from '@/types';
+import { APIResponse, DateRangeFilter } from '@/types';
 import { revalidatePath } from 'next/cache';
 
 // ****************** ******************************** ************************** //
@@ -346,10 +346,10 @@ export async function getCollectionsReport(
 export async function getCollectionLatestTransactions(
   workspaceID: string,
   service: string,
-  dateFilter: any,
+  dateFilter: DateRangeFilter,
 ): Promise<APIResponse> {
-  if (!workspaceID) {
-    return handleBadRequest('Workspace ID is required');
+  if (!service || !workspaceID) {
+    return handleBadRequest('Workspace ID and Service are required');
   }
 
   const url = `merchant/transaction/collections/${service}/${workspaceID}`;

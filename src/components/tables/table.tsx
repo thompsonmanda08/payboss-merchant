@@ -28,6 +28,7 @@ import { cn } from '@/lib/utils';
 
 import { SingleSelectionDropdown } from '../ui/dropdown-button';
 import Search from '../ui/search';
+import { Pagination as TPagination } from '@/types';
 
 const STATUSES = [
   {
@@ -65,8 +66,11 @@ type CustomTableProps = {
   permissions?: any;
   searchKeys?: any;
   useRowDataAsKey?: any;
+  pagination: TPagination;
+  handlePageChange?: (page: number) => void;
   rowKey?: any;
   filters?: {
+    dateFormat?: 'dd-MMM-yyyy hh:mm:ss a' | 'dd-MM-yyyy' | 'dd/MM/yyyy';
     status?: {
       enabled: boolean;
       options?: any;
@@ -88,6 +92,7 @@ export default function CustomTable({
   isLoading,
   removeWrapper,
   onRowAction = () => {},
+  handlePageChange = () => {},
   emptyCellValue = 'N/A',
   emptyDescriptionText,
   emptyTitleText,
@@ -96,7 +101,9 @@ export default function CustomTable({
   searchKeys = [],
   useRowDataAsKey = false,
   rowKey,
+  pagination,
   filters = {
+    dateFormat: 'dd-MMM-yyyy hh:mm:ss a',
     status: {
       enabled: false,
       options: [],
@@ -138,7 +145,8 @@ export default function CustomTable({
     direction: 'ascending',
   });
 
-  const pages = Math.ceil(rows?.length / rowsPerPage);
+  const pages =
+    pagination?.total_pages || Math.ceil(rows?.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(debouncedSearchQuery);
 
@@ -215,7 +223,7 @@ export default function CustomTable({
       case 'created_at':
         return (
           <span className={cn('text-nowrap capitalize')}>
-            {format(cellValue, 'dd-MMM-yyyy hh:mm:ss a')}
+            {format(cellValue, filters.dateFormat || 'dd-MMM-yyyy hh:mm:ss a')}
           </span>
         );
 
@@ -289,7 +297,7 @@ export default function CustomTable({
 
   const onRowsPerPageChange = React.useCallback((e: any) => {
     setRowsPerPage(Number(e.target.value));
-    setPage(1);
+    setPage(pagination.page || 1);
   }, []);
 
   const loadingContent = React.useMemo(() => {
@@ -361,16 +369,23 @@ export default function CustomTable({
     return (
       <div className="flex w-full items-center justify-between">
         <span className="text-small text-foreground-400">
-          Total: {rows.length} transactions
+          Total: {hasSearchFilter ? items.length : pagination.total}{' '}
+          transactions
         </span>
         <Pagination
           isCompact
           showControls
           showShadow
           color="primary"
-          page={page}
-          total={pages}
-          onChange={(page) => setPage(page)}
+          page={pagination.page || page}
+          total={pagination.total_pages || pages || 1}
+          onChange={(page) => {
+            if (!handlePageChange) {
+              setPage(page);
+            } else {
+              handlePageChange(page);
+            }
+          }}
         />
         <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-foreground-400">
           Rows per page:{' '}
@@ -416,7 +431,7 @@ export default function CustomTable({
         ),
 
         base: cn(
-          'min-h-[200px] overflow-x-auto',
+          'overflow-x-auto flex-1 py-5',
           { 'min-h-max': pages <= 1 },
           classNames?.wrapper,
         ),

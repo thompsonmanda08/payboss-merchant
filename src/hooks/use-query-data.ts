@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { getRefreshToken } from '@/app/_actions/auth-actions';
 import { getGeneralConfigs } from '@/app/_actions/config-actions';
@@ -14,6 +14,7 @@ import { getSubscriptionPacks } from '@/app/_actions/subscription-actions';
 import {
   getAllBulkTransactions,
   getBatchDetails,
+  getCollectionLatestTransactions,
   getWalletPrefundHistory,
 } from '@/app/_actions/transaction-actions';
 import { getAllUsers, getUser } from '@/app/_actions/user-actions';
@@ -29,6 +30,7 @@ import {
   initializeWorkspace,
 } from '@/app/_actions/workspace-actions';
 import { AUTH_SESSION, QUERY_KEYS } from '@/lib/constants';
+import { DateRangeFilter } from '@/types';
 
 export const useGeneralConfigOptions = () =>
   useQuery({
@@ -181,7 +183,7 @@ export const useWorkspaceTerminals = (workspaceID: string) =>
   useQuery({
     queryKey: [QUERY_KEYS.WORKSPACE_TERMINALS, workspaceID],
     queryFn: async () => await getAllWorkspaceTerminals(workspaceID),
-    staleTime: 30 * 1000,
+    staleTime: Infinity,
     refetchOnMount: true,
   });
 
@@ -226,3 +228,22 @@ export const useWorkspaceSubscriptions = (workspaceID: string) =>
     queryFn: async () => await getSubscriptionPacks(workspaceID),
     staleTime: Infinity,
   });
+
+/* TRANSACTIONS */
+export const useRecentTransactions = ({
+  workspaceID,
+  service,
+  filters,
+  queryKeys,
+}: {
+  workspaceID: string;
+  service: string;
+  queryKeys: string[];
+  filters: DateRangeFilter;
+}) => {
+  return useMutation({
+    mutationKey: [...queryKeys, workspaceID],
+    mutationFn: () =>
+      getCollectionLatestTransactions(workspaceID, service, filters),
+  });
+};

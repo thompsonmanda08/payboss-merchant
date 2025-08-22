@@ -222,7 +222,7 @@ export default function Invoice({
                   Balance
                 </td>
                 <td className="pb-4 pt-2 px-4 text-right font-bold">
-                  {formatCurrency(invoice?.dueAmount)}
+                  {formatCurrency(parseFloat(invoice?.dueAmount))}
                 </td>
               </tr>
             </tfoot>
