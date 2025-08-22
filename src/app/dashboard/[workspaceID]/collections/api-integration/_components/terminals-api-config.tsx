@@ -77,7 +77,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
 
   const API_KEYS_DATA = API?.data || {};
 
-  const terminals = CONFIG?.data?.terminals || []; 
+  const terminals = CONFIG?.data?.terminals || [];
   const hasTerminals = API?.data?.hasTerminals || false;
   const terminalsConfigured = Boolean(terminals.length > 0);
 
@@ -251,12 +251,12 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
     }
   }
 
-  useEffect(() => {
-    // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
-    if (!mutation.data) {
-      mutation.mutateAsync();
-    }
-  }, []);
+  // useEffect(() => {
+  //   // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
+  //   if (!mutation.data) {
+  //     mutation.mutateAsync();
+  //   }
+  // }, []);
 
   // ACTIONS FOR CONFIG
   const USER_PROMPT_ACTIONS = [
@@ -462,7 +462,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                       isLoading={isLoadingConfig || mutation?.isPending}
                       loadingText={'Getting Configuration...'}
                       startContent={
-                        terminalsConfigured && hasTerminals ? (
+                        hasTerminals ? (
                           <PlusIcon className={cn(iconClasses)} />
                         ) : (
                           <ComputerDesktopIcon className={cn(iconClasses)} />
@@ -470,14 +470,12 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                       }
                       variant="light"
                       onClick={() => {
-                        return terminalsConfigured && hasTerminals
+                        return hasTerminals
                           ? openTerminalConfig()
                           : handleTerminalStatus();
                       }}
                     >
-                      {terminalsConfigured && hasTerminals
-                        ? 'Add Terminals'
-                        : 'Activate Terminals'}
+                      {hasTerminals ? 'Add Terminals' : 'Activate Terminals'}
                     </Button>
                   </Tooltip>
                 )}

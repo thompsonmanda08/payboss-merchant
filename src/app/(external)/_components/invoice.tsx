@@ -76,6 +76,8 @@ export default function Invoice({
 
   const isInvalidAmount = amount > invoice?.dueAmount || amount < 1;
 
+  console.log(invoice);
+
   return (
     <>
       <div

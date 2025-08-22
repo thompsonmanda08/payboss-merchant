@@ -11,6 +11,7 @@ import CustomTable from '@/components/tables/table';
 import { QUERY_KEYS } from '@/lib/constants';
 import { INVOICE_COLUMNS } from '@/lib/table-columns';
 import { formatDate } from '@/lib/utils';
+import { Invoice as InvoiceType } from '@/types/invoice';
 
 export default function RecentInvoices({
   workspaceID,
@@ -21,8 +22,9 @@ export default function RecentInvoices({
 
   const { onOpen, onClose, isOpen } = useDisclosure();
 
-  const [openViewInvoice, setOpenViewInvoice] = useState(false);
-  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<InvoiceType | null>(
+    null,
+  );
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
 
   const thirtyDaysAgoDate = new Date();
@@ -55,7 +57,6 @@ export default function RecentInvoices({
 
   function handleClosePrompts() {
     onClose();
-    setOpenViewInvoice(false);
     setSelectedInvoice(null);
   }
 
@@ -65,7 +66,7 @@ export default function RecentInvoices({
         (invoice: any) => invoice.id === invoiceId,
       );
 
-      const invoice = {
+      const invoice: InvoiceType = {
         id: selected?.id || invoiceId,
         workspaceID: selected?.workspace_id,
         invoiceID: selected?.invoice_id,
@@ -152,7 +153,7 @@ export default function RecentInvoices({
         isDismissable
         backdrop="blur"
         className={'z-[999] max-h-[calc(100svh-60px)]'}
-        isOpen={isOpen && selectedInvoice}
+        isOpen={isOpen && selectedInvoice !== null}
         size="3xl"
         onClose={handleClosePrompts}
       >

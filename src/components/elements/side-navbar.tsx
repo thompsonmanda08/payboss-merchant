@@ -76,14 +76,14 @@ function SideNavBar() {
       Icon: InboxArrowDownIcon,
       subMenuItems: [
         {
-          name: 'Till Payments',
-          href: `${dashboardRoute}/collections/till-collections`,
-          Icon: CalculatorIcon,
-        },
-        {
           name: 'API Integration',
           href: `${dashboardRoute}/collections/api-integration`,
           Icon: AdjustmentsVerticalIcon,
+        },
+        {
+          name: 'Till Payments',
+          href: `${dashboardRoute}/collections/till-collections`,
+          Icon: CalculatorIcon,
         },
         // {
         //   name: 'Subscriptions',
@@ -100,12 +100,6 @@ function SideNavBar() {
         //   name: 'Subscriptions',
         //   href: `${dashboardRoute}/collections/subscriptions`,
         //   Icon: CreditCardIcon,
-        // },
-
-        // {
-        //   name: 'Online Store',
-        //   href: `${dashboardRoute}/collections/store`,
-        //   Icon: BuildingStorefrontIcon,
         // },
       ],
     },
