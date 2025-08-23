@@ -80,7 +80,7 @@ export default function CreateNewInvoice({
       </div>
 
       <Modal
-        isDismissable
+        isDismissable={false}
         backdrop="blur"
         className={'z-[999]'}
         isOpen={isOpen && openCreateInvoice}

@@ -150,7 +150,7 @@ export default function RecentInvoices({
 
       {/* VIEW INVOICE  */}
       <Modal
-        isDismissable
+        isDismissable={false}
         backdrop="blur"
         className={'z-[999] max-h-[calc(100svh-60px)]'}
         isOpen={isOpen && selectedInvoice !== null}
