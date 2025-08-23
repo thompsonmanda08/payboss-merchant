@@ -44,6 +44,7 @@ function WorkspaceDetails({
     onOpen: onOpenAdd,
     onClose: onCloseAdd,
   } = useDisclosure();
+
   const [error, setError] = useState<ErrorState>({
     status: false,
     message: '',
@@ -53,7 +54,6 @@ function WorkspaceDetails({
   const [deleteWorkspaceName, setDeleteWorkspaceName] = useState('');
   const [callbackURL, setCallbackURL] = useState({ method: 'GET', url: '' });
   const { activeWorkspace } = useWorkspaces();
-  const [isVisible, setIsVisible] = useState(activeWorkspace?.isVisible);
 
   const { data: callbackResponse } = useWorkspaceCallbackURL(workspaceID);
 
@@ -168,10 +168,7 @@ function WorkspaceDetails({
 
   // DEACTIVATE / DELETE WORKSPACE
   async function handleDeleteWorkspace() {
-    setDeleteLoading(true);
-
     if (deleteWorkspaceName !== activeWorkspace?.workspace) {
-      setDeleteLoading(false);
       setError({
         status: true,
         message: 'Type the workspace name to confirm delete',
@@ -180,16 +177,11 @@ function WorkspaceDetails({
       return;
     }
 
+    setDeleteLoading(true);
     const response = await deleteWorkspace(workspaceID);
 
     if (response?.success) {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.WORKSPACES],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.SETUP],
-      });
-      setDeleteLoading(false);
+      queryClient.invalidateQueries();
 
       addToast({
         color: 'success',
@@ -197,33 +189,16 @@ function WorkspaceDetails({
         description: 'Workspaces Deactivated successfully!',
       });
       back();
-
-      return;
+    } else {
+      addToast({
+        title: 'Error',
+        color: 'danger',
+        description: 'Failed to Deactivate Workspace!',
+      });
     }
 
-    addToast({
-      title: 'Error',
-      color: 'danger',
-      description: 'Failed to Deactivate Workspace!',
-    });
     setDeleteLoading(false);
   }
-
-  // CHECK IF WORKSPACE IS VISIBLE
-  useEffect(() => {
-    // CHECK VISIBILITY OF WORKSPACE
-    if (activeWorkspace != undefined && activeWorkspace?.isVisible) {
-      setIsVisible(activeWorkspace?.isVisible);
-    }
-
-    // CHECK IF WORKSPACE IS A SANDBOX
-    // if (
-    //   activeWorkspace != undefined &&
-    //   activeWorkspace?.workspace?.toLowerCase() == "sandbox"
-    // ) {
-    //   setIsSandbox(true);
-    // }
-  }, [activeWorkspace]);
 
   // CLEAR ERROR STATE
   useEffect(() => {
@@ -305,33 +280,9 @@ function WorkspaceDetails({
 
       <hr className="my-6 h-px bg-foreground-900/5" />
 
-      {/* <div className="flex flex-col gap-8 md:flex-row md:justify-between md:gap-16 xl:gap-24">
-        <div className="flex w-full items-center justify-between md:flex-row">
-          <div className="flex max-w-4xl flex-col gap-2">
-            <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
-              Add Users to Workspace
-            </h2>
-            <p className="text-xs leading-6 text-gray-400 sm:text-sm">
-              Give others access to this workspace
-            </p>
-          </div>
-
-          <Button
-            className="rounded-md px-3 py-2 text-sm font-semibold shadow-sm"
-            endContent={<PlusIcon className="h-5 w-5" />}
-            onClick={onOpenAdd}
-          >
-            Add Members
-          </Button>
-        </div>
-      </div> */}
-
-      {/* DISBURSEMENTS WORKSPACE DOES NOT NEED A CALLBACK-URL */}
+      {/* COLLECTION WORKSPACE CALLBACK-URL */}
       {activeWorkspace?.workspaceType !== WORKSPACE_TYPES[1]?.ID && (
         <>
-          {/* <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" /> */}
-
-          {/* CHANGE WORKSPACE VISIBILITY */}
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-6">
               <div className="flex max-w-4xl flex-col gap-2 lg:gap-1">
@@ -458,22 +409,6 @@ function WorkspaceDetails({
 
       <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
 
-      {/* CHANGE WORKSPACE VISIBILITY */}
-      <div className="flex w-full items-center justify-between">
-        <div className="flex max-w-4xl flex-col gap-2">
-          <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
-            Change Workspace Visibility
-          </h2>
-          <p className="text-xs leading-6 text-gray-400 sm:text-sm">
-            Change workspace to allow other users to have access
-          </p>
-        </div>
-
-        <Switch isDisabled isSelected={true} />
-      </div>
-
-      <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
-
       {/* DELETE A WORKSPACE */}
       <div className="flex flex-col gap-8 md:flex-row md:justify-between">
         <div className="flex max-w-4xl flex-col gap-4">
@@ -481,10 +416,10 @@ function WorkspaceDetails({
             Deactivate Workspace
           </h2>
           <p className="text-xs leading-6 text-gray-400 sm:text-sm">
-            If you wish to deactivate or delete your workspace. This action can
-            only be reversed by contacting our support team. Please note that
-            all information related to this workspace will be retained for audit
-            purposes in accordance with regulatory requirements.
+            This action can only be reversed by contacting our support team.
+            Please note that all information related to this workspace will be
+            retained for audit purposes in accordance with regulatory
+            requirements.
           </p>
         </div>
 

@@ -65,18 +65,18 @@ export default function InvoiceForm({
 }) {
   const queryClient = useQueryClient();
 
-  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
-  const permissions = workspaceInit?.data?.workspacePermissions;
+  // const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+  // const permissions = workspaceInit?.data?.workspacePermissions;
 
   const [formData, setFormData] = useState(INIT_INVOICE);
   const [selectedTab, setSelectedTab] = useState('invoice-details');
   const [isLoading, setIsLoading] = useState(false);
 
-  const thirtyDaysAgoDate = new Date();
+  // const thirtyDaysAgoDate = new Date();
 
-  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
-  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
-  const end_date = formatDate(new Date(), 'YYYY-MM-DD');
+  // thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
+  // const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
+  // const end_date = formatDate(new Date(), 'YYYY-MM-DD');
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;

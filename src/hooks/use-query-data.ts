@@ -15,6 +15,7 @@ import {
   getAllBulkTransactions,
   getBatchDetails,
   getCollectionLatestTransactions,
+  getRecentInvoices,
   getWalletPrefundHistory,
 } from '@/app/_actions/transaction-actions';
 import { getAllUsers, getUser } from '@/app/_actions/user-actions';
@@ -245,5 +246,18 @@ export const useRecentTransactions = ({
     mutationKey: [...queryKeys, workspaceID],
     mutationFn: () =>
       getCollectionLatestTransactions(workspaceID, service, filters),
+  });
+};
+
+export const useRecentInvoices = ({
+  workspaceID,
+  filters,
+}: {
+  workspaceID: string;
+  filters: DateRangeFilter;
+}) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.INVOICES, workspaceID],
+    queryFn: () => getRecentInvoices(workspaceID, { ...filters }),
   });
 };

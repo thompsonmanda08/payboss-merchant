@@ -1,5 +1,4 @@
 'use client';
-import { PlusIcon } from '@heroicons/react/24/outline';
 import {
   Modal,
   ModalContent,
@@ -15,6 +14,7 @@ import InvoiceForm from '@/components/forms/invoice-form';
 import { Button } from '@/components/ui/button';
 import { useWorkspaceCheckout } from '@/hooks/use-query-data';
 import { QUERY_KEYS } from '@/lib/constants';
+import { PlusIcon } from 'lucide-react';
 
 export default function CreateNewInvoice({
   workspaceID,

@@ -1,24 +1,22 @@
 'use client';
 import { Modal, ModalContent, ModalBody, useDisclosure } from '@heroui/react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import Invoice from '@/app/(external)/_components/invoice';
-import { getRecentInvoices } from '@/app/_actions/transaction-actions';
 import CardHeader from '@/components/base/card-header';
 import Card from '@/components/base/custom-card';
 import CustomTable from '@/components/tables/table';
-import { QUERY_KEYS } from '@/lib/constants';
 import { INVOICE_COLUMNS } from '@/lib/table-columns';
 import { formatDate } from '@/lib/utils';
 import { Invoice as InvoiceType } from '@/types/invoice';
+import { useRecentInvoices } from '@/hooks/use-query-data';
 
 export default function RecentInvoices({
   workspaceID,
 }: {
   workspaceID: string;
 }) {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const { onOpen, onClose, isOpen } = useDisclosure();
 
@@ -33,21 +31,24 @@ export default function RecentInvoices({
   const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
   const end_date = formatDate(new Date(), 'YYYY-MM-DD');
 
-  const { data: invoices, isLoading } = useQuery({
-    queryKey: [QUERY_KEYS.INVOICES, workspaceID],
-    queryFn: () =>
-      getRecentInvoices(workspaceID, { start_date, end_date, ...pagination }),
+  const { data: invoices, isLoading } = useRecentInvoices({
+    workspaceID,
+    filters: {
+      start_date,
+      end_date,
+      ...pagination,
+    },
   });
 
-  useEffect(() => {
-    // IF DATA IS NULL THEN GET THE LATEST INVOICES
-    if (!invoices?.data) {
-      // mutation.mutateAsync({ start_date, end_date });
-      queryClient.refetchQueries({
-        queryKey: [QUERY_KEYS.INVOICES, workspaceID],
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   // IF DATA IS NULL THEN GET THE LATEST INVOICES
+  //   if (!invoices?.data) {
+  //     // mutation.mutateAsync({ start_date, end_date });
+  //     queryClient.refetchQueries({
+  //       queryKey: [QUERY_KEYS.INVOICES, workspaceID],
+  //     });
+  //   }
+  // }, []);
 
   const LATEST_INVOICES = invoices?.data?.invoices || [];
   const PAGINATION = {
