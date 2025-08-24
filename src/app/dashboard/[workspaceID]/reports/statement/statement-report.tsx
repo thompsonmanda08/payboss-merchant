@@ -1,11 +1,12 @@
 'use client';
-import { Download as ArrowDownTrayIcon, Filter as FunnelIcon } from 'lucide-react';
-import { useMutation } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import {
+  Download as ArrowDownTrayIcon,
+  Filter as FunnelIcon,
+} from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+import React, { useCallback, useState } from 'react';
 
 import { walletStatementReportToCSV } from '@/app/_actions/file-conversion-actions';
-import { getWalletStatementReport } from '@/app/_actions/transaction-actions';
 import { WalletTransactionHistory } from '@/app/dashboard/[workspaceID]/workspace-settings/components/wallet';
 import CardHeader from '@/components/base/card-header';
 import Card from '@/components/base/custom-card';
@@ -14,35 +15,37 @@ import { DateRangePickerField } from '@/components/ui/date-select-field';
 import Search from '@/components/ui/search';
 import { useDebounce } from '@/hooks/use-debounce';
 import { QUERY_KEYS } from '@/lib/constants';
+import { DateRangeFilter, Pagination as TPagination } from '@/types';
+import { useWalletReports } from '@/hooks/use-query-data';
+import { Pagination } from '@heroui/react';
 
-export default function StatementReport({}) {
-  const params = useParams();
-  const workspaceID = String(params.workspaceID);
+export default function StatementReport({
+  workspaceID,
+}: {
+  workspaceID: string;
+}) {
+  const queryClient = useQueryClient();
 
   const [dateRange, setDateRange] = useState<any>();
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-  const mutation = useMutation({
-    mutationKey: [QUERY_KEYS.WALLET_STATEMENT_REPORTS, workspaceID],
-    mutationFn: (filterDates) => getReportsData(filterDates),
+  const [pagination, setPagination] = useState<TPagination>({
+    page: 1,
+    limit: 10,
   });
 
-  const statementTransactions = mutation?.data?.data?.data || [];
+  const filters: DateRangeFilter = {
+    ...dateRange,
+    ...pagination,
+  };
 
-  // handle get wallet history asynchronously with a date mutation - date range
-  async function runAsyncMutation(range: any) {
-    if (!range?.start_date && !range?.end_date) {
-      return [];
-    }
-    await mutation.mutateAsync(range);
-  }
+  const { data: walletStatement, isLoading } = useWalletReports({
+    workspaceID,
+    filters,
+  });
 
-  async function getReportsData(range: any) {
-    const response = await getWalletStatementReport(workspaceID, range);
-
-    return response || [];
-  }
+  const statementTransactions = walletStatement?.data?.data || [];
 
   // Implement manual CSV export functionality
   function handleFileExportToCSV() {
@@ -51,6 +54,7 @@ export default function StatementReport({}) {
 
   // RESOLVE DATA FILTERING
   const hasSearchFilter = Boolean(debouncedSearchQuery);
+
   const filteredItems = React.useMemo(() => {
     let filteredRows = [...statementTransactions];
 
@@ -72,13 +76,22 @@ export default function StatementReport({}) {
     return filteredRows;
   }, [statementTransactions, debouncedSearchQuery]);
 
-  useEffect(() => {
-    if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
-      runAsyncMutation(dateRange);
+  const triggerRefetch = useCallback(async () => {
+    const filters = {
+      start_date: dateRange?.start_date,
+      end_date: dateRange?.end_date,
+      ...pagination,
+    };
 
-      return;
-    }
-  }, [dateRange]);
+    const queryKey = [
+      QUERY_KEYS.WALLET_STATEMENT_REPORTS,
+      filters,
+      workspaceID,
+    ];
+
+    queryClient.invalidateQueries({ queryKey });
+    queryClient.refetchQueries({ queryKey });
+  }, [queryClient, dateRange, pagination, workspaceID]);
 
   return (
     <>
@@ -94,7 +107,7 @@ export default function StatementReport({}) {
           />{' '}
           <Button
             endContent={<FunnelIcon className="h-5 w-5" />}
-            onPress={() => runAsyncMutation(dateRange)}
+            onPress={triggerRefetch}
           >
             Apply
           </Button>
@@ -131,10 +144,29 @@ export default function StatementReport({}) {
         </div>
 
         <WalletTransactionHistory
-          isLoading={mutation.isPending}
+          isLoading={isLoading}
           transactionData={filteredItems || []}
           workspaceID={workspaceID}
         />
+
+        <div className="flex w-full items-center justify-between">
+          <span className="text-small text-foreground-400">
+            Total:{' '}
+            {hasSearchFilter ? filteredItems.length : pagination?.total || 0}{' '}
+            transactions
+          </span>
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            page={pagination?.page}
+            total={pagination?.total_pages || 1}
+            onChange={(page: any) =>
+              setPagination((prev) => ({ ...prev, page }))
+            }
+          />
+        </div>
       </Card>
     </>
   );

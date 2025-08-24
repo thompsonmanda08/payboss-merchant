@@ -275,7 +275,7 @@ export const CollectionsReports = ({
   const terminalSummary = reports?.data?.terminal || [];
   const PAGINATION = {
     ...pagination, // USER SET CONFIGS FOR PAGINATION {page and limit}
-    ...reports?.data?.data?.pagination, // PAGINATION DETAILS FROM SERVER
+    ...reports?.data?.pagination, // PAGINATION DETAILS FROM SERVER
   };
 
   // Use filtered data hook

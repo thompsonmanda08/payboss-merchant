@@ -18,6 +18,7 @@ import {
   getCollectionsReport,
   getRecentInvoices,
   getWalletPrefundHistory,
+  getWalletStatementReport,
 } from '@/app/_actions/transaction-actions';
 import { getAllUsers, getUser } from '@/app/_actions/user-actions';
 import { getCheckoutURL } from '@/app/_actions/vas-actions';
@@ -277,5 +278,19 @@ export const useCollectionReports = ({
     queryKey: [QUERY_KEYS.COLLECTION_REPORTS, service, filters, workspaceID],
     queryFn: () => getCollectionsReport(workspaceID, service, filters),
     staleTime: Infinity,
+  });
+};
+export const useWalletReports = ({
+  workspaceID,
+  filters,
+}: {
+  workspaceID: string;
+  filters: DateRangeFilter;
+}) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.WALLET_STATEMENT_REPORTS, filters, workspaceID],
+    queryFn: () => getWalletStatementReport(workspaceID, filters),
+    staleTime: Infinity,
+    refetchOnMount: true,
   });
 };

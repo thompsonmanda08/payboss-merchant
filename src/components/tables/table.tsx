@@ -141,8 +141,8 @@ export default function CustomTable({
   }, []);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: 'amount',
-    direction: 'ascending',
+    column: '',
+    direction: '',
   });
 
   const pages =
@@ -200,9 +200,15 @@ export default function CustomTable({
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
+    // If no sort descriptor is set, return items as-is (no sorting)
+    if (!sortDescriptor.column || !sortDescriptor.direction) {
+      return items;
+    }
+
     return [...items].sort((a, b) => {
-      const first = a[sortDescriptor.column];
-      const second = b[sortDescriptor.column];
+      const sortColumn = sortDescriptor.column || 'created_at';
+      const first = a[sortColumn];
+      const second = b[sortColumn];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === 'descending' ? -cmp : cmp;
@@ -369,7 +375,7 @@ export default function CustomTable({
     return (
       <div className="flex w-full items-center justify-between">
         <span className="text-small text-foreground-400">
-          Total: {hasSearchFilter ? items.length || 0 : pagination?.total || 0}{' '}
+          Total: {hasSearchFilter ? items.length : pagination?.total || 0}{' '}
           transactions
         </span>
         <Pagination
