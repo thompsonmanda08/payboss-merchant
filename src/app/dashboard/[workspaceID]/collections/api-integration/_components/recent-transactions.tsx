@@ -35,10 +35,12 @@ const RecentTransactions = ({
 
   const thirtyDaysAgoDate = new Date();
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
-  
+  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
+  const end_date = formatDate(new Date(), 'YYYY-MM-DD');
+
   const filters: DateRangeFilter = {
-    startDate: thirtyDaysAgoDate,
-    endDate: new Date(),
+    start_date, // YYYY-MM-DD
+    end_date,
     ...pagination,
   };
 

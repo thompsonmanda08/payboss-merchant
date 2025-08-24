@@ -1,11 +1,5 @@
 'use client';
-import {
-  Plus,
-  EyeOff,
-  Wrench,
-  Monitor,
-  Trash2,
-} from 'lucide-react';
+import { Plus, EyeOff, Wrench, Monitor, Trash2 } from 'lucide-react';
 import {
   Dropdown,
   DropdownItem,
@@ -18,7 +12,7 @@ import {
 } from '@heroui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import {
   activateWorkspaceTerminals,
@@ -38,8 +32,7 @@ import {
 } from '@/hooks/use-query-data';
 import { QUERY_KEYS } from '@/lib/constants';
 import { cn, formatDate } from '@/lib/utils';
-
-import TerminalConfigViewModal from './terminal-config-view';
+import TerminalConfigViewModal from './terminal-config-modal';
 
 const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
   const queryClient = useQueryClient();

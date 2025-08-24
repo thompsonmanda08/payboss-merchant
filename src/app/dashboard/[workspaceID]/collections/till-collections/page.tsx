@@ -12,7 +12,7 @@ export default async function APIIntegrationPage({ params }: PageProps) {
       <RecentTransactions
         workspaceID={workspaceID}
         service="till"
-        queryKeys={[QUERY_KEYS.API_COLLECTIONS]}
+        queryKeys={[QUERY_KEYS.TILL_COLLECTIONS]}
       />
     </div>
   );

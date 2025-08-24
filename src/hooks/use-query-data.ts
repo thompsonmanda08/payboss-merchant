@@ -257,7 +257,7 @@ export const useRecentTransactions = ({
   filters: DateRangeFilter;
 }) => {
   return useQuery({
-    queryKey: [...queryKeys, workspaceID, filters],
+    queryKey: [...queryKeys, service, filters, workspaceID],
     queryFn: () =>
       getCollectionLatestTransactions(workspaceID, service, filters),
     staleTime: Infinity,
