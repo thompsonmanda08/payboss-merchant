@@ -15,6 +15,7 @@ import {
   getAllBulkTransactions,
   getBatchDetails,
   getCollectionLatestTransactions,
+  getCollectionsReport,
   getRecentInvoices,
   getWalletPrefundHistory,
 } from '@/app/_actions/transaction-actions';
@@ -230,6 +231,19 @@ export const useWorkspaceSubscriptions = (workspaceID: string) =>
     staleTime: Infinity,
   });
 
+export const useRecentInvoices = ({
+  workspaceID,
+  filters,
+}: {
+  workspaceID: string;
+  filters: DateRangeFilter;
+}) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.INVOICES, workspaceID],
+    queryFn: () => getRecentInvoices(workspaceID, { ...filters }),
+  });
+};
+
 /* TRANSACTIONS */
 export const useRecentTransactions = ({
   workspaceID,
@@ -243,21 +257,24 @@ export const useRecentTransactions = ({
   filters: DateRangeFilter;
 }) => {
   return useMutation({
-    mutationKey: [...queryKeys, workspaceID],
+    mutationKey: [...queryKeys, workspaceID, filters],
     mutationFn: () =>
       getCollectionLatestTransactions(workspaceID, service, filters),
   });
 };
 
-export const useRecentInvoices = ({
+export const useCollectionReports = ({
   workspaceID,
+  service,
   filters,
 }: {
   workspaceID: string;
+  service: string;
   filters: DateRangeFilter;
 }) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.INVOICES, workspaceID],
-    queryFn: () => getRecentInvoices(workspaceID, { ...filters }),
+    queryKey: [QUERY_KEYS.COLLECTION_REPORTS, service, filters, workspaceID],
+    queryFn: () => getCollectionsReport(workspaceID, service, filters),
+    staleTime: Infinity,
   });
 };

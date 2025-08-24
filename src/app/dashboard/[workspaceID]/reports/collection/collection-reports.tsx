@@ -18,14 +18,13 @@ import {
   DropdownItem,
   Button as HeroButton,
   DropdownSection,
+  Selection,
 } from '@heroui/react';
-import { useMutation } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useMemo, useReducer, useState } from 'react';
 
 import { apiTransactionsReportToCSV } from '@/app/_actions/file-conversion-actions';
-import { getCollectionsReport } from '@/app/_actions/transaction-actions';
 import TotalValueStat from '@/app/dashboard/components/total-stats';
 import TotalStatsLoader from '@/app/dashboard/components/total-stats-loader';
 import CardHeader from '@/components/base/card-header';
@@ -45,195 +44,267 @@ import {
 } from '@/lib/table-columns';
 import { cn, formatCurrency } from '@/lib/utils';
 import { DateRangeFilter } from '@/types';
+import { useCollectionReports } from '@/hooks/use-query-data';
+
+// Constants
+const DEBOUNCE_DELAY = 500;
+const DEFAULT_DATE_RANGE_DAYS = 30;
+const DEFAULT_PAGINATION = { page: 1, limit: 10 };
 
 const SERVICE_TYPES = [
   {
-    name: 'API Integration ',
-    description: 'Integrations on 3rd party aplications',
+    id: 'api-integration',
+    name: 'API Integration',
+    description: 'Integrations on 3rd party applications',
     index: 0,
-    service: 'api-integration', // SERVICE TYPE REQUIRED BY API ENDPOINT
     icon: AdjustmentsVerticalIcon,
   },
   {
+    id: 'till',
     name: 'Till Payment',
     description: 'Integration on USSD and POS devices',
     index: 1,
-    service: 'till', // SERVICE TYPE REQUIRED BY API ENDPOINT
     icon: CalculatorIcon,
   },
   {
-    name: 'Hosted Checkout ',
+    id: 'checkout',
+    name: 'Hosted Checkout',
     description: 'Online E-Commerce and 3rd party checkout',
     index: 2,
-    service: 'checkout', // SERVICE TYPE REQUIRED BY API ENDPOINT
     icon: ShoppingCartIcon,
   },
   {
-    name: 'Invoice ',
+    id: 'invoice',
+    name: 'Invoice',
     description: 'Invoicing with checkout integration',
     index: 3,
-    service: 'invoice', // SERVICE TYPE REQUIRED BY API ENDPOINT
     icon: DocumentTextIcon,
   },
 ];
 
-export default function CollectionsReports({}) {
-  const params = useParams();
-  const workspaceID = String(params.workspaceID);
+// Create service map for O(1) lookup
+const SERVICE_MAP = new Map(
+  SERVICE_TYPES.map((service) => [service.id, service]),
+);
 
-  const [selectedServiceIndex, setSelectedServiceIndex] = React.useState(0);
+// Export filename mapping
+const EXPORT_FILENAME_MAP: Record<string, string> = {
+  'api-integration': 'api_collection_transactions',
+  till: 'till_collection_transactions',
+  checkout: 'checkout_collection_transactions',
+  invoice: 'invoice_collection_transactions',
+};
 
-  const SERVICE = SERVICE_TYPES?.[selectedServiceIndex]; // SELECTED SERVICE
+// Types
+type ServiceType = {
+  id: string;
+  name: string;
+  description: string;
+  index: number;
+  icon: React.ComponentType<{ className?: string }>;
+};
 
-  const [dateRange, setDateRange] = useState<DateRangeFilter>({
-    start_date: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000)
-      .toISOString()
-      .split('T')[0], // 30 DAYS AGO
-    end_date: new Date().toISOString().split('T')[0],
-    range: '',
-  }); // DATE RANGE FILTER
+// Custom hooks
+const useServiceSelection = (initialServiceKey = 'api-integration') => {
+  const [serviceKeys, setServiceKeys] = useState<Selection>(
+    new Set([initialServiceKey]),
+  );
 
-  const [isExpanded, setIsExpanded] = useState(true); // SUMMARY EXPANDED STATE
+  const selectedServiceKey = useMemo(
+    () => Array.from(serviceKeys).join(', ').replace(/_/g, ''),
+    [serviceKeys],
+  );
 
-  const [searchQuery, setSearchQuery] = useState(''); // TABLE SEARCH FILTER
-  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const service = useMemo(
+    () => SERVICE_MAP.get(selectedServiceKey) as ServiceType | undefined,
+    [selectedServiceKey],
+  );
 
-  const [terminalQuery, setTerminalQuery] = useState(''); // TERMINAL SEARCH FILTER
-  const debouncedTerminalQuery = useDebounce(terminalQuery, 500);
+  return { serviceKeys, setServiceKeys, selectedServiceKey, service };
+};
 
-  // HANDLE FETCH FILTERED TRANSACTION REPORT DATA
-  const mutation = useMutation({
-    mutationKey: [QUERY_KEYS.COLLECTION_REPORTS, workspaceID],
-    mutationFn: (filterDates: DateRangeFilter) => getReportsData(filterDates),
-  });
+const useFilteredData = (
+  transactions: any[],
+  terminalSummary: any[],
+  searchQuery: string,
+  terminalQuery: string,
+) => {
+  const debouncedSearchQuery = useDebounce(searchQuery, DEBOUNCE_DELAY);
+  const debouncedTerminalQuery = useDebounce(terminalQuery, DEBOUNCE_DELAY);
 
-  // ABSTRACT THE DATE RANGE FROM THE DATE PICKER - TO FETCH ASYNCHRONOUSLY
-  async function runAsyncMutation(range: DateRangeFilter) {
-    // IF NO DATE RANGE IS SELECTED, RETURN EMPTY ARRAY
-    if (!range?.start_date && !range?.end_date) {
-      return [];
-    }
+  const filteredTransactions = useMemo(() => {
+    if (!debouncedSearchQuery) return transactions;
 
-    return await mutation.mutateAsync(range);
-  }
-
-  // FETCH COLLECTIONS REPORT DATA - ASYNC AS HOISTED INTO THE MUTATION FUNCTION
-  async function getReportsData(dateRange: DateRangeFilter) {
-    const serviceType = SERVICE?.service;
-
-    if (!serviceType) {
-      throw new Error('No service type selected');
-    }
-
-    const response = await getCollectionsReport(
-      workspaceID,
-      serviceType,
-      dateRange,
+    const query = debouncedSearchQuery.toLowerCase();
+    return transactions.filter(
+      (row) =>
+        row?.transactionID?.toLowerCase().includes(query) ||
+        row?.destination?.toLowerCase().includes(query) ||
+        row?.amount?.toLowerCase().includes(query) ||
+        row?.service_provider?.toLowerCase().includes(query),
     );
-
-    return response || [];
-  }
-
-  // MUTATION RESPONSE DATA
-  const report = mutation?.data?.data?.summary || [];
-  const transactions = mutation?.data?.data?.data || [];
-  const hasTerminals = Boolean(mutation?.data?.data?.hasTerminal || false);
-  const terminalSummary = mutation?.data?.data?.terminal || [];
-  const isPending = mutation?.isPending;
-
-  // RESOLVE DATA FILTERING
-  const hasSearchFilter = Boolean(debouncedSearchQuery);
-  const filteredItems = React.useMemo(() => {
-    let filteredRows = [...transactions];
-
-    if (hasSearchFilter) {
-      filteredRows = filteredRows.filter(
-        (row) =>
-          // row?.narration?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
-          row?.transactionID
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.destination
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.amount
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()) ||
-          row?.service_provider
-            ?.toLowerCase()
-            .includes(debouncedSearchQuery?.toLowerCase()),
-      );
-    }
-
-    return filteredRows;
   }, [transactions, debouncedSearchQuery]);
 
-  // RESOLVE TERMINAL FILTERING
-  const hasTerminalFilter = Boolean(debouncedTerminalQuery);
-  const filteredTerminals = React.useMemo(() => {
-    let terminals = [...terminalSummary];
+  const filteredTerminals = useMemo(() => {
+    if (!debouncedTerminalQuery) return terminalSummary;
 
-    if (hasTerminalFilter) {
-      terminals = terminals.filter(
-        (terminal) =>
-          terminal?.terminal_name
-            ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase()) ||
-          terminal?.terminalName
-            ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase()) ||
-          terminal?.terminalID
-            ?.toLowerCase()
-            .includes(debouncedTerminalQuery?.toLowerCase()),
-      );
-    }
-
-    return terminals;
+    const query = debouncedTerminalQuery.toLowerCase();
+    return terminalSummary.filter(
+      (terminal) =>
+        terminal?.terminal_name?.toLowerCase().includes(query) ||
+        terminal?.terminalName?.toLowerCase().includes(query) ||
+        terminal?.terminalID?.toLowerCase().includes(query),
+    );
   }, [terminalSummary, debouncedTerminalQuery]);
 
-  // APPLY DATE RANGE FILTERING
-  useEffect(() => {
-    if (!mutation.data && dateRange?.start_date && dateRange?.end_date) {
-      runAsyncMutation(dateRange);
-    }
-  }, [dateRange]);
+  return { filteredTransactions, filteredTerminals };
+};
 
-  function handleFileExportToCSV() {
-    if (selectedServiceIndex === 0)
-      apiTransactionsReportToCSV({
-        objArray: transactions,
-        fileName: 'api_collection_transactions',
-        hasTerminals,
-      });
+const useReportExport = (
+  selectedServiceKey: string,
+  transactions: any[],
+  hasTerminals: boolean,
+) => {
+  return useCallback(() => {
+    const fileName =
+      EXPORT_FILENAME_MAP[selectedServiceKey] || 'collection_transactions';
+    const exportConfig: any = {
+      objArray: transactions,
+      fileName,
+    };
 
-    if (selectedServiceIndex === 1) {
-      apiTransactionsReportToCSV({
-        objArray: transactions,
-        fileName: 'till_collection_transactions',
-      });
+    if (selectedServiceKey === 'api-integration' && hasTerminals) {
+      exportConfig.hasTerminals = hasTerminals;
     }
 
-    if (selectedServiceIndex === 2) {
-      apiTransactionsReportToCSV({
-        objArray: transactions,
-        fileName: 'checkout_collection_transactions',
-      });
-    }
+    apiTransactionsReportToCSV(exportConfig);
+  }, [selectedServiceKey, transactions, hasTerminals]);
+};
 
-    if (selectedServiceIndex === 3) {
-      apiTransactionsReportToCSV({
-        objArray: transactions,
-        fileName: 'invoice_collection_transactions',
-      });
-    }
+// Filters reducer
+type FiltersState = {
+  searchQuery: string;
+  terminalQuery: string;
+  dateRange: DateRangeFilter;
+  pagination: { page: number; limit: number };
+  isExpanded: boolean;
+};
+
+type FiltersAction =
+  | { type: 'SET_SEARCH_QUERY'; payload: string }
+  | { type: 'SET_TERMINAL_QUERY'; payload: string }
+  | { type: 'SET_DATE_RANGE'; payload: DateRangeFilter }
+  | { type: 'SET_PAGINATION'; payload: { page: number; limit: number } }
+  | { type: 'TOGGLE_EXPANDED' }
+  | { type: 'SET_PAGE'; payload: number };
+
+const filtersReducer = (
+  state: FiltersState,
+  action: FiltersAction,
+): FiltersState => {
+  switch (action.type) {
+    case 'SET_SEARCH_QUERY':
+      return { ...state, searchQuery: action.payload };
+    case 'SET_TERMINAL_QUERY':
+      return { ...state, terminalQuery: action.payload };
+    case 'SET_DATE_RANGE':
+      return { ...state, dateRange: action.payload };
+    case 'SET_PAGINATION':
+      return { ...state, pagination: action.payload };
+    case 'TOGGLE_EXPANDED':
+      return { ...state, isExpanded: !state.isExpanded };
+    case 'SET_PAGE':
+      return {
+        ...state,
+        pagination: { ...state.pagination, page: action.payload },
+      };
+    default:
+      return state;
   }
+};
 
-  useEffect(() => {
-    runAsyncMutation(dateRange);
-  }, [selectedServiceIndex]);
+const initialFiltersState: FiltersState = {
+  searchQuery: '',
+  terminalQuery: '',
+  dateRange: {
+    start_date: new Date(
+      new Date().getTime() - DEFAULT_DATE_RANGE_DAYS * 24 * 60 * 60 * 1000,
+    )
+      .toISOString()
+      .split('T')[0],
+    end_date: new Date().toISOString().split('T')[0],
+    range: '',
+  },
+  pagination: DEFAULT_PAGINATION,
+  isExpanded: true,
+};
 
-  const iconClasses =
-    'w-5 h-5 text-default-500 pointer-events-none flex-shrink-0';
+export const CollectionsReports = ({
+  workspaceID,
+}: {
+  workspaceID: string;
+}) => {
+  const queryClient = useQueryClient();
+
+  // Use reducer for complex state management
+  const [filters, dispatchFilters] = useReducer(
+    filtersReducer,
+    initialFiltersState,
+  );
+  const { searchQuery, terminalQuery, dateRange, pagination, isExpanded } =
+    filters;
+
+  // Use custom hooks
+  const { serviceKeys, setServiceKeys, selectedServiceKey, service } =
+    useServiceSelection();
+
+  const { data: reports, isLoading } = useCollectionReports({
+    workspaceID,
+    service: service?.id as string,
+    filters: {
+      start_date: dateRange?.start_date,
+      end_date: dateRange?.end_date,
+      ...pagination,
+    },
+  });
+
+  // QUERY RESPONSE DATA
+  const report = reports?.data?.summary || [];
+  const transactions = reports?.data?.data || [];
+  const hasTerminals = Boolean(reports?.data?.hasTerminal || false);
+  const terminalSummary = reports?.data?.terminal || [];
+  const PAGINATION = {
+    ...pagination, // USER SET CONFIGS FOR PAGINATION {page and limit}
+    ...reports?.data?.data?.pagination, // PAGINATION DETAILS FROM SERVER
+  };
+
+  // Use filtered data hook
+  const { filteredTransactions: filteredItems, filteredTerminals } =
+    useFilteredData(transactions, terminalSummary, searchQuery, terminalQuery);
+
+  const exportReportToCSV = useReportExport(
+    selectedServiceKey,
+    transactions,
+    hasTerminals,
+  );
+
+  const triggerRefetch = useCallback(async () => {
+    const filters = {
+      start_date: dateRange?.start_date,
+      end_date: dateRange?.end_date,
+      ...pagination,
+    };
+
+    const queryKey = [
+      QUERY_KEYS.COLLECTION_REPORTS,
+      service?.id as string,
+      filters,
+      workspaceID,
+    ];
+
+    queryClient.invalidateQueries({ queryKey });
+    queryClient.refetchQueries({ queryKey });
+  }, [queryClient, service?.id, dateRange, pagination, workspaceID]);
 
   return (
     <>
@@ -256,26 +327,26 @@ export default function CollectionsReports({}) {
                   className={'aspect-square h-10 w-10 p-1 rounded-[5px]'}
                 >
                   {(() => {
-                    const Icon = SERVICE?.icon;
-
+                    const Icon = service?.icon;
+                    if (!Icon) return null;
                     return <Icon className="w-5 h-5" />;
                   })()}
                 </SoftBoxIcon>
                 <div className="flex w-full items-center justify-between text-primary">
                   <div className="flex flex-col items-start justify-start gap-0">
                     <div className="text-base font-semibold capitalize">
-                      {isPending ? (
+                      {isLoading ? (
                         <div className="flex gap-2 text-sm font-bold ">
                           <Spinner size={18} />{' '}
-                          {`Fetching ${SERVICE?.name} reports ...`}
+                          {`Fetching ${service?.name} reports ...`}
                         </div>
                       ) : (
-                        SERVICE?.name
+                        service?.name
                       )}
                     </div>
-                    {!isPending && (
+                    {!isLoading && (
                       <span className="-mt-0.5 text-xs font-medium tracking-wide text-foreground-600">
-                        Report analytics on {SERVICE?.name}
+                        Report analytics on {service?.name}
                       </span>
                     )}
                   </div>
@@ -286,19 +357,27 @@ export default function CollectionsReports({}) {
             <DropdownMenu
               aria-label="Dropdown menu with services"
               selectionMode="single"
+              disallowEmptySelection
+              selectedKeys={serviceKeys}
+              onSelectionChange={setServiceKeys}
             >
               <DropdownSection
                 // showDivider
                 title="Reports by Service types"
               >
-                {SERVICE_TYPES.map((service, index) => {
+                {SERVICE_TYPES.map((service) => {
+                  const Icon = service?.icon;
                   return (
                     <DropdownItem
-                      key={String(service?.index || index)}
+                      key={service?.id}
                       description={service?.description}
-                      startContent={<service.icon className={iconClasses} />}
-                      // shortcut="⌘N"
-                      onPress={() => setSelectedServiceIndex(index)}
+                      startContent={
+                        <Icon
+                          className={
+                            'w-5 h-5 text-default-500 pointer-events-none flex-shrink-0'
+                          }
+                        />
+                      }
                     >
                       {service?.name}
                     </DropdownItem>
@@ -314,28 +393,21 @@ export default function CollectionsReports({}) {
             dateRange={dateRange}
             description={'Dates to generate reports'}
             label={'Reports Date Range'}
-            setDateRange={setDateRange}
+            setDateRange={(range: DateRangeFilter) =>
+              dispatchFilters({ type: 'SET_DATE_RANGE', payload: range })
+            }
             visibleMonths={2}
           />{' '}
           <Button
             endContent={<FunnelIcon className="h-5 w-5" />}
-            onPress={() => runAsyncMutation(dateRange)}
+            onPress={triggerRefetch}
           >
             Apply
           </Button>
         </div>
       </div>
 
-      {/************************************************************************/}
       <Card className={'w-full gap-3'}>
-        {/* <div className="flex items-end justify-between">
-          <Tabs
-            className={"mb-2 mr-auto"}
-            selectedServiceIndex={selectedServiceIndex}
-            navigateTo={setCurrentTab}
-            tabs={SERVICE_TYPES}
-          />
-        </div> */}
         <div className="flex w-full items-center justify-between gap-8">
           <CardHeader
             className={'max-w-full'}
@@ -343,8 +415,8 @@ export default function CollectionsReports({}) {
               titleClasses: 'xl:text-[clamp(1.125rem,1vw,1.5rem)] font-bold',
               infoClasses: 'text-[clamp(0.8rem,0.8vw,1rem)]',
             }}
-            infoText={`Reports on ${SERVICE_TYPES[selectedServiceIndex]?.name} transactions that took place within the date range applied `}
-            title={`${SERVICE_TYPES[selectedServiceIndex]?.name} Reports from (${
+            infoText={`Reports on ${service?.name} transactions that took place within the date range applied `}
+            title={`${service?.name} Reports from (${
               dateRange?.range || '--'
             })`}
           />
@@ -353,7 +425,7 @@ export default function CollectionsReports({}) {
             <Button
               color={'primary'}
               variant="flat"
-              onPress={() => setIsExpanded(!isExpanded)}
+              onPress={() => dispatchFilters({ type: 'TOGGLE_EXPANDED' })}
             >
               {isExpanded ? (
                 <>
@@ -425,8 +497,8 @@ export default function CollectionsReports({}) {
                 )}
               </Card>
 
-              {/* TERMINAL SUMMARY */}
-              {hasTerminals && (
+              {/* TERMINAL SUMMARY FOR CONFIGURED TERMINALS */}
+              {hasTerminals && filteredTerminals?.length > 0 && (
                 <Card className={'max-w-full gap-4 shadow-none'}>
                   <div className="flex w-full flex-col items-center justify-between gap-8 sm:flex-row">
                     <CardHeader
@@ -444,7 +516,12 @@ export default function CollectionsReports({}) {
                       <Search
                         className={''}
                         placeholder={'Find a terminal...'}
-                        onChange={(v) => setTerminalQuery(v)}
+                        onChange={(v) =>
+                          dispatchFilters({
+                            type: 'SET_TERMINAL_QUERY',
+                            payload: v,
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -454,18 +531,16 @@ export default function CollectionsReports({}) {
                       'my-2 gap-4 flex max-w-full overflow-x-auto shadow-none'
                     }
                   >
-                    {filteredTerminals?.length > 0 &&
-                      filteredTerminals?.map((terminal) => (
-                        // Array.from({ length: 8 })?.map((terminal) => (
-                        <TerminalInfo
-                          key={terminal?.terminalID}
-                          className={'mb-4 min-w-[300px]'}
-                          count={terminal?.successful_count}
-                          terminalID={terminal?.terminalID}
-                          terminalName={terminal?.terminalName}
-                          value={terminal?.successful_value}
-                        />
-                      ))}
+                    {filteredTerminals?.map((terminal) => (
+                      <TerminalInfo
+                        key={terminal?.terminalID}
+                        className={'mb-4 min-w-[300px]'}
+                        count={terminal?.successful_count}
+                        terminalID={terminal?.terminalID}
+                        terminalName={terminal?.terminalName}
+                        value={terminal?.successful_value}
+                      />
+                    ))}
                   </div>
                 </Card>
               )}
@@ -489,12 +564,15 @@ export default function CollectionsReports({}) {
             <Search
               className={'max-w-sm'}
               placeholder={'Search by name, or type...'}
-              onChange={(v) => setSearchQuery(v)}
+              onChange={(v) =>
+                dispatchFilters({ type: 'SET_SEARCH_QUERY', payload: v })
+              }
             />
             <Button
               color={'primary'}
+              disabled={!filteredItems?.length}
               startContent={<ArrowDownTrayIcon className="h-5 w-5" />}
-              onPress={() => handleFileExportToCSV()}
+              onPress={() => exportReportToCSV()}
             >
               Export
             </Button>
@@ -505,18 +583,20 @@ export default function CollectionsReports({}) {
         <CustomTable
           removeWrapper
           columns={
-            hasTerminals
+            hasTerminals && filteredTerminals?.length > 0
               ? API_KEY_TERMINAL_TRANSACTION_COLUMNS
               : API_KEY_TRANSACTION_COLUMNS
           }
-          // isError={mutation.isError}
-          isLoading={mutation.isPending}
+          isLoading={isLoading}
           rows={filteredItems || []}
-          // onRowAction={(key) => {}}
+          pagination={PAGINATION}
+          handlePageChange={(page) =>
+            dispatchFilters({ type: 'SET_PAGE', payload: page })
+          }
         />
       </Card>
-
-      {/************************************************************************/}
     </>
   );
-}
+};
+
+export default CollectionsReports;

@@ -165,7 +165,7 @@ function WorkspaceSettings({
       {/* HEADER */}
       <div className={cn('mb-4')}>
         <h2 className="heading-3 !font-bold uppercase tracking-tight text-foreground">
-          {activeWorkspace?.workspace}
+          {activeWorkspace?.workspace || 'Workspace'}
         </h2>
         <p className="text-sm text-foreground-600">
           Workspaces provide a structured way to group and manage services,

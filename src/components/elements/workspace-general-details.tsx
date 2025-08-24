@@ -1,4 +1,4 @@
-import { Snippet, Switch, useDisclosure, addToast } from '@heroui/react';
+import { Snippet, useDisclosure, addToast } from '@heroui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';

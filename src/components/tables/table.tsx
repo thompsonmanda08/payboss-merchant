@@ -369,7 +369,7 @@ export default function CustomTable({
     return (
       <div className="flex w-full items-center justify-between">
         <span className="text-small text-foreground-400">
-          Total: {hasSearchFilter ? items.length : pagination.total}{' '}
+          Total: {hasSearchFilter ? items.length || 0 : pagination.total || 0}{' '}
           transactions
         </span>
         <Pagination
@@ -391,8 +391,8 @@ export default function CustomTable({
           Rows per page:{' '}
           <SelectField
             className="h-8 min-w-max bg-transparent text-sm text-foreground-400 outline-none"
-            defaultValue={8}
-            options={['5', '8', '10', '16', '20']}
+            defaultValue={10}
+            options={['5', '10', '15', '20']}
             placeholder={rowsPerPage.toString()}
             onChange={onRowsPerPageChange}
           />
