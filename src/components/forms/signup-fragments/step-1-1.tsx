@@ -1,6 +1,6 @@
 //BUSINESS REGISTRATION STATUS
 'use client';
-import { BriefcaseIcon } from '@heroicons/react/24/outline';
+import { Briefcase as BriefcaseIcon } from 'lucide-react';
 import { Checkbox } from '@heroui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect } from 'react';

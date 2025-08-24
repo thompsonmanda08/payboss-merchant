@@ -1,7 +1,7 @@
 import {
-  ClipboardDocumentCheckIcon,
-  ShieldExclamationIcon,
-} from '@heroicons/react/24/outline';
+  ClipboardCheck as ClipboardDocumentCheckIcon,
+  ShieldAlert as ShieldExclamationIcon,
+} from 'lucide-react';
 import { now, getLocalTimeZone } from '@internationalized/date';
 import Image from 'next/image';
 

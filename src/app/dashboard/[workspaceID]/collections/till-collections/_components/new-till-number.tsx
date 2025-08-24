@@ -1,10 +1,10 @@
 'use client';
 import {
-  PlusIcon,
-  QrCodeIcon,
-  ArrowDownTrayIcon,
-  ComputerDesktopIcon,
-} from '@heroicons/react/24/outline';
+  Plus as PlusIcon,
+  QrCode as QrCodeIcon,
+  Download as ArrowDownTrayIcon,
+  Monitor as ComputerDesktopIcon,
+} from 'lucide-react';
 import {
   Table,
   TableHeader,

@@ -1,5 +1,5 @@
 'use client';
-import { ArrowDownTrayIcon, FunnelIcon } from '@heroicons/react/24/outline';
+import { Download as ArrowDownTrayIcon, Filter as FunnelIcon } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';

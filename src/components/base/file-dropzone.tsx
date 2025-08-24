@@ -2,11 +2,11 @@
 'use client';
 
 import {
-  CheckCircleIcon,
-  CloudArrowUpIcon,
-  DocumentArrowUpIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+  CheckCircle as CheckCircleIcon,
+  CloudUpload as CloudArrowUpIcon,
+  FileUp as DocumentArrowUpIcon,
+  X as XMarkIcon,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import * as React from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';

@@ -1,6 +1,5 @@
 'use client';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { PowerIcon } from '@heroicons/react/24/solid';
+import { ChevronDown, Power } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
@@ -84,7 +83,7 @@ export default function SideNavItems({
                     >
                       {name}
                     </span>
-                    <ChevronDownIcon
+                    <ChevronDown
                       className={cn(
                         'ml-auto h-4 w-4 transition-all duration-300 ease-in-out',
                         {
@@ -168,7 +167,7 @@ export default function SideNavItems({
         }}
       >
         <NavItemIcon
-          Icon={PowerIcon}
+          Icon={Power}
           activeLayer={false}
           isSelected={true}
           onIconPress={() => {

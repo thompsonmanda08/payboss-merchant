@@ -1,5 +1,5 @@
 'use client';
-import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { BadgeCheck as CheckBadgeIcon, XCircle as XCircleIcon } from 'lucide-react';
 import { useDisclosure, addToast } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';

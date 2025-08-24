@@ -1,11 +1,11 @@
 'use client';
 import {
-  ChatBubbleLeftRightIcon,
-  MoonIcon,
-  PowerIcon,
-  SunIcon,
-  WalletIcon,
-} from '@heroicons/react/24/outline';
+  MessageSquare as ChatBubbleLeftRightIcon,
+  Moon as MoonIcon,
+  Power as PowerIcon,
+  Sun as SunIcon,
+  Wallet as WalletIcon,
+} from 'lucide-react';
 import {
   Dropdown,
   DropdownTrigger,

@@ -1,21 +1,19 @@
 'use client';
 import {
-  ArrowLeftEndOnRectangleIcon,
-  ArrowLeftStartOnRectangleIcon,
-} from '@heroicons/react/24/outline';
-import {
-  BanknotesIcon,
-  NewspaperIcon,
-  ArrowsRightLeftIcon,
-  PhoneArrowDownLeftIcon,
-  AdjustmentsVerticalIcon,
-  ClipboardDocumentIcon,
-  BuildingStorefrontIcon,
-  CreditCardIcon,
-  ReceiptPercentIcon,
-  CalculatorIcon,
-  TicketIcon,
-} from '@heroicons/react/24/solid';
+  LogOut as ArrowLeftEndOnRectangleIcon,
+  LogIn as ArrowLeftStartOnRectangleIcon,
+  Banknote as BanknotesIcon,
+  Newspaper as NewspaperIcon,
+  ArrowLeftRight as ArrowsRightLeftIcon,
+  PhoneCall as PhoneArrowDownLeftIcon,
+  SlidersVertical as AdjustmentsVerticalIcon,
+  Clipboard as ClipboardDocumentIcon,
+  Store as BuildingStorefrontIcon,
+  CreditCard as CreditCardIcon,
+  Receipt as ReceiptPercentIcon,
+  Calculator as CalculatorIcon,
+  Ticket as TicketIcon,
+} from 'lucide-react';
 import { Tab, Tabs } from '@heroui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 

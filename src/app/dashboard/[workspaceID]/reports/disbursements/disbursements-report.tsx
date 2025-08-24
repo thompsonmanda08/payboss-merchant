@@ -1,11 +1,11 @@
 'use client';
 import {
-  ArrowDownTrayIcon,
-  EyeSlashIcon,
-  FunnelIcon,
-  ListBulletIcon,
-  PresentationChartBarIcon,
-} from '@heroicons/react/24/outline';
+  Download as ArrowDownTrayIcon,
+  EyeOff as EyeSlashIcon,
+  Filter as FunnelIcon,
+  List as ListBulletIcon,
+  BarChart3 as PresentationChartBarIcon,
+} from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useParams } from 'next/navigation';

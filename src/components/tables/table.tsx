@@ -1,4 +1,4 @@
-import { EyeIcon, FunnelIcon } from '@heroicons/react/24/outline';
+import { Eye as EyeIcon, Filter as FunnelIcon } from 'lucide-react';
 import {
   Table,
   TableHeader,

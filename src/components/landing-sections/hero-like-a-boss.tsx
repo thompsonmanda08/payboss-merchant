@@ -1,8 +1,8 @@
 'use client';
 import {
-  ArrowRightIcon,
-  ChatBubbleLeftRightIcon,
-} from '@heroicons/react/24/outline';
+  ArrowRight as ArrowRightIcon,
+  MessageSquare as ChatBubbleLeftRightIcon,
+} from 'lucide-react';
 import { Image as HeroImage } from '@heroui/react';
 import Image from 'next/image';
 import Link from 'next/link';

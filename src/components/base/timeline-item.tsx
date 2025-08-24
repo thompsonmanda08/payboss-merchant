@@ -1,4 +1,4 @@
-import { CheckBadgeIcon } from '@heroicons/react/24/outline';
+import { BadgeCheck as CheckBadgeIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 

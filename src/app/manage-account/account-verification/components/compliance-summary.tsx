@@ -1,5 +1,5 @@
 'use client';
-import { ArrowRightIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
+import { ArrowRight as ArrowRightIcon, BadgeCheck as CheckBadgeIcon } from 'lucide-react';
 import { addToast } from '@heroui/react';
 import { useDisclosure } from '@heroui/react';
 import { useQueryClient } from '@tanstack/react-query';

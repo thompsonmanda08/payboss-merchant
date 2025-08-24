@@ -1,6 +1,6 @@
 'use client';
 
-import { CloudArrowDownIcon, PrinterIcon } from '@heroicons/react/24/outline';
+import { CloudDownload as CloudArrowDownIcon, Printer as PrinterIcon } from 'lucide-react';
 import { Link, RadioGroup, useDisclosure } from '@heroui/react';
 import { parseDate, getLocalTimeZone } from '@internationalized/date';
 import { useDateFormatter } from '@react-aria/i18n';

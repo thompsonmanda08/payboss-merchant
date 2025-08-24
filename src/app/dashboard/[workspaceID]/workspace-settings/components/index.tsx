@@ -1,11 +1,11 @@
 'use client';
 import {
-  BanknotesIcon,
-  UserGroupIcon,
-  WalletIcon,
-  WrenchScrewdriverIcon,
-  ShoppingCartIcon,
-} from '@heroicons/react/24/outline';
+  Banknote as BanknotesIcon,
+  Users as UserGroupIcon,
+  Wallet as WalletIcon,
+  Wrench as WrenchScrewdriverIcon,
+  ShoppingCart as ShoppingCartIcon,
+} from 'lucide-react';
 import { Tabs, Tab } from '@heroui/react';
 import { useEffect } from 'react';
 

@@ -1,4 +1,4 @@
-import { WalletIcon } from '@heroicons/react/24/outline';
+import { Wallet as WalletIcon } from 'lucide-react';
 import {
   Table,
   TableHeader,

@@ -1,23 +1,23 @@
 'use client';
 
 import {
-  HomeIcon,
-  BanknotesIcon,
-  ArrowsRightLeftIcon,
-  InboxArrowDownIcon,
-  AdjustmentsVerticalIcon,
-  Bars3BottomLeftIcon,
-  DocumentChartBarIcon,
-  CalculatorIcon,
-  WrenchScrewdriverIcon,
-  WalletIcon,
-  ReceiptPercentIcon,
-  ArrowLeftEndOnRectangleIcon,
-  ArrowRightStartOnRectangleIcon,
-  BriefcaseIcon,
-  ChevronRightIcon,
-  DocumentTextIcon,
-} from '@heroicons/react/24/outline';
+  Home as HomeIcon,
+  Banknote as BanknotesIcon,
+  ArrowLeftRight as ArrowsRightLeftIcon,
+  Inbox as InboxArrowDownIcon,
+  Settings as AdjustmentsVerticalIcon,
+  Menu as Bars3BottomLeftIcon,
+  BarChart3 as DocumentChartBarIcon,
+  Calculator as CalculatorIcon,
+  Wrench as WrenchScrewdriverIcon,
+  Wallet as WalletIcon,
+  Receipt as ReceiptPercentIcon,
+  LogOut as ArrowLeftEndOnRectangleIcon,
+  LogIn as ArrowRightStartOnRectangleIcon,
+  Briefcase as BriefcaseIcon,
+  ChevronRight as ChevronRightIcon,
+  FileText as DocumentTextIcon,
+} from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 

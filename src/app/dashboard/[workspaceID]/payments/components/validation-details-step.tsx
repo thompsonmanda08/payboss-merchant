@@ -1,5 +1,5 @@
 'use client';
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { HelpCircle as QuestionMarkCircleIcon } from 'lucide-react';
 import { Alert, addToast } from '@heroui/react';
 import { useQueryClient } from '@tanstack/react-query';
 

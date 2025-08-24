@@ -1,10 +1,10 @@
 'use client';
 import {
-  ChatBubbleLeftRightIcon,
-  Squares2X2Icon,
-  UserCircleIcon,
-  UserPlusIcon,
-} from '@heroicons/react/24/outline';
+  MessageSquare as ChatBubbleLeftRightIcon,
+  Grid2X2 as Squares2X2Icon,
+  UserCircle as UserCircleIcon,
+  UserPlus as UserPlusIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';

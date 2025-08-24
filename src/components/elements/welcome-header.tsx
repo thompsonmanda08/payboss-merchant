@@ -1,5 +1,5 @@
 'use client';
-import { Cog6ToothIcon, PowerIcon } from '@heroicons/react/24/outline';
+import { Settings as Cog6ToothIcon, Power as PowerIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import Logo from '@/components/base/payboss-logo';

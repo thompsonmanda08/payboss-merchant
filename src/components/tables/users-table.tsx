@@ -1,11 +1,11 @@
 import {
-  ArrowPathIcon,
-  LockClosedIcon,
-  LockOpenIcon,
-  PencilSquareIcon,
-  PlusIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
+  RotateCcw as ArrowPathIcon,
+  Lock as LockClosedIcon,
+  Unlock as LockOpenIcon,
+  PenSquare as PencilSquareIcon,
+  Plus as PlusIcon,
+  Trash2 as TrashIcon,
+} from 'lucide-react';
 import {
   Table,
   TableHeader,

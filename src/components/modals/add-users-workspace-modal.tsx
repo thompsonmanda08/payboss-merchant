@@ -1,5 +1,5 @@
 'use client';
-import { UserPlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { UserPlus as UserPlusIcon, X as XMarkIcon } from 'lucide-react';
 import {
   Table,
   TableHeader,

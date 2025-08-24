@@ -1,5 +1,5 @@
 'use client';
-import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
+import { AlignJustify as Bars3BottomRightIcon } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 

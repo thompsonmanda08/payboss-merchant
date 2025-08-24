@@ -1,4 +1,4 @@
-import { PaperClipIcon } from '@heroicons/react/24/outline';
+import { Paperclip as PaperClipIcon } from 'lucide-react';
 import { Chip, Tooltip, useDisclosure, addToast } from '@heroui/react';
 import { getLocalTimeZone, today } from '@internationalized/date';
 import { useQueryClient } from '@tanstack/react-query';

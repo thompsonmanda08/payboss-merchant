@@ -1,12 +1,12 @@
 'use client';
 import {
-  Cog6ToothIcon,
-  LinkIcon,
-  EyeIcon,
-  EyeSlashIcon,
-  Square2StackIcon,
-  ClipboardDocumentCheckIcon,
-} from '@heroicons/react/24/outline';
+  Settings as Cog6ToothIcon,
+  Link as LinkIcon,
+  Eye as EyeIcon,
+  EyeOff as EyeSlashIcon,
+  Copy as Square2StackIcon,
+  ClipboardCheck as ClipboardDocumentCheckIcon,
+} from 'lucide-react';
 import {
   Modal,
   ModalContent,

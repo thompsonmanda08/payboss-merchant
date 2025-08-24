@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircle as CheckCircleIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 

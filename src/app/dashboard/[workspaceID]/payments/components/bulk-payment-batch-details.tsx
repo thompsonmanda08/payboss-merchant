@@ -1,5 +1,5 @@
 'use client';
-import { BanknotesIcon, WalletIcon } from '@heroicons/react/24/outline';
+import { Banknote as BanknotesIcon, Wallet as WalletIcon } from 'lucide-react';
 import { Alert, addToast } from '@heroui/react';
 
 import { initializeBulkTransaction } from '@/app/_actions/transaction-actions';

@@ -1,9 +1,9 @@
 'use client';
 import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  EllipsisHorizontalIcon,
-} from '@heroicons/react/24/outline';
+  ChevronDown as ChevronDownIcon,
+  ChevronRight as ChevronRightIcon,
+  MoreHorizontal as EllipsisHorizontalIcon,
+} from 'lucide-react';
 import {
   Dropdown,
   DropdownTrigger,

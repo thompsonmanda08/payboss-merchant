@@ -1,16 +1,14 @@
 'use client';
-import { PencilIcon } from '@heroicons/react/20/solid';
 import {
-  CheckBadgeIcon,
-  DocumentCheckIcon,
-  FlagIcon,
-} from '@heroicons/react/24/outline';
-import {
-  DocumentIcon,
-  BuildingOffice2Icon,
-  CreditCardIcon,
-  ClipboardDocumentCheckIcon,
-} from '@heroicons/react/24/solid';
+  Pencil as PencilIcon,
+  BadgeCheck as CheckBadgeIcon,
+  FileCheck as DocumentCheckIcon,
+  Flag as FlagIcon,
+  File as DocumentIcon,
+  Building2 as BuildingOffice2Icon,
+  CreditCard as CreditCardIcon,
+  ClipboardCheck as ClipboardDocumentCheckIcon,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import useConfigOptions from '@/hooks/use-config-options';

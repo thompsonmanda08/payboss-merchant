@@ -1,11 +1,11 @@
 'use client';
 
 import {
-  DocumentTextIcon,
-  ListBulletIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
-import { PlusIcon } from '@heroicons/react/24/outline';
+  FileText as DocumentTextIcon,
+  List as ListBulletIcon,
+  Trash2 as TrashIcon,
+  Plus as PlusIcon,
+} from 'lucide-react';
 import {
   Card,
   CardBody,

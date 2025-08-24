@@ -1,8 +1,8 @@
 'use client';
 import {
-  ArrowRightCircleIcon,
-  CircleStackIcon,
-} from '@heroicons/react/24/outline';
+  ArrowRightCircle as ArrowRightCircleIcon,
+  Layers as CircleStackIcon,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 

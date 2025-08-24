@@ -1,9 +1,9 @@
 import {
-  ArrowLeftEndOnRectangleIcon,
-  ArrowRightCircleIcon,
-  ArrowRightStartOnRectangleIcon,
-  CircleStackIcon,
-} from '@heroicons/react/24/outline';
+  LogOut as ArrowLeftEndOnRectangleIcon,
+  ArrowRightCircle as ArrowRightCircleIcon,
+  LogIn as ArrowRightStartOnRectangleIcon,
+  Layers as CircleStackIcon,
+} from 'lucide-react';
 
 export const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL;

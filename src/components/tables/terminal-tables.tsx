@@ -1,9 +1,9 @@
 import {
-  Cog6ToothIcon,
-  ComputerDesktopIcon,
-  ListBulletIcon,
-  PlusIcon,
-} from '@heroicons/react/24/outline';
+  Settings as Cog6ToothIcon,
+  Monitor as ComputerDesktopIcon,
+  List as ListBulletIcon,
+  Plus as PlusIcon,
+} from 'lucide-react';
 import {
   Table,
   TableHeader,

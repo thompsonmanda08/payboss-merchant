@@ -1,16 +1,16 @@
 'use client';
 import {
-  AdjustmentsVerticalIcon,
-  ArrowDownTrayIcon,
-  CalculatorIcon,
-  ChevronDownIcon,
-  DocumentTextIcon,
-  EyeSlashIcon,
-  FunnelIcon,
-  ListBulletIcon,
-  PresentationChartBarIcon,
-  ShoppingCartIcon,
-} from '@heroicons/react/24/outline';
+  SlidersHorizontal as AdjustmentsVerticalIcon,
+  Download as ArrowDownTrayIcon,
+  Calculator as CalculatorIcon,
+  ChevronDown as ChevronDownIcon,
+  FileText as DocumentTextIcon,
+  EyeOff as EyeSlashIcon,
+  Filter as FunnelIcon,
+  List as ListBulletIcon,
+  BarChart3 as PresentationChartBarIcon,
+  ShoppingCart as ShoppingCartIcon,
+} from 'lucide-react';
 import {
   Dropdown,
   DropdownTrigger,

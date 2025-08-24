@@ -1,11 +1,11 @@
 'use client';
 
 import {
-  CheckBadgeIcon,
-  CreditCardIcon,
-  DevicePhoneMobileIcon,
-  ShieldCheckIcon,
-} from '@heroicons/react/24/outline';
+  BadgeCheck as CheckBadgeIcon,
+  CreditCard as CreditCardIcon,
+  Smartphone as DevicePhoneMobileIcon,
+  ShieldCheck as ShieldCheckIcon,
+} from 'lucide-react';
 import {
   Card,
   CardBody,

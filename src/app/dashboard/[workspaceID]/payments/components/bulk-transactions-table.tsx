@@ -1,5 +1,5 @@
 'use client';
-import { ComputerDesktopIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { Monitor as ComputerDesktopIcon, Plus as PlusIcon } from 'lucide-react';
 import {
   Table,
   TableHeader,

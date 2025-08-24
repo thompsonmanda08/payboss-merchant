@@ -1,10 +1,10 @@
 'use client';
 import {
-  ArrowRightStartOnRectangleIcon,
-  PencilIcon,
-  PlusIcon,
-  WalletIcon,
-} from '@heroicons/react/24/outline';
+  LogIn as ArrowRightStartOnRectangleIcon,
+  Pencil as PencilIcon,
+  Plus as PlusIcon,
+  Wallet as WalletIcon,
+} from 'lucide-react';
 import { Switch, useDisclosure, addToast } from '@heroui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';

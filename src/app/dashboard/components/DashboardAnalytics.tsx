@@ -1,10 +1,10 @@
 'use client';
 import {
-  ArrowLeftEndOnRectangleIcon,
-  ArrowRightStartOnRectangleIcon,
-  ListBulletIcon,
-  ReceiptPercentIcon,
-} from '@heroicons/react/24/outline';
+  LogOut as ArrowLeftEndOnRectangleIcon,
+  LogIn as ArrowRightStartOnRectangleIcon,
+  List as ListBulletIcon,
+  Receipt as ReceiptPercentIcon,
+} from 'lucide-react';
 import { Chip } from '@heroui/react';
 
 import SimpleStats from '@/app/dashboard/components/simple-stats';

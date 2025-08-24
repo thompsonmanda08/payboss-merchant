@@ -1,14 +1,14 @@
 'use client';
 import {
-  Bars3BottomLeftIcon,
-  BriefcaseIcon,
-  CheckBadgeIcon,
-  PowerIcon,
-  UserCircleIcon,
-  UserGroupIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+  AlignLeft as Bars3BottomLeftIcon,
+  Briefcase as BriefcaseIcon,
+  BadgeCheck as CheckBadgeIcon,
+  Power as PowerIcon,
+  UserCircle as UserCircleIcon,
+  Users as UserGroupIcon,
+  X as XMarkIcon,
+  ArrowLeft as ArrowLeftIcon,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

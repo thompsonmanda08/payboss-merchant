@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRightIcon, BriefcaseIcon } from '@heroicons/react/24/outline';
+import { ArrowRight as ArrowRightIcon, Briefcase as BriefcaseIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import SoftBoxIcon from '@/components/base/soft-box-icon';

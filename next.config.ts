@@ -49,7 +49,7 @@ const nextConfig = {
       allowedOrigins: ['bgspayboss.com', '*.bgspayboss.com'],
     },
 
-    optimizePackageImports: ['lucide-react', '@heroicons/react'], // Optimize chunk splitting
+    optimizePackageImports: ['lucide-react'], // Optimize chunk splitting
   },
 
   // Disable webpack cache if causing issues
