@@ -1,12 +1,12 @@
 'use client';
 import {
-  PlusIcon,
-  Square2StackIcon,
-  ArrowPathIcon,
-  EyeIcon,
-  EyeSlashIcon,
-  Cog6ToothIcon,
-} from '@heroicons/react/24/outline';
+  Plus,
+  Copy,
+  RotateCcw,
+  Eye,
+  EyeOff,
+  Settings,
+} from 'lucide-react';
 import {
   Spinner,
   Tooltip,
@@ -19,11 +19,10 @@ import {
   TableCell,
   addToast,
 } from '@heroui/react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { getCollectionLatestTransactions } from '@/app/_actions/transaction-actions';
 import {
   refreshWorkspaceAPIKey,
   setupWorkspaceAPIKey,
@@ -36,7 +35,7 @@ import { useWorkspaceAPIKey, useWorkspaceInit } from '@/hooks/use-query-data';
 import { QUERY_KEYS } from '@/lib/constants';
 import { maskString } from '@/lib/utils';
 
-const APIIntegration = ({ workspaceID }: { workspaceID: string }) => {
+const APIKeyConfig = ({ workspaceID }: { workspaceID: string }) => {
   const queryClient = useQueryClient();
 
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
@@ -64,17 +63,6 @@ const APIIntegration = ({ workspaceID }: { workspaceID: string }) => {
 
   const API_KEYS_DATA = apiKeyResponse?.data || [];
   const API_KEYS = API_KEYS_DATA?.data || [];
-
-  // HANDLE FETCH API COLLECTION LATEST TRANSACTION DATA
-  const mutation = useMutation({
-    mutationKey: [QUERY_KEYS.API_COLLECTIONS, workspaceID],
-    mutationFn: (dateRange) =>
-      getCollectionLatestTransactions(
-        workspaceID,
-        'api-integration',
-        dateRange,
-      ),
-  });
 
   function copyToClipboard(key: string) {
     try {
@@ -214,18 +202,11 @@ const APIIntegration = ({ workspaceID }: { workspaceID: string }) => {
     };
   }, [unmaskAPIKey]);
 
-  useEffect(() => {
-    // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
-    if (!mutation.data) {
-      mutation.mutateAsync();
-    }
-  }, []);
-
   // ACTIONS FOR API COLLECTIONS
   const USER_PROMPT_ACTIONS = [
     {
       title: 'Generate API Key',
-      icon: PlusIcon,
+      icon: Plus,
       color: 'primary',
       confirmText: 'Generate',
       onConfirmAction: handleGenerateAPIKey,
@@ -236,7 +217,7 @@ const APIIntegration = ({ workspaceID }: { workspaceID: string }) => {
     },
     {
       title: 'Refresh API Key',
-      icon: ArrowPathIcon,
+      icon: RotateCcw,
       color: 'warning',
       confirmText: 'Refresh',
       onConfirmAction: handleRefreshAPIKey,
@@ -263,7 +244,7 @@ const APIIntegration = ({ workspaceID }: { workspaceID: string }) => {
           />
           {Boolean(API_KEYS?.length < 0) && (
             <Button
-              endContent={<PlusIcon className="h-5 w-5" />}
+              endContent={<Plus className="h-5 w-5" />}
               isDisabled={isLoadingConfig || Boolean(API_KEYS?.length > 0)}
               onPress={onOpen}
             >
@@ -312,9 +293,9 @@ const APIIntegration = ({ workspaceID }: { workspaceID: string }) => {
                           onClick={() => setUnmaskAPIKey(!unmaskAPIKey)}
                         >
                           {unmaskAPIKey ? (
-                            <EyeSlashIcon className="h-5 w-5 cursor-pointer text-primary" />
+                            <EyeOff className="h-5 w-5 cursor-pointer text-primary" />
                           ) : (
-                            <EyeIcon className="h-5 w-5 cursor-pointer text-primary" />
+                            <Eye className="h-5 w-5 cursor-pointer text-primary" />
                           )}
                         </Button>
                       </>
@@ -326,7 +307,7 @@ const APIIntegration = ({ workspaceID }: { workspaceID: string }) => {
                       <div className="flex items-center gap-4">
                         <Tooltip color="secondary" content="See Documentation">
                           <Link href="/docs/collections" target="_blank">
-                            <Cog6ToothIcon
+                            <Settings
                               className="h-5 w-5 cursor-pointer text-secondary hover:opacity-90"
                               // onClick={() => setOpenViewConfig(true)}
                             />
@@ -336,7 +317,7 @@ const APIIntegration = ({ workspaceID }: { workspaceID: string }) => {
                           color="default"
                           content="Copy API Key to clipboard"
                         >
-                          <Square2StackIcon
+                          <Copy
                             className={`h-6 w-6 cursor-pointer ${
                               copiedKey === item?.apikey
                                 ? 'text-primary'
@@ -346,7 +327,7 @@ const APIIntegration = ({ workspaceID }: { workspaceID: string }) => {
                           />
                         </Tooltip>
                         <Tooltip color="primary" content="Refresh API Key">
-                          <ArrowPathIcon
+                          <RotateCcw
                             className="h-5 w-5 cursor-pointer text-primary hover:text-primary-300"
                             onClick={() => {
                               setCurrentActionIndex(1);
@@ -401,4 +382,4 @@ const APIIntegration = ({ workspaceID }: { workspaceID: string }) => {
   );
 };
 
-export default APIIntegration;
+export default APIKeyConfig;

@@ -1,11 +1,5 @@
 'use client';
-import {
-  PlusIcon,
-  EyeSlashIcon,
-  WrenchScrewdriverIcon,
-  ComputerDesktopIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
+import { Plus, EyeOff, Wrench, Monitor, Trash2 } from 'lucide-react';
 import {
   Dropdown,
   DropdownItem,
@@ -18,7 +12,7 @@ import {
 } from '@heroui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import {
   activateWorkspaceTerminals,
@@ -38,8 +32,7 @@ import {
 } from '@/hooks/use-query-data';
 import { QUERY_KEYS } from '@/lib/constants';
 import { cn, formatDate } from '@/lib/utils';
-
-import TerminalConfigViewModal from './terminal-config-view';
+import TerminalConfigViewModal from './terminal-config-modal';
 
 const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
   const queryClient = useQueryClient();
@@ -262,7 +255,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
   const USER_PROMPT_ACTIONS = [
     {
       title: 'Activate Terminals',
-      icon: ComputerDesktopIcon,
+      icon: Monitor,
       color: 'primary',
       confirmText: 'Activate',
       onConfirmAction: activateTerminals,
@@ -273,7 +266,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
     },
     {
       title: 'Deactivate Terminals',
-      icon: ComputerDesktopIcon,
+      icon: Monitor,
       color: 'primary',
       confirmText: 'Deactivate',
       onConfirmAction: deactivateTerminals,
@@ -284,7 +277,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
     },
     // {
     //   title: 'Delete API Key',
-    //   icon: TrashIcon,
+    //   icon: Trash2,
     //   color: 'danger',
     //   confirmText: 'Delete',
     //   onConfirmAction: () => {},
@@ -321,7 +314,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                 <DropdownTrigger>
                   <Button
                     color="primary"
-                    endContent={<WrenchScrewdriverIcon className="h-5 w-5" />}
+                    endContent={<Wrench className="h-5 w-5" />}
                     isDisabled={isLoadingTerminals || isLoadingConfig}
                     loadingText={'Please wait...'}
                   >
@@ -336,7 +329,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                     <DropdownItem
                       key="add-terminal"
                       description="Add new terminals to workspace"
-                      startContent={<PlusIcon className={cn(iconClasses)} />}
+                      startContent={<Plus className={cn(iconClasses)} />}
                     >
                       Add New Terminal
                     </DropdownItem>
@@ -361,7 +354,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                         description="Activate collection terminals"
                         shortcut="⌘⇧A"
                         startContent={
-                          <ComputerDesktopIcon
+                          <Monitor
                             className={cn(
                               iconClasses,
                               'group-hover:text-white font-bold group-hover:border-white',
@@ -385,7 +378,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                         href="/support"
                         shortcut="⌘⇧D"
                         startContent={
-                          <TrashIcon
+                          <Trash2
                             className={cn(
                               iconClasses,
                               'text-danger group-hover:text-white',
@@ -414,9 +407,9 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                 onPress={() => setIsExpanded(!isExpanded)}
               >
                 {isExpanded ? (
-                  <EyeSlashIcon className="h-5 w-5 text-orange-600" />
+                  <EyeOff className="h-5 w-5 text-orange-600" />
                 ) : (
-                  <ComputerDesktopIcon className="h-5 w-5 text-orange-600" />
+                  <Monitor className="h-5 w-5 text-orange-600" />
                 )}
               </Button>
             </Tooltip>
@@ -463,9 +456,9 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                       loadingText={'Getting Configuration...'}
                       startContent={
                         hasTerminals ? (
-                          <PlusIcon className={cn(iconClasses)} />
+                          <Plus className={cn(iconClasses)} />
                         ) : (
-                          <ComputerDesktopIcon className={cn(iconClasses)} />
+                          <Monitor className={cn(iconClasses)} />
                         )
                       }
                       variant="light"

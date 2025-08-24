@@ -256,10 +256,11 @@ export const useRecentTransactions = ({
   queryKeys: string[];
   filters: DateRangeFilter;
 }) => {
-  return useMutation({
-    mutationKey: [...queryKeys, workspaceID, filters],
-    mutationFn: () =>
+  return useQuery({
+    queryKey: [...queryKeys, service, filters, workspaceID],
+    queryFn: () =>
       getCollectionLatestTransactions(workspaceID, service, filters),
+    staleTime: Infinity,
   });
 };
 

@@ -66,7 +66,7 @@ type CustomTableProps = {
   permissions?: any;
   searchKeys?: any;
   useRowDataAsKey?: any;
-  pagination: TPagination;
+  pagination?: TPagination;
   handlePageChange?: (page: number) => void;
   rowKey?: any;
   filters?: {
@@ -297,7 +297,7 @@ export default function CustomTable({
 
   const onRowsPerPageChange = React.useCallback((e: any) => {
     setRowsPerPage(Number(e.target.value));
-    setPage(pagination.page || 1);
+    setPage(pagination?.page || 1);
   }, []);
 
   const loadingContent = React.useMemo(() => {
@@ -369,7 +369,7 @@ export default function CustomTable({
     return (
       <div className="flex w-full items-center justify-between">
         <span className="text-small text-foreground-400">
-          Total: {hasSearchFilter ? items.length || 0 : pagination.total || 0}{' '}
+          Total: {hasSearchFilter ? items.length || 0 : pagination?.total || 0}{' '}
           transactions
         </span>
         <Pagination
@@ -377,11 +377,11 @@ export default function CustomTable({
           showControls
           showShadow
           color="primary"
-          page={pagination.page || page}
-          total={pagination.total_pages || pages || 1}
-          onChange={(page) => {
+          page={pagination?.page || page}
+          total={pagination?.total_pages || pages || 1}
+          onChange={(page: any) => {
             if (!handlePageChange) {
-              setPage(page);
+              setPage(Number(page));
             } else {
               handlePageChange(page);
             }

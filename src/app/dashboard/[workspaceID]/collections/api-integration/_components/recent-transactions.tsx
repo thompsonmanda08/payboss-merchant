@@ -17,6 +17,7 @@ import {
 } from '@/hooks/use-query-data';
 import { formatDate } from '@/lib/utils';
 import { useCallback, useState } from 'react';
+import { DateRangeFilter } from '@/types';
 
 const RecentTransactions = ({
   workspaceID,
@@ -37,26 +38,28 @@ const RecentTransactions = ({
   const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
   const end_date = formatDate(new Date(), 'YYYY-MM-DD');
 
+  const filters: DateRangeFilter = {
+    start_date, // YYYY-MM-DD
+    end_date,
+    ...pagination,
+  };
+
   const terminals = TERMINALS?.data?.terminals || []; //
   const hasTerminals = Boolean(API?.data?.hasTerminals);
   const terminalsConfigured = Boolean(terminals.length > 0);
 
   // HANDLE FETCH API COLLECTION LATEST TRANSACTION DATA
-  const mutation = useRecentTransactions({
+  const { data: transactionData, isLoading } = useRecentTransactions({
     workspaceID,
     service,
-    filters: {
-      start_date,
-      end_date,
-      ...pagination,
-    },
+    filters,
     queryKeys,
   });
 
-  const LATEST_TRANSACTIONS = mutation.data?.data?.data || [];
+  const LATEST_TRANSACTIONS = transactionData?.data?.data || [];
   const PAGINATION = {
     ...pagination, // USER SET CONFIGS FOR PAGINATION {page and limit}
-    ...mutation.data?.data?.pagination, // PAGINATION DETAILS FROM SERVER
+    ...transactionData?.data?.pagination, // PAGINATION DETAILS FROM SERVER
   };
 
   // SET COLUMNS BASED ON SERVICE
@@ -98,7 +101,7 @@ const RecentTransactions = ({
         removeWrapper
         classNames={{ wrapper: 'shadow-none px-0 mx-0' }}
         columns={getColumns(service)}
-        isLoading={mutation.isPending}
+        isLoading={isLoading}
         rows={LATEST_TRANSACTIONS}
         pagination={PAGINATION}
         handlePageChange={(page: number) => {
