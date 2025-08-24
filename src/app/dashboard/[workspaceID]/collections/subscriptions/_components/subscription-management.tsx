@@ -1,5 +1,4 @@
 'use client';
-import { Plus, Trash2, Settings } from 'lucide-react';
 import {
   Spinner,
   useDisclosure,
@@ -22,9 +21,11 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import {
   Edit2Icon,
+  Plus,
   Settings,
   SquarePenIcon,
   TicketPercentIcon,
+  Trash2,
   UserCog,
   Users2,
 } from 'lucide-react';

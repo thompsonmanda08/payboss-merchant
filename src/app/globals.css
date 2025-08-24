@@ -1,70 +1,86 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin '../../hero.ts';
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-family-inter: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  
+  --color-border: hsl(270 14% 97%);
+  --color-input: hsl(220 13% 91%);
+  --color-ring: hsl(216 100% 81%);
+  --color-background: hsl(0 0% 98%);
+  --color-foreground: hsl(224 71.4% 4.1%);
+  
+  --color-primary: hsl(216 77% 46%);
+  --color-primary-foreground: hsl(210 20% 98%);
+  --color-primary-light: hsl(216 100% 81%);
+  
+  --color-secondary: hsl(24 100% 67%);
+  --color-secondary-foreground: hsl(210 20% 98%);
+  
+  --color-destructive: hsl(0 79% 49%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  
+  --color-muted: hsl(220 14.3% 95.9%);
+  --color-muted-foreground: hsl(220 8.9% 46.1%);
+  
+  --color-accent: hsl(24 79% 49%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(224 71.4% 4.1%);
+  
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(224 71.4% 4.1%);
+  
+  --radius: 0.5rem;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-4xl: 2rem;
+  
+  --container-center: true;
+  --container-padding: 2rem;
+  --container-screen-2xl: 1440px;
+}
+
+@theme dark {
+  --color-border: hsl(226 39% 10%);
+  --color-input: hsl(0 1% 17%);
+  --color-ring: hsl(206 89% 44%);
+  --color-background: hsl(222 6% 3%);
+  --color-foreground: hsl(0 0% 98%);
+  
+  --color-card: hsl(213 80% 3%);
+  --color-card-foreground: hsl(0 0% 90%);
+  
+  --color-muted-foreground: hsl(260 1% 41%);
+}
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 224 71.4% 4.1%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-
-    --primary: 216 77% 46;
-    --primary-light: 216 100% 81%;
-    --primary-foreground: 210 20% 98%;
-
-    --secondary: 24 100% 67%;
-    --secondary-foreground: 210 20% 98%;
-
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
-
-    --accent: 24 79% 49%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 79% 49%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 270 14% 97;
-    --input: 220 13% 91%;
-    --ring: 216 100% 81%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222 6% 3%;
-    --foreground: 0 0% 98%;
-
-    --card: 213 80% 3%;
-    --card-foreground: 0 0% 90%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-
-    --primary: 216 77% 46;
-    --primary-light: 216 100% 81%;
-    --primary-foreground: 210 20% 98%;
-
-    --secondary: 24 100% 67%;
-    --secondary-foreground: 210 20% 98%;
-
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 260 1% 41%;
-
-    --accent: 24 79% 49%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 79% 49%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 226 39% 10%;
-    --input: 0 1% 17%;
-    --ring: 206 89% 44%;
+    --background: var(--color-background);
+    --foreground: var(--color-foreground);
+    --card: var(--color-card);
+    --card-foreground: var(--color-card-foreground);
+    --popover: var(--color-popover);
+    --popover-foreground: var(--color-popover-foreground);
+    --primary: var(--color-primary);
+    --primary-light: var(--color-primary-light);
+    --primary-foreground: var(--color-primary-foreground);
+    --secondary: var(--color-secondary);
+    --secondary-foreground: var(--color-secondary-foreground);
+    --muted: var(--color-muted);
+    --muted-foreground: var(--color-muted-foreground);
+    --accent: var(--color-accent);
+    --accent-foreground: var(--color-accent-foreground);
+    --destructive: var(--color-destructive);
+    --destructive-foreground: var(--color-destructive-foreground);
+    --border: var(--color-border);
+    --input: var(--color-input);
+    --ring: var(--color-ring);
+    --radius: var(--radius);
   }
 }
 
@@ -94,6 +110,59 @@
     -webkit-appearance: none; /* IE and Edge */
     -moz-appearance: textfield; /* Firefox */
     margin: 0;
+  }
+  
+  /* Animation utilities */
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  .animate-ping {
+    animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-bounce {
+    animation: bounce 1s infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes ping {
+    75%, 100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .5;
+    }
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
   }
 }
 
