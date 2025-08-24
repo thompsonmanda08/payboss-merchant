@@ -20,7 +20,7 @@ import {
   Link,
   Chip,
 } from '@heroui/react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   Edit2Icon,
   Settings,
@@ -38,7 +38,6 @@ import {
   updateSubscriptionPack,
   uploadSubscriptionMembers,
 } from '@/app/_actions/subscription-actions';
-import { getCollectionLatestTransactions } from '@/app/_actions/transaction-actions';
 import CardHeader from '@/components/base/card-header';
 import Card from '@/components/base/custom-card';
 import {
@@ -53,6 +52,7 @@ import { Input } from '@/components/ui/input-field';
 import {
   useWorkspaceInit,
   useWorkspaceSubscriptions,
+  useRecentTransactions,
 } from '@/hooks/use-query-data';
 import { QUERY_KEYS } from '@/lib/constants';
 import { SUBSCRIPTION_PAYMENT_COLUMNS } from '@/lib/table-columns';
@@ -135,21 +135,25 @@ const Subscriptions = () => {
   }
 
   const thirtyDaysAgoDate = new Date();
-
   thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
-  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
-  const end_date = formatDate(new Date(), 'YYYY-MM-DD');
+
+  const defaultFilters = {
+    start_date: formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD'),
+    end_date: formatDate(new Date(), 'YYYY-MM-DD'),
+  };
 
   // HANDLE FETCH SUBS COLLECTION LATEST TRANSACTION DATA
-  const mutation = useMutation({
-    mutationKey: [QUERY_KEYS.API_COLLECTIONS, workspaceID],
-    mutationFn: (dateRange) =>
-      getCollectionLatestTransactions(workspaceID, 'subscription', dateRange),
-  });
+  const { data: transactionData, isLoading: isLoadingTransactions } =
+    useRecentTransactions({
+      workspaceID,
+      service: 'subscription',
+      queryKeys: [QUERY_KEYS.API_COLLECTIONS],
+      filters: defaultFilters,
+    });
 
   const LATEST_TRANSACTIONS = useMemo(() => {
-    return mutation.data?.data?.data || [];
-  }, [mutation?.data]);
+    return transactionData?.data?.data || [];
+  }, [transactionData?.data]);
 
   function updateSingleService(
     servicePacks: any,
@@ -441,13 +445,6 @@ const Subscriptions = () => {
     return {};
   }
 
-  useEffect(() => {
-    // IF NO DATA IS FETCH THEN GET THE LATEST TRANSACTIONS
-    if (!mutation.data) {
-      mutation.mutateAsync({ start_date, end_date } as any);
-    }
-  }, []);
-
   const ACTION: Record<ActionKey, any> = {
     'create-new-sub': {
       prompt: {
@@ -712,13 +709,13 @@ const Subscriptions = () => {
               title={'Recent Transactions'}
             />
           </div>
-          <CustomTable
+          {/* <CustomTable
             // removeWrapper
             classNames={{ wrapper: 'shadow-none px-0 mx-0' }}
             columns={SUBSCRIPTION_PAYMENT_COLUMNS}
-            isLoading={mutation.isPending}
+            isLoading={isLoadingTransactions}
             rows={LATEST_TRANSACTIONS}
-          />
+          /> */}
         </Card>
       </div>
 
