@@ -3,8 +3,6 @@ import { clsx } from 'clsx';
 import { ClassValue } from 'clsx/clsx';
 import { twMerge } from 'tailwind-merge';
 
-import { ActivityLogGroup } from '@/app/dashboard/[workspaceID]/workspace-settings/_components/wallet-transaction-log';
-
 import {
   AIRTEL_NO,
   BASE_URL,
@@ -12,6 +10,7 @@ import {
   SERVICES_BASE_URL,
   ZAMTEL_NO,
 } from './constants';
+import { ActivityLogGroup } from '@/app/dashboard/[workspaceID]/workspace-settings/_components/wallet';
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,

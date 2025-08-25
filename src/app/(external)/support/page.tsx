@@ -1,9 +1,8 @@
-import Logo from '@/components/base/payboss-logo';
 import WorkspaceHeader from '@/components/elements/welcome-header';
 import SupportForm from '@/components/forms/support-form';
 
-import AuthLayout from '../../(auth)/layout_old';
 import { getUserDetails } from '../../_actions/config-actions';
+import AuthLayout from '@/app/(auth)/layout';
 
 async function Support() {
   const [session] = await Promise.all([getUserDetails()]);
@@ -16,21 +15,15 @@ async function Support() {
           permissions={session?.userPermissions}
         />
       )}
-      <div className="-mt-[496px] flex flex-col items-center rounded-t-2xl border-b-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-black/40 via-black/5 to-transparent p-6 pb-10 pt-24">
-        <Logo
-          isWhite
-          classNames={{
-            wrapper: 'scale-[1.5] mb-4',
-          }}
-        />
+      <div className="flex flex-col items-center border-b-0 p-6 ">
         <h2
           className={
-            'w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-transparent text-white'
+            'w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-foreground'
           }
         >
           Contact Support
         </h2>
-        <p className="text-shadow-sm mb-0 text-center text-foreground">
+        <p className="text-shadow-sm mb-0 text-foreground">
           Need help with something?
         </p>
       </div>
