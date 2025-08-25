@@ -19,7 +19,7 @@ export function CallToAction() {
         src={'/images/background-call-to-action.jpg'}
         width={2347}
       />
-      <div className="relative container">
+      <div className="relative container mx-auto">
         <div className="mx-auto max-w-xl text-center">
           <h2 className="font-display heading-1 text-3xl tracking-tight text-white sm:text-4xl">
             Get Started Today

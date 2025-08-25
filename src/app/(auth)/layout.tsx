@@ -1,9 +1,8 @@
 'use client';
 import BackgroundSVG from '@/components/base/background-svg';
 import Logo from '@/components/base/payboss-logo';
-import { LadyBoss } from '@/components/landing-sections/hero-like-a-boss';
-import { backgroundAuthImage, DefaultCover } from '@/lib/constants';
-import { Mail, UserCheck2 } from 'lucide-react';
+import { LadyBoss } from '@/components/landing-sections/hero-section';
+import { backgroundAuthImage } from '@/lib/constants';
 import Image from 'next/image';
 import type React from 'react';
 export default function AuthLayout({

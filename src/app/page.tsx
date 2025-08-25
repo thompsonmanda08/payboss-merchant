@@ -3,7 +3,7 @@ import { Faqs } from '@/components/landing-sections/faqs';
 import { Features } from '@/components/landing-sections/features';
 import { Footer } from '@/components/landing-sections/footer';
 import { Header } from '@/components/landing-sections/header';
-import { HeroLikeABoss } from '@/components/landing-sections/hero-like-a-boss';
+import { HeroLikeABoss } from '@/components/landing-sections/hero-section';
 import { PrimaryFeatures } from '@/components/landing-sections/primary-features';
 
 import { getAuthSession } from './_actions/config-actions';
