@@ -6,6 +6,12 @@
 @theme {
   --font-family-inter: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
   --color-border: hsl(270 14% 97%);
   --color-input: hsl(220 13% 91%);
   --color-ring: hsl(216 100% 81%);

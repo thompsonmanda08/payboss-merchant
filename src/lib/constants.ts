@@ -20,6 +20,7 @@ export const WORKSPACE_SESSION =
 
 export const placeHolderImage = '/images/placeholder-image.webp';
 export const DefaultCover = '/images/profile-cover.jpg';
+export const backgroundAuthImage = '/images/background-auth.jpg';
 
 export const MAX_FILE_SIZE = 10 * 1024 * 1024;
 

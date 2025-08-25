@@ -4,7 +4,7 @@ import {
   Filter as FunnelIcon,
 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { walletStatementReportToCSV } from '@/app/_actions/file-conversion-actions';
 import { WalletTransactionHistory } from '@/app/dashboard/[workspaceID]/workspace-settings/components/wallet';
@@ -36,16 +36,25 @@ export default function StatementReport({
   });
 
   const filters: DateRangeFilter = {
-    ...dateRange,
+    start_date: dateRange?.start_date,
+    end_date: dateRange?.end_date,
     ...pagination,
   };
 
-  const { data: walletStatement, isLoading } = useWalletReports({
+  const {
+    data: walletStatement,
+    isLoading,
+    isFetching,
+  } = useWalletReports({
     workspaceID,
     filters,
   });
 
   const statementTransactions = walletStatement?.data?.data || [];
+  const reportPagination = useMemo(
+    () => walletStatement?.data?.pagination,
+    [walletStatement?.data?.pagination],
+  );
 
   // Implement manual CSV export functionality
   function handleFileExportToCSV() {
@@ -144,7 +153,7 @@ export default function StatementReport({
         </div>
 
         <WalletTransactionHistory
-          isLoading={isLoading}
+          isLoading={isLoading || isFetching}
           transactionData={filteredItems || []}
           workspaceID={workspaceID}
         />
@@ -152,7 +161,9 @@ export default function StatementReport({
         <div className="flex w-full items-center justify-between">
           <span className="text-small text-foreground-400">
             Total:{' '}
-            {hasSearchFilter ? filteredItems.length : pagination?.total || 0}{' '}
+            {hasSearchFilter
+              ? filteredItems.length
+              : reportPagination?.total || 0}{' '}
             transactions
           </span>
           <Pagination
@@ -160,8 +171,8 @@ export default function StatementReport({
             showControls
             showShadow
             color="primary"
-            page={pagination?.page}
-            total={pagination?.total_pages || 1}
+            page={reportPagination?.page}
+            total={reportPagination?.total_pages || 1}
             onChange={(page: any) =>
               setPagination((prev) => ({ ...prev, page }))
             }

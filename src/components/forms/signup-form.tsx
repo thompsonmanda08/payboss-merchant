@@ -1,5 +1,5 @@
 'use client';
-import { Card, addToast } from '@heroui/react';
+import { Card, CardHeader, addToast } from '@heroui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
 
@@ -294,7 +294,17 @@ export default function SignUpForm({
   // FOR REGISTRATION
 
   return (
-    <Card className="mx-auto w-full flex-auto p-6 sm:max-w-[790px]">
+    <Card className="mx-auto w-full flex-auto p-5 sm:max-w-[790px] shadow-none border border-border">
+      <CardHeader className="flex-col px-0 mb-2 items-start">
+        <div className="flex flex-col items-start ">
+          <h2 className={'w-full text-2xl font-semibold text-foreground'}>
+            Create an Account
+          </h2>
+          <p className="text-xs sm:text-sm text-foreground/60">
+            Join the PayBoss family and handle your payments easily!
+          </p>
+        </div>
+      </CardHeader>
       <div className="flex flex-col">
         <form
           className="mx-auto flex w-full flex-col items-center justify-center gap-4"

@@ -21,30 +21,14 @@ export default function Register({
   const router = useRouter();
 
   return (
-    <div className="relative -mt-[260px] md:-mt-[412px] xl:-mt-[432px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none ">
-      {!isAccountCreated && (
-        <div className="pt bg-red-5000 z-10 -mt-16 flex flex-col items-center rounded-t-2xl border-b-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-black/40 via-black/5 to-transparent p-6 pb-10 pt-24">
-          <Logo isWhite classNames={{ wrapper: 'scale-[1.5] mb-4' }} />
-          <h2
-            className={
-              'w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-transparent text-white'
-            }
-          >
-            Create an Account
-          </h2>
-          <p className="text-shadow-sm mb-0 text-center text-white">
-            Join the PayBoss family and handle your payments easily!
-          </p>
-        </div>
-      )}
-
+    <div className="relative flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none ">
       {/********************* REGISTER FORM *********************/}
       {isLoading ? (
-        <Card className="flex h-[300px] w-full max-w-md items-center justify-center self-center bg-background p-5">
+        <Card className="w-full p-40 aspect-square shadow-none items-center justify-center self-center">
           <Spinner size={100} />
         </Card>
       ) : isError ? (
-        <Card className="flex max-w-md items-center justify-center self-center bg-background p-5">
+        <Card className="flex items-center justify-center shadow-none self-center p-5">
           <EmptyState
             buttonText={'Reload'}
             message={'Something went wrong. Try reloading the page!'}
@@ -53,7 +37,36 @@ export default function Register({
           />
         </Card>
       ) : isAccountCreated ? (
-        <AccountCreatedSuccess />
+        <Card className="m-auto shadow-none flex max-w-lg flex-col items-center justify-center">
+          <CardHeader className="items-center justify-center">
+            <Logo href={'#'} />
+          </CardHeader>
+          <CardBody>
+            <h2
+              className={
+                'w-full bg-gradient-to-tr from-primary via-primary/80 to-primary-light bg-clip-text text-center text-[clamp(18px,18px+0.5vw,36px)] font-bold text-transparent pb-2'
+              }
+            >
+              Account Created!
+            </h2>
+            <p className="max-w-md px-4 text-center text-xs leading-8 text-foreground/70 xl:text-sm">
+              You will need to login and complete KYC to activate your account.
+              Approval takes up to <span className="font-bold">48 Hours</span>{' '}
+              after KYC is complete and submitted for review.
+            </p>
+          </CardBody>
+
+          <CardFooter className="px-6">
+            <Button
+              as={Link}
+              size="lg"
+              className={'w-full flex-1 my-2'}
+              href={'/login'}
+            >
+              Login
+            </Button>
+          </CardFooter>
+        </Card>
       ) : (
         <SignUpForm superMerchantID={superMerchantID} />
       )}
@@ -70,35 +83,5 @@ export default function Register({
         </p>
       </div>
     </div>
-  );
-}
-
-export function AccountCreatedSuccess() {
-  return (
-    <Card className="m-auto mt-24 flex max-w-[600px] flex-col items-center justify-center lg:mt-40">
-      <CardHeader className="items-center justify-center">
-        <Logo href={'#'} />
-      </CardHeader>
-      <CardBody>
-        <h2
-          className={
-            'w-full bg-gradient-to-tr from-primary via-primary/80 to-primary-light bg-clip-text text-center text-[clamp(18px,18px+0.5vw,36px)] font-bold text-transparent py-2'
-          }
-        >
-          Account Created Successfully!
-        </h2>
-        <p className="max-w-md text-center text-xs leading-6 tracking-tight text-foreground/70 xl:text-sm">
-          You will need to login and complete KYC to activate your account.
-          Approval takes up to <span className="font-bold">48 Hours</span> after
-          KYC is complete and submitted for review.
-        </p>
-      </CardBody>
-
-      <CardFooter className="px-6">
-        <Button as={Link} className={'w-full flex-1 my-2'} href={'/login'}>
-          Login
-        </Button>
-      </CardFooter>
-    </Card>
   );
 }

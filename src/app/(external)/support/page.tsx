@@ -2,7 +2,7 @@ import Logo from '@/components/base/payboss-logo';
 import WorkspaceHeader from '@/components/elements/welcome-header';
 import SupportForm from '@/components/forms/support-form';
 
-import AuthLayout from '../../(auth)/layout';
+import AuthLayout from '../../(auth)/layout_old';
 import { getUserDetails } from '../../_actions/config-actions';
 
 async function Support() {

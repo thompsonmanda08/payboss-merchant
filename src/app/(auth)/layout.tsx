@@ -1,34 +1,54 @@
+'use client';
+import BackgroundSVG from '@/components/base/background-svg';
+import Logo from '@/components/base/payboss-logo';
+import { LadyBoss } from '@/components/landing-sections/hero-like-a-boss';
+import { backgroundAuthImage, DefaultCover } from '@/lib/constants';
+import { Mail, UserCheck2 } from 'lucide-react';
 import Image from 'next/image';
-import { PropsWithChildren } from 'react';
-
-import { Footer } from '@/components/landing-sections/footer';
-import { DefaultCover } from '@/lib/constants';
-
-async function AuthLayout({ children }: PropsWithChildren) {
+import type React from 'react';
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // return
   return (
-    <main className="ease-soft-in-out relative flex h-full min-h-screen flex-grow flex-col justify-between transition-all duration-200">
-      <section>
-        <div className="relative flex h-full flex-col items-center bg-center last:bg-cover md:px-5 md:pt-2">
-          <div className="relative h-[300px] w-full overflow-clip bg-gray-900 md:h-[500px] md:rounded-4xl">
-            <Image
-              unoptimized
-              alt="Cover"
-              className="z-0 h-full w-full object-cover"
-              height={300}
-              loading="lazy"
-              src={DefaultCover}
-              width={1024}
-            />
-            <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-black/30 via-black/5 to-transparent" />
-          </div>
-          <div className="md:flex-0 z-10 mx-auto flex w-full shrink-0 flex-col px-4">
-            {children}
-          </div>
+    <div className="h-screen w-screen bg-background flex flex-row">
+      {/* Left Panel - Auth Forms */}
+      <div className="fixed bg-white p-4 rounded-full left-16 md:left-0 top-8  z-50">
+        <Logo className=" " />
+      </div>
+      <div className="hidden lg:flex flex-1 items-end justify-end relative">
+        <div className="absolute bottom-0 right-0"></div>
+        <LadyBoss className="z-50 fixed left-1/4  bottom-0" />
+
+        <div
+          className="w-full h-full relative overflow-clip z-10 "
+          style={{
+            borderTopRightRadius: '80px',
+            borderBottomRightRadius: '80px',
+            background:
+              'linear-gradient(135deg, #111827 0%, #374151 50%, #000000 100%)',
+          }}
+        >
+          <BackgroundSVG className={'-top-1 bg-secondary/30 z-10'} />
+
+          <Image
+            priority
+            unoptimized
+            alt="Official Cover Image"
+            className="w-full h-full object-cover z-0"
+            height={800}
+            src={backgroundAuthImage}
+            width={1000}
+          />
         </div>
-      </section>
-      <Footer showLinks={false} showLogo={false} />
-    </main>
+      </div>
+
+      {/* Right Panel - Illustration */}
+      <div className="flex-1 flex items-center justify-center p-8 overflow-y-auto">
+        {children}
+      </div>
+    </div>
   );
 }
-
-export default AuthLayout;

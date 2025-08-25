@@ -7,9 +7,9 @@ import { Input } from '@/components/ui/input-field';
 import useAuthStore from '@/context/auth-store';
 import { LoginPayload } from '@/types/account';
 
-import Card from '../base/custom-card';
 import StatusMessage from '../base/status-message';
 import { Button } from '../ui/button';
+import { Card, CardHeader } from '@heroui/react';
 
 function LoginForm() {
   const {
@@ -73,7 +73,17 @@ function LoginForm() {
   }, [loginDetails]);
 
   return (
-    <Card className="mx-auto w-full max-w-sm flex-auto p-6 ">
+    <Card className="mx-auto w-full max-w-sm p-5 shadow-none border border-border">
+      <CardHeader className="flex-col px-0 mb-2 items-start">
+        <div className="flex flex-col items-start ">
+          <h2 className={'w-full text-2xl font-semibold text-foreground'}>
+            Welcome Back!
+          </h2>
+          <p className="text-xs sm:text-sm text-foreground/60">
+            Enter your email and password to sign in
+          </p>
+        </div>
+      </CardHeader>
       <form className="flex flex-col gap-2" role="form" onSubmit={handleLogin}>
         <Input
           aria-describedby="email-addon"

@@ -52,4 +52,5 @@ EXPOSE 3001
 
 # server.js is created by next build from the standalone output
 ENV HOSTNAME="0.0.0.0"
+ENV TZ=Africa/Lusaka
 CMD ["node", "server.js"]
