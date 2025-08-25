@@ -5,7 +5,7 @@ import {
   handleError,
   successResponse,
 } from '@/lib/api-config';
-import { apiClient } from '@/lib/utils';
+import { externalApiClient as apiClient } from '@/lib/utils';
 import { APIResponse } from '@/types';
 
 /**

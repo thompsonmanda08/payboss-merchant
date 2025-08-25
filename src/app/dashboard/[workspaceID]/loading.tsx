@@ -2,7 +2,7 @@
 
 import { Skeleton } from '@heroui/react';
 
-import { WalletLHistoryLoader } from './workspace-settings/components/wallet';
+import { WalletLHistoryLoader } from './workspace-settings/_components/wallet';
 
 export default function DashboardLoading() {
   return (

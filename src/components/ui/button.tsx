@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 export function Button({
   children,
   loadingText,
-  size,
+  size = 'lg',
   className,
   ...props
 }: ButtonProps & {

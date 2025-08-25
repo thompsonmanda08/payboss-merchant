@@ -3,10 +3,70 @@ import { AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
 import { getAuthSession } from '@/app/_actions/config-actions';
 import { APIResponse } from '@/types';
 
-import { apiClient } from './utils';
+import { apiClient, externalApiClient } from './utils';
 
 // Add response interceptor for error handling
 apiClient.interceptors.response.use(
+  (response: any) => response,
+  async (error: Error | any) => {
+    const originalRequest = error.config;
+
+    // Network error (no response)
+    if (!error.response) {
+      return Promise.reject({
+        type: 'NoResponse Error',
+        message: 'No response from server. Please try again.',
+        request: originalRequest,
+        details: error,
+      });
+    }
+
+    // Timeout error
+    if (error.code === 'ECONNABORTED') {
+      throw {
+        ...error,
+        type: 'Timeout Error',
+        message: 'Request timed out! Please try again.',
+      };
+    }
+
+    //network error
+
+    if (
+      error.code == 'ECONNREFUSED' ||
+      error.code == 'ECONNRESET' ||
+      error.code == 'ENOTFOUND'
+    ) {
+      return Promise.reject({
+        type: 'Network Error',
+        message: 'Please check your internet connection.',
+      });
+    }
+
+    const { status, data } = error.response;
+
+    // Handle specific error codes
+    const errorMap: { [x: string]: string } = {
+      400: 'Bad request',
+      403: 'Forbidden',
+      404: 'Resource not found',
+      500: 'Internal server error',
+      502: 'Bad gateway',
+      503: 'Service unavailable',
+    };
+
+    throw {
+      ...error,
+      type: 'api',
+      status,
+      message: data?.message || errorMap[status] || 'Request failed',
+      details: data?.errors || {},
+    };
+  },
+);
+
+// EXTERNAL API CLIENT
+externalApiClient.interceptors.response.use(
   (response: any) => response,
   async (error: Error | any) => {
     const originalRequest = error.config;

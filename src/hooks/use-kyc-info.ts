@@ -17,15 +17,15 @@ const useKYCInfo = () => {
     staleTime: Infinity,
   });
 
-  const { data: docsResponse } = useQuery({
-    queryKey: ['uploaded-docs'],
-    queryFn: () => getBusinessDocumentRefs(),
-    staleTime: Infinity,
-  });
+  // const { data: docsResponse } = useQuery({
+  //   queryKey: ['uploaded-docs'],
+  //   queryFn: () => getBusinessDocumentRefs(),
+  //   staleTime: Infinity,
+  // });
 
   const users = response?.data?.users || [];
   const businessDetails = response?.data?.details || {};
-  const documents = docsResponse?.data || response?.data?.documents || {};
+  const documents = response?.data?.documents || {}; // docsResponse?.data || // TODO: Delete uploaded docs
   const refDocsExist = Object.keys(documents).length > 0;
 
   const merchantKYC = response?.data?.merchant_kyc || {

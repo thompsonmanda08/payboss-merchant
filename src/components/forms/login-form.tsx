@@ -9,7 +9,8 @@ import { LoginPayload } from '@/types/account';
 
 import StatusMessage from '../base/status-message';
 import { Button } from '../ui/button';
-import { Card, CardHeader } from '@heroui/react';
+import { addToast, Card, CardHeader } from '@heroui/react';
+import { useRouter } from 'next/navigation';
 
 function LoginForm() {
   const {
@@ -23,10 +24,10 @@ function LoginForm() {
 
     resetAuthData,
   } = useAuthStore();
+  const router = useRouter();
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const emailusername = formData.get('emailusername') as string;
@@ -39,26 +40,35 @@ function LoginForm() {
         status: true,
         message: 'Provide login credentials',
       });
-      setIsLoading(false);
 
       return;
     }
 
+    setIsLoading(true);
     const response = await authenticateUser(loginDetails);
 
     if (response?.success) {
-      window.location.href = '/workspaces';
+      addToast({
+        color: 'success',
+        title: 'Login Success',
+        description: 'Redirecting to workspaces...',
+        timeout: 2000,
+        shouldShowTimeoutProgress: true,
+      });
+      router.push('/workspaces');
+    } else {
+      addToast({
+        title: 'Error',
+        color: 'danger',
+        description: 'Oops! Something went wrong.',
+      });
 
-      return;
+      updateErrorStatus({
+        status: !response?.success,
+        message: response?.message,
+      });
+      setIsLoading(false);
     }
-
-    updateErrorStatus({
-      status: !response?.success,
-      message: response?.message,
-    });
-    setIsLoading(false);
-
-    return;
   }
 
   useEffect(() => {
