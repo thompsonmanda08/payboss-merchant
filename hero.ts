@@ -70,7 +70,7 @@ export default heroui({
           '700': '#b93d15',
           '800': '#933219',
           '900': '#762b18',
-          DEFAULT: '##ed6b22',
+          DEFAULT: '#ed6b22',
           foreground: '#ffffff',
         },
         // Override HeroUI border colors with warm subtle gray
@@ -130,7 +130,7 @@ export default heroui({
           '700': '#b93d15',
           '800': '#933219',
           '900': '#762b18',
-          DEFAULT: '##ed6b22',
+          DEFAULT: '#ed6b22',
           foreground: '#ffffff',
         },
         // Override HeroUI border colors with warm subtle gray
