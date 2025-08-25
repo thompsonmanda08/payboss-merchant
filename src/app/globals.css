@@ -1,34 +1,36 @@
 @import "tailwindcss";
 @plugin '../../hero.ts';
-@source '../../node_modules/@heroui/theme/dist/**/\*.{js,ts,jsx,tsx}';
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* Keep only non-conflicting Tailwind utilities */
-  --font-family-inter: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* Warm subtle gray border colors */
+  --color-border: #e7e5e4; /* stone-200 with warmth */
+  
+  /* Container centering */
+  --container-center: true;
+  --container-padding: 2rem;
 }
 
 @theme dark {
-  /* Dark theme handled by HeroUI theme configuration */
+  /* Warm subtle gray border for dark mode */
+  --color-border: #44403c; /* stone-600 with warmth */
 }
-
-/* Custom CSS variables removed - handled by HeroUI theme */
 
 @layer base {
-  /* Base styles handled by HeroUI and Tailwind defaults */
-}
-
-  select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: transparent;
-    /* background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path stroke-linecap='round' stroke-linejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' /></svg>"); */
-    background-image: url("data:image/svg+xml;utf-8,<svg xmlns='http://www.w3.org/2000/svg'fill='none'viewBox='0 0 24 24'stroke-width='1.5'stroke='currentColor'class='size-6'><path stroke-linecap='round'stroke-linejoin='round'd='m19.5 8.25-7.5 7.5-7.5-7.5'/></svg>");
-    background-repeat: no-repeat;
-    background-position-x: 100%;
-    /* background-position-y: 5px; */
-    padding-right: 2rem;
+  /* Ensure proper container centering */
+  .container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Fix body alignment issues */
+  body {
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -138,7 +140,8 @@
 }
 
 .paragraph {
-  @apply text-sm leading-6 text-foreground/70;
+  @apply text-sm leading-6;
+  color: hsl(var(--heroui-foreground) / 0.7);
 }
 
 /* CODE JSON SNIPPETS */

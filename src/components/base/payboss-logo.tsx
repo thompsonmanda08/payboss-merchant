@@ -8,18 +8,17 @@ import { cn } from '@/lib/utils';
 
 const payBossLogo = '/images/logos/payboss.svg';
 const payBossLogoWhite = '/images/logos/payboss_white.svg';
-const payBossLogoIcon = '/images/logos/payboss-icon.svg';
 
 function Logo({
   isWhite = false,
-  isCollapsedNavBar,
+  isBlack = false,
   className,
   classNames,
-  href,
+  href = '/',
   src,
 }: {
+  isBlack?: boolean;
   isWhite?: boolean;
-  isCollapsedNavBar?: boolean;
   className?: string;
   classNames?: any;
   href?: string;
@@ -29,67 +28,39 @@ function Logo({
   const [logoUrl, setLogoUrl] = useState(payBossLogo);
 
   useEffect(() => {
-    let logoType;
-
-    if (isCollapsedNavBar) {
-      logoType = payBossLogoIcon;
+    if (src) return; // Use custom src if provided
+    
+    if (isWhite) {
+      setLogoUrl(payBossLogoWhite);
+    } else if (isBlack) {
+      setLogoUrl(payBossLogo);
     } else {
-      logoType = logoType = theme === 'light' ? payBossLogo : payBossLogoWhite;
+      // Auto-switch based on theme
+      setLogoUrl(theme === 'dark' ? payBossLogoWhite : payBossLogo);
     }
+  }, [theme, isWhite, isBlack, src]);
 
-    setLogoUrl(logoType);
-  }, [theme, isCollapsedNavBar]);
-
-  if (isCollapsedNavBar) {
-    return (
-      <Link
+  return (
+    <Link
+      className={cn(
+        'aspect-auto max-h-[50px] min-h-12 min-w-fit',
+        classNames?.wrapper
+      )}
+      href={href}
+    >
+      <Image
+        priority
+        alt="PayBoss Logo"
         className={cn(
-          'flex aspect-square min-w-fit items-center justify-center ',
-
-          classNames?.wrapper,
-          {
-            'mx-auto max-h-[48px] min-h-12 max-w-10': isCollapsedNavBar,
-            'max-h-[50px] w-full': !isCollapsedNavBar,
-          },
+          'object-contain transition-all duration-300 ease-in-out',
+          className
         )}
-        href={href || '/'}
-      >
-        <Image
-          priority
-          alt="logo"
-          className={cn('object-contain', className)}
-          height={50}
-          src={src || logoUrl}
-          width={60}
-        />
-      </Link>
-    );
-  } else {
-    return (
-      <Link
-        className={cn(
-          'aspect-auto max-h-[50px] min-h-12 min-w-fit',
-          classNames?.wrapper,
-          {
-            // 'mx-auto max-h-[48px] min-h-12 max-w-10': isCollapsedNavBar,
-            // 'max-h-[50px] w-full': !isCollapsedNavBar,
-          },
-        )}
-        href={href || '/'}
-      >
-        <Image
-          priority
-          alt="logo"
-          className={cn(
-            '-translate-x-2 scale-[0.9] object-contain transition-all duration-300 ease-in-out sm:scale-90 md:scale-95 lg:translate-x-0 lg:scale-100',
-            className,
-          )}
-          height={48}
-          src={src ? src : isWhite ? payBossLogoWhite : logoUrl}
-          width={120}
-        />
-      </Link>
-    );
-  }
+        height={48}
+        src={src || logoUrl}
+        width={120}
+      />
+    </Link>
+  );
 }
+
 export default Logo;

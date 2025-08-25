@@ -15,8 +15,8 @@ export default function AuthLayout({
   return (
     <div className="h-screen w-screen bg-background flex flex-row">
       {/* Left Panel - Auth Forms */}
-      <div className="fixed bg-white p-4 rounded-full left-16 md:left-0 top-8  z-50">
-        <Logo className=" " />
+      <div className="fixed bg-white p-4 rounded-full left-16 md:left-12 top-8  z-50">
+        <Logo isBlack className=" " />
       </div>
       <div className="hidden lg:flex flex-1 items-end justify-end relative">
         <div className="absolute bottom-0 right-0"></div>
