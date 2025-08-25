@@ -1,3 +1,5 @@
+'use client';
+import { Accordion, AccordionItem } from '@heroui/react';
 import Image from 'next/image';
 
 const faqs = [
@@ -55,22 +57,32 @@ const faqs = [
 ];
 
 export function Faqs() {
+  // Flatten the faqs array for a single accordion list
+  const flatFaqs = faqs.flat();
+
   return (
     <section
-      aria-labelledby="payBoss FAQs"
+      aria-labelledby="faq-title"
       className="relative overflow-hidden bg-card py-20 sm:py-32"
       id="faqs"
     >
       <Image
         unoptimized
         alt="background image"
+        className="absolute inset-0 w-full h-full object-cover dark:opacity-0 dark:bg-blend-color-burn"
+        fill
+        src={'/images/background-faqs.jpg'}
+      />
+      {/* <Image
+        unoptimized
+        alt="background image"
         className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%] dark:opacity-0 dark:bg-blend-color-burn"
         height={946}
         src={'/images/background-faqs.jpg'}
         width={1558}
-      />
-      <div className="container relative">
-        <div className="mx-auto max-w-2xl lg:mx-0">
+      /> */}
+      <div className="container relative mx-auto flex flex-col items-center w-full">
+        <div className=" w-full max-w-2xl lg:mx-0 flex flex-col text-center">
           <h2
             className="text-3xl font-bold tracking-tight sm:text-4xl"
             id="faq-title"
@@ -82,27 +94,23 @@ export function Faqs() {
             and someone will get back to you soon.
           </p>
         </div>
-        <ul
-          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-10 lg:max-w-none lg:grid-cols-3"
-          role="list"
-        >
-          {faqs.map((column, columnIndex) => (
-            <li key={columnIndex}>
-              <ul className="flex flex-col gap-y-8" role="list">
-                {column.map((faq, faqIndex) => (
-                  <li key={faqIndex}>
-                    <h3 className="text-lg font-bold leading-7">
-                      {faq.question}
-                    </h3>
-                    <p className="mt-4 text-sm text-foreground-500">
-                      {faq.answer}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
+
+        <div className="mt-8 max-w-5xl mx-auto w-full">
+          <Accordion variant="bordered">
+            {flatFaqs.map((faq, idx) => (
+              <AccordionItem
+                key={idx}
+                title={faq.question}
+                classNames={{
+                  content: 'text-foreground/80',
+                  title: 'text-lg font-bold leading-7',
+                }}
+              >
+                {faq.answer}
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
       </div>
     </section>
   );
