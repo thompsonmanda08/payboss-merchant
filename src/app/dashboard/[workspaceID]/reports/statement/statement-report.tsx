@@ -1,13 +1,14 @@
 'use client';
 import {
   Download as ArrowDownTrayIcon,
+  FileDownIcon,
   Filter as FunnelIcon,
 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { walletStatementReportToCSV } from '@/app/_actions/file-conversion-actions';
-import { WalletTransactionHistory } from '@/app/dashboard/[workspaceID]/workspace-settings/components/wallet';
+import { WalletTransactionHistory } from '@/app/dashboard/[workspaceID]/workspace-settings/_components/wallet';
 import CardHeader from '@/components/base/card-header';
 import Card from '@/components/base/custom-card';
 import { Button } from '@/components/ui/button';
@@ -115,7 +116,7 @@ export default function StatementReport({
             visibleMonths={2}
           />{' '}
           <Button
-            endContent={<FunnelIcon className="h-5 w-5" />}
+            startContent={<FunnelIcon className="h-5 w-5" />}
             onPress={triggerRefetch}
           >
             Apply
@@ -144,7 +145,7 @@ export default function StatementReport({
               onChange={(v) => setSearchQuery(v)}
             />
             <Button
-              endContent={<ArrowDownTrayIcon className="h-5 w-5" />}
+              startContent={<FileDownIcon className="h-5 w-5" />}
               onPress={handleFileExportToCSV}
             >
               Export

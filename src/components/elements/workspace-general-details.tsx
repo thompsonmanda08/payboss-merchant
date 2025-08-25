@@ -18,6 +18,8 @@ import useWorkspaces from '@/hooks/use-workspaces';
 import { QUERY_KEYS, WORKSPACE_TYPES } from '@/lib/constants';
 import { cn, syntaxHighlight } from '@/lib/utils';
 import { ErrorState } from '@/types';
+import TerminalsConfig from '@/app/dashboard/[workspaceID]/workspace-settings/_components/terminals-api-config';
+import { SaveIcon } from 'lucide-react';
 
 function WorkspaceDetails({
   workspaceID,
@@ -240,7 +242,7 @@ function WorkspaceDetails({
       <div className="flex w-full flex-1 flex-col gap-4">
         <div className="flex flex-col gap-6">
           <form
-            className="flex w-full flex-col gap-4 sm:items-start md:flex-row md:items-end"
+            className="flex w-full  flex-col gap-4 sm:items-start md:flex-row md:items-end"
             role={'edit-workspace-details'}
             onSubmit={handleUpdateWorkspace}
           >
@@ -255,7 +257,7 @@ function WorkspaceDetails({
 
             <Input
               classNames={{
-                wrapper: cn('', { 'w-full max-w-[700px]': isSandbox }),
+                wrapper: cn('max-w-full', { 'w-full  w-full': isSandbox }),
               }}
               defaultValue={activeWorkspace?.description}
               isDisabled={loading || isSandbox}
@@ -270,8 +272,9 @@ function WorkspaceDetails({
                 isLoading={loading}
                 loadingText={'Saving...'}
                 type="submit"
+                startContent={<SaveIcon className="h-5 w-5" />}
               >
-                Save Changes
+                Save
               </Button>
             )}
           </form>
@@ -296,62 +299,66 @@ function WorkspaceDetails({
               </div>
 
               <form
-                className="flex w-full flex-col gap-1 sm:items-start md:flex-row md:items-end"
+                className="flex w-full flex-col gap-4 sm:items-start md:flex-row md:items-end"
                 role={'edit-workspace-details'}
                 onSubmit={handleUpdateWorkspaceCallback}
               >
-                <SelectField
-                  className={cn(
-                    'max-w-[100px] bg-orange-300 bg-opacity-50 rounded-md',
-                    {
-                      'bg-primary-300 bg-opacity-50 rounded-md ':
-                        callbackURL.method == 'POST',
-                    },
-                  )}
-                  classNames={{
-                    value: cn(
-                      'font-bold text-orange-600 group-data-[has-value=true]:text-orange-600',
+                <div className="flex gap-2 w-full">
+                  <SelectField
+                    size="lg"
+                    className={cn(
+                      'max-w-[100px] bg-orange-300 bg-opacity-50 rounded-md',
                       {
-                        'text-primary-600 group-data-[has-value=true]:text-primary-600':
+                        'bg-primary-300 bg-opacity-50 rounded-md ':
                           callbackURL.method == 'POST',
                       },
-                    ),
-                  }}
-                  defaultValue={'GET'}
-                  isDisabled={isLoadingCallback}
-                  label="Method"
-                  options={['GET', 'POST']}
-                  placeholder={'GET'}
-                  prefilled={true}
-                  value={callbackURL?.method}
-                  wrapperClassName={cn('max-w-24')}
-                  onChange={(e) =>
-                    updateCallbackURL({ method: e.target.value })
-                  }
-                  // isInvalid={error?.onCallbackURL}
-                />
+                    )}
+                    classNames={{
+                      value: cn(
+                        'font-bold text-orange-600 group-data-[has-value=true]:text-orange-600',
+                        {
+                          'text-primary-600 group-data-[has-value=true]:text-primary-600':
+                            callbackURL.method == 'POST',
+                        },
+                      ),
+                    }}
+                    defaultValue={'GET'}
+                    isDisabled={isLoadingCallback}
+                    label="Method"
+                    options={['GET', 'POST']}
+                    placeholder={'GET'}
+                    prefilled={true}
+                    value={callbackURL?.method}
+                    wrapperClassName={cn('max-w-24')}
+                    onChange={(e) =>
+                      updateCallbackURL({ method: e.target.value })
+                    }
+                    // isInvalid={error?.onCallbackURL}
+                  />
 
-                <Input
-                  className="w-full"
-                  classNames={{
-                    wrapper: 'max-w-full',
-                  }}
-                  defaultValue={activeWorkspace?.callBackURL}
-                  isDisabled={loading}
-                  isInvalid={error?.onCallbackURL}
-                  label="URL"
-                  pattern="https?://.+"
-                  required={true}
-                  title="https://www.domain-name.com"
-                  value={callbackURL?.url}
-                  onChange={(e) => updateCallbackURL({ url: e.target.value })}
-                />
+                  <Input
+                    className="w-full"
+                    classNames={{
+                      wrapper: 'max-w-full',
+                    }}
+                    defaultValue={activeWorkspace?.callBackURL}
+                    isDisabled={loading}
+                    isInvalid={error?.onCallbackURL}
+                    label="URL"
+                    pattern="https?://.+"
+                    required={true}
+                    title="https://www.domain-name.com"
+                    value={callbackURL?.url}
+                    onChange={(e) => updateCallbackURL({ url: e.target.value })}
+                  />
+                </div>
 
                 <Button
                   isDisabled={isLoadingCallback || noCallbackChanges}
                   isLoading={isLoadingCallback}
                   loadingText={'Saving...'}
                   type="submit"
+                  startContent={<SaveIcon className="h-5 w-5" />}
                 >
                   Save
                 </Button>
@@ -407,6 +414,8 @@ function WorkspaceDetails({
         </>
       )}
 
+      <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
+      <TerminalsConfig workspaceID={workspaceID} />
       <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
 
       {/* DELETE A WORKSPACE */}

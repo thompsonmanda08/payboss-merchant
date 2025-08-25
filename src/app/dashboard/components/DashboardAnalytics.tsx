@@ -16,7 +16,7 @@ import { useWorkspaceInit } from '@/hooks/use-query-data';
 import { MONTHS, WORKSPACE_TYPES } from '@/lib/constants';
 import { cn, formatCurrency } from '@/lib/utils';
 
-import { WalletTransactionHistory } from '../[workspaceID]/workspace-settings/components/wallet';
+import { WalletTransactionHistory } from '../[workspaceID]/workspace-settings/_components/wallet';
 
 // const pendingApprovals = [
 //   {

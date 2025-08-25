@@ -1,5 +1,12 @@
 'use client';
-import { Plus, EyeOff, Wrench, Monitor, Trash2 } from 'lucide-react';
+import {
+  Plus,
+  EyeOff,
+  Wrench,
+  Monitor,
+  Trash2,
+  Settings2Icon,
+} from 'lucide-react';
 import {
   Dropdown,
   DropdownItem,
@@ -293,18 +300,17 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
   return (
     <>
       {/* CONFIG API CONFIG */}
-      <Card className="">
+      <Card className="shadow-none px-0 border-none">
         <div className="mb-8 flex justify-between">
-          <CardHeader
-            classNames={{
-              titleClasses: 'xl:text-2xl lg:text-xl font-bold',
-              infoClasses: '!text-sm xl:text-base',
-            }}
-            infoText={
-              'Activate terminals to manage  multiple collection points like POS machines, tills, etc.'
-            }
-            title={'Terminals'}
-          />
+          <div className="flex max-w-4xl flex-col gap-2 lg:gap-1">
+            <h2 className="text-sm font-semibold leading-3 text-foreground sm:text-base">
+              Terminal Management
+            </h2>
+            <p className="text-xs text-gray-400 sm:text-sm">
+              Activate terminals to manage multiple collection points like POS
+              machines, tills, etc.
+            </p>
+          </div>
 
           <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
             {(permissions?.create ||
@@ -314,11 +320,11 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                 <DropdownTrigger>
                   <Button
                     color="primary"
-                    endContent={<Wrench className="h-5 w-5" />}
+                    startContent={<Settings2Icon className="h-5 w-5" />}
                     isDisabled={isLoadingTerminals || isLoadingConfig}
                     loadingText={'Please wait...'}
                   >
-                    Manage
+                    Edit
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu
@@ -393,7 +399,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                 </DropdownMenu>
               </Dropdown>
             )}
-            <Tooltip
+            {/* <Tooltip
               classNames={{
                 content: 'max-w-96 text-sm leading-6 p-3',
               }}
@@ -412,7 +418,7 @@ const TerminalsConfig = ({ workspaceID }: { workspaceID: string }) => {
                   <Monitor className="h-5 w-5 text-orange-600" />
                 )}
               </Button>
-            </Tooltip>
+            </Tooltip> */}
           </div>
         </div>
 

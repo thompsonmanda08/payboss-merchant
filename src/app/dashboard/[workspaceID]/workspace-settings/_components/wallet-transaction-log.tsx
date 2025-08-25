@@ -3,16 +3,18 @@ import { formatDistance } from 'date-fns';
 import { TASK_ICON_BG_COLOR_MAP, TASK_TYPE } from '@/lib/constants';
 
 export type ActivityLogItem = {
-  name: string;
-  type: string;
-  created_by: string;
-  content: string;
-  status: string;
-  isPrefunded: boolean;
-  isExpired: boolean;
+  id: string;
+  workspace_id: string;
+  amount: number;
+  narration: string;
+  transaction_type: string;
+  sys_service: string;
+  transaction_description: string;
   created_at: string;
-  remarks: string;
-  amount: string | number;
+  created_by?: string;
+  isPrefunded?: boolean;
+  isExpired?: boolean;
+  status?: 'approved' | 'pending' | 'prefunded' | 'rejected' | 'success';
 };
 
 export type ActivityLogGroup = {
@@ -70,24 +72,24 @@ const ActivityLog: React.FC = () => {
             {items.data.map((item, itemIndex) => (
               <div key={itemIndex} className="flex flex-col gap-y-4 py-2">
                 <div className="flex items-center space-x-4">
-                  {renderTaskType(item?.type)}
+                  {renderTaskType(item?.transaction_type)}
 
                   <div className="w-full">
                     <div className="flex w-full justify-between">
                       <p className="mb-[4px] text-[14px] font-medium leading-6">
-                        {item?.created_by}
+                        {item?.transaction_description}
                       </p>
                       <p className="leading-4] text-[12px] font-normal text-[#898989]">
                         {formatDistance(new Date(item.created_at), new Date())}
                       </p>
                     </div>
-                    <div className="text-xs  text-[#656971]">
+                    {/* <div className="text-xs  text-[#656971]">
                       <span
                         dangerouslySetInnerHTML={{
                           __html: item.content,
                         }}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

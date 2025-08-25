@@ -562,39 +562,44 @@ export function WalletTransactionHistory({
                   {items.title}
                 </p>
 
-                {items?.data?.map((item, itemIndex) => {
+                {items?.data?.map((item) => {
                   // EACH TRANSACTION ITEM
                   const isGreen =
                     (item?.status == 'success' || item?.status == 'approved') &&
-                    item?.type == 'credit' &&
+                    item?.transaction_type == 'credit' &&
                     item?.isPrefunded;
 
                   const isYellow = item?.status == 'pending';
 
                   const isRed =
-                    item?.status == 'rejected' || item?.type == 'debit';
+                    item?.status == 'rejected' ||
+                    item?.transaction_type == 'debit';
 
                   // const isGray = item?.isExpired;
 
                   return (
                     <div
-                      key={`${itemIndex}${index}${item?.name}`}
+                      key={`${item?.id || index}`}
                       className="flex flex-col gap-y-4 py-2"
                     >
                       <div className="flex items-start space-x-4">
                         <LogTaskType
                           classNames={{ wrapper: '' }}
-                          type={item?.type}
+                          type={item?.transaction_type}
                         />
 
                         <div className="w-full items-start">
                           <div className="flex w-full justify-between">
-                            <p className="text-xs text-foreground/70 -mt-1">
+                            <p className="text-xs text-foreground/70 truncate -mt-1">
                               <span className="text-base font-semibold text-foreground/80 capitalize leading-6">
-                                {item?.name || (item?.created_by as string)}
+                                {item?.narration}{' '}
+                                {/* APPEND CREATED BY FOR PREFUND TRANSACTIONS */}
+                                {item?.created_by
+                                  ? ` - ${item?.created_by as string}`
+                                  : ''}
                               </span>{' '}
                               <br />
-                              {item?.content}
+                              {item?.transaction_description}
                               <span className="ml-2 font-normal leading-4 text-foreground/40">
                                 ...
                                 {formatDistance(
@@ -619,8 +624,8 @@ export function WalletTransactionHistory({
                                       },
                                     ),
                                   }}
-                                  content={`${capitalize(item?.status)}: ${capitalize(
-                                    item?.remarks,
+                                  content={`${capitalize(
+                                    item?.transaction_description,
                                   )}`}
                                   placement="left"
                                 >
@@ -644,7 +649,8 @@ export function WalletTransactionHistory({
                                     {formatCurrency(item?.amount)}
                                   </Chip>
                                 </Tooltip>
-                                {item?.type?.toLowerCase() == 'deposit' && (
+                                {item?.transaction_type?.toLowerCase() ==
+                                  'deposit' && (
                                   <Tooltip
                                     content={'View Proof of payment'}
                                     placement="top"

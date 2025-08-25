@@ -6,7 +6,7 @@ import {
 import { getWalletPrefundHistory } from '@/app/_actions/transaction-actions';
 import { getAllUsers } from '@/app/_actions/user-actions';
 import { getWorkspaceMembers } from '@/app/_actions/workspace-actions';
-import WorkspaceSettings from '@/app/dashboard/[workspaceID]/workspace-settings/components';
+import WorkspaceSettings from '@/app/dashboard/[workspaceID]/workspace-settings/_components';
 import { PageProps } from '@/types';
 
 export const dynamic = 'force-dynamic';
