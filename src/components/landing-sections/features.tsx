@@ -1,27 +1,37 @@
 'use client';
-import {
-  LogOut as ArrowLeftEndOnRectangleIcon,
-  LogIn as ArrowLeftStartOnRectangleIcon,
-  Banknote as BanknotesIcon,
-  Newspaper as NewspaperIcon,
-  ArrowLeftRight as ArrowsRightLeftIcon,
-  PhoneCall as PhoneArrowDownLeftIcon,
-  SlidersVertical as AdjustmentsVerticalIcon,
-  Clipboard as ClipboardDocumentIcon,
-  Store as BuildingStorefrontIcon,
-  CreditCard as CreditCardIcon,
-  Receipt as ReceiptPercentIcon,
-  Calculator as CalculatorIcon,
-  Ticket as TicketIcon,
-} from 'lucide-react';
-import { Tab, Tabs } from '@heroui/react';
+
 import { motion, AnimatePresence } from 'framer-motion';
+
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+  Tab,
+  Tabs,
+} from '@heroui/react';
 
 import useCustomTabsHook from '@/hooks/use-custom-tabs';
 import {
-  staggerContainerItemVariants,
   containerVariants,
+  staggerContainerItemVariants,
 } from '@/lib/constants';
+import {
+  ArrowRightFromLineIcon,
+  Calculator,
+  ClipboardIcon,
+  CreditCard,
+  LucideBanknoteArrowDown,
+  Newspaper,
+  PhoneCall,
+  Receipt,
+  ReceiptIcon,
+  SendIcon,
+  SlidersVerticalIcon,
+  Store,
+  Ticket,
+} from 'lucide-react';
 
 const collections = [
   [
@@ -31,7 +41,7 @@ const collections = [
       Icon: {
         name: 'API Integration',
         role: 'Connect Seamlessly',
-        element: AdjustmentsVerticalIcon,
+        element: SlidersVerticalIcon,
       },
     },
     {
@@ -40,7 +50,7 @@ const collections = [
       Icon: {
         name: 'Invoicing',
         role: 'Effortless Billing',
-        element: NewspaperIcon,
+        element: Newspaper,
       },
     },
   ],
@@ -51,7 +61,7 @@ const collections = [
       Icon: {
         name: 'Payment Forms',
         role: 'Simplify Transactions',
-        element: ClipboardDocumentIcon,
+        element: ClipboardIcon,
       },
     },
     {
@@ -60,7 +70,7 @@ const collections = [
       Icon: {
         name: 'Store',
         role: 'Expand Sales Channels',
-        element: BuildingStorefrontIcon,
+        element: Store,
       },
     },
   ],
@@ -71,7 +81,7 @@ const collections = [
       Icon: {
         name: 'Subscriptions',
         role: 'Automate Recurring Payments',
-        element: CreditCardIcon,
+        element: CreditCard,
       },
     },
     {
@@ -80,13 +90,13 @@ const collections = [
       Icon: {
         name: 'USSD',
         role: 'Quick Cashless Payments',
-        element: CalculatorIcon,
+        element: Calculator,
       },
     },
   ],
 ];
 
-const spending = [
+const disbursements = [
   [
     {
       content:
@@ -94,7 +104,7 @@ const spending = [
       Icon: {
         name: 'Bill Payment',
         role: 'Pay Bills Easily',
-        element: BanknotesIcon,
+        element: LucideBanknoteArrowDown,
       },
     },
     {
@@ -103,7 +113,7 @@ const spending = [
       Icon: {
         name: 'Bulk Data',
         role: 'Connect Your Team',
-        element: ReceiptPercentIcon,
+        element: Receipt,
       },
     },
   ],
@@ -114,7 +124,7 @@ const spending = [
       Icon: {
         name: 'Bulk Airtime',
         role: 'Top Up Effortlessly',
-        element: PhoneArrowDownLeftIcon,
+        element: PhoneCall,
       },
     },
     {
@@ -123,7 +133,7 @@ const spending = [
       Icon: {
         name: 'Bulk Direct Payment',
         role: 'Pay Multiple Vendors',
-        element: ArrowsRightLeftIcon,
+        element: ArrowRightFromLineIcon,
       },
     },
   ],
@@ -134,16 +144,16 @@ const spending = [
       Icon: {
         name: 'Bulk Vouchers Payment',
         role: 'Distribute Rewards Efficiently',
-        element: TicketIcon,
+        element: Ticket,
       },
     },
     {
       content:
-        'Issue virtual or physical expense cards for your team. Control and track business spending with ease.',
+        'Issue virtual or physical expense cards for your team. Control and track business disbursements with ease.',
       Icon: {
         name: 'Expense Cards',
         role: 'Control Business PayoutFeatures',
-        element: CreditCardIcon,
+        element: CreditCard,
       },
     },
   ],
@@ -156,33 +166,42 @@ const TABS = [
     description:
       'Streamline your collections, save time, and grow your business with confidence.',
     index: 0,
-    Icon: ArrowLeftEndOnRectangleIcon,
+    Icon: ReceiptIcon,
   },
   {
     name: 'DISBURSEMENTS',
     title: 'Streamline Your Payout Features',
     description: 'Easily make bulk disbursements to your customers.',
     index: 1,
-    Icon: ArrowLeftStartOnRectangleIcon,
+    Icon: SendIcon,
   },
 ];
 
 export function Features() {
   const { activeTab, currentTabIndex, navigateTo } = useCustomTabsHook([
-    <CollectionFeatures key="collections" />,
-    <PayoutFeatures key="spending" />,
+    <FeatureGrid
+      key="collections"
+      features={collections}
+      colorScheme="primary"
+    />,
+
+    <FeatureGrid
+      key="disbursements"
+      features={disbursements}
+      colorScheme="secondary"
+    />,
   ]);
 
   return (
     <section
       aria-label="Features payBoss is offering"
-      className="bg-background py-20 sm:py-32"
+      className="bg-background  flex flex-col items-center justify-center w-screen"
       id="features"
     >
-      <div className="container flex flex-col justify-center">
+      <div className="container flex flex-col items-center pt-20 lg:px-8">
         <Tabs
-          aria-label="Options"
-          className="max-w-max mx-auto"
+          aria-label="Feature options"
+          className="mx-auto items-center"
           color="primary"
           items={TABS}
           radius="sm"
@@ -195,115 +214,119 @@ export function Features() {
             <Tab
               key={String(item.index)}
               title={
-                <div className="flex items-center space-x-2">
-                  <item.Icon className="w-6 h-6 aspect-square" />
-                  <span>{item?.name}</span>
+                <div className="flex items-center gap-2">
+                  <item.Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <span className="text-xs sm:text-sm md:text-base">
+                    {item?.name}
+                  </span>
                 </div>
               }
             />
           )}
         </Tabs>
-        <div className="mx-auto mt-6 md:text-center">
-          <h2 className="font-display text-[clamp(1.5rem,1rem+3vw,3rem)] font-bold text-foreground/90 text-nowrap">
+        <div className="mx-auto mt-6 text-center sm:mt-8">
+          <h2 className="font-display text-2xl font-bold text-foreground/90 sm:text-3xl md:text-4xl lg:text-5xl">
             {TABS[currentTabIndex]?.title}
           </h2>
-          <p className="mt-4 text-sm md:text-base text-foreground/70">
+          <p className="mt-3 text-sm text-foreground/70 sm:mt-4 sm:text-base md:text-lg">
             {TABS[currentTabIndex]?.description}
           </p>
         </div>
-        <AnimatePresence mode="wait">{activeTab}</AnimatePresence>
+        <AnimatePresence mode="wait">
+          <div>{activeTab}</div>
+        </AnimatePresence>
       </div>
     </section>
   );
 }
 
-function CollectionFeatures() {
+interface FeatureCardProps {
+  feature: {
+    content: string;
+    Icon: {
+      name: string;
+      role: string;
+      element: React.ComponentType<{ className?: string }>;
+    };
+  };
+  colorScheme: 'primary' | 'secondary';
+}
+
+function FeatureCard({ feature, colorScheme }: FeatureCardProps) {
   return (
-    <motion.ul
-      animate="show"
-      className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-      exit="hidden"
-      initial="hidden"
-      role="list"
-      variants={containerVariants}
-    >
-      {collections.map((column, columnIndex) => (
-        <li key={columnIndex}>
-          <motion.ul className="flex flex-col gap-y-6 sm:gap-y-8" role="list">
-            {column.map((revenue, revenueIndex) => (
-              <motion.li
-                key={revenueIndex}
-                variants={staggerContainerItemVariants}
-              >
-                <figure className="relative rounded-2xl bg-card dark:bg-gradient-to-br dark:from-secondary/5 dark:to-primary/5 p-6 shadow-xl dark:shadow-background/10 shadow-slate-500/5">
-                  <revenue.Icon.element className="absolute left-6 top-6 w-[100px] dark:opacity-5 fill-slate-100" />
-                  <blockquote className="relative">
-                    <p className="text-lg tracking-tight text-foreground/70 dark:text-foreground">
-                      {revenue.content}
-                    </p>
-                  </blockquote>
-                  <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
-                    <div>
-                      <div className="font-display text-base text-foreground/90">
-                        {revenue.Icon.name}
-                      </div>
-                      <div className="mt-1 text-sm text-foreground/50">
-                        {revenue.Icon.role}
-                      </div>
-                    </div>
-                    <div className="overflow-hidden rounded-full bg-slate-900 dark:bg-accent p-3">
-                      <revenue.Icon.element className="h-6 w-6 text-white" />
-                    </div>
-                  </figcaption>
-                </figure>
-              </motion.li>
-            ))}
-          </motion.ul>
-        </li>
-      ))}
-    </motion.ul>
+    <Card className="w-full h-full">
+      <CardHeader className="flex gap-3">
+        <div
+          className={`flex items-center justify-center w-12 h-12 rounded-full ${
+            colorScheme === 'primary' ? 'bg-primary/10' : 'bg-secondary/10'
+          }`}
+        >
+          <feature.Icon.element
+            className={`h-6 w-6 ${
+              colorScheme === 'primary' ? 'text-primary' : 'text-secondary'
+            }`}
+          />
+        </div>
+        <div className="flex flex-col">
+          <p className="text-md font-semibold">{feature.Icon.name}</p>
+          <p className="text-small text-default-500">{feature.Icon.role}</p>
+        </div>
+      </CardHeader>
+      <Divider />
+      <CardBody>
+        <p className="text-foreground/70 leading-relaxed">{feature.content}</p>
+      </CardBody>
+      <Divider />
+      <CardFooter className="justify-center">
+        <div
+          className={`flex items-center gap-2 text-sm ${
+            colorScheme === 'primary' ? 'text-primary' : 'text-secondary'
+          }`}
+        >
+          <feature.Icon.element className="h-4 w-4" />
+          <span>Learn more</span>
+        </div>
+      </CardFooter>
+    </Card>
   );
 }
 
-function PayoutFeatures() {
+interface FeatureGridProps {
+  features: Array<
+    Array<{
+      content: string;
+      Icon: {
+        name: string;
+        role: string;
+        element: React.ComponentType<{ className?: string }>;
+      };
+    }>
+  >;
+  colorScheme: 'primary' | 'secondary';
+}
+
+function FeatureGrid({ features, colorScheme }: FeatureGridProps) {
   return (
     <motion.ul
       animate="show"
-      className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
+      className="container mx-auto w-full gap-6 my-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
       exit="hidden"
       initial="hidden"
       role="list"
       variants={containerVariants}
     >
-      {spending.map((column, columnIndex) => (
+      {features.map((column, columnIndex) => (
         <li key={columnIndex}>
-          <motion.ul className="flex flex-col gap-y-6 sm:gap-y-8" role="list">
-            {column.map((expense, expenseIndex) => (
+          <motion.ul
+            className="flex flex-col gap-4 sm:gap-6 md:gap-8"
+            role="list"
+          >
+            {column.map((feature, featureIndex) => (
               <motion.li
-                key={expenseIndex}
+                key={featureIndex}
                 variants={staggerContainerItemVariants}
               >
-                <figure className="relative rounded-2xl bg-card dark:bg-gradient-to-br dark:from-secondary/5 dark:to-primary/5 p-6 shadow-xl dark:shadow-background/10 shadow-slate-500/5">
-                  <expense.Icon.element className="absolute left-6 top-6 w-[100px] dark:opacity-5 fill-slate-100" />
-                  <blockquote className="relative">
-                    <p className="text-lg tracking-tight text-foreground/90">
-                      {expense.content}
-                    </p>
-                  </blockquote>
-                  <figcaption className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
-                    <div>
-                      <div className="font-display text-base text-foreground/90">
-                        {expense.Icon.name}
-                      </div>
-                      <div className="mt-1 text-sm text-foreground/50">
-                        {expense.Icon.role}
-                      </div>
-                    </div>
-                    <div className="overflow-hidden rounded-full bg-slate-900 dark:bg-accent p-3">
-                      <expense.Icon.element className="h-6 w-6 text-white" />
-                    </div>
-                  </figcaption>
-                </figure>
+                <FeatureCard feature={feature} colorScheme={colorScheme} />
               </motion.li>
             ))}
           </motion.ul>
