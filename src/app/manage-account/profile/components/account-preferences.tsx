@@ -1,5 +1,5 @@
 'use client';
-import { Switch } from '@heroui/switch';
+import { Switch } from '@heroui/react';
 
 import Card from '@/components/base/custom-card';
 

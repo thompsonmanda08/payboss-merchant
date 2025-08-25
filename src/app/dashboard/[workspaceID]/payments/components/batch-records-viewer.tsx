@@ -1,5 +1,5 @@
 'use client';
-import { Modal, ModalContent, ModalHeader, ModalBody } from '@heroui/modal';
+import { Modal, ModalContent, ModalHeader, ModalBody } from '@heroui/react';
 
 import CardHeader from '@/components/base/card-header';
 import SingleTransactionsTable from '@/components/tables/single-transaction-table';

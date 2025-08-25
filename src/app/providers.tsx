@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
+import heroTheme from '../../hero';
+
 import FirstLogin from '@/components/elements/first-login';
 import ScreenLock, {
   IdleTimerContainer,
@@ -40,7 +42,7 @@ function Providers({
         attribute="class"
         defaultTheme="light"
       >
-        <HeroUIProvider locale="en-GB">
+        <HeroUIProvider locale="en-GB" theme={heroTheme}>
           {!online && (
             <motion.div
               className="relative -top-1 left-0 right-0 z-[999] mb-4 bg-red-500 p-2 py-2 text-xs font-bold capitalize text-white"

@@ -1,99 +1,24 @@
 @import "tailwindcss";
 @plugin '../../hero.ts';
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@source '../../node_modules/@heroui/react/dist/**/*.{js,ts,jsx,tsx}';
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  /* Keep only non-conflicting Tailwind utilities */
   --font-family-inter: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  
-  --breakpoint-sm: 640px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1280px;
-  --breakpoint-2xl: 1536px;
-  
-  --color-border: hsl(270 14% 97%);
-  --color-input: hsl(220 13% 91%);
-  --color-ring: hsl(216 100% 81%);
-  --color-background: hsl(0 0% 98%);
-  --color-foreground: hsl(224 71.4% 4.1%);
-  
-  --color-primary: hsl(216 77% 46%);
-  --color-primary-foreground: hsl(210 20% 98%);
-  --color-primary-light: hsl(216 100% 81%);
-  
-  --color-secondary: hsl(24 100% 67%);
-  --color-secondary-foreground: hsl(210 20% 98%);
-  
-  --color-destructive: hsl(0 79% 49%);
-  --color-destructive-foreground: hsl(0 0% 100%);
-  
-  --color-muted: hsl(220 14.3% 95.9%);
-  --color-muted-foreground: hsl(220 8.9% 46.1%);
-  
-  --color-accent: hsl(24 79% 49%);
-  --color-accent-foreground: hsl(0 0% 100%);
-  
-  --color-popover: hsl(0 0% 100%);
-  --color-popover-foreground: hsl(224 71.4% 4.1%);
-  
-  --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(224 71.4% 4.1%);
-  
-  --radius: 0.5rem;
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-4xl: 2rem;
-  
-  --container-center: true;
-  --container-padding: 2rem;
-  --container-screen-2xl: 1440px;
 }
 
 @theme dark {
-  --color-border: hsl(226 39% 10%);
-  --color-input: hsl(0 1% 17%);
-  --color-ring: hsl(206 89% 44%);
-  --color-background: hsl(222 6% 3%);
-  --color-foreground: hsl(0 0% 98%);
-  
-  --color-card: hsl(213 80% 3%);
-  --color-card-foreground: hsl(0 0% 90%);
-  
-  --color-muted-foreground: hsl(260 1% 41%);
+  /* Dark theme handled by HeroUI theme configuration */
 }
 
-@layer base {
-  :root {
-    --background: var(--color-background);
-    --foreground: var(--color-foreground);
-    --card: var(--color-card);
-    --card-foreground: var(--color-card-foreground);
-    --popover: var(--color-popover);
-    --popover-foreground: var(--color-popover-foreground);
-    --primary: var(--color-primary);
-    --primary-light: var(--color-primary-light);
-    --primary-foreground: var(--color-primary-foreground);
-    --secondary: var(--color-secondary);
-    --secondary-foreground: var(--color-secondary-foreground);
-    --muted: var(--color-muted);
-    --muted-foreground: var(--color-muted-foreground);
-    --accent: var(--color-accent);
-    --accent-foreground: var(--color-accent-foreground);
-    --destructive: var(--color-destructive);
-    --destructive-foreground: var(--color-destructive-foreground);
-    --border: var(--color-border);
-    --input: var(--color-input);
-    --ring: var(--color-ring);
-    --radius: var(--radius);
-  }
-}
+/* Custom CSS variables removed - handled by HeroUI theme */
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+  /* Base styles handled by HeroUI and Tailwind defaults */
+}
 
   select {
     appearance: none;
