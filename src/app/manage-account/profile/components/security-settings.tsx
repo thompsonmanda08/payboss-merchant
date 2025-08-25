@@ -1,6 +1,6 @@
 'use client';
 import { Card } from '@heroui/react';
-import { Switch } from '@heroui/switch';
+import { Switch } from '@heroui/react';
 import { useState } from 'react';
 
 import ChangePasswordField from '@/components/elements/change-password';
