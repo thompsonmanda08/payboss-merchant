@@ -45,7 +45,7 @@ function SelectField({
   return (
     <div
       className={cn(
-        'flex w-full max-w-md flex-col items-start',
+        'flex w-full max-w-md flex-col gap-1 items-start',
         wrapperClassName,
         classNames?.wrapper,
       )}
@@ -69,6 +69,7 @@ function SelectField({
         className={`group relative flex w-full flex-col items-start justify-start gap-1`}
       >
         <Select
+          size="lg"
           className={cn('font-medium', className)}
           classNames={{
             base: cn(

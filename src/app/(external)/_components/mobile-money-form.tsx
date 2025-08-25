@@ -1,6 +1,9 @@
 'use client';
 
-import { BadgeCheck as CheckBadgeIcon, XCircle as XCircleIcon } from 'lucide-react';
+import {
+  BadgeCheck as CheckBadgeIcon,
+  XCircle as XCircleIcon,
+} from 'lucide-react';
 import { Image, useDisclosure, addToast } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -177,7 +180,7 @@ export default function MobileMoneyForm({ checkoutData }: any) {
                 checkOperator(e.target.value);
               }}
             />
-            <span className="absolute right-0 top-6 h-full w-24 px-4">
+            <span className="absolute right-0 top-1/3 h-full w-24 px-4">
               {Boolean(operatorLogo) && (
                 <Image
                   alt="logo"
@@ -230,6 +233,7 @@ export default function MobileMoneyForm({ checkoutData }: any) {
         removeActionButtons
         backdrop="blur"
         className={'max-w-max'}
+        placement="center"
         onClose={
           transaction?.status == 'PENDING'
             ? () => {
@@ -246,12 +250,12 @@ export default function MobileMoneyForm({ checkoutData }: any) {
         isOpen={isOpen}
         size="sm"
       >
-        <div className="flex flex-col gap-4 flex-1 justify-center items-center max-w-max m-auto p-4 pb-6">
+        <div className="flex flex-col gap-4 flex-1 py-16 justify-center items-center max-w-max m-auto p-4 pb-6">
           <div className="aspect-square flex justify-center items-center mx-auto mb-4 max-w-xs">
             {transaction?.status == 'SUCCESSFUL' ? (
-              <CheckBadgeIcon className="w-32 text-success" />
+              <CheckBadgeIcon className="w-32 h-32 aspect-square text-success" />
             ) : transaction?.status == 'FAILED' ? (
-              <XCircleIcon className="w-32 text-danger" />
+              <XCircleIcon className="w-32 h-32 aspect-square text-danger" />
             ) : (
               <Spinner size={100} />
             )}

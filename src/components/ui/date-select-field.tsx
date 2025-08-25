@@ -57,9 +57,13 @@ function DateSelectField({
 }) {
   return (
     <div
-      className={cn('flex w-full max-w-md flex-col', classNames?.wrapper, {
-        'cursor-not-allowed opacity-50': disabled || props?.isDisabled,
-      })}
+      className={cn(
+        'flex w-full max-w-md flex-col gap-1',
+        classNames?.wrapper,
+        {
+          'cursor-not-allowed opacity-50': disabled || props?.isDisabled,
+        },
+      )}
     >
       {label && (
         <label
@@ -73,6 +77,7 @@ function DateSelectField({
       )}
       <DatePicker
         // label={label}
+        size="lg"
         key={label}
         className={cn('max-w-sm', className)}
         classNames={{

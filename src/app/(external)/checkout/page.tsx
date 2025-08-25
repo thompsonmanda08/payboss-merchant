@@ -13,18 +13,14 @@ async function CheckoutPage({ searchParams }: any) {
   let checkoutData = {
     workspaceID: queryParams?.workspace_id || '',
     checkoutID: queryParams?.checkout_id || '',
-    amount: queryParams?.amount || '',
+    amount: parseFloat(queryParams?.amount).toFixed(2) || '',
     transactionID: queryParams?.transaction_id || '',
     serviceID: queryParams?.service_id || '',
   };
 
   // FIRST POST CHECKOUT DATA TO LOG CHECKOUT INFO FOR VALIDATION
   const validation = await validateCheckoutData({
-    workspaceID: queryParams?.workspace_id || '',
-    checkoutID: queryParams?.checkout_id || '',
-    amount: queryParams?.amount || '',
-    transactionID: queryParams?.transaction_id || '',
-    serviceID: queryParams?.service_id || '',
+    ...checkoutData,
   });
 
   if (!validation?.success) {

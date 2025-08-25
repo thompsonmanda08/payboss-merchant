@@ -31,8 +31,6 @@ import { QUERY_KEYS, TASK_TYPE, WORKSPACE_TYPES } from '@/lib/constants';
 import { capitalize, cn, formatCurrency, formatDate } from '@/lib/utils';
 import { WorkspaceSession } from '@/types';
 
-import { formatActivityData } from './wallet-transaction-log';
-
 function Wallet({
   workspaceID,
   workspaceName,
@@ -557,7 +555,10 @@ export function WalletTransactionHistory({
           formattedActivityData.map((items, index) => {
             // TRANSACTIONS GROUPED BY DATE
             return (
-              <div key={`${index}${items?.title}`} className="pr-6">
+              <div
+                key={`${index + 1 * Math.random()}${items?.title}`}
+                className="pr-6"
+              >
                 <p className="text-base font-semibold text-slate-600">
                   {items.title}
                 </p>
@@ -579,7 +580,7 @@ export function WalletTransactionHistory({
 
                   return (
                     <div
-                      key={`${item?.id || index}`}
+                      key={`${item?.id || (index + 1) * Math.random()}`}
                       className="flex flex-col gap-y-4 py-2"
                     >
                       <div className="flex items-start space-x-4">
@@ -884,6 +885,60 @@ function ApprovalStatusPrompt({
       />
     </PromptModal>
   );
+}
+
+export type ActivityLogItem = {
+  id: string;
+  workspace_id: string;
+  amount: number;
+  narration: string;
+  transaction_type: string;
+  sys_service: string;
+  transaction_description: string;
+  created_at: string;
+  created_by?: string;
+  isPrefunded?: boolean;
+  isExpired?: boolean;
+  status?: 'approved' | 'pending' | 'prefunded' | 'rejected' | 'success';
+};
+
+export type ActivityLogGroup = {
+  title: string;
+  data: ActivityLogItem[];
+};
+export function formatActivityData(
+  activityLog: any,
+  isNotReverse = true,
+): ActivityLogGroup[] {
+  const groupedData: { [x: string]: any } = {};
+
+  activityLog?.forEach((activity: { title: string; data: any[] }) => {
+    activity.data?.forEach((item: any) => {
+      const created_at = new Date(item.created_at).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+
+      if (!groupedData[created_at]) {
+        groupedData[created_at] = [];
+      }
+
+      groupedData?.[created_at].push(item);
+    });
+  });
+
+  const result = Object.keys(groupedData).map(
+    (date) =>
+      ({
+        title: String(date),
+        data: isNotReverse
+          ? groupedData[String(date)]
+          : groupedData[date].reverse(),
+      }) as ActivityLogGroup,
+  );
+
+  return result;
 }
 
 export default Wallet;

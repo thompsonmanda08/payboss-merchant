@@ -29,8 +29,7 @@ export default function WorkspaceMembers({
     onClose: onCloseAdd,
   } = useDisclosure();
 
-  const { data: workspaceInit, isLoading: loadingSession } =
-    useWorkspaceInit(workspaceID);
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const permissions = workspaceInit?.data?.workspacePermissions;
 
   return (

@@ -1,5 +1,5 @@
 'use client';
-import { Settings as Cog6ToothIcon, Power as PowerIcon } from 'lucide-react';
+import { LogOut, SettingsIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import Logo from '@/components/base/payboss-logo';
@@ -27,17 +27,19 @@ function WorkspaceHeader({
           permissions?.role?.toLowerCase() == 'owner') && (
           <Button
             as={Link}
+            size="md"
             className="data[hover=true]:bg-foreground-900/30 z-30 aspect-square min-w-[120px] rounded-full bg-foreground-900/50 text-white"
             href={'/manage-account'}
-            startContent={<Cog6ToothIcon className=" h-5 w-5" />}
+            startContent={<SettingsIcon className=" h-5 w-5 text-white" />}
             variant="light"
           >
             Manage
           </Button>
         )}
         <Button
+          size="md"
           className="data[hover=true]:bg-foreground-900/30 z-30 aspect-square min-w-[120px] rounded-full bg-foreground-900/50 text-white"
-          startContent={<PowerIcon className=" h-5 w-5" />}
+          startContent={<LogOut className=" h-5 w-5 text-white" />}
           variant="light"
           onClick={() => {
             handleUserLogOut();

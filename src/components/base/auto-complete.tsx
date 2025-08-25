@@ -48,7 +48,7 @@ function AutoCompleteField({
   return (
     <div
       className={cn(
-        'flex w-full max-w-md flex-col items-start',
+        'flex w-full max-w-md flex-col gap-1 items-start',
         classNames?.wrapper,
       )}
     >
@@ -70,6 +70,7 @@ function AutoCompleteField({
       <Autocomplete
         // label={label}
         // labelPlacement="outside"
+        size="lg"
         classNames={{
           base: cn('outline-none border-none', classNames?.base),
           listbox: '',
