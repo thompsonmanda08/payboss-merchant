@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 
-// const formsPlugin = require("@tailwindcss/forms");
 import tailwindAnimate from 'tailwindcss-animate';
 import { heroui } from '@heroui/react';
 
@@ -81,7 +80,6 @@ export const theme = {
 
 export const plugins = [
   tailwindAnimate,
-  // formsPlugin,
   heroui({
     addCommonColors: true,
     themes: {
