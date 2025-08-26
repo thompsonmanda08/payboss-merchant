@@ -32,31 +32,8 @@ export default function DashboardLoading() {
           ))}
         </div>
 
-        {/* Transactions Summary */}
-        <div className="space-y-2 bg-white dark:bg-border rounded-xl p-6 flex flex-col justify-start animate-pulse">
-          <Skeleton className=" w-56 h-6 rounded-lg " />
-          <Skeleton className=" w-72 h-4 rounded-lg " />
-
-          {/* Chart Placeholder */}
-          <div className="bg-primary-800/50 rounded-xl h-48 w-full mt-4 animate-pulse">
-            <div className="flex justify-between p-4">
-              <div className="bg-border/10 w-8 h-4 rounded-lg" />
-              <div className="bg-border/10 w-8 h-4 rounded-lg" />
-              <div className="bg-border/10 w-8 h-4 rounded-lg" />
-            </div>
-          </div>
-
-          {/* Transactions List */}
-          <div className="flex items-center space-x-4 p-2 mt-2 animate-pulse">
-            <Skeleton className="bg-primary-300 w-10 h-10 rounded-lg" />
-            <div className="space-y-2">
-              <Skeleton className="bg-gray-200 w-8 h-5 rounded-lg" />
-              <Skeleton className="bg-gray-200 w-32 h-4 rounded-lg" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-border rounded-xl p-8 mt-6 flex flex-col justify-start animate-pulse">
+        <div className="bg-white dark:bg-border rounded-xl p-8 mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 justify-start animate-pulse">
+          <WalletLHistoryLoader limit={3} />
           <WalletLHistoryLoader limit={3} />
         </div>
       </>

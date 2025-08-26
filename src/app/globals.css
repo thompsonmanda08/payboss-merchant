@@ -126,10 +126,6 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
 

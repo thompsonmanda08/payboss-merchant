@@ -281,11 +281,10 @@ function WorkspaceDetails({
         </div>
       </div>
 
-      <Divider className="my-6 h-px" />
-
-      {/* COLLECTION WORKSPACE CALLBACK-URL */}
+      {/* COLLECTION WORKSPACE CALLBACK-URL AND TERMINAL CONFIGS */}
       {activeWorkspace?.workspaceType !== WORKSPACE_TYPES[1]?.ID && (
         <>
+          <Divider className="my-6 h-px" />
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-6">
               <div className="flex max-w-4xl flex-col gap-2 lg:gap-1">
@@ -411,12 +410,10 @@ function WorkspaceDetails({
               </div>
             </div>
           </div>
+          <Divider className="my-4 h-px  sm:my-6" />
+          <TerminalsConfig workspaceID={workspaceID} />
         </>
       )}
-
-      <Divider className="my-4 h-px  sm:my-6" />
-
-      <TerminalsConfig workspaceID={workspaceID} />
 
       <Divider className="my-4 h-px  sm:my-6" />
 

@@ -173,11 +173,7 @@ function Wallet({
       return;
     }
 
-    if (
-      !formData.amount ||
-      formData.amount < 0 ||
-      formData.amount.toString().length > 0
-    ) {
+    if (!formData.amount || parseFloat(formData.amount) < 0) {
       addToast({
         title: 'Invalid Amount',
         color: 'danger',

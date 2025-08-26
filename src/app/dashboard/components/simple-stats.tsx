@@ -1,6 +1,6 @@
+'use client';
+import Card from '@/components/base/custom-card';
 import { cn } from '@/lib/utils';
-
-import Card from '../../../components/base/custom-card';
 
 function SimpleStats({
   title,
@@ -28,7 +28,7 @@ function SimpleStats({
   return (
     <Card
       className={
-        'min-w-[300px] flex-1 flex-row items-center justify-between rounded-2xl'
+        'flex-1 flex-row items-center justify-between shadow-none border-border rounded-2xl'
       }
     >
       <div className="flex flex-col gap-3">
