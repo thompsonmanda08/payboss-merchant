@@ -1,4 +1,4 @@
-import { Snippet, useDisclosure, addToast } from '@heroui/react';
+import { Snippet, useDisclosure, addToast, Divider } from '@heroui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -281,7 +281,7 @@ function WorkspaceDetails({
         </div>
       </div>
 
-      <hr className="my-6 h-px bg-foreground-900/5" />
+      <Divider className="my-6 h-px" />
 
       {/* COLLECTION WORKSPACE CALLBACK-URL */}
       {activeWorkspace?.workspaceType !== WORKSPACE_TYPES[1]?.ID && (
@@ -414,9 +414,11 @@ function WorkspaceDetails({
         </>
       )}
 
-      <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
+      <Divider className="my-4 h-px  sm:my-6" />
+
       <TerminalsConfig workspaceID={workspaceID} />
-      <hr className="my-4 h-px bg-foreground-900/5 sm:my-6" />
+
+      <Divider className="my-4 h-px  sm:my-6" />
 
       {/* DELETE A WORKSPACE */}
       <div className="flex flex-col gap-8 md:flex-row md:justify-between">

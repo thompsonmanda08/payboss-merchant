@@ -6,11 +6,13 @@ import Logo from '@/components/base/payboss-logo';
 import { cn } from '@/lib/utils';
 
 import SideNavItems from './side-nav-items';
+import { User } from '@/types/account';
 
 function MobileNavBar({
   isMobileMenuOpen,
   toggleMobileMenu,
-  pathname,
+  workspaceID,
+  user,
   expandedSection,
   handleExpand,
   handleMainLinkClick,
@@ -23,6 +25,8 @@ function MobileNavBar({
   handleExpand: (index: number) => void;
   handleMainLinkClick: () => void;
   navBarItems: any;
+  user: User;
+  workspaceID: string;
 }) {
   function handleLinkClick() {
     if (isMobileMenuOpen) {
@@ -62,6 +66,8 @@ function MobileNavBar({
           </div>
           {/* MENU ITEMS CONTAINER */}
           <SideNavItems
+            workspaceID={workspaceID}
+            user={user}
             expandedSection={Number(expandedSection)}
             handleExpand={handleExpand}
             handleLinkClick={handleLinkClick}

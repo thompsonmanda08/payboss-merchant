@@ -103,13 +103,14 @@ export const useWorkspaceInit = (workspaceID: string) =>
   useQuery({
     queryKey: [QUERY_KEYS.WORKSPACE_SESSION, workspaceID],
     queryFn: async () => await initializeWorkspace(workspaceID),
+    gcTime: 1000 * 60 * 5,
     refetchOnMount: true,
-    refetchInterval: 1000 * 60 * 3, // 3minutes
+    refetchInterval: 1000 * 60 * 5, // 3minutes
     refetchIntervalInBackground: true,
     refetchOnWindowFocus: true,
     retry: 3,
     retryDelay: 3000,
-    staleTime: 60 * 1000 * 3,
+    staleTime: 60 * 1000 * 5,
   });
 
 export const useRefreshToken = (enable: boolean) =>

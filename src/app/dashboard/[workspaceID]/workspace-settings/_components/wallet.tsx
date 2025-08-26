@@ -1,5 +1,5 @@
 import { Paperclip as PaperClipIcon } from 'lucide-react';
-import { Chip, Tooltip, useDisclosure, addToast } from '@heroui/react';
+import { Chip, Tooltip, useDisclosure, addToast, Divider } from '@heroui/react';
 import { getLocalTimeZone, today } from '@internationalized/date';
 import { useQueryClient } from '@tanstack/react-query';
 import { formatDistance } from 'date-fns';
@@ -703,7 +703,7 @@ export function WalletTransactionHistory({
                 })}
 
                 {index != formattedActivityData?.length - 1 && (
-                  <hr className="my-4 h-px border-0 bg-foreground-100" />
+                  <Divider className="my-4 h-px" />
                 )}
               </div>
             );

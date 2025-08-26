@@ -35,6 +35,7 @@ export default function TopNavBar({ user }: any) {
 
   const { data: workspaceInit, isLoading } = useWorkspaceInit(workspaceID);
   const workspaceSession = workspaceInit?.data;
+  
 
   const { isProfile, currentPath, dashboardRoute, router } =
     useNavigation(workspaceSession);

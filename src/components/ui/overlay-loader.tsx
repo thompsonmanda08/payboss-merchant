@@ -86,7 +86,7 @@ function OverlayLoader({
             {/* Main Loading Spinner */}
             <div className="relative">
               <div className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 blur-xl" />
-              <div className="relative mx-auto flex h-24 w-24 items-center justify-center rounded-full border bg-card p-8 shadow-2xl shadow-primary/10">
+              <div className="relative mx-auto flex h-24 w-24 items-center justify-center rounded-full border-border bg-card p-8 shadow-2xl shadow-primary/10">
                 {/* <Loader2 className="h-10 w-10 animate-spin text-primary" /> */}
                 <Spinner
                   className={classNames?.spinner}

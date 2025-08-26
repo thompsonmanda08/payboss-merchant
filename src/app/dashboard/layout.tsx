@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
 
   return (
     <main className="flex h-screen items-start justify-start overflow-hidden bg-background text-foreground">
-      <SideNavBar />
+      <SideNavBar user={session?.user} />
       <div className="flex max-h-screen w-full flex-col overflow-y-auto  p-5 pt-20 lg:pt-8">
         <TopNavBar user={session?.user} />
         {children}

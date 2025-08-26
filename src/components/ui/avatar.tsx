@@ -11,6 +11,7 @@ function Avatar({
   email,
   showUserInfo,
   isProfile,
+  classNames,
 }: AvatarProps & {
   firstName: string;
   lastName: string;
@@ -32,14 +33,14 @@ function Avatar({
           src={src}
         />
       ) : (
-        <div className="ml-px grid h-9 w-9 flex-none scale-90 place-items-center items-center justify-center rounded-full bg-primary-800 font-medium uppercase text-white ring-2  ring-primary ring-offset-1">
+        <div className="grid h-9 w-9 flex-none place-items-center items-center justify-center rounded-full bg-primary-800 font-medium uppercase text-white ring-2 truncate ring-primary ring-offset-1">
           {getUserInitials(`${firstName} ${lastName}`)}
         </div>
       )}
 
       {showUserInfo && (
-        <span className="items-center flex">
-          <div className="flex min-w-[120px] flex-col items-start">
+        <span className={cn('items-center flex')}>
+          <div className="flex min-w-[120px] flex-col gap-1 items-start">
             <p
               className={cn('text-sm font-semibold text-foreground-600', {
                 'text-white': isProfile,

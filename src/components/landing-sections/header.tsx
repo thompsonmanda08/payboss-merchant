@@ -17,6 +17,7 @@ import NavIconButton from '@/components/ui/nav-icon-button';
 import useFloatingHeader from '@/hooks/use-floating-header';
 import { BGS_SUPER_MERCHANT_ID } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import { Divider } from '@heroui/react';
 
 function MobileNavLink({
   href,
@@ -91,7 +92,7 @@ function MobileNavigation({ session }: { session: any }) {
               <MobileNavLink href="/docs">Documentation</MobileNavLink>
               <MobileNavLink href="#why-payboss">Why PayBoss</MobileNavLink>
               <MobileNavLink href="#faqs">FAQs</MobileNavLink>
-              <hr className="m-2 border-slate-300/40" />
+              <Divider className="my-6 h-px" />
               {session ? (
                 <NavLink href="/dashboard">
                   <NavIconButton>

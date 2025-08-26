@@ -23,7 +23,7 @@ async function CheckoutLayout({ children }: PropsWithChildren) {
           Powered by <Logo href={'#'} />
         </span>
       </div>
-      <hr className="mb-4 bg-transparent border-slate-200" />
+      <hr className="mb-4 border-border" />
       <section className="flex min-h-[calc(100svh-220px)] w-full flex-1 flex-col h-full p-4">
         {children}
       </section>

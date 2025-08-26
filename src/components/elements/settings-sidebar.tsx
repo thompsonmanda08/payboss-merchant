@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import NavIconButton from '@/components/ui/nav-icon-button';
 import useAuthStore from '@/context/auth-store';
 import { cn } from '@/lib/utils';
+import { Divider } from '@heroui/react';
 
 // SETTINGS OPTIONS
 const SETTINGS_LINKS = [
@@ -105,7 +106,7 @@ function SettingsSideBar() {
           >
             Back to Workspaces
           </Button>
-          <hr className="my-2 dark:border-primary/20" />
+          <Divider className="my-2" />
           {/* ******************** WORKSPACE SETTINGS ******************************* */}
           <div
             className="flex flex-col justify-start"
@@ -114,7 +115,7 @@ function SettingsSideBar() {
             <p className="py-2 text-[13px] font-medium uppercase tracking-wide text-foreground-400">
               ACCOUNT SETTINGS
             </p>
-            <hr className="my-2 dark:border-primary/20" />
+            <Divider className="my-2" />
             {SETTINGS_LINKS?.map(({ href, Icon, name }, index) => {
               return (
                 <Button
@@ -137,7 +138,7 @@ function SettingsSideBar() {
             })}
           </div>
           {/* ************************************************************* */}
-          <hr className="mt-auto mb-4 dark:border-primary/20" />
+          <Divider className="mt-auto mb-4 " />
           {/* ************************************************************* */}
 
           <div className="flex items-center gap-2 px-5 pt-2">

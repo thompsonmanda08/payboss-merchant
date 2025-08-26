@@ -1,32 +1,44 @@
 'use client';
-import { ChevronDown, Power } from 'lucide-react';
+import { ChevronDown, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 import NavItemIcon from '@/components/base/nav-item-icon';
 import useAuthStore from '@/context/auth-store';
 import useNavigation from '@/hooks/use-navigation';
-import { cn } from '@/lib/utils';
+import { capitalize, cn } from '@/lib/utils';
+import { Tooltip } from '@heroui/react';
+import Avatar from '../ui/avatar';
+import { User } from '@/types/account';
+import { useWorkspaceInit } from '@/hooks/use-query-data';
+import { Button } from '../ui/button';
 
 export default function SideNavItems({
+  workspaceID,
   expandedSection,
   handleExpand,
   handleMainLinkClick,
   handleLinkClick,
   navBarItems,
+  user,
 }: {
+  workspaceID: string;
   expandedSection: number;
   handleExpand: (index: number) => void;
   handleMainLinkClick: () => void;
   handleLinkClick: () => void;
   navBarItems: any;
+  user: User;
 }) {
   const { handleUserLogOut } = useAuthStore((state) => state);
   const { pathname, pathArr } = useNavigation();
 
+  const { data: workspaceInit } = useWorkspaceInit(workspaceID);
+  const permissions = workspaceInit?.data?.workspacePermissions;
+
   return (
-    <div className="flex h-[88%] flex-1 flex-grow flex-col  p-1">
-      <ul className="mb-auto flex  w-full flex-col divide-y dark:divide-foreground-50 divide-slate-100/50 ">
+    <div className="flex h-[88%] flex-1 flex-grow flex-col">
+      <ul className="mb-auto flex  w-full flex-col divide-y dark:divide-border divide-border/40">
         {navBarItems?.map(
           (
             {
@@ -157,24 +169,32 @@ export default function SideNavItems({
           },
         )}
       </ul>
-      <hr className="mt-auto" />
-      <div
-        className={cn(
-          `group flex cursor-pointer items-center gap-3 rounded-lg bg-transparent p-3 text-sm font-bold text-slate-600 shadow-none transition-all duration-200 ease-in-out hover:text-primary`,
-        )}
-        onClick={() => {
-          handleUserLogOut();
-        }}
-      >
-        <NavItemIcon
-          Icon={Power}
-          activeLayer={false}
-          isSelected={true}
-          onIconPress={() => {
-            handleUserLogOut();
-          }}
-        />
-        Log out
+
+      <div className="py-6 border-t border-border mb-4 w-full">
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-pink-400 via-purple-400 to-blue-400 rounded-2xl opacity-90 shadow-xl shadow-purple-500/25" />
+          <div className="relative bg-white/95 backdrop-blur-sm rounded-2xl p-4 m-1 shadow-lg">
+            <div className="flex items-center justify-between gap-3">
+              <Avatar
+                showUserInfo
+                email={capitalize(permissions?.role || user?.role)}
+                firstName={user?.first_name}
+                lastName={user?.last_name}
+              />
+
+              <Tooltip color="default" content="Want to log out?">
+                <Button
+                  size={'sm'}
+                  isIconOnly
+                  className={cn('z-10 flex h-9 w-9')}
+                  onPress={handleUserLogOut}
+                >
+                  <LogOut className={cn('h-4 w-5 text-white')} fontSize={18} />
+                </Button>
+              </Tooltip>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

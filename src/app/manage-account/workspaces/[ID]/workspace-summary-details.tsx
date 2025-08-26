@@ -5,7 +5,7 @@ import {
   Plus as PlusIcon,
   Wallet as WalletIcon,
 } from 'lucide-react';
-import { Switch, useDisclosure, addToast } from '@heroui/react';
+import { Switch, useDisclosure, addToast, Divider } from '@heroui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -307,7 +307,7 @@ function WorkspaceSummary({
             </p>
           </div>
         )}
-        <hr className="my-6 h-px border-foreground/10" />
+        <Divider className="my-6 h-px" />
         {/* ****************************** WALLET DETAILS *********************************** */}
         <div className="flex w-full justify-between gap-4">
           <div
@@ -334,7 +334,7 @@ function WorkspaceSummary({
             Go to Dashboard
           </Button>
         </div>
-        <hr className="my-6 h-px border-foreground/10" />
+        <Divider className="my-6 h-px" />
         {/* ****************************** WORKSPACE VISIBILITY *********************************** */}
         <div className="flex items-center justify-between w-full gap-4 sm:mt-0 sm:flex-auto">
           <div className="flex flex-col items-start gap-1">
@@ -353,7 +353,7 @@ function WorkspaceSummary({
           />
         </div>
 
-        <hr className="my-6 h-px border-foreground/10" />
+        <Divider className="my-6 h-px" />
         {/* ****************************** WORKSPACE MEMBERS MANAGEMENT *********************************** */}
         {!isSandbox && (
           <>
@@ -376,7 +376,7 @@ function WorkspaceSummary({
                 Add Workspace Members
               </Button>
             </div>
-            <hr className="my-6 h-px border-foreground/10" />
+            <Divider className="my-6 h-px" />
             <div className="flex flex-col gap-8 md:flex-row md:justify-between">
               <div className="flex max-w-4xl flex-col gap-1">
                 <h4 className="font-semibold text-foreground">

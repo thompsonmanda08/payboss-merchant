@@ -1,22 +1,22 @@
 'use client';
 
 import {
-  Home as HomeIcon,
-  Banknote as BanknotesIcon,
-  ArrowLeftRight as ArrowsRightLeftIcon,
-  Inbox as InboxArrowDownIcon,
-  Settings as AdjustmentsVerticalIcon,
-  Menu as Bars3BottomLeftIcon,
-  BarChart3 as DocumentChartBarIcon,
-  Calculator as CalculatorIcon,
-  Wrench as WrenchScrewdriverIcon,
-  Wallet as WalletIcon,
-  Receipt as ReceiptPercentIcon,
-  LogOut as ArrowLeftEndOnRectangleIcon,
-  LogIn as ArrowRightStartOnRectangleIcon,
-  Briefcase as BriefcaseIcon,
-  ChevronRight as ChevronRightIcon,
-  FileText as DocumentTextIcon,
+  Banknote,
+  BanknoteArrowDown,
+  BanknoteArrowUp,
+  BriefcaseBusiness,
+  CalculatorIcon,
+  ChevronRightIcon,
+  FileChartColumn,
+  FileSliders,
+  FolderCog,
+  HandCoins,
+  HomeIcon,
+  Menu,
+  Receipt,
+  Settings,
+  SlidersVertical,
+  WalletIcon,
 } from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -33,6 +33,7 @@ import { cn } from '@/lib/utils';
 
 import MobileNavBar from './mobile-menu';
 import SideNavItems from './side-nav-items';
+import { User } from '@/types/account';
 
 type SideNavItem = {
   ID?: string;
@@ -42,7 +43,7 @@ type SideNavItem = {
   subMenuItems?: SideNavItem[];
 };
 
-function SideNavBar() {
+function SideNavBar({ user }: { user: User }) {
   const pathname = usePathname();
 
   const [openMobileMenu, setOpenMobileMenu] = useState<boolean>(false);
@@ -73,12 +74,12 @@ function SideNavBar() {
     {
       ID: 'collections',
       name: 'Manage Income',
-      Icon: InboxArrowDownIcon,
+      Icon: BanknoteArrowUp,
       subMenuItems: [
         {
           name: 'API Integration',
           href: `${dashboardRoute}/collections/api-integration`,
-          Icon: AdjustmentsVerticalIcon,
+          Icon: SlidersVertical,
         },
         {
           name: 'Till Payments',
@@ -93,7 +94,7 @@ function SideNavBar() {
         {
           name: 'Invoicing',
           href: `${dashboardRoute}/collections/invoicing`,
-          Icon: DocumentTextIcon,
+          Icon: FileSliders,
         },
 
         // {
@@ -110,13 +111,13 @@ function SideNavBar() {
     {
       ID: 'payments',
       name: 'Manage Payments',
-      Icon: BanknotesIcon,
+      Icon: Banknote,
       // href: `${dashboardRoute}/payments`,
       subMenuItems: [
         {
           name: 'Disbursements',
           href: `${dashboardRoute}/payments`,
-          Icon: ArrowsRightLeftIcon,
+          Icon: BanknoteArrowDown,
         },
         // {
         //   name: 'Data Bundles',
@@ -137,7 +138,7 @@ function SideNavBar() {
     {
       name: 'Bill Payments',
       href: `${dashboardRoute}/bills`,
-      Icon: ReceiptPercentIcon,
+      Icon: HandCoins,
     },
   ];
 
@@ -146,7 +147,7 @@ function SideNavBar() {
     {
       name: 'Disbursements',
       href: `${dashboardRoute}/reports/disbursements`,
-      Icon: ArrowRightStartOnRectangleIcon,
+      Icon: BanknoteArrowDown,
     },
   ];
 
@@ -155,7 +156,7 @@ function SideNavBar() {
     {
       name: 'Collections',
       href: `${dashboardRoute}/reports/collection`,
-      Icon: ArrowLeftEndOnRectangleIcon,
+      Icon: BanknoteArrowUp,
     },
   ];
 
@@ -163,7 +164,7 @@ function SideNavBar() {
     {
       name: 'Bill Payment Reports',
       href: `${dashboardRoute}/reports/bills`,
-      Icon: ReceiptPercentIcon,
+      Icon: Receipt,
     },
   ];
 
@@ -218,7 +219,7 @@ function SideNavBar() {
 
   const SIDE_BAR_OPTIONS: SideNavItem[] = [
     {
-      name: 'Dashboard',
+      name: 'Overview',
       ID: 'dashboard',
       href: dashboardRoute,
       Icon: HomeIcon,
@@ -232,7 +233,7 @@ function SideNavBar() {
       ID: 'reports',
       name: 'Reports & Analytics',
       href: `${dashboardRoute}/reports`,
-      Icon: DocumentChartBarIcon,
+      Icon: FileChartColumn,
       subMenuItems: [
         {
           name: 'Wallet Statement',
@@ -248,7 +249,7 @@ function SideNavBar() {
     {
       ID: 'workspace',
       name: 'Manage Workspace',
-      Icon: WrenchScrewdriverIcon,
+      Icon: FolderCog,
       href: `${dashboardRoute}/workspace-settings`,
     },
   ];
@@ -269,7 +270,7 @@ function SideNavBar() {
       name: 'Workspaces',
       // shortcut: '>',
       description: 'Change your workspace',
-      Icon: BriefcaseIcon,
+      Icon: BriefcaseBusiness,
       subMenuItems: workspaces.map((item: any) => {
         return {
           key: item.ID,
@@ -282,7 +283,7 @@ function SideNavBar() {
             // refresh()
             window.location.href = `/dashboard/${item?.ID}`;
           },
-          Icon: BriefcaseIcon,
+          Icon: BriefcaseBusiness,
         };
       }),
     },
@@ -292,7 +293,7 @@ function SideNavBar() {
       href: dashboardRoute + '/workspace-settings',
       shortcut: '⌘S',
       description: 'Workspace preferences',
-      Icon: WrenchScrewdriverIcon,
+      Icon: Settings,
     },
     // {
     //   key: 'users',
@@ -349,13 +350,16 @@ function SideNavBar() {
         // isIconOnly
         className="absolute left-6 top-3 z-[99] h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
       >
-        <Bars3BottomLeftIcon className="h-7 w-7 text-foreground/70" />
+        <Menu className="h-7 w-7 text-foreground/70" />
         <Logo href={'#'} />
       </Button>
       <div
-        className={cn('h-full hidden w-[380px] lg:flex', {
-          'flex ': openMobileMenu,
-        })}
+        className={cn(
+          'h-full hidden w-[380px] lg:flex border-r border-border',
+          {
+            'flex ': openMobileMenu,
+          },
+        )}
       >
         <nav
           className={cn(
@@ -369,8 +373,8 @@ function SideNavBar() {
               dropDownItems={WORKSPACES_OPTIONS}
               isDisabled={!workspaceID || isLoading || isPending}
             >
-              <SoftBoxIcon className={'aspect-square h-9 w-10 p-2'}>
-                <BriefcaseIcon />
+              <SoftBoxIcon className={'aspect-square h-10 w-10 p-2'}>
+                <BriefcaseBusiness />
               </SoftBoxIcon>
               <div className="flex w-full items-center justify-between text-primary">
                 {(() => {
@@ -396,7 +400,7 @@ function SideNavBar() {
                     </div>
                   );
                 })()}
-                <ChevronRightIcon className={cn('h-4 w-4 ease-in-out')} />
+                <ChevronRightIcon className={cn('h-5 w-5 ease-in-out')} />
               </div>
             </DropdownButton>
           </div>
@@ -412,6 +416,8 @@ function SideNavBar() {
             </div>
           ) : (
             <SideNavItems
+              user={user}
+              workspaceID={workspaceID}
               expandedSection={expandedSection as number}
               handleExpand={handleExpand}
               handleLinkClick={handleLinkClick}
@@ -423,6 +429,8 @@ function SideNavBar() {
       </div>
       {/* MOBILE NAVIGATION */}
       <MobileNavBar
+        workspaceID={workspaceID}
+        user={user}
         expandedSection={expandedSection}
         handleExpand={handleExpand}
         handleMainLinkClick={handleMainLinkClick}
