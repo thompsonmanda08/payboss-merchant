@@ -3,12 +3,12 @@ import { Skeleton } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-import ApproverAction from '@/app/dashboard/[workspaceID]/payments/components/approver-action';
-import RecordDetailsViewer from '@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer';
-import PaymentDetails from '@/app/dashboard/[workspaceID]/payments/components/bulk-payment-batch-details';
-import SelectPrefund from '@/app/dashboard/[workspaceID]/payments/components/select-prefund-step';
-import UploadCSVFile from '@/app/dashboard/[workspaceID]/payments/components/upload-batch-file-step';
-import ValidationDetails from '@/app/dashboard/[workspaceID]/payments/components/validation-details-step';
+import ApproverAction from '@/app/dashboard/[workspaceID]/disbursements/_components/approver-action_2';
+import RecordDetailsViewer from '@/app/dashboard/[workspaceID]/disbursements/_components/batch-records-viewer';
+import PaymentDetails from '@/app/dashboard/[workspaceID]/disbursements/_components/bulk-payment-batch-details';
+import SelectPrefund from '@/app/dashboard/[workspaceID]/disbursements/_components/select-prefund-step';
+import UploadCSVFile from '@/app/dashboard/[workspaceID]/disbursements/_components/upload-batch-file-step';
+import ValidationDetails from '@/app/dashboard/[workspaceID]/disbursements/_components/validation-details-step';
 import CardHeader from '@/components/base/card-header';
 import Card from '@/components/base/custom-card';
 import ProgressStep from '@/components/elements/progress-step';

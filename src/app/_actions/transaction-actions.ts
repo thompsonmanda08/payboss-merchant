@@ -29,6 +29,7 @@ import { revalidatePath } from 'next/cache';
  */
 export async function getAllBulkTransactions(
   workspaceID: string,
+  filters?: DateRangeFilter,
 ): Promise<APIResponse> {
   // const session = await getUserSession()
   // const merchantID = session?.user?.merchantID
@@ -36,7 +37,8 @@ export async function getAllBulkTransactions(
     return handleBadRequest('Workspace ID is required');
   }
 
-  const url = `merchant/transaction/payments/bulk/batches/${workspaceID}`;
+  // const url = `merchant/transaction/payments/bulk/batches/${workspaceID}`;
+  const url = `merchant/transaction/${workspaceID}/payments/bulk/batches?start_date=${filters?.start_date}&end_date=${filters?.end_date}&page=${filters?.page}&limit=${filters?.limit}`;
 
   try {
     const res = await authenticatedApiClient({ url });
@@ -63,12 +65,16 @@ export async function getAllBulkTransactions(
  * - `status`: The HTTP status code for the operation.
  * - `statusText`: The HTTP status text for the operation.
  */
-export async function getBatchDetails(batchID: string): Promise<APIResponse> {
+export async function getBatchDetails(
+  workspaceID: string,
+  batchID: string,
+  filters: DateRangeFilter = { page: 1, limit: 20 },
+): Promise<APIResponse> {
   if (!batchID) {
     return handleBadRequest('Batch ID is required');
   }
 
-  const url = `merchant/transaction/payments/bulk/batch/details/${batchID}`;
+  const url = `merchant/transaction/${workspaceID}/payments/bulk/batch/${batchID}/details?page=${filters?.page}&limit=${filters?.limit}`;
 
   try {
     const res = await authenticatedApiClient({ url });

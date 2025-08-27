@@ -6,16 +6,16 @@ import { useState } from 'react';
 import OverlayLoader from '@/components/ui/overlay-loader';
 import usePaymentsStore from '@/context/payment-store';
 
-import BatchDetailsPage from './components/batch-details-view';
-import SelectPaymentType from './components/payment-protocol-selection';
+import BatchDetailsPage from './_components/batch-details-view';
+import SelectPaymentType from './_components/payment-protocol-selection';
+import BatchDetailsModal from './_components/batch-details-modal';
 
 export default function PaymentWidgets({
   workspaceID,
 }: {
   workspaceID: string;
 }) {
-  const { onClose } = useDisclosure();
-  const { openPaymentsModal, openBatchDetailsModal } = usePaymentsStore();
+  const { openPaymentsModal } = usePaymentsStore();
   const [createPaymentLoading, setCreatePaymentLoading] = useState(false);
 
   return (
@@ -29,13 +29,14 @@ export default function PaymentWidgets({
         />
       )}
 
-      {openBatchDetailsModal && (
+      {/* {openBatchDetailsModal && (
         <BatchDetailsPage
           isOpen={openBatchDetailsModal}
           protocol={'direct'}
           onClose={onClose}
         />
-      )}
+      )} */}
+      {/* {<BatchDetailsModal />} */}
 
       {/************************************************************************/}
     </>

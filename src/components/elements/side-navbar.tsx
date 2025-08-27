@@ -112,21 +112,21 @@ function SideNavBar({ user }: { user: User }) {
       ID: 'payments',
       name: 'Manage Payments',
       Icon: Banknote,
-      // href: `${dashboardRoute}/payments`,
+      // href: `${dashboardRoute}/disbursements`,
       subMenuItems: [
         {
           name: 'Disbursements',
-          href: `${dashboardRoute}/payments`,
+          href: `${dashboardRoute}/disbursements`,
           Icon: BanknoteArrowDown,
         },
         // {
         //   name: 'Data Bundles',
-        //   href: `${dashboardRoute}/payments/data-bundles`,
+        //   href: `${dashboardRoute}/disbursements/data-bundles`,
         //   Icon: ReceiptPercentIcon,
         // },
         // {
         //   name: 'Expense Cards',
-        //   href: `${dashboardRoute}/payments/cards`,
+        //   href: `${dashboardRoute}/disbursements/cards`,
         //   Icon: ReceiptPercentIcon,
         // },
       ],

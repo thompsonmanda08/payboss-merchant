@@ -145,17 +145,31 @@ export const useWorkspaceMembers = (workspaceID: string) =>
     staleTime: Infinity,
   });
 
-export const useBulkTransactions = (workspaceID: string) =>
+export const useBulkTransactions = ({
+  workspaceID,
+  filters,
+}: {
+  workspaceID: string;
+  filters?: DateRangeFilter;
+}) =>
   useQuery({
-    queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, workspaceID],
-    queryFn: async () => await getAllBulkTransactions(workspaceID),
+    queryKey: [QUERY_KEYS.BULK_TRANSACTIONS, filters, workspaceID],
+    queryFn: async () => await getAllBulkTransactions(workspaceID, filters),
     refetchOnMount: true,
   });
 
-export const useBatchDetails = (batchID: string) =>
+export const useBatchDetails = ({
+  workspaceID,
+  batchID,
+  filters,
+}: {
+  workspaceID: string;
+  batchID: string;
+  filters?: DateRangeFilter;
+}) =>
   useQuery({
-    queryKey: [QUERY_KEYS.BATCH_DETAILS, batchID],
-    queryFn: async () => await getBatchDetails(batchID),
+    queryKey: [QUERY_KEYS.BATCH_DETAILS, filters, batchID, workspaceID],
+    queryFn: async () => await getBatchDetails(workspaceID, batchID, filters),
     refetchOnMount: true,
     staleTime: Infinity,
   });

@@ -11,7 +11,7 @@ import {
 } from '@heroui/react';
 import { format } from 'date-fns';
 import Link from 'next/link';
-import React, { Key } from 'react';
+import React, { Key, useCallback } from 'react';
 
 import EmptyLogs from '@/components/base/empty-logs';
 import { Button } from '@/components/ui/button';
@@ -23,7 +23,8 @@ import usePaymentsStore from '@/context/payment-store';
 import { useBulkTransactions, useWorkspaceInit } from '@/hooks/use-query-data';
 import { TRANSACTION_STATUS_COLOR_MAP } from '@/lib/constants';
 import { BULK_TRANSACTIONS_COLUMN } from '@/lib/table-columns';
-import { cn } from '@/lib/utils';
+import { cn, formatDate } from '@/lib/utils';
+import { Pagination as PaginationType, DateRangeFilter } from '@/types';
 
 // DEFINE FILTERABLE SERVICES
 const SERVICE_FILTERS = [
@@ -40,20 +41,54 @@ const SERVICE_FILTERS = [
 
 export default function BulkTransactionsTable({
   workspaceID,
+  dateRange,
+  pagination,
 }: {
   workspaceID: string;
+  dateRange?: DateRangeFilter;
+  pagination?: PaginationType;
 }) {
-  // DATA FETCHING
-  const { data: bulkTransactionsResponse, isLoading } =
-    useBulkTransactions(workspaceID);
-
-  const rows = bulkTransactionsResponse?.data?.batches || [];
-
-  const columns = BULK_TRANSACTIONS_COLUMN;
-  const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
+  const thirtyDaysAgoDate = new Date();
+  thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30);
+  const start_date = formatDate(thirtyDaysAgoDate, 'YYYY-MM-DD');
+  const end_date = formatDate(new Date(), 'YYYY-MM-DD');
 
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const permissions = workspaceInit?.data?.workspacePermissions;
+
+  const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
+  const [filters, setFilters] = React.useState<
+    PaginationType & DateRangeFilter
+  >({
+    start_date: dateRange?.start_date || start_date,
+    end_date: dateRange?.end_date || end_date,
+    page: pagination?.page || 1,
+    limit: pagination?.limit || 10,
+  });
+
+  // DATA FETCHING
+  const { data: bulkTransactionsResponse, isLoading } = useBulkTransactions({
+    workspaceID,
+    filters,
+  });
+
+  const handlePageChange = (page: number) => {
+    setFilters({ ...filters, page });
+  };
+  const updateFilters = useCallback(
+    (fields: Partial<typeof filters>) => {
+      setFilters((prev) => ({ ...prev, ...fields }));
+    },
+    [filters],
+  );
+
+  const rows = bulkTransactionsResponse?.data?.batches || [];
+  const columns = BULK_TRANSACTIONS_COLUMN;
+  const PAGINATION = {
+    page: filters.page,
+    limit: filters.limit,
+    ...bulkTransactionsResponse?.data?.pagination, // PAGINATION DETAILS FROM SERVER
+  };
 
   // DEFINE FILTERABLE COLUMNS
   const INITIAL_VISIBLE_COLUMNS = columns.map((column) => column?.uid);
@@ -67,7 +102,7 @@ export default function BulkTransactionsTable({
   const [serviceProtocolFilter, setServiceProtocolFilter] =
     React.useState('all');
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [rowsPerPage, setRowsPerPage] = React.useState(filters.limit || 10);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: 'amount',
@@ -203,6 +238,7 @@ export default function BulkTransactionsTable({
   const onRowsPerPageChange = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setRowsPerPage(Number(e.target.value));
+      updateFilters({ limit: parseInt(e.target.value), page: 1 });
       setPage(1);
     },
     [],
@@ -212,6 +248,7 @@ export default function BulkTransactionsTable({
     if (value) {
       setFilterValue(value);
       setPage(1);
+      updateFilters({ page: 1, limit: rowsPerPage });
     } else {
       setFilterValue('');
     }
@@ -245,18 +282,38 @@ export default function BulkTransactionsTable({
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="flex items-center justify-center px-2 py-2">
-        {pages > 1 && (
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={(page) => setPage(page)}
+      <div className="flex w-full items-center justify-between">
+        <span className="text-small text-foreground-400">
+          Total: {hasSearchFilter ? items.length : PAGINATION?.total || 0}{' '}
+          transactions
+        </span>
+        <Pagination
+          isCompact
+          showControls
+          showShadow
+          color="primary"
+          page={PAGINATION?.page || page}
+          total={PAGINATION?.total_pages || pages || 1}
+          onChange={(page: any) => {
+            if (!handlePageChange) {
+              setPage(Number(page));
+            } else {
+              handlePageChange(page);
+              setPage(Number(page));
+            }
+          }}
+        />
+        <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-foreground-400">
+          Rows per page:{' '}
+          <SelectField
+            size="sm"
+            className="h-8 min-w-fit bg-transparent text-sm text-foreground-400 outline-none"
+            defaultValue={10}
+            options={['5', '10', '15', '20']}
+            placeholder={rowsPerPage.toString()}
+            onChange={onRowsPerPageChange}
           />
-        )}
+        </label>
       </div>
     );
   }, [rows, pages]);
@@ -305,7 +362,7 @@ export default function BulkTransactionsTable({
               <Button
                 as={Link} // BY PASS VOUCHER
                 color="primary"
-                href={`/dashboard/${workspaceID}/payments/create/direct?protocol=direct`}
+                href={`/dashboard/${workspaceID}/disbursements/create/direct?protocol=direct`}
                 endContent={<PlusIcon className="h-5 w-5" />}
                 // onPress={() => setOpenPaymentsModal(true)}
               >
@@ -313,21 +370,6 @@ export default function BulkTransactionsTable({
               </Button>
             )}
           </div>
-        </div>
-        <div className="hidden items-center justify-between md:flex">
-          <span className="text-small text-default-400">
-            Total: {rows.length} transactions
-          </span>
-          <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-slate-400">
-            Rows per page:{' '}
-            <SelectField
-              className="-mb-1 h-8 min-w-max bg-transparent text-sm text-default-400 outline-none"
-              defaultValue={8}
-              options={['5', '8', '10', '20']}
-              placeholder={rowsPerPage.toString()}
-              onChange={onRowsPerPageChange}
-            />
-          </label>
         </div>
       </div>
     );
@@ -351,7 +393,7 @@ export default function BulkTransactionsTable({
       bottomContent={bottomContent}
       classNames={{
         table: cn(
-          'align-top min-h-[300px] w-full overflow-scroll items-center justify-center',
+          'align-top min-h-[400px] w-full overflow-scroll items-center justify-center',
         ),
         base: cn('overflow-x-auto', { '': pages <= 1 }),
       }}

@@ -3,8 +3,8 @@ import Card from '@/components/base/custom-card';
 import { PAYMENT_SERVICE_TYPES } from '@/lib/constants';
 import { PageProps } from '@/types';
 
-import BulkTransactionsTable from './components/bulk-transactions-table';
-import PaymentWidgets from './payment-widgets';
+import BulkTransactionsTable from './_components/bulk-transactions-table';
+import BatchDetailsModal from './_components/batch-details-modal';
 
 export default async function DisbursementsPage({ params }: PageProps) {
   const workspaceID = (await params)?.workspaceID as string;
@@ -30,7 +30,7 @@ export default async function DisbursementsPage({ params }: PageProps) {
           workspaceID={workspaceID}
         />
       </Card>
-      <PaymentWidgets workspaceID={workspaceID} />
+      <BatchDetailsModal workspaceID={workspaceID} />
     </>
   );
 }

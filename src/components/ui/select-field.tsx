@@ -37,7 +37,7 @@ function SelectField({
   className,
   classNames,
   wrapperClassName,
-
+  size = 'lg',
   isInvalid,
   prefilled = false,
   ...props
@@ -69,7 +69,7 @@ function SelectField({
         className={`group relative flex w-full flex-col items-start justify-start gap-1`}
       >
         <Select
-          size="lg"
+          size={size}
           className={cn('font-medium', className)}
           classNames={{
             base: cn(

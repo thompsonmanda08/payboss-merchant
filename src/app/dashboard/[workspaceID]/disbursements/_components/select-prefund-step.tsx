@@ -27,10 +27,22 @@ const SelectPrefund = ({
     usePaymentsStore();
 
   function handleProceed() {
+    setError({ status: false, message: '' });
+
     if (paymentAction?.prefund_id !== '' || selectedKeys.size !== 0) {
       const prefund = walletActivePrefunds.find(
         (prefund: any) => prefund.ID === paymentAction?.prefund_id,
       );
+
+      if (prefund.isLocked) {
+        setError({ status: true, message: 'This prefund is locked!' });
+        addToast({
+          title: 'Error',
+          color: 'danger',
+          description: 'This prefund is locked!',
+        });
+        return;
+      }
 
       if (prefund) {
         updatePaymentFields({ prefund, protocol });

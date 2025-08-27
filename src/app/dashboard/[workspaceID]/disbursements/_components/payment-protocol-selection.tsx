@@ -36,13 +36,13 @@ const SelectPaymentType = ({
     {
       name: 'Bulk Disbursement',
       Icon: CircleStackIcon,
-      href: `${dashboardRoute}/payments/create/bulk`,
+      href: `${dashboardRoute}/disbursements/create/bulk`,
       index: 0,
     },
     {
       name: 'Single Disbursement',
       Icon: ArrowRightCircleIcon,
-      href: `${dashboardRoute}/payments/create/single`,
+      href: `${dashboardRoute}/disbursements/create/single`,
       index: 1,
     },
   ];

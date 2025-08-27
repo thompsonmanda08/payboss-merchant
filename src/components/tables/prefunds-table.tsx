@@ -249,10 +249,7 @@ export default function PrefundsTable({
         loadingContent={loadingContent}
       >
         {(item) => (
-          <TableRow
-            key={item?.ID}
-            // isDisabled={Boolean(item?.isLocked)}
-          >
+          <TableRow key={item?.ID} isDisabled={Boolean(item?.isLocked)}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

@@ -3,9 +3,9 @@ import { Modal, ModalContent, ModalBody, ModalHeader } from '@heroui/react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import ApproverAction from '@/app/dashboard/[workspaceID]/payments/components/approver-action';
-import RecordDetailsViewer from '@/app/dashboard/[workspaceID]/payments/components/batch-records-viewer';
-import ValidationDetails from '@/app/dashboard/[workspaceID]/payments/components/validation-details-step';
+import ApproverAction from '@/app/dashboard/[workspaceID]/disbursements/_components/approver-action_2';
+import RecordDetailsViewer from '@/app/dashboard/[workspaceID]/disbursements/_components/batch-records-viewer';
+import ValidationDetails from '@/app/dashboard/[workspaceID]/disbursements/_components/validation-details-step';
 import CardHeader from '@/components/base/card-header';
 import Tabs from '@/components/elements/tabs';
 import usePaymentsStore from '@/context/payment-store';
