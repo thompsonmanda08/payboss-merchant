@@ -232,24 +232,38 @@ function WorkspacesList({
                 )}
               >
                 {WORKSPACES.length ? (
-                  WORKSPACES?.map((item, index) => {
-                    return (
-                      <WorkspaceItem
-                        key={index}
-                        description={`${capitalize(
-                          item?.workspaceType,
-                        )}'s Workspace`}
-                        href={
-                          isManagePage
-                            ? `manage-account/workspaces/${item?.ID}`
-                            : `/dashboard/${item?.ID}`
-                        }
-                        isVisible={item?.isVisible}
-                        name={item?.workspace}
-                        onClick={() => setIsLoading(true)}
-                      />
-                    );
-                  })
+                  <>
+                    {WORKSPACES?.map((item, index) => {
+                      return (
+                        <WorkspaceItem
+                          key={index}
+                          description={`${capitalize(
+                            item?.workspaceType,
+                          )}'s Workspace`}
+                          href={
+                            isManagePage
+                              ? `manage-account/workspaces/${item?.ID}`
+                              : `/dashboard/${item?.ID}`
+                          }
+                          isVisible={item?.isVisible}
+                          name={item?.workspace}
+                          onClick={() => setIsLoading(true)}
+                        />
+                      );
+                    })}
+
+                    {canCreateWorkspace && !isManagePage && (
+                      <Button
+                        className={cn(
+                          'h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50',
+                        )}
+                        onPress={onOpen}
+                      >
+                        <PlusIcon className="h-6 w-6" />
+                        Create Workspace
+                      </Button>
+                    )}
+                  </>
                 ) : (
                   <div className="flex flex-col aspect-square max-h-[500px] w-full flex-1 items-center rounded-lg text-sm font-semibold text-slate-600">
                     <EmptyLogs
@@ -300,14 +314,14 @@ function WorkspacesList({
                         </Popover>
                       )}
 
-                      {canCreateWorkspace && isCompleteKYC && !isManagePage && (
+                      {canCreateWorkspace && !isManagePage && (
                         <Button
                           className={
                             'bg-primary-50 p-8 min-w-[300px] dark:bg-primary dark:text-primary-foreground px-4'
                           }
                           color="primary"
                           endContent={<PlusIcon className="h-5 w-5" />}
-                          isDisabled={isLoading}
+                          isDisabled={isLoading || !isCompleteKYC}
                           size="lg"
                           variant="flat"
                           onPress={onOpen}
@@ -320,13 +334,10 @@ function WorkspacesList({
                   </div>
                 )}
 
-                {canCreateWorkspace && (
+                {canCreateWorkspace && isCompleteKYC && isManagePage && (
                   <Button
                     className={cn(
                       'h-24 w-full flex-col border border-primary-100 dark:border-primary-300/30 bg-transparent font-medium text-primary hover:border-primary-100 hover:bg-primary-50',
-                      {
-                        'col-span-full': !workspaces || workspaces?.length < 0,
-                      },
                     )}
                     onPress={onOpen}
                   >
