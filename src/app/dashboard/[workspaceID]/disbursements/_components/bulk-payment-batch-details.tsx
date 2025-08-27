@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input-field';
 import usePaymentsStore from '@/context/payment-store';
 import { useWorkspaceInit } from '@/hooks/use-query-data';
 import { formatCurrency } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
 const PaymentDetails = ({
   navigateForward,
@@ -31,6 +32,7 @@ const PaymentDetails = ({
     resetPaymentData,
     selectedActionType,
   } = usePaymentsStore();
+  const router = useRouter();
 
   const { data: workspaceInit } = useWorkspaceInit(workspaceID);
   const role = workspaceInit?.data?.workspacePermissions;
@@ -84,9 +86,9 @@ const PaymentDetails = ({
 
       resetPaymentData();
       setSelectedBatch(response?.data); // SET VALIDATION DATA INTO STATE
-      navigateForward(); // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
+      // navigateForward(); // VALIDATION WILL HAPPEN ON THE NEXT SCREEN
+      router.push(`/dashboard/${workspaceID}/disbursements/batch/${response?.data?.id}`);
       setLoading(false);
-
       return;
     }
 

@@ -31,17 +31,17 @@ export const STEPS = [
     infoText: 'Provide details for the payment action batch files',
     step: 'Details',
   },
-  {
-    title: 'Create a payment - File Record Validation',
-    infoText:
-      'The validation will make sure all record entries do not cause internal errors',
-    step: 'Validation',
-  },
-  {
-    title: 'Create a payment - Approval Status',
-    infoText: 'Approvals can only be done by account admins',
-    step: 'Approval',
-  },
+  // {
+  //   title: 'Create a payment - File Record Validation',
+  //   infoText:
+  //     'The validation will make sure all record entries do not cause internal errors',
+  //   step: 'Validation',
+  // },
+  // {
+  //   title: 'Create a payment - Approval Status',
+  //   infoText: 'Approvals can only be done by account admins',
+  //   step: 'Approval',
+  // },
 ];
 
 export default function BulkPaymentForm({
@@ -94,17 +94,17 @@ export default function BulkPaymentForm({
       protocol={protocol}
       workspaceID={workspaceID}
     />,
-    <ValidationDetails
-      key={'step-4'}
-      batch={selectedBatch}
-      navigateForward={goForward}
-      workspaceID={workspaceID}
-    />,
-    <ApproverAction
-      key={'step-5'}
-      batch={selectedBatch}
-      workspaceID={workspaceID}
-    />,
+    // <ValidationDetails
+    //   key={'step-4'}
+    //   batch={selectedBatch}
+    //   navigateForward={goForward}
+    //   workspaceID={workspaceID}
+    // />,
+    // <ApproverAction
+    //   key={'step-5'}
+    //   batch={selectedBatch}
+    //   workspaceID={workspaceID}
+    // />,
   ]);
 
   function goForward() {

@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
 
   const workspaceSession =
     ((await getWorkspaceSessionData()) as WorkspaceSession) || [];
-  const workspaceIDs = workspaceSession?.workspaceIDs || {};
+  const workspaceIDs = workspaceSession?.workspaceIDs || null;
 
   const urlRouteParams = pathname.match(/^\/dashboard\/([^\/]+)\/?$/);
   const accessToken = session?.accessToken || '';
@@ -71,7 +71,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    if (!workspaceIDs.includes(workspaceID)) {
+    if (workspaceIDs && ![...workspaceIDs].includes(workspaceID)) {
       url.pathname = '/workspaces';
 
       return NextResponse.redirect(url);
