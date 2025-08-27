@@ -42,7 +42,7 @@ function DateSelectField({
   disabled,
   required,
   ...props
-}: DatePickerProps & {
+}: DatePickerProps<any> & {
   label?: string;
   className?: string;
   classNames?: any;

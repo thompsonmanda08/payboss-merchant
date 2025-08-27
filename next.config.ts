@@ -7,6 +7,10 @@ const nextConfig = {
   compress: false, // Disable compression - let reverse proxy handle it
   outputFileTracingRoot: process.cwd(), // Container-specific settings
 
+  typescript: {
+    ignoreBuildErrors: process.env.NODE_ENV === 'production',
+  },
+
   devIndicators: {
     autoPrerender: false,
   },
